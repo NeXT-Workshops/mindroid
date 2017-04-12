@@ -1,4 +1,4 @@
-build_image: tomsontom/oracle-java8-mvn:latest 
+build_image: "tomsontom/oracle-java8-mvn:latest"
 
 script:
   - echo "Begin of script"

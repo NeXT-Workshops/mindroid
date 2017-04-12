@@ -1,6 +1,8 @@
 # mindroid
 This repository holds resources of the Mindroid project
 
+[![Run Status](https://api.shippable.com/projects/58eeab1b957294070031bf9b/badge?branch=master)](https://app.shippable.com/github/Echtzeitsysteme/mindroid) 
+
 # How to import the projects
 
 1. **Setup**

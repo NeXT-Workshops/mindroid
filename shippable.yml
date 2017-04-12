@@ -2,11 +2,11 @@ build_image: "tomsontom/oracle-java8-mvn:latest"
 
 script:
   - echo "Begin of script"
-  - cd impl
-  - cd androidApp
-  - ./gradlew clean test assemble
-  - cd ../ev3App
-  - echo "TODO: invoke gradlew here"
-  - cd ../serverApp
-  - echo "TODO: invoke gradlew here"
-  - echo "End of script"
+#  - cd "impl"
+#  - cd "androidApp"
+#  - ./gradlew clean test assemble
+#  - cd "../ev3App"
+#  - echo "TODO: invoke gradlew here"
+#  - cd "../serverApp"
+#  - echo "TODO: invoke gradlew here"
+#  - echo "End of script"

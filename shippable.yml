@@ -1,4 +1,4 @@
-build_image: gradle
+build_image: library/gradle
 
 script:
   - echo "Begin of script"

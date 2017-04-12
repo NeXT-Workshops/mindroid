@@ -1,0 +1,20 @@
+/**
+ * Use this file to define common configuration parameters 
+ * that should be used within each Mindroid subproject
+ *
+ * Example:
+ * apply from: 'path-to-this-script'
+ * ...
+ * version = ext.mindroidVersion
+ */
+
+ext {
+    javaSourceLevel = '1.7'
+    javaTargetLevel = '1.7'
+    mindroidVersion = '1.0'
+    javaFileEncoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+}

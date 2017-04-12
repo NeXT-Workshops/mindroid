@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp">
+
+        <TextView
+            android:text="EV3 IP"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtView_EV3IP"
+            android:layout_weight="1.21"
+            android:layout_width="70dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="192.178.0.240"
+            android:ems="10"
+            android:id="@+id/txtEdit_EV3IP"
+            android:layout_weight="1"
+            android:contentDescription="IP"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp">
+
+        <TextView
+            android:text="EV3 TCP Port"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtView_EV3TCPPort"
+            android:layout_weight="1.21" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="none|numberDecimal"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/txtEdit_EV3TCPPort"
+            android:layout_weight="1"
+            android:enabled="false" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp">
+
+        <TextView
+            android:text="Server IP"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtView_ServerIP"
+            android:layout_weight="1.21"
+            android:layout_width="70dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="192.178.0.240"
+            android:ems="10"
+            android:id="@+id/txtEdit_ServerIP"
+            android:layout_weight="1"
+            android:contentDescription="IP"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp">
+
+        <TextView
+            android:text="Server TCP Port"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtView_ServerTCPPort"
+            android:layout_weight="1.21" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="none|numberDecimal"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/txtEdit_ServerTCPPort"
+            android:layout_weight="1"
+            android:enabled="false" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <Button
+        android:text="save Settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_saveSettings"
+        android:elevation="0dp" />
+
+</LinearLayout>

@@ -1,0 +1,12 @@
+include ':api', ':org.robodancer'
+include ':app'
+
+include ':ev3Messages'
+project(':ev3Messages').projectDir = new File('../include/ev3Messages')
+
+include ':interRobotMessages'
+project(':interRobotMessages').projectDir = new File('../include/interRobotMessages')
+
+// The following project contains central configuration parameters
+include ':common'
+project(':common').projectDir = new File('../include/common')

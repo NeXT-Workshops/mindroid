@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+
+apply from: file('../../include/common/build.gradle')
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "org.mindroid.android.app"
+        minSdkVersion 18
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility javaSourceLevel
+        targetCompatibility javaTargetLevel
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    compile(project(':api')) {
+        /*
+         * This is a fix for the warning that the used version of org.json:json ist not compatible with Android:
+         * 'Warning:WARNING: Dependency org.json:json:20160810 is ignored for release as it may be conflicting with the internal version provided by Android.In case of problem, please repackage it with jarjar to change the class packages'
+         */
+        exclude group: 'org.json'
+    }
+    compile project(':ev3Messages')
+    compile 'com.esotericsoftware.kryo:kryo:2.24.0'
+    compile 'com.esotericsoftware:kryonet:2.22.0-RC1'
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support.test:runner:0.5'
+    compile 'com.google.android.gms:play-services-appindexing:9.8.0'
+    compile 'com.android.support:design:25.3.1'
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+    }
+}

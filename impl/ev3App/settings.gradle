@@ -1,0 +1,6 @@
+include ':ev3Messages'
+project(':ev3Messages').projectDir = new File('../include/ev3Messages')
+
+// The following project contains central configuration parameters
+include ':common'
+project(':common').projectDir = new File('../include/common')

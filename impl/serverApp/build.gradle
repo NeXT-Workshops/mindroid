@@ -1,0 +1,27 @@
+apply plugin: 'java'
+apply from: '../include/common/build.gradle'
+
+sourceCompatibility = ext.javaSourceLevel
+targetCompatibility = ext.javaTargetLevel
+version = ext.mindroidVersion
+
+jar {
+    baseName = 'MindroidServerApplication'
+    version = rootProject.ext.mindroidVersion
+    manifest {
+        attributes 'Main-Class': 'org.mindroid.server.app.MindroidServerApplicationMain'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':interRobotMessages')
+}
+
+task buildJar{
+    jar
+}
+

@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply from: '../common/build.gradle'
+
+sourceCompatibility = ext.javaSourceLevel
+targetCompatibility = ext.javaTargetLevel
+
+version = ext.mindroidVersion
+compileJava.options.encoding = ext.javaFileEncoding
+
+
+dependencies {
+    compile group: 'org.json', name: 'json', version: '20160810'
+    testCompile 'junit:junit:4.11'
+}
+
+sourceSets {
+    test {
+        resources {
+            srcDir "src/test/java"
+        }
+    }
+}

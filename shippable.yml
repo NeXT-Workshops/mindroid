@@ -1,4 +1,4 @@
-build_image: library/gradle
+build_image: frekele/gradle
 
 script:
   - echo "Begin of script"

@@ -1,5 +1,8 @@
 build_image: harshjv/texlive-2015
-
+install:
+  - echo "Nothing to do here."
+before_script:
+  - echo "Nothing to do here."
 script:
   - echo "Begin of script"
 #  - cd "impl"

@@ -1,4 +1,4 @@
-build_image: frekele/gradle
+build_image: harshjv/texlive-2015
 
 script:
   - echo "Begin of script"

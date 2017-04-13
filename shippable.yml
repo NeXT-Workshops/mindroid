@@ -1,3 +1,8 @@
+language: java
+
+jdk:
+   - openjdk7
+
 build_image: harshjv/texlive-2015
 
 script:

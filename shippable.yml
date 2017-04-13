@@ -3,15 +3,15 @@ language: java
 jdk:
    - openjdk7
 
-build_image: harshjv/texlive-2015
-
+# The following process could be skipped entirely, if we had a central build.gradle file
+# See: https://docsv2.readthedocs.io/en/latest/languages/java.html
 script:
   - echo "Begin of script"
-#  - cd "impl"
-#  - cd "androidApp"
-#  - ./gradlew clean test assemble
-#  - cd "../ev3App"
-#  - echo "TODO: invoke gradlew here"
-#  - cd "../serverApp"
-#  - echo "TODO: invoke gradlew here"
-#  - echo "End of script"
+  - cd "impl"
+  - cd "androidApp"
+  - ./gradlew clean test assemble
+  - cd "../ev3App"
+  - ../androidApp/gradlew clean test assemble
+  - cd "../serverApp"
+  - ../androidApp/gradlew clean test assemble
+  - echo "End of script"

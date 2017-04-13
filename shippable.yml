@@ -9,9 +9,9 @@ script:
   - echo "Begin of script"
   - cd "impl"
   - cd "androidApp"
-  - ./gradlew clean test assemble
+  - bash ./gradlew clean test assemble
   - cd "../ev3App"
-  - ../androidApp/gradlew clean test assemble
+  - bash ../androidApp/gradlew clean test assemble
   - cd "../serverApp"
-  - ../androidApp/gradlew clean test assemble
+  - bash ../androidApp/gradlew clean test assemble
   - echo "End of script"

@@ -2,6 +2,8 @@ language: java
 
 jdk:
    - oraclejdk8
+   
+build_image: runmymind/docker-android-sdk
 
 # The following process could be skipped entirely, if we had a central build.gradle file
 # See: https://docsv2.readthedocs.io/en/latest/languages/java.html

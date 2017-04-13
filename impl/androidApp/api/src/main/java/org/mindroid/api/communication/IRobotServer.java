@@ -4,7 +4,7 @@ import org.mindroid.api.IMessageListener;
 
 /**
  *
- * Server, der auf dem Roboter läuft, um Nachrichten von anderen Robotern zu empfangen.
+ * Server running on the robot to receive messages from other robots
  *
  * Created by torben on 04.04.2017.
  */

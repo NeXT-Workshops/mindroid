@@ -5,6 +5,7 @@ import org.mindroid.api.statemachine.IMindroidMain;
 import org.mindroid.api.robot.IRobodancerConfig;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.api.robot.IRobotFactory;
+import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
 import org.mindroid.common.messages.NetworkPortConfig;
 import org.mindroid.impl.robot.RobotFactory;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
@@ -19,7 +20,7 @@ import java.io.IOException;
 public class Testbench {
 
     @Test
-    public void testRobotFactory() {
+    public void testRobotFactory() throws Exception {
         IRobodancerConfig config = new RobotHardwareConfigurationTest();
         IMindroidMain mindroid = new MindroidMainTest();
         IRobotCommandCenter robotControl;

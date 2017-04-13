@@ -143,7 +143,7 @@ public final class RobotFactory implements IRobotFactory {
             myRobot.setBrick(robotConfigurator.getBrick());
 
 
-            // Verknüpfe Statemachines ;RobotContextStateEvaluator etc mit Statemachine.
+            // Connect statemachines RobotContextStateEvaluator etc with state machine
             IRobotContextStateEvaluator evaluator = new RobotContextStateEvaluator();
             myRobot.getStatemachineManager().addConstraintEvalauator(evaluator);
             RobotContextStateManager.getInstance().addRobotContextStateEvaluator(evaluator);
@@ -162,9 +162,9 @@ public final class RobotFactory implements IRobotFactory {
              *
              * Starte RobotConfigurator
 
-             * Verknüpfe Motoren..
+             * Connect motors...
              *
-             * Verknüpfe RobodancerControll mit Robot Instanz
+             * Connect RobodancerControl with Robot instance
              */
 
 

@@ -2,6 +2,10 @@ apply plugin: 'com.android.application'
 
 apply from: file('../../include/common/build.gradle')
 
+mindroidVersion = ext.mindroidVersion
+javaSourceLevel = ext.javaSourceLevel
+javaTargetLevel = ext.javaTargetLevel
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -10,7 +14,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 25
         versionCode 1
-        versionName rootProject.ext.mindroidVersion
+        versionName mindroidVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -20,8 +24,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility rootProject.ext.javaSourceLevel
-        targetCompatibility rootProject.ext.javaTargetLevel
+        sourceCompatibility javaSourceLevel
+        targetCompatibility javaTargetLevel
     }
 
     lintOptions {

@@ -2,6 +2,7 @@
 This repository holds resources of the Mindroid project
 
 [![Run Status](https://api.shippable.com/projects/58eeab1b957294070031bf9b/badge?branch=master)](https://app.shippable.com/github/Echtzeitsysteme/mindroid) 
+[![Project Stats](https://www.openhub.net/p/mindroid/widgets/project_thin_badge.gif)](https://www.openhub.net/p/mindroid)
 
 # How to import the projects
 

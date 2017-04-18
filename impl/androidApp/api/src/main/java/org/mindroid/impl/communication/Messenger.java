@@ -38,7 +38,7 @@ public class Messenger implements IMessenger {
     public void sendMessage(String destination, String content) {
         //TODO Allow destination other than server
         LogLevel logLevel;
-        if (destination.equals("ServerLog")) {
+        if (destination.equals(IMessenger.SERVER_LOG)) {
             logLevel=LogLevel.INFO;
         } else {
             logLevel=LogLevel.MESSAGE;

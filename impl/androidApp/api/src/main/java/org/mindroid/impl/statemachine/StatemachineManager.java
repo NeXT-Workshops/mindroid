@@ -1,6 +1,7 @@
 package org.mindroid.impl.statemachine;
 
 import org.mindroid.api.*;
+import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.robot.context.IRobotContextStateEvaluator;
 import org.mindroid.api.statemachine.*;
 import org.mindroid.api.statemachine.constraints.AbstractLogicOperator;
@@ -77,8 +78,11 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
 
                 //Set StartCondition
                 StartCondition.getInstance().setStateActiveTime(System.currentTimeMillis());
-                //TODO add Gyrosensors position to
+                //TODO add Gyrosensors position too
 
+                if(Robot.getInstance().messageingEnabled){
+                    Robot.getInstance().messenger.sendMessage(IMessenger.SERVER_LOG,"Changed State to --> "+currentStates.get(ID).getName());
+                }
 
                 //Activate state
                 currentStates.get(ID).activate();
@@ -163,6 +167,10 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
             subscribeConstraints(id);
             handleTimeEventScheduling(id);
             StartCondition.getInstance().setStateActiveTime(System.currentTimeMillis());
+            if(Robot.getInstance().messageingEnabled){
+                Robot.getInstance().messenger.sendMessage(IMessenger.SERVER_LOG,"Start Statemachine: "+id);
+            }
+
             statemachines.get(id).start();
 
             return true;
@@ -177,6 +185,9 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
             Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_B);
             Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_C);
             Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_D);
+            if(Robot.getInstance().messageingEnabled){
+                Robot.getInstance().messenger.sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+id);
+            }
             statemachines.get(id).stop();
             return true;
         }

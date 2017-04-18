@@ -1,5 +1,6 @@
 package org.mindroid.impl.robot;
 
+import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.motor.Motor;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.configuration.RobotConfigurator;
@@ -30,6 +31,9 @@ public final class Robot {
     private Motor motor_D = null;
 
     private StatemachineManager statemachineManager;
+
+    public boolean messageingEnabled = false;
+    public IMessenger messenger = null;
 
     private static Robot robot = new Robot();
 
@@ -142,5 +146,7 @@ public final class Robot {
     public void setRobotID(String robotID) {
         this.robotID = robotID;
     }
+
+
 
 }

@@ -30,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static EditText txt_input_ServerTCPPort;
 
     public static final String DEFAULT_EV3_IP = "192.168.0.240";
-    public static final String DEFAULT_SERVER_IP = "192.168.0.111";
+    public static final String DEFAULT_SERVER_IP = "192.168.188.38";
     public static final String DEFAULT_EV3_TCP_PORT = ""+33690; //TODO before: NetworkPortConfig.BRICK_PORT
     public static final String DEFAULT_SERVER_TCP_PORT = ""+33044;//TODO before: NetworkPortConfig.SERVER_PORT , but creates dependency with EV3Messages
     public static final String DEFAULT_ROBOT_ID = "No RobotID set";

@@ -50,7 +50,7 @@ public class Robot {
         roFactory.setBrickIP(Settings.getInstance().ev3IP);
         roFactory.setBrickTCPPort(Settings.getInstance().ev3TCPPort);
         roFactory.setMSGServerIP(Settings.getInstance().serverIP);
-        roFactory.setMSGServerTCPPort(Settings.getInstance().serverTCPPort); 
+        roFactory.setMSGServerTCPPort(Settings.getInstance().serverTCPPort);
         roFactory.setRobotID(Settings.getInstance().robotID);
 
         //Statemachine

@@ -22,5 +22,18 @@ public class Settings {
     }
 
     private Settings() {
+
+    }
+
+    @Override
+    public String toString() {
+        return "Settings{" +
+                "robotID='" + robotID + '\'' +
+                ", groupID='" + groupID + '\'' +
+                ", ev3IP='" + ev3IP + '\'' +
+                ", ev3TCPPort=" + ev3TCPPort +
+                ", serverIP='" + serverIP + '\'' +
+                ", serverTCPPort=" + serverTCPPort +
+                '}';
     }
 }

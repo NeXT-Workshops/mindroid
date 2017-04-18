@@ -69,7 +69,7 @@ public class MindroidMain implements IMindroidMain {
             }
         };
 
-        IState state_time_test = new State("TestTimeEventState") {
+        IState state_time_test = new State("NothingFound :(") {
             @Override
             public void run() {
                 System.out.println(this.getName() + " isActive\n");

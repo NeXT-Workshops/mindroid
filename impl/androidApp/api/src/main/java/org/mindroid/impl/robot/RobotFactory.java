@@ -1,5 +1,6 @@
 package org.mindroid.impl.robot;
 
+import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.robot.*;
 import org.mindroid.api.robot.context.IRobotContextStateEvaluator;
 import org.mindroid.api.robot.control.IBrickControl;
@@ -10,6 +11,7 @@ import org.mindroid.api.statemachine.IStatemachine;
 import org.mindroid.common.messages.Motors;
 import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.common.messages.Sensors;
+import org.mindroid.impl.communication.Messenger;
 import org.mindroid.impl.configuration.RobotConfigurator;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
@@ -17,6 +19,9 @@ import org.mindroid.impl.robot.context.RobotContextStateListener;
 import org.mindroid.impl.robot.context.RobotContextStateEvaluator;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 
 /**
@@ -148,24 +153,24 @@ public final class RobotFactory implements IRobotFactory {
             myRobot.getStatemachineManager().addConstraintEvalauator(evaluator);
             RobotContextStateManager.getInstance().addRobotContextStateEvaluator(evaluator);
 
-
-
-
-            //TODO Create TimeEventProducer (CLK) to call handleCLK()
-            /*
-            if(RobotContextStateManager.getInstance() instanceof IClockListener){
-                ((IClockListener) RobotContextStateManager.getInstance()).handleCLK();
+            //---------------- CREATE MESSENGER
+            if(isValidIP(msgServerIP) && isValidTCPPort(msgServerTCPPort)){
+                Runnable run = new Runnable(){
+                    @Override
+                    public void run(){
+                        try {
+                            myRobot.messenger = new Messenger(myRobot.getRobotID(), InetAddress.getByName(msgServerIP),msgServerTCPPort);
+                            myRobot.messageingEnabled = true;
+                        } catch (UnknownHostException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                new Thread(run).start();
+            }else{
+                myRobot.messenger = null;
+                myRobot.messageingEnabled = false;
             }
-            */
-
-            /**
-             *
-             * Starte RobotConfigurator
-
-             * Connect motors...
-             *
-             * Connect RobodancerControl with Robot instance
-             */
 
 
         }else{

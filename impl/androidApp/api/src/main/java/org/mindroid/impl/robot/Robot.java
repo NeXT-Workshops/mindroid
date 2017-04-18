@@ -11,6 +11,10 @@ import org.mindroid.impl.statemachine.StatemachineManager;
  */
 public final class Robot {
 
+
+
+    public String robotID = "No id set";
+
     private RobotConfigurator robotConfigurator = null;
 
     EV3Brick brick;
@@ -129,6 +133,14 @@ public final class Robot {
 
     public static RobotController getRobotController(){
         return robotController;
+    }
+
+    public String getRobotID() {
+        return robotID;
+    }
+
+    public void setRobotID(String robotID) {
+        this.robotID = robotID;
     }
 
 }

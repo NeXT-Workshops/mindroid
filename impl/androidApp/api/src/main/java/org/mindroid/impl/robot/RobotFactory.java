@@ -199,6 +199,11 @@ public final class RobotFactory implements IRobotFactory {
     }
 
     @Override
+    public void setRobotID(String robotID) {
+        Robot.getInstance().setRobotID(robotID);
+    }
+
+    @Override
     public void addStatemachine(IStatemachine statemachine) {
         myRobot.getStatemachineManager().addStatemachine(statemachine);
     }

@@ -56,6 +56,7 @@ public class Robot {
         roFactory.setMSGServerIP(""); //TODO set MsgServerIP
         roFactory.setMSGServerTCPPort(-1); //TODO set ServerPort
 
+
         //Statemachine
         roFactory.addStatemachine(mindroid.getStatemachine());
 

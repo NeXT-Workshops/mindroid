@@ -20,7 +20,7 @@ public interface IRobotFactory {
     public void setMSGServerIP(String msgServerIP);
     public void setMSGServerTCPPort(int tcpPort);
 
-
+    public void setRobotID(String robotID);
 
     //TODO public void addRuleSet(HasmMap<RobotEvent,Rule> rules);
 

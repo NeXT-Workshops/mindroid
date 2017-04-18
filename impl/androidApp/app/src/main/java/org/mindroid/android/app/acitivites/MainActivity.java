@@ -21,6 +21,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.robodancer.Robot;
+import org.mindroid.android.app.robodancer.Settings;
 import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
 
 
@@ -319,10 +320,22 @@ public class MainActivity extends AppCompatActivity {
 
         if (connectionProperties != null) {
                 String savedVal = connectionProperties.getString(SettingsActivity.KEY_EV3_IP, SettingsActivity.DEFAULT_EV3_IP);
-                robot.setEv3_ip( (savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_IP : savedVal);
+                Settings.getInstance().ev3IP = ( (savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_IP : savedVal);
 
                 savedVal = connectionProperties.getString(SettingsActivity.KEY_EV3_TCP_PORT,SettingsActivity.DEFAULT_EV3_TCP_PORT);
-                robot.setEv3_tcp_port(Integer.parseInt((savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_TCP_PORT : savedVal));
+                Settings.getInstance().ev3TCPPort = (Integer.parseInt((savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_TCP_PORT : savedVal));
+
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_SERVER_IP, SettingsActivity.DEFAULT_SERVER_IP);
+                Settings.getInstance().serverIP = ( (savedVal.isEmpty()) ? SettingsActivity.DEFAULT_SERVER_IP : savedVal);
+
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_SERVER_TCP_PORT,SettingsActivity.DEFAULT_SERVER_TCP_PORT);
+                Settings.getInstance().serverTCPPort = (Integer.parseInt((savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_TCP_PORT : savedVal));
+
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_ROBOT_ID,SettingsActivity.DEFAULT_ROBOT_ID);
+                Settings.getInstance().robotID = ( (savedVal.isEmpty()) ? SettingsActivity.KEY_ROBOT_ID : savedVal);
+
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_GROUP_ID,SettingsActivity.DEFAULT_GROUP_ID);
+                Settings.getInstance().groupID = ( (savedVal.isEmpty()) ? SettingsActivity.KEY_GROUP_ID : savedVal);
 
             try {
                 robot.makeRobot(); //Builds the robot with the Connection Settings

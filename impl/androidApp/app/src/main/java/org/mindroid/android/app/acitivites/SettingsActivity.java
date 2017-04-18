@@ -33,7 +33,8 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String DEFAULT_SERVER_IP = "192.168.0.111";
     public static final String DEFAULT_EV3_TCP_PORT = ""+33690; //TODO before: NetworkPortConfig.BRICK_PORT
     public static final String DEFAULT_SERVER_TCP_PORT = ""+33044;//TODO before: NetworkPortConfig.SERVER_PORT , but creates dependency with EV3Messages
-
+    public static final String DEFAULT_ROBOT_ID = "No RobotID set";
+    public static final String DEFAULT_GROUP_ID = "No groupID set";
 
     public static final String KEY_ROBOT_ID = "ROBOT_ID";
     public static final String KEY_GROUP_ID = "GROUP_ID";
@@ -82,6 +83,12 @@ public class SettingsActivity extends AppCompatActivity {
 
             savedVal = connectionProperties.getString(KEY_SERVER_TCP_PORT, DEFAULT_SERVER_TCP_PORT);
             txt_input_ServerTCPPort.setText((savedVal.isEmpty()) ? DEFAULT_SERVER_TCP_PORT : savedVal);
+
+            savedVal = connectionProperties.getString(KEY_ROBOT_ID, DEFAULT_ROBOT_ID);
+            txt_input_robotID.setText((savedVal.isEmpty()) ? DEFAULT_ROBOT_ID : savedVal);
+
+            savedVal = connectionProperties.getString(KEY_GROUP_ID, DEFAULT_GROUP_ID);
+            txt_input_groupID.setText((savedVal.isEmpty()) ? DEFAULT_GROUP_ID : savedVal);
         }
 
         btn_saveSettings.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +119,7 @@ public class SettingsActivity extends AppCompatActivity {
         //e.putString(KEY_EV3_TCP_PORT,txtEdit_EV3TCPPort.getText().toString()); Not changeable by the user. Not neccessary to save.
 
         /** Data to connect to Server **/
-        e.putString(KEY_GROUP_ID,txt_input_ServerIP.getText().toString());
+        e.putString(KEY_GROUP_ID,txt_input_groupID.getText().toString());
         //e.putString(KEY_SERVER_TCP_PORT,txtEdit_ServerTCPPort.getText().toString()); Not changeable by the user. Not neccessary to save.
 
 

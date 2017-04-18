@@ -32,10 +32,6 @@ public class Robot {
 
     IRobotCommandCenter commandCenter;
 
-    //Gets set from mainActivity while loading shared preferences
-    private int ev3_tcp_port = Integer.parseInt(SettingsActivity.DEFAULT_EV3_TCP_PORT);
-    //Gets set from mainActivity while loading shared preferences
-    private String ev3_ip = SettingsActivity.DEFAULT_EV3_IP;;
 
     public Robot(MainActivity mainActivity){
         this.main_activity = mainActivity;
@@ -51,11 +47,11 @@ public class Robot {
 
         //Config
         roFactory.setRobotConfig(config);
-        roFactory.setBrickIP(ev3_ip);
-        roFactory.setBrickTCPPort(ev3_tcp_port);
-        roFactory.setMSGServerIP(""); //TODO set MsgServerIP
-        roFactory.setMSGServerTCPPort(-1); //TODO set ServerPort
-
+        roFactory.setBrickIP(Settings.getInstance().ev3IP);
+        roFactory.setBrickTCPPort(Settings.getInstance().ev3TCPPort);
+        roFactory.setMSGServerIP(Settings.getInstance().serverIP);
+        roFactory.setMSGServerTCPPort(Settings.getInstance().serverTCPPort); 
+        roFactory.setRobotID(Settings.getInstance().robotID);
 
         //Statemachine
         roFactory.addStatemachine(mindroid.getStatemachine());
@@ -117,22 +113,6 @@ public class Robot {
     }
 
 
-    public int getEv3_tcp_port() {
-        return ev3_tcp_port;
-    }
-
-    public void setEv3_tcp_port(int ev3_tcp_port) {
-        this.ev3_tcp_port = ev3_tcp_port;
-    }
-
-    public String getEv3_ip() {
-        return ev3_ip;
-    }
-
-    public void setEv3_ip(String ev3_ip) {
-        this.ev3_ip = ev3_ip;
-    }
-
     public boolean isConnectedToBrick() {
         return isConnectedToBrick;
     }
@@ -159,12 +139,12 @@ public class Robot {
 
         @Override
         protected void onPreExecute(){
-            sb.append("connecting to "+getEv3_ip()+":"+getEv3_tcp_port()+"\n");
+            sb.append("connecting to "+Settings.getInstance().ev3IP+":"+Settings.getInstance().ev3TCPPort+"\n");
 
             if(isConnectedToBrick){
                 this.cancel(true);
             }else{
-                main_activity.showProgressDialog("Connecting to Brick","connecting to "+getEv3_ip()+":"+getEv3_tcp_port()+"\n");
+                main_activity.showProgressDialog("Connecting to Brick","connecting to "+Settings.getInstance().ev3IP+":"+Settings.getInstance().ev3TCPPort+"\n");
             }
         }
 

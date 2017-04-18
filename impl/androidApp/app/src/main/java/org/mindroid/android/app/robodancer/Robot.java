@@ -16,7 +16,6 @@ import org.mindroid.api.statemachine.IMindroidMain;
 import java.io.IOException;
 
 import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
-import org.mindroid.common.messages.NetworkPortConfig;
 import org.mindroid.impl.robot.RobotFactory;
 
 /**

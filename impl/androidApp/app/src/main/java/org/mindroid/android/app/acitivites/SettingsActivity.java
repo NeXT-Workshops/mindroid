@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 import org.mindroid.android.app.R;
 
-import org.mindroid.common.messages.NetworkPortConfig;
+
 
 
 
@@ -28,8 +28,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static final String DEFAULT_EV3_IP = "192.168.0.240";
     public static final String DEFAULT_SERVER_IP = "192.168.0.111";
-    public static final String DEFAULT_EV3_TCP_PORT = ""+NetworkPortConfig.BRICK_PORT;
-    public static final String DEFAULT_SERVER_TCP_PORT = ""+NetworkPortConfig.SERVER_PORT;
+    public static final String DEFAULT_EV3_TCP_PORT = ""+33690; //TODO before: NetworkPortConfig.BRICK_PORT
+    public static final String DEFAULT_SERVER_TCP_PORT = ""+33044;//TODO before: NetworkPortConfig.SERVER_PORT , but creates dependency with EV3Messages
 
 
     public static final String KEY_EV3_IP = "KEY_EV3_IP";

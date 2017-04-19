@@ -21,7 +21,7 @@ public interface IMessenger {
     void sendMessage(MindroidMessage msg);
 
     /**
-     * Should be called when the RobotServer has been started.
+     * Is called by the Robot Server. Does not need to be called manually.
      */
     void registerToServer(int port);
     /**

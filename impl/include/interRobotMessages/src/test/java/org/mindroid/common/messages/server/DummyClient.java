@@ -15,7 +15,7 @@ public class DummyClient {
 
     public static void main(String[] args) {
         try{
-            Socket socket = new Socket("localhost", 33044);
+            Socket socket = new Socket("localhost",33044);
             PrintWriter out = new PrintWriter(socket.getOutputStream(),
                     true);
 
@@ -49,8 +49,11 @@ public class DummyClient {
             serializedMessage2 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 2"), Destination.SERVER_LOG, MessageType.INFO, "Hello!"));
             out.println(serializedMessage2);
 
-            serializedMessage = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 3"), Destination.SERVER_LOG, MessageType.INFO, "Hi!"));
+            serializedMessage = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 3"), Destination.SERVER_LOG, MessageType.REGISTRATION, "55555"));
             out.println(serializedMessage);
+
+            serializedMessage2 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 2"), Destination.SERVER_LOG, MessageType.INFO, "Hello!"));
+            out.println(serializedMessage2);
 
             out.println("<close>");
             socket.close();

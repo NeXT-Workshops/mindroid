@@ -54,25 +54,34 @@ public class MindroidServerWorker implements Runnable {
                             int port = Integer.parseInt(deserializedMsg.getContent());
                             InetSocketAddress robotAddress = new InetSocketAddress(((InetSocketAddress) socketAddress).getAddress(),port);
                             mindroidServerFrame.register(deserializedMsg.getSource(), robotAddress);
+                            mindroidServerFrame.addContentLine("Local","INFO", deserializedMsg.getSource().getValue()+" was registered.");
                         } else {
                             throw new IOException("Registration of "+deserializedMsg.getSource().getValue()+" failed.");
                         }
                     }
 
                     //deliver message meant to be sent to another robot
-                    if(deserializedMsg.getMessageType().equals(MessageType.MESSAGE)) {
-                        InetSocketAddress address = mindroidServerFrame.findAddress(deserializedMsg.getSource());
+                    if(deserializedMsg.getMessageType().equals(MessageType.MESSAGE)&& !deserializedMsg.isLogMessage()) {
+                        InetSocketAddress address = mindroidServerFrame.findAddress(deserializedMsg.getDestination());
                         if (address!=null) {
-                            Socket socket = new Socket(address.getAddress(),address.getPort());
-                            PrintWriter out = new PrintWriter(socket.getOutputStream(),
-                                    true);
+                            try {
+                                Socket socket = new Socket(address.getAddress(), address.getPort());
+                                PrintWriter out = new PrintWriter(socket.getOutputStream(),
+                                        true);
 
-                            String serializedMessage = messageMarshaller.serialize(deserializedMsg);
+                                String serializedMessage = messageMarshaller.serialize(deserializedMsg);
 
-                            out.println(serializedMessage);
-                            out.println("<close>");
-                            socket.close();
-                            out.close();
+                                out.println(serializedMessage);
+                                out.println("<close>");
+                                socket.close();
+                                out.close();
+                            } catch (IOException e) {
+                                MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
+                                console.setVisible(true);
+                                console.appendLine("Error while forwarding a message to "+deserializedMsg.getDestination().getValue());
+                                console.appendLine("IOException: "+e.getMessage()+"\n");
+                            }
+
 
                         } else {
                             throw new IOException("The message to "+deserializedMsg.getDestination().getValue()+" has not been sent because its ip address is not known.");
@@ -88,8 +97,10 @@ public class MindroidServerWorker implements Runnable {
 
 
         } catch (IOException e) {
-            e.printStackTrace();
-            //2. Fenster TODO
+            MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
+            console.setVisible(true);
+            console.appendLine("Error while receiving or forwarding a message.");
+            console.appendLine("IOException: "+e.getMessage()+"\n");
         }
     }
 }

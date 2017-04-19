@@ -1,5 +1,6 @@
 package org.mindroid.server.app;
 
+import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
 
@@ -9,7 +10,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class MindroidServerFrame extends JFrame {
     private ArrayList<Color> availableColors;
     private final int SOURCE_COL = 1;  //Column that contains a message's source
     private final int LEVEL_COL = 2;
-    private HashMap<RobotId, InetSocketAddress> ipMapping;
+    private HashMap<Destination, InetSocketAddress> ipMapping;
 
 
     public MindroidServerFrame() {
@@ -221,10 +221,10 @@ public class MindroidServerFrame extends JFrame {
     }
 
     public void register(RobotId robotId, InetSocketAddress address) {
-        ipMapping.put(robotId,address);
+        ipMapping.put(new Destination(robotId.getValue()),address);
     }
 
-    public InetSocketAddress findAddress(RobotId robotId) {
-        return ipMapping.get(robotId);
+    public InetSocketAddress findAddress(Destination destination) {
+        return ipMapping.get(destination);
     }
 }

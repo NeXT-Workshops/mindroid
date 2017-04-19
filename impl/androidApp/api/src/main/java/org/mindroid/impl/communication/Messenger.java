@@ -1,6 +1,5 @@
 package org.mindroid.impl.communication;
 
-import org.mindroid.api.communication.IMessage;
 import org.mindroid.api.communication.IMessenger;
 import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MessageMarshaller;

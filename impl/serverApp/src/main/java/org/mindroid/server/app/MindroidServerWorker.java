@@ -1,13 +1,17 @@
 package org.mindroid.server.app;
 
-import org.mindroid.common.messages.server.LogLevel;
-import org.mindroid.common.messages.server.RobotId;
-import org.mindroid.common.messages.server.ServerLogMessage;
-import org.mindroid.common.messages.server.ServerMessageMarshaller;
+import org.mindroid.common.messages.server.Destination;
+import org.mindroid.common.messages.server.MessageType;
+import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.common.messages.server.MessageMarshaller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.Scanner;
 
 /**
@@ -28,7 +32,7 @@ public class MindroidServerWorker implements Runnable {
             InputStream inputStream = socket.getInputStream();
             Scanner scanner = new Scanner(inputStream);
             StringBuilder sb = new StringBuilder();
-            ServerMessageMarshaller serverMessageMarshaller = new ServerMessageMarshaller();
+            MessageMarshaller messageMarshaller = new MessageMarshaller();
             boolean connected =true;
             while(connected) {
             if(scanner.hasNextLine())
@@ -36,9 +40,44 @@ public class MindroidServerWorker implements Runnable {
                 String line = scanner.nextLine();
                 sb.append(line);
                 if(line.endsWith("}")){
-                    ServerLogMessage deseriaLogMessage = serverMessageMarshaller.deserializeLogMessage(sb.toString());
-                    mindroidServerFrame.addContentLine(deseriaLogMessage);
+                    MindroidMessage deserializedMsg = messageMarshaller.deserializeMessage(sb.toString());
+                    //view log message
+                    if (deserializedMsg.isLogMessage()) {
+                        mindroidServerFrame.addContentLine(deserializedMsg);
+                    }
                     sb = new StringBuilder();
+
+                    //handle registration message
+                    if (deserializedMsg.getMessageType().equals(MessageType.REGISTRATION)) {
+                        SocketAddress socketAddress = socket.getRemoteSocketAddress();
+                        if (socketAddress instanceof InetSocketAddress) {
+                            int port = Integer.parseInt(deserializedMsg.getContent());
+                            InetSocketAddress robotAddress = new InetSocketAddress(((InetSocketAddress) socketAddress).getAddress(),port);
+                            mindroidServerFrame.register(deserializedMsg.getSource(), robotAddress);
+                        } else {
+                            throw new IOException("Registration of "+deserializedMsg.getSource().getValue()+" failed.");
+                        }
+                    }
+
+                    //deliver message meant to be sent to another robot
+                    if(deserializedMsg.getMessageType().equals(MessageType.MESSAGE)) {
+                        InetSocketAddress address = mindroidServerFrame.findAddress(deserializedMsg.getSource());
+                        if (address!=null) {
+                            Socket socket = new Socket(address.getAddress(),address.getPort());
+                            PrintWriter out = new PrintWriter(socket.getOutputStream(),
+                                    true);
+
+                            String serializedMessage = messageMarshaller.serialize(deserializedMsg);
+
+                            out.println(serializedMessage);
+                            out.println("<close>");
+                            socket.close();
+                            out.close();
+
+                        } else {
+                            throw new IOException("The message to "+deserializedMsg.getDestination().getValue()+" has not been sent because its ip address is not known.");
+                        }
+                    }
                 }
                 if (line.contains("<close>")) {
                     connected = false;

@@ -2,10 +2,11 @@ package org.mindroid.impl.communication;
 
 import org.mindroid.api.communication.IMessage;
 import org.mindroid.api.communication.IMessenger;
-import org.mindroid.common.messages.server.LogLevel;
+import org.mindroid.common.messages.server.Destination;
+import org.mindroid.common.messages.server.MessageMarshaller;
+import org.mindroid.common.messages.server.MessageType;
+import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
-import org.mindroid.common.messages.server.ServerLogMessage;
-import org.mindroid.common.messages.server.ServerMessageMarshaller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,27 +30,22 @@ public class Messenger implements IMessenger {
         this.serverport = serverport;
     }
 
-    @Override
-    public boolean isConnected() {
-        return false;
-    }
 
     @Override
     public void sendMessage(String destination, String content) {
-        //TODO Allow destination other than server
-        LogLevel logLevel;
+        MessageType type;
         if (destination.equals(IMessenger.SERVER_LOG)) {
-            logLevel=LogLevel.INFO;
+            type = MessageType.INFO;
         } else {
-            logLevel=LogLevel.MESSAGE;
+            type = MessageType.MESSAGE;
         }
-        ServerLogMessage msgObj = new ServerLogMessage(new RobotId(robotID),logLevel,content);
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), new Destination(destination), type, content);
         sendMessage(msgObj);
     }
 
     @Override
-    public void sendMessage(ServerLogMessage msg) {
-        final ServerLogMessage msgFinal = msg;
+    public void sendMessage(MindroidMessage msg) {
+        final MindroidMessage msgFinal = msg;
         Thread client = new Thread() {
             public void run() {
                 try {
@@ -57,7 +53,7 @@ public class Messenger implements IMessenger {
                     PrintWriter out = new PrintWriter(socket.getOutputStream(),
                             true);
 
-                    ServerMessageMarshaller serverMessageMarshaller = new ServerMessageMarshaller();
+                    MessageMarshaller serverMessageMarshaller = new MessageMarshaller();
                     String serializedMessage = serverMessageMarshaller.serialize(msgFinal);
 
                     out.println(serializedMessage);
@@ -73,5 +69,19 @@ public class Messenger implements IMessenger {
         };
         new Thread(client).start();
     }
+
+
+    @Override
+    public void registerToServer(int port) {
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, MessageType.REGISTRATION, ""+port);
+        sendMessage(msgObj);
+    }
+
+    @Override
+    public void sendLogMessage(String content, MessageType type) {
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, type, content);
+        sendMessage(msgObj);
+    }
+
 
 }

@@ -1,6 +1,6 @@
 package org.mindroid.impl.robot;
 
-import org.mindroid.api.communication.IMessenger;
+import org.mindroid.api.communication.IRobotServer;
 import org.mindroid.api.robot.*;
 import org.mindroid.api.robot.context.IRobotContextStateEvaluator;
 import org.mindroid.api.robot.control.IBrickControl;
@@ -12,6 +12,7 @@ import org.mindroid.common.messages.Motors;
 import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.common.messages.Sensors;
 import org.mindroid.impl.communication.Messenger;
+import org.mindroid.impl.communication.RobotServer;
 import org.mindroid.impl.configuration.RobotConfigurator;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
@@ -19,7 +20,6 @@ import org.mindroid.impl.robot.context.RobotContextStateListener;
 import org.mindroid.impl.robot.context.RobotContextStateEvaluator;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
 
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -51,6 +51,7 @@ public final class RobotFactory implements IRobotFactory {
 
     private String brickIP = null;
     private int brickTCPport = -1;
+    private int robotServerPort = -1;
 
     private String msgServerIP = null;
     private int msgServerTCPPort = -1;
@@ -153,24 +154,8 @@ public final class RobotFactory implements IRobotFactory {
             myRobot.getStatemachineManager().addConstraintEvalauator(evaluator);
             RobotContextStateManager.getInstance().addRobotContextStateEvaluator(evaluator);
 
-            //---------------- CREATE MESSENGER
-            if(isValidIP(msgServerIP) && isValidTCPPort(msgServerTCPPort)){
-                Runnable run = new Runnable(){
-                    @Override
-                    public void run(){
-                        try {
-                            myRobot.messenger = new Messenger(myRobot.getRobotID(), InetAddress.getByName(msgServerIP),msgServerTCPPort);
-                            myRobot.messageingEnabled = true;
-                        } catch (UnknownHostException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                new Thread(run).start();
-            }else{
-                myRobot.messenger = null;
-                myRobot.messageingEnabled = false;
-            }
+            //---------------- CREATE MESSENGER and ROBOTSERVER
+            createNetworkCommunicationInterfaces();
 
 
         }else{
@@ -180,6 +165,40 @@ public final class RobotFactory implements IRobotFactory {
         }
         System.out.println("The RobotFactory created a Robot with the following setup:\n"+toString());
         return robotCommandCenter;
+    }
+
+    /**
+     * Creates the Messenger and the RobotServer.
+     */
+    private void createNetworkCommunicationInterfaces() {
+        if(isValidIP(msgServerIP) && isValidTCPPort(msgServerTCPPort)){
+            Runnable run = new Runnable(){
+                @Override
+                public void run(){
+                    try {
+                        //Initialize Messenger
+                        myRobot.messenger = new Messenger(myRobot.getRobotID(), InetAddress.getByName(msgServerIP),msgServerTCPPort);
+                        myRobot.messageingEnabled = true;
+
+                        //Initialize RobotServer
+                        if(isValidTCPPort(robotServerPort)) {
+                            IRobotServer robotServer = new RobotServer(robotServerPort,myRobot.messenger);
+                            robotServer.registerMsgListener(RobotContextStateListener.getInstance());
+                            robotServer.start();
+                        }else{
+                            //TODO send error message to error-handler
+                        }
+
+                    } catch (UnknownHostException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            new Thread(run).start();
+        }else{
+            myRobot.messenger = null;
+            myRobot.messageingEnabled = false;
+        }
     }
 
     @Override
@@ -204,6 +223,11 @@ public final class RobotFactory implements IRobotFactory {
     }
 
     @Override
+    public void setRobotServerPort(int robotServerPort){
+        this.robotServerPort = robotServerPort;
+    }
+
+    @Override
     public void setRobotID(String robotID) {
         Robot.getInstance().setRobotID(robotID);
     }
@@ -214,27 +238,28 @@ public final class RobotFactory implements IRobotFactory {
     }
 
     @Override
-    public void clear() {
-        Sensors sensor_S1 = null;
-        Sensors sensor_S2 = null;
-        Sensors sensor_S3 = null;
-        Sensors sensor_S4 = null;
+    public void clearConfiguration() {
+        this.sensor_S1 = null;
+        this.sensor_S2 = null;
+        this.sensor_S3 = null;
+        this.sensor_S4 = null;
 
-        SensorMessages.SensorMode_ mode_S1 = null;
-        SensorMessages.SensorMode_ mode_S2 = null;
-        SensorMessages.SensorMode_ mode_S3 = null;
-        SensorMessages.SensorMode_ mode_S4 = null;
+        this.mode_S1 = null;
+        this.mode_S2 = null;
+        this.mode_S3 = null;
+        this.mode_S4 = null;
 
-        Motors motor_A = null;
-        Motors motor_B = null;
-        Motors motor_C = null;
-        Motors motor_D = null;
+        this.motor_A = null;
+        this.motor_B = null;
+        this.motor_C = null;
+        this.motor_D = null;
 
-        String brickIP = null;
-        int brickTCPport = -1;
+        this.brickIP = null;
+        this.brickTCPport = -1;
 
-        String msgServerIP = null;
-        int msgServerTCPPort = -1;
+        this.msgServerIP = null;
+        this.msgServerTCPPort = -1;
+        this.robotServerPort = -1;
     }
 
     private boolean isValidTCPPort(int brickTCPport) {

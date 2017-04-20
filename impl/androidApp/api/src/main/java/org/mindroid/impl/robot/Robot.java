@@ -32,8 +32,8 @@ public final class Robot {
 
     private StatemachineManager statemachineManager;
 
-    public boolean messageingEnabled = false;
-    public IMessenger messenger = null;
+    protected boolean messageingEnabled = false;
+    protected IMessenger messenger = null;
 
     private static Robot robot = new Robot();
 
@@ -139,14 +139,19 @@ public final class Robot {
         return robotController;
     }
 
-    public String getRobotID() {
+    protected String getRobotID() {
         return robotID;
     }
 
-    public void setRobotID(String robotID) {
+    protected void setRobotID(String robotID) {
         this.robotID = robotID;
     }
 
+    public boolean isMessageingEnabled() {
+        return messageingEnabled;
+    }
 
-
+    protected IMessenger getMessenger() {
+        return messenger;
+    }
 }

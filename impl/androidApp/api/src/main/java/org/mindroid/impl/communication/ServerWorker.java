@@ -38,7 +38,9 @@ public class ServerWorker implements Runnable {
                     //TODO finding the end of a message could be solved without "}"
                     if(line.endsWith("}")){
                         MindroidMessage deserializedMsg = messageMarshaller.deserializeMessage(sb.toString());
-                        listener.handleMessage(deserializedMsg);
+                        if(listener != null) {
+                            listener.handleMessage(deserializedMsg);
+                        }
                         sb = new StringBuilder();
 
                     }

@@ -34,7 +34,7 @@ public class RobotHardwareConfiguration implements IRobodancerConfig {
 
     @Override
     public SensorMessages.SensorMode_ getSensorModeOfS1() {
-        return SensorMessages.SensorMode_.RED;
+        return SensorMessages.SensorMode_.COLOR_ID;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class RobotHardwareConfiguration implements IRobodancerConfig {
 
     @Override
     public SensorMessages.SensorMode_ getSensorModeOfS4() {
-        return SensorMessages.SensorMode_.RED;
+        return SensorMessages.SensorMode_.COLOR_ID;
     }
 
     //------------------ MOTORS ------------------

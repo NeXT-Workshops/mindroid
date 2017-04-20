@@ -3,7 +3,7 @@ package org.mindroid.android.app.robodancer;
 import org.mindroid.android.app.acitivites.SettingsActivity;
 
 /**
- * Created by Torbe on 18.04.2017.
+ * Created by Torben on 18.04.2017.
  */
 public class Settings {
 
@@ -11,9 +11,10 @@ public class Settings {
     public String robotID = "ROBOT_ID";
     public String groupID = "GROUP_ID";
     public String ev3IP = SettingsActivity.DEFAULT_EV3_IP;
-    public int ev3TCPPort = 0;
+    public int ev3TCPPort = -1;
     public String serverIP = SettingsActivity.DEFAULT_SERVER_IP;
-    public int serverTCPPort = 0;
+    public int serverTCPPort = -1;
+    public int robotServerPort = -1;
 
     private static Settings ourInstance = new Settings();
 

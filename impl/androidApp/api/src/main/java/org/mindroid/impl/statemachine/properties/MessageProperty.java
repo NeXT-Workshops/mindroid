@@ -10,6 +10,11 @@ public class MessageProperty implements IMessageProperty {
     private String msg;
     private String sender;
 
+    /**
+     *
+     * @param msg
+     * @param sender
+     */
     public MessageProperty(String msg, String sender){
         this.msg = msg;
         this.sender = sender;

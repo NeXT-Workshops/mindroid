@@ -20,6 +20,8 @@ public interface IRobotFactory {
     public void setMSGServerIP(String msgServerIP);
     public void setMSGServerTCPPort(int tcpPort);
 
+    void setRobotServerPort(int robotServerPort);
+
     public void setRobotID(String robotID);
 
     //TODO public void addRuleSet(HasmMap<RobotEvent,Rule> rules);
@@ -27,7 +29,7 @@ public interface IRobotFactory {
     public void addStatemachine(IStatemachine statemachine);
 
     /** Clears all properties **/
-    public void clear();
+    public void clearConfiguration();
 
     public IRobotCommandCenter createRobot(); //TODO return robodancer or singleton or both
 

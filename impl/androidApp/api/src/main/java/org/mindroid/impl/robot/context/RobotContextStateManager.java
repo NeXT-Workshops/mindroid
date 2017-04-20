@@ -70,7 +70,7 @@ public class RobotContextStateManager implements IRobotContextStateManager,ICloc
     @Override
     public void cleanContextState(){
         robotContextState_Source.getTimeEvents().clear();
-        //TODO: robotContextState_Source.getMessages().clear();
+        //TODO: robotContextState_Source.getMessages().clearConfiguration();
     }
 
 

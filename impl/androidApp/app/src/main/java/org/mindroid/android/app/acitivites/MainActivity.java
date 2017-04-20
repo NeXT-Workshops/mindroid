@@ -317,9 +317,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadConnectionProperties(){
         connectionProperties = getApplicationContext().getSharedPreferences("ConnectionData.xml",0);
-
+        //TODO Refactor -> get settings from Settings.class
         if (connectionProperties != null) {
-                String savedVal = connectionProperties.getString(SettingsActivity.KEY_EV3_IP, SettingsActivity.DEFAULT_EV3_IP);
+            String savedVal;
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_ROBOT_ID,SettingsActivity.DEFAULT_ROBOT_ID);
+                Settings.getInstance().robotID = ( (savedVal.isEmpty()) ? SettingsActivity.KEY_ROBOT_ID : savedVal);
+
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_GROUP_ID,SettingsActivity.DEFAULT_GROUP_ID);
+                Settings.getInstance().groupID = ( (savedVal.isEmpty()) ? SettingsActivity.KEY_GROUP_ID : savedVal);
+
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_EV3_IP, SettingsActivity.DEFAULT_EV3_IP);
                 Settings.getInstance().ev3IP = ( (savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_IP : savedVal);
 
                 savedVal = connectionProperties.getString(SettingsActivity.KEY_EV3_TCP_PORT,SettingsActivity.DEFAULT_EV3_TCP_PORT);
@@ -331,11 +338,10 @@ public class MainActivity extends AppCompatActivity {
                 savedVal = connectionProperties.getString(SettingsActivity.KEY_SERVER_TCP_PORT,SettingsActivity.DEFAULT_SERVER_TCP_PORT);
                 Settings.getInstance().serverTCPPort = (Integer.parseInt((savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_TCP_PORT : savedVal));
 
-                savedVal = connectionProperties.getString(SettingsActivity.KEY_ROBOT_ID,SettingsActivity.DEFAULT_ROBOT_ID);
-                Settings.getInstance().robotID = ( (savedVal.isEmpty()) ? SettingsActivity.KEY_ROBOT_ID : savedVal);
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_ROBOT_SERVER_TCP_PORT,SettingsActivity.DEFAULT_ROBOT_SERVER_PORT);
+                Settings.getInstance().robotServerPort = (Integer.parseInt((savedVal.isEmpty()) ? SettingsActivity.DEFAULT_ROBOT_SERVER_PORT : savedVal));
 
-                savedVal = connectionProperties.getString(SettingsActivity.KEY_GROUP_ID,SettingsActivity.DEFAULT_GROUP_ID);
-                Settings.getInstance().groupID = ( (savedVal.isEmpty()) ? SettingsActivity.KEY_GROUP_ID : savedVal);
+
 
             try {
                 robot.makeRobot(); //Builds the robot with the Connection Settings

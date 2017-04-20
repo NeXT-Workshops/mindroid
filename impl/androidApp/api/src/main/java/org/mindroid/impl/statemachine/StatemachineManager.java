@@ -10,6 +10,7 @@ import org.mindroid.api.statemachine.properties.ITimeProperty;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.robot.Robot;
+import org.mindroid.impl.robot.RobotController;
 import org.mindroid.impl.robot.context.RobotContextStateListener;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
 import org.mindroid.impl.robot.context.StartCondition;
@@ -80,8 +81,9 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                 StartCondition.getInstance().setStateActiveTime(System.currentTimeMillis());
                 //TODO add Gyrosensors position too
 
-                if(Robot.getInstance().messageingEnabled){
-                    Robot.getInstance().messenger.sendMessage(IMessenger.SERVER_LOG,"Changed State to --> "+currentStates.get(ID).getName());
+
+                if(Robot.getInstance().isMessageingEnabled()){
+                    Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Changed State to --> "+currentStates.get(ID).getName());
                 }
 
                 //Activate state
@@ -167,8 +169,8 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
             subscribeConstraints(id);
             handleTimeEventScheduling(id);
             StartCondition.getInstance().setStateActiveTime(System.currentTimeMillis());
-            if(Robot.getInstance().messageingEnabled){
-                Robot.getInstance().messenger.sendMessage(IMessenger.SERVER_LOG,"Start Statemachine: "+id);
+            if(Robot.getInstance().isMessageingEnabled()){
+                Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Start Statemachine: "+id);
             }
 
             statemachines.get(id).start();
@@ -185,8 +187,8 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
             Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_B);
             Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_C);
             Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_D);
-            if(Robot.getInstance().messageingEnabled){
-                Robot.getInstance().messenger.sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+id);
+            if(Robot.getInstance().isMessageingEnabled()){
+                Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+id);
             }
             statemachines.get(id).stop();
             return true;

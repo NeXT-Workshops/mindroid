@@ -7,27 +7,27 @@ import org.mindroid.api.statemachine.properties.IMessageProperty;
  */
 public class MessageProperty implements IMessageProperty {
 
-    private String msg;
-    private String sender;
+    private String content;
+    private String source;
 
     /**
      *
-     * @param msg
-     * @param sender
+     * @param content
+     * @param source
      */
-    public MessageProperty(String msg, String sender){
-        this.msg = msg;
-        this.sender = sender;
+    public MessageProperty(String content, String source){
+        this.content = content;
+        this.source = source;
     }
 
     @Override
-    public String getSensder() {
-        return null;
+    public String getSource() {
+        return source;
     }
 
     @Override
-    public String getMessage() {
-        return null;
+    public String getContent() {
+        return content;
     }
 
 }

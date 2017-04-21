@@ -107,7 +107,7 @@ public class State implements IState{
 
 	@Override
 	public void activate() {
-		System.out.println(getName()+"->State.activate()");
+		System.out.println("State.activate(): "+getName()+"->State.activate()");
 
 		isActive = true;
 		run();		

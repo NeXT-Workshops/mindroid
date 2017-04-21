@@ -21,4 +21,12 @@ public class EV3PortID
    {
       return label;
    }
+
+   @Override
+   public String toString() {
+      return "EV3PortID{" +
+              "label='" + label + '\'' +
+              ", number=" + number +
+              '}';
+   }
 }

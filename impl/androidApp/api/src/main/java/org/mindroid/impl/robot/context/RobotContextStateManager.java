@@ -48,8 +48,9 @@ public class RobotContextStateManager implements IRobotContextStateManager,ICloc
         robotContextState.setSensor_output_S4(robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_4));
 
         robotContextState.setReceivedTimeEvents(robotContextState_Source.getTimeEvents());
+        robotContextState.setReceivedMessages(robotContextState_Source.getMessages());
 
-        //System.out.println("taking snapshot of context: "+robotContextState);
+        //System.out.println("Took a snapshot! "+robotContextState.toString());
 
         return robotContextState;
     }

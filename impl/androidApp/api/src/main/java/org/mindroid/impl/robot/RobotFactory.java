@@ -84,7 +84,7 @@ public final class RobotFactory implements IRobotFactory {
     @Override
     public IRobotCommandCenter createRobot() {
         RobotCommandCenter robotCommandCenter = new RobotCommandCenter(myRobot);
-
+        Robot.getRobotController().setRobotID(Robot.getInstance().robotID);
 
         if(robotConfig != null) {
             //Sensors
@@ -179,7 +179,7 @@ public final class RobotFactory implements IRobotFactory {
                         //Initialize Messenger
                         myRobot.messenger = new Messenger(myRobot.getRobotID(), InetAddress.getByName(msgServerIP),msgServerTCPPort);
                         myRobot.messageingEnabled = true;
-
+                        Robot.getRobotController().setMessenger(Robot.getInstance().messenger);
                         //Initialize RobotServer
                         if(isValidTCPPort(robotServerPort)) {
                             IRobotServer robotServer = new RobotServer(robotServerPort,myRobot.messenger);
@@ -199,6 +199,12 @@ public final class RobotFactory implements IRobotFactory {
             myRobot.messenger = null;
             myRobot.messageingEnabled = false;
         }
+
+        //Workaround: messenger is not set when robot Controller gets initialized
+        if(Robot.getInstance().isMessageingEnabled()){
+
+        }
+
     }
 
     @Override

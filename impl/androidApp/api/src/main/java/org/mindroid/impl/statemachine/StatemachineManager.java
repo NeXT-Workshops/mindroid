@@ -71,7 +71,8 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
 
             if (transition != null) {
                 currentStates.get(ID).deactivate();
-                currentStates.put(ID,transition.fire());
+                IState nextState = transition.fire();
+                currentStates.put(ID,nextState);
                 //Clear RobotContextStateListener -> Remove old TimeEvents and Messages from context
                 RobotContextStateManager.getInstance().cleanContextState();
 
@@ -128,7 +129,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      * @param source
      */
     private void scheduleTimeEvents(IConstraint constraint,IState source) {
-        System.out.println("StatemachineManager.scheduleTimeEvents(): scheduleTimeEvents called: "+constraint+" from state: "+source);
+        //System.out.println("StatemachineManager.scheduleTimeEvents(): scheduleTimeEvents called: "+constraint+" from state: "+source);
         if(constraint instanceof AbstractLogicOperator){
             scheduleTimeEvents(((AbstractLogicOperator) constraint).getLeftConstraint(),source);
             scheduleTimeEvents(((AbstractLogicOperator) constraint).getRightConstraint(),source);
@@ -145,7 +146,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                     scheduledTimeEvents.add(task);
                     timeEventScheduler.schedule(task, time);
 
-                    System.out.println("StatemachineManager.scheduleTimeEvents(): ScheduledTimeEvent" + timeevent);
+                    //System.out.println("StatemachineManager.scheduleTimeEvents(): ScheduledTimeEvent" + timeevent);
                 }
             }
         }
@@ -171,6 +172,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
             StartCondition.getInstance().setStateActiveTime(System.currentTimeMillis());
             if(Robot.getInstance().isMessageingEnabled()){
                 Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Start Statemachine: "+id);
+                Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Current State: "+currentStates.get(id).getName());
             }
 
             statemachines.get(id).start();

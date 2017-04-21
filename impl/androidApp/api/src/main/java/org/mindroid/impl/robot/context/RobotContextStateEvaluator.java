@@ -44,8 +44,10 @@ public class RobotContextStateEvaluator implements IRobotContextStateEvaluator {
 
     @Override
     public void evaluateConstraints(IRobotContextState rcs) {
+
         for(String statemachine_id : subscribedConstraints.keySet()){
             for (int i = 0; i < subscribedConstraints.get(statemachine_id).size(); i++) {
+                //System.out.println("ContextStateEvaluator.evaluateConstraints()" +subscribedConstraints.get(statemachine_id));
                 boolean isSatisfied = false;
                 isSatisfied = evaluateConstraint(subscribedConstraints.get(statemachine_id).get(i),rcs);
 
@@ -57,7 +59,7 @@ public class RobotContextStateEvaluator implements IRobotContextStateEvaluator {
         }
     }
 
-    @Override                       //TODO Rename RobotEventListener
+    @Override
     public void subscribeConstraints(ISatisfiedConstraintHandler constraintHandler,String statemachine_id,List<IConstraint> constraints) {
         if(!subscribedConstraints.containsKey(statemachine_id)){
             if(!listener.containsKey(statemachine_id)) {

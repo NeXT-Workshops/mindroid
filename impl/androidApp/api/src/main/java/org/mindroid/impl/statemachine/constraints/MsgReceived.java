@@ -26,7 +26,7 @@ public class MsgReceived extends AbstractMessageComparator {
 
 
     private boolean evaluate(MindroidMessage msg){
-        boolean satisfiedSource = (msg.getSource().equals(((MessageProperty)getProperty()).getSource()));
+        boolean satisfiedSource = (msg.getSource().getValue().equals(((MessageProperty)getProperty()).getSource()));
         boolean satisfiedDestination = true; //TODO check if the message is actually for me? broadcast?
         boolean satisfiedContent = msg.getContent().equals(((MessageProperty)getProperty()).getContent());
         return  satisfiedSource && satisfiedContent && satisfiedDestination;

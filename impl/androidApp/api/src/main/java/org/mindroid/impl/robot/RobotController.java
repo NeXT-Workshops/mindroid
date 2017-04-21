@@ -45,4 +45,11 @@ public class RobotController {
         return robotID;
     }
 
+    protected void setMessenger(IMessenger messenger) {
+        this.messenger = messenger;
+    }
+
+    protected void setRobotID(String robotID) {
+        this.robotID = robotID;
+    }
 }

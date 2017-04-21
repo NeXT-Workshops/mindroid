@@ -1,5 +1,6 @@
 package org.mindroid.impl.robot.context;
 
+import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.robot.context.IRobotContextState;
 import org.mindroid.api.ITimeEventListener;
 import org.mindroid.api.IMessageListener;
@@ -10,6 +11,7 @@ import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
+import org.mindroid.impl.robot.Robot;
 
 import java.util.ArrayList;
 
@@ -62,6 +64,11 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
     @Override
     public ArrayList<ITimeEvent> getTimeEvents() {
         return receivedTimeEvents;
+    }
+
+    @Override
+    public ArrayList<MindroidMessage> getMessages() {
+        return receivedMessages;
     }
 
 
@@ -148,12 +155,20 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
         this.receivedTimeEvents = receivedTimeEvents;
     }
 
+    public void setReceivedMessages(ArrayList<MindroidMessage> receivedMessages) {
+        this.receivedMessages = receivedMessages;
+    }
+
     public StartCondition getStartCondition() {
         return startCondition;
     }
 
     @Override
     public void handleMessage(MindroidMessage msg) {
+
+        if(Robot.getInstance().isMessageingEnabled()){
+            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"msg received: "+msg);
+        }
         receivedMessages.add(msg);
     }
 

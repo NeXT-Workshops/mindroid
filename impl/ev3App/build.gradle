@@ -42,10 +42,12 @@ task deployEV3(dependsOn: jar) << {
     ant.taskdef(name: 'scp', classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp', classpath: configurations.sshAntTask.asPath)
     ant.scp(todir: ev3_username+'@'+ev3_server+':/home/lejos/programs',
             password: ev3_password,
-            verbose: 'true') {
+            verbose: 'true',
+            trust: 'true') { //trust: 'true' fixes "reject host" issue while deploying
         fileset(dir: './build/libs') {
             include(name: '**/*.jar')
         }
     }
 }
+
 

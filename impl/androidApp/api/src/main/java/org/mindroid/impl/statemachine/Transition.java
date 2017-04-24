@@ -26,7 +26,7 @@ public class Transition implements ITransition{
 
 	@Override
 	public void run() {
-		System.out.println("TRANSITION: TRANSITION FIRED! -> Standard run methoed exectued!");
+		System.out.println("TRANSITION: TRANSITION FIRED! -> Standard run method executed!");
 		//do something
 	}
 

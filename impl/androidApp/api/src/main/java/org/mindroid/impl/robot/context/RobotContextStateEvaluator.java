@@ -26,7 +26,7 @@ public class RobotContextStateEvaluator implements IRobotContextStateEvaluator {
     }
 
 
-    private boolean evaluateConstraint(IConstraint constraint,IRobotContextState rcs){
+    private synchronized boolean evaluateConstraint(IConstraint constraint,IRobotContextState rcs){
         if(constraint instanceof IComparator){
             //Evaluate Comparator-Constraint
             return ((IComparator)constraint).evaluate(rcs);
@@ -43,11 +43,10 @@ public class RobotContextStateEvaluator implements IRobotContextStateEvaluator {
 
 
     @Override
-    public void evaluateConstraints(IRobotContextState rcs) {
-
+    public synchronized void evaluateConstraints(IRobotContextState rcs) {
         for(String statemachine_id : subscribedConstraints.keySet()){
             for (int i = 0; i < subscribedConstraints.get(statemachine_id).size(); i++) {
-                //System.out.println("ContextStateEvaluator.evaluateConstraints()" +subscribedConstraints.get(statemachine_id));
+                System.out.println("ContextStateEvaluator.evaluateConstraints()" +subscribedConstraints.get(statemachine_id));
                 boolean isSatisfied = false;
                 isSatisfied = evaluateConstraint(subscribedConstraints.get(statemachine_id).get(i),rcs);
 
@@ -60,7 +59,7 @@ public class RobotContextStateEvaluator implements IRobotContextStateEvaluator {
     }
 
     @Override
-    public void subscribeConstraints(ISatisfiedConstraintHandler constraintHandler,String statemachine_id,List<IConstraint> constraints) {
+    public synchronized void subscribeConstraints(ISatisfiedConstraintHandler constraintHandler,String statemachine_id,List<IConstraint> constraints) {
         if(!subscribedConstraints.containsKey(statemachine_id)){
             if(!listener.containsKey(statemachine_id)) {
                 listener.put(statemachine_id, constraintHandler);

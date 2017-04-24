@@ -55,7 +55,7 @@ public class MindroidMain implements IMindroidMain {
 
 
     public void initStatemachine() throws StateAlreadyExsists {
-        lightshowBig();
+        //lightshowBig();
     }
 
 
@@ -81,12 +81,13 @@ public class MindroidMain implements IMindroidMain {
         }
         final String player_dest = other_player;
 
-        /** Waits for command to start with sending an command or wait**/
+
+
+        /** Waits for command **/
         IState state_idle = new State("Idle"){
             @Override
             public void run(){
-                messenger.sendMessage(SERVER_LOG,"Who should sent the Command?");
-                brickController.resetEV3StatusLight();
+                //brickController.resetEV3StatusLight();
             }
         };
 
@@ -144,9 +145,10 @@ public class MindroidMain implements IMindroidMain {
             }
         };
 
-        IConstraint time_expired = new TimeExpired(new Seconds(4));
-        Transition trans_end_lightshow = new Transition(time_expired);
-        Transition trans_cmd_sent = new Transition(time_expired);
+        Transition trans_end_Redlightshow = new Transition(new TimeExpired(new Seconds(4)));
+        Transition trans_end_Yellowlightshow = new Transition(new TimeExpired(new Seconds(4)));
+        Transition trans_end_Greenlightshow = new Transition(new TimeExpired(new Seconds(4)));
+        Transition trans_cmd_sent = new Transition(new TimeExpired(new Seconds(2)));
 
         sm.addState(state_idle);
         sm.setStartState(state_idle);
@@ -162,9 +164,9 @@ public class MindroidMain implements IMindroidMain {
         sm.addTransition(trans_light_yellow,state_idle,state_yellow);
         sm.addTransition(trans_light_green,state_idle,state_green);
 
-        sm.addTransition(trans_end_lightshow,state_red,state_idle);
-        sm.addTransition(trans_end_lightshow,state_yellow,state_idle);
-        sm.addTransition(trans_end_lightshow,state_green,state_idle);
+        sm.addTransition(trans_end_Redlightshow,state_red,state_sending_command);
+        sm.addTransition(trans_end_Yellowlightshow,state_yellow,state_sending_command);
+        sm.addTransition(trans_end_Greenlightshow,state_green,state_sending_command);
 
     }
 
@@ -308,7 +310,7 @@ public class MindroidMain implements IMindroidMain {
 
 
     }
-    /*
+
     public void wallPingPong() throws StateAlreadyExsists {
         IState state_forward = new State("Forward") {
             @Override
@@ -397,6 +399,6 @@ public class MindroidMain implements IMindroidMain {
         sm.addTransition(drive_backwards, state_backward, state_turn);
         sm.addTransition(done_turn_180, state_turn, state_forward);
         sm.addTransition(stop,state_forward,state_time_test);
-    }*/
+    }
 
 }

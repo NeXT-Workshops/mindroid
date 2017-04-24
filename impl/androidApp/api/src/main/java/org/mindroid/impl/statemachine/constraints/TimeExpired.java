@@ -12,7 +12,6 @@ import org.mindroid.impl.statemachine.properties.Seconds;
  */
 public class TimeExpired extends AbstractComparator {
 
-    private long delta = 50;
 
     public TimeExpired(ITimeProperty property) {
         super(property);
@@ -20,7 +19,7 @@ public class TimeExpired extends AbstractComparator {
 
     private boolean evaluate(long t_stateActivated, ITimeEvent timeEvent){
         if(timeEvent.getDelay() == ((ITimeProperty)getProperty()).getTime() && timeEvent.getOwner().equals(((ITimeProperty)getProperty()).getSource())){
-            if( (System.currentTimeMillis() - t_stateActivated - delta) < timeEvent.getDelay()){ //State has to be longer active since the delay of occuring timeevent
+            if( (System.currentTimeMillis() - t_stateActivated) < timeEvent.getDelay()){ //State has to be longer active since the delay of occuring timeevent
                 return false; //False Satisfied TimeEvent Constraint
             }
             return true;
@@ -32,7 +31,7 @@ public class TimeExpired extends AbstractComparator {
     public boolean evaluate(IRobotContextState context) {
         long t_stateActivated = context.getStartCondition().getStateActiveTime();
         boolean satisfied = false;
-
+        System.out.println("Evaluating TimeEvent: "+getProperty());
         for (ITimeEvent iTimeEvent : context.getTimeEvents()) {
             satisfied = evaluate(t_stateActivated,iTimeEvent);
             if(satisfied){

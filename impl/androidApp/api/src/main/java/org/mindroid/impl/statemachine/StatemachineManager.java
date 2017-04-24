@@ -59,7 +59,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      * @param satConstraint - Constraint which is satisfied
      */
     @Override
-    public void handleSatisfiedConstraint(String ID,IConstraint satConstraint){
+    public synchronized void handleSatisfiedConstraint(String ID,IConstraint satConstraint){
         /*if(!isActive){ //Return if statemachine is deactived!
             return;
         }*/

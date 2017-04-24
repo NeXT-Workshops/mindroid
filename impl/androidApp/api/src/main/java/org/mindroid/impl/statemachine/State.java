@@ -105,17 +105,22 @@ public class State implements IState{
 		return true;
 	}
 
+
+
 	@Override
 	public void activate() {
-		System.out.println("State.activate(): "+getName()+"->State.activate()");
+		synchronized(this){
+			System.out.println("State.activate(): "+getName()+"->State.activate()");
 
-		isActive = true;
-		run();		
+			isActive = true;
+			run();
+		}
 	}
 
 	@Override
 	public void deactivate() {
-		isActive = false;
+		this.isActive = false;
+		System.out.println("State.deactivate(): "+getName()+" is not active anymore");
 	}
 
 	@Override

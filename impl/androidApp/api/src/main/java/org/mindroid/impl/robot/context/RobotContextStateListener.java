@@ -41,7 +41,7 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
 
 
     @Override
-    public IEV3SensorEvent getSensorEvent(final EV3PortID sensorPort) {
+    public synchronized IEV3SensorEvent getSensorEvent(final EV3PortID sensorPort) {
         if(sensorPort.equals(EV3PortIDs.PORT_1)){
             return sensor_output_S1;
         }
@@ -62,18 +62,18 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
     }
 
     @Override
-    public ArrayList<ITimeEvent> getTimeEvents() {
+    public synchronized ArrayList<ITimeEvent> getTimeEvents() {
         return receivedTimeEvents;
     }
 
     @Override
-    public ArrayList<MindroidMessage> getMessages() {
+    public synchronized ArrayList<MindroidMessage> getMessages() {
         return receivedMessages;
     }
 
 
     @Override
-    public SensorMessages.SensorMode_ getSensorMode(EV3PortID sensorPort) {
+    public synchronized SensorMessages.SensorMode_ getSensorMode(EV3PortID sensorPort) {
 
         if(sensorPort.equals(EV3PortIDs.PORT_1)){
             return sensor_output_S1.getSensorMode();
@@ -95,7 +95,7 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
 
 
     @Override
-    public void handleSensorEvent(EV3PortID sensorPort, IEV3SensorEvent event) {
+    public synchronized void handleSensorEvent(EV3PortID sensorPort, IEV3SensorEvent event) {
         //System.out.println("Handle sensor event called"+event);
 
         if(sensorPort.equals(EV3PortIDs.PORT_1)){
@@ -128,43 +128,43 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
 
 
     @Override
-    public void handleTimeEvent(ITimeEvent timeEvent) {
+    public synchronized void handleTimeEvent(ITimeEvent timeEvent) {
         //Gets Called form TimeEventProducer
         System.out.println("RobotContextListener.handleTimeEvent(): called with: "+timeEvent);
         receivedTimeEvents.add(timeEvent);
     }
 
 
-    public void setSensor_output_S1(IEV3SensorEvent sensor_output_S1) {
+    public synchronized void setSensor_output_S1(IEV3SensorEvent sensor_output_S1) {
         this.sensor_output_S1 = sensor_output_S1;
     }
 
-    public void setSensor_output_S2(IEV3SensorEvent sensor_output_S2) {
+    public synchronized void setSensor_output_S2(IEV3SensorEvent sensor_output_S2) {
         this.sensor_output_S2 = sensor_output_S2;
     }
 
-    public void setSensor_output_S3(IEV3SensorEvent sensor_output_S3) {
+    public synchronized void setSensor_output_S3(IEV3SensorEvent sensor_output_S3) {
         this.sensor_output_S3 = sensor_output_S3;
     }
 
-    public void setSensor_output_S4(IEV3SensorEvent sensor_output_S4) {
+    public synchronized void setSensor_output_S4(IEV3SensorEvent sensor_output_S4) {
         this.sensor_output_S4 = sensor_output_S4;
     }
 
-    public void setReceivedTimeEvents(ArrayList<ITimeEvent> receivedTimeEvents) {
+    public synchronized void setReceivedTimeEvents(ArrayList<ITimeEvent> receivedTimeEvents) {
         this.receivedTimeEvents = receivedTimeEvents;
     }
 
-    public void setReceivedMessages(ArrayList<MindroidMessage> receivedMessages) {
+    public synchronized void setReceivedMessages(ArrayList<MindroidMessage> receivedMessages) {
         this.receivedMessages = receivedMessages;
     }
 
-    public StartCondition getStartCondition() {
+    public synchronized StartCondition getStartCondition() {
         return startCondition;
     }
 
     @Override
-    public void handleMessage(MindroidMessage msg) {
+    public synchronized void handleMessage(MindroidMessage msg) {
 
         if(Robot.getInstance().isMessageingEnabled()){
             Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"msg received: "+msg);
@@ -173,7 +173,7 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
     }
 
     @Override
-    public String toString() {
+    public synchronized String toString() {
         return "RobotContextStateListener{" +
                 "sensor_output_S1=" + sensor_output_S1 +
                 ", sensor_output_S2=" + sensor_output_S2 +

@@ -17,7 +17,7 @@ import org.mindroid.impl.statemachine.constraints.TimeExpired;
 public class Statemachine implements IStatemachine{
 
 	private String ID = null;
-	IState currentState = null; //TODO refactor -> remove currentState attribute from Statemachine
+	IState currentState = null;
 
 	IState startState;
 	/**
@@ -73,8 +73,7 @@ public class Statemachine implements IStatemachine{
 			this.states.put(state.getName(), state);
 		}
 	}
-	
-	
+
 	@Override
 	public void addTransition(ITransition transition, IState fromState, IState toState){
 		assert transition != null;
@@ -83,6 +82,9 @@ public class Statemachine implements IStatemachine{
 		
 		if(states.containsKey(fromState.getName()) && states.containsKey(toState.getName())){
 			try {
+				//TODO Make a copy of Transition-Constraint otherwise ERROR at evaluating TIMEPROPERTIES OCCUR!
+				//
+
 				//Make new transition-object, so the user can use the same transition multiple times at differnt source and destination states without creating new object of the same transition!
 				ITransition tmpTransition = new Transition(transition.getConstraint(),toState);
 				tmpTransition.setDestination(toState);
@@ -103,6 +105,11 @@ public class Statemachine implements IStatemachine{
 		
 	}
 
+	/**
+	 * Completes the Information of the ConstraintProperties. (Source needed)
+	 * @param constraint
+	 * @param source
+	 */
 	private void addStateInformationToProperties(IConstraint constraint,IState source) {
 		if(constraint instanceof AbstractLogicOperator){
 			addStateInformationToProperties(((AbstractLogicOperator) constraint).getLeftConstraint(),source);

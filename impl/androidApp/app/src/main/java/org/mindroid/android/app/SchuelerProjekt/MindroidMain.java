@@ -55,7 +55,167 @@ public class MindroidMain implements IMindroidMain {
 
 
     public void initStatemachine() throws StateAlreadyExsists {
-        //lightshowBig();
+        synchronizedWallPingPong();
+    }
+
+
+
+    public void synchronizedWallPingPong() throws StateAlreadyExsists {
+        final String cmd_red = "RED";
+        final String cmd_yellow = "YELLOW";
+        final String cmd_green = "GREEN";
+
+        String player_1 = "Bobby";
+        String player_2 = "Lea";
+
+        final String other_player;
+
+        //WHO AM I?
+        if(myRobotID.equals(player_1)){
+            other_player = player_2;
+            final String myID = player_1;
+        }else{
+            other_player = player_1;
+            final String myID = player_2;
+
+        }
+        final String player_dest = other_player;
+
+        IState state_idle = new State("Idle") {
+            @Override
+            public void run() {
+                //FORWARD
+                motorController.stop(EV3PortIDs.PORT_A);
+                motorController.stop(EV3PortIDs.PORT_D);
+
+                brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.BLINKING);
+            }
+        };
+
+
+        IState state_forward = new State("Forward") {
+            @Override
+            public void run() {
+                //FORWARD
+                motorController.setMotorDirection(EV3PortIDs.PORT_A,IMotorControl.MOTOR_FORWARD);
+                motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_FORWARD);
+
+                brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+
+                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+            }
+        };
+
+        IState state_wait = new State("WaitingForMessage") {
+            @Override
+            public void run() {
+                //Wait
+                motorController.stop(EV3PortIDs.PORT_A);
+                motorController.stop(EV3PortIDs.PORT_D);
+
+                brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.BLINKING);
+            }
+        };
+
+
+        IState state_backward = new State("backward") {
+            @Override
+            public void run() {
+                System.out.println(this.getName() + " isActive\n");
+                //BACKWARD
+                motorController.setMotorDirection(EV3PortIDs.PORT_A,IMotorControl.MOTOR_BACKWARD);
+                motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_BACKWARD);
+
+                brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
+
+                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+            }
+        };
+
+        IState state_turn = new State("turn") {
+            @Override
+            public void run() {
+                System.out.println(this.getName() + " isActive\n");
+                //TURN LEFT
+                motorController.setMotorDirection(EV3PortIDs.PORT_A,IMotorControl.MOTOR_BACKWARD);
+                motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_FORWARD);
+
+                brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
+
+                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+            }
+        };
+
+        IState state_sendStartMsg = new State("BackToStart") {
+            @Override
+            public void run() {
+                System.out.println(this.getName() + " isActive\n");
+                //TURN LEFT
+                motorController.setMotorDirection(EV3PortIDs.PORT_A,IMotorControl.MOTOR_FORWARD);
+                motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_FORWARD);
+
+                brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+
+                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+
+                messenger.sendMessage(player_dest,"START");
+            }
+        };
+
+
+        IConstraint cnstr_leader = new OR(new EQ(new Color(Color.BLACK,EV3PortIDs.PORT_1)),new EQ(new Color(Color.BLACK,EV3PortIDs.PORT_4)));
+        Transition trans_iamLeader = new Transition(cnstr_leader){
+            @Override
+            public void run(){
+                messenger.sendMessage(player_dest,"I AM THE LEADER");
+            }
+        };
+
+        //--- Transitionen
+        IConstraint cnstr_iamFollower = new MsgReceived(new MessageProperty("I AM THE LEADER",other_player));
+        Transition trans_iamFollower = new Transition(cnstr_iamFollower);
+
+        IConstraint cnstr_rcvdStartMsg = new MsgReceived(new MessageProperty("START",other_player));
+        Transition trans_rcvdStartMsg = new Transition(cnstr_rcvdStartMsg);
+
+        IConstraint distance_collision = new LT(new Distance(0.15f, EV3PortIDs.PORT_2));
+        ITransition trans_collision = new Transition(distance_collision);
+
+        IConstraint time_driving_backward = new TimeExpired(new Milliseconds(1200));
+        ITransition trans_drive_backwards = new Transition(time_driving_backward);
+
+        IConstraint time_180turn = new TimeExpired(new Milliseconds(1300));
+        ITransition trans_done_turn_180 = new Transition(time_180turn);
+
+        IConstraint time_stop = new TimeExpired(new Seconds(4));
+        ITransition trans_stop = new Transition(time_stop);
+
+
+        // SETUP STATEMACHINE
+        //Set start states ------
+        sm.addState(state_idle);
+        sm.setStartState(state_idle);
+
+        //Add States ------
+        sm.addState(state_forward);
+        sm.addState(state_backward);
+        sm.addState(state_turn);
+        sm.addState(state_sendStartMsg);
+        sm.addState(state_wait);
+
+        sm.addTransition(trans_iamLeader,state_idle,state_forward);
+        sm.addTransition(trans_iamFollower,state_idle,state_wait);
+        sm.addTransition(trans_rcvdStartMsg,state_wait,state_forward);
+
+        sm.addTransition(trans_collision,state_forward,state_backward);
+        sm.addTransition(trans_drive_backwards, state_backward, state_turn);
+        sm.addTransition(trans_done_turn_180, state_turn, state_sendStartMsg);
+        sm.addTransition(trans_stop,state_sendStartMsg,state_idle);
+
     }
 
 

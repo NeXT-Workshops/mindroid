@@ -75,7 +75,7 @@ public class Statemachine implements IStatemachine{
 	}
 
 	@Override
-	public void addTransition(ITransition transition, IState fromState, IState toState){
+	public void addTransition(final ITransition transition, IState fromState, IState toState){
 		assert transition != null;
 		assert fromState != null;
 		assert toState != null;
@@ -83,10 +83,15 @@ public class Statemachine implements IStatemachine{
 		if(states.containsKey(fromState.getName()) && states.containsKey(toState.getName())){
 			try {
 				//TODO Make a copy of Transition-Constraint otherwise ERROR at evaluating TIMEPROPERTIES OCCUR!
-				//
+				//TODO Is that actually useful? --> may implement method Transition.copy():Transition;
 
 				//Make new transition-object, so the user can use the same transition multiple times at differnt source and destination states without creating new object of the same transition!
-				ITransition tmpTransition = new Transition(transition.getConstraint(),toState);
+				ITransition tmpTransition = new Transition(transition.getConstraint(),toState){
+					@Override
+					public void run(){
+						transition.run();
+					}
+				};
 				tmpTransition.setDestination(toState);
 				fromState.addTransition(tmpTransition);
 

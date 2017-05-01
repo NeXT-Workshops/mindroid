@@ -1,6 +1,7 @@
 package org.mindroid.api.communication;
 
 import org.mindroid.common.messages.server.Destination;
+import org.mindroid.common.messages.server.LogLevel;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
 
@@ -30,9 +31,9 @@ public interface IMessenger {
      * Sends a log message to the server.
      *
      * @param content
-     * @param type
+     * @param logLevel
      */
-    void sendLogMessage(String content, MessageType type);
+    void sendLogMessage(String content, LogLevel logLevel);
 
 
 

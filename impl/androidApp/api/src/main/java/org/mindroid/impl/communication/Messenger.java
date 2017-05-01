@@ -2,6 +2,7 @@ package org.mindroid.impl.communication;
 
 import org.mindroid.api.communication.IMessenger;
 import org.mindroid.common.messages.server.Destination;
+import org.mindroid.common.messages.server.LogLevel;
 import org.mindroid.common.messages.server.MessageMarshaller;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
@@ -77,8 +78,8 @@ public class Messenger implements IMessenger {
     }
 
     @Override
-    public void sendLogMessage(String content, MessageType type) {
-        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, type, content);
+    public void sendLogMessage(String content, LogLevel logLevel) {
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, logLevel.getMessageType(), content);
         sendMessage(msgObj);
     }
 

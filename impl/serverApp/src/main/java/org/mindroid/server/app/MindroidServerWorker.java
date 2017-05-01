@@ -86,6 +86,7 @@ public class MindroidServerWorker implements Runnable {
 
         //deliver message meant to be sent to another robot
         if(deserializedMsg.getMessageType().equals(MessageType.MESSAGE)&& !deserializedMsg.isLogMessage() && !deserializedMsg.isBroadcastMessage() ) {
+            mindroidServerFrame.addContentLine("Local","INFO", "Message from "+deserializedMsg.getSource().getValue()+" to "+deserializedMsg.getDestination().getValue()+": '"+deserializedMsg.getContent()+"'");
             InetSocketAddress address = mindroidServerFrame.findAddress(deserializedMsg.getDestination());
             sendMessage(deserializedMsg, address);
             }
@@ -94,9 +95,12 @@ public class MindroidServerWorker implements Runnable {
         //deliver broadcast message
         if (deserializedMsg.getDestination().getValue().equals(Destination.BROADCAST.getValue())) {
             HashMap<Destination, InetSocketAddress> ipMapping = mindroidServerFrame.getIPMapping();
+            mindroidServerFrame.addContentLine("Local","INFO", "Message from "+deserializedMsg.getSource().getValue()+" to everyone: '"+deserializedMsg.getContent()+"'");
             for(Map.Entry<Destination, InetSocketAddress> entry : ipMapping.entrySet()) {
-                InetSocketAddress address = entry.getValue();
-                sendMessage(new MindroidMessage(deserializedMsg.getSource(),entry.getKey(),deserializedMsg.getMessageType(),deserializedMsg.getContent()),address);
+                if(!deserializedMsg.getSource().getValue().equals(entry.getKey().getValue())) {
+                    InetSocketAddress address = entry.getValue();
+                    sendMessage(new MindroidMessage(deserializedMsg.getSource(),entry.getKey(), deserializedMsg.getMessageType(),deserializedMsg.getContent()), address);
+                }
             }
         }
 

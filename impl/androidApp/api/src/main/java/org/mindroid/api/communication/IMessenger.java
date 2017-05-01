@@ -10,10 +10,12 @@ import org.mindroid.common.messages.server.MindroidMessage;
 public interface IMessenger {
 
     public static final String SERVER_LOG = Destination.SERVER_LOG.getValue();
+    public static final String BROADCAST = Destination.BROADCAST.getValue();
+
 
     /**
      * Sends a message to the given destination. If the destination is the server, MessageType INFO is used.
-     * For other MessageTypes use sendLogMessage(String content, MessageType type)
+     * For other Log-MessageTypes use sendLogMessage(String content, MessageType type)
      *
      */
     void sendMessage(String destination, String msg);

@@ -5,7 +5,7 @@ import org.mindroid.impl.ev3.EV3PortID;
 /**
  * Created by torben on 10.03.2017.
  */
-public abstract class EV3SensorPorperty implements SimpleEV3SensorPorperty {
+public abstract class EV3SensorPorperty implements IEV3SensorPorperty {
 
     private float value;
     private EV3PortID port;

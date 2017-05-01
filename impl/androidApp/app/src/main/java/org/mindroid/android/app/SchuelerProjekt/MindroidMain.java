@@ -55,7 +55,7 @@ public class MindroidMain implements IMindroidMain {
 
 
     public void initStatemachine() throws StateAlreadyExsists {
-        synchronizedWallPingPong();
+        testTransitionCopy();
     }
 
 
@@ -188,7 +188,7 @@ public class MindroidMain implements IMindroidMain {
         IConstraint time_driving_backward = new TimeExpired(new Milliseconds(1200));
         ITransition trans_drive_backwards = new Transition(time_driving_backward);
 
-        IConstraint time_180turn = new TimeExpired(new Milliseconds(1300));
+        IConstraint time_180turn = new TimeExpired(new Milliseconds(1400));
         ITransition trans_done_turn_180 = new Transition(time_180turn);
 
         IConstraint time_stop = new TimeExpired(new Seconds(4));
@@ -559,6 +559,70 @@ public class MindroidMain implements IMindroidMain {
         sm.addTransition(drive_backwards, state_backward, state_turn);
         sm.addTransition(done_turn_180, state_turn, state_forward);
         sm.addTransition(stop,state_forward,state_time_test);
+    }
+
+    public void testTransitionCopy() throws StateAlreadyExsists {
+        IState state_mathRandom = new State("Random Number State"){
+            @Override
+            public void run(){
+                brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.DOUBLE_BLINKING);
+                int number;
+                do {
+                    number = (int)Math.round(Math.random() * 3);
+                    messenger.sendMessage(SERVER_LOG,"Calculated Number"+number);
+                }while(!(number >= 1 && number <= 3));
+                messenger.sendMessage(myRobotID,""+number);
+                messenger.sendMessage(SERVER_LOG,""+number+" - "+myRobotID);
+            }
+        };
+
+        IState state_nr1 = new State("State NR1"){
+            @Override
+            public void run(){
+                brickController.setEV3StatusLight(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
+            }
+        };
+
+        IState state_nr2 = new State("State NR2"){
+            @Override
+            public void run(){
+                brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
+            }
+        };
+
+        IState state_nr3 = new State("State NR3"){
+            @Override
+            public void run(){
+                brickController.setEV3StatusLight(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
+            }
+        };
+
+        IConstraint constr_nr1 = new MsgReceived(new MessageProperty("1",myRobotID));
+        IConstraint constr_nr2 = new MsgReceived(new MessageProperty("2",myRobotID));
+        IConstraint constr_nr3 = new MsgReceived(new MessageProperty("3",myRobotID));
+        IConstraint constr_timeout = new TimeExpired(new Seconds(3));
+
+        Transition trans_nr1 = new Transition(constr_nr1);
+        Transition trans_nr2 = new Transition(constr_nr2);
+        Transition trans_nr3 = new Transition(constr_nr3);
+        Transition trans_timeout = new Transition(constr_timeout);
+        Transition trans_timeout2 = new Transition(constr_timeout);
+
+
+        sm.addState(state_mathRandom);
+        sm.setStartState(state_mathRandom);
+        sm.addState(state_nr1);
+        sm.addState(state_nr2);
+        sm.addState(state_nr3);
+
+        sm.addTransition(trans_nr1,state_mathRandom,state_nr1);
+        sm.addTransition(trans_nr2,state_mathRandom,state_nr2);
+        sm.addTransition(trans_nr3,state_mathRandom,state_nr3);
+
+        sm.addTransition(trans_timeout,state_nr1,state_mathRandom);
+        sm.addTransition(trans_timeout,state_nr2,state_mathRandom);
+        sm.addTransition(trans_timeout2,state_nr3,state_mathRandom);
+
     }
 
 }

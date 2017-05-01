@@ -2,6 +2,7 @@ package org.mindroid.impl.statemachine.constraints;
 
 import org.mindroid.api.robot.context.IRobotContextState;
 import org.mindroid.api.statemachine.constraints.AbstractMessageComparator;
+import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.api.statemachine.properties.IProperty;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.statemachine.properties.MessageProperty;
@@ -33,4 +34,8 @@ public class MsgReceived extends AbstractMessageComparator {
     }
 
 
+    @Override
+    public IConstraint copy() {
+        return new MsgReceived(getProperty().copy());
+    }
 }

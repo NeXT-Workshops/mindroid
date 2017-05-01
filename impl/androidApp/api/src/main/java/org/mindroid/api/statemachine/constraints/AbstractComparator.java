@@ -34,4 +34,6 @@ public abstract class AbstractComparator implements IComparator {
     public int hashCode() {
         return property != null ? property.hashCode() : 0;
     }
+
+
 }

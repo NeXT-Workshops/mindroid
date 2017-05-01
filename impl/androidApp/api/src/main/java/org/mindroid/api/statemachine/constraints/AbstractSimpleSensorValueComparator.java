@@ -2,7 +2,7 @@ package org.mindroid.api.statemachine.constraints;
 
 import org.mindroid.api.robot.context.IRobotContextState;
 import org.mindroid.api.sensor.IEV3SensorEvent;
-import org.mindroid.api.statemachine.properties.SimpleEV3SensorPorperty;
+import org.mindroid.api.statemachine.properties.IEV3SensorPorperty;
 
 /**
  * Created by torben on 16.03.2017.
@@ -10,7 +10,7 @@ import org.mindroid.api.statemachine.properties.SimpleEV3SensorPorperty;
 public abstract class AbstractSimpleSensorValueComparator extends AbstractComparator{
 
 
-    public AbstractSimpleSensorValueComparator(SimpleEV3SensorPorperty property) {
+    public AbstractSimpleSensorValueComparator(IEV3SensorPorperty property) {
         super(property);
     }
 
@@ -18,9 +18,9 @@ public abstract class AbstractSimpleSensorValueComparator extends AbstractCompar
 
     @Override
     public boolean evaluate(IRobotContextState context) {
-        if(getProperty() instanceof SimpleEV3SensorPorperty){
-            IEV3SensorEvent event = context.getSensorEvent(((SimpleEV3SensorPorperty) getProperty()).getSensorPort());
-            if(((SimpleEV3SensorPorperty) getProperty()).getSensormode() == event.getSensorMode()){
+        if(getProperty() instanceof IEV3SensorPorperty){
+            IEV3SensorEvent event = context.getSensorEvent(((IEV3SensorPorperty) getProperty()).getSensorPort());
+            if(((IEV3SensorPorperty) getProperty()).getSensormode() == event.getSensorMode()){
                 return evaluate(event.getSample());
             }
         }

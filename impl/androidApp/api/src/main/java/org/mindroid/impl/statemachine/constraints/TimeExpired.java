@@ -3,6 +3,7 @@ package org.mindroid.impl.statemachine.constraints;
 import org.mindroid.api.robot.context.IRobotContextState;
 import org.mindroid.api.statemachine.ITimeEvent;
 import org.mindroid.api.statemachine.constraints.AbstractComparator;
+import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.api.statemachine.properties.ITimeProperty;
 import org.mindroid.impl.statemachine.properties.Milliseconds;
 import org.mindroid.impl.statemachine.properties.Seconds;
@@ -18,6 +19,7 @@ public class TimeExpired extends AbstractComparator {
     }
 
     private boolean evaluate(long t_stateActivated, ITimeEvent timeEvent){
+        //System.out.println(getProperty().toString());
         if(timeEvent.getDelay() == ((ITimeProperty)getProperty()).getTime() && timeEvent.getOwner().equals(((ITimeProperty)getProperty()).getSource())){
             if( (System.currentTimeMillis() - t_stateActivated) < timeEvent.getDelay()){ //State has to be longer active since the delay of occuring timeevent
                 return false; //False Satisfied TimeEvent Constraint
@@ -41,4 +43,8 @@ public class TimeExpired extends AbstractComparator {
         return satisfied;
     }
 
+    @Override
+    public IConstraint copy() {
+        return new TimeExpired((ITimeProperty) getProperty().copy());
+    }
 }

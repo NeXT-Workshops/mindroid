@@ -167,7 +167,7 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
     public synchronized void handleMessage(MindroidMessage msg) {
 
         if(Robot.getInstance().isMessageingEnabled()){
-            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"msg received: "+msg);
+            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"I received a message!");
         }
         receivedMessages.add(msg);
     }

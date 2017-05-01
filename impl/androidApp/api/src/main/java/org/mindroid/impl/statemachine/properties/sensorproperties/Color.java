@@ -1,6 +1,7 @@
 package org.mindroid.impl.statemachine.properties.sensorproperties;
 
 import org.mindroid.api.statemachine.properties.EV3SensorPorperty;
+import org.mindroid.api.statemachine.properties.IProperty;
 import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.impl.ev3.EV3PortID;
 
@@ -25,5 +26,10 @@ public class Color extends EV3SensorPorperty {
     @Override
     public SensorMessages.SensorMode_ getSensormode() {
         return SensorMessages.SensorMode_.COLOR_ID;
+    }
+
+    @Override
+    public IProperty copy() {
+        return new Color(getValue(),getSensorPort());
     }
 }

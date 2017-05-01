@@ -1,6 +1,7 @@
 package org.mindroid.impl.statemachine.properties;
 
 import org.mindroid.api.statemachine.properties.IMessageProperty;
+import org.mindroid.api.statemachine.properties.IProperty;
 
 /**
  * Created by torben on 10.03.2017.
@@ -30,4 +31,8 @@ public class MessageProperty implements IMessageProperty {
         return content;
     }
 
+    @Override
+    public IProperty copy() {
+        return new MessageProperty(getContent(),getSource());
+    }
 }

@@ -75,37 +75,32 @@ public class Statemachine implements IStatemachine{
 	}
 
 	@Override
-	public void addTransition(final ITransition transition, IState fromState, IState toState){
+	public void addTransition(final ITransition transition, IState source, IState destination){
 		assert transition != null;
-		assert fromState != null;
-		assert toState != null;
+		assert source != null;
+		assert destination != null;
 		
-		if(states.containsKey(fromState.getName()) && states.containsKey(toState.getName())){
+		if(states.containsKey(source.getName()) && states.containsKey(destination.getName())){
 			try {
-				//TODO Make a copy of Transition-Constraint otherwise ERROR at evaluating TIMEPROPERTIES OCCUR!
-				//TODO Is that actually useful? --> may implement method Transition.copy():Transition;
-
 				//Make new transition-object, so the user can use the same transition multiple times at differnt source and destination states without creating new object of the same transition!
-				ITransition tmpTransition = new Transition(transition.getConstraint(),toState){
+				//Possible reuse of defined-constraints as well
+				ITransition tmpTransition = new Transition(transition.getConstraint().copy(),destination){
 					@Override
 					public void run(){
 						transition.run();
 					}
 				};
-				tmpTransition.setDestination(toState);
-				fromState.addTransition(tmpTransition);
+				tmpTransition.setDestination(destination);
+				source.addTransition(tmpTransition);
 
 				//Add StateInformation to TimeProperties/(no more yet) in Constraint
-				addStateInformationToProperties(transition.getConstraint(),fromState);
-
-				//transition.setDestination(toState);
-				//fromState.addTransition(transition);
+				addStateInformationToProperties(tmpTransition.getConstraint(),source);
 			} catch (DuplicateTransitionException e) {
 				e.printStackTrace();
 			}
 			
 		}else{
-			new NoSuchStateException("At least one of the given sates: "+fromState.getName()+", "+toState.getName()+" does not exist!").printStackTrace();
+			new NoSuchStateException("At least one of the given sates: "+source.getName()+", "+destination.getName()+" does not exist!").printStackTrace();
 		}
 		
 	}

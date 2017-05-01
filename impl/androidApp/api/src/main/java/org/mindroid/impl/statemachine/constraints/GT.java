@@ -1,7 +1,8 @@
 package org.mindroid.impl.statemachine.constraints;
 
 import org.mindroid.api.statemachine.constraints.AbstractSimpleSensorValueComparator;
-import org.mindroid.api.statemachine.properties.SimpleEV3SensorPorperty;
+import org.mindroid.api.statemachine.constraints.IConstraint;
+import org.mindroid.api.statemachine.properties.IEV3SensorPorperty;
 
 
 /**
@@ -9,14 +10,18 @@ import org.mindroid.api.statemachine.properties.SimpleEV3SensorPorperty;
  */
 public class GT extends AbstractSimpleSensorValueComparator {
 
-    public GT(SimpleEV3SensorPorperty property) {
+    public GT(IEV3SensorPorperty property) {
         super(property);
     }
 
     @Override
     protected boolean evaluate(float value) {
-        return value > ((SimpleEV3SensorPorperty)getProperty()).getValue();
+        return value > ((IEV3SensorPorperty)getProperty()).getValue();
     }
 
 
+    @Override
+    public IConstraint copy() {
+        return new GT((IEV3SensorPorperty) getProperty().copy());
+    }
 }

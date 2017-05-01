@@ -3,22 +3,14 @@ package statemachine;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.mindroid.api.sensor.IUltrasonicSensorEvent;
-import org.mindroid.api.sensor.IUltrasonicSensorEvent.UltrasonicEventType;
 import org.mindroid.api.statemachine.*;
 import org.mindroid.api.statemachine.constraints.IConstraint;
-import org.mindroid.api.statemachine.exception.DuplicateTransitionException;
 import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
-import org.mindroid.common.messages.Sensors;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.robot.context.RobotContextStateListener;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
-import org.mindroid.impl.sensor.EV3Sensor;
-import org.mindroid.impl.sensor.UltrasonicSensorEvent;
 import org.mindroid.impl.statemachine.*;
 import org.mindroid.impl.statemachine.constraints.EQ;
 import org.mindroid.impl.statemachine.constraints.LT;

@@ -227,4 +227,6 @@ public class MindroidServerFrame extends JFrame {
     public InetSocketAddress findAddress(Destination destination) {
         return ipMapping.get(destination);
     }
+
+    public HashMap<Destination, InetSocketAddress> getIPMapping() {return ipMapping;}
 }

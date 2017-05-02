@@ -1,6 +1,7 @@
 package org.mindroid.api.communication;
 
 import org.mindroid.common.messages.server.Destination;
+import org.mindroid.common.messages.server.LogLevel;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
 
@@ -10,10 +11,12 @@ import org.mindroid.common.messages.server.MindroidMessage;
 public interface IMessenger {
 
     public static final String SERVER_LOG = Destination.SERVER_LOG.getValue();
+    public static final String BROADCAST = Destination.BROADCAST.getValue();
+
 
     /**
      * Sends a message to the given destination. If the destination is the server, MessageType INFO is used.
-     * For other MessageTypes use sendLogMessage(String content, MessageType type)
+     * For other Log-MessageTypes use sendLogMessage(String content, MessageType type)
      *
      */
     void sendMessage(String destination, String msg);
@@ -28,9 +31,9 @@ public interface IMessenger {
      * Sends a log message to the server.
      *
      * @param content
-     * @param type
+     * @param logLevel
      */
-    void sendLogMessage(String content, MessageType type);
+    void sendLogMessage(String content, LogLevel logLevel);
 
 
 

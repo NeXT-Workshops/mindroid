@@ -36,6 +36,10 @@ public class MindroidMessage {
         return destination.getValue().equals(Destination.SERVER_LOG.getValue())&&!messageType.equals(MessageType.REGISTRATION);
     }
 
+    public boolean isBroadcastMessage() {
+        return destination.getValue().equals(Destination.BROADCAST.getValue());
+    }
+
     @Override
     public String toString() {
         return "MindroidMessage{" +

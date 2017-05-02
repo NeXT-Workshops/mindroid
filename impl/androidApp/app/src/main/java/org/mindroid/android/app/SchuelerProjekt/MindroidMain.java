@@ -26,6 +26,7 @@ import org.mindroid.impl.statemachine.properties.Seconds;
 import org.mindroid.impl.statemachine.properties.Milliseconds;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
+import org.mindroid.impl.statemachine.properties.sensorproperties.RGB;
 
 import static org.mindroid.api.communication.IMessenger.SERVER_LOG;
 
@@ -55,7 +56,7 @@ public class MindroidMain implements IMindroidMain {
 
 
     public void initStatemachine() throws StateAlreadyExsists {
-        testTransitionCopy();
+        wallPingPong();
     }
 
 
@@ -167,7 +168,7 @@ public class MindroidMain implements IMindroidMain {
         };
 
 
-        IConstraint cnstr_leader = new OR(new EQ(new Color(Color.BLACK,EV3PortIDs.PORT_1)),new EQ(new Color(Color.BLACK,EV3PortIDs.PORT_4)));
+        IConstraint cnstr_leader = new OR(new EQ(Color.BLACK,new Color(EV3PortIDs.PORT_1)),new EQ(Color.BLACK,new Color(EV3PortIDs.PORT_4)));
         Transition trans_iamLeader = new Transition(cnstr_leader){
             @Override
             public void run(){
@@ -182,7 +183,7 @@ public class MindroidMain implements IMindroidMain {
         IConstraint cnstr_rcvdStartMsg = new MsgReceived(new MessageProperty("START",other_player));
         Transition trans_rcvdStartMsg = new Transition(cnstr_rcvdStartMsg);
 
-        IConstraint distance_collision = new LT(new Distance(0.15f, EV3PortIDs.PORT_2));
+        IConstraint distance_collision = new LT(0.15f, new Distance(EV3PortIDs.PORT_2));
         ITransition trans_collision = new Transition(distance_collision);
 
         IConstraint time_driving_backward = new TimeExpired(new Milliseconds(1200));
@@ -251,7 +252,8 @@ public class MindroidMain implements IMindroidMain {
             }
         };
 
-        IConstraint send_cmd = new OR(new EQ(new Color(Color.BLACK,EV3PortIDs.PORT_1)),new EQ(new Color(Color.BLACK,EV3PortIDs.PORT_4)));
+
+        IConstraint send_cmd = new OR(new EQ(Color.BLACK,new Color(EV3PortIDs.PORT_1)),new EQ(Color.BLACK,new Color(EV3PortIDs.PORT_4)));
         ITransition trans_send_cmd = new Transition(send_cmd);
 
 
@@ -381,7 +383,7 @@ public class MindroidMain implements IMindroidMain {
             }
         };
 
-        IConstraint send_cmd = new OR(new EQ(new Color(Color.BLACK,EV3PortIDs.PORT_1)),new EQ(new Color(Color.BLACK,EV3PortIDs.PORT_4)));
+        IConstraint send_cmd = new OR(new EQ(Color.BLACK,new Color(EV3PortIDs.PORT_1)),new EQ(Color.BLACK,new Color(EV3PortIDs.PORT_4)));
 
         Transition trans_send_first_cmd = new Transition(send_cmd){
             @Override
@@ -540,7 +542,7 @@ public class MindroidMain implements IMindroidMain {
         sm.addState(state_backward);
         sm.addState(state_turn);
 
-        IConstraint distance_collision = new LT(new Distance(0.10f, EV3PortIDs.PORT_2));
+        IConstraint distance_collision = new LT(0.10f, new Distance(EV3PortIDs.PORT_2));
         IConstraint time_driving_backward = new TimeExpired(new Milliseconds(1200));
 
         IConstraint time_180turn = new TimeExpired(new Milliseconds(1300));
@@ -562,6 +564,7 @@ public class MindroidMain implements IMindroidMain {
     }
 
     public void testTransitionCopy() throws StateAlreadyExsists {
+
         IState state_mathRandom = new State("Random Number State"){
             @Override
             public void run(){

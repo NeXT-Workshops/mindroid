@@ -7,25 +7,29 @@ import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.impl.ev3.EV3PortID;
 
 /**
- * Created by torben on 10.03.2017.
+ * Created by Torbe on 02.05.2017.
  */
-public class Distance extends SimpleEV3SensorProperty {
+public class Listen extends SimpleEV3SensorProperty {
+
+    public static final int FOUND_ONE = 1;
+
+    public static final int NO_ONE_FOUND = 0;
 
     /**
      *
      * @param port
      */
-    public Distance(EV3PortID port) {
+    public Listen(EV3PortID port) {
         super(port);
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormode() {
-        return SensorMessages.SensorMode_.DISTANCE;
+    public IProperty copy() {
+        return new Listen(getSensorPort());
     }
 
     @Override
-    public IProperty copy() {
-        return new Distance(getSensorPort());
+    public SensorMessages.SensorMode_ getSensormode() {
+        return SensorMessages.SensorMode_.LISTEN;
     }
 }

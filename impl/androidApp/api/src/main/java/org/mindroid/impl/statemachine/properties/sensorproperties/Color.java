@@ -2,13 +2,14 @@ package org.mindroid.impl.statemachine.properties.sensorproperties;
 
 import org.mindroid.api.statemachine.properties.EV3SensorPorperty;
 import org.mindroid.api.statemachine.properties.IProperty;
+import org.mindroid.api.statemachine.properties.SimpleEV3SensorProperty;
 import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.impl.ev3.EV3PortID;
 
 /**
  * Created by torben on 10.03.2017.
  */
-public class Color extends EV3SensorPorperty {
+public class Color extends SimpleEV3SensorProperty {
     //NONE, BLACK, BLUE, GREEN, YELLOW, RED, WHITE, BROWN
     public static final float NONE = 0f;
     public static final float BLACK = 1f;
@@ -19,8 +20,12 @@ public class Color extends EV3SensorPorperty {
     public static final float WHITE = 6f;
     public static final float BROWN = 7f;
 
-    public Color(float value, EV3PortID port) {
-        super(value, port);
+    /**
+     *
+     * @param port
+     */
+    public Color(EV3PortID port) {
+        super(port);
     }
 
     @Override
@@ -30,6 +35,6 @@ public class Color extends EV3SensorPorperty {
 
     @Override
     public IProperty copy() {
-        return new Color(getValue(),getSensorPort());
+        return new Color(getSensorPort());
     }
 }

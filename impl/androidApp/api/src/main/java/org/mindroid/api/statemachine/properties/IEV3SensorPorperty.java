@@ -10,7 +10,5 @@ public interface IEV3SensorPorperty extends IProperty {
 
     SensorMessages.SensorMode_ getSensormode();
 
-    float getValue();
-
     EV3PortID getSensorPort();
 }

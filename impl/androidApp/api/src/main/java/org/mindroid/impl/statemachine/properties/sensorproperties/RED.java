@@ -5,27 +5,28 @@ import org.mindroid.api.statemachine.properties.IProperty;
 import org.mindroid.api.statemachine.properties.SimpleEV3SensorProperty;
 import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.impl.ev3.EV3PortID;
+import org.mindroid.impl.sensor.EV3Sensor;
 
 /**
- * Created by torben on 10.03.2017.
+ * Created by Torbe on 02.05.2017.
  */
-public class Distance extends SimpleEV3SensorProperty {
+public class RED extends SimpleEV3SensorProperty {
 
     /**
      *
      * @param port
      */
-    public Distance(EV3PortID port) {
+    public RED(EV3PortID port) {
         super(port);
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormode() {
-        return SensorMessages.SensorMode_.DISTANCE;
+    public IProperty copy() {
+        return new RED(getSensorPort());
     }
 
     @Override
-    public IProperty copy() {
-        return new Distance(getSensorPort());
+    public SensorMessages.SensorMode_ getSensormode() {
+        return SensorMessages.SensorMode_.RED;
     }
 }

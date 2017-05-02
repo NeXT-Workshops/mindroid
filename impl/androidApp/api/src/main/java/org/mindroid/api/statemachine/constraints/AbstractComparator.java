@@ -9,7 +9,21 @@ import org.mindroid.api.statemachine.properties.ITimeProperty;
  */
 public abstract class AbstractComparator implements IComparator {
 
+    /**
+     * Validate a float value with respect to the given property
+     */
+    protected final int SIMPLE_VALUE_EVALUATION = 1;
+
+    /**
+     * Validate a float-array with respect to the given property
+     */
+    protected final int COMPLEX_VALUE_EVALUATION = 2;
+
     IProperty property;
+    protected int evaluationMode = -1;
+
+    protected float value;
+    protected float[] values;
 
     public AbstractComparator(IProperty property){
         this.property = property;
@@ -35,5 +49,23 @@ public abstract class AbstractComparator implements IComparator {
         return property != null ? property.hashCode() : 0;
     }
 
+    public int getEvaluationMode() {
+        return evaluationMode;
+    }
 
+    public float getValue() {
+        return value;
+    }
+
+    public float[] getValues() {
+        return values;
+    }
+
+    public void setValue(float value) {
+        this.value = value;
+    }
+
+    public void setValues(float[] values) {
+        this.values = values;
+    }
 }

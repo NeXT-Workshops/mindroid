@@ -10,7 +10,7 @@ import org.mindroid.common.messages.Sensors;
  * Created by torben on 02.03.2017.
  */
 
-public class RobotHardwareConfiguration implements IRobodancerConfig {
+public class RobotPortConfig implements IRobodancerConfig {
     //------------------ SENSORS ------------------
     @Override
     public Sensors getSensorAtPortS1() {

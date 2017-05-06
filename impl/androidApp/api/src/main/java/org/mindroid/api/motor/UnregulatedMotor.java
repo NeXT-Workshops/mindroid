@@ -1,6 +1,6 @@
 package org.mindroid.api.motor;
 
-public interface UnregulatedMotor extends Motor {
+public interface UnregulatedMotor extends IMotor {
 	
 	
 	public static final int MAX_POWER = 100;

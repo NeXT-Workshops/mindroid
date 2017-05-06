@@ -19,9 +19,9 @@ import java.util.ArrayList;
 /**
  * Created by torben on 11.03.2017.
  */
-public class RobotContextStateListener implements IRobotContextState,IEV3SensorEventListener,IMessageListener,ITimeEventListener {
+public class RobotContextState implements IRobotContextState,IEV3SensorEventListener,IMessageListener,ITimeEventListener {
 
-    private static RobotContextStateListener ourInstance = new RobotContextStateListener();
+    private static RobotContextState ourInstance = new RobotContextState();
 
     IEV3SensorEvent sensor_output_S1;
     IEV3SensorEvent sensor_output_S2;
@@ -33,7 +33,7 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
 
     StartCondition startCondition;
 
-    public RobotContextStateListener(){
+    public RobotContextState(){
         startCondition = StartCondition.getInstance();
         this.receivedTimeEvents = new ArrayList<ITimeEvent>();
         this.receivedMessages = new ArrayList<MindroidMessage>();
@@ -122,7 +122,7 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
 
 
 
-    public static RobotContextStateListener getInstance() {
+    public static RobotContextState getInstance() {
         return ourInstance;
     }
 
@@ -174,7 +174,7 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
 
     @Override
     public synchronized String toString() {
-        return "RobotContextStateListener{" +
+        return "RobotContextState{" +
                 "sensor_output_S1=" + sensor_output_S1 +
                 ", sensor_output_S2=" + sensor_output_S2 +
                 ", sensor_output_S3=" + sensor_output_S3 +

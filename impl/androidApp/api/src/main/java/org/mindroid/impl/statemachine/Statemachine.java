@@ -10,7 +10,7 @@ import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.api.statemachine.exception.DuplicateTransitionException;
 import org.mindroid.api.statemachine.exception.NoCurrentStateSetException;
 import org.mindroid.api.statemachine.exception.NoSuchStateException;
-import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 import org.mindroid.api.statemachine.properties.ITimeProperty;
 import org.mindroid.impl.statemachine.constraints.TimeExpired;
 
@@ -66,9 +66,9 @@ public class Statemachine implements IStatemachine{
 	}
 
 	@Override
-	public void addState(IState state) throws StateAlreadyExsists {
+	public void addState(IState state) throws StateAlreadyExists {
 		if(this.states.containsKey(state.getName())){
-			throw new StateAlreadyExsists("This Statemachine already has a State with this name: "+state.getName());
+			throw new StateAlreadyExists("This Statemachine already has a State with this name: "+state.getName());
 		}else{
 			this.states.put(state.getName(), state);
 		}
@@ -124,7 +124,7 @@ public class Statemachine implements IStatemachine{
 	}
 
 	@Override
-	public void addStates(Collection<IState> states) throws StateAlreadyExsists{
+	public void addStates(Collection<IState> states) throws StateAlreadyExists {
 		for(IState s : states){
 			addState(s);
 		}
@@ -134,6 +134,8 @@ public class Statemachine implements IStatemachine{
 	public IState getState(String name) {
 		return states.get(name);
 	}
+
+
 
 	@Override
 	public void reset() {
@@ -169,6 +171,11 @@ public class Statemachine implements IStatemachine{
 	@Override
 	public String getID() {
 		return ID;
+	}
+
+	@Override
+	public void setID(String id) {
+		this.ID = id;
 	}
 
 	@Override

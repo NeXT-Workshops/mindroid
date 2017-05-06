@@ -1,22 +1,15 @@
 package org.mindroid.android.app.SchuelerProjekt;
 
-import org.junit.Test;
-import org.mindroid.api.communication.IMessenger;
+import org.mindroid.api.LVL1API;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.robot.control.IMotorControl;
-import org.mindroid.api.statemachine.IMindroidMain;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
 import org.mindroid.api.statemachine.ITransition;
 import org.mindroid.api.statemachine.constraints.IConstraint;
-import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
-import org.mindroid.impl.robot.Robot;
+import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 import org.mindroid.impl.ev3.EV3PortIDs;
-import org.mindroid.impl.robot.BrickController;
-import org.mindroid.impl.robot.MotorController;
-import org.mindroid.impl.robot.RobotController;
-import org.mindroid.impl.robot.SensorController;
 import org.mindroid.impl.statemachine.State;
 import org.mindroid.impl.statemachine.Statemachine;
 import org.mindroid.impl.statemachine.Transition;
@@ -26,42 +19,40 @@ import org.mindroid.impl.statemachine.properties.Seconds;
 import org.mindroid.impl.statemachine.properties.Milliseconds;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
-import org.mindroid.impl.statemachine.properties.sensorproperties.RGB;
 
 import static org.mindroid.api.communication.IMessenger.SERVER_LOG;
 
 /**
  * Created by torben on 02.03.2017.
+ *
+ * Statemachine programming level
+ *
  */
 
-public class MindroidMain implements IMindroidMain {
-
-
-    IStatemachine sm = new Statemachine("main");
-
-    RobotController robotController = Robot.getRobotController();
-    MotorController motorController = robotController.getMotorController();
-    BrickController brickController = robotController.getBrickController();
-    SensorController sensorController = robotController.getSensorController();
-    IMessenger messenger = Robot.getRobotController().getMessenger();
-    String myRobotID = Robot.getRobotController().getRobotID();
+public class MindroidLVL1 extends LVL1API {
 
 
 
-    @Override
-    public IStatemachine getStatemachine() throws StateAlreadyExsists {
-        initStatemachine();
-        return sm;
+
+    public MindroidLVL1() throws StateAlreadyExists {
+        initStatemachines();
     }
 
+    public void initStatemachines() throws StateAlreadyExists {
 
-    public void initStatemachine() throws StateAlreadyExsists {
-        wallPingPong();
+        statemachineCollection.addStatemachine(synchronizedWallPingPong());
+        statemachineCollection.addStatemachine(wallPingPong());
+        statemachineCollection.addStatemachine(lightshowBig());
+        statemachineCollection.addStatemachine(testSM());
+        statemachineCollection.addStatemachine(lightshowSmall());
+        statemachineCollection.addStatemachine(testTransitionCopy());
     }
 
 
 
-    public void synchronizedWallPingPong() throws StateAlreadyExsists {
+    public IStatemachine synchronizedWallPingPong() throws StateAlreadyExists {
+        IStatemachine sm = new Statemachine("syncWallPingPong");
+
         final String cmd_red = "RED";
         final String cmd_yellow = "YELLOW";
         final String cmd_green = "GREEN";
@@ -217,10 +208,13 @@ public class MindroidMain implements IMindroidMain {
         sm.addTransition(trans_done_turn_180, state_turn, state_sendStartMsg);
         sm.addTransition(trans_stop,state_sendStartMsg,state_idle);
 
+        return sm;
     }
 
 
-    public void lightshowBig() throws StateAlreadyExsists {
+    public IStatemachine lightshowBig() throws StateAlreadyExists {
+        IStatemachine sm = new Statemachine("lightShow");
+
         final String cmd_red = "RED";
         final String cmd_yellow = "YELLOW";
         final String cmd_green = "GREEN";
@@ -330,9 +324,12 @@ public class MindroidMain implements IMindroidMain {
         sm.addTransition(trans_end_Yellowlightshow,state_yellow,state_sending_command);
         sm.addTransition(trans_end_Greenlightshow,state_green,state_sending_command);
 
+        return sm;
     }
 
-    public void testSM() throws StateAlreadyExsists {
+    public IStatemachine testSM() throws StateAlreadyExists {
+        IStatemachine sm = new Statemachine("testSM");
+
         IState state_A = new State("STATE A");
         IState state_B = new State("STATE B");
 
@@ -349,10 +346,14 @@ public class MindroidMain implements IMindroidMain {
         sm.addState(state_B);
 
         sm.addTransition(transition,state_A,state_B);
+
+        return sm;
     }
 
 
-    public void lightshowSmall() throws StateAlreadyExsists {
+    public IStatemachine lightshowSmall() throws StateAlreadyExists {
+        IStatemachine sm = new Statemachine("lightshowSmall");
+
         final String cmd_red = "RED";
         final String cmd_yellow = "YELLOW";
         final String cmd_green = "GREEN";
@@ -470,10 +471,12 @@ public class MindroidMain implements IMindroidMain {
         sm.addTransition(trans_yellow,state_wait_for_cmd,state_lightshow);
         sm.addTransition(trans_green,state_wait_for_cmd,state_lightshow);
 
-
+        return sm;
     }
 
-    public void wallPingPong() throws StateAlreadyExsists {
+    public IStatemachine wallPingPong() throws StateAlreadyExists {
+        IStatemachine sm = new Statemachine("SingleWallPingPong");
+
         IState state_forward = new State("Forward") {
             @Override
             public void run() {
@@ -561,10 +564,12 @@ public class MindroidMain implements IMindroidMain {
         sm.addTransition(drive_backwards, state_backward, state_turn);
         sm.addTransition(done_turn_180, state_turn, state_forward);
         sm.addTransition(stop,state_forward,state_time_test);
+
+        return sm;
     }
 
-    public void testTransitionCopy() throws StateAlreadyExsists {
-
+    public IStatemachine testTransitionCopy() throws StateAlreadyExists {
+        IStatemachine sm = new Statemachine("testTransitionCopy");
         IState state_mathRandom = new State("Random Number State"){
             @Override
             public void run(){
@@ -626,6 +631,7 @@ public class MindroidMain implements IMindroidMain {
         sm.addTransition(trans_timeout,state_nr2,state_mathRandom);
         sm.addTransition(trans_timeout2,state_nr3,state_mathRandom);
 
+        return sm;
     }
 
 }

@@ -1,7 +1,7 @@
 package org.mindroid.impl.robot.context;
 
 import org.mindroid.api.robot.context.IRobotContextState;
-import org.mindroid.api.robot.context.IRobotContextStateEvaluator;
+import org.mindroid.api.robot.context.IConstraintEvaluator;
 import org.mindroid.api.statemachine.ISatisfiedConstraintHandler;
 import org.mindroid.api.statemachine.constraints.*;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by torben on 11.03.2017.
  */
-public class RobotContextStateEvaluator implements IRobotContextStateEvaluator {
+public class RobotContextStateEvaluator implements IConstraintEvaluator{
 
 
     Map<String,List<IConstraint>> subscribedConstraints;
@@ -43,10 +43,10 @@ public class RobotContextStateEvaluator implements IRobotContextStateEvaluator {
 
 
     @Override
-    public synchronized void evaluateConstraints(IRobotContextState rcs) {
+    public synchronized void handleRobotContextState(IRobotContextState rcs) {
         for(String statemachine_id : subscribedConstraints.keySet()){
             for (int i = 0; i < subscribedConstraints.get(statemachine_id).size(); i++) {
-                System.out.println("ContextStateEvaluator.evaluateConstraints()" +subscribedConstraints.get(statemachine_id));
+                System.out.println("ContextStateEvaluator.handleRobotContextState()" +subscribedConstraints.get(statemachine_id));
                 boolean isSatisfied = false;
                 isSatisfied = evaluateConstraint(subscribedConstraints.get(statemachine_id).get(i),rcs);
 

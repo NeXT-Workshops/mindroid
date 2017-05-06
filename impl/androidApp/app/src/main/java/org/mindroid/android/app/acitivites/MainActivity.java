@@ -13,16 +13,14 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.Settings;
-import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 
 
 /**
@@ -74,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView txt_isConnected;
     private TextView txt_robotState;
-
+    private Spinner spinner_selectedStatemachine;
 
 
     /** Information Box **/
@@ -105,12 +103,14 @@ public class MainActivity extends AppCompatActivity {
         /** Instantiate buttons and textviews **/
         btn_initConfiguration = (Button) findViewById(R.id.btn_initConfig);
         btn_connect = (Button) findViewById(R.id.btn_connect);
+        spinner_selectedStatemachine = (Spinner) findViewById(R.id.spinner_selectedStatemachine);
         btn_startRobot = (Button) findViewById(R.id.btn_startRobot);
         btn_stopRobot = (Button) findViewById(R.id.btn_stopRobot);
         btn_settings = (Button) findViewById(R.id.btn_settings);
 
         txt_isConnected = (TextView) findViewById(R.id.txt_isConnected);
         txt_robotState = (TextView) findViewById(R.id.txt_stateRobot);
+
 
         /** Information Box **/
         layout_info = (FrameLayout) findViewById(R.id.layout_infobox);
@@ -176,6 +176,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void setStatemachineIDs(String[] items){
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        spinner_selectedStatemachine.setAdapter(adapter);
+    }
+
+    public String getSelectedStatemachine(){
+        return spinner_selectedStatemachine.getSelectedItem().toString();
+    }
+
+
     /**
      * Continuesly checking the current state of:
      *  Robot state (connected ?, configuration ? , running? )
@@ -194,11 +204,15 @@ public class MainActivity extends AppCompatActivity {
 
                 btn_initConfiguration.setEnabled(robot.isConnectedToBrick && !robot.isConfigurationBuilt && positiveUSBState);
 
-                btn_startRobot.setEnabled(robot.isConnectedToBrick && robot.isConfigurationBuilt && !robot.isRunning && positiveUSBState);
+                btn_startRobot.setEnabled(robot.isConnectedToBrick && robot.isConfigurationBuilt && !robot.isRunning && positiveUSBState && !spinner_selectedStatemachine.getSelectedItem().toString().isEmpty());
 
                 btn_stopRobot.setEnabled(robot.isRunning);
 
+                spinner_selectedStatemachine.setEnabled(!robot.isRunning);
+
                 btn_settings.setEnabled(!robot.isConnectedToBrick);
+
+
             }
         };
 
@@ -345,8 +359,8 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 robot.makeRobot(); //Builds the robot with the Connection Settings
-            } catch (StateAlreadyExsists stateAlreadyExsists) {
-                showAlertDialog("State Already exists",stateAlreadyExsists.getMessage());
+            } catch (StateAlreadyExists stateAlreadyExists) {
+                showAlertDialog("State Already exists", stateAlreadyExists.getMessage());
             }
         }else{
             showAlertDialog("Error: Connection Properties","Couldn't Load connection properties. Check the Settings and may restart the application!");

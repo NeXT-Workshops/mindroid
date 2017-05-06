@@ -4,18 +4,19 @@ package org.mindroid.android.app.robodancer;
 
 import android.os.AsyncTask;
 
-import org.mindroid.android.app.SchuelerProjekt.MindroidMain;
-import org.mindroid.android.app.SchuelerProjekt.RobotHardwareConfiguration;
+import org.mindroid.android.app.SchuelerProjekt.MindroidLVL1;
+import org.mindroid.android.app.SchuelerProjekt.MindroidLVL2;
+import org.mindroid.android.app.SchuelerProjekt.RobotPortConfig;
 import org.mindroid.android.app.acitivites.MainActivity;
-import org.mindroid.android.app.acitivites.SettingsActivity;
 import org.mindroid.api.robot.IRobodancerConfig;
 import org.mindroid.api.robot.IRobotFactory;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.api.statemachine.IMindroidMain;
 
 import java.io.IOException;
+import java.util.Set;
 
-import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 import org.mindroid.impl.robot.RobotFactory;
 
 /**
@@ -40,10 +41,11 @@ public class Robot {
     /**
      * TODO Refactor
      */
-    public void makeRobot() throws StateAlreadyExsists {
+    public void makeRobot() throws StateAlreadyExists {
         IRobotFactory roFactory = new RobotFactory();
-        IRobodancerConfig config = new RobotHardwareConfiguration(); //TODO Dependency/Linked to SchuelerProjekt
-        IMindroidMain mindroid = new MindroidMain(); //TODO Dependency/Linked to SchuelerProjekt
+        IRobodancerConfig config = new RobotPortConfig(); //TODO Dependency/Linked to SchuelerProjekt
+        IMindroidMain mindroidStatemachine = new MindroidLVL1(); //TODO Dependency/Linked to SchuelerProjekt
+        IMindroidMain mindroidImperative = new MindroidLVL2();
 
         //Config
         roFactory.setRobotConfig(config);
@@ -54,8 +56,24 @@ public class Robot {
         roFactory.setRobotServerPort(Settings.getInstance().robotServerPort);
         roFactory.setRobotID(Settings.getInstance().robotID);
 
-        //Statemachine
-        roFactory.addStatemachine(mindroid.getStatemachine());
+        //Add Statemachines
+        roFactory.addStatemachine(mindroidStatemachine.getStatemachineCollection());
+        roFactory.addStatemachine(mindroidImperative.getStatemachineCollection());
+
+        //Add Statemachine ids to Dropdown-ui
+        int size_imp = mindroidImperative.getStatemachineCollection().getStatemachineKeySet().size();
+        int size_state = mindroidStatemachine.getStatemachineCollection().getStatemachineKeySet().size();
+        String[] ids = new String[size_imp+size_state];
+        int index = 0;
+        for (String id : mindroidImperative.getStatemachineCollection().getStatemachineKeySet()) {
+            ids[index] = id;
+            index++;
+        }
+        for (String id : mindroidStatemachine.getStatemachineCollection().getStatemachineKeySet()) {
+            ids[index] = id;
+            index++;
+        }
+        main_activity.setStatemachineIDs(ids);
 
         //Create Robot
         commandCenter = roFactory.createRobot();
@@ -272,7 +290,7 @@ public class Robot {
             if(start.length>0) {
                 if (start[0]) { //True => Start robot, else it should stop the Robot
                     try {
-                        commandCenter.startStatemachine("main");//TODO use ID
+                        commandCenter.startStatemachine(main_activity.getSelectedStatemachine());//TODO use ID
 
                         return true;
                     }catch(Exception e){

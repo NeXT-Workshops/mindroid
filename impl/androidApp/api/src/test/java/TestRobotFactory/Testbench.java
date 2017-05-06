@@ -5,7 +5,6 @@ import org.mindroid.api.statemachine.IMindroidMain;
 import org.mindroid.api.robot.IRobodancerConfig;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.api.robot.IRobotFactory;
-import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
 import org.mindroid.common.messages.NetworkPortConfig;
 import org.mindroid.impl.robot.RobotFactory;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;

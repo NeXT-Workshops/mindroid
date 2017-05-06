@@ -32,7 +32,7 @@ public class Messenger implements IMessenger {
 
 
     @Override
-    public void sendMessage(String destination, String content) {
+    public synchronized void sendMessage(String destination, String content) {
         MessageType type;
         if (destination.equals(IMessenger.SERVER_LOG)) {
             type = MessageType.INFO;
@@ -44,7 +44,7 @@ public class Messenger implements IMessenger {
     }
 
     @Override
-    public void sendMessage(MindroidMessage msg) {
+    public synchronized void sendMessage(MindroidMessage msg) {
         final MindroidMessage msgFinal = msg;
         Thread client = new Thread() {
             public void run() {
@@ -78,7 +78,7 @@ public class Messenger implements IMessenger {
     }
 
     @Override
-    public void sendLogMessage(String content, LogLevel logLevel) {
+    public synchronized void sendLogMessage(String content, LogLevel logLevel) {
         MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, logLevel.getMessageType(), content);
         sendMessage(msgObj);
     }

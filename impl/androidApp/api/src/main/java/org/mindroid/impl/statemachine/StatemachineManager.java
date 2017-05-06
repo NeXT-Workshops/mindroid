@@ -2,21 +2,17 @@ package org.mindroid.impl.statemachine;
 
 import org.mindroid.api.*;
 import org.mindroid.api.communication.IMessenger;
-import org.mindroid.api.robot.context.IRobotContextStateEvaluator;
+import org.mindroid.api.robot.context.IConstraintEvaluator;
 import org.mindroid.api.statemachine.*;
 import org.mindroid.api.statemachine.constraints.AbstractLogicOperator;
 import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.api.statemachine.properties.ITimeProperty;
-import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.robot.Robot;
-import org.mindroid.impl.robot.RobotController;
-import org.mindroid.impl.robot.context.RobotContextStateListener;
+import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
 import org.mindroid.impl.robot.context.StartCondition;
 import org.mindroid.impl.statemachine.constraints.TimeExpired;
-import org.mindroid.impl.statemachine.properties.Milliseconds;
-import org.mindroid.impl.statemachine.properties.Seconds;
 
 import java.util.*;
 
@@ -26,17 +22,19 @@ import java.util.*;
 public class StatemachineManager implements ISatisfiedConstraintHandler {
 
     HashMap<String,IState> currentStates;
-    HashMap<String,IStatemachine> statemachines;
+    //HashMap<String,IStatemachine> statemachines;
 
-    ArrayList<IRobotContextStateEvaluator> evaluators;
+    StatemachineCollection statemachineCollection;
+
+    ArrayList<IConstraintEvaluator> evaluators;
     private ArrayList<Task_TimeEvent> scheduledTimeEvents;
 
     private Timer timeEventScheduler;
 
     private StatemachineManager() {
+        statemachineCollection = new StatemachineCollection();
         currentStates = new HashMap<String,IState>();
-        statemachines = new HashMap<String,IStatemachine>();
-        evaluators= new ArrayList<IRobotContextStateEvaluator>(1);
+        evaluators= new ArrayList<IConstraintEvaluator>(1);
         scheduledTimeEvents = new ArrayList<Task_TimeEvent>();
         timeEventScheduler = new Timer();
 
@@ -73,7 +71,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                 currentStates.get(ID).deactivate();
                 IState nextState = transition.fire();
                 currentStates.put(ID,nextState);
-                //Clear RobotContextStateListener -> Remove old TimeEvents and Messages from context
+                //Clear RobotContextState -> Remove old TimeEvents and Messages from context
                 RobotContextStateManager.getInstance().cleanContextState();
 
                 handleTimeEventScheduling(ID);
@@ -118,7 +116,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
     }
 
     private void subscribeConstraints(String ID) {
-        for (int i = 0; i < evaluators.size(); i++) {
+        for (int i = 0; i < this.evaluators.size(); i++) {
             evaluators.get(i).subscribeConstraints(this,ID, currentStates.get(ID).getConstraints());
         }
     }
@@ -142,7 +140,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                     long time = property.getTime();
                     ITimeEvent timeevent = new TimeEvent(time, source);
 
-                    task = new Task_TimeEvent(RobotContextStateListener.getInstance(), timeevent);
+                    task = new Task_TimeEvent(RobotContextState.getInstance(), timeevent);
                     scheduledTimeEvents.add(task);
                     timeEventScheduler.schedule(task, time);
 
@@ -153,57 +151,117 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
     }
 
     @Override
-    public void addConstraintEvalauator(IRobotContextStateEvaluator evaluator) {
+    public void addConstraintEvalauator(IConstraintEvaluator evaluator) {
         this.evaluators.add(evaluator);
     }
 
 
-    public void addStatemachine(IStatemachine sm){
-        statemachines.put(sm.getID(),sm);
-        currentStates.put(sm.getID(),sm.getStartState());
-    }
-
-    public boolean startStatemachine(String id){
-        if(statemachines.containsKey(id)){
-            currentStates.put(id,statemachines.get(id).getStartState());
-            RobotContextStateManager.getInstance().cleanContextState();
-            subscribeConstraints(id);
-            handleTimeEventScheduling(id);
-            StartCondition.getInstance().setStateActiveTime(System.currentTimeMillis());
-            if(Robot.getInstance().isMessageingEnabled()){
-                Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Start Statemachine: "+id);
-                Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Current State: "+currentStates.get(id).getName());
+    public void addStatemachines(StatemachineCollection sc){
+        for(String id: sc.getStatemachineKeySet()){
+            IStatemachine[] statemachines = sc.getStatemachineSet(id);
+            if(statemachines.length > 0){
+                if(statemachines.length == 1){
+                    this.statemachineCollection.addStatemachine(statemachines[0]);
+                }else{
+                    this.statemachineCollection.addParallelStatemachines(id,statemachines);
+                }
             }
-
-            statemachines.get(id).start();
-
-            return true;
         }
-        return false;
+
     }
 
-    public boolean stopStatemachine(String id){
-        if(statemachines.containsKey(id)){
-            //Stop all motors
-            Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_A);
-            Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_B);
-            Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_C);
-            Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_D);
-            if(Robot.getInstance().isMessageingEnabled()){
-                Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+id);
+    /**
+     * Starts a single Statemachine with the given id, or a group of parallel running statemchines with the given groupID (id).
+     *
+     * @param id of one Statemachine - or a GroupID of a group of parallel running Statemachines
+     */
+    public void startStatemachines(String id){
+        //System.out.println ("## 'startStatemachines(id):' called with ID: "+id);
+        IStatemachine[] statemachines = statemachineCollection.getStatemachineSet(id);
+        if(statemachines == null || statemachines.length == 0){
+            return;
+        }
+
+        if(statemachines.length == 1){
+            //start singleStatemachines
+            startStatemachine(statemachines[0]);
+            //System.out.println ("## startStatemachines(id):' only one machine found "+id);
+        }else {
+            //System.out.println ("## startStatemachines(id):' set of statemachines found - parallel start initiated "+id);
+            //Start parallel statemachines
+            for (IStatemachine statemachine : statemachines) {
+                //set new statemachine id: "<groupID>_<statemachineID>"
+                statemachine.setID(id + "_" + statemachine.getID());
+                startStatemachine(statemachine);
             }
-            statemachines.get(id).stop();
-            return true;
         }
-        return false;
     }
 
-    public boolean resetStatemachine(String id){
-        if(statemachines.containsKey(id)){
-            statemachines.get(id).reset();
-            return true;
+    private void startStatemachine(final IStatemachine sm){
+        //System.out.println ("## 'Start Statemachine'-Thread will be started soon! ##");
+        Runnable runSM = new Runnable(){
+         @Override
+         public void run(){
+             // System.out.println("## Starting statemachine in Thread --> "+sm.getID()+" ##");
+                currentStates.put(sm.getID(),sm.getStartState());
+                RobotContextStateManager.getInstance().cleanContextState();
+                subscribeConstraints(sm.getID());
+                handleTimeEventScheduling(sm.getID());
+                StartCondition.getInstance().setStateActiveTime(System.currentTimeMillis());
+                if(Robot.getInstance().isMessageingEnabled()){
+                    Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Start Statemachine: "+sm.getID());
+                    Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Current State: "+currentStates.get(sm.getID()).getName());
+                }
+                sm.start();
+             // System.out.println("## Statemachine "+sm.getID()+" is now running in Thread ##");
+          }
+         };
+        Thread t = new Thread(runSM);
+        t.start();
+        //System.out.println("## 'Start Statemachine'-Thread is running! ##");
+    }
+
+    /**
+     *
+     * Stops a single Statemachine with the given id, or a group of parallel running statemchines with the given groupID (id).
+     *
+     * @param id of one Statemachine - or a GroupID of a group of parallel running Statemachines
+     */
+    public void stopStatemachines(String id){
+        //Stop all motors
+        Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_A);
+        Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_B);
+        Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_C);
+        Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_D);
+
+        IStatemachine[] statemachines = statemachineCollection.getStatemachineSet(id);
+
+        if(statemachines == null || statemachines.length == 0){
+            return;
         }
-        return false;
+        for (IStatemachine statemachine : statemachines) {
+            stopStatemachine(statemachine);
+        }
+    }
+
+    /**
+     * Stops a single statemachine
+     * @param sm
+     */
+    private void stopStatemachine(IStatemachine sm){
+        if(Robot.getInstance().isMessageingEnabled()){
+            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+sm.getID());
+        }
+        currentStates.remove(sm.getID());
+        sm.stop();
+    }
+
+
+    public void resetStatemachine(String id){
+        IStatemachine[] statemachines = statemachineCollection.getStatemachineSet(id);
+        for (IStatemachine statemachine : statemachines) {
+            statemachine.reset();
+        }
     }
 
     public IState getCurrentState(String id){
@@ -211,7 +269,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
     }
 
     public Set<String> getStatemachineIDs(){
-        return statemachines.keySet();
+        return statemachineCollection.getStatemachineKeySet();
     }
 
     // ------------------------ Class: Task_schedule_TimeEvents

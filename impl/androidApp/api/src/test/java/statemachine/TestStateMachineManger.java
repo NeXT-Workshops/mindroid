@@ -7,9 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mindroid.api.statemachine.*;
 import org.mindroid.api.statemachine.constraints.IConstraint;
-import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 import org.mindroid.impl.ev3.EV3PortIDs;
-import org.mindroid.impl.robot.context.RobotContextStateListener;
+import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
 import org.mindroid.impl.statemachine.*;
 import org.mindroid.impl.statemachine.constraints.EQ;
@@ -40,7 +40,7 @@ public class TestStateMachineManger {
 
 
 	@Before
-	public void initStatemachine() throws StateAlreadyExsists {
+	public void initStatemachine() throws StateAlreadyExists {
 		start = new State(state_name_start){
 			@Override
 			public void run(){
@@ -71,7 +71,7 @@ public class TestStateMachineManger {
 	@Test
 	public void testConstraint(){
 		smm.addStatemachine(sm);
-		smm.startStatemachine(statemachineID);
+		smm.startStatemachines(statemachineID);
 
 		//----- State 'start' should be switched to state 'end"
 		smm.handleSatisfiedConstraint(statemachineID,color_red);
@@ -103,7 +103,7 @@ public class TestStateMachineManger {
 	@Test
 	public void testTimeEventDeletionStatemachine(){
 		smm.addStatemachine(sm);
-		smm.startStatemachine(statemachineID);
+		smm.startStatemachines(statemachineID);
 
 
 
@@ -118,7 +118,7 @@ public class TestStateMachineManger {
 		smm.handleSatisfiedConstraint(statemachineID,color_red);
 
 		assertTrue(RobotContextStateManager.getInstance().takeSnapshot().getTimeEvents().size() == 0);
-		RobotContextStateListener.getInstance().handleTimeEvent(new TimeEvent(200f,start));
+		RobotContextState.getInstance().handleTimeEvent(new TimeEvent(200f,start));
 
 
 		assertTrue(smm.getCurrentState(statemachineID).getName().equals(state_name_end));

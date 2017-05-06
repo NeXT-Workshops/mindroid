@@ -8,7 +8,7 @@ import org.mindroid.api.statemachine.constraints.IComparator;
 import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.common.messages.Sensors;
-import org.mindroid.impl.robot.context.RobotContextStateListener;
+import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.robot.context.StartCondition;
 import org.mindroid.impl.sensor.EV3Sensor;
@@ -34,7 +34,7 @@ public class TestConstraints {
         float test_value_true = 15;
         float test_value_flase = 25;
 
-        IRobotContextState contextState = new RobotContextStateListener();
+        IRobotContextState contextState = new RobotContextState();
         EV3Sensor testSensor = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, SensorMessages.SensorMode_.DISTANCE);
         IEV3SensorEventListener rcs = (IEV3SensorEventListener) contextState;
         rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_true,0, SensorMessages.SensorMode_.DISTANCE));
@@ -58,7 +58,7 @@ public class TestConstraints {
         float test_value_false = 15;
         float test_value_true = 25;
 
-        IRobotContextState contextState = new RobotContextStateListener();
+        IRobotContextState contextState = new RobotContextState();
         EV3Sensor testSensor = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, SensorMessages.SensorMode_.DISTANCE);
         IEV3SensorEventListener rcs = (IEV3SensorEventListener) contextState;
         rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_true,0, SensorMessages.SensorMode_.DISTANCE));
@@ -78,7 +78,7 @@ public class TestConstraints {
         float test_value_false = 15;
         float test_value_true = 20;
 
-        IRobotContextState contextState = new RobotContextStateListener();
+        IRobotContextState contextState = new RobotContextState();
         EV3Sensor testSensor = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, SensorMessages.SensorMode_.DISTANCE);
         IEV3SensorEventListener rcs = (IEV3SensorEventListener) contextState;
         rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_true,0, SensorMessages.SensorMode_.DISTANCE));
@@ -101,7 +101,7 @@ public class TestConstraints {
         EV3Sensor testSensor_1 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, SensorMessages.SensorMode_.DISTANCE);
         EV3Sensor testSensor_2 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_2, SensorMessages.SensorMode_.DISTANCE);
 
-        IRobotContextState contextState = new RobotContextStateListener();
+        IRobotContextState contextState = new RobotContextState();
 
         IEV3SensorEventListener rcs = (IEV3SensorEventListener) contextState;
         rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor_1,test_value_s1,0, SensorMessages.SensorMode_.DISTANCE));
@@ -139,7 +139,7 @@ public class TestConstraints {
         EV3Sensor testSensor_1 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, SensorMessages.SensorMode_.DISTANCE);
         EV3Sensor testSensor_2 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_2, SensorMessages.SensorMode_.DISTANCE);
 
-        IRobotContextState contextState = new RobotContextStateListener();
+        IRobotContextState contextState = new RobotContextState();
 
         IEV3SensorEventListener rcs = (IEV3SensorEventListener) contextState;
         rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor_1,test_value_s1,0, SensorMessages.SensorMode_.DISTANCE));
@@ -176,7 +176,7 @@ public class TestConstraints {
         State testState = new State("test");
         testState.activate();
 
-        RobotContextStateListener rcs = new RobotContextStateListener();
+        RobotContextState rcs = new RobotContextState();
         StartCondition.getInstance().setStateActiveTime(1);
 
         Seconds sec_prop = new Seconds(time_val_sec);
@@ -196,7 +196,7 @@ public class TestConstraints {
     public void testTimeExpiredFalse_Seconds() throws InterruptedException {
         float time_val_ms = 2000;
         long time_val_sec = 2;
-        RobotContextStateListener rcs = new RobotContextStateListener();
+        RobotContextState rcs = new RobotContextState();
         StartCondition.getInstance().setStateActiveTime(1);
         State testState = new State("test");
         testState.activate();
@@ -222,7 +222,7 @@ public class TestConstraints {
         State testState = new State("test");
         testState.activate();
 
-        RobotContextStateListener rcs = new RobotContextStateListener();
+        RobotContextState rcs = new RobotContextState();
         StartCondition.getInstance().setStateActiveTime(1);
 
         Milliseconds sec_prop = new Milliseconds(time_val_ms);
@@ -242,7 +242,7 @@ public class TestConstraints {
     public void testTimeExpiredFalse_Millis() throws InterruptedException {
         long time_val_ms = 2000;
         long time_val_sec = 2;
-        RobotContextStateListener rcs = new RobotContextStateListener();
+        RobotContextState rcs = new RobotContextState();
         StartCondition.getInstance().setStateActiveTime(1);
         State testState = new State("test");
         testState.activate();

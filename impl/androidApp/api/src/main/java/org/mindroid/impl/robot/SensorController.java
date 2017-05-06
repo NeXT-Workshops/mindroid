@@ -4,7 +4,6 @@ import org.mindroid.api.robot.control.ISensorControl;
 import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
-import org.mindroid.impl.robot.Robot;
 import org.mindroid.impl.sensor.EV3Sensor;
 
 
@@ -12,7 +11,7 @@ import org.mindroid.impl.sensor.EV3Sensor;
  * Created by torben on 02.03.2017.
  */
 
-public class SensorController implements ISensorControl {
+public class SensorController implements ISensorControl{
 
     private Robot robot;
 
@@ -43,4 +42,5 @@ public class SensorController implements ISensorControl {
 
         return null;
     }
+
 }

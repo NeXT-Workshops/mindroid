@@ -3,7 +3,6 @@ package org.mindroid.impl.robot;
 
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
-import org.mindroid.impl.robot.Robot;
 
 import java.io.IOException;
 
@@ -22,13 +21,14 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     }
 
     @Override
-    public boolean startStatemachine(String id) {
-        return robot.getStatemachineManager().startStatemachine(id);
+    public void startStatemachine(String id) {
+        robot.getStatemachineManager().startStatemachines(id);
+
     }
 
     @Override
-    public boolean stopStatemachine(String id) {
-        return robot.getStatemachineManager().stopStatemachine(id);
+    public void stopStatemachine(String id) {
+        robot.getStatemachineManager().stopStatemachines(id);
     }
 
     @Override

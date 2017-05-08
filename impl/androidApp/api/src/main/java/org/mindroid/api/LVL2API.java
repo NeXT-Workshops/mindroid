@@ -27,7 +27,7 @@ public abstract class LVL2API extends LVL1API {
 
     private boolean collision = false;
 
-    public LED led; //TODO
+    public LED led = new LED(brickController); //TODO: LED not fully implemented
 
     public LVL2API() throws StateAlreadyExists {
         motorA = new Motor(motorController,EV3PortIDs.PORT_A);

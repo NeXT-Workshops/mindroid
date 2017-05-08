@@ -3,20 +3,21 @@ package org.mindroid.impl.brick;
 import org.mindroid.api.LVL2API;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
+import org.mindroid.impl.robot.BrickController;
 
 /**
  * Created by Torbe on 03.05.2017.
  */
 public class LED {
 
-    LVL2API api;
+    BrickController brickController;
 
-    public LED(LVL2API api){
-        this.api = api;
+    public LED(BrickController brickController){
+        this.brickController = brickController;
     }
 
     public void red(){
-        api.setLED(EV3StatusLightColor.RED, EV3StatusLightInterval.ON);
+        brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.ON);
     }
 
     public void green(){

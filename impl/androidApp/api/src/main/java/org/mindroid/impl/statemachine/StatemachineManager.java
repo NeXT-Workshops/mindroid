@@ -63,9 +63,11 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         /*if(!isActive){ //Return if statemachine is deactived!
             return;
         }*/
+        System.out.println("## handleSatisfiedConstraint(id,satConstraint) --> "+ID+  runningStatemachines.get(ID).isActive() + currentStates.get(ID).isActive());
 
         if(currentStates.get(ID) != null && currentStates.get(ID).isActive() && runningStatemachines.containsKey(ID) && runningStatemachines.get(ID).isActive()) { //Otherwise statemachine is deactivated by stop();
-            ITransition transition = currentStates.get(ID).getSatisfiedTransition(satConstraint);
+            ITransition transition = null;
+            transition = currentStates.get(ID).getSatisfiedTransition(satConstraint);
 
             if (transition != null) {
                 currentStates.get(ID).deactivate();
@@ -88,9 +90,9 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                 //Activate state
                 currentStates.get(ID).activate();
             }
-            System.out.println("StateMachine.handleSatisfiedConstraint() => "+satConstraint);
-        }
 
+        }
+        System.out.println("StateMachine.handleSatisfiedConstraint() => "+satConstraint);
 
 
         //Get Constraints of the current State, and subscribe them to the Evaluator
@@ -116,6 +118,11 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         }
     }
 
+    /**
+     * Subscribe constraints of the current state of the Statemachine 'parameter ID' to the evaluators
+     *
+     * @param ID
+     */
     private void subscribeConstraints(String ID) {
         for (int i = 0; i < this.evaluators.size(); i++) {
             evaluators.get(i).subscribeConstraints(this,ID, currentStates.get(ID).getConstraints());
@@ -128,7 +135,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      * @param source
      */
     private void scheduleTimeEvents(IConstraint constraint,IState source) {
-        //System.out.println("StatemachineManager.scheduleTimeEvents(): scheduleTimeEvents called: "+constraint+" from state: "+source);
+        System.out.println("StatemachineManager.scheduleTimeEvents(): scheduleTimeEvents called: "+constraint+" from state: "+source);
         if(constraint instanceof AbstractLogicOperator){
             scheduleTimeEvents(((AbstractLogicOperator) constraint).getLeftConstraint(),source);
             scheduleTimeEvents(((AbstractLogicOperator) constraint).getRightConstraint(),source);
@@ -152,7 +159,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
     }
 
     @Override
-    public void addConstraintEvalauator(IConstraintEvaluator evaluator) {
+    public void addConstraintEvaluator(IConstraintEvaluator evaluator) {
         this.evaluators.add(evaluator);
     }
 
@@ -215,7 +222,9 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                     Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Current State: "+currentStates.get(sm.getID()).getName());
                 }
                 runningStatemachines.put(sm.getID(),sm);
+
                 sm.start();
+
              // System.out.println("## Statemachine "+sm.getID()+" is now running in Thread ##");
           }
          };

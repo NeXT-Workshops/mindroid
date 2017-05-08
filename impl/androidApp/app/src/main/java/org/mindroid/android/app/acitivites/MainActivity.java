@@ -97,8 +97,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        
-        robot = new Robot(this);
+
 
         /** Instantiate buttons and textviews **/
         btn_initConfiguration = (Button) findViewById(R.id.btn_initConfig);
@@ -117,18 +116,24 @@ public class MainActivity extends AppCompatActivity {
         txt_info = (TextView) findViewById(R.id.txt_info);
         btn_activateTethering = (Button) findViewById(R.id.btn_activateTethering);
 
+        try {
+            robot = new Robot(this);
+            createStatemachineIDs(robot);
+        } catch (StateAlreadyExists stateAlreadyExists) {
+            showAlertDialog("Error on create",stateAlreadyExists.getMessage());
+        }
+
+
         /** Load Connection Properties **/
         loadConnectionProperties();
 
-        /** get current IP **/
-//        WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
 
-        setButtonListeners();
+        setListeners();
 
         checkCurrentState();
     }
 
-    private void setButtonListeners() {
+    private void setListeners() {
         //Handle settings button
         btn_settings.setOnClickListener(new View.OnClickListener() {
 
@@ -174,17 +179,38 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), 0);
             }
         });
+
+        spinner_selectedStatemachine.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Settings.getInstance().selectedStatemachineID = (String) parent.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Settings.getInstance().selectedStatemachineID = "";
+            }
+        });
     }
 
-    public void setStatemachineIDs(String[] items){
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+    public void createStatemachineIDs(Robot robot) throws StateAlreadyExists {
+        //Add Statemachine ids to Dropdown-ui
+        int size_imp = robot.mindroidImperative.getStatemachineCollection().getStatemachineKeySet().size();
+        int size_state = robot.mindroidStatemachine.getStatemachineCollection().getStatemachineKeySet().size();
+        String[] ids = new String[size_imp+size_state];
+        int index = 0;
+        for (String id : robot.mindroidImperative.getStatemachineCollection().getStatemachineKeySet()) {
+            ids[index] = id;
+            index++;
+        }
+        for (String id : robot.mindroidStatemachine.getStatemachineCollection().getStatemachineKeySet()) {
+            ids[index] = id;
+            index++;
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, ids);
         spinner_selectedStatemachine.setAdapter(adapter);
     }
-
-    public String getSelectedStatemachine(){
-        return spinner_selectedStatemachine.getSelectedItem().toString();
-    }
-
 
     /**
      * Continuesly checking the current state of:

@@ -10,5 +10,5 @@ public interface ISatisfiedConstraintHandler {
 
     void handleSatisfiedConstraint(String ID,IConstraint satConstraint);
 
-    void addConstraintEvalauator(IConstraintEvaluator evaluator);
+    void addConstraintEvaluator(IConstraintEvaluator evaluator);
 }

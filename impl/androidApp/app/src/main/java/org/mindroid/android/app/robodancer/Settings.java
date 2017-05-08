@@ -16,6 +16,10 @@ public class Settings {
     public int serverTCPPort = -1;
     public int robotServerPort = -1;
 
+    public String selectedStatemachineID = "";
+
+
+
     private static Settings ourInstance = new Settings();
 
     public static Settings getInstance() {

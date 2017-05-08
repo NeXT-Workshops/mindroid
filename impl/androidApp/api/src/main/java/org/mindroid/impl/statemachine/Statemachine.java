@@ -150,6 +150,7 @@ public class Statemachine implements IStatemachine{
 				//TODO Throw exception!
 			}
 			currentState = startState;
+			currentState.activate();
 		}
 		this.isActive = true;
 	}

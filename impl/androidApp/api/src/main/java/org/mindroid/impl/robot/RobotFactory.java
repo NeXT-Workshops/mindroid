@@ -152,7 +152,7 @@ public final class RobotFactory implements IRobotFactory {
 
             // Connect statemachines RobotContextStateEvaluator etc with state machine
             IConstraintEvaluator evaluator = new RobotContextStateEvaluator();
-            myRobot.getStatemachineManager().addConstraintEvalauator(evaluator);
+            myRobot.getStatemachineManager().addConstraintEvaluator(evaluator);
             RobotContextStateManager.getInstance().registerRobotContextStateListener(evaluator);
 
             //---------------- CREATE MESSENGER and ROBOTSERVER

@@ -10,9 +10,7 @@ import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 import org.mindroid.impl.brick.LED;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.motor.Motor;
-import org.mindroid.impl.statemachine.State;
-import org.mindroid.impl.statemachine.Statemachine;
-import org.mindroid.impl.statemachine.Transition;
+import org.mindroid.impl.statemachine.*;
 import org.mindroid.impl.statemachine.constraints.GT;
 import org.mindroid.impl.statemachine.constraints.LT;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
@@ -29,6 +27,7 @@ public abstract class LVL2API extends LVL1API {
 
     private boolean collision = false;
 
+    public LED led; //TODO
 
     public LVL2API() throws StateAlreadyExists {
         motorA = new Motor(motorController,EV3PortIDs.PORT_A);
@@ -40,6 +39,37 @@ public abstract class LVL2API extends LVL1API {
 
         statemachineCollection.addParallelStatemachines("LVL2APIMachine",initStatemachine());
     }
+
+    /**
+     * Register a Statemachine.
+     *
+     * @param sm
+     */
+    private void registerStatemachine(IStatemachine sm){
+        StatemachineCollection sc = new StatemachineCollection();
+        sc.addStatemachine(sm);
+        StatemachineManager.getInstance().addStatemachines(sc);
+    }
+
+    /**
+     * Starting a Statemachine/group of Statemachines with the id.
+     *
+     * @param id
+     */
+    private void startStatemachine(String id){
+        StatemachineManager.getInstance().startStatemachine(id);
+    }
+
+    /**
+     * Stopping a statemachine
+     * Note: All motors will be stopped.
+     *
+     * @param id
+     */
+    private void stopStatemachine(String id){
+        StatemachineManager.getInstance().stopStatemachines(id);
+    }
+
 
 
     public final IStatemachine initStatemachine() throws StateAlreadyExists {
@@ -65,7 +95,7 @@ public abstract class LVL2API extends LVL1API {
         brickController.setEV3StatusLight(color,interval);
     }
 
-    public LED led; //TODO
+
 
     public final void forward(/** distance in cm **/){
         //TODO implement

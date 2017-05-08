@@ -22,7 +22,8 @@ import java.util.*;
 public class StatemachineManager implements ISatisfiedConstraintHandler {
 
     HashMap<String,IState> currentStates;
-    //HashMap<String,IStatemachine> statemachines;
+
+    HashMap<String,IStatemachine> runningStatemachines;
 
     StatemachineCollection statemachineCollection;
 
@@ -37,6 +38,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         evaluators= new ArrayList<IConstraintEvaluator>(1);
         scheduledTimeEvents = new ArrayList<Task_TimeEvent>();
         timeEventScheduler = new Timer();
+        runningStatemachines = new HashMap<String,IStatemachine>();
 
     }
 
@@ -62,10 +64,8 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
             return;
         }*/
 
-        if(currentStates.get(ID) != null && currentStates.get(ID).isActive()) { //Otherwise statemachine is deactivated by stop();
-            ITransition transition = null;
-
-            transition = currentStates.get(ID).getSatisfiedTransition(satConstraint);
+        if(currentStates.get(ID) != null && currentStates.get(ID).isActive() && runningStatemachines.containsKey(ID) && runningStatemachines.get(ID).isActive()) { //Otherwise statemachine is deactivated by stop();
+            ITransition transition = currentStates.get(ID).getSatisfiedTransition(satConstraint);
 
             if (transition != null) {
                 currentStates.get(ID).deactivate();
@@ -88,8 +88,9 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                 //Activate state
                 currentStates.get(ID).activate();
             }
+            System.out.println("StateMachine.handleSatisfiedConstraint() => "+satConstraint);
         }
-        System.out.println("StateMachine.handleSatisfiedConstraint() => "+satConstraint);
+
 
 
         //Get Constraints of the current State, and subscribe them to the Evaluator
@@ -175,8 +176,8 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      *
      * @param id of one Statemachine - or a GroupID of a group of parallel running Statemachines
      */
-    public void startStatemachines(String id){
-        //System.out.println ("## 'startStatemachines(id):' called with ID: "+id);
+    public void startStatemachine(String id){
+        //System.out.println ("## 'startStatemachine(id):' called with ID: "+id);
         IStatemachine[] statemachines = statemachineCollection.getStatemachineSet(id);
         if(statemachines == null || statemachines.length == 0){
             return;
@@ -185,9 +186,9 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         if(statemachines.length == 1){
             //start singleStatemachines
             startStatemachine(statemachines[0]);
-            //System.out.println ("## startStatemachines(id):' only one machine found "+id);
+            //System.out.println ("## startStatemachine(id):' only one machine found "+id);
         }else {
-            //System.out.println ("## startStatemachines(id):' set of statemachines found - parallel start initiated "+id);
+            //System.out.println ("## startStatemachine(id):' set of statemachines found - parallel start initiated "+id);
             //Start parallel statemachines
             for (IStatemachine statemachine : statemachines) {
                 //set new statemachine id: "<groupID>_<statemachineID>"
@@ -213,6 +214,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                     Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Start Statemachine: "+sm.getID());
                     Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Current State: "+currentStates.get(sm.getID()).getName());
                 }
+                runningStatemachines.put(sm.getID(),sm);
                 sm.start();
              // System.out.println("## Statemachine "+sm.getID()+" is now running in Thread ##");
           }
@@ -250,11 +252,12 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      * @param sm
      */
     private void stopStatemachine(IStatemachine sm){
+        sm.stop();
         if(Robot.getInstance().isMessageingEnabled()){
             Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+sm.getID());
         }
+        runningStatemachines.remove(sm.getID());
         currentStates.remove(sm.getID());
-        sm.stop();
     }
 
 

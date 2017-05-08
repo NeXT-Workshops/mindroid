@@ -29,7 +29,7 @@ public class Statemachine implements IStatemachine{
 	
 	private ArrayList<IState> lstStates = new ArrayList<IState>();
 
-	boolean isActive = false;
+	private boolean isActive = false;
 
 
 	public Statemachine(String ID){
@@ -138,28 +138,26 @@ public class Statemachine implements IStatemachine{
 
 
 	@Override
-	public void reset() {
+	public synchronized void reset() {
 		stop();
 		currentState = startState;		
 	}
 	
 	@Override
-	public void start(){
+	public synchronized void start(){
 		if(currentState == null){
 			if(startState == null){
 				//TODO Throw exception!
 			}
 			currentState = startState;
 		}
-		currentState.activate();
-		isActive = true;
+		this.isActive = true;
 	}
 
 	@Override
-	public void stop(){
+	public synchronized void stop(){
 		currentState.deactivate();
-
-		isActive = false;
+		this.isActive = false;
 	}
 	
 	
@@ -181,5 +179,10 @@ public class Statemachine implements IStatemachine{
 	@Override
 	public IState getStartState() {
 		return startState;
+	}
+
+	@Override
+	public synchronized boolean isActive() {
+		return isActive;
 	}
 }

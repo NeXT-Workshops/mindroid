@@ -34,4 +34,6 @@ public interface IStatemachine {
 	public void stop();
 
 	void addStates(Collection<IState> states) throws StateAlreadyExists;
+
+	boolean isActive();
 }

@@ -13,7 +13,7 @@ public class State implements IState{
 
 	String name = null;
 	
-	boolean isActive = false;
+	private boolean isActive = false;
 	
 	HashMap<IConstraint, ITransition> transitions = new HashMap<IConstraint, ITransition>();
 	
@@ -106,26 +106,25 @@ public class State implements IState{
 	}
 
 
-
 	@Override
-	public void activate() {
+	public synchronized void activate() {
 		synchronized(this){
 			System.out.println("State.activate(): "+getName()+"->State.activate()");
 
-			isActive = true;
+			this.isActive = true;
 			run();
 		}
 	}
 
 	@Override
-	public void deactivate() {
+	public synchronized void deactivate() {
 		this.isActive = false;
 		System.out.println("State.deactivate(): "+getName()+" is not active anymore");
 	}
 
 	@Override
-	public boolean isActive() {
-		return isActive;
+	public synchronized boolean isActive() {
+		return this.isActive;
 	}
 
 	@Override

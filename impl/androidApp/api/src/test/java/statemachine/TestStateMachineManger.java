@@ -71,7 +71,7 @@ public class TestStateMachineManger {
 	@Test
 	public void testConstraint(){
 		smm.addStatemachine(sm);
-		smm.startStatemachines(statemachineID);
+		smm.startStatemachine(statemachineID);
 
 		//----- State 'start' should be switched to state 'end"
 		smm.handleSatisfiedConstraint(statemachineID,color_red);
@@ -103,7 +103,7 @@ public class TestStateMachineManger {
 	@Test
 	public void testTimeEventDeletionStatemachine(){
 		smm.addStatemachine(sm);
-		smm.startStatemachines(statemachineID);
+		smm.startStatemachine(statemachineID);
 
 
 

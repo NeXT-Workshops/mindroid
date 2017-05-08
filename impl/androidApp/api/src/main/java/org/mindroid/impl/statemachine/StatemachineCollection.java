@@ -16,11 +16,25 @@ public class StatemachineCollection {
         statemachines = new HashMap<String,IStatemachine[]>();
     }
 
+    /**
+     *
+     * Adds a Single running Statemachine to the Collection.
+     * Statemachines with the same id will be overwritten.
+     *
+     * @param statemachine
+     */
     public void addStatemachine(IStatemachine statemachine){
-        //TODO may throw a warning if statemachine/group with the same id already exists
+        //TODO may throw a warning if statemachine/group with the same id already exists and will be overwritten
         this.statemachines.put(statemachine.getID(),new IStatemachine[]{statemachine});
     }
 
+    /**
+     * Adds parallel running Statemachine to the Collection.
+     * Calling this method multiple times with the same id will add the given Statemachines to the already existing ones.
+     *
+     * @param groupID
+     * @param statemachines
+     */
     public void addParallelStatemachines(String groupID,IStatemachine... statemachines){
         if(this.statemachines.containsKey(groupID)){
             IStatemachine[] existingSMs = this.statemachines.get(groupID);

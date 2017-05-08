@@ -9,4 +9,6 @@ public interface IRobotContextStateManager {
     public void registerRobotContextStateListener(IConstraintEvaluator evaluator);
 
     public void cleanContextState();
+
+    void setGyroSensorStartCondition();
 }

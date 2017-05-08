@@ -21,6 +21,7 @@ public class RobotContextStateManager implements IRobotContextStateManager,ICloc
 
     private Timer clk_Timer;
 
+    /** taking a Snapshot and constraint evaluation per second **/
     private static final long clocks_per_second = 20;
 
     private RobotContextStateManager(){
@@ -79,6 +80,15 @@ public class RobotContextStateManager implements IRobotContextStateManager,ICloc
     public synchronized void cleanContextState(){
         robotContextState_Source.getTimeEvents().clear();
         robotContextState_Source.getMessages().clear();
+    }
+
+    @Override
+    public void setGyroSensorStartCondition() {
+        //The addPosition methods checks if the event is a valid GyroSensor event or if its null.
+        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_1,robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_1));
+        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_2,robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_2));
+        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_3,robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_3));
+        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_4,robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_4));
     }
 
 

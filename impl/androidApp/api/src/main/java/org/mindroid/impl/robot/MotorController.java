@@ -52,6 +52,7 @@ public class MotorController implements IMotorControl {
 
         if(IMotor != null){
             IMotor.stop();
+            IMotor.setSpeed(0);
         }else{
             System.err.println("Unknown motorport! "+motorPort);
         }

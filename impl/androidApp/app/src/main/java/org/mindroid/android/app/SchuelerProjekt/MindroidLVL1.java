@@ -17,6 +17,7 @@ import org.mindroid.impl.statemachine.constraints.*;
 import org.mindroid.impl.statemachine.properties.MessageProperty;
 import org.mindroid.impl.statemachine.properties.Seconds;
 import org.mindroid.impl.statemachine.properties.Milliseconds;
+import org.mindroid.impl.statemachine.properties.sensorproperties.Angle;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
 
@@ -40,6 +41,7 @@ public class MindroidLVL1 extends LVL1API {
 
     public void initStatemachines() throws StateAlreadyExists {
 
+        statemachineCollection.addStatemachine(roationMachine());
         statemachineCollection.addStatemachine(synchronizedWallPingPong());
         statemachineCollection.addStatemachine(wallPingPong());
         statemachineCollection.addStatemachine(lightshowBig());
@@ -48,6 +50,48 @@ public class MindroidLVL1 extends LVL1API {
         statemachineCollection.addStatemachine(testTransitionCopy());
     }
 
+    public IStatemachine roationMachine() throws StateAlreadyExists {
+        IStatemachine sm = new Statemachine("RotationMachine");
+
+        IState state_rotate = new State("Rotating"){
+            @Override
+            public void run(){
+                //TURN RIGHT
+                motorController.setMotorDirection(EV3PortIDs.PORT_A,IMotorControl.MOTOR_FORWARD);
+                motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_BACKWARD);
+
+                brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
+
+                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+            }
+        };
+
+        //90 Degree right turn
+        IConstraint constr_ninety_degree = new Rotation(90f,new Angle(EV3PortIDs.PORT_3));
+        ITransition trans_rotate = new Transition(constr_ninety_degree);
+
+        IState state_wait = new State("waiting a while"){
+            @Override
+            public void run(){
+                brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                motorController.stop(EV3PortIDs.PORT_A);
+                motorController.stop(EV3PortIDs.PORT_D);
+            }
+        };
+
+        IConstraint constr_wait = new TimeExpired(new Seconds(3));
+        ITransition trans_wait = new Transition(constr_wait);
+
+        sm.addState(state_rotate);
+        sm.addState(state_wait);
+        sm.addTransition(trans_rotate,state_rotate,state_wait);
+        sm.addTransition(trans_wait,state_wait,state_rotate);
+
+        sm.setStartState(state_wait);
+
+        return sm;
+    }
 
 
     public IStatemachine synchronizedWallPingPong() throws StateAlreadyExists {

@@ -24,7 +24,7 @@ public class RobotPortConfig implements IRobodancerConfig {
 
     @Override
     public Sensors getSensorAtPortS3() {
-        return null;
+        return Sensors.EV3GyroSensor;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class RobotPortConfig implements IRobodancerConfig {
 
     @Override
     public SensorMessages.SensorMode_ getSensorModeOfS3() {
-        return null;
+        return SensorMessages.SensorMode_.ANGLE;
     }
 
     @Override

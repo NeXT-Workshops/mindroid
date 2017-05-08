@@ -78,7 +78,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
 
                 //Set StartCondition
                 StartCondition.getInstance().setStateActiveTime(System.currentTimeMillis());
-                //TODO add Gyrosensors position too
+                RobotContextStateManager.getInstance().setGyroSensorStartCondition();
 
 
                 if(Robot.getInstance().isMessageingEnabled()){
@@ -208,6 +208,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                 subscribeConstraints(sm.getID());
                 handleTimeEventScheduling(sm.getID());
                 StartCondition.getInstance().setStateActiveTime(System.currentTimeMillis());
+                RobotContextStateManager.getInstance().setGyroSensorStartCondition();
                 if(Robot.getInstance().isMessageingEnabled()){
                     Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Start Statemachine: "+sm.getID());
                     Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Current State: "+currentStates.get(sm.getID()).getName());

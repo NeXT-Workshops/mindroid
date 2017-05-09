@@ -2,6 +2,7 @@ package org.mindroid.api;
 
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
+import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
 import org.mindroid.api.statemachine.ITransition;
@@ -13,7 +14,14 @@ import org.mindroid.impl.motor.Motor;
 import org.mindroid.impl.statemachine.*;
 import org.mindroid.impl.statemachine.constraints.GT;
 import org.mindroid.impl.statemachine.constraints.LT;
+import org.mindroid.impl.statemachine.constraints.Rotation;
+import org.mindroid.impl.statemachine.constraints.TimeExpired;
+import org.mindroid.impl.statemachine.properties.Seconds;
+import org.mindroid.impl.statemachine.properties.sensorproperties.Angle;
+import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
+
+import java.util.HashMap;
 
 /**
  * Created by Torbe on 03.05.2017.
@@ -25,7 +33,7 @@ public abstract class LVL2API extends LVL1API {
     public Motor motorC = null;
     public Motor motorD = null;
 
-    private boolean collision = false;
+    private HashMap<String, Statemachine> sensorEvaluatingStatemachines = new HashMap<>();
 
     public LED led = new LED(brickController); //TODO: LED not fully implemented
 
@@ -35,7 +43,8 @@ public abstract class LVL2API extends LVL1API {
         motorC = new Motor(motorController,EV3PortIDs.PORT_C);
         motorD = new Motor(motorController,EV3PortIDs.PORT_D);
 
-        statemachineCollection.addParallelStatemachines("LVL2APIMachine",getCollisionDetectionStatemachine()/*, getXX(), getXY(), ... */);
+        initSensorStatemachines();
+        statemachineCollection.addParallelStatemachines("LVL2APIMachine", sensorEvaluatingStatemachines.values().toArray(new Statemachine[sensorEvaluatingStatemachines.values().size()]));
 
         statemachineCollection.addParallelStatemachines("LVL2APIMachine",initStatemachine());
     }
@@ -96,68 +105,114 @@ public abstract class LVL2API extends LVL1API {
     }
 
 
+    private void initSensorStatemachines() {
+        sensorEvaluatingStatemachines.clear();
+        BooleanStatemachine collisionDetected = new BooleanStatemachine("collisionDetected", false, new LT(0.15f,new Distance(EV3PortIDs.PORT_2)),new GT(0.15f,new Distance(EV3PortIDs.PORT_2)));
+        sensorEvaluatingStatemachines.put("collisionDetected",collisionDetected);
 
-    public final void forward(/** distance in cm **/){
-        //TODO implement
+        float[] colorValues =  {Color.NONE,Color.BLACK,Color.BLUE,Color.BROWN,Color.GREEN,Color.RED,Color.WHITE,Color.YELLOW};
+        DiscreteValueStateMachine colorSM = new DiscreteValueStateMachine("colorSM", new Color(EV3PortIDs.PORT_1), colorValues );
+        sensorEvaluatingStatemachines.put("colorSM",colorSM );
+
     }
 
-    public final void backward(/** distance in cm **/){
-        //TODO implement
-    }
 
-    public final void turnLeft(/** degrees**/){
-        //TODO implement
-    }
 
-    public final void turnRight(/** degrees**/){
-        //TODO implement
-    }
-
-    private final IStatemachine getCollisionDetectionStatemachine() throws StateAlreadyExists {
-        //TODO implement Statemachine to detect collision
-        Statemachine sm_coll_detection = new Statemachine("Collision Detection");
-        IState checking_collision = new State("checking_collision");
-
-        IConstraint constr_collision = new LT(0.15f,new Distance(EV3PortIDs.PORT_2));
-        IConstraint constr_no_collision = new GT(0.15f,new Distance(EV3PortIDs.PORT_2));
-
-        ITransition trans_collision = new Transition(constr_collision){
-            @Override
-            public void run(){
-                collision = true;
-            }
-        };
-
-        ITransition trans_no_collision = new Transition(constr_no_collision){
-            @Override
-            public void run(){
-                collision = false;
-            }
-        };
-
-        sm_coll_detection.addState(checking_collision);
-        sm_coll_detection.setStartState(checking_collision);
-
-        sm_coll_detection.addTransition(trans_collision,checking_collision,checking_collision);
-        sm_coll_detection.addTransition(trans_no_collision,checking_collision,checking_collision);
-
-        return sm_coll_detection;
-    }
 
     public final boolean isCollisionDetected() {
-        return collision;
+        if (sensorEvaluatingStatemachines.containsKey("collisionDetected") && sensorEvaluatingStatemachines.get("collisionDetected") instanceof BooleanStatemachine) {
+            return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("collisionDetected")).getResult();
+        } else {
+            BooleanStatemachine collisionDetected = new BooleanStatemachine("collisionDetected", false, new LT(0.15f,new Distance(EV3PortIDs.PORT_2)),new GT(0.15f,new Distance(EV3PortIDs.PORT_2)));
+            sensorEvaluatingStatemachines.put("collisionDetected",collisionDetected);
+            registerStatemachine(collisionDetected);
+            startStatemachine("collisionDetected");
+            return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("collisionDetected")).getResult();
+        }
     }
 
-    public final boolean hasLineDetected(){
-        //TODO implement
-        return false;
+    public final boolean distanceLessThan(float value) {
+            BooleanStatemachine sm = new BooleanStatemachine("distanceLessThan"+ value, false, new LT(value,new Distance(EV3PortIDs.PORT_2)),new GT(value,new Distance(EV3PortIDs.PORT_2)));
+            registerStatemachine(sm);
+            startStatemachine("distanceLessThan"+ value);
+            //TODO how long?
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+        }
+
+        return sm.getResult();
+
+
+        //TODO maybe delete or stop statemachines when they are not needed anymore
     }
 
-    public final boolean isColor(int color){
-        //TODO implement
-        return false;
+    public final boolean distanceGreaterThan(float value) {
+        if (sensorEvaluatingStatemachines.containsKey("distanceGreaterThan"+ value) && sensorEvaluatingStatemachines.get("distanceGreaterThan"+ value) instanceof BooleanStatemachine) {
+            return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("distanceGreaterThan"+ value)).getResult();
+        } else {
+            BooleanStatemachine sm = new BooleanStatemachine("distanceGreaterThan"+ value, true, new GT(value,new Distance(EV3PortIDs.PORT_2)),new LT(value,new Distance(EV3PortIDs.PORT_2)));
+            sensorEvaluatingStatemachines.put("distanceGreaterThan"+ value,sm);
+            statemachineCollection.addParallelStatemachines("LVL2APIMachine", sm);
+            return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("distanceGreaterThan"+ value)).getResult();
+        }
+
+        //TODO maybe remove statemachines after a certain timeout when they are not needed anymore
     }
 
-    //TODO and so one
+    public final float getColor() {
+        if (sensorEvaluatingStatemachines.containsKey("colorSM") && sensorEvaluatingStatemachines.get("colorSM") instanceof DiscreteValueStateMachine) {
+            return ((DiscreteValueStateMachine)sensorEvaluatingStatemachines.get("colorSM")).getResult();
+        } else {
+            float[] colorValues =  {Color.NONE,Color.BLACK,Color.BLUE,Color.BROWN,Color.GREEN,Color.RED,Color.WHITE,Color.YELLOW};
+            DiscreteValueStateMachine colorSM = new DiscreteValueStateMachine("colorSM", new Color(EV3PortIDs.PORT_1), colorValues );
+            sensorEvaluatingStatemachines.put("colorSM",colorSM );
+            statemachineCollection.addParallelStatemachines("LVL2APIMachine", colorSM);
+            return ((DiscreteValueStateMachine)sensorEvaluatingStatemachines.get("colorSM")).getResult();
+        }
+    }
+
+    public final boolean isColorBlack() {
+        return (getColor()==Color.BLACK);
+    }
+
+    public final boolean isColor(float color){
+        return (getColor()==color);
+    }
+
+    public final void delay(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+        }
+    }
+
+    public final void turnLeft(int degrees) {
+        BooleanStatemachine angleSM = new BooleanStatemachine("angleSM",false, new Rotation(degrees,new Angle(EV3PortIDs.PORT_3)),new TimeExpired(new Seconds(100)));
+        registerStatemachine(angleSM);
+        startStatemachine("angleSM");
+        motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
+        motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_FORWARD);
+        motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
+        motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+        while(!angleSM.getResult()){
+            try {
+                //TODO how long?
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        stopStatemachine("angleSM");
+        motorController.stop(EV3PortIDs.PORT_A);
+        motorController.stop(EV3PortIDs.PORT_D);
+    }
+
+    public void stop() {
+        motorA.stop();
+        motorB.stop();
+        motorC.stop();
+        motorD.stop();
+    }
 
 }

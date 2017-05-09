@@ -21,7 +21,7 @@ public class MindroidLVL2 extends LVL2API {
         messenger.sendMessage(IMessenger.SERVER_LOG,"Imperative Implementation is running!");
         forward();
         while(!isCollisionDetected()){
-
+            delay(500);
         }
         //backward 5cm
         backward(5);
@@ -35,9 +35,7 @@ public class MindroidLVL2 extends LVL2API {
         led.green();
         led.blinking();
 
-        while(!hasLineDetected()){
 
-        }
         //At start again
         stop();
 
@@ -47,15 +45,10 @@ public class MindroidLVL2 extends LVL2API {
 
 
 
-    private void turnLeft(int degree){
-
-    }
 
     private void backward(int val){
-
+//TODO
     }
 
-    private void stop(){
 
-    }
 }

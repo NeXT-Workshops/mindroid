@@ -1,7 +1,9 @@
 package org.mindroid.impl.statemachine;
 
+import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -10,10 +12,10 @@ import java.util.Set;
  */
 public class StatemachineCollection {
 
-    private HashMap<String,IStatemachine[]> statemachines;
+    private HashMap<String,ArrayList<IStatemachine>> statemachines;
 
     public StatemachineCollection(){
-        statemachines = new HashMap<String,IStatemachine[]>();
+        statemachines = new HashMap<String,ArrayList<IStatemachine>>();
     }
 
     /**
@@ -25,7 +27,9 @@ public class StatemachineCollection {
      */
     public void addStatemachine(IStatemachine statemachine){
         //TODO may throw a warning if statemachine/group with the same id already exists and will be overwritten
-        this.statemachines.put(statemachine.getID(),new IStatemachine[]{statemachine});
+        ArrayList<IStatemachine> statemachines = new ArrayList<IStatemachine>(1);
+        statemachines.add(statemachine);
+        this.statemachines.put(statemachine.getID(),statemachines);
     }
 
     /**
@@ -37,24 +41,42 @@ public class StatemachineCollection {
      */
     public void addParallelStatemachines(String groupID,IStatemachine... statemachines){
         if(this.statemachines.containsKey(groupID)){
-            IStatemachine[] existingSMs = this.statemachines.get(groupID);
-            IStatemachine[] newCollection = new Statemachine[existingSMs.length+statemachines.length];
-            int cnt = 0;
-            for (IStatemachine existingSM : existingSMs) {
-                newCollection[cnt] = existingSM;
-                cnt++;
+            ArrayList<IStatemachine> existingSMs = this.statemachines.get(groupID);
+
+            for (IStatemachine newSM : statemachines) {
+                if(!this.statemachines.get(groupID).contains(newSM)){
+                    this.statemachines.get(groupID).add(newSM);
+                }
             }
-            for (IStatemachine newSms : statemachines) {
-                newCollection[cnt] = newSms;
-                cnt++;
+            //Testprintout
+            System.out.println("## StatemachineCollection.addParallelStatemachines(..): Collection: ");
+            for (int i = 0; i < this.statemachines.get(groupID).size(); i++) {
+                System.out.println("## "+i+". "+this.statemachines.get(groupID).get(i));
             }
-            this.statemachines.put(groupID, newCollection);
+
         }else {
-            this.statemachines.put(groupID, statemachines);
+            ArrayList<IStatemachine> collection = new ArrayList<IStatemachine>(statemachines.length);
+            this.statemachines.put(groupID, collection);
+            addParallelStatemachines(groupID,statemachines);
         }
     }
 
-    public IStatemachine[] getStatemachineSet(String id){
+    /**
+     * Adds parallel running Statemachine to the Collection.
+     * Calling this method multiple times with the same id will add the given Statemachines to the already existing ones.
+     *
+     * @param groupID
+     * @param statemachines
+     */
+    public void addParallelStatemachines(String groupID,ArrayList<IStatemachine> statemachines){
+        IStatemachine[] arrayOfStatemachines = new  IStatemachine[statemachines.size()];
+        for (int i = 0; i < statemachines.size(); i++) {
+            arrayOfStatemachines[i] = statemachines.get(i);
+        }
+        addParallelStatemachines(groupID,arrayOfStatemachines);
+    }
+
+    public ArrayList<IStatemachine> getStatemachineList(String id){
         return statemachines.get(id);
     }
 

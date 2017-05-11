@@ -32,10 +32,10 @@ public class RobotContextStateEvaluator implements IConstraintEvaluator{
             return ((IComparator)constraint).evaluate(rcs);
 
         }else if(constraint instanceof ILogicOperator){
-            boolean eval_left = evaluateConstraint(((ILogicOperator)constraint).getLeftConstraint(),rcs);
-            boolean eval_right = evaluateConstraint(((ILogicOperator)constraint).getRightConstraint(),rcs);
+            boolean evalLeft = evaluateConstraint(((ILogicOperator)constraint).getLeftConstraint(),rcs);
+            boolean evalRight = evaluateConstraint(((ILogicOperator)constraint).getRightConstraint(),rcs);
 
-            return ((ILogicOperator)constraint).evaluate(eval_left,eval_right);
+            return ((ILogicOperator)constraint).evaluate(evalLeft,evalRight);
         }else{
             throw new IllegalArgumentException("Unknown Constrainttype.");
         }
@@ -46,7 +46,7 @@ public class RobotContextStateEvaluator implements IConstraintEvaluator{
     public synchronized void handleRobotContextState(IRobotContextState rcs) {
         for(String statemachineId : subscribedConstraints.keySet()){
             for (int i = 0; i < subscribedConstraints.get(statemachineId).size(); i++) {
-                System.out.println("ContextStateEvaluator.handleRobotContextState()" +subscribedConstraints.get(statemachineId));
+                //System.out.println("ContextStateEvaluator.handleRobotContextState()" +subscribedConstraints.get(statemachineId));
                 boolean isSatisfied = false;
                 isSatisfied = evaluateConstraint(subscribedConstraints.get(statemachineId).get(i),rcs);
 

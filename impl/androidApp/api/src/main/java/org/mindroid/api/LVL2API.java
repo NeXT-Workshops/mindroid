@@ -11,8 +11,11 @@ import org.mindroid.impl.brick.LED;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.motor.Motor;
 import org.mindroid.impl.statemachine.*;
+import org.mindroid.impl.statemachine.constraints.AND;
 import org.mindroid.impl.statemachine.constraints.GT;
 import org.mindroid.impl.statemachine.constraints.LT;
+import org.mindroid.impl.statemachine.constraints.TimeExpired;
+import org.mindroid.impl.statemachine.properties.Milliseconds;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
 
 /**
@@ -35,9 +38,10 @@ public abstract class LVL2API extends LVL1API {
         motorC = new Motor(motorController,EV3PortIDs.PORT_C);
         motorD = new Motor(motorController,EV3PortIDs.PORT_D);
 
+        statemachineCollection.addParallelStatemachines("LVL2APIMachine",initStatemachine());
         statemachineCollection.addParallelStatemachines("LVL2APIMachine",getCollisionDetectionStatemachine()/*, getXX(), getXY(), ... */);
 
-        statemachineCollection.addParallelStatemachines("LVL2APIMachine",initStatemachine());
+
     }
 
     /**
@@ -118,20 +122,23 @@ public abstract class LVL2API extends LVL1API {
         Statemachine sm_coll_detection = new Statemachine("Collision Detection");
         IState checking_collision = new State("checking_collision");
 
+        // IConstraint constr_collision = new AND(new TimeExpired(new Milliseconds(500)),new LT(0.15f,new Distance(EV3PortIDs.PORT_2)));
+        //IConstraint constr_no_collision = new AND(new TimeExpired(new Milliseconds(500)),new GT(0.15f,new Distance(EV3PortIDs.PORT_2)));
         IConstraint constr_collision = new LT(0.15f,new Distance(EV3PortIDs.PORT_2));
         IConstraint constr_no_collision = new GT(0.15f,new Distance(EV3PortIDs.PORT_2));
 
         ITransition trans_collision = new Transition(constr_collision){
             @Override
             public void run(){
-                collision = true;
+                System.out.println("## Transition collision detected is fireing!");
+                //collision = true;
             }
         };
 
         ITransition trans_no_collision = new Transition(constr_no_collision){
             @Override
             public void run(){
-                collision = false;
+                System.out.println("## Transition collision not detected is fireing!");
             }
         };
 
@@ -156,6 +163,21 @@ public abstract class LVL2API extends LVL1API {
     public final boolean isColor(int color){
         //TODO implement
         return false;
+    }
+
+
+
+
+    public void turnLeft(int degree){
+        //TODO implement
+    }
+
+    public void backward(int val){
+        //TODO implement
+    }
+
+    public void stop(){
+        //TODO implement
     }
 
     //TODO and so one

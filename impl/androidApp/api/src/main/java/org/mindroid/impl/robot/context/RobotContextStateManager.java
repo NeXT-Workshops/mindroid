@@ -16,20 +16,20 @@ import java.util.TimerTask;
  */
 public class RobotContextStateManager implements IRobotContextStateManager,IClockListener {
 
-    private IRobotContextState robotContextState_Source;
+    private IRobotContextState robotContextStateSource;
     private List<IConstraintEvaluator> evaluators;
 
     private Timer clk_Timer;
 
     /** taking a Snapshot and constraint evaluation per second **/
-    private static final long clocks_per_second = 20;
+    private static final long clocksPerSecond = 20;
 
     private RobotContextStateManager(){
         //clk_Timer.schedule(new TimerTa);
-        robotContextState_Source = RobotContextState.getInstance();
+        robotContextStateSource = RobotContextState.getInstance();
         evaluators = new ArrayList<IConstraintEvaluator>(1);
         clk_Timer = new Timer(true);
-        clk_Timer.schedule(new Task_handleCLK(this),100, 1000/clocks_per_second);
+        clk_Timer.schedule(new Task_handleCLK(this),100, 1000/ clocksPerSecond);
     }
 
 
@@ -43,13 +43,13 @@ public class RobotContextStateManager implements IRobotContextStateManager,ICloc
     public synchronized IRobotContextState takeSnapshot(){
         RobotContextState robotContextState = new RobotContextState();
 
-        robotContextState.setSensor_output_S1(robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_1));
-        robotContextState.setSensor_output_S2(robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_2));
-        robotContextState.setSensor_output_S3(robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_3));
-        robotContextState.setSensor_output_S4(robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_4));
+        robotContextState.setSensor_output_S1(robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_1));
+        robotContextState.setSensor_output_S2(robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_2));
+        robotContextState.setSensor_output_S3(robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_3));
+        robotContextState.setSensor_output_S4(robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_4));
 
-        robotContextState.setReceivedTimeEvents(robotContextState_Source.getTimeEvents());
-        robotContextState.setReceivedMessages(robotContextState_Source.getMessages());
+        robotContextState.setReceivedTimeEvents(robotContextStateSource.getTimeEvents());
+        robotContextState.setReceivedMessages(robotContextStateSource.getMessages());
 
         //System.out.println("Took a snapshot! "+robotContextState.getMessages()+" ## "+robotContextState.getTimeEvents());
 
@@ -78,17 +78,17 @@ public class RobotContextStateManager implements IRobotContextStateManager,ICloc
 
     @Override
     public synchronized void cleanContextState(){
-        robotContextState_Source.getTimeEvents().clear();
-        robotContextState_Source.getMessages().clear();
+        robotContextStateSource.getTimeEvents().clear();
+        robotContextStateSource.getMessages().clear();
     }
 
     @Override
     public void setGyroSensorStartCondition() {
         //The addPosition methods checks if the event is a valid GyroSensor event or if its null.
-        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_1,robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_1));
-        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_2,robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_2));
-        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_3,robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_3));
-        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_4,robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_4));
+        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_1, robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_1));
+        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_2, robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_2));
+        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_3, robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_3));
+        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_4, robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_4));
     }
 
 

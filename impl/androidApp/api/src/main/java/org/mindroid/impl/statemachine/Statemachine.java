@@ -160,11 +160,15 @@ public class Statemachine implements IStatemachine{
 		currentState.deactivate();
 		this.isActive = false;
 	}
-	
-	
+
+
 	@Override
 	public String toString() {
-		return "Statemachine [currentState=" + currentState + ", startState=" + startState + ", states=" + states + "]";
+		return "Statemachine{" +
+				"ID='" + ID + '\'' +
+				", startState=" + startState.getName() +
+				", isActive=" + isActive +
+				'}';
 	}
 
 	@Override

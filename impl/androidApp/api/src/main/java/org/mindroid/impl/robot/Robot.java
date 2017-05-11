@@ -135,7 +135,7 @@ public final class Robot {
         this.statemachineManager = statemachineManager;
     }
 
-    public static RobotController getRobotController(){
+    public static synchronized RobotController getRobotController(){
         return robotController;
     }
 

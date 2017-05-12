@@ -38,9 +38,9 @@ public abstract class LVL2API extends LVL1API {
         motorC = new Motor(motorController,EV3PortIDs.PORT_C);
         motorD = new Motor(motorController,EV3PortIDs.PORT_D);
 
-        statemachineCollection.addParallelStatemachines("LVL2APIMachine",initStatemachine());
-        statemachineCollection.addParallelStatemachines("LVL2APIMachine",getCollisionDetectionStatemachine()/*, getXX(), getXY(), ... */);
 
+        statemachineCollection.addParallelStatemachines("LVL2APIMachine",getCollisionDetectionStatemachine()/*, getXX(), getXY(), ... */);
+        statemachineCollection.addParallelStatemachines("LVL2APIMachine",initStatemachine());
 
     }
 

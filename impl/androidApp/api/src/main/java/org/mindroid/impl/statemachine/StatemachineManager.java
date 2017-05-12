@@ -64,7 +64,10 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         /*if(!isActive){ //Return if statemachine is deactived!
             return;
         }*/
-        System.out.println("## handleSatisfiedConstraint(id,satConstraint) --> "+ID+ " " + runningStatemachines.get(ID).isActive() + " " + currentStates.get(ID).isActive());
+        //Testausgabe
+        if(runningStatemachines.containsKey(ID) && currentStates.containsKey(ID)) {
+            System.out.println("## handleSatisfiedConstraint(id,satConstraint) --> " + ID + " " + runningStatemachines.get(ID).isActive() + " " + currentStates.get(ID).isActive());
+        }
 
         if(currentStates.get(ID) != null && currentStates.get(ID).isActive() && runningStatemachines.containsKey(ID) && runningStatemachines.get(ID).isActive()) { //Otherwise statemachine is deactivated by stop();
             ITransition transition = null;
@@ -91,13 +94,13 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                 //Activate state
                 currentStates.get(ID).activate();
             }
-
+            //Get Constraints of the current State, and subscribe them to the Evaluator
+            subscribeConstraints(ID);
         }
         System.out.println("StateMachine.handleSatisfiedConstraint() => "+satConstraint);
 
 
-        //Get Constraints of the current State, and subscribe them to the Evaluator
-        subscribeConstraints(ID);
+
 
     }
 
@@ -105,13 +108,12 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      * Removes old(unused) scheduled Time events, and initiate the new ones of the current state
      * @param ID
      */
-    private void handleTimeEventScheduling(String ID) {
+    private synchronized void handleTimeEventScheduling(String ID) {
         //Remove old/unused scheduled TimeEvents
         for (Task_TimeEvent scheduledTimeEvent : scheduledTimeEvents) {
             scheduledTimeEvent.cancel();
         }
         scheduledTimeEvents.clear();
-
 
         //Schedule TimeEvents
         for (IConstraint iConstraint : currentStates.get(ID).getConstraints()) {
@@ -124,7 +126,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      *
      * @param ID
      */
-    private void subscribeConstraints(String ID) {
+    private synchronized void subscribeConstraints(String ID) {
         for (int i = 0; i < this.evaluators.size(); i++) {
             evaluators.get(i).subscribeConstraints(this,ID, currentStates.get(ID).getConstraints());
         }
@@ -132,10 +134,11 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
 
     /**
      * Checks for TimeProperties in the constraint and schedules proper TimeEvents.
+     *
      * @param constraint
      * @param source
      */
-    private void scheduleTimeEvents(IConstraint constraint,IState source) {
+    private synchronized void scheduleTimeEvents(IConstraint constraint,IState source) {
         //System.out.println("StatemachineManager.scheduleTimeEvents(): scheduleTimeEvents called: "+constraint+" from state: "+source);
         if(constraint instanceof AbstractLogicOperator){
             scheduleTimeEvents(((AbstractLogicOperator) constraint).getLeftConstraint(),source);

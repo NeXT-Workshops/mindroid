@@ -1,5 +1,6 @@
 package org.mindroid.impl.statemachine;
 
+import java.lang.management.ThreadInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,16 +109,15 @@ public class State implements IState{
 
 	@Override
 	public synchronized void activate() {
-		synchronized(this){
 			System.out.println("State.activate(): "+getName()+"->State.activate()");
 
 			this.isActive = true;
 			run();
-		}
 	}
 
 	@Override
 	public synchronized void deactivate() {
+
 		this.isActive = false;
 		System.out.println("State.deactivate(): "+getName()+" is not active anymore");
 	}

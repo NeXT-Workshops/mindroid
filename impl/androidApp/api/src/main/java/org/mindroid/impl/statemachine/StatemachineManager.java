@@ -15,15 +15,17 @@ import org.mindroid.impl.robot.context.StartCondition;
 import org.mindroid.impl.statemachine.constraints.TimeExpired;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by torben on 19.03.2017.
  */
 public class StatemachineManager implements ISatisfiedConstraintHandler {
 
-    HashMap<String,IState> currentStates;
+    Map<String,IState> currentStates;
 
-    HashMap<String,IStatemachine> runningStatemachines;
+    Map<String,IStatemachine> runningStatemachines;
+    Map<String,Thread> runningStatemachineThreads;
 
     StatemachineCollection statemachineCollection;
 
@@ -34,12 +36,11 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
 
     private StatemachineManager() {
         statemachineCollection = new StatemachineCollection();
-        currentStates = new HashMap<String,IState>();
+        currentStates = new ConcurrentHashMap<String,IState>();
         evaluators= new ArrayList<IConstraintEvaluator>(1);
         scheduledTimeEvents = new ArrayList<Task_TimeEvent>();
         timeEventScheduler = new Timer();
-        runningStatemachines = new HashMap<String,IStatemachine>();
-
+        runningStatemachines = new ConcurrentHashMap<String,IStatemachine>();
     }
 
 
@@ -214,10 +215,15 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         System.out.println ("## startStatemachine(IStatemachine sm) called with --> sm-id: "+sm.getID());
         if(!sm.isActive()) { //If sm is not active already --> start statemachine
             System.out.println ("## The Statemachine is not active already and will be started --> sm-id: "+sm.getID());
-            Runnable runSM = new Runnable() {
+            final Runnable runSM = new Runnable() {
                 @Override
                 public void run() {
                     // System.out.println("## Starting statemachine in Thread --> "+sm.getID()+" ##");
+                    if (Robot.getInstance().isMessageingEnabled()) {
+                        Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Start Statemachine: " + sm.getID());
+                        Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Current State: " + sm.getStartState().getName());
+                    }
+
                     currentStates.put(sm.getID(), sm.getStartState());
                     RobotContextStateManager.getInstance().cleanContextState();
                     subscribeConstraints(sm.getID());
@@ -227,14 +233,11 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                     RobotContextStateManager.getInstance().setGyroSensorStartCondition();
 
                     runningStatemachines.put(sm.getID(), sm);
-                    sm.start();
-
-                    if (Robot.getInstance().isMessageingEnabled()) {
-                        Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Start Statemachine: " + sm.getID());
-                        Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Current State: " + currentStates.get(sm.getID()).getName());
+                    try {
+                        sm.start();
+                    } catch (NoStartStateException e) {
+                        e.printStackTrace();//TODO call error handler
                     }
-
-
                     // System.out.println("## Statemachine "+sm.getID()+" is now running in Thread ##");
                 }
             };

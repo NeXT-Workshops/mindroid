@@ -29,7 +29,7 @@ public interface IStatemachine {
 
 	public void reset();
 	
-	public void start();
+	public void start() throws NoStartStateException;
 	
 	public void stop();
 

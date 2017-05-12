@@ -180,6 +180,7 @@ public class Robot {
 
                 result = commandCenter.isConnected();;
             }catch(Exception e){
+                System.out.println("## AsyncTask ConnectToBrickTask. Exception: "+e);
                 main_activity.dismissCurrentProgressDialog();
                 main_activity.showAlertDialog("Error",e.getMessage()+"\n"+e.getCause());
             }
@@ -228,6 +229,7 @@ public class Robot {
 
                 result = commandCenter.initializeConfiguration();;
             }catch(Exception e){
+                System.out.println("## AsyncTask initRobotConfig. Exception: "+e);
                 main_activity.dismissCurrentProgressDialog();
                 main_activity.showAlertDialog("Error",""+e);
                 e.printStackTrace();
@@ -282,6 +284,7 @@ public class Robot {
 
                         return true;
                     }catch(Exception e){
+                        System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
                         main_activity.dismissCurrentProgressDialog();
                         main_activity.showAlertDialog("Error",""+e);
                         e.printStackTrace();
@@ -291,6 +294,7 @@ public class Robot {
                         commandCenter.stopStatemachine(Settings.getInstance().selectedStatemachineID);
                         return false;
                     }catch(Exception e){
+                        System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
                         main_activity.dismissCurrentProgressDialog();
                         main_activity.showAlertDialog("Error",""+e);
                         e.printStackTrace();

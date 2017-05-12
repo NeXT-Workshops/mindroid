@@ -9,6 +9,7 @@ import org.mindroid.api.statemachine.constraints.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by torben on 11.03.2017.
@@ -21,7 +22,7 @@ public class RobotContextStateEvaluator implements IConstraintEvaluator{
     Map<String,ISatisfiedConstraintHandler> listener;
 
     public RobotContextStateEvaluator(){
-        subscribedConstraints = new HashMap<String,List<IConstraint>>();
+        subscribedConstraints = new ConcurrentHashMap<String,List<IConstraint>>();
         listener =  new HashMap<String,ISatisfiedConstraintHandler>();
     }
 
@@ -75,7 +76,7 @@ public class RobotContextStateEvaluator implements IConstraintEvaluator{
 
     private static RobotContextStateEvaluator ourInstance = new RobotContextStateEvaluator();
 
-    public static RobotContextStateEvaluator getInstance() {
+    public synchronized static RobotContextStateEvaluator getInstance() {
         return ourInstance;
     }
 

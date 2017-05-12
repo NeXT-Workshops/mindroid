@@ -211,33 +211,36 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      * @param sm - The Statemachine which should be executed
      */
     private void startStatemachine(final IStatemachine sm){
-        System.out.println ("## 'Start Statemachine'-Thread will be started soon! --> sm-id: "+sm.getID());
-        Runnable runSM = new Runnable(){
-         @Override
-         public void run(){
-             // System.out.println("## Starting statemachine in Thread --> "+sm.getID()+" ##");
-                currentStates.put(sm.getID(),sm.getStartState());
-                RobotContextStateManager.getInstance().cleanContextState();
-                subscribeConstraints(sm.getID());
-                handleTimeEventScheduling(sm.getID());
-                //Set Start Conditions
-                StartCondition.getInstance().setStateActiveTime(System.currentTimeMillis());
-                RobotContextStateManager.getInstance().setGyroSensorStartCondition();
+        System.out.println ("## startStatemachine(IStatemachine sm) called with --> sm-id: "+sm.getID());
+        if(!sm.isActive()) { //If sm is not active already --> start statemachine
+            System.out.println ("## The Statemachine is not active already and will be started --> sm-id: "+sm.getID());
+            Runnable runSM = new Runnable() {
+                @Override
+                public void run() {
+                    // System.out.println("## Starting statemachine in Thread --> "+sm.getID()+" ##");
+                    currentStates.put(sm.getID(), sm.getStartState());
+                    RobotContextStateManager.getInstance().cleanContextState();
+                    subscribeConstraints(sm.getID());
+                    handleTimeEventScheduling(sm.getID());
+                    //Set Start Conditions
+                    StartCondition.getInstance().setStateActiveTime(System.currentTimeMillis());
+                    RobotContextStateManager.getInstance().setGyroSensorStartCondition();
 
-                runningStatemachines.put(sm.getID(),sm);
-                sm.start();
+                    runningStatemachines.put(sm.getID(), sm);
+                    sm.start();
 
-                if (Robot.getInstance().isMessageingEnabled()) {
-                    Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Start Statemachine: " + sm.getID());
-                    Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Current State: " + currentStates.get(sm.getID()).getName());
+                    if (Robot.getInstance().isMessageingEnabled()) {
+                        Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Start Statemachine: " + sm.getID());
+                        Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Current State: " + currentStates.get(sm.getID()).getName());
+                    }
+
+
+                    // System.out.println("## Statemachine "+sm.getID()+" is now running in Thread ##");
                 }
-
-
-             // System.out.println("## Statemachine "+sm.getID()+" is now running in Thread ##");
-          }
-         };
-        Thread t = new Thread(runSM);
-        t.start();
+            };
+            Thread t = new Thread(runSM);
+            t.start();
+        }
 
         //System.out.println("## 'Start Statemachine'-Thread is running! ##");
     }

@@ -9,6 +9,7 @@ import org.mindroid.impl.robot.*;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.statemachine.State;
 import org.mindroid.impl.statemachine.Statemachine;
+import org.mindroid.impl.statemachine.StatemachineCollection;
 
 /**
  * Created by torben on 02.03.2017.
@@ -27,11 +28,6 @@ public class MindroidMainTest implements IMindroidMain {
     //RobotEvent no_ground = RuleFactory.createBrightnessRule(EV3PortIds.S2,"<",0.6);
 
     //TODO HashMap<String,RobotEvent> events = Robot.getInstance().getRobotEvents();
-
-    @Override
-    public IStatemachine getStatemachine() {
-        return sm;
-    }
 
 
     public void initStatemachine() throws StateAlreadyExists {
@@ -104,4 +100,10 @@ public class MindroidMainTest implements IMindroidMain {
     }
 
 
+    @Override
+    public StatemachineCollection getStatemachineCollection() throws StateAlreadyExists {
+        StatemachineCollection sc = new StatemachineCollection();
+        sc.addStatemachine(sm);
+        return sc;
+    }
 }

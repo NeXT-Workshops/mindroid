@@ -284,8 +284,22 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         if(Robot.getInstance().isMessageingEnabled()){
             Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+sm.getID());
         }
+        unsubscribeFromEvaluators(sm.getID());
         runningStatemachines.remove(sm.getID());
         currentStates.remove(sm.getID());
+
+    }
+
+    /**
+     * Unsubscribe the Statemachine from the Evaluator.
+     *
+     * @param ID - Statemachine ID
+     */
+    private void unsubscribeFromEvaluators(String ID){
+        for (IConstraintEvaluator evaluator : evaluators) {
+            evaluator.unsubscribeConstraints(ID);
+        }
+
     }
 
 

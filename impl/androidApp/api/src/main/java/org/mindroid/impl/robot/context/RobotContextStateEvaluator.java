@@ -23,7 +23,7 @@ public class RobotContextStateEvaluator implements IConstraintEvaluator{
 
     public RobotContextStateEvaluator(){
         subscribedConstraints = new ConcurrentHashMap<String,List<IConstraint>>();
-        listener =  new HashMap<String,ISatisfiedConstraintHandler>();
+        listener =  new ConcurrentHashMap<String,ISatisfiedConstraintHandler>();
     }
 
 
@@ -72,6 +72,13 @@ public class RobotContextStateEvaluator implements IConstraintEvaluator{
             //recall method
             subscribeConstraints(constraintHandler,statemachineId,constraints);
         }
+    }
+
+    @Override
+    public synchronized void unsubscribeConstraints(String statemachineId){
+        //Remove Listener
+        listener.remove(statemachineId);
+        subscribedConstraints.remove(statemachineId);
     }
 
     private static RobotContextStateEvaluator ourInstance = new RobotContextStateEvaluator();

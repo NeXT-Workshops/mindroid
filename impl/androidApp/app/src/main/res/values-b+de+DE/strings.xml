@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Robodancer</string>
+    <string name="connect_to_robot">Mit dem Roboter verbinden</string>
+    <string name="start_robot">Start</string>
+    <string name="init_config">Initialisiere Konfiguration</string>
+    <string name="titleStatus">Status:</string>
+    <string name="not_running">Nicht aktiv</string>
+    <string name="connected">Verbindung:</string>
+    <string name="robot">Robot:</string>
+    <string name="stop">Stop</string>
+    <string name="not_connected">nicht verbunden</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+</resources>

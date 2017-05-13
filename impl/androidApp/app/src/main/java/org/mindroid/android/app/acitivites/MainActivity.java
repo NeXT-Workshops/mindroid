@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent nexScreen = new Intent(getApplicationContext(), SettingsActivity.class);
                     startActivity(nexScreen);
+
                 }
             });
 
@@ -298,6 +299,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+
+
         //final Context cntxt_mainActivity = this;
         Runnable check = new Runnable() {
             @Override
@@ -331,6 +334,7 @@ public class MainActivity extends AppCompatActivity {
 
         new Thread(check).start();
     } //USB_FUNCTION_RNDIS
+
 
     /**
      * Checks if USB is connected

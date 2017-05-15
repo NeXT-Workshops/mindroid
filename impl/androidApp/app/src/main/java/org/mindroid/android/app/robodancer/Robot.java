@@ -8,7 +8,6 @@ import org.mindroid.android.app.SchuelerProjekt.MindroidLVL1;
 import org.mindroid.android.app.SchuelerProjekt.MindroidLVL2;
 import org.mindroid.android.app.SchuelerProjekt.RobotPortConfig;
 import org.mindroid.android.app.acitivites.MainActivity;
-import org.mindroid.api.robot.IRobodancerConfig;
 import org.mindroid.api.robot.IRobotFactory;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.api.statemachine.IMindroidMain;
@@ -151,7 +150,7 @@ public class Robot {
             if(isConnectedToBrick){
                 this.cancel(true);
             }else{
-                main_activity.showProgressDialog("Connecting to Brick","connecting to "+Settings.getInstance().ev3IP+":"+Settings.getInstance().ev3TCPPort+"\n");
+                //TODO main_activity.showProgressDialog("Connecting to Brick","connecting to "+Settings.getInstance().ev3IP+":"+Settings.getInstance().ev3TCPPort+"\n");
             }
         }
 
@@ -164,14 +163,14 @@ public class Robot {
                 sb.append("Exception: \n").append(e.toString());
                 sb.append("\ncaused by: \n").append(e.getCause());
                 sb.append("\n--------------------\n");
-                main_activity.dismissCurrentProgressDialog();
-                main_activity.showAlertDialog("Error",sb.toString());
+                //TODO main_activity.dismissCurrentProgressDialog();
+                //TODO main_activity.showAlertDialog("Error",sb.toString());
                 e.printStackTrace();
 
                 return false;
             } catch(Exception e){
-                main_activity.dismissCurrentProgressDialog();
-                main_activity.showAlertDialog("Error",""+e);
+                //TODO main_activity.dismissCurrentProgressDialog();
+                //TODO main_activity.showAlertDialog("Error",""+e);
                 e.printStackTrace();
             }
 
@@ -181,8 +180,8 @@ public class Robot {
                 result = commandCenter.isConnected();;
             }catch(Exception e){
                 System.out.println("## AsyncTask ConnectToBrickTask. Exception: "+e);
-                main_activity.dismissCurrentProgressDialog();
-                main_activity.showAlertDialog("Error",e.getMessage()+"\n"+e.getCause());
+                //TODO main_activity.dismissCurrentProgressDialog();
+                //TODO main_activity.showAlertDialog("Error",e.getMessage()+"\n"+e.getCause());
             }
             return result;
         }
@@ -195,12 +194,12 @@ public class Robot {
                 sb.append("\nCONNECTION ESTABLISHED!");
             }else{
                 sb.append("\nCONNECTION FAILED!");
-                main_activity.showAlertDialog("Error","Connection failed!");
+                //TODO main_activity.showAlertDialog("Error","Connection failed!");
             }
 
             isConnectedToBrick = result;
 
-            main_activity.dismissCurrentProgressDialog();
+            //TODO main_activity.dismissCurrentProgressDialog();
 
         }
     }
@@ -217,7 +216,7 @@ public class Robot {
             if(!isConnectedToBrick){
                 this.cancel(true);
             }else{
-                main_activity.showProgressDialog("Initializing Robot Configuration",sb.toString());
+                //TODO  main_activity.showProgressDialog("Initializing Robot Configuration",sb.toString());
             }
         }
 
@@ -230,8 +229,8 @@ public class Robot {
                 result = commandCenter.initializeConfiguration();;
             }catch(Exception e){
                 System.out.println("## AsyncTask initRobotConfig. Exception: "+e);
-                main_activity.dismissCurrentProgressDialog();
-                main_activity.showAlertDialog("Error",""+e);
+                //TODO main_activity.dismissCurrentProgressDialog();
+                //TODO main_activity.showAlertDialog("Error",""+e);
                 e.printStackTrace();
             }
             return result;
@@ -248,12 +247,12 @@ public class Robot {
             }else{
                 sb.append("\nConfiguration failed!");
 
-                main_activity.showAlertDialog("Error","Configuration failed!");
+                //TODO main_activity.showAlertDialog("Error","Configuration failed!");
             }
 
             isConfigurationBuilt = result;
 
-            main_activity.dismissCurrentProgressDialog();
+            //TODO main_activity.dismissCurrentProgressDialog();
         }
     }
 
@@ -267,7 +266,7 @@ public class Robot {
             if(!isConnectedToBrick && !isConfigurationBuilt){
                 this.cancel(true);
             }else{
-                main_activity.showProgressDialog("Starting Robot","starting..");
+                //TODO  main_activity.showProgressDialog("Starting Robot","starting..");
             }
         }
 
@@ -285,8 +284,8 @@ public class Robot {
                         return true;
                     }catch(Exception e){
                         System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
-                        main_activity.dismissCurrentProgressDialog();
-                        main_activity.showAlertDialog("Error",""+e);
+                        //TODO main_activity.dismissCurrentProgressDialog();
+                        //TODO  main_activity.showAlertDialog("Error",""+e);
                         e.printStackTrace();
                     }
                 } else {
@@ -295,8 +294,8 @@ public class Robot {
                         return false;
                     }catch(Exception e){
                         System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
-                        main_activity.dismissCurrentProgressDialog();
-                        main_activity.showAlertDialog("Error",""+e);
+                        //TODO main_activity.dismissCurrentProgressDialog();
+                        //TODO main_activity.showAlertDialog("Error",""+e);
                         e.printStackTrace();
                     }
                 }
@@ -311,7 +310,7 @@ public class Robot {
         }
 
         protected void onPostExecute(Boolean result) {
-            main_activity.dismissCurrentProgressDialog();
+            //TODO main_activity.dismissCurrentProgressDialog();
             isRunning = result;
         }
 

@@ -73,29 +73,29 @@ public class SettingsActivity extends AppCompatActivity {
         txt_input_ServerTCPPort.setText(DEFAULT_SERVER_TCP_PORT);
         txt_input_robotServerPort.setText(DEFAULT_ROBOT_SERVER_PORT);
 
-        connectionProperties = MainActivity.connectionProperties;
+        connectionProperties = null;//TODO MainActivity.connectionProperties; //TODO Change to getApplicationContext().getSharedPreferences("ConnectionData.xml",Context.MODE_PRIVATE);
 
         //Set the values of the Textfields with the saved Data.
         if(connectionProperties != null) {
-            String savedVal = connectionProperties.getString(KEY_EV3_IP, DEFAULT_EV3_IP);
+            String savedVal = connectionProperties.getString(KEY_EV3_IP, getResources().getString(R.string.ev3_brick_ip_default));
             txt_input_EV3IP.setText((savedVal.isEmpty()) ? DEFAULT_EV3_IP : savedVal);
 
-            savedVal = connectionProperties.getString(KEY_EV3_TCP_PORT, DEFAULT_EV3_TCP_PORT);
+            savedVal = connectionProperties.getString(KEY_EV3_TCP_PORT, getResources().getString(R.string.ev3_brick_tcp_port_default));
             txt_input_EV3TCPPort.setText((savedVal.isEmpty()) ? DEFAULT_EV3_TCP_PORT : savedVal);
 
-            savedVal = connectionProperties.getString(KEY_SERVER_IP, DEFAULT_SERVER_IP);
+            savedVal = connectionProperties.getString(KEY_SERVER_IP, getResources().getString(R.string.msg_server_ip_default));
             txt_input_ServerIP.setText((savedVal.isEmpty()) ? DEFAULT_SERVER_IP : savedVal);
 
-            savedVal = connectionProperties.getString(KEY_SERVER_TCP_PORT, DEFAULT_SERVER_TCP_PORT);
+            savedVal = connectionProperties.getString(KEY_SERVER_TCP_PORT, getResources().getString(R.string.msg_server_tcp_port_default));
             txt_input_ServerTCPPort.setText((savedVal.isEmpty()) ? DEFAULT_SERVER_TCP_PORT : savedVal);
 
-            savedVal = connectionProperties.getString(KEY_ROBOT_ID, DEFAULT_ROBOT_ID);
+            savedVal = connectionProperties.getString(KEY_ROBOT_ID, getResources().getString(R.string.robot_id_default));
             txt_input_robotID.setText((savedVal.isEmpty()) ? DEFAULT_ROBOT_ID : savedVal);
 
-            savedVal = connectionProperties.getString(KEY_GROUP_ID, DEFAULT_GROUP_ID);
+            savedVal = connectionProperties.getString(KEY_GROUP_ID, getResources().getString(R.string.group_id_default));
             txt_input_groupID.setText((savedVal.isEmpty()) ? DEFAULT_GROUP_ID : savedVal);
 
-            savedVal = connectionProperties.getString(KEY_ROBOT_SERVER_TCP_PORT, DEFAULT_ROBOT_SERVER_PORT);
+            savedVal = connectionProperties.getString(KEY_ROBOT_SERVER_TCP_PORT, getResources().getString(R.string.robot_msg_server_port_default));
             txt_input_robotServerPort.setText((savedVal.isEmpty()) ? DEFAULT_ROBOT_SERVER_PORT : savedVal);
         }
 

@@ -15,6 +15,8 @@ import org.mindroid.api.statemachine.IMindroidMain;
 import java.io.IOException;
 
 import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.impl.exceptions.BrickIsNotReadyException;
+import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 import org.mindroid.impl.robot.RobotFactory;
 
 /**
@@ -27,25 +29,30 @@ public class Robot {
 
     public boolean isRunning = false;
 
-    private MainActivity main_activity;
-
     IRobotCommandCenter commandCenter;
 
     IRobotFactory roFactory = new RobotFactory();
     //-------- Robot
     RobotPortConfig config = new RobotPortConfig(); //TODO Dependency/Linked to SchuelerProjekt
-    public IMindroidMain mindroidStatemachine = new MindroidLVL1(); //TODO Dependency/Linked to SchuelerProjekt
-    public IMindroidMain mindroidImperative = new MindroidLVL2(); //TODO Dependency/Linked to SchuelerProjekt
+    public IMindroidMain mindroidStatemachine; //TODO Dependency/Linked to SchuelerProjekt
+    public IMindroidMain mindroidImperative; //TODO Dependency/Linked to SchuelerProjekt
+
+    String runningStatemachineID = "";
 
 
-    public Robot(MainActivity mainActivity) throws StateAlreadyExists {
-        this.main_activity = mainActivity;
+    public Robot() {
+
     }
 
     /**
      * TODO Refactor
      */
     public void makeRobot() throws StateAlreadyExists {
+        if(mindroidStatemachine == null || mindroidImperative == null){
+            mindroidStatemachine = new MindroidLVL1();
+            mindroidImperative = new MindroidLVL2();
+        }
+
         System.out.println("## App.Robot.makeRobot() got called ");
         //Config
         roFactory.setRobotConfig(config);
@@ -60,8 +67,6 @@ public class Robot {
         roFactory.addStatemachine(mindroidStatemachine.getStatemachineCollection());
         roFactory.addStatemachine(mindroidImperative.getStatemachineCollection());
 
-
-
         //Create Robot
         commandCenter = roFactory.createRobot();
     }
@@ -74,33 +79,8 @@ public class Robot {
      * automatic gestellt werden!!
      *
      */
-    public void connectToBrick(){
-        new ConnectToBrickTask().execute("Not important string"); //String is not important
-    }
-
-    /**
-     * Configurates the Robot.
-     * Make sure the connection to the brick is established first! Use connectToBrick();
-     */
-    public void configurateRobot(){
-        new InitRobotConfiguration().execute("Not important string"); //String is not important
-    }
-
-    /**
-     * Run Statemachines of the Robot
-     */
-    public void startRobot(){
-        if(isConnectedToBrick && isConfigurationBuilt) {
-            new StartStopRobotTask().execute(true);
-        }
-        isRunning = false;
-    }
-
-    /**
-     *
-     */
-    public void stopRobot(){
-        new StartStopRobotTask().execute(false);
+    public void connectToBrick() throws IOException {
+        commandCenter.connectToBrick();
     }
 
     private void checkState(){
@@ -135,185 +115,60 @@ public class Robot {
         isConfigurationBuilt = configurationBuilt;
     }
 
-
-
-    // ---------------------------------- ASYNC TASKS ------------------------------------- //
-    private class ConnectToBrickTask extends AsyncTask<String,Integer,Boolean> {
-
-        StringBuffer sb = new StringBuffer();
-
-
-        @Override
-        protected void onPreExecute(){
-            sb.append("connecting to "+Settings.getInstance().ev3IP+":"+Settings.getInstance().ev3TCPPort+"\n");
-
-            if(isConnectedToBrick){
-                this.cancel(true);
-            }else{
-                //TODO main_activity.showProgressDialog("Connecting to Brick","connecting to "+Settings.getInstance().ev3IP+":"+Settings.getInstance().ev3TCPPort+"\n");
+    /**
+     * Returns the IDs of Statemachine-Groups (Group of parallel Statemachines) and Single-Statemachines
+     * @return IDs of Statemachines as String[]
+     */
+    public String[] getStatemachineIDs(){
+        try {
+            int size_imp = mindroidImperative.getStatemachineCollection().getStatemachineKeySet().size();
+            int size_state = mindroidStatemachine.getStatemachineCollection().getStatemachineKeySet().size();
+            String[] ids = new String[size_imp+size_state];
+            int index = 0;
+            for (String id : mindroidImperative.getStatemachineCollection().getStatemachineKeySet()) {
+                ids[index] = id;
+                index++;
             }
-        }
-
-
-        protected Boolean doInBackground(String... str) {
-            try {
-                commandCenter.connectToBrick();
-            } catch (IOException e) {
-                sb.append("\n--------------------\n");
-                sb.append("Exception: \n").append(e.toString());
-                sb.append("\ncaused by: \n").append(e.getCause());
-                sb.append("\n--------------------\n");
-                //TODO main_activity.dismissCurrentProgressDialog();
-                //TODO main_activity.showAlertDialog("Error",sb.toString());
-                e.printStackTrace();
-
-                return false;
-            } catch(Exception e){
-                //TODO main_activity.dismissCurrentProgressDialog();
-                //TODO main_activity.showAlertDialog("Error",""+e);
-                e.printStackTrace();
+            for (String id : mindroidStatemachine.getStatemachineCollection().getStatemachineKeySet()) {
+                ids[index] = id;
+                index++;
             }
-
-            boolean result = false;
-            try{
-
-                result = commandCenter.isConnected();;
-            }catch(Exception e){
-                System.out.println("## AsyncTask ConnectToBrickTask. Exception: "+e);
-                //TODO main_activity.dismissCurrentProgressDialog();
-                //TODO main_activity.showAlertDialog("Error",e.getMessage()+"\n"+e.getCause());
-            }
-            return result;
+            return ids;
+        } catch (StateAlreadyExists stateAlreadyExists) {
+            stateAlreadyExists.printStackTrace();
         }
-
-        protected void onProgressUpdate(Integer... progress) {
-        }
-
-        protected void onPostExecute(Boolean result) {
-            if(result){
-                sb.append("\nCONNECTION ESTABLISHED!");
-            }else{
-                sb.append("\nCONNECTION FAILED!");
-                //TODO main_activity.showAlertDialog("Error","Connection failed!");
-            }
-
-            isConnectedToBrick = result;
-
-            //TODO main_activity.dismissCurrentProgressDialog();
-
-        }
+        return null;
     }
 
-    /**--------------------------------------------- ASYNC TASK INITIALIZE ROBOT CONFIGURATION ---------------------------------------------**/
-    private class InitRobotConfiguration extends AsyncTask<String,Integer,Boolean> {
-
-        StringBuffer sb = new StringBuffer();
-
-        @Override
-        protected void onPreExecute(){
-            sb.append("Initializing Robot Configuration.. \n");
-
-            if(!isConnectedToBrick){
-                this.cancel(true);
-            }else{
-                //TODO  main_activity.showProgressDialog("Initializing Robot Configuration",sb.toString());
-            }
-        }
-
-
-        protected Boolean doInBackground(String... str) {
-            boolean result = false;
-
-            try{
-
-                result = commandCenter.initializeConfiguration();;
-            }catch(Exception e){
-                System.out.println("## AsyncTask initRobotConfig. Exception: "+e);
-                //TODO main_activity.dismissCurrentProgressDialog();
-                //TODO main_activity.showAlertDialog("Error",""+e);
-                e.printStackTrace();
-            }
-            return result;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-
-        }
-
-        protected void onPostExecute(Boolean result) {
-
-            if(result){
-                sb.append("\nConfiguration complete!");
-            }else{
-                sb.append("\nConfiguration failed!");
-
-                //TODO main_activity.showAlertDialog("Error","Configuration failed!");
-            }
-
-            isConfigurationBuilt = result;
-
-            //TODO main_activity.dismissCurrentProgressDialog();
-        }
+    public boolean isConnected() {
+        return commandCenter.isConnected();
     }
 
-    /**--------------------------------------------- ASYNC TASK START/STOP ROBOTS STATEMACHINE ---------------------------------------------**/
-    private class StartStopRobotTask extends AsyncTask<Boolean,Integer,Boolean> {
+    public boolean initializeConfiguration() throws BrickIsNotReadyException, PortIsAlreadyInUseException {
+        return commandCenter.initializeConfiguration();
+    }
 
-        StringBuffer sb = new StringBuffer();
+    /**
+     * Start Group of-/Statemachine with id
+     * @param id
+     */
+    public void startStatemachine(String id) {
+        runningStatemachineID = id;
+        commandCenter.startStatemachine(id);
+    }
 
-        @Override
-        protected void onPreExecute(){
-            if(!isConnectedToBrick && !isConfigurationBuilt){
-                this.cancel(true);
-            }else{
-                //TODO  main_activity.showProgressDialog("Starting Robot","starting..");
-            }
+    /**
+     * Stop the Group of-/Statemachine with id
+     * @param id
+     */
+    public void stopStatemachine(String id) {
+        runningStatemachineID = "";
+        commandCenter.stopStatemachine(id);
+    }
+
+    public void stop() {
+        if(runningStatemachineID != ""){
+            commandCenter.stopStatemachine(runningStatemachineID);
         }
-
-        /**
-         *
-         * @param start = true => start robot ; start = false => stop robot
-         * @return
-         */
-        protected Boolean doInBackground(Boolean... start) {
-            if(start.length>0) {
-                if (start[0]) { //True => Start robot, else it should stop the Robot
-                    try {
-                        commandCenter.startStatemachine(Settings.getInstance().selectedStatemachineID);
-
-                        return true;
-                    }catch(Exception e){
-                        System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
-                        //TODO main_activity.dismissCurrentProgressDialog();
-                        //TODO  main_activity.showAlertDialog("Error",""+e);
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        commandCenter.stopStatemachine(Settings.getInstance().selectedStatemachineID);
-                        return false;
-                    }catch(Exception e){
-                        System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
-                        //TODO main_activity.dismissCurrentProgressDialog();
-                        //TODO main_activity.showAlertDialog("Error",""+e);
-                        e.printStackTrace();
-                    }
-                }
-            }else{
-                return false;
-            }
-            return false;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-
-        }
-
-        protected void onPostExecute(Boolean result) {
-            //TODO main_activity.dismissCurrentProgressDialog();
-            isRunning = result;
-        }
-
-
     }
 }

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.mindroid.android.app.acitivites.SettingsFragment">
+    tools:context="org.mindroid.android.app.fragments.SettingsFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -209,6 +209,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="0dp"
+            android:onClick="saveSettings"
             android:text="save Settings" />
 
     </LinearLayout>

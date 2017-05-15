@@ -4,8 +4,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Activity titles -->
+    <string name="title_activity_main">Mindroid</string>
 
-    <string name="connect_to_robot">Mit dem Roboter verbinden</string>
+    <string name="msg_connect_to_robot">Mit dem Roboter verbinden</string>
     <string name="start_robot">Start</string>
     <string name="init_config">Initialisiere Konfiguration</string>
     <string name="titleStatus">Status:</string>
@@ -16,23 +18,40 @@
     <string name="not_connected">nicht verbunden</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
+    <!-- Shared Preferences -->
+    <string name="shared_pref_connection_Data">ConnectionData.xml</string>
+
+    <!-- Settings Fragment -->
+    <string name="settings_saved_msg">gespeichert</string>
+
+    <!-- DEFAULT VALUES -->
+    <string name="DEFAULT_EV3_BRICK_IP">192.168.0.240</string>
+    <string name="DEFAULT_EV3_BRICK_PORT">33690</string>
+    <string name="DEFAULT_MSG_SERVER_IP">192.168.188.38</string>
+    <string name="DEFAULT_MSG_SERVER_PORT">33044</string>
+    <string name="DEFAULT_BRICK_MSG_SERVER_PORT">33045</string>
+    <string name="DEFAULT_ROBOT_ID">No RobotID set</string>
+    <string name="DEFAULT_GROUP_ID">No groupID set</string>
 
 
-    <string name="ev3_brick_ip_default">192.168.0.240</string>
-    <string name="ev3_brick_tcp_port_default">33690</string>
-    <string name="msg_server_ip_default">192.168.188.38</string>
-    <string name="msg_server_tcp_port_default">33044</string>
-    <string name="robot_msg_server_port_default">33045</string>
-    <string name="robot_id_default">No RobotID set</string>
-    <string name="group_id_default">No groupID set</string>
-    <string name="title_activity_main">MainActivity</string>
+    <!-- KEYS for Shared Preferences - ConnectionData.xml -->
+    <string name="KEY_ROBOT_ID">ROBOT_ID</string>
+    <string name="KEY_GROUP_ID">GROUP_ID</string>
+    <string name="KEY_EV3_IP">KEY_EV3_IP</string>
+    <string name="KEY_EV3_TCP_PORT">"KEY_EV3_TCP_PORT</string>
+    <string name="KEY_SERVER_IP">KEY_SERVER_IP</string>
+    <string name="KEY_SERVER_TCP_PORT">KEY_SERVER_TCP_PORT</string>
+    <string name="KEY_ROBOT_SERVER_TCP_PORT">KEY_ROBOT_SERVER_TCP_PORT</string>
 
     <string name="title_section1">Home</string>
-    <string name="title_section2">Konfiguration</string>
-    <string name="title_section3">Settings</string>
+    <string name="title_section2">Mein Robotor</string>
+    <string name="title_section3">Einstellungen</string>
 
     <string name="action_example">Example action</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="msg_init_config" />
+    <string name="msg_start_robot" />
+    <string name="msg_stop_robot" />
 </resources>

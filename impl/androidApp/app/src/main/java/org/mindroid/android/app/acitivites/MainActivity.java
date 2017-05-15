@@ -5,24 +5,23 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import org.mindroid.android.app.R;
+import org.mindroid.android.app.fragments.HomeFragment;
+import org.mindroid.android.app.fragments.NavigationDrawerFragment;
+import org.mindroid.android.app.fragments.SettingsFragment;
+import org.mindroid.android.app.robodancer.Settings;
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SettingsFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SettingsFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,SettingsFragment.OnSettingsChanged {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -34,10 +33,20 @@ public class MainActivity extends Activity
      */
     private CharSequence mTitle;
 
+    public static SharedPreferences connectionProperties;
+
+    /** Used Fragments **/
+    private final Fragment HOME_FRAGMENT = HomeFragment.newInstance("","");
+    private final Fragment SETTINGS_FRAGMENT = SettingsFragment.newInstance("","");
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -47,22 +56,35 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        //Load Connection Properties from sharedPreferences
+        loadConnectionProperties();
+
+        //show Home Fragment
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, HOME_FRAGMENT)
+                .commit();
+
+
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        System.out.println("## App.onNavigationDrawer.. "+position);
         Fragment fragment;
         switch(position){
-            case 0: fragment = PlaceholderFragment.newInstance(position + 1); break;//Home
-            case 2: fragment = SettingsFragment.newInstance("",""); break;//Settings
-            default: fragment = PlaceholderFragment.newInstance(position + 1);
+            case 0: fragment = HOME_FRAGMENT; break;//Home
+            case 2: fragment = SETTINGS_FRAGMENT; break;//Settings
+            default:
+                System.out.println("## MainActivity.onNavigationDrawerItemSelected(): No fragment defined for this position");
+                fragment = HOME_FRAGMENT;
         }
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        //transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     public void onSectionAttached(int number) {
@@ -88,48 +110,53 @@ public class MainActivity extends Activity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        //TODO
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
 
     }
+
+    @Override
+    public void onSettingsChanged(boolean settingsChanged){
+        ((HomeFragment)HOME_FRAGMENT).onSettingsChanged(settingsChanged);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, HOME_FRAGMENT)
+                .commit();
+    }
+
+    private void loadConnectionProperties(){
+        connectionProperties = getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_connection_Data), Context.MODE_PRIVATE);
+        //TODO Refactor -> get settings from Settings.class
+        if (connectionProperties != null) {
+            String savedVal;
+            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_ROBOT_ID),getResources().getString(R.string.DEFAULT_ROBOT_ID));
+            Settings.getInstance().robotID = ( (savedVal.isEmpty()) ? getResources().getString(R.string.KEY_ROBOT_ID) : savedVal);
+
+            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_GROUP_ID),getResources().getString(R.string.DEFAULT_GROUP_ID));
+            Settings.getInstance().groupID = ( (savedVal.isEmpty()) ? getResources().getString(R.string.KEY_GROUP_ID) : savedVal);
+
+            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_EV3_IP), getResources().getString(R.string.DEFAULT_EV3_BRICK_IP));
+            Settings.getInstance().ev3IP = ( (savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_EV3_BRICK_IP) : savedVal);
+
+            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_EV3_TCP_PORT),getResources().getString(R.string.DEFAULT_EV3_BRICK_PORT));
+            Settings.getInstance().ev3TCPPort = (Integer.parseInt((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_EV3_BRICK_PORT) : savedVal));
+
+            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_SERVER_IP), getResources().getString(R.string.DEFAULT_MSG_SERVER_IP));
+            Settings.getInstance().serverIP = ( (savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_MSG_SERVER_IP) : savedVal);
+
+            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_SERVER_TCP_PORT),getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT));
+            Settings.getInstance().serverTCPPort = (Integer.parseInt((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT) : savedVal));
+
+            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_ROBOT_SERVER_TCP_PORT),getResources().getString(R.string.DEFAULT_BRICK_MSG_SERVER_PORT));
+            Settings.getInstance().robotServerPort = (Integer.parseInt((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_BRICK_MSG_SERVER_PORT) : savedVal));
+
+        }else{
+            //TODO
+            //System.out.println("Error: Connection Properties","Couldn't Load connection properties. Check the Settings and may restart the application!");
+            //showAlertDialog("Error: Connection Properties","Couldn't Load connection properties. Check the Settings and may restart the application!");
+        }
+
+    }
+
+
 
 }

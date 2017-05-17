@@ -1,8 +1,9 @@
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ConfigurationFragment">
+    tools:context=".fragments.myrobot.MyRobotFragment">
 
 
     <TabHost
@@ -29,15 +30,23 @@
                     android:id="@+id/tab_sensors"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:weightSum="1">
 
-                    <EditText
-                        android:id="@+id/editText"
+                    <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName"
-                        android:text="TabSensors" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.03">
+
+                        <LinearLayout
+                            android:id="@+id/sensor_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                        </LinearLayout>
+                    </ScrollView>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -46,13 +55,19 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/editText2"
+                    <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName"
-                        android:text="TabMotors" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.03">
+
+                        <LinearLayout
+                            android:id="@+id/motor_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                        </LinearLayout>
+                    </ScrollView>
                 </LinearLayout>
 
             </FrameLayout>

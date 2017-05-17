@@ -1,7 +1,8 @@
-package org.mindroid.android.app.fragments;
+package org.mindroid.android.app.fragments.home;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.asynctasks.ProgressTask;
+import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.Settings;
 import org.mindroid.api.statemachine.exception.StateAlreadyExists;
@@ -147,6 +149,12 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             txt_info = (TextView) view.findViewById(R.id.txt_info);
             btn_activateTethering = (Button) view.findViewById(R.id.btn_activateTethering);
 
+            //Add RobotSetupInfo Fragment
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.container_robotSetupInfo, RobotSetupInfoFragment.newInstance("",""));
+            //transaction.addToBackStack(null);
+            transaction.commit();
 
         try {
             robot.makeRobot(); //TODO put it somewhere else

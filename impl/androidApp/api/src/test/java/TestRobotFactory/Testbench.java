@@ -2,7 +2,7 @@ package TestRobotFactory;
 
 import org.junit.Test;
 import org.mindroid.api.statemachine.IMindroidMain;
-import org.mindroid.api.robot.IRobodancerConfig;
+import org.mindroid.api.robot.IRobotPortConfig;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.api.robot.IRobotFactory;
 import org.mindroid.common.messages.NetworkPortConfig;
@@ -20,7 +20,7 @@ public class Testbench {
 
     @Test
     public void testRobotFactory() throws Exception {
-        IRobodancerConfig config = new RobotHardwareConfigurationTest();
+        IRobotPortConfig config = new RobotHardwareConfigurationTest();
         IMindroidMain mindroid = new MindroidMainTest();
         IRobotCommandCenter robotControl;
         final String brickIP = "192.168.137.2";

@@ -1,10 +1,6 @@
 package org.mindroid.api.robot;
 
-import org.mindroid.api.robot.control.IBrickControl;
-import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
-import org.mindroid.api.robot.control.ISensorControl;
-import org.mindroid.api.statemachine.IStatemachine;
 import org.mindroid.impl.statemachine.StatemachineCollection;
 
 /**
@@ -13,7 +9,7 @@ import org.mindroid.impl.statemachine.StatemachineCollection;
 
 public interface IRobotFactory {
 
-    public void setRobotConfig(IRobodancerConfig robotConfig);
+    public void setRobotConfig(IRobotPortConfig robotConfig);
 
     public void setBrickIP(String ip);
     public void setBrickTCPPort(int tcpPort);

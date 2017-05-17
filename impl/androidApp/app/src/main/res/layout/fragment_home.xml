@@ -1,164 +1,179 @@
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.mindroid.android.app.fragments.HomeFragment">
+    tools:context="org.mindroid.android.app.fragments.home.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <FrameLayout
+        android:id="@+id/container_robotSetupInfo"
+        android:layout_width="match_parent"
+        android:layout_height="152dp">
+    </FrameLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context="org.mindroid.android.app.acitivites.MainActivity">
+        android:layout_marginTop="150dp">
 
-        <ScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            tools:context="org.mindroid.android.app.acitivites.MainActivity">
 
-            <LinearLayout
-                android:orientation="vertical"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/btn_connect"
-                android:layout_alignParentTop="true"
-                tools:ignore="NotSibling,UselessParent"
-                android:weightSum="1">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true"
-                    android:id="@+id/layout_infobox">
-
-                    <TextView
-                        android:text="TextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txt_info" />
-
-                </FrameLayout>
-
-                <Button
-                    android:id="@+id/btn_activateTethering"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="0dp"
-                    android:text="activate Tethering" />
-
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/msg_connect_to_robot"
-                    android:id="@+id/btn_connect"
-                    android:enabled="true" />
-
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/init_config"
-                    android:id="@+id/btn_initConfig"
-                    android:enabled="false" />
-
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp" android:id="@+id/spinner_selectedStatemachine"
-                    android:spinnerMode="dialog"/>
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignStart="@+id/btn_connect"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    tools:ignore="NotSibling,UselessParent">
 
-                    <Button
-                        android:id="@+id/btn_startRobot"
-                        android:layout_width="164dp"
-                        android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:text="@string/start_robot" />
-
-                    <Button
-                        android:id="@+id/btn_stopRobot"
+                    <FrameLayout
+                        android:id="@+id/layout_infobox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:text="@string/stop" />
-                </LinearLayout>
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true">
 
-                <TableLayout
+                        <TextView
+                            android:id="@+id/txt_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="TextView" />
+
+                    </FrameLayout>
+
+                    <Button
+                        android:id="@+id/btn_activateTethering"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:elevation="0dp"
+                        android:text="activate Tethering" />
+
+                    <Button
+                        android:id="@+id/btn_connect"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="true"
+                        android:text="@string/msg_connect_to_robot" />
+
+                    <Button
+                        android:id="@+id/btn_initConfig"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:text="@string/init_config" />
+
+                    <Spinner
+                        android:id="@+id/spinner_selectedStatemachine"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:spinnerMode="dialog" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <Button
+                            android:id="@+id/btn_startRobot"
+                            android:layout_width="164dp"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:text="@string/start_robot" />
+
+                        <Button
+                            android:id="@+id/btn_stopRobot"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:text="@string/stop" />
+                    </LinearLayout>
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/txt_stateTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="12"
+                                android:text="@string/titleStatus"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:textIsSelectable="false"
+                                tools:targetApi="n" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="12"
+                                android:text="@string/connected"
+                                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                            <TextView
+                                android:id="@+id/txt_isConnected"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="14"
+                                android:text="@string/not_connected"
+                                android:textAppearance="?android:attr/textAppearanceMedium" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/textView2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="12"
+                                android:text="@string/robot"
+                                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                            <TextView
+                                android:id="@+id/txt_stateRobot"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="14"
+                                android:text="@string/not_running"
+                                android:textAppearance="?android:attr/textAppearanceMedium" />
+                        </TableRow>
+                    </TableLayout>
+                    <![CDATA[
+                TextView
+                    android:text="TextView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3" />
+            ]]>
+                </LinearLayout>
+            </ScrollView>
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+        </RelativeLayout>
+    </FrameLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="@string/titleStatus"
-                            android:id="@+id/txt_stateTitle"
-                            android:layout_column="12"
-                            android:textIsSelectable="false"
-                            tools:targetApi="n" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/connected"
-                            android:id="@+id/textView"
-                            android:layout_column="12" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/not_connected"
-                            android:id="@+id/txt_isConnected"
-                            android:layout_column="14" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/robot"
-                            android:id="@+id/textView2"
-                            android:layout_column="12" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/not_running"
-                            android:id="@+id/txt_stateRobot"
-                            android:layout_column="14" />
-                    </TableRow>
-                </TableLayout><![CDATA[
-            TextView
-                android:text="TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView3" />
-        ]]>
-            </LinearLayout>
-        </ScrollView>
-
-    </RelativeLayout>
 </FrameLayout>

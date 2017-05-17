@@ -2,12 +2,9 @@ package org.mindroid.android.app.robodancer;
 
 
 
-import android.os.AsyncTask;
-
 import org.mindroid.android.app.SchuelerProjekt.MindroidLVL1;
 import org.mindroid.android.app.SchuelerProjekt.MindroidLVL2;
 import org.mindroid.android.app.SchuelerProjekt.RobotPortConfig;
-import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.api.robot.IRobotFactory;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.api.statemachine.IMindroidMain;
@@ -33,7 +30,7 @@ public class Robot {
 
     IRobotFactory roFactory = new RobotFactory();
     //-------- Robot
-    RobotPortConfig config = new RobotPortConfig(); //TODO Dependency/Linked to SchuelerProjekt
+    RobotPortConfig robotPortConfig = new RobotPortConfig(); //TODO Dependency/Linked to SchuelerProjekt
     public IMindroidMain mindroidStatemachine; //TODO Dependency/Linked to SchuelerProjekt
     public IMindroidMain mindroidImperative; //TODO Dependency/Linked to SchuelerProjekt
 
@@ -55,7 +52,7 @@ public class Robot {
 
         System.out.println("## App.Robot.makeRobot() got called ");
         //Config
-        roFactory.setRobotConfig(config);
+        roFactory.setRobotConfig(robotPortConfig);
         roFactory.setBrickIP(Settings.getInstance().ev3IP);
         roFactory.setBrickTCPPort(Settings.getInstance().ev3TCPPort);
         roFactory.setMSGServerIP(Settings.getInstance().serverIP);
@@ -170,5 +167,9 @@ public class Robot {
         if(runningStatemachineID != ""){
             commandCenter.stopStatemachine(runningStatemachineID);
         }
+    }
+
+    public RobotPortConfig getRobotPortConfig() {
+        return robotPortConfig;
     }
 }

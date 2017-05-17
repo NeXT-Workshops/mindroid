@@ -1,4 +1,4 @@
-package org.mindroid.android.app.fragments;
+package org.mindroid.android.app.fragments.settings;
 
 import android.app.Activity;
 import android.content.Context;

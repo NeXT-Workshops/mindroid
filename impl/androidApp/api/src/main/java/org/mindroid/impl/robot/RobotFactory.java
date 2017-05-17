@@ -57,7 +57,7 @@ public final class RobotFactory implements IRobotFactory {
     private String msgServerIP = null;
     private int msgServerTCPPort = -1;
 
-    IRobodancerConfig robotConfig;
+    IRobotPortConfig robotConfig;
 
     private HashMap<String,IStatemachine> statemachines = new HashMap<String,IStatemachine>();
 
@@ -78,7 +78,7 @@ public final class RobotFactory implements IRobotFactory {
     }
 
     @Override
-    public void setRobotConfig(IRobodancerConfig robotConfig) {
+    public void setRobotConfig(IRobotPortConfig robotConfig) {
         this.robotConfig = robotConfig;
     }
 
@@ -89,22 +89,22 @@ public final class RobotFactory implements IRobotFactory {
 
         if(robotConfig != null) {
             //Sensors
-            sensor_S1 = robotConfig.getSensorAtPortS1();
-            sensor_S2 = robotConfig.getSensorAtPortS2();
-            sensor_S3 = robotConfig.getSensorAtPortS3();
-            sensor_S4 = robotConfig.getSensorAtPortS4();
+            sensor_S1 = robotConfig.getSensorS1();
+            sensor_S2 = robotConfig.getSensorS2();
+            sensor_S3 = robotConfig.getSensorS3();
+            sensor_S4 = robotConfig.getSensorS4();
 
             //Sensormodes
-            mode_S1 = robotConfig.getSensorModeOfS1();
-            mode_S2 = robotConfig.getSensorModeOfS2();
-            mode_S3 = robotConfig.getSensorModeOfS3();
-            mode_S4 = robotConfig.getSensorModeOfS4();
+            mode_S1 = robotConfig.getSensormodeS1();
+            mode_S2 = robotConfig.getSensormodeS2();
+            mode_S3 = robotConfig.getSensormodeS3();
+            mode_S4 = robotConfig.getSensormodeS4();
 
             //Motors
-            motor_A = robotConfig.getMotorAtPortA();
-            motor_B = robotConfig.getMotorAtPortB();
-            motor_C = robotConfig.getMotorAtPortC();
-            motor_D = robotConfig.getMotorAtPortD();
+            motor_A = robotConfig.getMotorA();
+            motor_B = robotConfig.getMotorB();
+            motor_C = robotConfig.getMotorC();
+            motor_D = robotConfig.getMotorD();
         }else{
             throw new NullPointerException("No RobotConfig set!");
         }

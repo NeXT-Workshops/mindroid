@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.mindroid.android.app.fragments.SettingsFragment">
+    tools:context="org.mindroid.android.app.fragments.settings.SettingsFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -61,10 +61,7 @@
                 android:text="Team Blue" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+        <include layout="@layout/seperator"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -116,10 +113,7 @@
                 android:text="Name" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+        <include layout="@layout/seperator"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -199,10 +193,7 @@
                 android:text="Name" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+        <include layout="@layout/seperator"/>
 
         <Button
             android:id="@+id/btn_saveSettings"

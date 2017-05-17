@@ -8,76 +8,76 @@ import org.mindroid.common.messages.Sensors;
  * Created by torben on 02.03.2017.
  */
 
-public interface IRobodancerConfig {
+public interface IRobotPortConfig {
     /**
      *
      * @return sensor type - or null if no sensor is connected
      */
-    Sensors getSensorAtPortS1();
-
-    /**
-     *
-     * @return sensor type - or null if no sensor is connected
-     */
-    Sensors getSensorAtPortS2();
+    Sensors getSensorS1();
 
     /**
      *
      * @return sensor type - or null if no sensor is connected
      */
-    Sensors getSensorAtPortS3();
+    Sensors getSensorS2();
 
     /**
      *
      * @return sensor type - or null if no sensor is connected
      */
-    Sensors getSensorAtPortS4();
+    Sensors getSensorS3();
+
+    /**
+     *
+     * @return sensor type - or null if no sensor is connected
+     */
+    Sensors getSensorS4();
 
     /**
      *
      * @return the mode the sensor should run
      */
-    SensorMessages.SensorMode_ getSensorModeOfS1();
+    SensorMessages.SensorMode_ getSensormodeS1();
 
     /**
      *
      * @return the mode the sensor should run
      */
-    SensorMessages.SensorMode_ getSensorModeOfS2();
+    SensorMessages.SensorMode_ getSensormodeS2();
 
     /**
      *
      * @return the mode the sensor should run
      */
-    SensorMessages.SensorMode_ getSensorModeOfS3();
+    SensorMessages.SensorMode_ getSensormodeS3();
 
     /**
      *
      * @return the mode the sensor should run
      */
-    SensorMessages.SensorMode_ getSensorModeOfS4();
+    SensorMessages.SensorMode_ getSensormodeS4();
 
     /**
      *
      * @return motor type - or null if no sensor is connected
      */
-    Motors getMotorAtPortA();
+    Motors getMotorA();
 
     /**
      *
      * @return motor type - or null if no sensor is connected
      */
-    Motors getMotorAtPortB();
+    Motors getMotorB();
 
     /**
      *
      * @return motor type - or null if no sensor is connected
      */
-    Motors getMotorAtPortC();
+    Motors getMotorC();
 
     /**
      *
      * @return motor type - or null if no sensor is connected
      */
-    Motors getMotorAtPortD();
+    Motors getMotorD();
 }

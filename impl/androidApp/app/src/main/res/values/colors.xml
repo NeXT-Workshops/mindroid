@@ -6,4 +6,5 @@
     <color name="primary_material_light">#3e52bd</color>
     <color name="secondary_text_material_light">#8af83e3e</color>
     <color name="MenuBack">#e7f0ff</color>
+    <color name="hardware_selection_elmnt">#cccccc</color>
 </resources>

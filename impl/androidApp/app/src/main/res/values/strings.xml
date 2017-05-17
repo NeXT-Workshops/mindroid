@@ -19,6 +19,9 @@
     <string name="stop">STOP</string>
     <string name="not_connected">not connected</string>
 
+    <!-- RobotSetupInfo Fragment-->
+    <string name="tab_connection_tag">Connections</string>
+
     <!-- Configuration Fragment -->
     <string name="tab_sensors_tag">Sensors</string>
     <string name="tab_motors_tag">Motors</string>
@@ -28,8 +31,9 @@
 
     <!-- Shared Preferences -->
     <string name="shared_pref_connection_Data">ConnectionData.xml</string>
+    <string name="shared_pref_portConfiguration">PortConfiguration.xml</string>
 
-    <!-- DEFAULT VALUES -->
+    <!-- Shared Preferences: DEFAULT VALUES -->
     <string name="DEFAULT_EV3_BRICK_IP">192.168.0.240</string>
     <string name="DEFAULT_EV3_BRICK_PORT">33690</string>
     <string name="DEFAULT_MSG_SERVER_IP">192.168.188.38</string>
@@ -38,7 +42,8 @@
     <string name="DEFAULT_ROBOT_ID">No RobotID set</string>
     <string name="DEFAULT_GROUP_ID">No groupID set</string>
 
-    <!-- KEYS for Shared Preferences - ConnectionData.xml -->
+
+    <!-- Shared Preferences: KEYS for Shared Preferences - ConnectionData.xml -->
     <string name="KEY_ROBOT_ID">ROBOT_ID</string>
     <string name="KEY_GROUP_ID">GROUP_ID</string>
     <string name="KEY_EV3_IP">KEY_EV3_IP</string>
@@ -46,6 +51,19 @@
     <string name="KEY_SERVER_IP">KEY_SERVER_IP</string>
     <string name="KEY_SERVER_TCP_PORT">KEY_SERVER_TCP_PORT</string>
     <string name="KEY_ROBOT_SERVER_TCP_PORT">KEY_ROBOT_SERVER_TCP_PORT</string>
+
+    <string name="KEY_SENSOR_S1">sensorS1</string>
+    <string name="KEY_SENSOR_S2">sensorS2</string>
+    <string name="KEY_SENSOR_S3">sensorS3</string>
+    <string name="KEY_SENSOR_S4">sensorS4</string>
+    <string name="KEY_SENSORMODE_S1">sensormodeS1</string>
+    <string name="KEY_SENSORMODE_S2">sensormodeS2</string>
+    <string name="KEY_SENSORMODE_S3">sensormodeS3</string>
+    <string name="KEY_SENSORMODE_S4">sensormodeS4</string>
+    <string name="KEY_MOTOR_A">motorA</string>
+    <string name="KEY_MOTOR_B">motorB</string>
+    <string name="KEY_MOTOR_C">motorC</string>
+    <string name="KEY_MOTOR_D">motorD</string>
 
 
     <!-- Navigation Drawer item titles -->

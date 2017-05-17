@@ -15,13 +15,14 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 
 import org.mindroid.android.app.R;
+import org.mindroid.android.app.fragments.ConfigurationFragment;
 import org.mindroid.android.app.fragments.HomeFragment;
 import org.mindroid.android.app.fragments.NavigationDrawerFragment;
 import org.mindroid.android.app.fragments.SettingsFragment;
 import org.mindroid.android.app.robodancer.Settings;
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SettingsFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,SettingsFragment.OnSettingsChanged {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SettingsFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,SettingsFragment.OnSettingsChanged, ConfigurationFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -37,10 +38,8 @@ public class MainActivity extends Activity
 
     /** Used Fragments **/
     private final Fragment HOME_FRAGMENT = HomeFragment.newInstance("","");
+    private final Fragment CONFIG_FRAGMENT = ConfigurationFragment.newInstance("","");
     private final Fragment SETTINGS_FRAGMENT = SettingsFragment.newInstance("","");
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +60,12 @@ public class MainActivity extends Activity
         loadConnectionProperties();
 
         //show Home Fragment
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, HOME_FRAGMENT)
-                .commit();
-
+        if (savedInstanceState == null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, HOME_FRAGMENT)
+                    .commit();
+        }
 
     }
 
@@ -73,9 +73,14 @@ public class MainActivity extends Activity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         Fragment fragment;
+        String tag;
         switch(position){
-            case 0: fragment = HOME_FRAGMENT; break;//Home
-            case 2: fragment = SETTINGS_FRAGMENT; break;//Settings
+            case 0: fragment = HOME_FRAGMENT;
+                break;//Home
+            case 1: fragment = CONFIG_FRAGMENT;
+                break;//Configuration
+            case 2: fragment = SETTINGS_FRAGMENT;
+                break;//Settings
             default:
                 System.out.println("## MainActivity.onNavigationDrawerItemSelected(): No fragment defined for this position");
                 fragment = HOME_FRAGMENT;

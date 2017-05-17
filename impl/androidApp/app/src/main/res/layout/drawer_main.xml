@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:background="#cccc"
     android:choiceMode="singleChoice"
-    android:divider="@android:color/transparent"
+    android:divider="@color/common_google_signin_btn_text_dark_focused"
     android:dividerHeight="0dp"
+    android:footerDividersEnabled="false"
+    android:headerDividersEnabled="false"
     tools:context="org.mindroid.android.app.fragments.NavigationDrawerFragment" />

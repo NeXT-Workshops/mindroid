@@ -5,4 +5,5 @@
     <color name="accent_material_light">#466de1</color>
     <color name="primary_material_light">#3e52bd</color>
     <color name="secondary_text_material_light">#8af83e3e</color>
+    <color name="MenuBack">#e7f0ff</color>
 </resources>

@@ -227,7 +227,7 @@ public class SettingsFragment extends Fragment {
 
         e.commit();
 
-        showShortToast(parentActivity,getResources().getString(R.string.settings_saved_msg));
+        showShortToast(parentActivity,getResources().getString(R.string.msg_taost_settings_saved));
 
         settingsChangedListener.onSettingsChanged(true); //TODO check if settings have really changed
     }

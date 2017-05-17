@@ -22,7 +22,7 @@
     <string name="shared_pref_connection_Data">ConnectionData.xml</string>
 
     <!-- Settings Fragment -->
-    <string name="settings_saved_msg">gespeichert</string>
+    <string name="msg_taost_settings_saved">gespeichert</string>
 
     <!-- DEFAULT VALUES -->
     <string name="DEFAULT_EV3_BRICK_IP">192.168.0.240</string>

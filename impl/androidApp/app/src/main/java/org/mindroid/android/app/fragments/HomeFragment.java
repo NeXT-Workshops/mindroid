@@ -69,6 +69,12 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     Activity parentActivity;
 
+    // Resources
+    String msgConnectToRobot;
+    String msgInitConfiguration;
+    String msgStartRobot;
+    String msgStopRobot;
+
     public HomeFragment() {
         // Required empty public constructor
 
@@ -101,6 +107,23 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
 
         parentActivity = getActivity();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+
+        //Get Resources
+        msgConnectToRobot = getResources().getString(R.string.msg_connect_to_robot);
+        msgInitConfiguration = getResources().getString(R.string.msg_init_config);
+        msgStartRobot = getResources().getString(R.string.msg_start_robot);
+        msgStopRobot = getResources().getString(R.string.msg_stop_robot);
     }
 
     @Override
@@ -152,16 +175,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
+
 
     @Override
     public void onDetach() {
@@ -345,7 +359,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConnectToBrickTask task = new ConnectToBrickTask(parentActivity,getResources().getString(R.string.msg_connect_to_robot));
+                ConnectToBrickTask task = new ConnectToBrickTask(parentActivity,msgConnectToRobot);
                 task.execute(); //String is not important
             }
         });
@@ -353,7 +367,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_initConfiguration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InitConfiguration task = new InitConfiguration(parentActivity,getResources().getString(R.string.msg_init_config));
+                InitConfiguration task = new InitConfiguration(parentActivity,msgInitConfiguration);
                 task.execute();
             }
         });
@@ -361,7 +375,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_startRobot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartStopRobotTask task = new StartStopRobotTask(parentActivity,getResources().getString(R.string.msg_start_robot));
+                StartStopRobotTask task = new StartStopRobotTask(parentActivity,msgStartRobot);
                 task.execute(START_ROBOT);
             }
         });
@@ -369,7 +383,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_stopRobot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartStopRobotTask task = new StartStopRobotTask(parentActivity,getResources().getString(R.string.msg_stop_robot));
+                StartStopRobotTask task = new StartStopRobotTask(parentActivity,msgStopRobot);
                 task.execute(STOP_ROBOT);
             }
         });

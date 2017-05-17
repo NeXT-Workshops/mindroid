@@ -76,10 +76,13 @@ public class MainActivity extends Activity
         String tag;
         switch(position){
             case 0: fragment = HOME_FRAGMENT;
+                    setTitle(getResources().getString(R.string.title_section1));
                 break;//Home
             case 1: fragment = CONFIG_FRAGMENT;
+                    setTitle(getResources().getString(R.string.title_section2));
                 break;//Configuration
             case 2: fragment = SETTINGS_FRAGMENT;
+                    setTitle(getResources().getString(R.string.title_section3));
                 break;//Settings
             default:
                 System.out.println("## MainActivity.onNavigationDrawerItemSelected(): No fragment defined for this position");

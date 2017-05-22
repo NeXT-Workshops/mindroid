@@ -6,37 +6,83 @@
     tools:context="org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="113dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/txtView_port"
-            android:layout_width="60dp"
+            android:layout_width="70dp"
             android:layout_height="80dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="0dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="9dp"
             android:padding="5dp"
             android:text="@string/hello_blank_fragment"
             android:textSize="60sp"
             tools:text="A" />
 
-        <Spinner
-            android:id="@+id/spinner_mode"
-            android:layout_width="280dp"
-            android:layout_height="30dp"
-            android:layout_below="@+id/spinner_type"
-            android:layout_marginLeft="70dp"
-            android:layout_marginTop="10dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:layout_weight="0.96"
+            android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/spinner_type"
-            android:layout_width="280dp"
-            android:layout_height="30dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="70dp" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
 
-    </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtView_hardwareSelect_type"
+                    android:layout_width="83dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/spinner_type"
+                    android:layout_toEndOf="@+id/txtView_port"
+                    android:text="TextView" />
+
+                <Spinner
+                    android:id="@+id/spinner_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtView_hardwareSelect_mode"
+                    android:layout_width="83dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/txtView_hardwareSelect_type"
+                    android:layout_alignTop="@+id/spinner_mode"
+                    android:text="TextView" />
+
+                <Spinner
+                    android:id="@+id/spinner_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/spinner_type"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </FrameLayout>

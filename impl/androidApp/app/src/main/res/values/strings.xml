@@ -19,6 +19,11 @@
     <string name="stop">STOP</string>
     <string name="not_connected">not connected</string>
 
+    <!-- Hardware Selection Fragment -->
+    <string name="view_sensortype">Sensor</string>
+    <string name="view_sensormode">Mode</string>
+    <string name="view_motortype">Motor</string>
+
     <!-- RobotSetupInfo Fragment-->
     <string name="tab_connection_tag">Connections</string>
 

@@ -254,6 +254,8 @@ public class RobotSetupInfoFragment extends Fragment {
             savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_SERVER_IP), "-").concat(":").concat(portConfigProperties.getString(getResources().getString(R.string.KEY_SERVER_TCP_PORT), "-"));
             txtView_msg_server_ip.setText((savedVal.isEmpty()) ? notDefined : savedVal);
 
+
+
             savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_EV3_IP), "-").concat(":").concat(portConfigProperties.getString(getResources().getString(R.string.KEY_EV3_TCP_PORT), "-"));
             txtView_ev3_brick_ip.setText((savedVal.isEmpty()) ? notDefined : savedVal);
         }

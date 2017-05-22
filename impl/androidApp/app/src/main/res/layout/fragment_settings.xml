@@ -102,6 +102,8 @@
                     android:contentDescription="Name of the Robot"
                     android:ems="10"
                     android:inputType="textPersonName"
+                    android:lines="1"
+                    android:maxLength="30"
                     android:maxLines="1"
                     android:text="Freddy the First" />
 
@@ -113,19 +115,86 @@
                     android:contentDescription="GroupID of the Robot"
                     android:ems="10"
                     android:inputType="textPersonName"
+                    android:lines="1"
+                    android:maxLength="30"
                     android:maxLines="1"
                     android:text="Team Blue" />
 
-                <EditText
-                    android:id="@+id/txt_input_ev3IP"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:contentDescription="IP"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:maxLines="1"
-                    android:text="192.178.0.240" />
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/txt_input_ev3ip_part1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:numeric="integer|signed"
+                        android:text="192" />
+
+                    <TextView
+                        android:id="@+id/txtView_dot3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="."
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txt_input_ev3ip_part2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:numeric="integer|signed"
+                        android:text="178" />
+
+                    <TextView
+                        android:id="@+id/txtView_dot2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="."
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txt_input_ev3ip_part3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:numeric="integer|signed"
+                        android:text="0" />
+
+                    <TextView
+                        android:id="@+id/txtView_dot1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="."
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txt_input_ev3ip_part4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:numeric="integer|signed"
+                        android:text="240" />
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/txt_input_EV3TCPPort"
@@ -134,20 +203,88 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:enabled="false"
-                    android:inputType="none|numberDecimal"
+                    android:inputType="none|number"
+                    android:lines="1"
+                    android:maxLength="5"
                     android:maxLines="1"
+                    android:numeric="integer|signed"
                     android:text="Name" />
 
-                <EditText
-                    android:id="@+id/txt_input_ServerIP"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:contentDescription="IP"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:maxLines="1"
-                    android:text="192.178.0.240" />
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/txt_input_msg_serverip_part1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:numeric="integer|signed"
+                        android:text="192" />
+
+                    <TextView
+                        android:id="@+id/txtView_msg_dot1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="."
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txt_input_msg_serverip_part2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:numeric="integer|signed"
+                        android:text="178" />
+
+                    <TextView
+                        android:id="@+id/txtView_msg_dot2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="."
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txt_input_msg_serverip_part3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:numeric="integer|signed"
+                        android:text="42" />
+
+                    <TextView
+                        android:id="@+id/txtView_msg_dot3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="."
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txt_input_msg_serverip_part4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:numeric="integer|signed"
+                        android:text="2" />
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/txt_input_ServerTCPPort"
@@ -157,8 +294,11 @@
                     android:contentDescription="serverport"
                     android:ems="10"
                     android:enabled="false"
-                    android:inputType="none|numberDecimal"
+                    android:inputType="none|number"
+                    android:lines="1"
+                    android:maxLength="5"
                     android:maxLines="1"
+                    android:numeric="integer|signed"
                     android:text="Name" />
 
                 <EditText
@@ -169,8 +309,11 @@
                     android:contentDescription="robotserverport"
                     android:ems="10"
                     android:enabled="false"
-                    android:inputType="none|numberDecimal"
+                    android:inputType="none|number"
+                    android:lines="1"
+                    android:maxLength="5"
                     android:maxLines="1"
+                    android:numeric="integer|signed"
                     android:text="Name" />
 
             </LinearLayout>

@@ -32,6 +32,7 @@
     <string name="tab_motors_tag">Motors</string>
 
     <!-- Settings Fragment -->
+    <string name="msg_toast_settings_invalid_input">Invalid Input</string>
     <string name="msg_taost_settings_saved">saved</string>
 
     <!-- Shared Preferences -->

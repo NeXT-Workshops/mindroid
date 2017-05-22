@@ -45,21 +45,28 @@ public class SettingsFragment extends Fragment {
     private Button btn_saveSettings;
 
     //UI-Textfield
-    public static EditText txt_input_robotID;
-    public static EditText txt_input_groupID;
+    public EditText txt_input_robotID;
+    public EditText txt_input_groupID;
 
-    public static EditText txt_input_EV3IP;
-    public static EditText txt_input_ServerIP;
+    public EditText txt_input_EV3TCPPort;
+    public EditText txt_input_ServerTCPPort;
+    public EditText txt_input_robotServerPort;
 
-    public static EditText txt_input_EV3TCPPort;
-    public static EditText txt_input_ServerTCPPort;
-    public static EditText txt_input_robotServerPort;
+    private EditText txt_input_ev3ip_part1;
+    private EditText txt_input_ev3ip_part2;
+    private EditText txt_input_ev3ip_part3;
+    private EditText txt_input_ev3ip_part4;
 
+    private EditText txt_input_serverip_part1;
+    private EditText txt_input_serverip_part2;
+    private EditText txt_input_serverip_part3;
+    private EditText txt_input_serverip_part4;
 
 
     public SettingsFragment() {
         // Required empty public constructor
     }
+
 
     public interface OnSettingsChanged {
         public void onSettingsChanged(boolean settingsChanged);
@@ -69,7 +76,7 @@ public class SettingsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * EditText@param param1 Parameter 1.
      * @param param2 Parameter 2.
      * @return A new instance of fragment SettingsFragment.
      */
@@ -107,18 +114,33 @@ public class SettingsFragment extends Fragment {
         txt_input_robotID = (EditText) view.findViewById(R.id.txt_input_robotID);
         txt_input_groupID = (EditText) view.findViewById(R.id.txt_input_groupID);
 
-        txt_input_EV3IP = (EditText) view.findViewById(R.id.txt_input_ev3IP);
+        txt_input_ev3ip_part1 = (EditText) view.findViewById(R.id.txt_input_ev3ip_part1);
+        txt_input_ev3ip_part2 = (EditText) view.findViewById(R.id.txt_input_ev3ip_part2);
+        txt_input_ev3ip_part3 = (EditText) view.findViewById(R.id.txt_input_ev3ip_part3);
+        txt_input_ev3ip_part4 = (EditText) view.findViewById(R.id.txt_input_ev3ip_part4);
         txt_input_EV3TCPPort = (EditText) view.findViewById(R.id.txt_input_EV3TCPPort);
 
-        txt_input_ServerIP = (EditText) view.findViewById(R.id.txt_input_ServerIP);
+        txt_input_serverip_part1 = (EditText) view.findViewById(R.id.txt_input_msg_serverip_part1);
+        txt_input_serverip_part2 = (EditText) view.findViewById(R.id.txt_input_msg_serverip_part2);
+        txt_input_serverip_part3 = (EditText) view.findViewById(R.id.txt_input_msg_serverip_part3);
+        txt_input_serverip_part4 = (EditText) view.findViewById(R.id.txt_input_msg_serverip_part4);
         txt_input_ServerTCPPort = (EditText) view.findViewById(R.id.txt_input_ServerTCPPort);
         txt_input_robotServerPort = (EditText) view.findViewById(R.id.txt_input_robotServerPort);
 
         /** Set ports **/
-        txt_input_EV3IP.setText(R.string.DEFAULT_EV3_BRICK_IP);
+        String[] def_ev3ip = getResources().getString(R.string.DEFAULT_EV3_BRICK_IP).split("\\.");
+        txt_input_ev3ip_part1.setText(def_ev3ip[0]);
+        txt_input_ev3ip_part2.setText(def_ev3ip[1]);
+        txt_input_ev3ip_part3.setText(def_ev3ip[2]);
+        txt_input_ev3ip_part4.setText(def_ev3ip[3]);
         txt_input_EV3TCPPort.setText(R.string.DEFAULT_EV3_BRICK_PORT);
 
-        txt_input_ServerIP.setText(R.string.DEFAULT_MSG_SERVER_IP);
+        String[] dev_serverip = getResources().getString(R.string.DEFAULT_MSG_SERVER_IP).split("\\.");
+        txt_input_serverip_part1.setText(dev_serverip[0]);
+        txt_input_serverip_part2.setText(dev_serverip[1]);
+        txt_input_serverip_part3.setText(dev_serverip[2]);
+        txt_input_serverip_part4.setText(dev_serverip[3]);
+
         txt_input_ServerTCPPort.setText(R.string.DEFAULT_MSG_SERVER_PORT);
         txt_input_robotServerPort.setText(R.string.DEFAULT_BRICK_MSG_SERVER_PORT);
 
@@ -183,13 +205,25 @@ public class SettingsFragment extends Fragment {
         SharedPreferences connectionProperties = parentActivity.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_connection_Data),Context.MODE_PRIVATE);
         if(connectionProperties != null) {
             String savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_EV3_IP), getResources().getString(R.string.DEFAULT_EV3_BRICK_IP));
-            txt_input_EV3IP.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_EV3_BRICK_IP) : savedVal);
+            if(!savedVal.isEmpty()){
+                String[] val = savedVal.split("\\.");
+                txt_input_ev3ip_part1.setText(val[0]);
+                txt_input_ev3ip_part2.setText(val[1]);
+                txt_input_ev3ip_part3.setText(val[2]);
+                txt_input_ev3ip_part4.setText(val[3]);
+            }
 
             savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_EV3_TCP_PORT), getResources().getString(R.string.DEFAULT_EV3_BRICK_PORT));
             txt_input_EV3TCPPort.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_EV3_BRICK_PORT) : savedVal);
 
             savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_SERVER_IP), getResources().getString(R.string.DEFAULT_MSG_SERVER_IP));
-            txt_input_ServerIP.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_MSG_SERVER_IP) : savedVal);
+            if(!savedVal.isEmpty()){
+                String[] val = savedVal.split("\\.");
+                txt_input_serverip_part1.setText(val[0]);
+                txt_input_serverip_part2.setText(val[1]);
+                txt_input_serverip_part3.setText(val[2]);
+                txt_input_serverip_part4.setText(val[3]);
+            }
 
             savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_SERVER_TCP_PORT), getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT));
             txt_input_ServerTCPPort.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT) : savedVal);
@@ -207,16 +241,21 @@ public class SettingsFragment extends Fragment {
     }
 
     private void saveSettings(){
+        if(!validateSettings()){
+            showShortToast(getActivity(),getResources().getString(R.string.msg_toast_settings_invalid_input));
+            return;
+        }
+
 
         SharedPreferences.Editor e = parentActivity.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_connection_Data),Context.MODE_PRIVATE).edit();
         e.clear();
 
         /** Data to connect to EV3 Brick **/
-        e.putString(getResources().getString(R.string.KEY_EV3_IP),txt_input_EV3IP.getText().toString());
+        e.putString(getResources().getString(R.string.KEY_EV3_IP),getInputEV3IP());
         e.putString(getResources().getString(R.string.KEY_EV3_TCP_PORT),txt_input_EV3TCPPort.getText().toString());
 
         /** Data to connect to Server **/
-        e.putString(getResources().getString(R.string.KEY_SERVER_IP),txt_input_ServerIP.getText().toString());
+        e.putString(getResources().getString(R.string.KEY_SERVER_IP),getInputServerIP());
         e.putString(getResources().getString(R.string.KEY_SERVER_TCP_PORT),txt_input_ServerTCPPort.getText().toString());
 
         /** Data to connect to EV3 Brick **/
@@ -234,7 +273,70 @@ public class SettingsFragment extends Fragment {
         settingsChangedListener.onSettingsChanged(true); //TODO check if settings have really changed
     }
 
+    /**
+     * Checks if the Settings input values are valid
+     *
+     * @return
+     */
+    private boolean validateSettings() {
+        String ipRegex = "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"; //
+        //Validate EV3IP
+        if(! (txt_input_ev3ip_part1.getText().toString().matches(ipRegex) &&
+                txt_input_ev3ip_part2.getText().toString().matches(ipRegex) &&
+                txt_input_ev3ip_part3.getText().toString().matches(ipRegex) &&
+                txt_input_ev3ip_part4.getText().toString().matches(ipRegex))){
+            return false;
+        }
+
+        if(! (txt_input_serverip_part1.getText().toString().matches(ipRegex) &&
+                txt_input_serverip_part2.getText().toString().matches(ipRegex) &&
+                txt_input_serverip_part3.getText().toString().matches(ipRegex) &&
+                txt_input_serverip_part4.getText().toString().matches(ipRegex))){
+            return false;
+        }
+
+        //TODO complete?
+        return true;
+    }
+
     private void showShortToast(Context context,String msg){
         Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
     }
+
+    /**
+     * Concats the Text-Fields of the EV3-IP and returns a string in ip format
+     *
+     * @return
+     */
+    private String getInputEV3IP() {
+        String ev3ip =ev3ip = "";
+        ev3ip = ev3ip.concat(txt_input_ev3ip_part1.getText().toString());
+        ev3ip = ev3ip.concat(".");
+        ev3ip = ev3ip.concat(txt_input_ev3ip_part2.getText().toString());
+        ev3ip = ev3ip.concat(".");
+        ev3ip = ev3ip.concat(txt_input_ev3ip_part3.getText().toString());
+        ev3ip = ev3ip.concat(".");
+        ev3ip = ev3ip.concat(txt_input_ev3ip_part4.getText().toString());
+        System.out.println(" ## EV3ip: "+ev3ip);
+        return ev3ip;
+    }
+
+    /**
+     * Concats the Text-Fields of the Msg-Server-IP and returns a string in ip format
+     *
+     * @return
+     */
+    private String getInputServerIP() {
+        String serverip = "";
+        serverip = serverip.concat(txt_input_serverip_part1.getText().toString());
+        serverip = serverip.concat(".");
+        serverip = serverip.concat(txt_input_serverip_part2.getText().toString());
+        serverip = serverip.concat(".");
+        serverip = serverip.concat(txt_input_serverip_part3.getText().toString());
+        serverip = serverip.concat(".");
+        serverip = serverip.concat(txt_input_serverip_part4.getText().toString());
+        System.out.println(" ## ServerIP: "+serverip);
+        return serverip;
+    }
+
 }

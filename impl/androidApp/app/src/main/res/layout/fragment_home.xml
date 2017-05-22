@@ -100,76 +100,16 @@
                             android:layout_height="wrap_content"
                             android:enabled="false"
                             android:text="@string/stop" />
-                    </LinearLayout>
+                    </LinearLayout><![CDATA[
 
-                    <TableLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
 
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/txt_stateTitle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="12"
-                                android:text="@string/titleStatus"
-                                android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:textIsSelectable="false"
-                                tools:targetApi="n" />
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="12"
-                                android:text="@string/connected"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                            <TextView
-                                android:id="@+id/txt_isConnected"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="14"
-                                android:text="@string/not_connected"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/textView2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="12"
-                                android:text="@string/robot"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                            <TextView
-                                android:id="@+id/txt_stateRobot"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="14"
-                                android:text="@string/not_running"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-                        </TableRow>
-                    </TableLayout>
-                    <![CDATA[
                 TextView
                     android:text="TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView3" />
-            ]]>
+
+                ]]>
                 </LinearLayout>
             </ScrollView>
 

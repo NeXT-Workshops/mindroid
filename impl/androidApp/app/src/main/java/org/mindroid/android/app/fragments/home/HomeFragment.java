@@ -56,8 +56,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private Button btn_startRobot;
     private Button btn_stopRobot;
 
-    private TextView txt_isConnected;
-    private TextView txt_robotState;
     private Spinner spinner_selectedStatemachine;
 
     /** Information Box **/
@@ -146,9 +144,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             spinner_selectedStatemachine = (Spinner) view.findViewById(R.id.spinner_selectedStatemachine);
             btn_startRobot = (Button) view.findViewById(R.id.btn_startRobot);
             btn_stopRobot = (Button) view.findViewById(R.id.btn_stopRobot);
-
-            txt_isConnected = (TextView) view.findViewById(R.id.txt_isConnected);
-            txt_robotState = (TextView) view.findViewById(R.id.txt_stateRobot);
 
             /** Information Box **/
             layout_info = (FrameLayout) view.findViewById(R.id.layout_infobox);
@@ -245,29 +240,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             }
         };
 
-        final Runnable taskUpdateStatusView = new Runnable() {
-            @Override
-            public void run() {
-                if(robot.isConnectedToBrick){
-                    txt_isConnected.setText("Connected");
-                }else{
-                    txt_isConnected.setText("Not connected");
-                }
-
-                if(robot.isConfigurationBuilt){
-                    //TODO
-                }else{
-                    //TODO
-                }
-
-                if(robot.isRunning){
-                    txt_robotState.setText("running");
-                }else{
-                    txt_robotState.setText("not running");
-                }
-            }
-        };
-
         final Runnable taskCheckUSBState = new Runnable() {
             @Override
             public void run() {
@@ -311,9 +283,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
                     //Enable/disable control buttons (Connect to brick, init configuration, start robot,stop robot)
                     parentActivity.runOnUiThread(taskUpdateButtonEnableState);
-
-                    //Update View of the current State
-                    parentActivity.runOnUiThread(taskUpdateStatusView);
 
                     //Update View of the current State
                     parentActivity.runOnUiThread(taskCheckUSBState);

@@ -144,15 +144,15 @@ public class Statemachine implements IStatemachine{
 	}
 	
 	@Override
-	public synchronized void start(){
+	public synchronized void start() throws NoStartStateException {
 		if(currentState == null){
 			if(startState == null){
-				//TODO Throw exception!
+				throw new NoStartStateException("No Start State specified for this (ID:'"+getID()+"') Statemachine. Use setStartState(..) to specify a State to begin with!");
 			}
 			currentState = startState;
+			this.isActive = true;
 			currentState.activate();
 		}
-		this.isActive = true;
 	}
 
 	@Override
@@ -160,11 +160,15 @@ public class Statemachine implements IStatemachine{
 		currentState.deactivate();
 		this.isActive = false;
 	}
-	
-	
+
+
 	@Override
 	public String toString() {
-		return "Statemachine [currentState=" + currentState + ", startState=" + startState + ", states=" + states + "]";
+		return "Statemachine{" +
+				"ID='" + ID + '\'' +
+				", startState=" + startState.getName() +
+				", isActive=" + isActive +
+				'}';
 	}
 
 	@Override

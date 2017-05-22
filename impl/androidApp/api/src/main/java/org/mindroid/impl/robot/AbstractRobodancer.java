@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import org.mindroid.api.ev3.EV3RotationMotorEnabled;
 import org.mindroid.api.ev3.EV3StatusLightEnabled;
+import org.mindroid.api.statemachine.NoStartStateException;
 import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
@@ -51,7 +52,7 @@ public abstract class AbstractRobodancer implements EV3RotationMotorEnabled, EV3
 
 	}
 
-	private void startStatemachines(){
+	private void startStatemachines() throws NoStartStateException {
 		for(String key : statemachines.keySet()){
 			statemachines.get(key).start();
 		}
@@ -71,7 +72,7 @@ public abstract class AbstractRobodancer implements EV3RotationMotorEnabled, EV3
 	 */
 	abstract public void initStatemachines() throws StateAlreadyExists;
 
-	public void start() throws StateAlreadyExists {
+	public void start() throws StateAlreadyExists, NoStartStateException {
 		initStatemachines();
 		startStatemachines();
 	}

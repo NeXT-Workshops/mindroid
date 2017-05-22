@@ -27,7 +27,7 @@ public class Testbench {
 
         IRobotFactory rf = new RobotFactory();
 
-        rf.addStatemachine(mindroid.getStatemachine());
+        rf.addStatemachine(mindroid.getStatemachineCollection());
         rf.setRobotConfig(config);
         rf.setBrickIP(brickIP);
         rf.setBrickTCPPort(NetworkPortConfig.BRICK_PORT);

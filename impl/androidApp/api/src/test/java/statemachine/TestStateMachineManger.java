@@ -55,8 +55,8 @@ public class TestStateMachineManger {
 			}
 		};
 
-		color_red = new EQ(new Color(Color.RED, EV3PortIDs.PORT_1));
-		collision = new LT(new Distance(4f, EV3PortIDs.PORT_1));
+		color_red = new EQ(Color.RED, new Color(EV3PortIDs.PORT_1));
+		collision = new LT(4f,new Distance( EV3PortIDs.PORT_1));
 
 		this.sm = new Statemachine(statemachineID);
 		this.sm.addState(start);
@@ -70,7 +70,9 @@ public class TestStateMachineManger {
 
 	@Test
 	public void testConstraint(){
-		smm.addStatemachine(sm);
+		StatemachineCollection sc = new StatemachineCollection();
+		sc.addStatemachine(sm);
+		smm.addStatemachines(sc);
 		smm.startStatemachine(statemachineID);
 
 		//----- State 'start' should be switched to state 'end"
@@ -80,19 +82,19 @@ public class TestStateMachineManger {
 		assertTrue(end.isActive());
 		assertFalse(start.isActive());
 
-	//----- Nothing should change, because no transition with this constraint exists
-		smm.handleSatisfiedConstraint(statemachineID,color_red);
+		//----- Nothing should change, because no transition with this constraint exists
+			smm.handleSatisfiedConstraint(statemachineID,color_red);
 
-	assertTrue(smm.getCurrentState(statemachineID).getName().equals(state_name_end));
-	assertTrue(end.isActive());
-	assertFalse(start.isActive());
+		assertTrue(smm.getCurrentState(statemachineID).getName().equals(state_name_end));
+		assertTrue(end.isActive());
+		assertFalse(start.isActive());
 
-	//----- State 'end' should be switched to state 'start'
-		smm.handleSatisfiedConstraint(statemachineID,collision);
+		//----- State 'end' should be switched to state 'start'
+			smm.handleSatisfiedConstraint(statemachineID,collision);
 
-	assertTrue(smm.getCurrentState(statemachineID).getName().equals(state_name_start));
-	assertTrue(start.isActive());
-	assertFalse(end.isActive());
+		assertTrue(smm.getCurrentState(statemachineID).getName().equals(state_name_start));
+		assertTrue(start.isActive());
+		assertFalse(end.isActive());
 }
 
 	@Test
@@ -102,7 +104,9 @@ public class TestStateMachineManger {
 
 	@Test
 	public void testTimeEventDeletionStatemachine(){
-		smm.addStatemachine(sm);
+		StatemachineCollection sc = new StatemachineCollection();
+		sc.addStatemachine(sm);
+		smm.addStatemachines(sc);
 		smm.startStatemachine(statemachineID);
 
 

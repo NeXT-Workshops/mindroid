@@ -9,6 +9,7 @@ import org.mindroid.api.statemachine.constraints.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by torben on 11.03.2017.
@@ -21,8 +22,8 @@ public class RobotContextStateEvaluator implements IConstraintEvaluator{
     Map<String,ISatisfiedConstraintHandler> listener;
 
     public RobotContextStateEvaluator(){
-        subscribedConstraints = new HashMap<String,List<IConstraint>>();
-        listener =  new HashMap<String,ISatisfiedConstraintHandler>();
+        subscribedConstraints = new ConcurrentHashMap<String,List<IConstraint>>();
+        listener =  new ConcurrentHashMap<String,ISatisfiedConstraintHandler>();
     }
 
 
@@ -32,10 +33,10 @@ public class RobotContextStateEvaluator implements IConstraintEvaluator{
             return ((IComparator)constraint).evaluate(rcs);
 
         }else if(constraint instanceof ILogicOperator){
-            boolean eval_left = evaluateConstraint(((ILogicOperator)constraint).getLeftConstraint(),rcs);
-            boolean eval_right = evaluateConstraint(((ILogicOperator)constraint).getRightConstraint(),rcs);
+            boolean evalLeft = evaluateConstraint(((ILogicOperator)constraint).getLeftConstraint(),rcs);
+            boolean evalRight = evaluateConstraint(((ILogicOperator)constraint).getRightConstraint(),rcs);
 
-            return ((ILogicOperator)constraint).evaluate(eval_left,eval_right);
+            return ((ILogicOperator)constraint).evaluate(evalLeft,evalRight);
         }else{
             throw new IllegalArgumentException("Unknown Constrainttype.");
         }
@@ -46,7 +47,7 @@ public class RobotContextStateEvaluator implements IConstraintEvaluator{
     public synchronized void handleRobotContextState(IRobotContextState rcs) {
         for(String statemachineId : subscribedConstraints.keySet()){
             for (int i = 0; i < subscribedConstraints.get(statemachineId).size(); i++) {
-                System.out.println("ContextStateEvaluator.handleRobotContextState()" +subscribedConstraints.get(statemachineId));
+                //System.out.println("ContextStateEvaluator.handleRobotContextState()" +subscribedConstraints.get(statemachineId));
                 boolean isSatisfied = false;
                 isSatisfied = evaluateConstraint(subscribedConstraints.get(statemachineId).get(i),rcs);
 
@@ -73,9 +74,16 @@ public class RobotContextStateEvaluator implements IConstraintEvaluator{
         }
     }
 
+    @Override
+    public synchronized void unsubscribeConstraints(String statemachineId){
+        //Remove Listener
+        listener.remove(statemachineId);
+        subscribedConstraints.remove(statemachineId);
+    }
+
     private static RobotContextStateEvaluator ourInstance = new RobotContextStateEvaluator();
 
-    public static RobotContextStateEvaluator getInstance() {
+    public synchronized static RobotContextStateEvaluator getInstance() {
         return ourInstance;
     }
 

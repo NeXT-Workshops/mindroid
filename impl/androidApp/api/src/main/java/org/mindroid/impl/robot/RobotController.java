@@ -37,7 +37,7 @@ public class RobotController {
         return sensorControl;
     }
 
-    public IMessenger getMessenger() {
+    public synchronized IMessenger getMessenger() {
         return messenger;
     }
 

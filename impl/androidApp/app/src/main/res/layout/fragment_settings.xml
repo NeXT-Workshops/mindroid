@@ -13,195 +13,178 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/txtView_robotID"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="20dp">
+
+                <TextView
+                    android:id="@+id/txtView_robotID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="RobotID"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtView_groupID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="GroupID"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtView_EV3IP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="EV3 IP"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtView_EV3TCPPort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="EV3 TCP Port"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtView_ServerIP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="MSG-Server IP"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtView_ServerTCPPort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="MSG-Server Port"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtView_robotServerPort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Robot Serverport"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="RobotID" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:weightSum="1">
 
-            <EditText
-                android:id="@+id/txt_input_robotID"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:contentDescription="Name of the Robot"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:text="Freddy the First" />
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/txt_input_robotID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:contentDescription="Name of the Robot"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:text="Freddy the First" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
-            android:weightSum="1">
+                <EditText
+                    android:id="@+id/txt_input_groupID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:contentDescription="GroupID of the Robot"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:text="Team Blue" />
 
-            <TextView
-                android:id="@+id/txtView_groupID"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.41"
-                android:text="GroupID" />
+                <EditText
+                    android:id="@+id/txt_input_ev3IP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:contentDescription="IP"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:text="192.178.0.240" />
 
-            <EditText
-                android:id="@+id/txt_input_groupID"
-                android:layout_width="186dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="GroupID of the Robot"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:text="Team Blue" />
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/txt_input_EV3TCPPort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="none|numberDecimal"
+                    android:maxLines="1"
+                    android:text="Name" />
 
-        <include layout="@layout/seperator"/>
+                <EditText
+                    android:id="@+id/txt_input_ServerIP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:contentDescription="IP"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:text="192.178.0.240" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp">
+                <EditText
+                    android:id="@+id/txt_input_ServerTCPPort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:contentDescription="serverport"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="none|numberDecimal"
+                    android:maxLines="1"
+                    android:text="Name" />
 
-            <TextView
-                android:id="@+id/txtView_EV3IP"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.21"
-                android:text="EV3 IP" />
+                <EditText
+                    android:id="@+id/txt_input_robotServerPort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:contentDescription="robotserverport"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="none|numberDecimal"
+                    android:maxLines="1"
+                    android:text="Name" />
 
-            <EditText
-                android:id="@+id/txt_input_ev3IP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="IP"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:text="192.178.0.240" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp">
-
-            <TextView
-                android:id="@+id/txtView_EV3TCPPort"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.21"
-                android:text="EV3 TCP Port" />
-
-            <EditText
-                android:id="@+id/txt_input_EV3TCPPort"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:enabled="false"
-                android:inputType="none|numberDecimal"
-                android:maxLines="1"
-                android:text="Name" />
-        </LinearLayout>
-
-        <include layout="@layout/seperator"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp">
-
-            <TextView
-                android:id="@+id/txtView_ServerIP"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.21"
-                android:text="MSG-Server IP" />
-
-            <EditText
-                android:id="@+id/txt_input_ServerIP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="IP"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:text="192.178.0.240" />
+            </LinearLayout>
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp">
-
-            <TextView
-                android:id="@+id/txtView_ServerTCPPort"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.21"
-                android:text="MSG-Server Port" />
-
-            <EditText
-                android:id="@+id/txt_input_ServerTCPPort"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="serverport"
-                android:ems="10"
-                android:enabled="false"
-                android:inputType="none|numberDecimal"
-                android:maxLines="1"
-                android:text="Name" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp">
-
-            <TextView
-                android:id="@+id/txtView_robotServerPort"
-                android:layout_width="111dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.07"
-                android:text="Robot Serverport" />
-
-            <EditText
-                android:id="@+id/txt_input_robotServerPort"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="robotserverport"
-                android:ems="10"
-                android:enabled="false"
-                android:inputType="none|numberDecimal"
-                android:maxLines="1"
-                android:text="Name" />
-        </LinearLayout>
-
-        <include layout="@layout/seperator"/>
 
         <Button
             android:id="@+id/btn_saveSettings"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0.59"
             android:elevation="0dp"
             android:onClick="saveSettings"
             android:text="save Settings" />
-
     </LinearLayout>
+
 </FrameLayout>

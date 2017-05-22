@@ -69,14 +69,20 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:enabled="true"
-                        android:text="@string/msg_connect_to_robot" />
+                        android:text="@string/dialog_msg_connect_to_robot" />
+
+                    <Button
+                        android:id="@+id/btn_disconnect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="disconnect" />
 
                     <Button
                         android:id="@+id/btn_initConfig"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:enabled="false"
-                        android:text="@string/init_config" />
+                        android:text="@string/btn_text_init_config" />
 
                     <Spinner
                         android:id="@+id/spinner_selectedStatemachine"
@@ -95,14 +101,14 @@
                             android:layout_width="164dp"
                             android:layout_height="wrap_content"
                             android:enabled="false"
-                            android:text="@string/start_robot" />
+                            android:text="@string/btn_text_start_robot" />
 
                         <Button
                             android:id="@+id/btn_stopRobot"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
-                            android:text="@string/stop" />
+                            android:text="@string/btn_text_stop_robot" />
                     </LinearLayout><![CDATA[
 
 

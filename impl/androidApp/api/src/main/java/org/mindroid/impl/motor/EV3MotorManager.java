@@ -88,6 +88,14 @@ public class EV3MotorManager extends Listener {
 		}
 	}
 
+	public void disconnectMotors(){
+		for(EV3MotorPort key: motors.keySet()){
+			if(motors.get(key) != null && (motors.get(key) instanceof ClientEndpoint)){
+				((ClientEndpoint)motors.get(key)).disconnect();
+			}
+		}
+	}
+
     @Override
     public void received(Connection connection, Object object){
 		/** Message if the Endpoint-creation was successful or not **/

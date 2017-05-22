@@ -55,7 +55,12 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
         	setClientReady(true);
         }	
 	}
-	
+
+    @Override
+    public void disconnect(){
+        client.close();
+    }
+
 	private void registerMessages(Client client){
 		MessageRegistrar.register(client);
 	}

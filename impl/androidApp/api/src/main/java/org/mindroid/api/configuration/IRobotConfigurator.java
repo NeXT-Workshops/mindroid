@@ -81,4 +81,6 @@ public interface IRobotConfigurator {
 	 * Build the Configuration
 	 */
 	boolean initializeConfiguration() throws BrickIsNotReadyException, PortIsAlreadyInUseException;
+
+
 }

@@ -7,14 +7,14 @@
     <!-- Activity titles -->
     <string name="title_activity_main">Mindroid</string>
 
-    <string name="msg_connect_to_robot">Mit dem Roboter verbinden</string>
-    <string name="start_robot">Start</string>
-    <string name="init_config">Initialisiere Konfiguration</string>
+    <string name="dialog_msg_connect_to_robot">Mit dem Roboter verbinden</string>
+    <string name="btn_text_start_robot">Start</string>
+    <string name="btn_text_init_config">Initialisiere Konfiguration</string>
     <string name="titleStatus">Status:</string>
     <string name="not_running">Nicht aktiv</string>
     <string name="connected">Verbindung:</string>
     <string name="robot">Robot:</string>
-    <string name="stop">Stop</string>
+    <string name="btn_text_stop_robot">Stop</string>
     <string name="not_connected">nicht verbunden</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
@@ -51,7 +51,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="msg_init_config" />
-    <string name="msg_start_robot" />
-    <string name="msg_stop_robot" />
+    <string name="dialog_msg_init_config" />
+    <string name="dialog_msg_start_robot" />
+    <string name="dialog_msg_stop_robot" />
 </resources>

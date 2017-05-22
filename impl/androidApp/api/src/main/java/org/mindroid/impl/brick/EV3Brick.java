@@ -96,6 +96,15 @@ public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO 
 
 		return client.isConnected();
     }
+
+	/**
+	 * Disconnects all open Connections to the Brick!
+	 */
+	public void disconnect(){
+		client.close();
+		getSensorManager().disconnectSensors();
+		getMotorManager().disconnectMotors();
+	}
     
 	public EV3MotorManager getMotorManager() {
 		return motorManager;

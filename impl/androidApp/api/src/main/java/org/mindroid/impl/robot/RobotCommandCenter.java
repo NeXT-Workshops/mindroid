@@ -63,4 +63,9 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     public boolean initializeConfiguration() throws BrickIsNotReadyException {
         return robot.getRobotConfigurator().initializeConfiguration();
     }
+
+    @Override
+    public void disconnect() {
+        robot.getRobotConfigurator().getBrick().disconnect();
+    }
 }

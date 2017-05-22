@@ -4,8 +4,10 @@ public interface ClientEndpoint {
 	/**
 	 * Connect to server
 	 */
-	public void connect();
-	
+	void connect();
+
+	void disconnect();
+
 	/**
 	 * checks if client is ready 
 	 * returns true if connection is established.

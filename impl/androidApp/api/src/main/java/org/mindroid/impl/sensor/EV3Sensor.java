@@ -108,6 +108,8 @@ public class EV3Sensor extends ClientEndpointImpl {
         client.stop();
     }
 
+
+
     public void registerListener(IEV3SensorEventListener listener) {
         listeners.add(listener);
     }

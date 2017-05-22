@@ -12,8 +12,6 @@ import org.mindroid.impl.statemachine.StatemachineManager;
  */
 public final class Robot {
 
-
-
     public String robotID = "No id set";
 
     private RobotConfigurator robotConfigurator = null;

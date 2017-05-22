@@ -23,6 +23,11 @@ import org.mindroid.common.messages.Motors;
 import org.mindroid.common.messages.SensorMessages.SensorMode_;
 import org.mindroid.common.messages.Sensors;
 
+/**
+ *
+ * Configurates the Robot in the mean of which hardware is added to which port.
+ *
+ */
 public class RobotConfigurator implements IRobotConfigurator {
 
 	private HashMap<EV3SensorPort,Sensors> sensorConfiguration = new HashMap<EV3SensorPort,Sensors>(4);
@@ -67,8 +72,13 @@ public class RobotConfigurator implements IRobotConfigurator {
 		sensorManager = brick.getSensorManager();
 		motorManager = brick.getMotorManager();
 	}
-	
 
+	/**
+	 * Disconnectes the Kryo-Connection of the open devices
+	 */
+	public void disconnectDevices(){
+
+	}
 	
 	@Override
 	public void addSensorConfigurationSet(Sensors sensor_S1,Sensors sensor_S2, Sensors sensor_S3,Sensors sensor_S4){

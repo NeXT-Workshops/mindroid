@@ -183,4 +183,7 @@ public class Robot {
         return robotPortConfig;
     }
 
+    public void disconnect() {
+        commandCenter.disconnect();
+    }
 }

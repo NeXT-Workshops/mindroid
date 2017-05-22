@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.asynctasks.ProgressTask;
-import org.mindroid.android.app.dialog.ErrorDialog;
 import org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
@@ -54,8 +53,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     //--- Buttons etc --//
     private Button btn_initConfiguration;
     private Button btn_connect;
+    private Button btn_disconnect;
     private Button btn_startRobot;
     private Button btn_stopRobot;
+
 
     private Spinner spinner_selectedStatemachine;
 
@@ -74,6 +75,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     // Resources
     String msgConnectToRobot;
+    String msgDisconnectFromRobot;
     String msgInitConfiguration;
     String msgStartRobot;
     String msgStopRobot;
@@ -127,10 +129,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
 
         //Get Resources
-        msgConnectToRobot = getResources().getString(R.string.msg_connect_to_robot);
-        msgInitConfiguration = getResources().getString(R.string.msg_init_config);
-        msgStartRobot = getResources().getString(R.string.msg_start_robot);
-        msgStopRobot = getResources().getString(R.string.msg_stop_robot);
+        msgConnectToRobot = getResources().getString(R.string.dialog_msg_connect_to_robot);
+        msgDisconnectFromRobot = getResources().getString(R.string.dialog_msg_disconnect_from_robot);
+        msgInitConfiguration = getResources().getString(R.string.dialog_msg_init_config);
+        msgStartRobot = getResources().getString(R.string.dialog_msg_start_robot);
+        msgStopRobot = getResources().getString(R.string.dialog_msg_stop_robot);
     }
 
     @Override
@@ -142,14 +145,23 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
             btn_initConfiguration = (Button) view.findViewById(R.id.btn_initConfig);
             btn_connect = (Button) view.findViewById(R.id.btn_connect);
+            btn_disconnect = (Button) view.findViewById(R.id.btn_disconnect);
             spinner_selectedStatemachine = (Spinner) view.findViewById(R.id.spinner_selectedStatemachine);
             btn_startRobot = (Button) view.findViewById(R.id.btn_startRobot);
             btn_stopRobot = (Button) view.findViewById(R.id.btn_stopRobot);
 
-            /** Information Box **/
+            /** ActivateTethering-Information Box **/
             layout_info = (FrameLayout) view.findViewById(R.id.layout_infobox);
             txt_info = (TextView) view.findViewById(R.id.txt_info);
             btn_activateTethering = (Button) view.findViewById(R.id.btn_activateTethering);
+
+            btn_connect.setText(getResources().getString(R.string.btn_text_connect));
+            btn_disconnect.setText(getResources().getString(R.string.btn_text_disconnect));
+            btn_disconnect.setVisibility(View.GONE);
+            btn_initConfiguration.setText(getResources().getString(R.string.btn_text_init_config));
+            btn_startRobot.setText(getResources().getString(R.string.btn_text_start_robot));
+            btn_stopRobot.setText(getResources().getString(R.string.btn_text_stop_robot));
+
 
             //Add RobotSetupInfo Fragment
             FragmentManager fragmentManager = getFragmentManager();
@@ -163,7 +175,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             spinner_selectedStatemachine.setAdapter(getStatemachineIDAdapter());
         } catch (StateAlreadyExists stateAlreadyExists) {
             stateAlreadyExists.printStackTrace();
-            //showAlertDialog("Error on create",stateAlreadyExists.getMessage());
+            mListener.showErrorDialog("Error on create",stateAlreadyExists.getMessage());
         }
 
 
@@ -227,6 +239,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 boolean positiveUSBState = isUSBConnected(parentActivity) && isTetheringActivated(parentActivity);
 
                 btn_connect.setEnabled(!robot.isConnectedToBrick && positiveUSBState);
+
+                btn_connect.setVisibility((!robot.isConnectedToBrick && positiveUSBState) ? View.VISIBLE : View.GONE);
+
+                btn_disconnect.setVisibility(robot.isConnectedToBrick ? View.VISIBLE : View.GONE);
 
                 btn_initConfiguration.setEnabled(robot.isConnectedToBrick && !robot.isConfigurationBuilt && positiveUSBState);
 
@@ -340,6 +356,14 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             }
         });
 
+        btn_disconnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DisconnectFromBrickTask task = new DisconnectFromBrickTask(parentActivity,msgDisconnectFromRobot);
+                task.execute();
+            }
+        });
+
         btn_initConfiguration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -408,6 +432,28 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 e.printStackTrace();
                 mListener.showErrorDialog("Exception",e.getMessage());
             }
+            robot.isConnectedToBrick = result;
+            return result;
+        }
+    }
+
+    private class DisconnectFromBrickTask extends ProgressTask{
+
+        public DisconnectFromBrickTask(Context context,String progressMsg) {
+            super(context,progressMsg);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            boolean result = false;
+            try {
+                robot.disconnect();
+                result = robot.isConnected();
+            } catch (Exception e){
+                e.printStackTrace();
+                mListener.showErrorDialog("Exception",e.getMessage());
+            }
+            robot.isConfigurationBuilt = result;
             robot.isConnectedToBrick = result;
             return result;
         }

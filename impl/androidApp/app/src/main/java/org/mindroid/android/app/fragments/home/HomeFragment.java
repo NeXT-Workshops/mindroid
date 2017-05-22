@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.asynctasks.ProgressTask;
+import org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.Settings;
@@ -109,7 +111,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
 
         parentActivity = getActivity();
+
+        loadRobotPortConfiguration();
     }
+
+
 
     @Override
     public void onAttach(Context context) {
@@ -157,7 +163,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             transaction.commit();
 
         try {
-            robot.makeRobot(); //TODO put it somewhere else
+            robot.makeRobot();
             spinner_selectedStatemachine.setAdapter(getStatemachineIDAdapter());
         } catch (StateAlreadyExists stateAlreadyExists) {
             stateAlreadyExists.printStackTrace();
@@ -193,16 +199,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     @Override
     public void onSettingsChanged(boolean settingsChanged) {
-        //TODO create a Robot with the new Settings
-        if(settingsChanged) {
-            try {
-                robot.makeRobot();
-            } catch (StateAlreadyExists stateAlreadyExists) {
-                stateAlreadyExists.printStackTrace();
-            }
-        }else{
-            // do nothing
-        }
+        //nothind todo
     }
 
     /**
@@ -367,6 +364,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    robot.makeRobot();
+                } catch (StateAlreadyExists stateAlreadyExists) {
+                    stateAlreadyExists.printStackTrace();
+                }
                 ConnectToBrickTask task = new ConnectToBrickTask(parentActivity,msgConnectToRobot);
                 task.execute(); //String is not important
             }
@@ -510,4 +512,56 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             robot.isRunning = result;
         }
     }
+
+    private void loadRobotPortConfiguration() {
+        SharedPreferences portConfigProperties = getActivity().getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_portConfiguration),Context.MODE_PRIVATE);
+        if(portConfigProperties != null) {
+            // ---- load sensortypes ---- //
+            String type ="";
+            String sensormode="";
+
+
+            //--SENSORS--
+            //Sensor - S1
+            type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S1), HardwareSelectionFragment.notDefined);
+            sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S1), HardwareSelectionFragment.notDefined);
+            robot.getRobotPortConfig().setSensorS1(HardwareSelectionFragment.getSensorType(type));
+            robot.getRobotPortConfig().setSensormodeS1(HardwareSelectionFragment.getSensorMode(sensormode));
+
+            //Sensor - S2
+            type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S2), HardwareSelectionFragment.notDefined);
+            sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S2), HardwareSelectionFragment.notDefined);
+            robot.getRobotPortConfig().setSensorS2(HardwareSelectionFragment.getSensorType(type));
+            robot.getRobotPortConfig().setSensormodeS2(HardwareSelectionFragment.getSensorMode(sensormode));
+
+            //Sensor - S3
+            type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S3), HardwareSelectionFragment.notDefined);
+            sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S3), HardwareSelectionFragment.notDefined);
+            robot.getRobotPortConfig().setSensorS3(HardwareSelectionFragment.getSensorType(type));
+            robot.getRobotPortConfig().setSensormodeS3(HardwareSelectionFragment.getSensorMode(sensormode));
+
+            //Sensor - S4
+            type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S4), HardwareSelectionFragment.notDefined);
+            sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S4), HardwareSelectionFragment.notDefined);
+            robot.getRobotPortConfig().setSensorS4(HardwareSelectionFragment.getSensorType(type));
+            robot.getRobotPortConfig().setSensormodeS4(HardwareSelectionFragment.getSensorMode(sensormode));
+
+            //--MOTORS--
+            //Motor A
+            type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_A), HardwareSelectionFragment.notDefined);
+            robot.getRobotPortConfig().setMotorA(HardwareSelectionFragment.getMotorType(type));
+
+            //Motor B
+            type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_B), HardwareSelectionFragment.notDefined);
+            robot.getRobotPortConfig().setMotorB(HardwareSelectionFragment.getMotorType(type));
+
+            //Motor C
+            type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_C), HardwareSelectionFragment.notDefined);
+            robot.getRobotPortConfig().setMotorC(HardwareSelectionFragment.getMotorType(type));
+
+            //Motor D
+            type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_D), HardwareSelectionFragment.notDefined);
+            robot.getRobotPortConfig().setMotorD(HardwareSelectionFragment.getMotorType(type));
+            }
+        }
 }

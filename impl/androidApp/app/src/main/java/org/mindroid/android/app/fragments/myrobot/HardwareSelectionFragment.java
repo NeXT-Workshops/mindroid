@@ -16,11 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mindroid.android.app.R;
+import org.mindroid.android.app.fragments.home.HomeFragment;
 import org.mindroid.common.messages.Motors;
+import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.common.messages.Sensors;
+import org.mindroid.impl.statemachine.properties.sensorproperties.RED;
 
 import java.util.HashMap;
 
+import static org.mindroid.android.app.fragments.home.HomeFragment.robot;
 import static org.mindroid.common.messages.Sensors.EV3ColorSensor;
 import static org.mindroid.common.messages.Sensors.EV3GyroSensor;
 import static org.mindroid.common.messages.Sensors.EV3IRSensor;
@@ -29,12 +33,7 @@ import static org.mindroid.common.messages.Sensors.EV3UltrasonicSensor;
 import static org.mindroid.common.messages.Sensors.getAllSensorTypes;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HardwareSelectionFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link HardwareSelectionFragment#newInstance} factory method to
- * create an instance of this fragment.
+ *
  */
 public class HardwareSelectionFragment extends Fragment implements MyRobotFragment.OnFragmentInteractionListener {
     // TODO: Rename parameter arguments, choose names that match
@@ -46,14 +45,10 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
     private int hardware_selection_mode;
     private String hardwarePort;
 
-    private OnFragmentInteractionListener mListener;
-
-
-
     public static final int HARDWARE_SELECTION_MODE_SENSOR = 0;
     public static final int HARDWARE_SELECTION_MODE_MOTOR = 1;
 
-    String notDefined = "-";
+    public static String notDefined = "-";
     private String[] sensortypes = {notDefined,
             EV3ColorSensor.getName(),
             EV3UltrasonicSensor.getName(),
@@ -66,10 +61,14 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
             Motors.UnregulatedMotor.getName()
     };
 
+    private static boolean mappingInitialized = false;
+    private static HashMap<String,Motors> motorMapping;
+    private static HashMap<String,Sensors> sensorMapping;
+    private static HashMap<String,SensorMessages.SensorMode_> modeMapping;
 
-    String selectedSensorType =notDefined;
-    String selectedSensorMode =notDefined;
-    String selectedMotorType = notDefined;
+    String selectedSensorType = notDefined;
+    String selectedSensorMode = notDefined;
+    String selectedMotorType =  notDefined;
 
     HashMap<String,String[]> senTypeToMode = null;
 
@@ -101,7 +100,60 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
         args.putInt(KEY_HARDWARE_SELECTION_MODE,hardwareType);
         args.putString(KEY_HARDWARE_PORT,hardwarePort);
         fragment.setArguments(args);
+
+        initMapping();
+
         return fragment;
+    }
+
+    private static void initMapping(){
+        if(!mappingInitialized){
+            //Motors
+            motorMapping = new HashMap(2);
+            motorMapping.put(notDefined,null);
+            motorMapping.put(Motors.UnregulatedMotor.getName(),Motors.UnregulatedMotor);
+
+            //Sensors
+            sensorMapping = new HashMap(6);
+            sensorMapping.put(notDefined,null);
+            sensorMapping.put(EV3ColorSensor.getName(),EV3ColorSensor);
+            sensorMapping.put(EV3UltrasonicSensor.getName(),EV3UltrasonicSensor);
+            sensorMapping.put(EV3TouchSensor.getName(),EV3TouchSensor);
+            sensorMapping.put(EV3GyroSensor.getName(),EV3GyroSensor);
+            sensorMapping.put(EV3IRSensor.getName(),EV3IRSensor);
+
+            //Sensormodes
+            modeMapping = new HashMap(12);
+            modeMapping.put(notDefined,null);
+            modeMapping.put(SensorMessages.SensorMode_.RED.getValue(), SensorMessages.SensorMode_.RED);
+            modeMapping.put(SensorMessages.SensorMode_.AMBIENT.getValue(),SensorMessages.SensorMode_.AMBIENT);
+            modeMapping.put(SensorMessages.SensorMode_.COLOR_ID.getValue(),SensorMessages.SensorMode_.COLOR_ID);
+            modeMapping.put(SensorMessages.SensorMode_.RGB.getValue(),SensorMessages.SensorMode_.RGB);
+            modeMapping.put(SensorMessages.SensorMode_.DISTANCE.getValue(),SensorMessages.SensorMode_.DISTANCE);
+            modeMapping.put(SensorMessages.SensorMode_.LISTEN.getValue(),SensorMessages.SensorMode_.LISTEN);
+            modeMapping.put(SensorMessages.SensorMode_.SEEK.getValue(),SensorMessages.SensorMode_.SEEK);
+            modeMapping.put(SensorMessages.SensorMode_.ANGLE.getValue(),SensorMessages.SensorMode_.ANGLE);
+            modeMapping.put(SensorMessages.SensorMode_.RATE.getValue(), SensorMessages.SensorMode_.RATE);
+            modeMapping.put(SensorMessages.SensorMode_.RATEANDANGLE.getValue(),SensorMessages.SensorMode_.RATEANDANGLE);
+            modeMapping.put(SensorMessages.SensorMode_.TOUCH.getValue(),SensorMessages.SensorMode_.TOUCH);
+
+            mappingInitialized = true;
+        }
+    }
+
+    public static Sensors getSensorType(String type){
+        initMapping();
+        return sensorMapping.get(type);
+    }
+
+    public static SensorMessages.SensorMode_ getSensorMode(String mode){
+        initMapping();
+        return modeMapping.get(mode);
+    }
+
+    public static Motors getMotorType(String type){
+        initMapping();
+        return motorMapping.get(type);
     }
 
     @Override
@@ -273,26 +325,18 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     private void loadPortConfig(int hardware_selection_mode, String hardwarePort){
@@ -307,6 +351,7 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
                 if (hardwarePort.equals(getResources().getString(R.string.KEY_SENSOR_S1))) {
                     type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S1), notDefined);
                     sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S1), notDefined);
+
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_SENSOR_S2))) {
                     type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S2), notDefined);
                     sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S2), notDefined);
@@ -335,9 +380,7 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_D))) {
                     type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_D), notDefined);
                 }
-
                 selectSpinnerItem(spinner_select_type,type);
-
             }
         }
     }
@@ -360,15 +403,27 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
                 if (hardwarePort.equals(getResources().getString(R.string.KEY_SENSOR_S1))) {
                     e.putString(getResources().getString(R.string.KEY_SENSOR_S1),spinner_select_type.getSelectedItem().toString());
                     e.putString(getResources().getString(R.string.KEY_SENSORMODE_S1),spinner_select_mode.getSelectedItem().toString());
+
+                    robot.getRobotPortConfig().setSensorS1(getSensorType(spinner_select_type.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setSensormodeS1(getSensorMode(spinner_select_mode.getSelectedItem().toString()));
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_SENSOR_S2))) {
                     e.putString(getResources().getString(R.string.KEY_SENSOR_S2),spinner_select_type.getSelectedItem().toString());
                     e.putString(getResources().getString(R.string.KEY_SENSORMODE_S2),spinner_select_mode.getSelectedItem().toString());
+
+                    robot.getRobotPortConfig().setSensorS2(getSensorType(spinner_select_type.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setSensormodeS2(getSensorMode(spinner_select_mode.getSelectedItem().toString()));
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_SENSOR_S3))) {
                     e.putString(getResources().getString(R.string.KEY_SENSOR_S3),spinner_select_type.getSelectedItem().toString());
                     e.putString(getResources().getString(R.string.KEY_SENSORMODE_S3),spinner_select_mode.getSelectedItem().toString());
+
+                    robot.getRobotPortConfig().setSensorS3(getSensorType(spinner_select_type.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setSensormodeS3(getSensorMode(spinner_select_mode.getSelectedItem().toString()));
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_SENSOR_S4))) {
                     e.putString(getResources().getString(R.string.KEY_SENSOR_S4),spinner_select_type.getSelectedItem().toString());
                     e.putString(getResources().getString(R.string.KEY_SENSORMODE_S4),spinner_select_mode.getSelectedItem().toString());
+
+                    robot.getRobotPortConfig().setSensorS4(getSensorType(spinner_select_type.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setSensormodeS4(getSensorMode(spinner_select_mode.getSelectedItem().toString()));
                 }
 
                e.commit();
@@ -376,16 +431,16 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
                 //MOTOR
                 if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_A))) {
                     e.putString(getResources().getString(R.string.KEY_MOTOR_A),spinner_select_type.getSelectedItem().toString());
-
+                    robot.getRobotPortConfig().setMotorA(getMotorType(spinner_select_type.getSelectedItem().toString()));
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_B))) {
                     e.putString(getResources().getString(R.string.KEY_MOTOR_B),spinner_select_type.getSelectedItem().toString());
-
+                    robot.getRobotPortConfig().setMotorB(getMotorType(spinner_select_type.getSelectedItem().toString()));
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_C))) {
                     e.putString(getResources().getString(R.string.KEY_MOTOR_C),spinner_select_type.getSelectedItem().toString());
-
+                    robot.getRobotPortConfig().setMotorC(getMotorType(spinner_select_type.getSelectedItem().toString()));
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_D))) {
                     e.putString(getResources().getString(R.string.KEY_MOTOR_D),spinner_select_type.getSelectedItem().toString());
-
+                    robot.getRobotPortConfig().setMotorD(getMotorType(spinner_select_type.getSelectedItem().toString()));
                 }
                 e.commit();
             }
@@ -397,18 +452,4 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
 
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

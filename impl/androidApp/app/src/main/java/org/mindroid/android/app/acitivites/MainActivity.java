@@ -23,7 +23,7 @@ import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Settings;
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SettingsFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,SettingsFragment.OnSettingsChanged, MyRobotFragment.OnFragmentInteractionListener, RobotSetupInfoFragment.OnFragmentInteractionListener, HardwareSelectionFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SettingsFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,SettingsFragment.OnSettingsChanged, MyRobotFragment.OnFragmentInteractionListener, RobotSetupInfoFragment.OnFragmentInteractionListener{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -165,7 +165,5 @@ public class MainActivity extends Activity
         }
 
     }
-
-
 
 }

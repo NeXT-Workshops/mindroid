@@ -2,6 +2,10 @@ package org.mindroid.android.app.robodancer;
 
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import org.mindroid.android.app.R;
 import org.mindroid.android.app.SchuelerProjekt.MindroidLVL1;
 import org.mindroid.android.app.SchuelerProjekt.MindroidLVL2;
 import org.mindroid.android.app.SchuelerProjekt.RobotPortConfig;
@@ -37,6 +41,8 @@ public class Robot {
     String runningStatemachineID = "";
 
 
+
+
     public Robot() {
 
     }
@@ -51,6 +57,10 @@ public class Robot {
         }
 
         System.out.println("## App.Robot.makeRobot() got called ");
+
+        //Load port Configuration
+        //TODO
+
         //Config
         roFactory.setRobotConfig(robotPortConfig);
         roFactory.setBrickIP(Settings.getInstance().ev3IP);
@@ -172,4 +182,5 @@ public class Robot {
     public RobotPortConfig getRobotPortConfig() {
         return robotPortConfig;
     }
+
 }

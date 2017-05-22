@@ -25,7 +25,7 @@
     <string name="view_motortype">Motor</string>
 
     <!-- RobotSetupInfo Fragment-->
-    <string name="tab_connection_tag">Connections</string>
+    <string name="tab_connection_tag">Info</string>
 
     <!-- Configuration Fragment -->
     <string name="tab_sensors_tag">Sensors</string>

@@ -35,390 +35,305 @@
                         android:id="@+id/tab_config_sensors"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <TableLayout
+                        <LinearLayout
+                            android:layout_width="50dp"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txt_title_port_sensors"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Port" />
+
+                            <TextView
+                                android:id="@+id/txt_port_s1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="1" />
+
+                            <TextView
+                                android:id="@+id/txt_port_s2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="2" />
+
+                            <TextView
+                                android:id="@+id/txt_port_s3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="3" />
+
+                            <TextView
+                                android:id="@+id/txt_port_s4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="4" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="170dp"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txt_title_sensorType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Sensor" />
+
+                            <TextView
+                                android:id="@+id/txt_sensor_s1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="ColorSensor" />
+
+                            <TextView
+                                android:id="@+id/txt_sensor_s2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="ColorSensor" />
+
+                            <TextView
+                                android:id="@+id/txt_sensor_s3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="ColorSensor" />
+
+                            <TextView
+                                android:id="@+id/txt_sensor_s4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="ColorSensor" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="109dp">
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
-                            <TableRow
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                            <TextView
+                                android:id="@+id/txt_tilte_mode"
+                                android:layout_width="82dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Mode" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/txt_sensormode_s1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="RGB" />
 
-                                    <TextView
-                                        android:id="@+id/txt_title_port_sensors"
-                                        android:layout_width="59dp"
-                                        android:layout_height="wrap_content"
-                                        android:text="Port" />
+                            <TextView
+                                android:id="@+id/txt_sensormode_s2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="RGB" />
 
-                                    <TextView
-                                        android:id="@+id/txt_title_sensorType"
-                                        android:layout_width="100dp"
-                                        android:layout_height="wrap_content"
-                                        android:text="Sensor" />
+                            <TextView
+                                android:id="@+id/txt_sensormode_s3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="RGB" />
 
-                                    <TextView
-                                        android:id="@+id/txt_tilte_mode"
-                                        android:layout_width="82dp"
-                                        android:layout_height="wrap_content"
-                                        android:text="Mode" />
-                                </LinearLayout>
-                            </TableRow>
+                            <TextView
+                                android:id="@+id/txt_sensormode_s4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="RGB" />
 
-                            <TableRow
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                        </LinearLayout>
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/txt_port_s1"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="1" />
-
-                                    <TextView
-                                        android:id="@+id/txt_sensor_s1"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.76"
-                                        android:text="ColorSensor" />
-
-                                    <TextView
-                                        android:id="@+id/txt_sensormode_s1"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1.37"
-                                        android:text="RGB" />
-                                </LinearLayout>
-
-                            </TableRow>
-
-                            <TableRow
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/txt_port_s2"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="2" />
-
-                                    <TextView
-                                        android:id="@+id/txt_sensor_s2"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="ColorSensor" />
-
-                                    <TextView
-                                        android:id="@+id/txt_sensormode_s2"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="RGB" />
-                                </LinearLayout>
-                            </TableRow>
-
-                            <TableRow
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/txt_port_s3"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="3" />
-
-                                    <TextView
-                                        android:id="@+id/txt_sensor_s3"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="ColorSensor" />
-
-                                    <TextView
-                                        android:id="@+id/txt_sensormode_s3"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="RGB" />
-                                </LinearLayout>
-                            </TableRow>
-
-                            <TableRow
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/txt_port_s4"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="4" />
-
-                                    <TextView
-                                        android:id="@+id/txt_sensor_s4"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="ColorSensor" />
-
-                                    <TextView
-                                        android:id="@+id/txt_sensormode_s4"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="RGB" />
-                                </LinearLayout>
-                            </TableRow>
-                        </TableLayout>
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/tab_config_motors"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <TableLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="109dp">
+                        <LinearLayout
+                            android:layout_width="50dp"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
-                            <TableRow
+                            <TextView
+                                android:id="@+id/txt_title_port_motors"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="wrap_content"
+                                android:text="Port" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/txt_title_port_motors"
-                                        android:layout_width="59dp"
-                                        android:layout_height="wrap_content"
-                                        android:text="Port" />
-
-                                    <TextView
-                                        android:id="@+id/txt_title_motors"
-                                        android:layout_width="100dp"
-                                        android:layout_height="wrap_content"
-                                        android:text="Motor" />
-
-                                </LinearLayout>
-                            </TableRow>
-
-                            <TableRow
+                            <TextView
+                                android:id="@+id/txt_port_A"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="A" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/txt_port_A"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="A" />
-
-                                    <TextView
-                                        android:id="@+id/txt_motor_A"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.76"
-                                        android:text="ColorSensor" />
-
-                                </LinearLayout>
-
-                            </TableRow>
-
-                            <TableRow
+                            <TextView
+                                android:id="@+id/txt_port_B"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="B" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/txt_port_B"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="B" />
-
-                                    <TextView
-                                        android:id="@+id/txt_motor_B"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="ColorSensor" />
-
-                                </LinearLayout>
-                            </TableRow>
-
-                            <TableRow
+                            <TextView
+                                android:id="@+id/txt_port_C"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="C" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/txt_port_C"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="C" />
-
-                                    <TextView
-                                        android:id="@+id/txt_motor_C"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="ColorSensor" />
-
-                                </LinearLayout>
-                            </TableRow>
-
-                            <TableRow
+                            <TextView
+                                android:id="@+id/txt_port_D"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="D" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
+                        </LinearLayout>
 
-                                    <TextView
-                                        android:id="@+id/txt_port_D"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="D" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
-                                    <TextView
-                                        android:id="@+id/txt_motor_D"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="ColorSensor" />
+                            <TextView
+                                android:id="@+id/txt_title_motors"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Motor" />
 
-                                </LinearLayout>
-                            </TableRow>
-                        </TableLayout>
+                            <TextView
+                                android:id="@+id/txt_motor_A"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.76"
+                                android:text="ColorSensor" />
+
+                            <TextView
+                                android:id="@+id/txt_motor_B"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="ColorSensor" />
+
+                            <TextView
+                                android:id="@+id/txt_motor_C"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="ColorSensor" />
+
+                            <TextView
+                                android:id="@+id/txt_motor_D"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="ColorSensor" />
+
+                        </LinearLayout>
+
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/tab_connection"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <TableLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_width="100dp"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
-                            <TableRow
+                            <TextView
+                                android:id="@+id/txt_title_robot_id"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="wrap_content"
+                                android:text="TextView" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/txt_title_msgServer"
-                                        android:layout_width="59dp"
-                                        android:layout_height="wrap_content"
-                                        android:text="MSG-Server" />
-
-                                    <TextView
-                                        android:id="@+id/txt_conn_msgServer"
-                                        android:layout_width="100dp"
-                                        android:layout_height="wrap_content"
-                                        android:text="192.168.42:20194" />
-
-                                </LinearLayout>
-                            </TableRow>
-
-                            <TableRow
+                            <TextView
+                                android:id="@+id/txt_title_group_id"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="wrap_content"
+                                android:text="TextView" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                </LinearLayout>
-
-                            </TableRow>
-
-                            <TableRow
+                            <TextView
+                                android:id="@+id/txt_title_msgServer"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="wrap_content"
+                                android:text="MSG-Server" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                </LinearLayout>
-                            </TableRow>
-
-                            <TableRow
+                            <TextView
+                                android:id="@+id/txt_title_brickConnInfo"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="wrap_content"
+                                android:text="TextView" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
+                        </LinearLayout>
 
-                                </LinearLayout>
-                            </TableRow>
+                        <LinearLayout
+                            android:layout_width="150dp"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
-                        </TableLayout>
+                            <TextView
+                                android:id="@+id/txt_robot_id"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="TextView" />
+
+                            <TextView
+                                android:id="@+id/txt_group_id"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="TextView" />
+
+                            <TextView
+                                android:id="@+id/txt_conn_msgServer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="192.168.42:20194" />
+
+                            <TextView
+                                android:id="@+id/txt_conn_brick"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="TextView" />
+
+                        </LinearLayout>
+
                     </LinearLayout>
 
                 </FrameLayout>
             </LinearLayout>
         </TabHost>
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
         <include
             layout="@layout/seperator"

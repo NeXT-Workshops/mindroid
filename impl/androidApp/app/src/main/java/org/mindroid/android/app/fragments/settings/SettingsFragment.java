@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.mindroid.android.app.R;
+import org.mindroid.android.app.robodancer.Settings;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -254,9 +255,12 @@ public class SettingsFragment extends Fragment {
         e.putString(getResources().getString(R.string.KEY_EV3_IP),getInputEV3IP());
         e.putString(getResources().getString(R.string.KEY_EV3_TCP_PORT),txt_input_EV3TCPPort.getText().toString());
 
+
         /** Data to connect to Server **/
         e.putString(getResources().getString(R.string.KEY_SERVER_IP),getInputServerIP());
         e.putString(getResources().getString(R.string.KEY_SERVER_TCP_PORT),txt_input_ServerTCPPort.getText().toString());
+
+
 
         /** Data to connect to EV3 Brick **/
         e.putString(getResources().getString(R.string.KEY_ROBOT_ID),txt_input_robotID.getText().toString());
@@ -272,6 +276,7 @@ public class SettingsFragment extends Fragment {
 
         settingsChangedListener.onSettingsChanged(true); //TODO check if settings have really changed
     }
+
 
     /**
      * Checks if the Settings input values are valid

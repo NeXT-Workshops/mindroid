@@ -59,7 +59,7 @@ public class Robot {
         System.out.println("## App.Robot.makeRobot() got called ");
 
         //Load port Configuration
-        //TODO
+        //TODO Load changed Settings/Configuration
 
         //Config
         roFactory.setRobotConfig(robotPortConfig);

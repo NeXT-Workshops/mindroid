@@ -72,6 +72,9 @@
     <string name="KEY_MOTOR_D">motorD</string>
 
 
+    <!-- ErrorDialog -->
+    <string name="text_ok_button">OK</string>
+
     <!-- Navigation Drawer item titles -->
     <string name="title_section1">Home</string>
     <string name="title_section2">My Robot</string>

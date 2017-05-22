@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.asynctasks.ProgressTask;
+import org.mindroid.android.app.dialog.ErrorDialog;
 import org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
@@ -180,7 +181,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+
         }
     }
 
@@ -209,7 +210,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void showErrorDialog(String title,String message);
     }
 
     /**
@@ -286,10 +287,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
                     //Update View of the current State
                     parentActivity.runOnUiThread(taskCheckUSBState);
-
-                    //TODO remove those lines
-                    //System.out.println("Usb device is rndis -> " + getUSBInfo(cntxt_mainActivity));
-                    //txt_ipPhone.setText(getUSBInfo(cntxt_mainActivity));
 
                     try {
                         Thread.sleep(33);
@@ -409,6 +406,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 result = robot.isConnected();
             } catch (IOException e){
                 e.printStackTrace();
+                mListener.showErrorDialog("Exception",e.getMessage());
             }
             robot.isConnectedToBrick = result;
             return result;
@@ -430,8 +428,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 result = robot.initializeConfiguration();;
             }catch(Exception e){
                 System.out.println("## AsyncTask initRobotConfig. Exception: "+e);
-                //TODO main_activity.dismissCurrentProgressDialog();
-                //TODO main_activity.showAlertDialog("Error",""+e);
+                mListener.showErrorDialog("Exception",e.getMessage());
                 e.printStackTrace();
             }
             robot.isConfigurationBuilt = result;
@@ -455,8 +452,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                         return true;
                     }catch(Exception e){
                         System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
-                        //TODO main_activity.dismissCurrentProgressDialog();
-                        //TODO  main_activity.showAlertDialog("Error",""+e);
+                        mListener.showErrorDialog("Exception",e.getMessage());
                         e.printStackTrace();
                     }
                 } else if(params[0].equals(STOP_ROBOT)) {
@@ -465,8 +461,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                         return false;
                     }catch(Exception e){
                         System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
-                        //TODO main_activity.dismissCurrentProgressDialog();
-                        //TODO main_activity.showAlertDialog("Error",""+e);
+                        mListener.showErrorDialog("Exception",e.getMessage());
                         e.printStackTrace();
                     }
                 }

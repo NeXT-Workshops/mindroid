@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 
 import org.mindroid.android.app.R;
+import org.mindroid.android.app.dialog.ErrorDialog;
 import org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment;
 import org.mindroid.android.app.fragments.myrobot.MyRobotFragment;
 import org.mindroid.android.app.fragments.home.HomeFragment;
@@ -164,6 +165,18 @@ public class MainActivity extends Activity
             //showAlertDialog("Error: Connection Properties","Couldn't Load connection properties. Check the Settings and may restart the application!");
         }
 
+    }
+
+    @Override
+    public void showErrorDialog(final String title, final String message){
+        final Context context = this;
+        Runnable showErrorDialog = new Runnable(){
+            @Override
+            public void run() {
+                ErrorDialog.newInstance(context,title,message).show();
+            }
+        };
+        runOnUiThread(showErrorDialog);
     }
 
 }

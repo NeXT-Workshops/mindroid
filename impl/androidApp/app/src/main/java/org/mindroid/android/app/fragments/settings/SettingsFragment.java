@@ -213,9 +213,11 @@ public class SettingsFragment extends Fragment {
 
         /** Data to connect to EV3 Brick **/
         e.putString(getResources().getString(R.string.KEY_EV3_IP),txt_input_EV3IP.getText().toString());
+        e.putString(getResources().getString(R.string.KEY_EV3_TCP_PORT),txt_input_EV3TCPPort.getText().toString());
 
         /** Data to connect to Server **/
         e.putString(getResources().getString(R.string.KEY_SERVER_IP),txt_input_ServerIP.getText().toString());
+        e.putString(getResources().getString(R.string.KEY_SERVER_TCP_PORT),txt_input_ServerTCPPort.getText().toString());
 
         /** Data to connect to EV3 Brick **/
         e.putString(getResources().getString(R.string.KEY_ROBOT_ID),txt_input_robotID.getText().toString());

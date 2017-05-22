@@ -49,6 +49,11 @@ public class RobotSetupInfoFragment extends Fragment {
     TextView txtView_motor_c;
     TextView txtView_motor_d;
 
+    TextView txtView_robot_id;
+    TextView txtView_group_id;
+    TextView txtView_msg_server_ip;
+    TextView txtView_ev3_brick_ip;
+
     public RobotSetupInfoFragment() {
         // Required empty public constructor
     }
@@ -90,24 +95,14 @@ public class RobotSetupInfoFragment extends Fragment {
         TabHost host = (TabHost)view.findViewById(R.id.tabHost_info_robotSetup);
         host.setup();
 
-        // get textviews
-        txtView_sensortype_s1 = (TextView)view.findViewById(R.id.txt_sensor_s1);
-        txtView_sensortype_s2 = (TextView)view.findViewById(R.id.txt_sensor_s2);
-        txtView_sensortype_s3 = (TextView)view.findViewById(R.id.txt_sensor_s3);
-        txtView_sensortype_s4 = (TextView)view.findViewById(R.id.txt_sensor_s4);
-
-        txtView_sensormode_s1 = (TextView)view.findViewById(R.id.txt_sensormode_s1);
-        txtView_sensormode_s2 = (TextView)view.findViewById(R.id.txt_sensormode_s2);
-        txtView_sensormode_s3 = (TextView)view.findViewById(R.id.txt_sensormode_s3);
-        txtView_sensormode_s4 = (TextView)view.findViewById(R.id.txt_sensormode_s4);
-
-        txtView_motor_a = (TextView)view.findViewById(R.id.txt_motor_A);
-        txtView_motor_b = (TextView)view.findViewById(R.id.txt_motor_B);
-        txtView_motor_c = (TextView)view.findViewById(R.id.txt_motor_C);
-        txtView_motor_d = (TextView)view.findViewById(R.id.txt_motor_D);
+        //Set Textview-Fields
+        getTextviews(view);
 
         //Load Configuration and Display
         loadPortConfig();
+
+        //Load Info Settings and Display
+        loadInfoSettings();
 
 
         //Init sensor Configuration Tab
@@ -131,6 +126,29 @@ public class RobotSetupInfoFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    private void getTextviews(View view) {
+        // get textviews
+        txtView_sensortype_s1 = (TextView)view.findViewById(R.id.txt_sensor_s1);
+        txtView_sensortype_s2 = (TextView)view.findViewById(R.id.txt_sensor_s2);
+        txtView_sensortype_s3 = (TextView)view.findViewById(R.id.txt_sensor_s3);
+        txtView_sensortype_s4 = (TextView)view.findViewById(R.id.txt_sensor_s4);
+
+        txtView_sensormode_s1 = (TextView)view.findViewById(R.id.txt_sensormode_s1);
+        txtView_sensormode_s2 = (TextView)view.findViewById(R.id.txt_sensormode_s2);
+        txtView_sensormode_s3 = (TextView)view.findViewById(R.id.txt_sensormode_s3);
+        txtView_sensormode_s4 = (TextView)view.findViewById(R.id.txt_sensormode_s4);
+
+        txtView_motor_a = (TextView)view.findViewById(R.id.txt_motor_A);
+        txtView_motor_b = (TextView)view.findViewById(R.id.txt_motor_B);
+        txtView_motor_c = (TextView)view.findViewById(R.id.txt_motor_C);
+        txtView_motor_d = (TextView)view.findViewById(R.id.txt_motor_D);
+
+        txtView_robot_id = (TextView)view.findViewById(R.id.txt_robot_id);
+        txtView_group_id = (TextView)view.findViewById(R.id.txt_group_id);
+        txtView_msg_server_ip = (TextView)view.findViewById(R.id.txt_conn_msgServer);
+        txtView_ev3_brick_ip = (TextView)view.findViewById(R.id.txt_conn_brick);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -218,5 +236,26 @@ public class RobotSetupInfoFragment extends Fragment {
                 savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_D), "");
                 txtView_motor_d.setText((savedVal.isEmpty()) ? notDefined : savedVal);
             }
+    }
+
+    private void loadInfoSettings(){
+        SharedPreferences portConfigProperties = getActivity().getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_connection_Data),Context.MODE_PRIVATE);
+
+        final String notDefined = "-";
+
+        if(portConfigProperties != null) {
+            // ---- load sensortypes ---- //
+            String savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_ROBOT_ID), "-");
+            txtView_robot_id.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+
+            savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_GROUP_ID), "-");
+            txtView_group_id.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+
+            savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_SERVER_IP), "-").concat(":").concat(portConfigProperties.getString(getResources().getString(R.string.KEY_SERVER_TCP_PORT), "-"));
+            txtView_msg_server_ip.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+
+            savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_EV3_IP), "-").concat(":").concat(portConfigProperties.getString(getResources().getString(R.string.KEY_EV3_TCP_PORT), "-"));
+            txtView_ev3_brick_ip.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+        }
     }
 }

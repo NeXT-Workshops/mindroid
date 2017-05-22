@@ -47,7 +47,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Port" />
+                                android:text="Port"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/txt_port_s1"
@@ -89,7 +90,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Sensor" />
+                                android:text="Sensor"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/txt_sensor_s1"
@@ -131,7 +133,8 @@
                                 android:layout_width="82dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Mode" />
+                                android:text="Mode"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/txt_sensormode_s1"
@@ -180,7 +183,8 @@
                                 android:id="@+id/txt_title_port_motors"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Port" />
+                                android:text="Port"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/txt_port_A"
@@ -221,7 +225,8 @@
                                 android:id="@+id/txt_title_motors"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Motor" />
+                                android:text="Motor"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/txt_motor_A"
@@ -270,25 +275,25 @@
                                 android:id="@+id/txt_title_robot_id"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="TextView" />
+                                android:text="Robot-ID" />
 
                             <TextView
                                 android:id="@+id/txt_title_group_id"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="TextView" />
+                                android:text="Group-ID" />
 
                             <TextView
                                 android:id="@+id/txt_title_msgServer"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="MSG-Server" />
+                                android:text="MSG-Server-IP" />
 
                             <TextView
                                 android:id="@+id/txt_title_brickConnInfo"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="TextView" />
+                                android:text="EV3-Brick-IP" />
 
                         </LinearLayout>
 

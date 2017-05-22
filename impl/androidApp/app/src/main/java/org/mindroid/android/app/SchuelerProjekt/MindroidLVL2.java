@@ -18,22 +18,24 @@ public class MindroidLVL2 extends LVL2API {
     @Override
     public void run() {
         //Example Wall-Ping-Pong
-        messenger.sendMessage(IMessenger.SERVER_LOG,"Imperative Implementation is running!");
+        if(messenger!=null) {
+            messenger.sendMessage(IMessenger.SERVER_LOG, "Imperative Implementation is running!");
+        }
         forward();
         while(!isCollisionDetected()){
             delay(500);
         }
         //backward 5cm
-        backward(5);
+        //backward(5);
 
         //turn around
-        turnLeft(180);
+        //turnLeft(180);
 
         //Back to start
         forward();
-
-        led.green();
-        led.blinking();
+        delay(500);
+        //led.green();
+        //led.blinking();
 
 
         //At start again

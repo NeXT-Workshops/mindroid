@@ -219,7 +219,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                 RobotContextStateManager.getInstance().setGyroSensorStartCondition();
                 if(Robot.getInstance().isMessageingEnabled()){
                     Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Start Statemachine: "+sm.getID());
-                    Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Current State: "+currentStates.get(sm.getID()).getName());
+                    Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Current State of "+ sm.getID() + ": " + currentStates.get(sm.getID()).getName());
                 }
                 runningStatemachines.put(sm.getID(),sm);
 

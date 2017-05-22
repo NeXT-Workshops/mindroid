@@ -45,7 +45,6 @@ public abstract class LVL2API extends LVL1API {
 
         initSensorStatemachines();
         statemachineCollection.addParallelStatemachines("LVL2APIMachine", sensorEvaluatingStatemachines.values().toArray(new Statemachine[sensorEvaluatingStatemachines.values().size()]));
-
         statemachineCollection.addParallelStatemachines("LVL2APIMachine",initStatemachine());
     }
 
@@ -107,8 +106,8 @@ public abstract class LVL2API extends LVL1API {
 
     private void initSensorStatemachines() {
         sensorEvaluatingStatemachines.clear();
-        BooleanStatemachine collisionDetected = new BooleanStatemachine("collisionDetected", false, new LT(0.15f,new Distance(EV3PortIDs.PORT_2)),new GT(0.15f,new Distance(EV3PortIDs.PORT_2)));
-        sensorEvaluatingStatemachines.put("collisionDetected",collisionDetected);
+        BooleanStatemachine collisionDetection = new BooleanStatemachine("collisionDetection", false, new LT(0.15f,new Distance(EV3PortIDs.PORT_2)),new GT(0.15f,new Distance(EV3PortIDs.PORT_2)));
+        sensorEvaluatingStatemachines.put("collisionDetection", collisionDetection);
 
         float[] colorValues =  {Color.NONE,Color.BLACK,Color.BLUE,Color.BROWN,Color.GREEN,Color.RED,Color.WHITE,Color.YELLOW};
         DiscreteValueStateMachine colorSM = new DiscreteValueStateMachine("colorSM", new Color(EV3PortIDs.PORT_1), colorValues );
@@ -120,14 +119,14 @@ public abstract class LVL2API extends LVL1API {
 
 
     public final boolean isCollisionDetected() {
-        if (sensorEvaluatingStatemachines.containsKey("collisionDetected") && sensorEvaluatingStatemachines.get("collisionDetected") instanceof BooleanStatemachine) {
-            return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("collisionDetected")).getResult();
+        if (sensorEvaluatingStatemachines.containsKey("collisionDetection") && sensorEvaluatingStatemachines.get("collisionDetection") instanceof BooleanStatemachine) {
+            return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("collisionDetection")).getResult();
         } else {
-            BooleanStatemachine collisionDetected = new BooleanStatemachine("collisionDetected", false, new LT(0.15f,new Distance(EV3PortIDs.PORT_2)),new GT(0.15f,new Distance(EV3PortIDs.PORT_2)));
-            sensorEvaluatingStatemachines.put("collisionDetected",collisionDetected);
-            registerStatemachine(collisionDetected);
-            startStatemachine("collisionDetected");
-            return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("collisionDetected")).getResult();
+            BooleanStatemachine collisionDetection = new BooleanStatemachine("collisionDetection", false, new LT(0.15f,new Distance(EV3PortIDs.PORT_2)),new GT(0.15f,new Distance(EV3PortIDs.PORT_2)));
+            sensorEvaluatingStatemachines.put("collisionDetection",collisionDetection);
+            registerStatemachine(collisionDetection);
+            startStatemachine("collisionDetection");
+            return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("collisionDetection")).getResult();
         }
     }
 
@@ -152,7 +151,7 @@ public abstract class LVL2API extends LVL1API {
             return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("distanceGreaterThan"+ value)).getResult();
         } else {
             BooleanStatemachine sm = new BooleanStatemachine("distanceGreaterThan"+ value, true, new GT(value,new Distance(EV3PortIDs.PORT_2)),new LT(value,new Distance(EV3PortIDs.PORT_2)));
-            sensorEvaluatingStatemachines.put("distanceGreaterThan"+ value,sm);
+            sensorEvaluatingStatemachines.put("distanceGreaterThan"+ value, sm);
             statemachineCollection.addParallelStatemachines("LVL2APIMachine", sm);
             return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("distanceGreaterThan"+ value)).getResult();
         }

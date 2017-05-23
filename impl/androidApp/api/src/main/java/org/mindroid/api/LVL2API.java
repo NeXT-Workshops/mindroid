@@ -207,6 +207,20 @@ public abstract class LVL2API extends LVL1API {
         motorController.stop(EV3PortIDs.PORT_D);
     }
 
+    public final void turnLeftTime(int milliseconds) {
+        motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
+        motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_FORWARD);
+        motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
+        motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        motorController.stop(EV3PortIDs.PORT_A);
+        motorController.stop(EV3PortIDs.PORT_D);
+    }
+
     public void stop() {
         motorA.stop();
         motorB.stop();

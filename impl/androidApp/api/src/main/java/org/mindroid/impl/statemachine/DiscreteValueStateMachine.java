@@ -25,7 +25,7 @@ public class DiscreteValueStateMachine extends Statemachine {
 
         ArrayList<IState> states = new ArrayList<>();
         for (int i = 0; i< values.length; i++) {
-            IState state = new State("Value"+i);
+            IState state = new State("Value "+ values[i]);
             states.add(state);
 
             try {
@@ -37,7 +37,7 @@ public class DiscreteValueStateMachine extends Statemachine {
 
         for (int j=0; j< values.length; j++) {
             final float value = values[j];
-            ITransition transition = new Transition(new EQ(values[j],property)){
+            ITransition transition = new Transition(new EQ(value,property)){
                 @Override
                 public void run(){
                     result = value;

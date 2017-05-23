@@ -594,7 +594,7 @@ public class MindroidLVL1 extends LVL1API {
 
         IConstraint time_180turn = new TimeExpired(new Milliseconds(1300));
 
-        IConstraint time_stop = new TimeExpired(new Seconds(5));
+        IConstraint time_stop = new TimeExpired(new Seconds(25));
 
 
         //--- Transitionen

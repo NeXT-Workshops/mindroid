@@ -46,7 +46,13 @@ public abstract class AbstractComparator implements IComparator {
 
     @Override
     public int hashCode() {
-        return property != null ? property.hashCode() : 0;
+        //return property != null ? property.hashCode() : 0;
+        if (property==null) {return 0;}
+        int hash = 17;
+        hash = hash * 31 + property.hashCode();
+        hash = hash * 31 + ((Float)value).hashCode();
+        return hash;
+
     }
 
     public int getEvaluationMode() {

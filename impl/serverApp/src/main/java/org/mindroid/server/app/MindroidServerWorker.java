@@ -34,7 +34,7 @@ public class MindroidServerWorker implements Runnable {
     public void run() {
         try {
             InputStream inputStream = socket.getInputStream();
-            Scanner scanner = new Scanner(inputStream);
+            Scanner scanner = new Scanner(inputStream,"UTF-8");
             StringBuilder sb = new StringBuilder();
             boolean connected = true;
             while(connected) {

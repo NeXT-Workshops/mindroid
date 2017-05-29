@@ -1,8 +1,10 @@
 package org.mindroid.api;
 
 import org.mindroid.api.communication.IMessenger;
+import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.statemachine.IMindroidMain;
 import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.robot.*;
 import org.mindroid.impl.statemachine.StatemachineCollection;
 
@@ -23,6 +25,20 @@ public abstract class LVL1API implements IMindroidMain {
     @Override
     public final StatemachineCollection getStatemachineCollection() throws StateAlreadyExists {
         return  statemachineCollection;
+    }
+
+    public void forward() {
+        motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_FORWARD);
+        motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_FORWARD);
+        motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
+        motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+    }
+
+    public void backward() {
+        motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
+        motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_BACKWARD);
+        motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
+        motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
     }
 
 }

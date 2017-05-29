@@ -14,8 +14,10 @@ import org.mindroid.impl.motor.Motor;
 import org.mindroid.impl.statemachine.*;
 import org.mindroid.impl.statemachine.constraints.GT;
 import org.mindroid.impl.statemachine.constraints.LT;
+import org.mindroid.impl.statemachine.constraints.MsgReceived;
 import org.mindroid.impl.statemachine.constraints.Rotation;
 import org.mindroid.impl.statemachine.constraints.TimeExpired;
+import org.mindroid.impl.statemachine.properties.MessageProperty;
 import org.mindroid.impl.statemachine.properties.Seconds;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Angle;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
@@ -131,19 +133,17 @@ public abstract class LVL2API extends LVL1API {
     }
 
     public final boolean distanceLessThan(float value) {
-            BooleanStatemachine sm = new BooleanStatemachine("distanceLessThan"+ value, false, new LT(value,new Distance(EV3PortIDs.PORT_2)),new GT(value,new Distance(EV3PortIDs.PORT_2)));
-            registerStatemachine(sm);
-            startStatemachine("distanceLessThan"+ value);
-            //TODO how long?
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-        }
+            if  (sensorEvaluatingStatemachines.containsKey("distanceLessThan"+ value) && sensorEvaluatingStatemachines.get("distanceLessThan"+ value) instanceof BooleanStatemachine) {
+                return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("distanceLessThan"+ value)).getResult();
+            } else {
+                BooleanStatemachine sm = new BooleanStatemachine("distanceLessThan"+ value, false, new LT(value,new Distance(EV3PortIDs.PORT_2)),new GT(value,new Distance(EV3PortIDs.PORT_2)));
+                sensorEvaluatingStatemachines.put("distanceLessThan"+ value, sm);
+                registerStatemachine(sm);
+                startStatemachine("distanceLessThan"+ value);
+                return sm.getResult();
+            }
 
-        return sm.getResult();
-
-
-        //TODO maybe delete or stop statemachines when they are not needed anymore
+        //TODO maybe remove or stop statemachines when they are not needed anymore
     }
 
     public final boolean distanceGreaterThan(float value) {
@@ -152,11 +152,27 @@ public abstract class LVL2API extends LVL1API {
         } else {
             BooleanStatemachine sm = new BooleanStatemachine("distanceGreaterThan"+ value, true, new GT(value,new Distance(EV3PortIDs.PORT_2)),new LT(value,new Distance(EV3PortIDs.PORT_2)));
             sensorEvaluatingStatemachines.put("distanceGreaterThan"+ value, sm);
-            statemachineCollection.addParallelStatemachines("LVL2APIMachine", sm);
-            return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("distanceGreaterThan"+ value)).getResult();
+            registerStatemachine(sm);
+            startStatemachine("distanceGreaterThan"+value);
+            return sm.getResult();
         }
 
-        //TODO maybe remove statemachines after a certain timeout when they are not needed anymore
+        //TODO maybe remove or stop statemachines when they are not needed anymore
+    }
+
+    public final boolean wasMsgReceived(String message, String source) {
+        //TODO needs to be tested
+        if (sensorEvaluatingStatemachines.containsKey("Msg"+ message) && sensorEvaluatingStatemachines.get("Msg"+ message) instanceof BooleanStatemachine) {
+            return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("Msg"+ message)).getResult();
+        } else {
+            BooleanStatemachine sm = new BooleanStatemachine("Msg"+ message, false, new MsgReceived(new MessageProperty(message,source)),null);
+            sensorEvaluatingStatemachines.put("Msg"+ message, sm);
+            registerStatemachine(sm);
+            startStatemachine("Msg"+ message);
+            return sm.getResult();
+        }
+
+        //TODO maybe remove or stop statemachines when they are not needed anymore
     }
 
     public final float getColor() {
@@ -187,6 +203,7 @@ public abstract class LVL2API extends LVL1API {
     }
 
     public final void turnLeft(int degrees) {
+        //TODO needs to be tested
         BooleanStatemachine angleSM = new BooleanStatemachine("angleSM",false, new Rotation(degrees,new Angle(EV3PortIDs.PORT_3)),new TimeExpired(new Seconds(100)));
         registerStatemachine(angleSM);
         startStatemachine("angleSM");

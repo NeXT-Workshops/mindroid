@@ -2,6 +2,8 @@ package org.mindroid.android.app.SchuelerProjekt;
 
 import org.mindroid.api.LVL2API;
 import org.mindroid.api.communication.IMessenger;
+import org.mindroid.api.ev3.EV3StatusLightColor;
+import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 
 /**
@@ -24,24 +26,18 @@ public class MindroidLVL2 extends LVL2API {
 
         while (true) {
             forward();
-            while (!isCollisionDetected()) {
+            while (distanceGreaterThan(0.15f)) {
                 delay(300);
             }
             backward();
             delay(1200);
+            setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.BLINKING);
             turnLeftTime(1600);
+            setLED(EV3StatusLightColor.OFF,EV3StatusLightInterval.BLINKING);
         }
 
     }
-
-
-
-
-
-
-    private void backward(int val){
-//TODO
-    }
+    
 
 
 }

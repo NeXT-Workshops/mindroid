@@ -30,22 +30,29 @@ public class BooleanStatemachine extends Statemachine {
             this.setStartState(resultFalse);
         }
 
-        ITransition transReturnsTrue = new Transition(returnTrue){
-            @Override
-            public void run(){
-                result = true;
-            }
-        };
 
-        ITransition transReturnsFalse = new Transition(returnFalse){
-            @Override
-            public void run(){
-                result = false;
-            }
-        };
+        if (returnTrue!=null) {
+            ITransition transReturnsTrue = new Transition(returnTrue) {
+                @Override
+                public void run() {
+                    result = true;
+                }
+            };
+            this.addTransition(transReturnsTrue,resultFalse,resultTrue);
+        }
 
-        this.addTransition(transReturnsFalse,resultTrue,resultFalse);
-        this.addTransition(transReturnsTrue,resultFalse,resultTrue);
+        if (returnFalse!= null) {
+            ITransition transReturnsFalse = new Transition(returnFalse) {
+                @Override
+                public void run() {
+                    result = false;
+                }
+            };
+            this.addTransition(transReturnsFalse,resultTrue,resultFalse);
+        }
+
+
+
 
     }
 

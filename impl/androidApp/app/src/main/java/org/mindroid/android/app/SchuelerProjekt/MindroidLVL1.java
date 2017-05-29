@@ -41,13 +41,29 @@ public class MindroidLVL1 extends LVL1API {
 
     public void initStatemachines() throws StateAlreadyExists {
 
-        statemachineCollection.addStatemachine(roationMachine());
-        statemachineCollection.addStatemachine(synchronizedWallPingPong());
-        statemachineCollection.addStatemachine(wallPingPong());
-        statemachineCollection.addStatemachine(lightshowBig());
-        statemachineCollection.addStatemachine(testSM());
-        statemachineCollection.addStatemachine(lightshowSmall());
-        statemachineCollection.addStatemachine(testTransitionCopy());
+        IStatemachine tmpStatemachine;
+        //Statemachine rotate 90 degrees
+        tmpStatemachine = roationMachine();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine synchronized Wall ping pong
+        tmpStatemachine = synchronizedWallPingPong();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine Wall ping pong
+        tmpStatemachine = wallPingPong();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine Wall lightshow
+        tmpStatemachine = lightshowBig();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine test
+        tmpStatemachine = testSM();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine test lightshow
+        tmpStatemachine = lightshowSmall();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine test transitions
+        tmpStatemachine = testTransitionCopy();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+
     }
 
     public IStatemachine roationMachine() throws StateAlreadyExists {
@@ -83,6 +99,7 @@ public class MindroidLVL1 extends LVL1API {
         IConstraint constr_wait = new TimeExpired(new Seconds(3));
         ITransition trans_wait = new Transition(constr_wait);
 
+
         sm.addState(state_rotate);
         sm.addState(state_wait);
         sm.addTransition(trans_rotate,state_rotate,state_wait);
@@ -94,7 +111,7 @@ public class MindroidLVL1 extends LVL1API {
     }
 
 
-    public IStatemachine synchronizedWallPingPong() throws StateAlreadyExists {
+    public IStatemachine synchronizedWallPingPong() throws StateAlreadyExists{
         IStatemachine sm = new Statemachine("syncWallPingPong");
 
         final String cmd_red = "RED";

@@ -34,9 +34,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
 
     private Timer timeEventScheduler;
 
-
-    private ExecutorService pool = Executors.newCachedThreadPool();
-    private ConcurrentHashMap<String,Future> poolFutures;
+    private ConcurrentHashMap<String,Thread> runningStatemachineThreads;
 
     private StatemachineManager() {
         statemachineCollection = new StatemachineCollection();
@@ -45,7 +43,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         scheduledTimeEvents = new ArrayList<Task_TimeEvent>();
         timeEventScheduler = new Timer();
         runningStatemachines = new ConcurrentHashMap<String,IStatemachine>();
-        poolFutures = new ConcurrentHashMap<String,Future>();
+        runningStatemachineThreads = new ConcurrentHashMap<String,Thread>();
     }
 
 
@@ -71,7 +69,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         }*/
         //Testausgabe
         if(runningStatemachines.containsKey(ID) && currentStates.containsKey(ID)) {
-            System.out.println("## handleSatisfiedConstraint(id,satConstraint) --> " + ID + " " + runningStatemachines.get(ID).isActive() + " " + currentStates.get(ID).isActive());
+            System.out.println("# handleSatisfiedConstraint(id,satConstraint) --> " + ID + " " + runningStatemachines.get(ID).isActive() + " " + currentStates.get(ID).isActive());
         }
 
         if(currentStates.get(ID) != null && currentStates.get(ID).isActive() && runningStatemachines.containsKey(ID) && runningStatemachines.get(ID).isActive()) { //Otherwise statemachine is deactivated by stop();
@@ -178,7 +176,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
             ArrayList<IStatemachine> statemachines = sc.getStatemachineList(id);
             if(statemachines.size() > 0){
                 if(statemachines.size() == 1){
-                    this.statemachineCollection.addStatemachine(statemachines.get(0));
+                    this.statemachineCollection.addStatemachine(id,statemachines.get(0));
                 }else{
                     this.statemachineCollection.addParallelStatemachines(id,statemachines);
                 }
@@ -190,11 +188,11 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
     /**
      * Starts a single Statemachine with the given id, or a group of parallel running statemchines with the given groupID (id).
      *
-     * @param id of one Statemachine - or a GroupID of a group of parallel running Statemachines
+     * @param groupID of one Statemachine - or a GroupID of a group of parallel running Statemachines
      */
-    public void startStatemachine(String id){
-        //System.out.println ("## 'startStatemachine(id):' called with ID: "+id);
-        ArrayList<IStatemachine> statemachines = statemachineCollection.getStatemachineList(id);
+    public void startStatemachines(String groupID){
+        //System.out.println ("## 'startStatemachines(id):' called with ID: "+id);
+        ArrayList<IStatemachine> statemachines = statemachineCollection.getStatemachineList(groupID);
         if(statemachines == null || statemachines.size() == 0){
             return;
         }
@@ -202,13 +200,12 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         if(statemachines.size() == 1){
             //start singleStatemachines
             startStatemachine(statemachines.get(0));
-            //System.out.println ("## startStatemachine(id):' only one machine found "+id);
+            //System.out.println ("## startStatemachines(id):' only one machine found "+id);
         }else {
-            //System.out.println ("## startStatemachine(id):' set of statemachines found - parallel start initiated "+id);
+            //System.out.println ("## startStatemachines(id):' set of statemachines found - parallel start initiated "+id);
             //Start parallel statemachines
             for (IStatemachine statemachine : statemachines) {
                 //set new statemachine id: "<groupID>_<statemachineID>"
-                statemachine.setID(id + "_" + statemachine.getID());
                 startStatemachine(statemachine);
             }
         }
@@ -219,8 +216,8 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      *
      * @param sm - The Statemachine which should be executed
      */
-    private void startStatemachine(final IStatemachine sm){
-        System.out.println ("## startStatemachine(IStatemachine sm) called with --> sm-id: "+sm.getID());
+    private synchronized void startStatemachine(final IStatemachine sm){
+        System.out.println ("## startStatemachines(IStatemachine sm) called with --> sm-id: "+sm.getID());
         if(!sm.isActive()) { //If sm is not active already --> start statemachine
             System.out.println ("## The Statemachine is not active already and will be started --> sm-id: "+sm.getID());
             final Runnable runSM = new Runnable() {
@@ -243,6 +240,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                     runningStatemachines.put(sm.getID(), sm);
                     try {
                         sm.start();
+                        System.out.println("## Statemachine started: "+sm.toString());
                     } catch (NoStartStateException e) {
                         e.printStackTrace();//TODO call error handler
                     }
@@ -250,9 +248,8 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                 }
             };
             Thread t = new Thread(runSM);
-            Future poolFuture = pool.submit(runSM);
-            poolFutures.put(sm.getID(),poolFuture);
-            pool.execute(t);
+            runningStatemachineThreads.put(sm.getID(),t);
+            t.start();
         }
 
         //System.out.println("## 'Start Statemachine'-Thread is running! ##");
@@ -260,22 +257,25 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
 
     /**
      *
-     * Stops a single Statemachine with the given id, or a group of parallel running statemchines with the given groupID (id).
+     * Stops a single Statemachine with the given groupID, or a group of parallel running statemchines with the given groupID (groupID).
      *
-     * @param id of one Statemachine - or a GroupID of a group of parallel running Statemachines
+     * @param groupID of one Statemachine - or a GroupID of a group of parallel running Statemachines
      */
-    public void stopStatemachines(String id){
+    public synchronized void stopStatemachines(String groupID){
         //Stop all motors
         Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_A);
         Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_B);
         Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_C);
         Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_D);
 
-        ArrayList<IStatemachine> statemachines = statemachineCollection.getStatemachineList(id);
+        ArrayList<IStatemachine> statemachines = statemachineCollection.getStatemachineList(groupID);
 
         if(statemachines == null || statemachines.size() == 0){
             return;
         }
+
+        System.out.println("### Number of Statemachines to Stop: "+statemachines.size());
+
 
         for (IStatemachine statemachine : statemachines) {
             stopStatemachine(statemachine);
@@ -287,17 +287,19 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      * @param sm
      */
     private void stopStatemachine(IStatemachine sm){
-        //Kill SM Executing Worker Thread.
-        poolFutures.get(sm.getID()).cancel(true);
+        System.out.println("### Trying to stop Statemachine: "+sm.getID());
 
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        //Hard-Kill Imperative Statemachine Thread
+        if(sm.getID().equals(LVL2API.IMPERATIVE_STATEMACHINE_ID)){
+            System.out.println("### Imperative Statemachine, trying to kill Thread with stop()");
+            //runningStatemachineThreads.get(sm.getID()).stop();
+
+            System.out.println("### Imperative Statemachin killed by thread.stop()");
         }
-
-        //Stop statemachine
+            //Stop statemachine
         sm.stop();
+
+
 
         if(Robot.getInstance().isMessageingEnabled()){
             Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+sm.getID());
@@ -305,7 +307,10 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         unsubscribeFromEvaluators(sm.getID());
         runningStatemachines.remove(sm.getID());
         currentStates.remove(sm.getID());
-        poolFutures.remove(sm.getID());
+        runningStatemachineThreads.remove(sm.getID());
+
+        System.out.println("### Stopped Statemachine: "+sm.getID());
+        System.out.println("### StatemachineStatus: "+sm.toString());
 
     }
 

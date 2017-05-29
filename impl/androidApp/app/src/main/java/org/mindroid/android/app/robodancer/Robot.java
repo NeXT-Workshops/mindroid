@@ -284,20 +284,22 @@ public class Robot {
 
                         return true;
                     }catch(Exception e){
+                        e.printStackTrace();
                         System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
                         main_activity.dismissCurrentProgressDialog();
                         main_activity.showAlertDialog("Error",""+e);
-                        e.printStackTrace();
+
                     }
                 } else {
                     try {
                         commandCenter.stopStatemachine(Settings.getInstance().selectedStatemachineID);
                         return false;
                     }catch(Exception e){
+                        e.printStackTrace();
                         System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
                         main_activity.dismissCurrentProgressDialog();
                         main_activity.showAlertDialog("Error",""+e);
-                        e.printStackTrace();
+
                     }
                 }
             }else{

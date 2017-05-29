@@ -25,11 +25,11 @@ public class StatemachineCollection {
      *
      * @param statemachine
      */
-    public void addStatemachine(IStatemachine statemachine){
+    public void addStatemachine(String groupID,IStatemachine statemachine){
         //TODO may throw a warning if statemachine/group with the same id already exists and will be overwritten
         ArrayList<IStatemachine> statemachines = new ArrayList<IStatemachine>(1);
         statemachines.add(statemachine);
-        this.statemachines.put(statemachine.getID(),statemachines);
+        this.statemachines.put(groupID,statemachines);
     }
 
     /**
@@ -49,10 +49,10 @@ public class StatemachineCollection {
                 }
             }
             //Testprintout
-            System.out.println("## StatemachineCollection.addParallelStatemachines(..): Collection: ");
-            for (int i = 0; i < this.statemachines.get(groupID).size(); i++) {
-                System.out.println("## "+i+". "+this.statemachines.get(groupID).get(i));
-            }
+            //System.out.println("## StatemachineCollection.addParallelStatemachines(..): Collection: ");
+            // for (int i = 0; i < this.statemachines.get(groupID).size(); i++) {
+            //    System.out.println("## "+i+". "+this.statemachines.get(groupID).get(i));
+            //}
 
         }else {
             ArrayList<IStatemachine> collection = new ArrayList<IStatemachine>(statemachines.length);

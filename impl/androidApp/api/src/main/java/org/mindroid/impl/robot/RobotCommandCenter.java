@@ -22,7 +22,7 @@ public class RobotCommandCenter implements IRobotCommandCenter {
 
     @Override
     public void startStatemachine(String id) {
-        robot.getStatemachineManager().startStatemachine(id);
+        robot.getStatemachineManager().startStatemachines(id);
 
     }
 

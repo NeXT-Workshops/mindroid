@@ -1,7 +1,6 @@
 package org.mindroid.android.app.SchuelerProjekt;
 
 import org.mindroid.api.LVL2API;
-import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 
 /**

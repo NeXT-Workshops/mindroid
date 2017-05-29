@@ -11,11 +11,8 @@ import org.mindroid.impl.brick.LED;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.motor.Motor;
 import org.mindroid.impl.statemachine.*;
-import org.mindroid.impl.statemachine.constraints.AND;
 import org.mindroid.impl.statemachine.constraints.GT;
 import org.mindroid.impl.statemachine.constraints.LT;
-import org.mindroid.impl.statemachine.constraints.TimeExpired;
-import org.mindroid.impl.statemachine.properties.Milliseconds;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
 
 /**
@@ -30,9 +27,13 @@ public abstract class LVL2API extends LVL1API {
 
     private boolean collision = false;
 
+    public static final String IMPERATIVE_STATEMACHINE_ID = "Imperative Implementation Statemachine";
+
+
+
     public LED led = new LED(brickController); //TODO: LED not fully implemented
 
-    public LVL2API() throws StateAlreadyExists {
+    public LVL2API() throws StateAlreadyExists{
         motorA = new Motor(motorController,EV3PortIDs.PORT_A);
         motorB = new Motor(motorController,EV3PortIDs.PORT_B);
         motorC = new Motor(motorController,EV3PortIDs.PORT_C);
@@ -50,8 +51,10 @@ public abstract class LVL2API extends LVL1API {
      * @param sm
      */
     private void registerStatemachine(IStatemachine sm){
+        //Group contains only one element!
+        String groupID = sm.getID();
         StatemachineCollection sc = new StatemachineCollection();
-        sc.addStatemachine(sm);
+        sc.addStatemachine(groupID,sm);
         StatemachineManager.getInstance().addStatemachines(sc);
     }
 
@@ -61,7 +64,7 @@ public abstract class LVL2API extends LVL1API {
      * @param id
      */
     private void startStatemachine(String id){
-        StatemachineManager.getInstance().startStatemachine(id);
+        StatemachineManager.getInstance().startStatemachines(id);
     }
 
     /**
@@ -76,14 +79,13 @@ public abstract class LVL2API extends LVL1API {
 
 
 
-    public final IStatemachine initStatemachine() throws StateAlreadyExists {
-        Statemachine sm = new Statemachine("Implementation");
+    public final IStatemachine initStatemachine() throws StateAlreadyExists{
+        IStatemachine sm = new Statemachine(IMPERATIVE_STATEMACHINE_ID);
 
         IState state_start = new State("Running state"){
             @Override
             public void run(){
                 LVL2API.this.run();
-
             }
         };
 
@@ -117,7 +119,7 @@ public abstract class LVL2API extends LVL1API {
         //TODO implement
     }
 
-    private final IStatemachine getCollisionDetectionStatemachine() throws StateAlreadyExists {
+    private final IStatemachine getCollisionDetectionStatemachine() throws StateAlreadyExists{
         //TODO implement Statemachine to detect collision
         Statemachine sm_coll_detection = new Statemachine("Collision Detection");
         IState checking_collision = new State("checking_collision");

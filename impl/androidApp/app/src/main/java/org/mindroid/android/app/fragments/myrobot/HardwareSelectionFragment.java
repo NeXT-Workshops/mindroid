@@ -66,6 +66,7 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
     private static HashMap<String,Sensors> sensorMapping;
     private static HashMap<String,SensorMessages.SensorMode_> modeMapping;
 
+
     String selectedSensorType = notDefined;
     String selectedSensorMode = notDefined;
     String selectedMotorType =  notDefined;
@@ -162,6 +163,8 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
         if (getArguments() != null) {
             hardware_selection_mode = getArguments().getInt(KEY_HARDWARE_SELECTION_MODE);
             hardwarePort = getArguments().getString(KEY_HARDWARE_PORT);
+
+
         }
     }
 
@@ -171,27 +174,24 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_hardware_selection, container, false);
 
-
-
         spinner_select_type = (Spinner) view.findViewById(R.id.spinner_type);
         spinner_select_mode = (Spinner) view.findViewById(R.id.spinner_mode);
         txtView_port = (TextView) view.findViewById(R.id.txtView_port);
         txtView_type = (TextView) view.findViewById(R.id.txtView_hardwareSelect_type);
         txtView_mode = (TextView) view.findViewById(R.id.txtView_hardwareSelect_mode);
 
-        switch(hardware_selection_mode){
-            case HARDWARE_SELECTION_MODE_MOTOR: initMotorView(); break;
-            case HARDWARE_SELECTION_MODE_SENSOR: initSensorView(); break;
-        };
-
-
+//Init Spinner Selection listener
         spinner_select_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            int count = 0;
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedSensorType = (String) parent.getSelectedItem();
                 selectedMotorType = (String) parent.getSelectedItem();
-                if(hardware_selection_mode == HARDWARE_SELECTION_MODE_SENSOR) {
+                if(hardware_selection_mode == HARDWARE_SELECTION_MODE_SENSOR && count >= 1) { // count >= 1: So the (loaded)Mode wont be reset on start
+                    System.out.println("** sensormode adapter set");
                     spinner_select_mode.setAdapter(getSensorModeAdapter(selectedSensorType));
+                }else {
+                    count++;
                 }
                 if(isValidSelection()){
                     //Toast.makeText(getActivity(),"Valid configuration",Toast.LENGTH_SHORT).show();
@@ -205,10 +205,32 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
             }
         });
 
+        spinner_select_mode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedSensorMode = (String) parent.getSelectedItem();
+                if(isValidSelection()){
+                    //Toast.makeText(getActivity(),"Valid configuration",Toast.LENGTH_SHORT).show();
+                    savePortConfig(hardware_selection_mode, hardwarePort);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selectedSensorType = notDefined;
+            }
+        });
+
+        switch(hardware_selection_mode){
+            case HARDWARE_SELECTION_MODE_MOTOR: initMotorView(); break;
+            case HARDWARE_SELECTION_MODE_SENSOR: initSensorView(); break;
+        };
         loadPortConfig(hardware_selection_mode,hardwarePort);
 
         return view;
     }
+
 
     private void initSensorView() {
         initSensorTypeToModeMap();
@@ -229,21 +251,7 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
         spinner_select_type.setAdapter(getSensorTypeAdapter());
         spinner_select_mode.setAdapter(getSensorModeAdapter(notDefined));
 
-        spinner_select_mode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedSensorMode = (String) parent.getSelectedItem();
-                if(isValidSelection()){
-                    //Toast.makeText(getActivity(),"Valid configuration",Toast.LENGTH_SHORT).show();
-                    savePortConfig(hardware_selection_mode, hardwarePort);
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                selectedSensorType = notDefined;
-            }
-        });
     }
 
     private boolean isValidSelection() {
@@ -363,7 +371,14 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
                     sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S4), notDefined);
                 }
 
+                selectedSensorType = type;
+                selectedSensorMode = sensormode;
+
                 selectSpinnerItem(spinner_select_type,type);
+                if(hardware_selection_mode == HARDWARE_SELECTION_MODE_SENSOR) {
+                    System.out.println("** Select mode item");
+                    spinner_select_mode.setAdapter(getSensorModeAdapter(selectedSensorType));
+                }
                 selectSpinnerItem(spinner_select_mode,sensormode);
 
             }else{
@@ -380,6 +395,7 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_D))) {
                     type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_D), notDefined);
                 }
+                selectedMotorType = type;
                 selectSpinnerItem(spinner_select_type,type);
             }
         }
@@ -389,6 +405,7 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
         for(int i = 0; i < spinner.getAdapter().getCount();i++){
             if(spinner.getItemAtPosition(i).equals(item)){
                 spinner.setSelection(i);
+                System.out.println("** Selected Item "+item+" - "+i);
                 break;
             }
         }

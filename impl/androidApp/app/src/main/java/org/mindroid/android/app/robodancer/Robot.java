@@ -2,13 +2,9 @@ package org.mindroid.android.app.robodancer;
 
 
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import org.mindroid.android.app.R;
 import org.mindroid.android.app.SchuelerProjekt.MindroidLVL1;
 import org.mindroid.android.app.SchuelerProjekt.MindroidLVL2;
-import org.mindroid.android.app.SchuelerProjekt.RobotPortConfig;
+import org.mindroid.impl.configuration.RobotPortConfig;
 import org.mindroid.api.robot.IRobotFactory;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.api.statemachine.IMindroidMain;

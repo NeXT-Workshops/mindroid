@@ -36,7 +36,7 @@ public class MainActivity extends Activity
      */
     private CharSequence mTitle;
 
-    public static SharedPreferences connectionProperties;
+
 
     /** Used Fragments **/
     private final Fragment HOME_FRAGMENT = HomeFragment.newInstance("","");
@@ -58,8 +58,6 @@ public class MainActivity extends Activity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        //Load Connection Properties from sharedPreferences
-        loadConnectionProperties();
 
         //show Home Fragment
         if (savedInstanceState == null) {
@@ -133,39 +131,7 @@ public class MainActivity extends Activity
                 .commit();
     }
 
-    private void loadConnectionProperties(){
-        connectionProperties = getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_connection_Data), Context.MODE_PRIVATE);
-        //TODO Refactor -> get settings from Settings.class
-        if (connectionProperties != null) {
-            String savedVal;
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_ROBOT_ID),getResources().getString(R.string.DEFAULT_ROBOT_ID));
-            Settings.getInstance().robotID = ( (savedVal.isEmpty()) ? getResources().getString(R.string.KEY_ROBOT_ID) : savedVal);
 
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_GROUP_ID),getResources().getString(R.string.DEFAULT_GROUP_ID));
-            Settings.getInstance().groupID = ( (savedVal.isEmpty()) ? getResources().getString(R.string.KEY_GROUP_ID) : savedVal);
-
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_EV3_IP), getResources().getString(R.string.DEFAULT_EV3_BRICK_IP));
-            Settings.getInstance().ev3IP = ( (savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_EV3_BRICK_IP) : savedVal);
-
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_EV3_TCP_PORT),getResources().getString(R.string.DEFAULT_EV3_BRICK_PORT));
-            Settings.getInstance().ev3TCPPort = (Integer.parseInt((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_EV3_BRICK_PORT) : savedVal));
-
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_SERVER_IP), getResources().getString(R.string.DEFAULT_MSG_SERVER_IP));
-            Settings.getInstance().serverIP = ( (savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_MSG_SERVER_IP) : savedVal);
-
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_SERVER_TCP_PORT),getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT));
-            Settings.getInstance().serverTCPPort = (Integer.parseInt((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT) : savedVal));
-
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_ROBOT_SERVER_TCP_PORT),getResources().getString(R.string.DEFAULT_BRICK_MSG_SERVER_PORT));
-            Settings.getInstance().robotServerPort = (Integer.parseInt((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_BRICK_MSG_SERVER_PORT) : savedVal));
-
-        }else{
-            //TODO
-            //System.out.println("Error: Connection Properties","Couldn't Load connection properties. Check the Settings and may restart the application!");
-            //showAlertDialog("Error: Connection Properties","Couldn't Load connection properties. Check the Settings and may restart the application!");
-        }
-
-    }
 
     @Override
     public void showErrorDialog(final String title, final String message){

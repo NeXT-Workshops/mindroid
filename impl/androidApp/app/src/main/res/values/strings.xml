@@ -8,6 +8,7 @@
     <string name="title_activity_main">Mindroid</string>
 
     <!-- Home Fragment -->
+    <string name="btn_text_activate_tethering">Activate Tethering</string>
     <string name="btn_text_init_config">Initialize Configuration</string>
     <string name="btn_text_start_robot">Start</string>
     <string name="btn_text_stop_robot">stop</string>
@@ -19,6 +20,8 @@
     <string name="dialog_msg_start_robot">Starting robot..</string>
     <string name="dialog_msg_stop_robot">Stopping robot..</string>
 
+    <!-- Settings Fragment -->
+    <string name="btn_text_save_settings">save Settings</string>
 
     <!-- Hardware Selection Fragment -->
     <string name="view_sensortype">Sensor</string>

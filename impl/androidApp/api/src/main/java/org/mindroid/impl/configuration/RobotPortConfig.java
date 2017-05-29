@@ -1,4 +1,4 @@
-package org.mindroid.android.app.SchuelerProjekt;
+package org.mindroid.impl.configuration;
 
 import org.mindroid.api.robot.IRobotPortConfig;
 import org.mindroid.common.messages.Motors;

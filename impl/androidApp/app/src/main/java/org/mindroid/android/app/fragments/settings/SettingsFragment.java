@@ -145,6 +145,8 @@ public class SettingsFragment extends Fragment {
         txt_input_ServerTCPPort.setText(R.string.DEFAULT_MSG_SERVER_PORT);
         txt_input_robotServerPort.setText(R.string.DEFAULT_BRICK_MSG_SERVER_PORT);
 
+        btn_saveSettings.setText(getResources().getString(R.string.btn_text_save_settings));
+
         btn_saveSettings.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

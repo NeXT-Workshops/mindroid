@@ -12,6 +12,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import org.mindroid.android.app.R;
+import org.mindroid.android.app.robodancer.Settings;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -251,12 +252,12 @@ public class RobotSetupInfoFragment extends Fragment {
             savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_GROUP_ID), "-");
             txtView_group_id.setText((savedVal.isEmpty()) ? notDefined : savedVal);
 
-            savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_SERVER_IP), "-").concat(":").concat(portConfigProperties.getString(getResources().getString(R.string.KEY_SERVER_TCP_PORT), "-"));
+            savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_SERVER_IP), "-").concat(":").concat(portConfigProperties.getString(getResources().getString(R.string.KEY_SERVER_TCP_PORT), getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT)));
             txtView_msg_server_ip.setText((savedVal.isEmpty()) ? notDefined : savedVal);
 
 
 
-            savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_EV3_IP), "-").concat(":").concat(portConfigProperties.getString(getResources().getString(R.string.KEY_EV3_TCP_PORT), "-"));
+            savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_EV3_IP), "-").concat(":").concat(portConfigProperties.getString(getResources().getString(R.string.KEY_EV3_TCP_PORT), getResources().getString(R.string.DEFAULT_EV3_BRICK_PORT)));
             txtView_ev3_brick_ip.setText((savedVal.isEmpty()) ? notDefined : savedVal);
         }
     }

@@ -15,7 +15,7 @@ import org.mindroid.impl.robot.context.StartCondition;
 import org.mindroid.impl.statemachine.constraints.TimeExpired;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.*;
 
 /**
  * Created by torben on 19.03.2017.
@@ -25,7 +25,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
     Map<String,IState> currentStates;
 
     Map<String,IStatemachine> runningStatemachines;
-    Map<String,Thread> runningStatemachineThreads;
+
 
     StatemachineCollection statemachineCollection;
 
@@ -34,6 +34,10 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
 
     private Timer timeEventScheduler;
 
+
+    private ExecutorService pool = Executors.newCachedThreadPool();
+    private ConcurrentHashMap<String,Future> poolFutures;
+
     private StatemachineManager() {
         statemachineCollection = new StatemachineCollection();
         currentStates = new ConcurrentHashMap<String,IState>();
@@ -41,6 +45,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         scheduledTimeEvents = new ArrayList<Task_TimeEvent>();
         timeEventScheduler = new Timer();
         runningStatemachines = new ConcurrentHashMap<String,IStatemachine>();
+        poolFutures = new ConcurrentHashMap<String,Future>();
     }
 
 
@@ -245,7 +250,9 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                 }
             };
             Thread t = new Thread(runSM);
-            t.start();
+            Future poolFuture = pool.submit(runSM);
+            poolFutures.put(sm.getID(),poolFuture);
+            pool.execute(t);
         }
 
         //System.out.println("## 'Start Statemachine'-Thread is running! ##");
@@ -280,13 +287,25 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      * @param sm
      */
     private void stopStatemachine(IStatemachine sm){
+        //Kill SM Executing Worker Thread.
+        poolFutures.get(sm.getID()).cancel(true);
+
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //Stop statemachine
         sm.stop();
+
         if(Robot.getInstance().isMessageingEnabled()){
             Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+sm.getID());
         }
         unsubscribeFromEvaluators(sm.getID());
         runningStatemachines.remove(sm.getID());
         currentStates.remove(sm.getID());
+        poolFutures.remove(sm.getID());
 
     }
 

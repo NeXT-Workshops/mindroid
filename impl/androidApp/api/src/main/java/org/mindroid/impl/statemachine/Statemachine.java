@@ -144,7 +144,7 @@ public class Statemachine implements IStatemachine{
 	}
 	
 	@Override
-	public synchronized void start() throws NoStartStateException {
+	public void start() throws NoStartStateException {
 		if(currentState == null){
 			if(startState == null){
 				throw new NoStartStateException("No Start State specified for this (ID:'"+getID()+"') Statemachine. Use setStartState(..) to specify a State to begin with!");
@@ -156,7 +156,7 @@ public class Statemachine implements IStatemachine{
 	}
 
 	@Override
-	public synchronized void stop(){
+	public void stop(){
 		currentState.deactivate();
 		this.isActive = false;
 	}

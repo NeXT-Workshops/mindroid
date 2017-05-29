@@ -5,10 +5,7 @@ import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
-import org.mindroid.api.statemachine.ITransition;
-import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.api.statemachine.exception.StateAlreadyExists;
-import org.mindroid.impl.brick.LED;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.motor.Motor;
 import org.mindroid.impl.statemachine.*;
@@ -37,7 +34,7 @@ public abstract class LVL2API extends LVL1API {
 
     private HashMap<String, Statemachine> sensorEvaluatingStatemachines = new HashMap<>();
 
-    public LED led = new LED(brickController); //TODO: LED not fully implemented
+    public static final String IMPERATIVE_STATEMACHINE_ID = "Imperative Statemachine Implementation";
 
     public LVL2API() throws StateAlreadyExists {
         motorA = new Motor(motorController,EV3PortIDs.PORT_A);
@@ -57,7 +54,7 @@ public abstract class LVL2API extends LVL1API {
      */
     private void registerStatemachine(IStatemachine sm){
         StatemachineCollection sc = new StatemachineCollection();
-        sc.addStatemachine(sm);
+        sc.addStatemachine(sm.getID(),sm);
         StatemachineManager.getInstance().addStatemachines(sc);
     }
 
@@ -67,7 +64,7 @@ public abstract class LVL2API extends LVL1API {
      * @param id
      */
     private void startStatemachine(String id){
-        StatemachineManager.getInstance().startStatemachine(id);
+        StatemachineManager.getInstance().startStatemachines(id);
     }
 
     /**
@@ -83,7 +80,7 @@ public abstract class LVL2API extends LVL1API {
 
 
     public final IStatemachine initStatemachine() throws StateAlreadyExists {
-        Statemachine sm = new Statemachine("Implementation");
+        Statemachine sm = new Statemachine(IMPERATIVE_STATEMACHINE_ID);
 
         IState state_start = new State("Running state"){
             @Override

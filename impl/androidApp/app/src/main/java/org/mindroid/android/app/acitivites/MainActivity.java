@@ -7,11 +7,15 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.dialog.ErrorDialog;
@@ -22,6 +26,8 @@ import org.mindroid.android.app.fragments.NavigationDrawerFragment;
 import org.mindroid.android.app.fragments.home.RobotSetupInfoFragment;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Settings;
+
+import java.util.Locale;
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, SettingsFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,SettingsFragment.OnSettingsChanged, MyRobotFragment.OnFragmentInteractionListener, RobotSetupInfoFragment.OnFragmentInteractionListener{
@@ -143,6 +149,24 @@ public class MainActivity extends Activity
             }
         };
         runOnUiThread(showErrorDialog);
+    }
+
+    /**
+     * Changes the app language
+     * @param localLang
+     */
+    public void setLocale(Locale localLang) {
+        //TODO Does not work properly
+        Locale myLocale = localLang;
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, MainActivity.class);
+        finish();
+        startActivity(refresh);
+
     }
 
 }

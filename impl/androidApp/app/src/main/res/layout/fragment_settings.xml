@@ -85,6 +85,15 @@
                     android:text="Robot Serverport"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/txtView_language"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Language"
+                    android:textStyle="bold" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -315,6 +324,12 @@
                     android:maxLines="1"
                     android:numeric="integer|signed"
                     android:text="Name" />
+
+                <Spinner
+                    android:id="@+id/spinner_language"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
             </LinearLayout>
 

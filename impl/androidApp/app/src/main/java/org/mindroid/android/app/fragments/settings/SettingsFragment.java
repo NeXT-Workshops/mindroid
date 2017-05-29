@@ -9,12 +9,18 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mindroid.android.app.R;
-import org.mindroid.android.app.robodancer.Settings;
+import org.mindroid.android.app.acitivites.MainActivity;
+
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +45,8 @@ public class SettingsFragment extends Fragment {
 
     private Activity parentActivity;
 
+    private final String[] languages = {"English","Deutsch"};
+
     // has changed
     private boolean hasChanged = false;
 
@@ -46,6 +54,8 @@ public class SettingsFragment extends Fragment {
     private Button btn_saveSettings;
 
     //UI-Textfield
+    private TextView txtView_language;
+
     public EditText txt_input_robotID;
     public EditText txt_input_groupID;
 
@@ -63,6 +73,7 @@ public class SettingsFragment extends Fragment {
     private EditText txt_input_serverip_part3;
     private EditText txt_input_serverip_part4;
 
+    private Spinner spinner_language;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -127,6 +138,7 @@ public class SettingsFragment extends Fragment {
         txt_input_serverip_part4 = (EditText) view.findViewById(R.id.txt_input_msg_serverip_part4);
         txt_input_ServerTCPPort = (EditText) view.findViewById(R.id.txt_input_ServerTCPPort);
         txt_input_robotServerPort = (EditText) view.findViewById(R.id.txt_input_robotServerPort);
+        txtView_language = (TextView) view.findViewById(R.id.txtView_language);
 
         /** Set ports **/
         String[] def_ev3ip = getResources().getString(R.string.DEFAULT_EV3_BRICK_IP).split("\\.");
@@ -145,6 +157,34 @@ public class SettingsFragment extends Fragment {
         txt_input_ServerTCPPort.setText(R.string.DEFAULT_MSG_SERVER_PORT);
         txt_input_robotServerPort.setText(R.string.DEFAULT_BRICK_MSG_SERVER_PORT);
 
+
+        //Language spinner
+        spinner_language = (Spinner) view.findViewById(R.id.spinner_language);
+        spinner_language.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, languages));
+        spinner_language.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        int count = 0;
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                if(count >= 1) {
+                    switch(pos){
+                        case 0: changeLanguage(Locale.ENGLISH); break;
+                        case 1: changeLanguage(Locale.GERMAN); break;
+                    }
+
+                }else{
+                    count++;
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+
+        });
+        spinner_language.setVisibility(View.GONE);
+        txtView_language.setVisibility(View.GONE);
+
+
         btn_saveSettings.setText(getResources().getString(R.string.btn_text_save_settings));
 
         btn_saveSettings.setOnClickListener(new View.OnClickListener(){
@@ -158,6 +198,12 @@ public class SettingsFragment extends Fragment {
         loadSettings();
 
         return view;
+    }
+
+    private void changeLanguage(Locale localLang) {
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setLocale(localLang);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

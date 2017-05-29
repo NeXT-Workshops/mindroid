@@ -22,6 +22,10 @@
 
     <!-- Settings Fragment -->
     <string name="btn_text_save_settings">save Settings</string>
+    <string name="txtView_language_text">Language</string>
+    <string name="msg_toast_settings_invalid_input">Invalid Input</string>
+    <string name="msg_taost_settings_saved">saved</string>
+
 
     <!-- Hardware Selection Fragment -->
     <string name="view_sensortype">Sensor</string>
@@ -34,10 +38,6 @@
     <!-- Configuration Fragment -->
     <string name="tab_sensors_tag">Sensors</string>
     <string name="tab_motors_tag">Motors</string>
-
-    <!-- Settings Fragment -->
-    <string name="msg_toast_settings_invalid_input">Invalid Input</string>
-    <string name="msg_taost_settings_saved">saved</string>
 
     <!-- Shared Preferences -->
     <string name="shared_pref_connection_Data">ConnectionData.xml</string>

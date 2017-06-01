@@ -9,11 +9,20 @@ import org.mindroid.api.ev3.EV3StatusLightInterval;
 
 public interface IBrickControl {
 
+    //Status light operations
     public void setEV3StatusLight(EV3StatusLightColor color, EV3StatusLightInterval interval);
     public void resetEV3StatusLight();
 
+    //Sound operations
+    public void singleBeep();
+    public void doubleBeep();
+    public void buzz();
+    public void beepSequenceDown();
+    public void beepSequenceUp();
+
+    //Display operations
     public void clearDisplay();
-    public void drawString(String str,int posX, int posY);
+    public void drawString(String str, int posX, int posY);
     public void drawImage(String str);
 
 }

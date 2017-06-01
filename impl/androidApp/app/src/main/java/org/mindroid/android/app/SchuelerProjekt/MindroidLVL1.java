@@ -63,7 +63,67 @@ public class MindroidLVL1 extends LVL1API {
         //Statemachine test transitions
         tmpStatemachine = testTransitionCopy();
         statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine test Sound
+        tmpStatemachine = soundTestStatemachine();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
 
+    }
+
+    public IStatemachine soundTestStatemachine () throws StateAlreadyExists {
+        IStatemachine sm = new Statemachine("SoundTestStatemachine");
+
+        IState state_beep = new State("SingleBeep"){
+            public void run(){
+                brickController.singleBeep();
+            }
+        };
+
+
+        IState state_doubleBeep = new State("DoubleBeep"){
+            public void run(){
+                brickController.doubleBeep();
+            }
+        };
+
+
+
+        IState state_buzz = new State("Buzz"){
+            public void run(){
+                brickController.buzz();
+            }
+        };
+
+        IState state_sequenceDown = new State("SequenceDown"){
+            public void run(){
+                brickController.beepSequenceDown();
+            }
+        };
+
+
+        IState state_sequenceUp = new State("SequenceUp"){
+            public void run(){
+                brickController.beepSequenceUp();
+            }
+        };
+
+        sm.addState(state_beep);
+        sm.addState(state_buzz);
+        sm.addState(state_doubleBeep);
+        sm.addState(state_sequenceDown);
+        sm.addState(state_sequenceUp);
+
+        sm.setStartState(state_beep);
+
+        ITransition t_one_sec = new Transition(new TimeExpired(new Seconds(1)));
+        ITransition t_two_sec = new Transition(new TimeExpired(new Seconds(2)));
+
+        sm.addTransition(t_one_sec,state_beep,state_doubleBeep);
+        sm.addTransition(t_one_sec,state_doubleBeep,state_buzz);
+        sm.addTransition(t_two_sec,state_buzz,state_sequenceDown);
+        sm.addTransition(t_two_sec,state_sequenceDown,state_sequenceUp);
+        sm.addTransition(t_two_sec,state_sequenceDown,state_beep);
+
+        return sm;
     }
 
     public IStatemachine roationMachine() throws StateAlreadyExists {

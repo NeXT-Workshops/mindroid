@@ -47,7 +47,7 @@ public class SensorEndpoint extends Listener implements SensorListener {
 	
 	@Override
 	public void disconnected(Connection connection) {
-		System.out.println("SensorEndpoint - Connection disconnected: "+connection+" " + sensor.toString());
+		//System.out.println("SensorEndpoint - Connection disconnected: "+connection+" " + sensor.toString());
 		this.connection = null;
 	}
 

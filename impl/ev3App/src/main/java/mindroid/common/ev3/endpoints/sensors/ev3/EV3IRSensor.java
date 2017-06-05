@@ -16,7 +16,7 @@ public class EV3IRSensor extends AbstractSensor {
         if(isSensorCreated){
             sendSensorData();
         }
-        System.out.println(toString());;
+        //System.out.println(toString());
     }
 
     @Override

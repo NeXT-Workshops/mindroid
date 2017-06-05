@@ -70,10 +70,13 @@ public class MindroidLVL1 extends LVL1API {
     }
 
     public IStatemachine soundTestStatemachine () throws StateAlreadyExists {
-        IStatemachine sm = new Statemachine("SoundTestStatemachine");
+        IStatemachine sm = new Statemachine("TestSoundStatemachine");
 
         IState state_beep = new State("SingleBeep"){
+
             public void run(){
+
+                brickController.setVolume(50);
                 brickController.singleBeep();
             }
         };
@@ -121,7 +124,7 @@ public class MindroidLVL1 extends LVL1API {
         sm.addTransition(t_one_sec,state_doubleBeep,state_buzz);
         sm.addTransition(t_two_sec,state_buzz,state_sequenceDown);
         sm.addTransition(t_two_sec,state_sequenceDown,state_sequenceUp);
-        sm.addTransition(t_two_sec,state_sequenceDown,state_beep);
+        sm.addTransition(t_two_sec,state_sequenceUp,state_beep);
 
         return sm;
     }

@@ -29,10 +29,12 @@ public class BrickController implements IBrickControl {
         robot.getBrick().resetEV3StatusLight();
     }
 
+
+
     // ------------- SSOUND OPERATIONS -------------
     @Override
     public void singleBeep() {
-        robot.getBrick().beep();
+        robot.getBrick().singleBeep();
     }
 
     @Override
@@ -55,22 +57,28 @@ public class BrickController implements IBrickControl {
         robot.getBrick().beepSequenceUp();
     }
 
+    @Override
+    public void setVolume(int volume) {
+        robot.getBrick().setVolume(volume);
+    }
+
     // ------------- DISPLAY OPERATIONS -------------
     @Override
     public void clearDisplay() {
         //TODO Not working correctly yet
-        robot.getBrick().getDisplay().clearDisplay();
+        robot.getBrick().clearDisplay();
     }
 
     @Override
     public void drawString(String str,int posX, int posY) {
         //TODO Not working correctly yet
-        robot.getBrick().getDisplay().drawString(str,posX,posY);
+        robot.getBrick().drawString(str,posX,posY);
     }
 
     @Override
     public void drawImage(String str) {
-        //TODO Impl
+        //TODO not implemented on EV3Display
+        robot.getBrick().drawImage(str);
     }
 
 }

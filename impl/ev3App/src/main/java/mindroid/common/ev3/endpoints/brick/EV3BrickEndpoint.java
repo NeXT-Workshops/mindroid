@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import lejos.hardware.Sound;
+import lejos.hardware.lcd.LCD;
 import org.mindroid.common.messages.DisplayMessages;
 import org.mindroid.common.messages.DisplayMessages.DrawString;
 import org.mindroid.common.messages.SoundMessageFactory;
@@ -54,6 +55,7 @@ public class EV3BrickEndpoint extends Listener {
 		if(object.getClass() == SetStatusLightMsg.class){
 			SetStatusLightMsg msg = (SetStatusLightMsg) object;
 			LocalEV3.get().getLED().setPattern(msg.getVal());
+
 		}
 	}
 
@@ -64,8 +66,9 @@ public class EV3BrickEndpoint extends Listener {
 	private void handleDisplayMessages(Object object) {
 		if(object.getClass() == DrawString.class){
 			DrawString ds = (DrawString) object;
-			LocalEV3.get().getTextLCD().clear();
-			LocalEV3.get().getTextLCD().drawString(ds.getStr(), ds.getX(), ds.getY());
+			LCD.clear();
+			LCD.drawString(ds.getStr(), ds.getX(), ds.getY());
+
 			return;
 		}
 		
@@ -76,20 +79,30 @@ public class EV3BrickEndpoint extends Listener {
 	}
 
 	private void handleSoundMessages(Object object){
+		//System.out.println(object.toString());
+		//Handle Beep Message
 		if(object.getClass() ==  SoundMessageFactory.BeepMessage.class){
 			switch(((SoundMessageFactory.BeepMessage)object).getBeep()){
-				case SINGLE_BEEP:
+				case SoundMessageFactory.Beeptype.SINGLE_BEEP:
 					Sound.beep(); break;
-				case DOUBLE_BEEP:
+				case SoundMessageFactory.Beeptype.DOUBLE_BEEP:
 					Sound.twoBeeps(); break;
-				case BEEP_SEQUENCE_DOWNWARDS:
+				case SoundMessageFactory.Beeptype.BEEP_SEQUENCE_DOWNWARDS:
 					Sound.beepSequence(); break;
-				case BEEP_SEQUENCE_UPWARDS:
+				case SoundMessageFactory.Beeptype.BEEP_SEQUENCE_UPWARDS:
 					Sound.beepSequenceUp(); break;
-				case LOW_BUZZ:
+				case SoundMessageFactory.Beeptype.LOW_BUZZ:
 					Sound.buzz(); break;
+
 				default: //DO nothing;
 			}
+			return;
+		}
+
+		//Handle Volume Message
+		if(object.getClass() ==  SoundMessageFactory.SoundVolumeMessage.class){
+			Sound.setVolume(((SoundMessageFactory.SoundVolumeMessage)object).getVolume());
+			return;
 		}
 	}
 

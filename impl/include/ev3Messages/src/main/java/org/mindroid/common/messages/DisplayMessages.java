@@ -66,6 +66,6 @@ public class DisplayMessages {
 	}
 	
 	public static class ClearDisplay{
-		ClearDisplay(){};
+		public ClearDisplay(){};
 	}
 }

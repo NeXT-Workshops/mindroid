@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightEnabled;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
+import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.common.messages.*;
 import org.mindroid.impl.motor.EV3MotorManager;
 import org.mindroid.impl.sensor.EV3SensorManager;
@@ -18,7 +19,7 @@ import com.esotericsoftware.kryonet.Listener;
 /**
  * Brick Endpoint Classes. Used to send proper messages to the Brick.
  */
-public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO Extends ClientEndpointImpl
+public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends ClientEndpointImpl
 
     public final static int BRICK_TIMEOUT = 50000;
     private final Client client;
@@ -136,8 +137,7 @@ public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO 
     	return (readyForCommands && isConnected());
     }
 
-	public EV3Display getDisplay() {
-		
+	private EV3Display getDisplay() {
 		return display;
 	}
 
@@ -174,7 +174,13 @@ public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO 
 	}
 
 	//-------------- SOUND Operations ----------------
-	public void beep(){
+	public void setVolume(int volume){
+		if(isBrickReady()){
+			conn.sendTCP(SoundMessageFactory.createVolumeMessage(volume));
+		}
+	}
+
+	public void singleBeep(){
 		if(isBrickReady()){
 			conn.sendTCP(SoundMessageFactory.createBeepMessage(SoundMessageFactory.Beeptype.SINGLE_BEEP));
 		}
@@ -202,4 +208,21 @@ public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO 
 			conn.sendTCP(SoundMessageFactory.createBeepMessage(SoundMessageFactory.Beeptype.BEEP_SEQUENCE_UPWARDS));
 		}
 	}
+
+	@Override
+	public void clearDisplay() {
+		getDisplay().clearDisplay();
+	}
+
+	@Override
+	public void drawString(String str, int posX, int posY) {
+		getDisplay().drawString(str,posX,posY);
+	}
+
+	@Override
+	public void drawImage(String str) {
+		getDisplay().drawImage(str);
+	}
+
+
 }

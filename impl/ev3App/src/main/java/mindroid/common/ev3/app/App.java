@@ -31,7 +31,7 @@ public class App implements Runnable {
 		
 		try {
 			LocalEV3.get().getLED().setPattern(2); //RED Light, always on, waiting for connection
-			System.out.println("Current System Time"+ new Date(System.currentTimeMillis()) + " in millis "+ System.currentTimeMillis());
+			//System.out.println("Current System Time"+ new Date(System.currentTimeMillis()) + " in millis "+ System.currentTimeMillis());
 	
 			
 			BrickServerImpl server = new BrickServerImpl(NetworkPortConfig.BRICK_PORT);
@@ -42,8 +42,8 @@ public class App implements Runnable {
 
 			server.addListener(brick);
 			server.addListener(endpointManager);
-			
-			System.out.println("Waiting for Connection..");
+
+			//System.out.println("Waiting for Connection..");
 			LocalEV3.get().getLED().setPattern(3);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

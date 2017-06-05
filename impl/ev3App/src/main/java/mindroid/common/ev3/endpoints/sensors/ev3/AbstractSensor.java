@@ -99,7 +99,7 @@ public abstract class AbstractSensor {
                     try {
                         Thread.sleep(sampleRate);
                     } catch (InterruptedException e) {
-                        System.err.println("SensorEndpoint - Thread could not sleep.");
+                        //System.err.println("SensorEndpoint - Thread could not sleep.");
                     }
                 }
             }

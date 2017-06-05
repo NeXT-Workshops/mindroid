@@ -75,6 +75,10 @@ public class EV3Display extends ClientEndpointImpl{
 		return false;
 	}
 
+	public void drawImage(String str) {
+		//TODO Impl
+	}
+
 	public boolean isReady() {
 		return ready;
 	}

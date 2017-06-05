@@ -58,11 +58,13 @@ public class MessageRegistrar {
 
 		//Sound Message
 		kryo.register(SoundMessageFactory.BeepMessage.class);
+		kryo.register(SoundMessageFactory.Beeptype.class);
+		kryo.register(SoundMessageFactory.SoundVolumeMessage.class);
 
 		/** ----- Used classes by Message-classes ----- **/
 		kryo.register(Sensors.class);
 		kryo.register(Motors.class);
-		kryo.register(SoundMessageFactory.Beeptype.class);
+
 
 		//kryo.register(SensorPort.class);
 		//kryo.register(MotorPort.class);

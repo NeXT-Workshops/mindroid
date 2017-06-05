@@ -17,7 +17,8 @@ public class EV3GyroSensor extends AbstractSensor {
         if(isSensorCreated){
             sendSensorData();
         }
-        System.out.println(toString());;}
+        //System.out.println(toString());;
+    }
 
     @Override
     public boolean setSensorMode(SensorMessages.SensorMode_ newMode) {

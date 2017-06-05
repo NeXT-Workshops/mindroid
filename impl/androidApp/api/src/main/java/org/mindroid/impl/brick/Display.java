@@ -5,6 +5,7 @@ import org.mindroid.api.LVL2API;
 /**
  * Created by Torbe on 03.05.2017.
  */
+@Deprecated
 public class Display {
 
     LVL2API api;

@@ -50,8 +50,9 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
         this.EV3Brick_IP = ev3Brick_IP;
         this.EV3Brick_PORT = ev3Brick_PORT;
         
-        motorManager 	= new EV3MotorManager(this); //TODO
+        motorManager 	= new EV3MotorManager(this);
         sensorManager 	= new EV3SensorManager(this);
+        display = createDisplay();
 
 		System.out.println("Local-EV3Brick: Starte client.. ");
 		client = new Client();
@@ -68,18 +69,17 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 		motorManager.setBrickClient(client);
 
 		MessageRegistrar.register(client);
-
-
     }
     
-    public void createDisplay(){
-    	if(display == null){
-    		display = new EV3Display(EV3Brick_IP,NetworkPortConfig.DISPLAY_PORT,BRICK_TIMEOUT);
-    		client.addListener(display);
-    		client.sendTCP(BrickMessages.createDisplay());
-    		System.out.println("Local-EV3Brick: Display created");
-    	}
+    public EV3Display createDisplay(){
+		EV3Display tmpDisplay = new EV3Display(EV3Brick_IP,EV3Brick_PORT,BRICK_TIMEOUT);
+		System.out.println("Local-EV3Brick: Display created");
+		return tmpDisplay;
     }
+
+	private void connectDisplay(){
+		display.connect();
+	}
 
 
     public boolean connect() throws IOException {
@@ -90,6 +90,9 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 		client.connect(BRICK_TIMEOUT, EV3Brick_IP, EV3Brick_PORT,EV3Brick_PORT-NetworkPortConfig.UDP_OFFSET);
 
 		System.out.println("Local-EV3Brick: Connected successful!");
+
+
+		connectDisplay();
 
 		return client.isConnected();
     }

@@ -3,6 +3,7 @@ package mindroid.common.ev3.endpoints;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import com.esotericsoftware.minlog.Log;
 import lejos.hardware.port.PortException;
 import mindroid.common.ev3.endpoints.motors.ev3.AbstractMotor;
 import mindroid.common.ev3.endpoints.motors.ev3.MediumRegulatedMotor;

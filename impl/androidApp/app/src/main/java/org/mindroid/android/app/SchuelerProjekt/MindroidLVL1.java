@@ -66,9 +66,49 @@ public class MindroidLVL1 extends LVL1API {
         //Statemachine test Sound
         tmpStatemachine = soundTestStatemachine();
         statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine test Display Drawings
+        tmpStatemachine = displayDrawingTestStatemachine();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+
 
     }
 
+
+    public IStatemachine displayDrawingTestStatemachine() throws StateAlreadyExists {
+        IStatemachine sm = new Statemachine("TestDisplayStatemachine");
+
+        IState state_clearDisplay = new State("clearDisplay"){
+            public void run(){
+                brickController.clearDisplay();
+            }
+        };
+
+        IState state_drawString = new State("drawString"){
+            public void run(){
+                brickController.drawString("Teststring",50,50);
+            }
+        };
+
+        sm.addState(state_clearDisplay);
+        sm.addState(state_drawString);
+
+        sm.setStartState(state_clearDisplay);
+
+        ITransition t_one_sec = new Transition(new TimeExpired(new Seconds(1)));
+        ITransition t_two_sec = new Transition(new TimeExpired(new Seconds(2)));
+
+        sm.addTransition(t_two_sec,state_clearDisplay,state_drawString);
+        sm.addTransition(t_two_sec,state_drawString,state_clearDisplay);
+
+
+        return sm;
+    }
+
+    /**
+     * Plays Sounds sequentially singleBeep,doubleBeep,sequenceDown,sequenceUp,buzz
+     * @return
+     * @throws StateAlreadyExists
+     */
     public IStatemachine soundTestStatemachine () throws StateAlreadyExists {
         IStatemachine sm = new Statemachine("TestSoundStatemachine");
 

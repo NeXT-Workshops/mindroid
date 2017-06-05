@@ -19,31 +19,10 @@ public class EV3Display extends ClientEndpointImpl{
 		// TODO Auto-generated constructor stub
 	}
 
-	private boolean ready = false;
-/*
-	@Override
-	protected void registerMessages(Client client) {
-		DisplayMessages.register(client);		
-	}
-*/
+
 	@Override
 	public void received(Connection connection, Object object) {
-		System.out.println("Local-EV3Display: Received Message "+object.toString());
-		if(object.getClass() == BrickMessages.EndpointCreatedMessage.class){
-			BrickMessages.EndpointCreatedMessage msg = (EndpointCreatedMessage) object;
-			if(!msg.isMotor() && !msg.isSensor()){
-				if(msg.isSuccess() && msg.getMsg().equals("DISPLAY")){
-					connect();
-					System.out.println("EV3-Display: connecting to endpoint!");
-				}
-			}
-			return;
-		}
-		
-		if(object.getClass() == DisplayMessages.HelloDisplay.class){
-			ready = true;
-		}
-		
+
 	}
 	
 	/**
@@ -55,7 +34,7 @@ public class EV3Display extends ClientEndpointImpl{
 	 * @return false if display not ready 
 	 */
 	public boolean drawString(String str,int posX, int posY){
-		if(ready){
+		if(isClientReady()){
 			client.sendTCP(DisplayMessages.drawString(str, posX, posY));
 			return true;
 		}
@@ -68,7 +47,7 @@ public class EV3Display extends ClientEndpointImpl{
 	 * @return false if display not ready 
 	 */
 	public boolean clearDisplay(){
-		if(ready){
+		if(isClientReady()){
 			client.sendTCP(DisplayMessages.clearDisplay());
 			return true;
 		}
@@ -79,9 +58,6 @@ public class EV3Display extends ClientEndpointImpl{
 		//TODO Impl
 	}
 
-	public boolean isReady() {
-		return ready;
-	}
 	
 	
 

@@ -1,12 +1,18 @@
 package mindroid.common.ev3.endpoints.brick;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import lejos.hardware.Sound;
+import lejos.hardware.lcd.Font;
+import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.LCD;
+import lejos.hardware.lcd.LCDOutputStream;
+import lejos.internal.ev3.EV3LCDManager;
+import org.freedesktop.DBus;
 import org.mindroid.common.messages.DisplayMessages;
 import org.mindroid.common.messages.DisplayMessages.DrawString;
 import org.mindroid.common.messages.SoundMessageFactory;
@@ -14,6 +20,7 @@ import org.mindroid.common.messages.StatusLightMessages;
 import org.mindroid.common.messages.StatusLightMessages.SetStatusLightMsg;
 import lejos.hardware.ev3.LocalEV3;
 import mindroid.common.ev3.app.DeviceManager;
+
 
 /**
  * Represents the EV3Brick
@@ -28,8 +35,7 @@ public class EV3BrickEndpoint extends Listener {
 	
 	public EV3BrickEndpoint() throws IOException {
 		
-		//endpointManager.registerMessages(super.server);
-				
+
 	}
 	
 	@Override
@@ -64,16 +70,16 @@ public class EV3BrickEndpoint extends Listener {
 	 * @param object
 	 */
 	private void handleDisplayMessages(Object object) {
-		if(object.getClass() == DrawString.class){
+		if(object.getClass() == DisplayMessages.DrawString.class){
 			DrawString ds = (DrawString) object;
-			LCD.clear();
-			LCD.drawString(ds.getStr(), ds.getX(), ds.getY());
-
+			LocalEV3.get().getGraphicsLCD().setColor(GraphicsLCD.BLACK);
+			LocalEV3.get().getGraphicsLCD().setFont(Font.getDefaultFont());
+			LocalEV3.get().getGraphicsLCD().drawString(ds.getStr(),ds.getX(),ds.getY(),GraphicsLCD.TOP);
 			return;
 		}
 		
 		if(object.getClass() == DisplayMessages.ClearDisplay.class){
-			LocalEV3.get().getTextLCD().clear();
+			LCD.clearDisplay();
 			return;
 		}
 	}

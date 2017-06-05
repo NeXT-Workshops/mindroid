@@ -2,7 +2,13 @@ package mindroid.common.ev3.app;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Locale;
 
+import com.esotericsoftware.minlog.Log;
+import lejos.hardware.lcd.Font;
+import lejos.hardware.lcd.GraphicsLCD;
+import lejos.hardware.lcd.LCD;
+import lejos.hardware.lcd.TextLCD;
 import org.mindroid.common.messages.NetworkPortConfig;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
@@ -22,6 +28,8 @@ public class App implements Runnable {
 	EV3BrickEndpoint brickEndpoint;
 	
 	public static void main(String[] args) {
+		Log.set(Log.LEVEL_NONE);
+
 		Thread t = new Thread(new App());
 		t.start();
 	}
@@ -31,6 +39,8 @@ public class App implements Runnable {
 		
 		try {
 			LocalEV3.get().getLED().setPattern(2); //RED Light, always on, waiting for connection
+			LocalEV3.get().getGraphicsLCD().setFont(Font.getDefaultFont());
+			LocalEV3.get().getGraphicsLCD().drawString("PLEASE WAIT",30,50,GraphicsLCD.TOP);
 			//System.out.println("Current System Time"+ new Date(System.currentTimeMillis()) + " in millis "+ System.currentTimeMillis());
 	
 			
@@ -45,6 +55,9 @@ public class App implements Runnable {
 
 			//System.out.println("Waiting for Connection..");
 			LocalEV3.get().getLED().setPattern(3);
+			LCD.clearDisplay();
+			LocalEV3.get().getGraphicsLCD().setFont(Font.getLargeFont());
+			LocalEV3.get().getGraphicsLCD().drawString("READY",40,50,GraphicsLCD.TOP);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

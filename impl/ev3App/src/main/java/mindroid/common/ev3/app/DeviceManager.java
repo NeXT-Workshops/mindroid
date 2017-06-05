@@ -148,20 +148,13 @@ public class DeviceManager extends Listener {
 				return;
 			}
 			
-			
-			
 			if (object.getClass() == BrickMessages.CreateMotorMessage.class){
 				final CreateMotorMessage msg = (BrickMessages.CreateMotorMessage) object;
 				handleCreateMotorMessage(conn, msg);
 				//connection.sendTCP(BrickMessages.createEndpointCreatedMessage(true, msg.getPort(), "Motor endpoint created: "+msg.getPort()));
 					return;
 			}
-		
-		/*if(object.getClass() == BrickMessages.CreateDisplayMessage.class){
-			createEV3BrickEndpoint(conn);
-		}*/
  		}
-		
 	}
 
 	private void handleCreateMotorMessage(final Connection conn, final CreateMotorMessage msg) {
@@ -247,15 +240,4 @@ public class DeviceManager extends Listener {
 		}
 		return false;
 	}
-	
-	/*
-	@FunctionalInterface
-	public static interface MotorCreator {
-			boolean createMotor(Port port, Motors motorType,int networkPort);
-	}
-	
-	@FunctionalInterface
-	public static interface SensorCreator {
-		boolean createSensor(Port port, Sensors sensorType, int networkPort);
-	}*/
 }

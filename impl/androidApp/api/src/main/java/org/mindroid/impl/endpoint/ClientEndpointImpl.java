@@ -35,8 +35,6 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
 	 */
 	@Override
 	public void connect() {
-
-        
         client.addListener(this);
 
         try {

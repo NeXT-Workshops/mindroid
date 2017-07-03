@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightEnabled;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
+import org.mindroid.api.robot.control.IBrickControl;
+import org.mindroid.common.messages.*;
 import org.mindroid.impl.motor.EV3MotorManager;
 import org.mindroid.impl.sensor.EV3SensorManager;
 
@@ -13,16 +15,11 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-import org.mindroid.common.messages.BrickMessages;
-import org.mindroid.common.messages.MessageRegistrar;
-import org.mindroid.common.messages.NetworkPortConfig;
-import org.mindroid.common.messages.StatusLightMessages;
-
 
 /**
  * Brick Endpoint Classes. Used to send proper messages to the Brick.
  */
-public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO Extends ClientEndpointImpl
+public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends ClientEndpointImpl
 
     public final static int BRICK_TIMEOUT = 50000;
     private final Client client;
@@ -53,8 +50,9 @@ public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO 
         this.EV3Brick_IP = ev3Brick_IP;
         this.EV3Brick_PORT = ev3Brick_PORT;
         
-        motorManager 	= new EV3MotorManager(this); //TODO
+        motorManager 	= new EV3MotorManager(this);
         sensorManager 	= new EV3SensorManager(this);
+        display = createDisplay();
 
 		System.out.println("Local-EV3Brick: Starte client.. ");
 		client = new Client();
@@ -71,18 +69,17 @@ public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO 
 		motorManager.setBrickClient(client);
 
 		MessageRegistrar.register(client);
-
-
     }
     
-    public void createDisplay(){
-    	if(display == null){
-    		display = new EV3Display(EV3Brick_IP,NetworkPortConfig.DISPLAY_PORT,BRICK_TIMEOUT);
-    		client.addListener(display);
-    		client.sendTCP(BrickMessages.createDisplay());
-    		System.out.println("Local-EV3Brick: Display created");
-    	}
+    public EV3Display createDisplay(){
+		EV3Display tmpDisplay = new EV3Display(EV3Brick_IP,EV3Brick_PORT,BRICK_TIMEOUT);
+		System.out.println("Local-EV3Brick: Display created");
+		return tmpDisplay;
     }
+
+	private void connectDisplay(){
+		display.connect();
+	}
 
 
     public boolean connect() throws IOException {
@@ -93,6 +90,9 @@ public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO 
 		client.connect(BRICK_TIMEOUT, EV3Brick_IP, EV3Brick_PORT,EV3Brick_PORT-NetworkPortConfig.UDP_OFFSET);
 
 		System.out.println("Local-EV3Brick: Connected successful!");
+
+
+		connectDisplay();
 
 		return client.isConnected();
     }
@@ -130,24 +130,8 @@ public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO 
         super.disconnected(connection);
         readyForCommands = false;
     }
- 
-	@Override
-	public void setEV3StatusLight(EV3StatusLightColor color, EV3StatusLightInterval interval) {
-		if(isBrickReady()){
-			conn.sendTCP(StatusLightMessages.setStatusLight(color.getValue()+3*interval.getValue()));
-		}else{
-			System.err.println("StatusLight is not ready yet. Check Brick connection!");
-		}
-	}
 
-	@Override
-	public void resetEV3StatusLight() {
-		if(isBrickReady()){
-			conn.sendTCP(StatusLightMessages.setStatusLight(0));
-		}else{
-			System.err.println("StatusLight is not ready yet. Check Brick connection!");
-		}
-	} 
+
    
 	/**
 	 * returns true if connection to Brick is established
@@ -165,8 +149,7 @@ public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO 
     	return (readyForCommands && isConnected());
     }
 
-	public EV3Display getDisplay() {
-		
+	private EV3Display getDisplay() {
 		return display;
 	}
 
@@ -182,4 +165,76 @@ public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO 
 	public String getConnectionInformation(){
 		return new StringBuffer().append(EV3Brick_IP).append(":").append(EV3Brick_PORT).toString();
 	}
+
+	//-------------- Status Light Operations ----------------
+	@Override
+	public void setEV3StatusLight(EV3StatusLightColor color, EV3StatusLightInterval interval) {
+		if(isBrickReady()){
+			conn.sendTCP(StatusLightMessages.setStatusLight(color.getValue()+3*interval.getValue()));
+		}else{
+			System.err.println("StatusLight is not ready yet. Check Brick connection!");
+		}
+	}
+
+	@Override
+	public void resetEV3StatusLight() {
+		if(isBrickReady()){
+			conn.sendTCP(StatusLightMessages.setStatusLight(0));
+		}else{
+			System.err.println("StatusLight is not ready yet. Check Brick connection!");
+		}
+	}
+
+	//-------------- SOUND Operations ----------------
+	public void setVolume(int volume){
+		if(isBrickReady()){
+			conn.sendTCP(SoundMessageFactory.createVolumeMessage(volume));
+		}
+	}
+
+	public void singleBeep(){
+		if(isBrickReady()){
+			conn.sendTCP(SoundMessageFactory.createBeepMessage(SoundMessageFactory.Beeptype.SINGLE_BEEP));
+		}
+	}
+
+	public void doubleBeep() {
+		if(isBrickReady()){
+			conn.sendTCP(SoundMessageFactory.createBeepMessage(SoundMessageFactory.Beeptype.DOUBLE_BEEP));
+		}
+	}
+
+	public void buzz() {
+		if(isBrickReady()){
+			conn.sendTCP(SoundMessageFactory.createBeepMessage(SoundMessageFactory.Beeptype.LOW_BUZZ));
+		}
+	}
+
+	public void beepSequenceDown() {
+		if(isBrickReady()){
+			conn.sendTCP(SoundMessageFactory.createBeepMessage(SoundMessageFactory.Beeptype.BEEP_SEQUENCE_DOWNWARDS));
+		}
+	}
+	public void beepSequenceUp() {
+		if(isBrickReady()){
+			conn.sendTCP(SoundMessageFactory.createBeepMessage(SoundMessageFactory.Beeptype.BEEP_SEQUENCE_UPWARDS));
+		}
+	}
+
+	@Override
+	public void clearDisplay() {
+		getDisplay().clearDisplay();
+	}
+
+	@Override
+	public void drawString(String str, int posX, int posY) {
+		getDisplay().drawString(str,posX,posY);
+	}
+
+	@Override
+	public void drawImage(String str) {
+		getDisplay().drawImage(str);
+	}
+
+
 }

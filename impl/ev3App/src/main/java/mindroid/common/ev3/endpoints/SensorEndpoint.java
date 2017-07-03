@@ -3,6 +3,7 @@ package mindroid.common.ev3.endpoints;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import com.esotericsoftware.minlog.Log;
 import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.common.messages.SensorMessages.ChangeSensorModeMsg;
 import org.mindroid.common.messages.SensorMessages.SensorMode_;
@@ -21,7 +22,7 @@ public class SensorEndpoint extends Listener implements SensorListener {
 	protected Connection connection;
 
 	public SensorEndpoint(AbstractSensor sensor) {
-		setSensor(sensor); //Also adds calls sensor.addListener(this)		
+		setSensor(sensor); //Also adds calls sensor.addListener(this)
 	}
 
 	/*
@@ -47,7 +48,7 @@ public class SensorEndpoint extends Listener implements SensorListener {
 	
 	@Override
 	public void disconnected(Connection connection) {
-		System.out.println("SensorEndpoint - Connection disconnected: "+connection+" " + sensor.toString());
+		//System.out.println("SensorEndpoint - Connection disconnected: "+connection+" " + sensor.toString());
 		this.connection = null;
 	}
 

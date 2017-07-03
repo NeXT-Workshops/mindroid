@@ -18,8 +18,8 @@ public class EV3ColorSensor extends AbstractSensor {
         if(isSensorCreated){
             sendSensorData();
         }
-        
-        System.out.println(toString());;
+
+        //System.out.println(toString());;
     }
 
     @Override

@@ -73,7 +73,7 @@ public class TestStateMachineManger {
 		StatemachineCollection sc = new StatemachineCollection();
 		sc.addStatemachine(sm);
 		smm.addStatemachines(sc);
-		smm.startStatemachine(statemachineID);
+		smm.startStatemachines(statemachineID);
 
 		//----- State 'start' should be switched to state 'end"
 		smm.handleSatisfiedConstraint(statemachineID,color_red);
@@ -107,7 +107,7 @@ public class TestStateMachineManger {
 		StatemachineCollection sc = new StatemachineCollection();
 		sc.addStatemachine(sm);
 		smm.addStatemachines(sc);
-		smm.startStatemachine(statemachineID);
+		smm.startStatemachines(statemachineID);
 
 
 

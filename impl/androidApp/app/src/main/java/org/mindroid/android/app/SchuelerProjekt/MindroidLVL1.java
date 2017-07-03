@@ -41,13 +41,132 @@ public class MindroidLVL1 extends LVL1API {
 
     public void initStatemachines() throws StateAlreadyExists {
 
-        statemachineCollection.addStatemachine(roationMachine());
-        statemachineCollection.addStatemachine(synchronizedWallPingPong());
-        statemachineCollection.addStatemachine(wallPingPong());
-        statemachineCollection.addStatemachine(lightshowBig());
-        statemachineCollection.addStatemachine(testSM());
-        statemachineCollection.addStatemachine(lightshowSmall());
-        statemachineCollection.addStatemachine(testTransitionCopy());
+        IStatemachine tmpStatemachine;
+        //Statemachine rotate 90 degrees
+        tmpStatemachine = roationMachine();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine synchronized Wall ping pong
+        tmpStatemachine = synchronizedWallPingPong();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine Wall ping pong
+        tmpStatemachine = wallPingPong();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine Wall lightshow
+        tmpStatemachine = lightshowBig();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine test
+        tmpStatemachine = testSM();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine test lightshow
+        tmpStatemachine = lightshowSmall();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine test transitions
+        tmpStatemachine = testTransitionCopy();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine test Sound
+        tmpStatemachine = soundTestStatemachine();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+        //Statemachine test Display Drawings
+        tmpStatemachine = displayDrawingTestStatemachine();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
+
+
+    }
+
+
+    public IStatemachine displayDrawingTestStatemachine() throws StateAlreadyExists {
+        IStatemachine sm = new Statemachine("TestDisplayStatemachine");
+
+        IState state_clearDisplay = new State("clearDisplay"){
+            public void run(){
+                brickController.clearDisplay();
+            }
+        };
+
+        IState state_drawString = new State("drawString"){
+            public void run(){
+                brickController.drawString("Teststring",50,50);
+            }
+        };
+
+        sm.addState(state_clearDisplay);
+        sm.addState(state_drawString);
+
+        sm.setStartState(state_clearDisplay);
+
+        ITransition t_one_sec = new Transition(new TimeExpired(new Seconds(1)));
+        ITransition t_two_sec = new Transition(new TimeExpired(new Seconds(2)));
+
+        sm.addTransition(t_two_sec,state_clearDisplay,state_drawString);
+        sm.addTransition(t_two_sec,state_drawString,state_clearDisplay);
+
+
+        return sm;
+    }
+
+    /**
+     * Plays Sounds sequentially singleBeep,doubleBeep,sequenceDown,sequenceUp,buzz
+     * @return
+     * @throws StateAlreadyExists
+     */
+    public IStatemachine soundTestStatemachine () throws StateAlreadyExists {
+        IStatemachine sm = new Statemachine("TestSoundStatemachine");
+
+        IState state_beep = new State("SingleBeep"){
+
+            public void run(){
+
+                brickController.setVolume(50);
+                brickController.singleBeep();
+            }
+        };
+
+
+        IState state_doubleBeep = new State("DoubleBeep"){
+            public void run(){
+                brickController.doubleBeep();
+            }
+        };
+
+
+
+        IState state_buzz = new State("Buzz"){
+            public void run(){
+                brickController.buzz();
+            }
+        };
+
+        IState state_sequenceDown = new State("SequenceDown"){
+            public void run(){
+                brickController.beepSequenceDown();
+            }
+        };
+
+
+        IState state_sequenceUp = new State("SequenceUp"){
+            public void run(){
+                brickController.beepSequenceUp();
+            }
+        };
+
+        sm.addState(state_beep);
+        sm.addState(state_buzz);
+        sm.addState(state_doubleBeep);
+        sm.addState(state_sequenceDown);
+        sm.addState(state_sequenceUp);
+
+        sm.setStartState(state_beep);
+
+        ITransition t_one_sec = new Transition(new TimeExpired(new Seconds(1)));
+        ITransition t_two_sec = new Transition(new TimeExpired(new Seconds(2)));
+
+        sm.addTransition(t_one_sec,state_beep,state_doubleBeep);
+        sm.addTransition(t_one_sec,state_doubleBeep,state_buzz);
+        sm.addTransition(t_two_sec,state_buzz,state_sequenceDown);
+        sm.addTransition(t_two_sec,state_sequenceDown,state_sequenceUp);
+        sm.addTransition(t_two_sec,state_sequenceUp,state_beep);
+
+        return sm;
     }
 
     public IStatemachine roationMachine() throws StateAlreadyExists {
@@ -83,6 +202,7 @@ public class MindroidLVL1 extends LVL1API {
         IConstraint constr_wait = new TimeExpired(new Seconds(3));
         ITransition trans_wait = new Transition(constr_wait);
 
+
         sm.addState(state_rotate);
         sm.addState(state_wait);
         sm.addTransition(trans_rotate,state_rotate,state_wait);
@@ -94,7 +214,7 @@ public class MindroidLVL1 extends LVL1API {
     }
 
 
-    public IStatemachine synchronizedWallPingPong() throws StateAlreadyExists {
+    public IStatemachine synchronizedWallPingPong() throws StateAlreadyExists{
         IStatemachine sm = new Statemachine("syncWallPingPong");
 
         final String cmd_red = "RED";
@@ -594,7 +714,7 @@ public class MindroidLVL1 extends LVL1API {
 
         IConstraint time_180turn = new TimeExpired(new Milliseconds(1300));
 
-        IConstraint time_stop = new TimeExpired(new Seconds(5));
+        IConstraint time_stop = new TimeExpired(new Seconds(25));
 
 
         //--- Transitionen

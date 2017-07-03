@@ -18,7 +18,7 @@ public class EV3TouchSensor extends AbstractSensor {
         if(isSensorCreated){
             sendSensorData();
         }
-        System.out.println(toString());;
+        //System.out.println(toString());;
     }
 
     @Override

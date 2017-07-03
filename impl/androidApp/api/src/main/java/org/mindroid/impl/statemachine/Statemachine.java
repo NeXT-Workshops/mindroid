@@ -75,7 +75,7 @@ public class Statemachine implements IStatemachine{
 	}
 
 	@Override
-	public void addTransition(final ITransition transition, IState source, IState destination){
+	public void addTransition(final ITransition transition, IState source, IState destination) {
 		assert transition != null;
 		assert source != null;
 		assert destination != null;
@@ -124,7 +124,7 @@ public class Statemachine implements IStatemachine{
 	}
 
 	@Override
-	public void addStates(Collection<IState> states) throws StateAlreadyExists {
+	public void addStates(Collection<IState> states) throws StateAlreadyExists{
 		for(IState s : states){
 			addState(s);
 		}
@@ -167,7 +167,9 @@ public class Statemachine implements IStatemachine{
 		return "Statemachine{" +
 				"ID='" + ID + '\'' +
 				", startState=" + startState.getName() +
+				", currentState="+currentState.getName() +
 				", isActive=" + isActive +
+				", nbOfStates ="+ states.keySet().size()+
 				'}';
 	}
 

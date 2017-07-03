@@ -16,9 +16,10 @@ public class BrickMessages {
 	public static CreateDisplayMessage createDisplay(){
 		return new CreateDisplayMessage();
 	}
-	
+
+	@Deprecated
 	public static class CreateDisplayMessage{
-		public CreateDisplayMessage(){};
+		public CreateDisplayMessage(){}
 	}
 	
 	/**

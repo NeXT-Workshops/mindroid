@@ -2,6 +2,8 @@ package org.mindroid.android.app.SchuelerProjekt;
 
 import org.mindroid.api.LVL2API;
 import org.mindroid.api.communication.IMessenger;
+import org.mindroid.api.ev3.EV3StatusLightColor;
+import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 
 /**
@@ -18,30 +20,24 @@ public class MindroidLVL2 extends LVL2API {
     @Override
     public void run() {
         //Example Wall-Ping-Pong
-        //messenger.sendMessage(IMessenger.SERVER_LOG,"Imperative Implementation is running!");
-        forward();
-        while(!isCollisionDetected()){
-
+        if(messenger!=null) {
+            messenger.sendMessage(IMessenger.SERVER_LOG, "Imperative Implementation is running!");
         }
-        //backward 5cm
-        backward(5);
 
-        //turn around
-        turnLeft(180);
-
-        //Back to start
-        forward();
-
-        led.green();
-        led.blinking();
-
-        while(!hasLineDetected()){
-
+        while (true) {
+            forward();
+            while (distanceGreaterThan(0.15f)) {
+                delay(300);
+            }
+            backward();
+            delay(1200);
+            setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.BLINKING);
+            turnLeftTime(1600);
+            setLED(EV3StatusLightColor.OFF,EV3StatusLightInterval.BLINKING);
         }
-        //At start again
-        stop();
 
     }
+    
 
 
 }

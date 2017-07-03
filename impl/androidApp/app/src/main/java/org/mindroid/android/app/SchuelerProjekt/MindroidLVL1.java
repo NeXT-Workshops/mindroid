@@ -77,13 +77,13 @@ public class MindroidLVL1 extends LVL1API {
     public IStatemachine displayDrawingTestStatemachine() throws StateAlreadyExists {
         IStatemachine sm = new Statemachine("TestDisplayStatemachine");
 
-        IState state_clearDisplay = new State("clearDisplay"){
+        IState state_clearDisplay = new State("createClearDisplayMsg"){
             public void run(){
                 brickController.clearDisplay();
             }
         };
 
-        IState state_drawString = new State("drawString"){
+        IState state_drawString = new State("createDrawStringMsg"){
             public void run(){
                 brickController.drawString("Teststring",50,50);
             }

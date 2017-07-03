@@ -72,6 +72,7 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
     }
     
     public EV3Display createDisplay(){
+		//Display gets connected to the brick with the call of method this.connect()
 		EV3Display tmpDisplay = new EV3Display(EV3Brick_IP,EV3Brick_PORT,BRICK_TIMEOUT);
 		System.out.println("Local-EV3Brick: Display created");
 		return tmpDisplay;
@@ -101,6 +102,7 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 	 * Disconnects all open Connections to the Brick!
 	 */
 	public void disconnect(){
+		display.disconnect();
 		client.close();
 		getSensorManager().disconnectSensors();
 		getMotorManager().disconnectMotors();

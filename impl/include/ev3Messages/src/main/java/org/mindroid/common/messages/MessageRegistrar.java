@@ -23,10 +23,10 @@ public class MessageRegistrar {
 		kryo.register(BrickMessages.HelloMessage.class);
 		kryo.register(BrickMessages.EndpointCreatedMessage.class);
 
-		//DisplayMessages
-		kryo.register(DisplayMessages.DrawString.class);
-		kryo.register(DisplayMessages.HelloDisplay.class);
-		kryo.register(DisplayMessages.ClearDisplay.class);
+		//DisplayMessageFactory
+		kryo.register(DisplayMessageFactory.DrawStringMsg.class);
+		kryo.register(DisplayMessageFactory.HelloDisplay.class);
+		kryo.register(DisplayMessageFactory.ClearDisplayMsg.class);
 
 		//RegulatedMotorMessages
 		kryo.register(RegulatedMotorMessages.BackwardMsg.class);

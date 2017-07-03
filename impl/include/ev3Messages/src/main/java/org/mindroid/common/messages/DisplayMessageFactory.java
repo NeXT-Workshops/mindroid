@@ -1,6 +1,6 @@
 package org.mindroid.common.messages;
 
-public class DisplayMessages {
+public class DisplayMessageFactory {
 
 
 
@@ -21,20 +21,20 @@ public class DisplayMessages {
 		public HelloDisplay() {};
 	}
 	
-	public static DrawString drawString(String str, int x, int y){
-		DrawString ds = new DrawString();
+	public static DrawStringMsg createDrawStringMsg(String str, int x, int y){
+		DrawStringMsg ds = new DrawStringMsg();
 		ds.setStr(str);
 		ds.setX(x);
 		ds.setY(y);
 		return ds;
 	}
 	
-	public static class DrawString{
+	public static class DrawStringMsg {
 		String str;
 		int x;
 		int y;
 		
-		DrawString(){}
+		public DrawStringMsg(){}
 
 		public String getStr() {
 			return str;
@@ -61,11 +61,11 @@ public class DisplayMessages {
 		};
 	}
 	
-	public static ClearDisplay clearDisplay(){
-		return new ClearDisplay();
+	public static ClearDisplayMsg createClearDisplayMsg(){
+		return new ClearDisplayMsg();
 	}
 	
-	public static class ClearDisplay{
-		public ClearDisplay(){};
+	public static class ClearDisplayMsg {
+		public ClearDisplayMsg(){};
 	}
 }

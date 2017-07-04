@@ -16,7 +16,8 @@ build:
     # Do not build android app
     #- cd "androidApp"
     #- bash ./gradlew clean test assemble
-    - cd "../ev3App"
+    #- cd ..
+    - cd "./ev3App"
     - bash ../androidApp/gradlew clean test assemble
     - cd "../serverApp"
     - bash ../androidApp/gradlew clean test assemble

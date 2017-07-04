@@ -13,8 +13,9 @@ build:
   ci:
     - export ANDROID_HOME="/opt/android-sdk-linux"
     - cd "impl"
-    - cd "androidApp"
-    - bash ./gradlew clean test assemble
+    # Do not build android app
+    #- cd "androidApp"
+    #- bash ./gradlew clean test assemble
     - cd "../ev3App"
     - bash ../androidApp/gradlew clean test assemble
     - cd "../serverApp"

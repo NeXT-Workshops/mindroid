@@ -3,7 +3,7 @@ language: none
 build:
   pre_ci_build:
     image_name: thyrlian/android-sdk
-    image_tag: 1.5
+    image_tag: latest
     pull: true
 
   ci:

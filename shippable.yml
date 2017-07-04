@@ -2,7 +2,7 @@ language: none
 
 build:
   pre_ci_build:
-    image_name: thyrlian/android-sdk
+    image_name: echtzeitsysteme/mindroid
     image_tag: latest
     pull: true
 

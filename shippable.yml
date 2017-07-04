@@ -11,7 +11,7 @@ build:
     pull: true
 
   ci:
-    - echo "Begin of script"
+    - export ANDROID_HOME="$ANDROID_SDK_HOME"
     - cd "impl"
     - cd "androidApp"
     - bash ./gradlew clean test assemble

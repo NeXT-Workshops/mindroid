@@ -1,27 +1,21 @@
 language: none
 
-# The Android SDK appears to require Java 1.8
-#jdk:
-#   - oraclejdk8
-
 build:
   pre_ci_build:
-    image_name: runmymind/docker-android-sdk
-    image_tag: latest
+    image_name: thyrlian/android-sdk
+    image_tag: 1.5
     pull: true
 
   ci:
-    - export ANDROID_HOME="/opt/android-sdk-linux"
     - cd "impl"
-    # Do not build android app
-    #- cd "androidApp"
-    #- bash ./gradlew clean test assemble
-    #- cd ..
+    - cd "./androidApp"
+    - bash ./gradlew clean test assemble
+    - cd ..
     - cd "./ev3App"
     - bash ../androidApp/gradlew clean test assemble
-    - cd "../serverApp"
+    - cd ..
+    - cd "./serverApp"
     - bash ../androidApp/gradlew clean test assemble
-    - echo "End of script"
    
 integrations:
   # See http://docs.shippable.com/ci/email-notifications/

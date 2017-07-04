@@ -11,6 +11,8 @@ build:
     pull: true
 
   ci:
+    - which android
+    - ls -la /opt/android-sdk-linux
     - export ANDROID_HOME="/opt/android-sdk-linux"
     - cd "impl"
     - cd "androidApp"

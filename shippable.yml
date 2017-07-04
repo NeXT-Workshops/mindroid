@@ -11,7 +11,7 @@ build:
     pull: true
 
   ci:
-    - export ANDROID_HOME="$ANDROID_SDK_HOME"
+    - export ANDROID_HOME="/opt/android-sdk-linux"
     - cd "impl"
     - cd "androidApp"
     - bash ./gradlew clean test assemble

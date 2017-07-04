@@ -8,7 +8,7 @@ build:
 
   ci:
     - export ANDROID_HOME="/opt/android-sdk/"
-    - ll $ANDROID_HOME
+    - ls -la $ANDROID_HOME
     - cd "impl"
     - cd "./androidApp"
     - bash ./gradlew clean test assemble

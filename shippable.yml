@@ -1,25 +1,32 @@
-language: java
+language: none
 
 # The Android SDK appears to require Java 1.8
-jdk:
-   - oraclejdk8
+#jdk:
+#   - oraclejdk8
+
+build:
+  pre_ci_build:
+    image_name: runmymind/docker-android-sdk
+    image_tag: latest
+    pull: true
+
+  ci:
+    - echo "Begin of script"
+    - cd "impl"
+    - cd "androidApp"
+    - bash ./gradlew clean test assemble
+    - cd "../ev3App"
+    - bash ../androidApp/gradlew clean test assemble
+    - cd "../serverApp"
+    - bash ../androidApp/gradlew clean test assemble
+    - echo "End of script"
    
-build_image: runmymind/docker-android-sdk
-
-# The following directive instructs Shippable to cache the container.
-# To invalidate the cache, you need to add '[reset_minion]' to a commit message.
-# See: http://blog.shippable.com/faster-builds-by-caching-containers
-cache: true
-
-# The following process could be skipped entirely, if we had a central build.gradle file
-# See: https://docsv2.readthedocs.io/en/latest/languages/java.html
-script:
-  - echo "Begin of script"
-  - cd "impl"
-  - cd "androidApp"
-  - bash ./gradlew clean test assemble
-  - cd "../ev3App"
-  - bash ../androidApp/gradlew clean test assemble
-  - cd "../serverApp"
-  - bash ../androidApp/gradlew clean test assemble
-  - echo "End of script"
+integrations:
+  # See http://docs.shippable.com/ci/email-notifications/
+  notifications:
+    - integrationName: email
+      type: email
+      sendConsoleLogs: true
+      recipients:
+        --last_committer
+        - roland.kluge@es.tu-darmstadt.de

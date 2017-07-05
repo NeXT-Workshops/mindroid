@@ -6,17 +6,17 @@ import java.util.HashMap;
 
 import org.mindroid.api.ev3.EV3RotationMotorEnabled;
 import org.mindroid.api.ev3.EV3StatusLightEnabled;
+import org.mindroid.api.statemachine.NoStartStateException;
+import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.motor.UnregulatedMotor;
 import org.mindroid.api.statemachine.IStatemachine;
-import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
 import org.mindroid.impl.configuration.RobotConfigurator;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.sensor.EV3Sensor;
-import org.mindroid.impl.statemachine.Statemachine;
 
 import org.mindroid.common.messages.EV3MotorPort;
 import org.mindroid.common.messages.EV3SensorPort;
@@ -52,7 +52,7 @@ public abstract class AbstractRobodancer implements EV3RotationMotorEnabled, EV3
 
 	}
 
-	private void startStatemachines(){
+	private void startStatemachines() throws NoStartStateException {
 		for(String key : statemachines.keySet()){
 			statemachines.get(key).start();
 		}
@@ -70,9 +70,9 @@ public abstract class AbstractRobodancer implements EV3RotationMotorEnabled, EV3
 	/**
 	 * Statemachines are implemented in this methods
 	 */
-	abstract public void initStatemachines() throws StateAlreadyExsists;
+	abstract public void initStatemachines() throws StateAlreadyExists;
 
-	public void start() throws StateAlreadyExsists {
+	public void start() throws StateAlreadyExists, NoStartStateException {
 		initStatemachines();
 		startStatemachines();
 	}

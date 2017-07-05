@@ -1,41 +1,40 @@
 package org.mindroid.api.communication;
 
-import org.mindroid.common.messages.server.ServerLogMessage;
+import org.mindroid.common.messages.server.Destination;
+import org.mindroid.common.messages.server.LogLevel;
+import org.mindroid.common.messages.server.MessageType;
+import org.mindroid.common.messages.server.MindroidMessage;
 
 /**
  * Created by torben on 04.04.2017.
  */
 public interface IMessenger {
+
+    public static final String SERVER_LOG = Destination.SERVER_LOG.getValue();
+    public static final String BROADCAST = Destination.BROADCAST.getValue();
+
+
     /**
-     *
-     * Sendet eine Message.
+     * Sends a message to the given destination. If the destination is the server, MessageType INFO is used.
+     * For other Log-MessageTypes use sendLogMessage(String content, MessageType type)
      *
      */
     void sendMessage(String destination, String msg);
 
-    void sendMessage(ServerLogMessage msg);
+    void sendMessage(MindroidMessage msg);
 
     /**
-     *
-     * Verbindungsstatus
-     *
-     *
-     *
-     * @return
+     * Is called by the Robot Server. Does not need to be called manually.
      */
-    boolean isConnected();
-
-
+    void registerToServer(int port);
     /**
-     * Verwendung:
+     * Sends a log message to the server.
      *
-     * IMessenger messenger = new Messenger(ownName, serverip,serverport);
-     *
-     * Kommunikation mit anderen Robotern:
-     * messenger.sendMessage("Peter","Hallo!");
-     *
-     * Lognachrichten:
-     * messenger.sendMessage("ServerLog","Lognachricht");
-     *
+     * @param content
+     * @param logLevel
      */
+    void sendLogMessage(String content, LogLevel logLevel);
+
+
+
 }

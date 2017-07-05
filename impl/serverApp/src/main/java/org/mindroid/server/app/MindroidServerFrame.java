@@ -1,6 +1,8 @@
 package org.mindroid.server.app;
 
-import org.mindroid.common.messages.server.ServerLogMessage;
+import org.mindroid.common.messages.server.Destination;
+import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.common.messages.server.RobotId;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -8,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,6 +28,7 @@ public class MindroidServerFrame extends JFrame {
     private ArrayList<Color> availableColors;
     private final int SOURCE_COL = 1;  //Column that contains a message's source
     private final int LEVEL_COL = 2;
+    private HashMap<Destination, InetSocketAddress> ipMapping;
 
 
     public MindroidServerFrame() {
@@ -145,16 +149,17 @@ public class MindroidServerFrame extends JFrame {
 
         this.pack();
         this.setVisible(true);
+        this.ipMapping = new HashMap<>();
 
     }
 
 
-    public void addContentLine(ServerLogMessage deseriaLogMessage) {
+    public void addContentLine(MindroidMessage deseriaLogMessage) {
         try {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
             String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
             model.addRow(new String[]{timeStamp, deseriaLogMessage.getSource().getValue(),
-                    deseriaLogMessage.getLogLevel().toString(), deseriaLogMessage.getContent()});
+                    deseriaLogMessage.getMessageType().toString(), deseriaLogMessage.getContent()});
         } catch (ArrayIndexOutOfBoundsException e) {
             //Tries again n times, error was caused by 2 threads accessing the table at the same time
             int n = 10;
@@ -171,12 +176,12 @@ public class MindroidServerFrame extends JFrame {
              }
     }
 
-    private boolean retryAddContentLine(ServerLogMessage deseriaLogMessage) {
+    private boolean retryAddContentLine(MindroidMessage deseriaLogMessage) {
         try {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
             String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
             model.addRow(new String[]{timeStamp, deseriaLogMessage.getSource().getValue(),
-                    deseriaLogMessage.getLogLevel().toString(), deseriaLogMessage.getContent()});
+                    deseriaLogMessage.getMessageType().toString(), deseriaLogMessage.getContent()});
             return true;
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
@@ -214,4 +219,14 @@ public class MindroidServerFrame extends JFrame {
         assignedColors.put(source,availableColors.get(0));
         availableColors.remove(0);
     }
+
+    public void register(RobotId robotId, InetSocketAddress address) {
+        ipMapping.put(new Destination(robotId.getValue()),address);
+    }
+
+    public InetSocketAddress findAddress(Destination destination) {
+        return ipMapping.get(destination);
+    }
+
+    public HashMap<Destination, InetSocketAddress> getIPMapping() {return ipMapping;}
 }

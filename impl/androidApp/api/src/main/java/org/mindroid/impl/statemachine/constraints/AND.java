@@ -18,4 +18,8 @@ public class AND extends AbstractLogicOperator {
         return result_left && result_right;
     }
 
+    @Override
+    public IConstraint copy() {
+        return new AND(getLeftConstraint().copy(),getRightConstraint().copy());
+    }
 }

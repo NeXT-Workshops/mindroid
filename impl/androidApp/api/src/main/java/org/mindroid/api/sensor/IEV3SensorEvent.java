@@ -7,7 +7,7 @@ import org.mindroid.common.messages.SensorMessages.SensorMode_;
 public interface IEV3SensorEvent  {
     EV3Sensor getSensor();
 
-    float getSample();
+    float[] getSample();
 
     long getTimeStamp();
     

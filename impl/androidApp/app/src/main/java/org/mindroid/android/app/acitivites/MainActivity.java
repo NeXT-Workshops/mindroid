@@ -13,15 +13,14 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 //import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.robodancer.Robot;
-import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
+import org.mindroid.android.app.robodancer.Settings;
+import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 
 
 /**
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView txt_isConnected;
     private TextView txt_robotState;
-
+    private Spinner spinner_selectedStatemachine;
 
 
     /** Information Box **/
@@ -98,12 +97,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        
-        robot = new Robot(this);
+
 
         /** Instantiate buttons and textviews **/
         btn_initConfiguration = (Button) findViewById(R.id.btn_initConfig);
         btn_connect = (Button) findViewById(R.id.btn_connect);
+        spinner_selectedStatemachine = (Spinner) findViewById(R.id.spinner_selectedStatemachine);
         btn_startRobot = (Button) findViewById(R.id.btn_startRobot);
         btn_stopRobot = (Button) findViewById(R.id.btn_stopRobot);
         btn_settings = (Button) findViewById(R.id.btn_settings);
@@ -111,23 +110,30 @@ public class MainActivity extends AppCompatActivity {
         txt_isConnected = (TextView) findViewById(R.id.txt_isConnected);
         txt_robotState = (TextView) findViewById(R.id.txt_stateRobot);
 
+
         /** Information Box **/
         layout_info = (FrameLayout) findViewById(R.id.layout_infobox);
         txt_info = (TextView) findViewById(R.id.txt_info);
         btn_activateTethering = (Button) findViewById(R.id.btn_activateTethering);
 
+        try {
+            robot = new Robot(this);
+            createStatemachineIDs(robot);
+        } catch (StateAlreadyExists stateAlreadyExists) {
+            showAlertDialog("Error on create",stateAlreadyExists.getMessage());
+        }
+
+
         /** Load Connection Properties **/
         loadConnectionProperties();
 
-        /** get current IP **/
-//        WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
 
-        setButtonListeners();
+        setListeners();
 
         checkCurrentState();
     }
 
-    private void setButtonListeners() {
+    private void setListeners() {
         //Handle settings button
         btn_settings.setOnClickListener(new View.OnClickListener() {
 
@@ -173,6 +179,37 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), 0);
             }
         });
+
+        spinner_selectedStatemachine.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Settings.getInstance().selectedStatemachineID = (String) parent.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Settings.getInstance().selectedStatemachineID = "";
+            }
+        });
+    }
+
+    public void createStatemachineIDs(Robot robot) throws StateAlreadyExists {
+        //Add Statemachine ids to Dropdown-ui
+        int size_imp = robot.mindroidImperative.getStatemachineCollection().getStatemachineKeySet().size();
+        int size_state = robot.mindroidStatemachine.getStatemachineCollection().getStatemachineKeySet().size();
+        String[] ids = new String[size_imp+size_state];
+        int index = 0;
+        for (String id : robot.mindroidImperative.getStatemachineCollection().getStatemachineKeySet()) {
+            ids[index] = id;
+            index++;
+        }
+        for (String id : robot.mindroidStatemachine.getStatemachineCollection().getStatemachineKeySet()) {
+            ids[index] = id;
+            index++;
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, ids);
+        spinner_selectedStatemachine.setAdapter(adapter);
     }
 
     /**
@@ -193,11 +230,15 @@ public class MainActivity extends AppCompatActivity {
 
                 btn_initConfiguration.setEnabled(robot.isConnectedToBrick && !robot.isConfigurationBuilt && positiveUSBState);
 
-                btn_startRobot.setEnabled(robot.isConnectedToBrick && robot.isConfigurationBuilt && !robot.isRunning && positiveUSBState);
+                btn_startRobot.setEnabled(robot.isConnectedToBrick && robot.isConfigurationBuilt && !robot.isRunning && positiveUSBState && !spinner_selectedStatemachine.getSelectedItem().toString().isEmpty());
 
                 btn_stopRobot.setEnabled(robot.isRunning);
 
+                spinner_selectedStatemachine.setEnabled(!robot.isRunning);
+
                 btn_settings.setEnabled(!robot.isConnectedToBrick);
+
+
             }
         };
 
@@ -316,18 +357,36 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadConnectionProperties(){
         connectionProperties = getApplicationContext().getSharedPreferences("ConnectionData.xml",0);
-
+        //TODO Refactor -> get settings from Settings.class
         if (connectionProperties != null) {
-                String savedVal = connectionProperties.getString(SettingsActivity.KEY_EV3_IP, SettingsActivity.DEFAULT_EV3_IP);
-                robot.setEv3_ip( (savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_IP : savedVal);
+            String savedVal;
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_ROBOT_ID,SettingsActivity.DEFAULT_ROBOT_ID);
+                Settings.getInstance().robotID = ( (savedVal.isEmpty()) ? SettingsActivity.KEY_ROBOT_ID : savedVal);
+
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_GROUP_ID,SettingsActivity.DEFAULT_GROUP_ID);
+                Settings.getInstance().groupID = ( (savedVal.isEmpty()) ? SettingsActivity.KEY_GROUP_ID : savedVal);
+
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_EV3_IP, SettingsActivity.DEFAULT_EV3_IP);
+                Settings.getInstance().ev3IP = ( (savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_IP : savedVal);
 
                 savedVal = connectionProperties.getString(SettingsActivity.KEY_EV3_TCP_PORT,SettingsActivity.DEFAULT_EV3_TCP_PORT);
-                robot.setEv3_tcp_port(Integer.parseInt((savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_TCP_PORT : savedVal));
+                Settings.getInstance().ev3TCPPort = (Integer.parseInt((savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_TCP_PORT : savedVal));
+
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_SERVER_IP, SettingsActivity.DEFAULT_SERVER_IP);
+                Settings.getInstance().serverIP = ( (savedVal.isEmpty()) ? SettingsActivity.DEFAULT_SERVER_IP : savedVal);
+
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_SERVER_TCP_PORT,SettingsActivity.DEFAULT_SERVER_TCP_PORT);
+                Settings.getInstance().serverTCPPort = (Integer.parseInt((savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_TCP_PORT : savedVal));
+
+                savedVal = connectionProperties.getString(SettingsActivity.KEY_ROBOT_SERVER_TCP_PORT,SettingsActivity.DEFAULT_ROBOT_SERVER_PORT);
+                Settings.getInstance().robotServerPort = (Integer.parseInt((savedVal.isEmpty()) ? SettingsActivity.DEFAULT_ROBOT_SERVER_PORT : savedVal));
+
+
 
             try {
                 robot.makeRobot(); //Builds the robot with the Connection Settings
-            } catch (StateAlreadyExsists stateAlreadyExsists) {
-                showAlertDialog("State Already exists",stateAlreadyExsists.getMessage());
+            } catch (StateAlreadyExists stateAlreadyExists) {
+                showAlertDialog("State Already exists", stateAlreadyExists.getMessage());
             }
         }else{
             showAlertDialog("Error: Connection Properties","Couldn't Load connection properties. Check the Settings and may restart the application!");

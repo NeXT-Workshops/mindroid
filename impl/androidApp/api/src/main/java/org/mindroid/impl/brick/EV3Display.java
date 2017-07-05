@@ -9,6 +9,9 @@ import org.mindroid.common.messages.BrickMessages;
 import org.mindroid.common.messages.BrickMessages.EndpointCreatedMessage;
 import org.mindroid.common.messages.DisplayMessages;
 
+/**
+ * Display Endpoint classes. Used to send proper messages to the brick
+ */
 public class EV3Display extends ClientEndpointImpl{
 
 	public EV3Display(String ip, int tcpPort, int brickTimeout) {

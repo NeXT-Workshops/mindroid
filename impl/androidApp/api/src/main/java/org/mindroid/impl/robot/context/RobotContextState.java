@@ -1,6 +1,6 @@
 package org.mindroid.impl.robot.context;
 
-import org.mindroid.api.communication.IMessage;
+import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.robot.context.IRobotContextState;
 import org.mindroid.api.ITimeEventListener;
 import org.mindroid.api.IMessageListener;
@@ -8,8 +8,10 @@ import org.mindroid.api.sensor.IEV3SensorEvent;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.api.statemachine.ITimeEvent;
 import org.mindroid.common.messages.SensorMessages;
+import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
+import org.mindroid.impl.robot.Robot;
 
 import java.util.ArrayList;
 
@@ -17,9 +19,9 @@ import java.util.ArrayList;
 /**
  * Created by torben on 11.03.2017.
  */
-public class RobotContextStateListener implements IRobotContextState,IEV3SensorEventListener,IMessageListener,ITimeEventListener {
+public class RobotContextState implements IRobotContextState,IEV3SensorEventListener,IMessageListener,ITimeEventListener {
 
-    private static RobotContextStateListener ourInstance = new RobotContextStateListener();
+    private static RobotContextState ourInstance = new RobotContextState();
 
     IEV3SensorEvent sensor_output_S1;
     IEV3SensorEvent sensor_output_S2;
@@ -27,19 +29,19 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
     IEV3SensorEvent sensor_output_S4;
 
     ArrayList<ITimeEvent> receivedTimeEvents;
-    ArrayList<IMessage> receivedMessages;
+    ArrayList<MindroidMessage> receivedMessages;
 
     StartCondition startCondition;
 
-    public RobotContextStateListener(){
+    public RobotContextState(){
         startCondition = StartCondition.getInstance();
         this.receivedTimeEvents = new ArrayList<ITimeEvent>();
-        this.receivedMessages = new ArrayList<IMessage>();
+        this.receivedMessages = new ArrayList<MindroidMessage>();
     }
 
 
     @Override
-    public IEV3SensorEvent getSensorEvent(final EV3PortID sensorPort) {
+    public synchronized IEV3SensorEvent getSensorEvent(final EV3PortID sensorPort) {
         if(sensorPort.equals(EV3PortIDs.PORT_1)){
             return sensor_output_S1;
         }
@@ -60,13 +62,18 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
     }
 
     @Override
-    public ArrayList<ITimeEvent> getTimeEvents() {
+    public synchronized ArrayList<ITimeEvent> getTimeEvents() {
         return receivedTimeEvents;
+    }
+
+    @Override
+    public synchronized ArrayList<MindroidMessage> getMessages() {
+        return receivedMessages;
     }
 
 
     @Override
-    public SensorMessages.SensorMode_ getSensorMode(EV3PortID sensorPort) {
+    public synchronized SensorMessages.SensorMode_ getSensorMode(EV3PortID sensorPort) {
 
         if(sensorPort.equals(EV3PortIDs.PORT_1)){
             return sensor_output_S1.getSensorMode();
@@ -88,7 +95,7 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
 
 
     @Override
-    public void handleSensorEvent(EV3PortID sensorPort, IEV3SensorEvent event) {
+    public synchronized void handleSensorEvent(EV3PortID sensorPort, IEV3SensorEvent event) {
         //System.out.println("Handle sensor event called"+event);
 
         if(sensorPort.equals(EV3PortIDs.PORT_1)){
@@ -115,51 +122,59 @@ public class RobotContextStateListener implements IRobotContextState,IEV3SensorE
 
 
 
-    public static RobotContextStateListener getInstance() {
+    public static RobotContextState getInstance() {
         return ourInstance;
     }
 
 
     @Override
-    public void handleTimeEvent(ITimeEvent timeEvent) {
+    public synchronized void handleTimeEvent(ITimeEvent timeEvent) {
         //Gets Called form TimeEventProducer
         System.out.println("RobotContextListener.handleTimeEvent(): called with: "+timeEvent);
         receivedTimeEvents.add(timeEvent);
     }
 
 
-    public void setSensor_output_S1(IEV3SensorEvent sensor_output_S1) {
+    public synchronized void setSensor_output_S1(IEV3SensorEvent sensor_output_S1) {
         this.sensor_output_S1 = sensor_output_S1;
     }
 
-    public void setSensor_output_S2(IEV3SensorEvent sensor_output_S2) {
+    public synchronized void setSensor_output_S2(IEV3SensorEvent sensor_output_S2) {
         this.sensor_output_S2 = sensor_output_S2;
     }
 
-    public void setSensor_output_S3(IEV3SensorEvent sensor_output_S3) {
+    public synchronized void setSensor_output_S3(IEV3SensorEvent sensor_output_S3) {
         this.sensor_output_S3 = sensor_output_S3;
     }
 
-    public void setSensor_output_S4(IEV3SensorEvent sensor_output_S4) {
+    public synchronized void setSensor_output_S4(IEV3SensorEvent sensor_output_S4) {
         this.sensor_output_S4 = sensor_output_S4;
     }
 
-    public void setReceivedTimeEvents(ArrayList<ITimeEvent> receivedTimeEvents) {
+    public synchronized void setReceivedTimeEvents(ArrayList<ITimeEvent> receivedTimeEvents) {
         this.receivedTimeEvents = receivedTimeEvents;
     }
 
-    public StartCondition getStartCondition() {
+    public synchronized void setReceivedMessages(ArrayList<MindroidMessage> receivedMessages) {
+        this.receivedMessages = receivedMessages;
+    }
+
+    public synchronized StartCondition getStartCondition() {
         return startCondition;
     }
 
     @Override
-    public void handleMessage(IMessage msg) {
+    public synchronized void handleMessage(MindroidMessage msg) {
+
+        if(Robot.getInstance().isMessageingEnabled()){
+            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"I received a message!");
+        }
         receivedMessages.add(msg);
     }
 
     @Override
-    public String toString() {
-        return "RobotContextStateListener{" +
+    public synchronized String toString() {
+        return "RobotContextState{" +
                 "sensor_output_S1=" + sensor_output_S1 +
                 ", sensor_output_S2=" + sensor_output_S2 +
                 ", sensor_output_S3=" + sensor_output_S3 +

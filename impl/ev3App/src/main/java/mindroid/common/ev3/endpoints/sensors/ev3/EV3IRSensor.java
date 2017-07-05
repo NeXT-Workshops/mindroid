@@ -21,13 +21,11 @@ public class EV3IRSensor extends AbstractSensor {
 
     @Override
     public boolean setSensorMode(SensorMessages.SensorMode_ newMode) {
-        switch(newMode){
-            // Measures the distance to an object in front of the sensor
-            case DISTANCE:  sensor.setCurrentMode(newMode.getValue()); return true;
-                // Locates up to four beacons
-            case SEEK:		sensor.setCurrentMode(newMode.getValue()); return true;
-            default: return false;
+        if(Sensors.EV3IRSensor.isValidMode(newMode)){
+            sensor.setCurrentMode(newMode.getValue());
+            return true;
         }
+        return false;
     }
     
 	@Override

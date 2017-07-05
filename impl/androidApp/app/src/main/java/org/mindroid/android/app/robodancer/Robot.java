@@ -4,10 +4,10 @@ package org.mindroid.android.app.robodancer;
 
 import android.os.AsyncTask;
 
-import org.mindroid.android.app.SchuelerProjekt.MindroidMain;
-import org.mindroid.android.app.SchuelerProjekt.RobotHardwareConfiguration;
+import org.mindroid.android.app.SchuelerProjekt.MindroidLVL1;
+import org.mindroid.android.app.SchuelerProjekt.MindroidLVL2;
+import org.mindroid.android.app.SchuelerProjekt.RobotPortConfig;
 import org.mindroid.android.app.acitivites.MainActivity;
-import org.mindroid.android.app.acitivites.SettingsActivity;
 import org.mindroid.api.robot.IRobodancerConfig;
 import org.mindroid.api.robot.IRobotFactory;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
@@ -15,8 +15,7 @@ import org.mindroid.api.statemachine.IMindroidMain;
 
 import java.io.IOException;
 
-import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
-import org.mindroid.common.messages.NetworkPortConfig;
+import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 import org.mindroid.impl.robot.RobotFactory;
 
 /**
@@ -33,32 +32,36 @@ public class Robot {
 
     IRobotCommandCenter commandCenter;
 
-    //Gets set from mainActivity while loading shared preferences
-    private int ev3_tcp_port = Integer.parseInt(SettingsActivity.DEFAULT_EV3_TCP_PORT);
-    //Gets set from mainActivity while loading shared preferences
-    private String ev3_ip = SettingsActivity.DEFAULT_EV3_IP;;
+    IRobotFactory roFactory = new RobotFactory();
+    //-------- Robot
+    RobotPortConfig config = new RobotPortConfig(); //TODO Dependency/Linked to SchuelerProjekt
+    public IMindroidMain mindroidStatemachine = new MindroidLVL1(); //TODO Dependency/Linked to SchuelerProjekt
+    public IMindroidMain mindroidImperative = new MindroidLVL2(); //TODO Dependency/Linked to SchuelerProjekt
 
-    public Robot(MainActivity mainActivity){
+
+    public Robot(MainActivity mainActivity) throws StateAlreadyExists {
         this.main_activity = mainActivity;
     }
 
     /**
      * TODO Refactor
      */
-    public void makeRobot() throws StateAlreadyExsists {
-        IRobotFactory roFactory = new RobotFactory();
-        IRobodancerConfig config = new RobotHardwareConfiguration(); //TODO Dependency/Linked to SchuelerProjekt
-        IMindroidMain mindroid = new MindroidMain(); //TODO Dependency/Linked to SchuelerProjekt
-
+    public void makeRobot() throws StateAlreadyExists {
+        System.out.println("## App.Robot.makeRobot() got called ");
         //Config
         roFactory.setRobotConfig(config);
-        roFactory.setBrickIP(ev3_ip);
-        roFactory.setBrickTCPPort(ev3_tcp_port);
-        roFactory.setMSGServerIP(""); //TODO set MsgServerIP
-        roFactory.setMSGServerTCPPort(-1); //TODO set ServerPort
+        roFactory.setBrickIP(Settings.getInstance().ev3IP);
+        roFactory.setBrickTCPPort(Settings.getInstance().ev3TCPPort);
+        roFactory.setMSGServerIP(Settings.getInstance().serverIP);
+        roFactory.setMSGServerTCPPort(Settings.getInstance().serverTCPPort);
+        roFactory.setRobotServerPort(Settings.getInstance().robotServerPort);
+        roFactory.setRobotID(Settings.getInstance().robotID);
 
-        //Statemachine
-        roFactory.addStatemachine(mindroid.getStatemachine());
+        //Add Statemachines
+        roFactory.addStatemachine(mindroidStatemachine.getStatemachineCollection());
+        roFactory.addStatemachine(mindroidImperative.getStatemachineCollection());
+
+
 
         //Create Robot
         commandCenter = roFactory.createRobot();
@@ -117,22 +120,6 @@ public class Robot {
     }
 
 
-    public int getEv3_tcp_port() {
-        return ev3_tcp_port;
-    }
-
-    public void setEv3_tcp_port(int ev3_tcp_port) {
-        this.ev3_tcp_port = ev3_tcp_port;
-    }
-
-    public String getEv3_ip() {
-        return ev3_ip;
-    }
-
-    public void setEv3_ip(String ev3_ip) {
-        this.ev3_ip = ev3_ip;
-    }
-
     public boolean isConnectedToBrick() {
         return isConnectedToBrick;
     }
@@ -159,12 +146,12 @@ public class Robot {
 
         @Override
         protected void onPreExecute(){
-            sb.append("connecting to "+getEv3_ip()+":"+getEv3_tcp_port()+"\n");
+            sb.append("connecting to "+Settings.getInstance().ev3IP+":"+Settings.getInstance().ev3TCPPort+"\n");
 
             if(isConnectedToBrick){
                 this.cancel(true);
             }else{
-                main_activity.showProgressDialog("Connecting to Brick","connecting to "+getEv3_ip()+":"+getEv3_tcp_port()+"\n");
+                main_activity.showProgressDialog("Connecting to Brick","connecting to "+Settings.getInstance().ev3IP+":"+Settings.getInstance().ev3TCPPort+"\n");
             }
         }
 
@@ -193,6 +180,7 @@ public class Robot {
 
                 result = commandCenter.isConnected();;
             }catch(Exception e){
+                System.out.println("## AsyncTask ConnectToBrickTask. Exception: "+e);
                 main_activity.dismissCurrentProgressDialog();
                 main_activity.showAlertDialog("Error",e.getMessage()+"\n"+e.getCause());
             }
@@ -241,6 +229,7 @@ public class Robot {
 
                 result = commandCenter.initializeConfiguration();;
             }catch(Exception e){
+                System.out.println("## AsyncTask initRobotConfig. Exception: "+e);
                 main_activity.dismissCurrentProgressDialog();
                 main_activity.showAlertDialog("Error",""+e);
                 e.printStackTrace();
@@ -291,20 +280,21 @@ public class Robot {
             if(start.length>0) {
                 if (start[0]) { //True => Start robot, else it should stop the Robot
                     try {
-                        commandCenter.startStatemachine("main");//TODO use ID
+                        commandCenter.startStatemachine(Settings.getInstance().selectedStatemachineID);
 
                         return true;
                     }catch(Exception e){
+                        System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
                         main_activity.dismissCurrentProgressDialog();
                         main_activity.showAlertDialog("Error",""+e);
                         e.printStackTrace();
                     }
                 } else {
                     try {
-                        commandCenter.stopStatemachine("main");//TODO use ID
-
+                        commandCenter.stopStatemachine(Settings.getInstance().selectedStatemachineID);
                         return false;
                     }catch(Exception e){
+                        System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
                         main_activity.dismissCurrentProgressDialog();
                         main_activity.showAlertDialog("Error",""+e);
                         e.printStackTrace();

@@ -21,15 +21,11 @@ public class EV3GyroSensor extends AbstractSensor {
 
     @Override
     public boolean setSensorMode(SensorMessages.SensorMode_ newMode) {
-        switch(newMode){
-            //Measures the orientation of the sensor
-            case ANGLE: sensor.setCurrentMode(newMode.getValue()); return true;
-            //Measures the angular velocity of the sensor
-            case RATE: sensor.setCurrentMode(newMode.getValue()); return true;
-            //Measures both angle and angular velocity
-            case RATEANDANGLE: sensor.setCurrentMode(newMode.getValue()); return true;
-            default : return false;
+        if(Sensors.EV3GyroSensor.isValidMode(newMode)){
+            sensor.setCurrentMode(newMode.getValue());
+            return true;
         }
+        return false;
     }
     
 	@Override

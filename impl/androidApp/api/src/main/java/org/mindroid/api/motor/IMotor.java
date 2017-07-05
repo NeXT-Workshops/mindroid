@@ -1,6 +1,6 @@
 package org.mindroid.api.motor;
 
-public interface Motor {
+public interface IMotor {
 	void forward();
 	void backward();
 	void stop();

@@ -1,6 +1,7 @@
 package org.mindroid.impl.robot;
 
-import org.mindroid.api.motor.Motor;
+import org.mindroid.api.communication.IMessenger;
+import org.mindroid.api.motor.IMotor;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.configuration.RobotConfigurator;
 import org.mindroid.impl.sensor.EV3Sensor;
@@ -11,6 +12,10 @@ import org.mindroid.impl.statemachine.StatemachineManager;
  */
 public final class Robot {
 
+
+
+    public String robotID = "No id set";
+
     private RobotConfigurator robotConfigurator = null;
 
     EV3Brick brick;
@@ -20,12 +25,15 @@ public final class Robot {
     private EV3Sensor sensor_S3 = null;
     private EV3Sensor sensor_S4 = null;
 
-    private Motor motor_A = null;
-    private Motor motor_B = null;
-    private Motor motor_C = null;
-    private Motor motor_D = null;
+    private IMotor IMotor_A = null;
+    private IMotor IMotor_B = null;
+    private IMotor IMotor_C = null;
+    private IMotor IMotor_D = null;
 
     private StatemachineManager statemachineManager;
+
+    protected boolean messageingEnabled = false;
+    protected IMessenger messenger = null;
 
     private static Robot robot = new Robot();
 
@@ -79,36 +87,36 @@ public final class Robot {
         this.sensor_S4 = sensor_S4;
     }
 
-    protected Motor getMotor_A() {
-        return motor_A;
+    protected IMotor getIMotor_A() {
+        return IMotor_A;
     }
 
-    protected void setMotor_A(Motor motor_A) {
-        this.motor_A = motor_A;
+    protected void setIMotor_A(IMotor IMotor_A) {
+        this.IMotor_A = IMotor_A;
     }
 
-    protected Motor getMotor_B() {
-        return motor_B;
+    protected IMotor getIMotor_B() {
+        return IMotor_B;
     }
 
-    protected void setMotor_B(Motor motor_B) {
-        this.motor_B = motor_B;
+    protected void setIMotor_B(IMotor IMotor_B) {
+        this.IMotor_B = IMotor_B;
     }
 
-    protected Motor getMotor_C() {
-        return motor_C;
+    protected IMotor getIMotor_C() {
+        return IMotor_C;
     }
 
-    protected void setMotor_C(Motor motor_C) {
-        this.motor_C = motor_C;
+    protected void setIMotor_C(IMotor IMotor_C) {
+        this.IMotor_C = IMotor_C;
     }
 
-    protected Motor getMotor_D() {
-        return motor_D;
+    protected IMotor getIMotor_D() {
+        return IMotor_D;
     }
 
-    protected void setMotor_D(Motor motor_D) {
-        this.motor_D = motor_D;
+    protected void setIMotor_D(IMotor IMotor_D) {
+        this.IMotor_D = IMotor_D;
     }
 
     protected StatemachineManager getStatemachineManager() {
@@ -127,8 +135,23 @@ public final class Robot {
         this.statemachineManager = statemachineManager;
     }
 
-    public static RobotController getRobotController(){
+    public static synchronized RobotController getRobotController(){
         return robotController;
     }
 
+    protected String getRobotID() {
+        return robotID;
+    }
+
+    protected void setRobotID(String robotID) {
+        this.robotID = robotID;
+    }
+
+    public synchronized boolean isMessageingEnabled() {
+        return messageingEnabled;
+    }
+
+    protected IMessenger getMessenger() {
+        return messenger;
+    }
 }

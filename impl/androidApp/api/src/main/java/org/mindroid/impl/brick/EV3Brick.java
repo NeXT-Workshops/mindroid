@@ -19,9 +19,6 @@ import org.mindroid.common.messages.NetworkPortConfig;
 import org.mindroid.common.messages.StatusLightMessages;
 
 
-/**
- * Brick Endpoint Classes. Used to send proper messages to the Brick.
- */
 public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO Extends ClientEndpointImpl
 
     public final static int BRICK_TIMEOUT = 50000;
@@ -66,7 +63,7 @@ public class EV3Brick extends Listener implements EV3StatusLightEnabled{ //TODO 
 		client.addListener(sensorManager);
 		client.addListener(motorManager);
 
-		//Set Client to IMotor-/Sensormanager
+		//Set Client to Motor-/Sensormanager
 		sensorManager.setBrickClient(client);
 		motorManager.setBrickClient(client);
 

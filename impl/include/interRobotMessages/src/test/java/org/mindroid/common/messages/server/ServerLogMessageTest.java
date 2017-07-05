@@ -10,9 +10,9 @@ public class ServerLogMessageTest {
     @Test
     public void testConstruction()
     {
-        final MindroidMessage msg = new MindroidMessage(new RobotId("Robot 1"),Destination.SERVER_LOG, MessageType.INFO, "Content");
+        final ServerLogMessage msg = new ServerLogMessage(new RobotId("Robot 1"), LogLevel.INFO, "Content");
         Assert.assertEquals(new RobotId("Robot 1"), msg.getSource());
-        Assert.assertEquals(MessageType.INFO, msg.getMessageType());
+        Assert.assertEquals(LogLevel.INFO, msg.getLogLevel());
         Assert.assertEquals("Content", msg.getContent());
     }
 }

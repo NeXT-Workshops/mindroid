@@ -10,7 +10,7 @@ import org.mindroid.common.messages.Sensors;
  * Created by torben on 02.03.2017.
  */
 
-public class RobotPortConfig implements IRobodancerConfig {
+public class RobotHardwareConfiguration implements IRobodancerConfig {
     //------------------ SENSORS ------------------
     @Override
     public Sensors getSensorAtPortS1() {
@@ -24,7 +24,7 @@ public class RobotPortConfig implements IRobodancerConfig {
 
     @Override
     public Sensors getSensorAtPortS3() {
-        return Sensors.EV3GyroSensor;
+        return null;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class RobotPortConfig implements IRobodancerConfig {
 
     @Override
     public SensorMessages.SensorMode_ getSensorModeOfS1() {
-        return SensorMessages.SensorMode_.COLOR_ID;
+        return SensorMessages.SensorMode_.RED;
     }
 
     @Override
@@ -44,12 +44,12 @@ public class RobotPortConfig implements IRobodancerConfig {
 
     @Override
     public SensorMessages.SensorMode_ getSensorModeOfS3() {
-        return SensorMessages.SensorMode_.ANGLE;
+        return null;
     }
 
     @Override
     public SensorMessages.SensorMode_ getSensorModeOfS4() {
-        return SensorMessages.SensorMode_.COLOR_ID;
+        return SensorMessages.SensorMode_.RED;
     }
 
     //------------------ MOTORS ------------------

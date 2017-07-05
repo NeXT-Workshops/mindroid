@@ -36,7 +36,7 @@ public class SensorManager extends HardwareInterfaceManager {
 			System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> containsPort = true");
 			if(((SensorEndpoint)endpoints.get(port)).getSensor() != null) { //Pruefe ob der Sensor null ist.
 				if(((SensorEndpoint)endpoints.get(port)).getSensor().getSensortype() == sensortype){
-					//Pruefe ob der Sensortyp des geoeffneted Sensors mit dem zu initialisierenden uebereinstimmt
+					//Pr��fe ob der Sensortyp des ge��ffneted Sensors mit dem zu initialisierenden ��bereinstimmt
 					return true; //Sensor bereits initialisiert!
 				}
 				System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> aktueller sensortyp passt nicht");
@@ -71,7 +71,7 @@ public class SensorManager extends HardwareInterfaceManager {
 			}
 			
 		}
-		//SensorEndpoint noch nicht geoeffnet. Erstelle mit passendem Sensor!
+		//SensorEndpoint noch nicht ge��ffnet. Erstelle mit passendem Sensor!
 		System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> Endpoint noch nicht geoeffnet, erzeuge!");
 		Listener endpoint;
 		switch(sensortype){

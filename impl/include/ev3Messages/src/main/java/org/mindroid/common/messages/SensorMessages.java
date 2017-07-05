@@ -141,7 +141,7 @@ public class SensorMessages {
 	 * @param timestamp
 	 * @return
 	 */
-	public static SensorEventMsg sensorEvent(float[] sample, long timestamp){
+	public static SensorEventMsg sensorEvent(float sample, long timestamp){
 		SensorEventMsg msg = new SensorEventMsg();
 		msg.setSample(sample);
 		msg.setTimestamp(timestamp);
@@ -149,16 +149,16 @@ public class SensorMessages {
 	}
 	
 	public static class SensorEventMsg {
-		private float[] sample;
+		private float sample;
 		private long timestamp;
 		
 		public SensorEventMsg(){}
 		
-		public float[] getSample() {
+		public float getSample() {
 			return this.sample;
 		}
 		
-		public void setSample(float[] sample) {
+		public void setSample(float sample) {
 			this.sample = sample;
 		}
 

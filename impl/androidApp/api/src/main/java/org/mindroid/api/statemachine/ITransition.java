@@ -8,8 +8,7 @@ public interface ITransition {
 	/** if constraint is satisfied, returns destination Sate else null **/
 	IState fire();
 
-	void run();
-
+	
 	void setConstraint(IConstraint constraint);
 	
 	IConstraint getConstraint();

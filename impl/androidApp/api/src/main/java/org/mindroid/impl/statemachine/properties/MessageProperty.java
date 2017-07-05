@@ -1,38 +1,28 @@
 package org.mindroid.impl.statemachine.properties;
 
 import org.mindroid.api.statemachine.properties.IMessageProperty;
-import org.mindroid.api.statemachine.properties.IProperty;
 
 /**
  * Created by torben on 10.03.2017.
  */
 public class MessageProperty implements IMessageProperty {
 
-    private String content;
-    private String source;
+    private String msg;
+    private String sender;
 
-    /**
-     *
-     * @param content
-     * @param source
-     */
-    public MessageProperty(String content, String source){
-        this.content = content;
-        this.source = source;
+    public MessageProperty(String msg, String sender){
+        this.msg = msg;
+        this.sender = sender;
     }
 
     @Override
-    public String getSource() {
-        return source;
+    public String getSensder() {
+        return null;
     }
 
     @Override
-    public String getContent() {
-        return content;
+    public String getMessage() {
+        return null;
     }
 
-    @Override
-    public IProperty copy() {
-        return new MessageProperty(getContent(),getSource());
-    }
 }

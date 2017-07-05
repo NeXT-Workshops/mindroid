@@ -58,10 +58,6 @@
                 android:id="@+id/btn_initConfig"
                 android:enabled="false" />
 
-            <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp" android:id="@+id/spinner_selectedStatemachine"
-                    android:spinnerMode="dialog"/>
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

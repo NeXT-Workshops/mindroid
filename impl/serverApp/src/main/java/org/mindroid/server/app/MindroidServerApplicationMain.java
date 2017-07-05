@@ -55,6 +55,7 @@ public class MindroidServerApplicationMain {
 
 		Thread.UncaughtExceptionHandler exceptionHandler = new Thread.UncaughtExceptionHandler() {
 			public void uncaughtException(Thread th, Throwable ex) {
+				System.out.println("ex handler");
 				MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
 				console.setVisible(true);
 				console.appendLine("Messages from one connection might have been lost. No need to restart the application.");

@@ -23,13 +23,8 @@ public class Transition implements ITransition{
 	public Transition(IConstraint constraint){
 		this.constraint = constraint;
 	}
-
-	@Override
-	public void run() {
-		System.out.println("TRANSITION: TRANSITION FIRED! -> Standard run method executed!");
-		//do something
-	}
-
+	
+	
 	@Override
 	public IState fire() {
 		run();
@@ -62,6 +57,8 @@ public class Transition implements ITransition{
 		return "Transition [constraint=" + constraint + ", destination=" + destination.getName() + "]";
 	}
 
-
+	public void run() {
+				
+	}
 
 }

@@ -1,6 +1,5 @@
 package org.mindroid.impl.statemachine;
 
-import java.lang.management.ThreadInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +13,7 @@ public class State implements IState{
 
 	String name = null;
 	
-	private boolean isActive = false;
+	boolean isActive = false;
 	
 	HashMap<IConstraint, ITransition> transitions = new HashMap<IConstraint, ITransition>();
 	
@@ -106,25 +105,22 @@ public class State implements IState{
 		return true;
 	}
 
-
 	@Override
-	public synchronized void activate() {
-			System.out.println("State.activate(): "+getName()+"->State.activate()");
+	public void activate() {
+		System.out.println(getName()+"->State.activate()");
 
-			this.isActive = true;
-			run();
+		isActive = true;
+		run();		
 	}
 
 	@Override
-	public synchronized void deactivate() {
-
-		this.isActive = false;
-		System.out.println("State.deactivate(): "+getName()+" is not active anymore");
+	public void deactivate() {
+		isActive = false;
 	}
 
 	@Override
-	public synchronized boolean isActive() {
-		return this.isActive;
+	public boolean isActive() {
+		return isActive;
 	}
 
 	@Override

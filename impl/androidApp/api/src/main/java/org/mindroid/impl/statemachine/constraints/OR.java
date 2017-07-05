@@ -15,9 +15,4 @@ public class OR extends AbstractLogicOperator {
     public boolean evaluate(boolean result_left, boolean result_right) {
         return result_left || result_right;
     }
-
-    @Override
-    public IConstraint copy() {
-        return new OR(getLeftConstraint().copy(),getRightConstraint().copy());
-    }
 }

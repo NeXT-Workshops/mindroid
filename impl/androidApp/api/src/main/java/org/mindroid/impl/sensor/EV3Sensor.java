@@ -26,6 +26,8 @@ public class EV3Sensor extends ClientEndpointImpl {
     private SensorMode_ currentMode = null;
     private SensorMode_ modeToWaitFor = null;
 
+    private float value = -1;
+
     private boolean ready = false;
 
     private final EV3Sensor sensor = this;
@@ -61,12 +63,12 @@ public class EV3Sensor extends ClientEndpointImpl {
             public void run() {
                 if (object instanceof SensorMessages.SensorEventMsg) {
 
-                    float[] sample = ((SensorMessages.SensorEventMsg) object).getSample();
+                    float sample = ((SensorMessages.SensorEventMsg) object).getSample();
                     long timestamp = ((SensorMessages.SensorEventMsg) object).getTimestamp();
                     EV3SensorEvent sensorevent = new EV3SensorEvent(sensor, sample, timestamp, currentMode);
 
                     for (IEV3SensorEventListener listener : listeners) {
-                        //value = sensorevent.getSample();
+                        value = sensorevent.getSample();
                         listener.handleSensorEvent(brick_port,sensorevent);
                     }
                     return;
@@ -139,6 +141,10 @@ public class EV3Sensor extends ClientEndpointImpl {
         return ready;
     }
 
+
+    public float getValue() {
+        return value;
+    }
 
     public SensorMode_ getCurrentMode() {
         return currentMode;

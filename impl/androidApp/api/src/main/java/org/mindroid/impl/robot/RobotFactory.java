@@ -1,8 +1,7 @@
 package org.mindroid.impl.robot;
 
-import org.mindroid.api.communication.IRobotServer;
 import org.mindroid.api.robot.*;
-import org.mindroid.api.robot.context.IConstraintEvaluator;
+import org.mindroid.api.robot.context.IRobotContextStateEvaluator;
 import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
@@ -11,18 +10,13 @@ import org.mindroid.api.statemachine.IStatemachine;
 import org.mindroid.common.messages.Motors;
 import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.common.messages.Sensors;
-import org.mindroid.impl.communication.Messenger;
-import org.mindroid.impl.communication.RobotServer;
 import org.mindroid.impl.configuration.RobotConfigurator;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
-import org.mindroid.impl.robot.context.RobotContextState;
+import org.mindroid.impl.robot.context.RobotContextStateListener;
 import org.mindroid.impl.robot.context.RobotContextStateEvaluator;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
-import org.mindroid.impl.statemachine.StatemachineCollection;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 
 /**
@@ -52,7 +46,6 @@ public final class RobotFactory implements IRobotFactory {
 
     private String brickIP = null;
     private int brickTCPport = -1;
-    private int robotServerPort = -1;
 
     private String msgServerIP = null;
     private int msgServerTCPPort = -1;
@@ -85,7 +78,7 @@ public final class RobotFactory implements IRobotFactory {
     @Override
     public IRobotCommandCenter createRobot() {
         RobotCommandCenter robotCommandCenter = new RobotCommandCenter(myRobot);
-        Robot.getRobotController().setRobotID(Robot.getInstance().robotID);
+
 
         if(robotConfig != null) {
             //Sensors
@@ -124,39 +117,55 @@ public final class RobotFactory implements IRobotFactory {
                 myRobot.setSensor_S3(robotConfigurator.createSensor(EV3PortIDs.PORT_3));
                 myRobot.setSensor_S4(robotConfigurator.createSensor(EV3PortIDs.PORT_4));
 
-                myRobot.setIMotor_A(robotConfigurator.createMotor(EV3PortIDs.PORT_A));
-                myRobot.setIMotor_B(robotConfigurator.createMotor(EV3PortIDs.PORT_B));
-                myRobot.setIMotor_C(robotConfigurator.createMotor(EV3PortIDs.PORT_C));
-                myRobot.setIMotor_D(robotConfigurator.createMotor(EV3PortIDs.PORT_D));
+                myRobot.setMotor_A(robotConfigurator.createMotor(EV3PortIDs.PORT_A));
+                myRobot.setMotor_B(robotConfigurator.createMotor(EV3PortIDs.PORT_B));
+                myRobot.setMotor_C(robotConfigurator.createMotor(EV3PortIDs.PORT_C));
+                myRobot.setMotor_D(robotConfigurator.createMotor(EV3PortIDs.PORT_D));
             } catch (PortIsAlreadyInUseException e) {
                 robotCommandCenter = null;
                 e.printStackTrace();
             }
 
-            // --- Connect Sensorobject --> with RobotContextState
+            // --- Connect Sensorobject --> with RobotContextStateListener
             if(myRobot.getSensor_S1() != null){
-                myRobot.getSensor_S1().registerListener(RobotContextState.getInstance());
+                myRobot.getSensor_S1().registerListener(RobotContextStateListener.getInstance());
             }
             if(myRobot.getSensor_S2() != null){
-                myRobot.getSensor_S2().registerListener(RobotContextState.getInstance());
+                myRobot.getSensor_S2().registerListener(RobotContextStateListener.getInstance());
             }
             if(myRobot.getSensor_S3() != null){
-                myRobot.getSensor_S3().registerListener(RobotContextState.getInstance());
+                myRobot.getSensor_S3().registerListener(RobotContextStateListener.getInstance());
             }
             if(myRobot.getSensor_S4() != null){
-                myRobot.getSensor_S4().registerListener(RobotContextState.getInstance());
+                myRobot.getSensor_S4().registerListener(RobotContextStateListener.getInstance());
             }
 
             myRobot.setBrick(robotConfigurator.getBrick());
 
 
             // Connect statemachines RobotContextStateEvaluator etc with state machine
-            IConstraintEvaluator evaluator = new RobotContextStateEvaluator();
-            myRobot.getStatemachineManager().addConstraintEvaluator(evaluator);
-            RobotContextStateManager.getInstance().registerRobotContextStateListener(evaluator);
+            IRobotContextStateEvaluator evaluator = new RobotContextStateEvaluator();
+            myRobot.getStatemachineManager().addConstraintEvalauator(evaluator);
+            RobotContextStateManager.getInstance().addRobotContextStateEvaluator(evaluator);
 
-            //---------------- CREATE MESSENGER and ROBOTSERVER
-            createNetworkCommunicationInterfaces();
+
+
+
+            //TODO Create TimeEventProducer (CLK) to call handleCLK()
+            /*
+            if(RobotContextStateManager.getInstance() instanceof IClockListener){
+                ((IClockListener) RobotContextStateManager.getInstance()).handleCLK();
+            }
+            */
+
+            /**
+             *
+             * Starte RobotConfigurator
+
+             * Connect motors...
+             *
+             * Connect RobodancerControl with Robot instance
+             */
 
 
         }else{
@@ -166,46 +175,6 @@ public final class RobotFactory implements IRobotFactory {
         }
         System.out.println("The RobotFactory created a Robot with the following setup:\n"+toString());
         return robotCommandCenter;
-    }
-
-    /**
-     * Creates the Messenger and the RobotServer.
-     */
-    private void createNetworkCommunicationInterfaces() {
-        if(isValidIP(msgServerIP) && isValidTCPPort(msgServerTCPPort)){
-            Runnable run = new Runnable(){
-                @Override
-                public void run(){
-                    try {
-                        //Initialize Messenger
-                        myRobot.messenger = new Messenger(myRobot.getRobotID(), InetAddress.getByName(msgServerIP),msgServerTCPPort);
-                        Robot.getRobotController().setMessenger(Robot.getInstance().messenger);
-                        myRobot.messageingEnabled = true;
-                        //Initialize RobotServer
-                        if(isValidTCPPort(robotServerPort)) {
-                            IRobotServer robotServer = new RobotServer(robotServerPort,myRobot.messenger);
-                            robotServer.registerMsgListener(RobotContextState.getInstance());
-                            robotServer.start();
-                        }else{
-                            //TODO send error message to error-handler
-                        }
-
-                    } catch (UnknownHostException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            new Thread(run).start();
-        }else{
-            myRobot.messenger = null;
-            myRobot.messageingEnabled = false;
-        }
-
-        //Workaround: messenger is not set when robot Controller gets initialized
-        if(Robot.getInstance().isMessageingEnabled()){
-
-        }
-
     }
 
     @Override
@@ -230,43 +199,32 @@ public final class RobotFactory implements IRobotFactory {
     }
 
     @Override
-    public void setRobotServerPort(int robotServerPort){
-        this.robotServerPort = robotServerPort;
+    public void addStatemachine(IStatemachine statemachine) {
+        myRobot.getStatemachineManager().addStatemachine(statemachine);
     }
 
     @Override
-    public void setRobotID(String robotID) {
-        Robot.getInstance().setRobotID(robotID);
-    }
+    public void clear() {
+        Sensors sensor_S1 = null;
+        Sensors sensor_S2 = null;
+        Sensors sensor_S3 = null;
+        Sensors sensor_S4 = null;
 
-    @Override
-    public void addStatemachine(StatemachineCollection statemachines) {
-        myRobot.getStatemachineManager().addStatemachines(statemachines);
-    }
+        SensorMessages.SensorMode_ mode_S1 = null;
+        SensorMessages.SensorMode_ mode_S2 = null;
+        SensorMessages.SensorMode_ mode_S3 = null;
+        SensorMessages.SensorMode_ mode_S4 = null;
 
-    @Override
-    public void clearConfiguration() {
-        this.sensor_S1 = null;
-        this.sensor_S2 = null;
-        this.sensor_S3 = null;
-        this.sensor_S4 = null;
+        Motors motor_A = null;
+        Motors motor_B = null;
+        Motors motor_C = null;
+        Motors motor_D = null;
 
-        this.mode_S1 = null;
-        this.mode_S2 = null;
-        this.mode_S3 = null;
-        this.mode_S4 = null;
+        String brickIP = null;
+        int brickTCPport = -1;
 
-        this.motor_A = null;
-        this.motor_B = null;
-        this.motor_C = null;
-        this.motor_D = null;
-
-        this.brickIP = null;
-        this.brickTCPport = -1;
-
-        this.msgServerIP = null;
-        this.msgServerTCPPort = -1;
-        this.robotServerPort = -1;
+        String msgServerIP = null;
+        int msgServerTCPPort = -1;
     }
 
     private boolean isValidTCPPort(int brickTCPport) {

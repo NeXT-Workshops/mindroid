@@ -24,11 +24,26 @@ public class EV3ColorSensor extends AbstractSensor {
 
     @Override
     public boolean setSensorMode(SensorMessages.SensorMode_ newMode) {
-        if(Sensors.EV3ColorSensor.isValidMode(newMode)){
-            sensor.setCurrentMode(newMode.getValue());
-            return true;
+        switch (newMode) {
+            case RED:
+                //Measures the level of reflected light from the sensors RED LED.
+                sensor.setCurrentMode(newMode.getValue());
+                return true;
+            case AMBIENT:
+                //Measures the level of ambient light while the sensors lights are off.
+                sensor.setCurrentMode(newMode.getValue());
+                return true;
+            case COLOR_ID:
+                //Measures the color ID of a surface.
+                sensor.setCurrentMode(newMode.getValue());
+                return true;
+            case RGB:
+                //Measures the level of red, green and blue light when illuminated by a white light source..
+                sensor.setCurrentMode(newMode.getValue());
+                return true;
+            default:
+                return false;
         }
-        return false;
     }
 
 	@Override

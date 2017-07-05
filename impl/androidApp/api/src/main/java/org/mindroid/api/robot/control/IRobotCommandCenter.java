@@ -11,8 +11,8 @@ import java.util.List;
  */
 
 public interface IRobotCommandCenter {
-    void startStatemachine(String id);
-    void stopStatemachine(String id);
+    boolean startStatemachine(String id);
+    boolean stopStatemachine(String id);
     String[] getStatemachines();
 
     void connectToBrick() throws IOException;

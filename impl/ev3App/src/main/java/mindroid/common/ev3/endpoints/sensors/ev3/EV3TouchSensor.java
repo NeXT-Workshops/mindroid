@@ -23,11 +23,10 @@ public class EV3TouchSensor extends AbstractSensor {
 
     @Override
     public boolean setSensorMode(SensorMessages.SensorMode_ newMode) {
-        if(Sensors.EV3TouchSensor.isValidMode(newMode)){
-            sensor.setCurrentMode(newMode.getValue());
-            return true;
+        switch(newMode){
+            case TOUCH: sensor.setCurrentMode(newMode.getValue()); return true;
+            default: return false;
         }
-        return false;
     }
     
 	@Override

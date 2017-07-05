@@ -111,7 +111,7 @@ public class EV3SensorManager extends Listener{
 								System.out.println("Local-EV3SensorManager: Sensor does not exist");
 							}
 						}else{
-							//TODO Tell Sensor/IMotor Manager that endpoint creation failed
+							//TODO Tell Sensor/Motor Manager that endpoint creation failed
 						}
 					}
 				}

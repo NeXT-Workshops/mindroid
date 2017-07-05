@@ -2,16 +2,15 @@ package mindroid.common.ev3.endpoints.sensors.ev3;
 
 import java.util.ArrayList;
 
-import lejos.hardware.sensor.*;
+import org.mindroid.common.messages.SensorMessages;
+import org.mindroid.common.messages.Sensors;
+import lejos.hardware.port.Port;
+import lejos.hardware.sensor.BaseSensor;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.robotics.filter.MeanFilter;
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
-import lejos.hardware.port.Port;
 
 /**
  * Created by torben on 27.01.2017.
@@ -71,26 +70,18 @@ public abstract class AbstractSensor {
     public abstract boolean setSensorMode(SensorMessages.SensorMode_ newMode);
 
     protected void sendSensorData() {
-        //TODO may use MeanFilter
-        /*MeanFilter tmpFilter = null;
-        if(sensor != null) {
-            tmpFilter = new MeanFilter(sensor, 7);
-        }
-        final MeanFilter filter = tmpFilter;*/
-
         Runnable run = new Runnable() {
             @Override
             public void run() {
                 float[] sample = new float[sensor.sampleSize()];
-                while (sensor != null /*&& filter != null*/) {
+                while (sensor != null) {
                     try {
-
                         sensor.fetchSample(sample, 0);
-                        //filter.fetchSample(sample,0);
+                        float value = sample[0];
 
                         for (SensorListener tmp_listener : listener) {
                             if(tmp_listener != null) {
-                                tmp_listener.handleSensorData(sample);
+                                tmp_listener.handleSensorData(new float[]{value});
                             }
                         }
                     }catch(IndexOutOfBoundsException e){

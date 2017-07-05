@@ -5,6 +5,4 @@ package org.mindroid.api.statemachine.constraints;
  */
 public interface IConstraint {
 
-    IConstraint copy();
-
 }

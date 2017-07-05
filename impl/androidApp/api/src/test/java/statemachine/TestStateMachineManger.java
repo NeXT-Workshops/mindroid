@@ -3,14 +3,22 @@ package statemachine;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.mindroid.api.sensor.IUltrasonicSensorEvent;
+import org.mindroid.api.sensor.IUltrasonicSensorEvent.UltrasonicEventType;
 import org.mindroid.api.statemachine.*;
 import org.mindroid.api.statemachine.constraints.IConstraint;
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.api.statemachine.exception.DuplicateTransitionException;
+import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
+import org.mindroid.common.messages.Sensors;
 import org.mindroid.impl.ev3.EV3PortIDs;
-import org.mindroid.impl.robot.context.RobotContextState;
+import org.mindroid.impl.robot.context.RobotContextStateListener;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
+import org.mindroid.impl.sensor.EV3Sensor;
+import org.mindroid.impl.sensor.UltrasonicSensorEvent;
 import org.mindroid.impl.statemachine.*;
 import org.mindroid.impl.statemachine.constraints.EQ;
 import org.mindroid.impl.statemachine.constraints.LT;
@@ -40,7 +48,7 @@ public class TestStateMachineManger {
 
 
 	@Before
-	public void initStatemachine() throws StateAlreadyExists {
+	public void initStatemachine() throws StateAlreadyExsists {
 		start = new State(state_name_start){
 			@Override
 			public void run(){
@@ -55,8 +63,8 @@ public class TestStateMachineManger {
 			}
 		};
 
-		color_red = new EQ(Color.RED, new Color(EV3PortIDs.PORT_1));
-		collision = new LT(4f,new Distance( EV3PortIDs.PORT_1));
+		color_red = new EQ(new Color(Color.RED, EV3PortIDs.PORT_1));
+		collision = new LT(new Distance(4f, EV3PortIDs.PORT_1));
 
 		this.sm = new Statemachine(statemachineID);
 		this.sm.addState(start);
@@ -70,9 +78,7 @@ public class TestStateMachineManger {
 
 	@Test
 	public void testConstraint(){
-		StatemachineCollection sc = new StatemachineCollection();
-		sc.addStatemachine(sm);
-		smm.addStatemachines(sc);
+		smm.addStatemachine(sm);
 		smm.startStatemachine(statemachineID);
 
 		//----- State 'start' should be switched to state 'end"
@@ -82,19 +88,19 @@ public class TestStateMachineManger {
 		assertTrue(end.isActive());
 		assertFalse(start.isActive());
 
-		//----- Nothing should change, because no transition with this constraint exists
-			smm.handleSatisfiedConstraint(statemachineID,color_red);
+	//----- Nothing should change, because no transition with this constraint exists
+		smm.handleSatisfiedConstraint(statemachineID,color_red);
 
-		assertTrue(smm.getCurrentState(statemachineID).getName().equals(state_name_end));
-		assertTrue(end.isActive());
-		assertFalse(start.isActive());
+	assertTrue(smm.getCurrentState(statemachineID).getName().equals(state_name_end));
+	assertTrue(end.isActive());
+	assertFalse(start.isActive());
 
-		//----- State 'end' should be switched to state 'start'
-			smm.handleSatisfiedConstraint(statemachineID,collision);
+	//----- State 'end' should be switched to state 'start'
+		smm.handleSatisfiedConstraint(statemachineID,collision);
 
-		assertTrue(smm.getCurrentState(statemachineID).getName().equals(state_name_start));
-		assertTrue(start.isActive());
-		assertFalse(end.isActive());
+	assertTrue(smm.getCurrentState(statemachineID).getName().equals(state_name_start));
+	assertTrue(start.isActive());
+	assertFalse(end.isActive());
 }
 
 	@Test
@@ -104,9 +110,7 @@ public class TestStateMachineManger {
 
 	@Test
 	public void testTimeEventDeletionStatemachine(){
-		StatemachineCollection sc = new StatemachineCollection();
-		sc.addStatemachine(sm);
-		smm.addStatemachines(sc);
+		smm.addStatemachine(sm);
 		smm.startStatemachine(statemachineID);
 
 
@@ -122,7 +126,7 @@ public class TestStateMachineManger {
 		smm.handleSatisfiedConstraint(statemachineID,color_red);
 
 		assertTrue(RobotContextStateManager.getInstance().takeSnapshot().getTimeEvents().size() == 0);
-		RobotContextState.getInstance().handleTimeEvent(new TimeEvent(200f,start));
+		RobotContextStateListener.getInstance().handleTimeEvent(new TimeEvent(200f,start));
 
 
 		assertTrue(smm.getCurrentState(statemachineID).getName().equals(state_name_end));

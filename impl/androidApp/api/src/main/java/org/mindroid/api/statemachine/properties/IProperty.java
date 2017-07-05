@@ -5,6 +5,4 @@ package org.mindroid.api.statemachine.properties;
  */
 public interface IProperty {
 
-    IProperty copy();
-
 }

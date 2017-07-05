@@ -7,10 +7,10 @@ public class ServerMessageSerializationTest {
 
     @Test
     public void testSerializationAndDeserializationOfMessages() {
-        final MessageMarshaller serializer = new MessageMarshaller();
-        final MindroidMessage logMessage = new MindroidMessage(new RobotId("Robot 2"), Destination.SERVER_LOG, MessageType.INFO, "Everything OK");
+        final ServerMessageMarshaller serializer = new ServerMessageMarshaller();
+        final ServerLogMessage logMessage = new ServerLogMessage(new RobotId("Robot 2"), LogLevel.INFO, "Everything OK");
         final String serializedLogMessage = serializer.serialize(logMessage);
-        final MindroidMessage restoredLogMessage = serializer.deserializeMessage(
+        final ServerLogMessage restoredLogMessage = serializer.deserializeLogMessage(
                 serializedLogMessage);
         Assert.assertEquals(logMessage, restoredLogMessage);
     }

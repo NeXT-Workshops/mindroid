@@ -21,10 +21,10 @@ build:
     - bash ../androidApp/gradlew clean test assemble
     - cd ..
     # Provide test reports to Shippable
-    - cp "./androidApp/api/build/test-results/TEST-*.xml" /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
-    - cp "./androidApp/app/build/test-results/debug/TEST-*.xml" /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
-    - cp "./androidApp/app/build/test-results/release/TEST-*.xml" /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
-    - cp "./include/interRobotMessages/build/test-results/TEST-*.xml" /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
+    - cp ./androidApp/api/build/test-results/TEST-*.xml /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
+    - cp ./androidApp/app/build/test-results/debug/TEST-*.xml /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
+    - cp ./androidApp/app/build/test-results/release/TEST-*.xml /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
+    - cp ./include/interRobotMessages/build/test-results/TEST-*.xml /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
    
 integrations:
   # See http://docs.shippable.com/ci/email-notifications/

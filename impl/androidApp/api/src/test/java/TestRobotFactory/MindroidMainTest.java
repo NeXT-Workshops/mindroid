@@ -103,7 +103,7 @@ public class MindroidMainTest implements IMindroidMain {
     @Override
     public StatemachineCollection getStatemachineCollection() throws StateAlreadyExists {
         StatemachineCollection sc = new StatemachineCollection();
-        sc.addStatemachine(sm);
+        sc.addStatemachine("main",sm);
         return sc;
     }
 }

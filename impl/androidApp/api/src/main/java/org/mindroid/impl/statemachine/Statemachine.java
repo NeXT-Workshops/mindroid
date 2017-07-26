@@ -167,7 +167,7 @@ public class Statemachine implements IStatemachine{
 		return "Statemachine{" +
 				"ID='" + ID + '\'' +
 				", startState=" + startState.getName() +
-				", currentState="+currentState.getName() +
+				", currentState="+ ((currentState == null) ? "null" : currentState.getName()) +
 				", isActive=" + isActive +
 				", nbOfStates ="+ states.keySet().size()+
 				'}';

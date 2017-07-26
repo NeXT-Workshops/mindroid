@@ -111,7 +111,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      * Removes old(unused) scheduled Time events, and initiate the new ones of the current state
      * @param ID
      */
-    private synchronized void handleTimeEventScheduling(String ID) {
+    private void handleTimeEventScheduling(String ID) {
         //Remove old/unused scheduled TimeEvents
         for (Task_TimeEvent scheduledTimeEvent : scheduledTimeEvents) {
             scheduledTimeEvent.cancel();
@@ -129,7 +129,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      *
      * @param ID
      */
-    private synchronized void subscribeConstraints(String ID) {
+    private void subscribeConstraints(String ID) {
         for (int i = 0; i < this.evaluators.size(); i++) {
             evaluators.get(i).subscribeConstraints(this,ID, currentStates.get(ID).getConstraints());
         }
@@ -141,7 +141,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      * @param constraint
      * @param source
      */
-    private synchronized void scheduleTimeEvents(IConstraint constraint,IState source) {
+    private void scheduleTimeEvents(IConstraint constraint,IState source) {
         //System.out.println("StatemachineManager.scheduleTimeEvents(): scheduleTimeEvents called: "+constraint+" from state: "+source);
         if(constraint instanceof AbstractLogicOperator){
             scheduleTimeEvents(((AbstractLogicOperator) constraint).getLeftConstraint(),source);
@@ -218,6 +218,8 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      */
     private synchronized void startStatemachine(final IStatemachine sm){
         System.out.println ("## startStatemachines(IStatemachine sm) called with --> sm-id: "+sm.getID());
+        System.out.println("isAtive:"+sm.isActive());
+        System.out.println("SM.ToString"+ sm.toString());
         if(!sm.isActive()) { //If sm is not active already --> start statemachine
             System.out.println ("## The Statemachine is not active already and will be started --> sm-id: "+sm.getID());
             final Runnable runSM = new Runnable() {
@@ -228,19 +230,21 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                         Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Start Statemachine: " + sm.getID());
                         Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Current State: " + sm.getStartState().getName());
                     }
-
+                    System.out.print("[Statemachine-Thread][StatemachineID: "+sm.getID()+"] Step 1");
                     currentStates.put(sm.getID(), sm.getStartState());
                     RobotContextStateManager.getInstance().cleanContextState();
                     subscribeConstraints(sm.getID());
                     handleTimeEventScheduling(sm.getID());
+                    System.out.print("[Statemachine-Thread][StatemachineID: "+sm.getID()+"] Step 2");
                     //Set Start Conditions
                     StartCondition.getInstance().setStateActiveTime(System.currentTimeMillis());
                     RobotContextStateManager.getInstance().setGyroSensorStartCondition();
 
                     runningStatemachines.put(sm.getID(), sm);
+                    System.out.print("[Statemachine-Thread][StatemachineID: "+sm.getID()+"] Step 3");
                     try {
                         sm.start();
-                        System.out.println("## Statemachine started: "+sm.toString());
+                        System.out.print("[Statemachine-Thread][StatemachineID: "+sm.getID()+"] Statemachine started");
                     } catch (NoStartStateException e) {
                         e.printStackTrace();//TODO call error handler
                     }
@@ -250,6 +254,15 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
             Thread t = new Thread(runSM);
             runningStatemachineThreads.put(sm.getID(),t);
             t.start();
+            while(!sm.isActive()){
+                try {
+                    Thread.sleep(50);
+                    System.out.println("Wait until statemachine got started.. [StatemachineID: "+sm.getID()+"]");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
         }
 
         //System.out.println("## 'Start Statemachine'-Thread is running! ##");

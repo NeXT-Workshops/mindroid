@@ -71,7 +71,7 @@ public class TestStateMachineManger {
 	@Test
 	public void testConstraint(){
 		StatemachineCollection sc = new StatemachineCollection();
-		sc.addStatemachine("main",sm);
+		sc.addStatemachine(statemachineID,sm);
 		smm.addStatemachines(sc);
 		smm.startStatemachines(statemachineID);
 
@@ -105,7 +105,7 @@ public class TestStateMachineManger {
 	@Test
 	public void testTimeEventDeletionStatemachine(){
 		StatemachineCollection sc = new StatemachineCollection();
-		sc.addStatemachine("main",sm);
+		sc.addStatemachine(statemachineID,sm);
 		smm.addStatemachines(sc);
 		smm.startStatemachines(statemachineID);
 

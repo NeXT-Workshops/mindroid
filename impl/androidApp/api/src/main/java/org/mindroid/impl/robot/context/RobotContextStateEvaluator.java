@@ -60,7 +60,7 @@ public class RobotContextStateEvaluator implements IConstraintEvaluator{
     }
 
     @Override
-    public synchronized void subscribeConstraints(ISatisfiedConstraintHandler constraintHandler,String statemachineId,List<IConstraint> constraints) {
+    public void subscribeConstraints(ISatisfiedConstraintHandler constraintHandler,String statemachineId,List<IConstraint> constraints) {
         if(!subscribedConstraints.containsKey(statemachineId)){
             if(!listener.containsKey(statemachineId)) {
                 listener.put(statemachineId, constraintHandler);
@@ -75,7 +75,7 @@ public class RobotContextStateEvaluator implements IConstraintEvaluator{
     }
 
     @Override
-    public synchronized void unsubscribeConstraints(String statemachineId){
+    public void unsubscribeConstraints(String statemachineId){
         //Remove Listener
         listener.remove(statemachineId);
         subscribedConstraints.remove(statemachineId);

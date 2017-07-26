@@ -5,11 +5,11 @@ public class DisplayMessageFactory {
 
 
 	/**
-	 * creates a HelloDisplay Msg;
+	 * creates a HelloDisplayMsg Msg;
 	 * @return
 	 */
-	public static HelloDisplay helloDisplayMsg(){
-		return new HelloDisplay();
+	public static HelloDisplayMsg getHelloDisplayMsg(){
+		return new HelloDisplayMsg();
 	}
 	
 	/**
@@ -17,8 +17,8 @@ public class DisplayMessageFactory {
 	 * @author mindroid
 	 *
 	 */
-	public static class HelloDisplay{
-		public HelloDisplay() {};
+	public static class HelloDisplayMsg {
+		public HelloDisplayMsg() {};
 	}
 	
 	public static DrawStringMsg createDrawStringMsg(String str, int x, int y){

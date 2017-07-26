@@ -25,7 +25,7 @@ public class MessageRegistrar {
 
 		//DisplayMessageFactory
 		kryo.register(DisplayMessageFactory.DrawStringMsg.class);
-		kryo.register(DisplayMessageFactory.HelloDisplay.class);
+		kryo.register(DisplayMessageFactory.HelloDisplayMsg.class);
 		kryo.register(DisplayMessageFactory.ClearDisplayMsg.class);
 
 		//RegulatedMotorMessages

@@ -1,7 +1,6 @@
 package mindroid.common.ev3.endpoints.brick;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -10,13 +9,8 @@ import lejos.hardware.Sound;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.LCD;
-import lejos.hardware.lcd.LCDOutputStream;
-import lejos.internal.ev3.EV3LCDManager;
-import org.freedesktop.DBus;
-import org.mindroid.common.messages.DisplayMessages;
-import org.mindroid.common.messages.DisplayMessages.DrawString;
+import org.mindroid.common.messages.DisplayMessageFactory;
 import org.mindroid.common.messages.SoundMessageFactory;
-import org.mindroid.common.messages.StatusLightMessages;
 import org.mindroid.common.messages.StatusLightMessages.SetStatusLightMsg;
 import lejos.hardware.ev3.LocalEV3;
 import mindroid.common.ev3.app.DeviceManager;
@@ -41,7 +35,7 @@ public class EV3BrickEndpoint extends Listener {
 	@Override
 	public void connected(Connection connection) {
 		super.connected(connection);
-		connection.sendTCP(DisplayMessages.helloDisplayMsg());
+		connection.sendTCP(DisplayMessageFactory.getHelloDisplayMsg());
 	}
 
 	@Override
@@ -70,15 +64,15 @@ public class EV3BrickEndpoint extends Listener {
 	 * @param object
 	 */
 	private void handleDisplayMessages(Object object) {
-		if(object.getClass() == DisplayMessages.DrawString.class){
-			DrawString ds = (DrawString) object;
+		if(object.getClass() == DisplayMessageFactory.DrawStringMsg.class){
+			DisplayMessageFactory.DrawStringMsg ds = (DisplayMessageFactory.DrawStringMsg) object;
 			LocalEV3.get().getGraphicsLCD().setColor(GraphicsLCD.BLACK);
 			LocalEV3.get().getGraphicsLCD().setFont(Font.getDefaultFont());
 			LocalEV3.get().getGraphicsLCD().drawString(ds.getStr(),ds.getX(),ds.getY(),GraphicsLCD.TOP);
 			return;
 		}
 		
-		if(object.getClass() == DisplayMessages.ClearDisplay.class){
+		if(object.getClass() == DisplayMessageFactory.ClearDisplayMsg.class){
 			LCD.clearDisplay();
 			return;
 		}

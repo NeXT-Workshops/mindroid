@@ -30,11 +30,11 @@ public class MotorManager extends HardwareInterfaceManager{
 				if(((MotorEndpoint)endpoints.get(port)).getMotor().getMotortype() == motortype){
 					return true;
 				}
-				System.out.println("Motor.createMotorEndpoint() at "+port.toString()+" -> aktueller motortyp passt nicht");
+				//System.out.println("Motor.createMotorEndpoint() at "+port.toString()+" -> aktueller motortyp passt nicht");
 			}
 			
 			((MotorEndpoint)endpoints.get(port)).getMotor().close();//TODO
-			System.out.println("Motor.createMotorEndpoint() at "+port.toString()+" -> aktueller motortyp passt nicht - erzeuge neuen motortyp");
+			//System.out.println("Motor.createMotorEndpoint() at "+port.toString()+" -> aktueller motortyp passt nicht - erzeuge neuen motortyp");
 			switch(motortype){
 				case UnregulatedMotor:
 					((MotorEndpoint)endpoints.get(port)).setMotor(new EV3UnregulatedMotor(port));

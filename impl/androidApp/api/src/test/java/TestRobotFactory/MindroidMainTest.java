@@ -1,16 +1,15 @@
 package TestRobotFactory;
 
-import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.api.statemachine.IMindroidMain;
 import org.mindroid.api.robot.control.IMotorControl;
-import org.mindroid.api.robot.control.ISensorControl;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
-import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 import org.mindroid.impl.robot.*;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.statemachine.State;
 import org.mindroid.impl.statemachine.Statemachine;
+import org.mindroid.impl.statemachine.StatemachineCollection;
 
 /**
  * Created by torben on 02.03.2017.
@@ -30,13 +29,8 @@ public class MindroidMainTest implements IMindroidMain {
 
     //TODO HashMap<String,RobotEvent> events = Robot.getInstance().getRobotEvents();
 
-    @Override
-    public IStatemachine getStatemachine() {
-        return sm;
-    }
 
-
-    public void initStatemachine() throws StateAlreadyExsists {
+    public void initStatemachine() throws StateAlreadyExists {
 
         IState state_forward = new State("Forward") {
             @Override
@@ -106,4 +100,10 @@ public class MindroidMainTest implements IMindroidMain {
     }
 
 
+    @Override
+    public StatemachineCollection getStatemachineCollection() throws StateAlreadyExists {
+        StatemachineCollection sc = new StatemachineCollection();
+        sc.addStatemachine("main",sm);
+        return sc;
+    }
 }

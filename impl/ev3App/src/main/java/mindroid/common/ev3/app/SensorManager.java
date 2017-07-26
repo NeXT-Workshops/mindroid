@@ -31,17 +31,17 @@ public class SensorManager extends HardwareInterfaceManager {
 	 * @throws IOException
 	 */
 	public boolean createSensorEndpoint(Port port, Sensors sensortype, int networkPort) throws IOException {
-		System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" sensortype: "+sensortype.toString()+" at port "+networkPort);
+		//System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" sensortype: "+sensortype.toString()+" at port "+networkPort);
 		if(endpoints.containsKey(port)){ //Endpoint auf diesem Port bereits geoeffnet
-			System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> containsPort = true");
+			//System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> containsPort = true");
 			if(((SensorEndpoint)endpoints.get(port)).getSensor() != null) { //Pruefe ob der Sensor null ist.
 				if(((SensorEndpoint)endpoints.get(port)).getSensor().getSensortype() == sensortype){
-					//Pr��fe ob der Sensortyp des ge��ffneted Sensors mit dem zu initialisierenden ��bereinstimmt
+					//Pruefe ob der Sensortyp des geoeffneted Sensors mit dem zu initialisierenden uebereinstimmt
 					return true; //Sensor bereits initialisiert!
 				}
-				System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> aktueller sensortyp passt nicht");
+				//System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> aktueller sensortyp passt nicht");
 			}
-			System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> Sensor == null oder typ passt nicht!");
+			//System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> Sensor == null oder typ passt nicht!");
 			//Sensor ist null oder aktueller sensortyp passt nicht -> Sensortyp aendern
 			
 			((SensorEndpoint)endpoints.get(port)).getSensor().getSensor().close(); //Close old sensor
@@ -49,30 +49,30 @@ public class SensorManager extends HardwareInterfaceManager {
 			switch(sensortype){ // je nach gewolltem sensortyp dem sensorendpoint einen neuen Sensor zuweisen.
 				case EV3ColorSensor:
 					((SensorEndpoint)endpoints.get(port)).setSensor(new EV3ColorSensor(port,sensortype.getModes()[0])); //(Port sensorPort,SensorMessages.SensorMode_ mode)
-					System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> passender Sensortyp EV3Color gesetzt");
+					//System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> passender Sensortyp EV3Color gesetzt");
 					return true;
 				case EV3UltrasonicSensor:
 					((SensorEndpoint)endpoints.get(port)).setSensor(new EV3UltrasonicSensor(port,sensortype.getModes()[0]));
-					System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> passender Sensortyp EV3Ultra gesetzt");
+					//System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> passender Sensortyp EV3Ultra gesetzt");
 					return true;
 				case EV3GyroSensor:
 					((SensorEndpoint)endpoints.get(port)).setSensor(new EV3GyroSensor(port,sensortype.getModes()[0]));
-					System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> passender Sensortyp EV3Gyro gesetzt");
+					//System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> passender Sensortyp EV3Gyro gesetzt");
 					return true;
 				case EV3IRSensor:
 					((SensorEndpoint)endpoints.get(port)).setSensor(new EV3IRSensor(port,sensortype.getModes()[0]));
-					System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> passender Sensortyp EV3IRr gesetzt");
+					//System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> passender Sensortyp EV3IRr gesetzt");
 					return true;
 				case EV3TouchSensor:
 					((SensorEndpoint)endpoints.get(port)).setSensor(new EV3TouchSensor(port,sensortype.getModes()[0]));
-					System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> passender Sensortyp EV3Touch gesetzt");
+					//System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> passender Sensortyp EV3Touch gesetzt");
 					return true;
 				default: endpoints.remove(port); //loesche Endpoint!
 			}
 			
 		}
-		//SensorEndpoint noch nicht ge��ffnet. Erstelle mit passendem Sensor!
-		System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> Endpoint noch nicht geoeffnet, erzeuge!");
+		//SensorEndpoint noch nicht geoeffnet. Erstelle mit passendem Sensor!
+		//System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> Endpoint noch nicht geoeffnet, erzeuge!");
 		Listener endpoint;
 		switch(sensortype){
 			case EV3ColorSensor:
@@ -98,7 +98,7 @@ public class SensorManager extends HardwareInterfaceManager {
 			//Create Server for Sensor
 			BrickServerImpl brickServer = new BrickServerImpl(networkPort);
 			brickServer.addListener(endpoint);
-			System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> Endpoint noch nicht geoeffnet, Server gestartet!");
+			//System.out.println("SensorManager.createSensorEndpoint() at "+port.toString()+" -> Endpoint noch nicht geoeffnet, Server gestartet!");
 			return true;
 		}else{
 			return false;

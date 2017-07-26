@@ -111,7 +111,7 @@ public class EV3SensorManager extends Listener{
 								System.out.println("Local-EV3SensorManager: Sensor does not exist");
 							}
 						}else{
-							//TODO Tell Sensor/Motor Manager that endpoint creation failed
+							//TODO Tell Sensor/IMotor Manager that endpoint creation failed
 						}
 					}
 				}
@@ -119,8 +119,17 @@ public class EV3SensorManager extends Listener{
     	};
     	new Thread(handleMessage).start();
     }
-    
 
+	/**
+	 * disconnects the Sensor Connections
+	 */
+	public void disconnectSensors(){
+		for(EV3SensorPort key:sensors.keySet()){
+			if(sensors.get(key) != null){
+				sensors.get(key).disconnect();
+			}
+		}
+	}
     
     void close(EV3Sensor sensor) {
         /*List<Integer> tmpPorts = new ArrayList<>(4);

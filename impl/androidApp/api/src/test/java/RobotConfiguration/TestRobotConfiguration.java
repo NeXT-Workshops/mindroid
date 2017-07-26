@@ -1,4 +1,4 @@
-package robotConfiguration;
+package RobotConfiguration;
 
 import org.junit.Before;
 import org.junit.Test;

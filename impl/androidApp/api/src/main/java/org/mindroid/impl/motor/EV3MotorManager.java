@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.mindroid.api.endpoint.ClientEndpoint;
-import org.mindroid.api.motor.Motor;
+import org.mindroid.api.motor.IMotor;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
@@ -21,7 +21,7 @@ import org.mindroid.common.messages.NetworkPortConfig;
 
 public class EV3MotorManager extends Listener {
 
-    private Map<EV3MotorPort, Motor> motors;
+    private Map<EV3MotorPort, IMotor> motors;
     private Map<EV3MotorPort, ClientEndpoint> endpoints;
 
     private HashMap<EV3MotorPort,Integer> portToTCPPort;
@@ -42,22 +42,22 @@ public class EV3MotorManager extends Listener {
         motors = new HashMap<>(4);
     }
 
-    public Motor createMotor(Motors motorType, EV3MotorPort motorPort) throws PortIsAlreadyInUseException {
+    public IMotor createMotor(Motors motorType, EV3MotorPort motorPort) throws PortIsAlreadyInUseException {
 		if(motorType != null && motorPort != null){
 			if(motors.containsKey(motorPort)){
 				throw new PortIsAlreadyInUseException(motorPort.toString());
 			}else{
-				//System.out.println("Local-EV3MotorManager: creating Motor");
-				Motor ev3Motor = null;
+				//System.out.println("Local-EV3MotorManager: creating IMotor");
+				IMotor ev3IMotor = null;
 				switch(motorType){
-					case UnregulatedMotor: ev3Motor = new EV3UnregulatedMotor(ev3Brick.EV3Brick_IP, portToTCPPort.get(motorPort), EV3Brick.BRICK_TIMEOUT); break;
-					case MediumRegulatedMotor: ev3Motor = new EV3RegulatedMotor(ev3Brick.EV3Brick_IP, portToTCPPort.get(motorPort), EV3Brick.BRICK_TIMEOUT); break;
-					default: ev3Motor = null;
+					case UnregulatedMotor: ev3IMotor = new EV3UnregulatedMotor(ev3Brick.EV3Brick_IP, portToTCPPort.get(motorPort), EV3Brick.BRICK_TIMEOUT); break;
+					case MediumRegulatedMotor: ev3IMotor = new EV3RegulatedMotor(ev3Brick.EV3Brick_IP, portToTCPPort.get(motorPort), EV3Brick.BRICK_TIMEOUT); break;
+					default: ev3IMotor = null;
 				}
 
-				motors.put(motorPort, ev3Motor);
-				endpoints.put(motorPort, (ClientEndpoint)ev3Motor);
-				return ev3Motor;
+				motors.put(motorPort, ev3IMotor);
+				endpoints.put(motorPort, (ClientEndpoint) ev3IMotor);
+				return ev3IMotor;
 			}
 
 
@@ -67,7 +67,7 @@ public class EV3MotorManager extends Listener {
     }
 
 	/**
-	 * Sends message to the Brick to initialize the Motor at Brickside.
+	 * Sends message to the Brick to initialize the IMotor at Brickside.
 	 * @param motorType
 	 * @param motorPort
      * @return
@@ -78,13 +78,21 @@ public class EV3MotorManager extends Listener {
 				if (motors.containsKey(motorPort)) {
 					brickClient.sendTCP(BrickMessages.createMotor(motorPort.getValue(), motorType, portToTCPPort.get(motorPort)));
 				}else{
-					//TODO throw Exception Motor wurde noch nicht created!
+					//TODO throw Exception IMotor wurde noch nicht created!
 				}
 			}else{
 				//TODO throw Illegal Argument Exception
 			}
 		}else{
-			throw new BrickIsNotReadyException("Can't create a Motor, because the Brick is not ready. Check Connection and/or try again!");
+			throw new BrickIsNotReadyException("Can't create a IMotor, because the Brick is not ready. Check Connection and/or try again!");
+		}
+	}
+
+	public void disconnectMotors(){
+		for(EV3MotorPort key: motors.keySet()){
+			if(motors.get(key) != null && (motors.get(key) instanceof ClientEndpoint)){
+				((ClientEndpoint)motors.get(key)).disconnect();
+			}
 		}
 	}
 
@@ -106,7 +114,7 @@ public class EV3MotorManager extends Listener {
 						System.out.println("Local-EV3MotorManager: Sensor does not exist");
 					}
 				}else{
-					//TODO Tell Sensor/Motor Manager that endpoint creation failed
+					//TODO Tell Sensor/IMotor Manager that endpoint creation failed
 				}
 			}
 		}

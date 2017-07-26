@@ -1,13 +1,10 @@
 package org.mindroid.impl.robot;
 
-import org.mindroid.api.motor.Motor;
+import org.mindroid.api.motor.IMotor;
 import org.mindroid.api.motor.RegulatedMotor;
 import org.mindroid.api.robot.control.IMotorControl;
-import org.mindroid.common.messages.RegulatedMotorMessages;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
-import org.mindroid.impl.motor.EV3MotorManager;
-import org.mindroid.impl.robot.Robot;
 
 /**
  * Created by torben on 02.03.2017.
@@ -25,22 +22,22 @@ public class MotorController implements IMotorControl {
     }
 
     @Override
-    public void setMotorSpeed(EV3PortID motorPort, int speed) {
-        Motor motor = getMotor(motorPort);
-        if(motor != null){
-            motor.setSpeed(speed);
+    public final void setMotorSpeed(EV3PortID motorPort, int speed) {
+        IMotor IMotor = getMotor(motorPort);
+        if(IMotor != null){
+            IMotor.setSpeed(speed);
         }else{
             System.err.println("Unknown motorport! at "+motorPort);
         }
     }
 
     @Override
-    public void setMotorDirection(EV3PortID motorPort, int direction) {
-        Motor motor = getMotor(motorPort);
-        if(motor != null){
+    public final  void setMotorDirection(EV3PortID motorPort, int direction) {
+        IMotor IMotor = getMotor(motorPort);
+        if(IMotor != null){
             switch(direction) {
-                case FORWARD:   motor.forward(); break;
-                case BACKWARD:  motor.backward(); break;
+                case FORWARD:   IMotor.forward(); break;
+                case BACKWARD:  IMotor.backward(); break;
                 default:
                     System.err.println("unknown direction at "+motorPort);
             }
@@ -50,23 +47,24 @@ public class MotorController implements IMotorControl {
     }
 
     @Override
-    public void stop(EV3PortID motorPort) {
-        Motor motor = getMotor(motorPort);
+    public final void stop(EV3PortID motorPort) {
+        IMotor IMotor = getMotor(motorPort);
 
-        if(motor != null){
-            motor.stop();
+        if(IMotor != null){
+            IMotor.stop();
+            IMotor.setSpeed(0);
         }else{
             System.err.println("Unknown motorport! "+motorPort);
         }
     }
 
     @Override
-    public void rotate(EV3PortID motorPort,int angle) {
-        Motor motor = getMotor(motorPort);
+    public final void rotate(EV3PortID motorPort,int angle) {
+        IMotor IMotor = getMotor(motorPort);
 
-        if(motor != null){
-            if(motor instanceof RegulatedMotor){
-                ((RegulatedMotor) motor).rotate(angle);
+        if(IMotor != null){
+            if(IMotor instanceof RegulatedMotor){
+                ((RegulatedMotor) IMotor).rotate(angle);
             }else{
                 System.err.println("Motortype does not support this operation (Rotate()) at "+motorPort);
             }
@@ -76,12 +74,12 @@ public class MotorController implements IMotorControl {
     }
 
     @Override
-    public void rotateTo(EV3PortID motorPort,int angle) {
-        Motor motor = getMotor(motorPort);
+    public final void rotateTo(EV3PortID motorPort,int angle) {
+        IMotor IMotor = getMotor(motorPort);
 
-        if(motor != null){
-            if(motor instanceof RegulatedMotor){
-                ((RegulatedMotor) motor).rotateTo(angle);
+        if(IMotor != null){
+            if(IMotor instanceof RegulatedMotor){
+                ((RegulatedMotor) IMotor).rotateTo(angle);
             }else{
                 System.err.println("Motortype does not support this operation (rotateTo()) at "+motorPort);
             }
@@ -91,15 +89,15 @@ public class MotorController implements IMotorControl {
     }
 
 
-    private Motor getMotor(EV3PortID motorPort){
+    private final IMotor getMotor(EV3PortID motorPort){
         if(motorPort.equals(EV3PortIDs.PORT_A)){
-            return robot.getMotor_A();
+            return robot.getIMotor_A();
         }else if(motorPort.equals(EV3PortIDs.PORT_B)){
-            return  robot.getMotor_B();
+            return  robot.getIMotor_B();
         }else if(motorPort.equals(EV3PortIDs.PORT_C)){
-            return  robot.getMotor_C();
+            return  robot.getIMotor_C();
         }else if(motorPort.equals(EV3PortIDs.PORT_D)){
-            return  robot.getMotor_D();
+            return  robot.getIMotor_D();
         }
 
         return null;

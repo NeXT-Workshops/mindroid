@@ -3,6 +3,7 @@ package mindroid.common.ev3.endpoints;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import com.esotericsoftware.minlog.Log;
 import lejos.hardware.port.PortException;
 import mindroid.common.ev3.endpoints.motors.ev3.AbstractMotor;
 import mindroid.common.ev3.endpoints.motors.ev3.MediumRegulatedMotor;
@@ -29,7 +30,7 @@ public class MotorEndpoint extends Listener{
 					try {
 						Thread.sleep(UPDATETIME);
 					} catch (InterruptedException e) {
-						System.err.println("MotorEndpoint - Thread could not sleep.");
+						//System.err.println("MotorEndpoint - Thread could not sleep.");
 						e.printStackTrace();
 					}
 					if(conn != null && conn.isConnected() && motor != null){
@@ -60,14 +61,14 @@ public class MotorEndpoint extends Listener{
 	@Override
 	public void received(Connection connection, Object msg){		
 		if(motor != null && conn != null && motor instanceof MotorMessageListener) {
-			System.out.println("Motor.handleMotorMessage(): "+ msg.toString()); 
+			//System.out.println("Motor.handleMotorMessage(): "+ msg.toString());
 			((MotorMessageListener) motor).handleMotorMessage(msg);
 		}
 	}
 
 	@Override
 	public void disconnected(Connection connection) {
-		System.out.println("MotorEndpoint - Connection disconnected: "+connection.toString());
+		//System.out.println("MotorEndpoint - Connection disconnected: "+connection.toString());
 		motor.getMotor().stop();
 		motor.getMotor().flt();
 		conn = null;

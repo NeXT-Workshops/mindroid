@@ -2,7 +2,7 @@ package org.mindroid.impl.robot.context;
 
 import org.mindroid.api.IClockListener;
 import org.mindroid.api.robot.context.IRobotContextState;
-import org.mindroid.api.robot.context.IRobotContextStateEvaluator;
+import org.mindroid.api.robot.context.IConstraintEvaluator;
 import org.mindroid.api.robot.context.IRobotContextStateManager;
 import org.mindroid.impl.ev3.EV3PortIDs;
 
@@ -16,19 +16,20 @@ import java.util.TimerTask;
  */
 public class RobotContextStateManager implements IRobotContextStateManager,IClockListener {
 
-    private IRobotContextState robotContextState_Source;
-    private List<IRobotContextStateEvaluator> evaluators;
+    private IRobotContextState robotContextStateSource;
+    private List<IConstraintEvaluator> evaluators;
 
     private Timer clk_Timer;
 
-    private static final long clocks_per_second = 20;
+    /** taking a Snapshot and constraint evaluation per second **/
+    private static final long clocksPerSecond = 20;
 
     private RobotContextStateManager(){
-        clk_Timer = new Timer(true);
-        clk_Timer.schedule(new Task_handleCLK(this),100, 1000/clocks_per_second);
         //clk_Timer.schedule(new TimerTa);
-        robotContextState_Source = RobotContextStateListener.getInstance();
-        evaluators = new ArrayList<IRobotContextStateEvaluator>(1);
+        robotContextStateSource = RobotContextState.getInstance();
+        evaluators = new ArrayList<IConstraintEvaluator>(1);
+        clk_Timer = new Timer(true);
+        clk_Timer.schedule(new Task_handleCLK(this),100, 1000/ clocksPerSecond);
     }
 
 
@@ -39,38 +40,55 @@ public class RobotContextStateManager implements IRobotContextStateManager,ICloc
     }
 
 
-    public IRobotContextState takeSnapshot(){
-        RobotContextStateListener robotContextState = new RobotContextStateListener();
+    public synchronized IRobotContextState takeSnapshot(){
+        RobotContextState robotContextState = new RobotContextState();
 
-        robotContextState.setSensor_output_S1(robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_1));
-        robotContextState.setSensor_output_S2(robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_2));
-        robotContextState.setSensor_output_S3(robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_3));
-        robotContextState.setSensor_output_S4(robotContextState_Source.getSensorEvent(EV3PortIDs.PORT_4));
+        robotContextState.setSensor_output_S1(robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_1));
+        robotContextState.setSensor_output_S2(robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_2));
+        robotContextState.setSensor_output_S3(robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_3));
+        robotContextState.setSensor_output_S4(robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_4));
 
-        robotContextState.setReceivedTimeEvents(robotContextState_Source.getTimeEvents());
+        robotContextState.setReceivedTimeEvents(robotContextStateSource.getTimeEvents());
+        robotContextState.setReceivedMessages(robotContextStateSource.getMessages());
 
-        //System.out.println("taking snapshot of context: "+robotContextState);
+        //System.out.println("Took a snapshot! "+robotContextState.getMessages()+" ## "+robotContextState.getTimeEvents());
 
         return robotContextState;
     }
 
     @Override
-    public void handleCLK(){
-        IRobotContextState context = takeSnapshot();
-        for(IRobotContextStateEvaluator evaluator: evaluators) {
-            evaluator.evaluateConstraints(context);
-        }
+    public synchronized void handleCLK(){
+        System.out.println(">>>>>>>>>>>>>> HANDLE CLK CALLED");
+        Runnable evaluateRobotState = new Runnable(){
+            @Override
+            public void run(){
+                IRobotContextState context = takeSnapshot();
+                for(IConstraintEvaluator contextListener: evaluators) {
+                    contextListener.handleRobotContextState(context);
+                }
+            }
+        };
+        new Thread(evaluateRobotState).start();
     }
 
     @Override
-    public void addRobotContextStateEvaluator(IRobotContextStateEvaluator evaluator){
+    public void registerRobotContextStateListener(IConstraintEvaluator evaluator){
         evaluators.add(evaluator);
     }
 
     @Override
-    public void cleanContextState(){
-        robotContextState_Source.getTimeEvents().clear();
-        //TODO: robotContextState_Source.getMessages().clear();
+    public synchronized void cleanContextState(){
+        robotContextStateSource.getTimeEvents().clear();
+        robotContextStateSource.getMessages().clear();
+    }
+
+    @Override
+    public void setGyroSensorStartCondition() {
+        //The addPosition methods checks if the event is a valid GyroSensor event or if its null.
+        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_1, robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_1));
+        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_2, robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_2));
+        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_3, robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_3));
+        StartCondition.getInstance().addPosition(EV3PortIDs.PORT_4, robotContextStateSource.getSensorEvent(EV3PortIDs.PORT_4));
     }
 
 
@@ -86,6 +104,7 @@ public class RobotContextStateManager implements IRobotContextStateManager,ICloc
 
         @Override
         public void run() {
+
             listener.handleCLK();
         }
     }

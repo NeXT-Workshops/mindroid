@@ -8,6 +8,7 @@ import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
+import com.esotericsoftware.minlog.Log;
 import org.mindroid.common.messages.MessageRegistrar;
 import org.mindroid.common.messages.NetworkPortConfig;
 
@@ -44,7 +45,6 @@ public class BrickServerImpl implements BrickServer {
 			server = new Server();
 			server.start();
 			server.bind(tcpPort,tcpPort-NetworkPortConfig.UDP_OFFSET);
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	

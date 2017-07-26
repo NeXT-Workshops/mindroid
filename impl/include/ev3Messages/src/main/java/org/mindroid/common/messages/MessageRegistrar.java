@@ -23,10 +23,10 @@ public class MessageRegistrar {
 		kryo.register(BrickMessages.HelloMessage.class);
 		kryo.register(BrickMessages.EndpointCreatedMessage.class);
 
-		//DisplayMessages
-		kryo.register(DisplayMessages.DrawString.class);
-		kryo.register(DisplayMessages.HelloDisplay.class);
-		kryo.register(DisplayMessages.ClearDisplay.class);
+		//DisplayMessageFactory
+		kryo.register(DisplayMessageFactory.DrawStringMsg.class);
+		kryo.register(DisplayMessageFactory.HelloDisplayMsg.class);
+		kryo.register(DisplayMessageFactory.ClearDisplayMsg.class);
 
 		//RegulatedMotorMessages
 		kryo.register(RegulatedMotorMessages.BackwardMsg.class);
@@ -55,10 +55,16 @@ public class MessageRegistrar {
 	
 		//StatusLightMessages
 		kryo.register(StatusLightMessages.SetStatusLightMsg.class);
-		
+
+		//Sound Message
+		kryo.register(SoundMessageFactory.BeepMessage.class);
+		kryo.register(SoundMessageFactory.Beeptype.class);
+		kryo.register(SoundMessageFactory.SoundVolumeMessage.class);
+
 		/** ----- Used classes by Message-classes ----- **/
 		kryo.register(Sensors.class);
 		kryo.register(Motors.class);
+
 
 		//kryo.register(SensorPort.class);
 		//kryo.register(MotorPort.class);

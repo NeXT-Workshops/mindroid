@@ -3,7 +3,7 @@ package org.mindroid.api.statemachine;
 import java.util.Collection;
 
 import org.mindroid.api.statemachine.exception.NoCurrentStateSetException;
-import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 
 public interface IStatemachine {
 
@@ -17,9 +17,11 @@ public interface IStatemachine {
 
 	public void addTransition(ITransition transition, IState fromState, IState toState);
 
-	public void addState(IState state) throws StateAlreadyExsists;
+	public void addState(IState state) throws StateAlreadyExists;
 	
 	public IState getState(String name);
+
+	public void setID(String id);
 
 	public String getID();
 
@@ -27,9 +29,11 @@ public interface IStatemachine {
 
 	public void reset();
 	
-	public void start();
+	public void start() throws NoStartStateException;
 	
 	public void stop();
 
-	void addStates(Collection<IState> states) throws StateAlreadyExsists;
+	void addStates(Collection<IState> states) throws StateAlreadyExists;
+
+	boolean isActive();
 }

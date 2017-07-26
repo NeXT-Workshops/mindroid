@@ -15,19 +15,19 @@ public class DummyClient {
 
     public static void main(String[] args) {
         try{
-            Socket socket = new Socket("localhost", 33044);
+            Socket socket = new Socket("localhost",33044);
             PrintWriter out = new PrintWriter(socket.getOutputStream(),
                     true);
 
-            ServerMessageMarshaller serverMessageMarshaller = new ServerMessageMarshaller();
+            MessageMarshaller messageMarshaller = new MessageMarshaller();
 
-            String serializedMessage = serverMessageMarshaller.serialize(new ServerLogMessage(new RobotId("Robot 1"), LogLevel.INFO, "Everything is awesome!"));
+            String serializedMessage = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 1"), Destination.SERVER_LOG, MessageType.INFO, "Everything is awesome!"));
             out.println(serializedMessage);
 
-            String serializedMessage2 = serverMessageMarshaller.serialize(new ServerLogMessage(new RobotId("Robot 2"), LogLevel.INFO, "Hello!"));
+            String serializedMessage2 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 2"), Destination.SERVER_LOG, MessageType.INFO, "Hello!"));
             out.println(serializedMessage2);
 
-            String serializedMessage3 = serverMessageMarshaller.serialize(new ServerLogMessage(new RobotId("Robot 3"), LogLevel.INFO, "Hi there!"));
+            String serializedMessage3 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 3"), Destination.SERVER_LOG, MessageType.INFO, "Hi there!"));
             out.println(serializedMessage3);
 
             BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -40,17 +40,20 @@ public class DummyClient {
             out = new PrintWriter(socket.getOutputStream(),
                     true);
 
-            serverMessageMarshaller = new ServerMessageMarshaller();
+            messageMarshaller = new MessageMarshaller();
 
-             serializedMessage = serverMessageMarshaller.serialize(new ServerLogMessage(new RobotId("Robot 1"), LogLevel.INFO, "Everything is awesome!"));
+             serializedMessage = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 1"), Destination.SERVER_LOG, MessageType.INFO, "Everything is awesome!"));
             out.println(serializedMessage);
 
 
-            serializedMessage2 = serverMessageMarshaller.serialize(new ServerLogMessage(new RobotId("Robot 2"), LogLevel.INFO, "Hello!"));
+            serializedMessage2 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 2"), Destination.SERVER_LOG, MessageType.INFO, "Hello!"));
             out.println(serializedMessage2);
 
-            serializedMessage = serverMessageMarshaller.serialize(new ServerLogMessage(new RobotId("Robot 3"), LogLevel.INFO, "Hi!"));
+            serializedMessage = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 3"), Destination.SERVER_LOG, MessageType.REGISTRATION, "55555"));
             out.println(serializedMessage);
+
+            serializedMessage2 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 2"), Destination.SERVER_LOG, MessageType.INFO, "Hello!"));
+            out.println(serializedMessage2);
 
             out.println("<close>");
             socket.close();

@@ -5,6 +5,7 @@ import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.impl.robot.Robot;
 
 /**
  * Created by Torbe on 03.05.2017.
@@ -19,21 +20,25 @@ public class MindroidLVL2 extends LVL2API {
 
     @Override
     public void run() {
-        //Example Wall-Ping-Pong
-        if(messenger!=null) {
-            messenger.sendMessage(IMessenger.SERVER_LOG, "Imperative Implementation is running!");
-        }
+        
+        messenger = Robot.getRobotController().getMessenger();
+        if(messenger!=null) messenger.sendMessage(IMessenger.SERVER_LOG, "Imperative Implementation is running!");
 
+
+        //Example Wall-Ping-Pong
         while (true) {
             forward();
             while (distanceGreaterThan(0.15f)) {
                 delay(300);
             }
+            stopMotors();
             backward();
             delay(1200);
             setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.BLINKING);
-            turnLeftTime(1600);
+
+            turnLeft(130);
             setLED(EV3StatusLightColor.OFF,EV3StatusLightInterval.BLINKING);
+            stopMotors();
         }
 
     }

@@ -6,6 +6,7 @@ import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.common.messages.Sensors;
 
 
+
 /**
  * Created by torben on 02.03.2017.
  */
@@ -26,6 +27,8 @@ public class RobotPortConfig implements IRobodancerConfig {
     public Sensors getSensorAtPortS3() {
         return Sensors.EV3GyroSensor;
     }
+
+
 
     @Override
     public Sensors getSensorAtPortS4() {

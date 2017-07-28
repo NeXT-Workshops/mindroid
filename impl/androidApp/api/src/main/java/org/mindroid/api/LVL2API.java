@@ -19,6 +19,7 @@ import org.mindroid.impl.statemachine.properties.Seconds;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Angle;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
+import org.mindroid.impl.statemachine.properties.sensorproperties.Touch;
 
 import java.util.HashMap;
 
@@ -117,6 +118,7 @@ public abstract class LVL2API extends LVL1API {
 
 
 
+
     public final boolean isCollisionDetected() {
         if (sensorEvaluatingStatemachines.containsKey("collisionDetection") && sensorEvaluatingStatemachines.get("collisionDetection") instanceof BooleanStatemachine) {
             return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("collisionDetection")).getResult();
@@ -157,19 +159,56 @@ public abstract class LVL2API extends LVL1API {
         //TODO maybe remove or stop statemachines when they are not needed anymore
     }
 
+    /** //TODO check port config before creating SM
+     * //TODO method does not work yet
+    public final boolean wasTouched() {
+        if (sensorEvaluatingStatemachines.containsKey("touched") && sensorEvaluatingStatemachines.get("touched") instanceof DiscreteValueStateMachine) {
+            return (((DiscreteValueStateMachine) sensorEvaluatingStatemachines.get("touched")).getResult() == Touch.HIT);
+        } else {
+            float[] touchValues = {Touch.NO_HIT, Touch.HIT};
+            DiscreteValueStateMachine touchedSM = new DiscreteValueStateMachine("touched",  new Touch(EV3PortIDs.PORT_3), touchValues);
+            sensorEvaluatingStatemachines.put("touched", touchedSM);
+            registerStatemachine(touchedSM);
+            startStatemachine("touched");
+            return (touchedSM.getResult() == Touch.HIT);
+        }
+    }
+    **/
+
     public final boolean wasMsgReceived(String message, String source) {
         //TODO needs to be tested
-        if (sensorEvaluatingStatemachines.containsKey("Msg"+ message) && sensorEvaluatingStatemachines.get("Msg"+ message) instanceof BooleanStatemachine) {
-            return ((BooleanStatemachine)sensorEvaluatingStatemachines.get("Msg"+ message)).getResult();
+        if (sensorEvaluatingStatemachines.containsKey("Msg"+ message + source) && sensorEvaluatingStatemachines.get("Msg"+ message + source) instanceof BooleanStatemachine) {
+            //Statemachine has already been started.
+            boolean result = ((BooleanStatemachine)sensorEvaluatingStatemachines.get("Msg"+ message + source)).getResult();
+            if (!result) {
+                //SM will keep running as the message was not received yet.
+                return false;
+            } else {
+                //SM is stopped and removed.
+                stopStatemachine("Msg"+ message + source);
+                sensorEvaluatingStatemachines.remove("Msg"+ message + source);
+                return true;
+            }
         } else {
-            BooleanStatemachine sm = new BooleanStatemachine("Msg"+ message, false, new MsgReceived(new MessageProperty(message,source)),null);
-            sensorEvaluatingStatemachines.put("Msg"+ message, sm);
+            //create new SM
+            BooleanStatemachine sm = new BooleanStatemachine("Msg"+ message + source, false, new MsgReceived(new MessageProperty(message,source)),null);
+            sensorEvaluatingStatemachines.put("Msg"+ message + source, sm);
             registerStatemachine(sm);
-            startStatemachine("Msg"+ message);
-            return sm.getResult();
+            startStatemachine("Msg"+ message + source);
+            boolean result = sm.getResult();
+
+            if (!result) {
+                //SM will keep running as the message was not received yet.
+                return false;
+
+            } else {
+                //SM is stopped and removed.
+                stopStatemachine("Msg"+ message + source);
+                sensorEvaluatingStatemachines.remove("Msg"+ message + source);
+                return true;
+            }
         }
 
-        //TODO maybe remove or stop statemachines when they are not needed anymore
     }
 
     public final float getColor() {
@@ -192,6 +231,7 @@ public abstract class LVL2API extends LVL1API {
         return (getColor()==color);
     }
 
+
     public final void delay(long milliseconds) {
         try {
             Thread.sleep(milliseconds);
@@ -199,9 +239,13 @@ public abstract class LVL2API extends LVL1API {
         }
     }
 
+    /**
+     * The robot rotates counterclockwise by the given angle. The method blocks until the rotation is completed.
+     * @param degrees angle
+     */
     public final void turnLeft(int degrees) {
-        //TODO needs to be tested
-        BooleanStatemachine angleSM = new BooleanStatemachine("angleSM",false, new Rotation(degrees,new Angle(EV3PortIDs.PORT_3)),new TimeExpired(new Seconds(100)));
+        //TODO check port config before creating SM
+        BooleanStatemachine angleSM = new BooleanStatemachine("angleSM",false, new Rotation((-1)*degrees,new Angle(EV3PortIDs.PORT_3)),null);
         registerStatemachine(angleSM);
         startStatemachine("angleSM");
         motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
@@ -210,7 +254,6 @@ public abstract class LVL2API extends LVL1API {
         motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
         while(!angleSM.getResult()){
             try {
-                //TODO how long?
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -221,6 +264,34 @@ public abstract class LVL2API extends LVL1API {
         motorController.stop(EV3PortIDs.PORT_D);
     }
 
+    /**
+     * The robot rotates clockwise by the given angle. The method blocks until the rotation is completed.
+     * @param degrees angle
+     */
+    public final void turnRight(int degrees) {
+        BooleanStatemachine angleSM = new BooleanStatemachine("angleSM",false, new Rotation(degrees, new Angle(EV3PortIDs.PORT_3)),null);
+        registerStatemachine(angleSM);
+        startStatemachine("angleSM");
+        motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_FORWARD);
+        motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_BACKWARD);
+        motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
+        motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+        while(!angleSM.getResult()){
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        stopStatemachine("angleSM");
+        motorController.stop(EV3PortIDs.PORT_A);
+        motorController.stop(EV3PortIDs.PORT_D);
+    }
+
+    /**
+     * The robot rotates counterclockwise for the specified time. The method blocks until the rotation is completed.
+     * @param milliseconds time in milliseconds
+     */
     public final void turnLeftTime(int milliseconds) {
         motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
         motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_FORWARD);
@@ -235,7 +306,26 @@ public abstract class LVL2API extends LVL1API {
         motorController.stop(EV3PortIDs.PORT_D);
     }
 
-    public void stop() {
+    /**
+     * The robot rotates clockwise for the specified time. The method blocks until the rotation is completed.
+     * @param milliseconds time in milliseconds
+     */
+    public final void turnRightTime(int milliseconds) {
+        motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_FORWARD);
+        motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_BACKWARD);
+        motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
+        motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        motorController.stop(EV3PortIDs.PORT_A);
+        motorController.stop(EV3PortIDs.PORT_D);
+    }
+
+
+    public void stopMotors() {
         motorA.stop();
         motorB.stop();
         motorC.stop();

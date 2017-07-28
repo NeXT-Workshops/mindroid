@@ -15,8 +15,8 @@ public class BooleanStatemachine extends Statemachine {
     public BooleanStatemachine(String ID, boolean defaultValue, IConstraint returnTrue, IConstraint returnFalse) {
         super(ID);
         result = defaultValue;
-        IState resultTrue = new State("True");
-        IState resultFalse = new State("False");
+        IState resultTrue = new State(ID + ": True");
+        IState resultFalse = new State(ID + ": False");
 
         try {
             this.addState(resultTrue);

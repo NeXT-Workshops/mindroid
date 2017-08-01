@@ -16,6 +16,9 @@ public class DiscreteValueStateMachine extends Statemachine {
     private float result;
     public DiscreteValueStateMachine(String ID, SimpleEV3SensorProperty property, final float[] values) {
         super(ID);
+
+        setIsMessageingAllowed(false);
+
         if(values.length<1) {
             result = 0;
             return;

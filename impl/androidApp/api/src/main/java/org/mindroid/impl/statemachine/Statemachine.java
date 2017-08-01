@@ -31,6 +31,11 @@ public class Statemachine implements IStatemachine{
 
 	private boolean isActive = false;
 
+	/**
+	 * true: Statemachine is allowed to send Update-Messages to the Message Server.
+	 * e.g. new state.
+	 */
+	private boolean isMessageingAllowed = true;
 
 	public Statemachine(String ID){
 		this.ID = ID;
@@ -192,4 +197,16 @@ public class Statemachine implements IStatemachine{
 	public synchronized boolean isActive() {
 		return isActive;
 	}
+
+	@Override
+	public boolean isMessageingAllowed() {
+		return isMessageingAllowed;
+	}
+
+	@Override
+	public void setIsMessageingAllowed(boolean value) {
+		this.isMessageingAllowed = value;
+	}
+
+
 }

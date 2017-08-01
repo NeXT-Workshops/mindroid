@@ -36,4 +36,8 @@ public interface IStatemachine {
 	void addStates(Collection<IState> states) throws StateAlreadyExists;
 
 	boolean isActive();
+
+	boolean isMessageingAllowed();
+
+	void setIsMessageingAllowed(boolean value);
 }

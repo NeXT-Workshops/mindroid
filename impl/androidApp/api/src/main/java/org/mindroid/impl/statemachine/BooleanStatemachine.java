@@ -14,6 +14,9 @@ public class BooleanStatemachine extends Statemachine {
     private boolean result;
     public BooleanStatemachine(String ID, boolean defaultValue, IConstraint returnTrue, IConstraint returnFalse) {
         super(ID);
+
+        setIsMessageingAllowed(false);
+
         result = defaultValue;
         IState resultTrue = new State(ID + ": True");
         IState resultFalse = new State(ID + ": False");

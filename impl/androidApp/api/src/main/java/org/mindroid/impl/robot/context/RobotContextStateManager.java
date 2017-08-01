@@ -58,7 +58,7 @@ public class RobotContextStateManager implements IRobotContextStateManager,ICloc
 
     @Override
     public synchronized void handleCLK(){
-        System.out.println(">>>>>>>>>>>>>> HANDLE CLK CALLED");
+        //System.out.println("[RobotContextSateManager:handleCLK] handle CLK");
         Runnable evaluateRobotState = new Runnable(){
             @Override
             public void run(){

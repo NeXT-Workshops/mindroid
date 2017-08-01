@@ -39,8 +39,7 @@ public class App implements Runnable {
 		
 		try {
 			LocalEV3.get().getLED().setPattern(2); //RED Light, always on, waiting for connection
-			LocalEV3.get().getGraphicsLCD().setFont(Font.getDefaultFont());
-			LocalEV3.get().getGraphicsLCD().drawString("PLEASE WAIT",30,50,GraphicsLCD.TOP);
+			Display.showPleaseWait();
 			//System.out.println("Current System Time"+ new Date(System.currentTimeMillis()) + " in millis "+ System.currentTimeMillis());
 	
 			
@@ -55,15 +54,15 @@ public class App implements Runnable {
 
 			//System.out.println("Waiting for Connection..");
 			LocalEV3.get().getLED().setPattern(3);
-			LCD.clearDisplay();
-			LocalEV3.get().getGraphicsLCD().setFont(Font.getLargeFont());
-			LocalEV3.get().getGraphicsLCD().drawString("READY",40,50,GraphicsLCD.TOP);
+
+			Display.showSystemIsReady();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
+
 	@Override
 	public void run() {
 		

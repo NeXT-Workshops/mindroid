@@ -8,6 +8,7 @@ import java.util.Queue;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import lejos.hardware.lcd.GraphicsLCD;
 import org.mindroid.common.messages.BrickMessages;
 import org.mindroid.common.messages.BrickMessages.CreateMotorMessage;
 import org.mindroid.common.messages.BrickMessages.CreateSensorMessage;
@@ -129,6 +130,7 @@ public class DeviceManager extends Listener {
 	public void connected(Connection connection) {
 		super.connected(connection);	
 		connection.sendTCP(BrickMessages.newHelloThereMessage("Hello, this is the Endpoint Manager of the EV3Brick - Connection established!"));
+		Display.showSystemIsReadyAndConnected();
 	}
 
 		
@@ -155,6 +157,11 @@ public class DeviceManager extends Listener {
 					return;
 			}
  		}
+	}
+	@Override
+	public void disconnected(Connection connection){
+		super.disconnected(connection);
+		Display.showSystemIsReady();
 	}
 
 	private void handleCreateMotorMessage(final Connection conn, final CreateMotorMessage msg) {

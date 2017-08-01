@@ -161,7 +161,7 @@ public class EV3SensorManager extends Listener{
 		this.brickClient = brickClient;
 	}
 
-	
-	
-	
+
+
+
 }

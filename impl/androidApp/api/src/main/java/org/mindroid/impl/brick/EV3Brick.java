@@ -38,7 +38,7 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
     private boolean readyForCommands = false;
     
     private Connection conn = null;
-
+	private boolean areMessagesRegistered = false;
 
     /**
 	 * Creates a Brick Class.
@@ -52,7 +52,7 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
         
         motorManager 	= new EV3MotorManager(this);
         sensorManager 	= new EV3SensorManager(this);
-        display = createDisplay();
+        display = new EV3Display();
 
 		System.out.println("Local-EV3Brick: Starte client.. ");
 		client = new Client();
@@ -63,37 +63,24 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 		client.addListener(this);
 		client.addListener(sensorManager);
 		client.addListener(motorManager);
+		client.addListener(display);
 
 		//Set Client to IMotor-/Sensormanager
 		sensorManager.setBrickClient(client);
 		motorManager.setBrickClient(client);
 
-		MessageRegistrar.register(client);
+		registerMessages(client);
     }
-    
-    public EV3Display createDisplay(){
-		//Display gets connected to the brick with the call of method this.connect()
-		EV3Display tmpDisplay = new EV3Display(EV3Brick_IP,EV3Brick_PORT,BRICK_TIMEOUT);
-		System.out.println("Local-EV3Brick: Display created");
-		return tmpDisplay;
-    }
-
-	private void connectDisplay(){
-		display.connect();
-	}
 
 
     public boolean connect() throws IOException {
-		System.out.println("Local-EV3Brick: connect to brick "+EV3Brick_IP+":"+EV3Brick_PORT);
-		System.out.print("Local-EV3Brick: Connecting...");
+		System.out.println("[Local-EV3Brick] connect to brick "+EV3Brick_IP+":"+EV3Brick_PORT);
+		System.out.print("[Local-EV3Brick] Connecting...");
 
 		client.setKeepAliveTCP(10000);
 		client.connect(BRICK_TIMEOUT, EV3Brick_IP, EV3Brick_PORT,EV3Brick_PORT-NetworkPortConfig.UDP_OFFSET);
 
 		System.out.println("Local-EV3Brick: Connected successful!");
-
-
-		connectDisplay();
 
 		return client.isConnected();
     }
@@ -102,10 +89,12 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 	 * Disconnects all open Connections to the Brick!
 	 */
 	public void disconnect(){
-		display.disconnect();
+		System.out.println("[EV3-BRICK:disconnect()] executing disconnect");
 		client.close();
+		System.out.println("[EV3-BRICK:disconnect()] client state: "+client.isConnected());
 		getSensorManager().disconnectSensors();
 		getMotorManager().disconnectMotors();
+		System.out.println("[EV3-BRICK:disconnect()] Sensors and motors got disconnected");
 	}
     
 	public EV3MotorManager getMotorManager() {
@@ -167,6 +156,14 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 	public String getConnectionInformation(){
 		return new StringBuffer().append(EV3Brick_IP).append(":").append(EV3Brick_PORT).toString();
 	}
+
+	private void registerMessages(Client client) {
+		if (!areMessagesRegistered){
+			MessageRegistrar.register(client);
+			areMessagesRegistered = true;
+		}
+	}
+
 
 	//-------------- Status Light Operations ----------------
 	@Override

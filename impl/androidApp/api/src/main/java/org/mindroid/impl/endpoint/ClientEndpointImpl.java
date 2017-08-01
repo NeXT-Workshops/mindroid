@@ -19,6 +19,8 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
     protected int brickTimeout;
     
 	boolean clientReady = false;;
+
+	private boolean areMessagesRegistered = false;
     
 	public ClientEndpointImpl(String ip,int tcpPort, int brickTimeout) {
 		this.ip =ip;
@@ -28,6 +30,11 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
 		client = new Client();
 		client.start();
 		new Thread(client).start();
+
+		client.addListener(this);
+
+
+		registerMessages(client);
 	}
 	
 	/**
@@ -35,8 +42,6 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
 	 */
 	@Override
 	public void connect() {
-        client.addListener(this);
-
         try {
         	client.setKeepAliveTCP(10000);
             client.connect(this.brickTimeout, this.ip, this.tcpPort,this.tcpPort-NetworkPortConfig.UDP_OFFSET); 
@@ -45,9 +50,6 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
             e.printStackTrace();
         	//throw new EV3Exception("You must have entered a wrong IP.");
         }
-        
-        registerMessages(client);
-
 
         if(client.isConnected()){
         	setClientReady(true);
@@ -59,13 +61,16 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
         client.close();
     }
 
-	private void registerMessages(Client client){
-		MessageRegistrar.register(client);
-	}
-
     @Override
     public abstract void received (Connection connection, Object object);
-	
+
+	private void registerMessages(Client client) {
+		if (!areMessagesRegistered){
+			MessageRegistrar.register(client);
+			areMessagesRegistered = true;
+		}
+	}
+
 	@Override
 	public void stop(){
 		client.stop();

@@ -29,41 +29,67 @@ public abstract class AbstractSensor {
 
     ArrayList<SensorListener> listener = new ArrayList<SensorListener>(1);
 
-    public AbstractSensor(long sampleRate){
+
+    /**
+     * Create an Abstract Sensor
+     * @param sensortype
+     * @param sensorPort
+     * @param mode
+     * @param sampleRate
+     */
+    public AbstractSensor(Sensors sensortype,Port sensorPort,SensorMessages.SensorMode_ mode,long sampleRate){
+        this.sensortype = sensortype;
+        this.sensorPort = sensorPort;
+        this.sensormode = mode;
         this.sampleRate = sampleRate;
     }
 
-    protected boolean create(Port sensorPort,Sensors sensortype,SensorMessages.SensorMode_ sensormode) {
-        assert sensortype != null && sensorPort != null && sensormode != null;
-
-        this.sensorPort = sensorPort;
-        
-        switch(sensortype){
-            case EV3ColorSensor:
-                this.sensor = new EV3ColorSensor(sensorPort);
-                this.sensortype = Sensors.EV3ColorSensor;
-                break;
-            case EV3UltrasonicSensor:
-            	this.sensor = new EV3UltrasonicSensor(sensorPort);
-            	this.sensortype = Sensors.EV3UltrasonicSensor;
-                break;
-            case EV3GyroSensor:
-            	this.sensor = new EV3GyroSensor(sensorPort);
-            	this.sensortype = Sensors.EV3GyroSensor;
-                break;
-            case EV3IRSensor:
-            	this.sensor = new EV3IRSensor(sensorPort);
-            	this.sensortype = Sensors.EV3IRSensor;
-                break;
-            case EV3TouchSensor:
-            	this.sensor = new EV3TouchSensor(sensorPort);
-            	this.sensortype = Sensors.EV3TouchSensor;
-                break;
-            default: return false;
+    /**
+     * Creates the specified Sensor
+     * @return  true if creation was a success
+     *          false if an error appeared
+     */
+    public boolean create() {
+        if(this.sensortype == null || this.sensorPort == null || this.sensormode == null){
+            System.out.println("[AbstractSensor:create] - Error - Port,Type or Mode is null");
+            return false;
         }
 
-        if(sensor != null && setSensorMode(sensormode)){
-            this.sensormode = sensormode;
+        //this.sensorPort = sensorPort;
+
+        try {
+            switch (this.sensortype) {
+                case EV3ColorSensor:
+                    this.sensor = new EV3ColorSensor(this.sensorPort);
+                    this.sensortype = Sensors.EV3ColorSensor;
+                    break;
+                case EV3UltrasonicSensor:
+                    this.sensor = new EV3UltrasonicSensor(this.sensorPort);
+                    this.sensortype = Sensors.EV3UltrasonicSensor;
+                    break;
+                case EV3GyroSensor:
+                    this.sensor = new EV3GyroSensor(this.sensorPort);
+                    this.sensortype = Sensors.EV3GyroSensor;
+                    break;
+                case EV3IRSensor:
+                    this.sensor = new EV3IRSensor(this.sensorPort);
+                    this.sensortype = Sensors.EV3IRSensor;
+                    break;
+                case EV3TouchSensor:
+                    this.sensor = new EV3TouchSensor(this.sensorPort);
+                    this.sensortype = Sensors.EV3TouchSensor;
+                    break;
+                default:
+                    return false;
+            }
+        }catch(IllegalArgumentException IAE){
+            /* May appear while creating a Sensor (Invalid Sensor mode) - error in lejos */
+            System.out.println("[AbstractSensor:create] - Error - IllegalArgumentException appeared while creating a Sensor! \n"+IAE.toString());
+            return false;
+        }
+
+        if(this.sensormode != null && !setSensorMode(this.sensormode)){ //If i couldnt set the sensor mode, set to null
+            this.sensormode = null;
         }
         return true;
     }
@@ -121,5 +147,11 @@ public abstract class AbstractSensor {
         return sensor.sampleSize();
     }
 
+    /**
+     * Sensor Starts sending Data
+     */
+    public void startSensor(){
+        sendSensorData();
+    }
 
 }

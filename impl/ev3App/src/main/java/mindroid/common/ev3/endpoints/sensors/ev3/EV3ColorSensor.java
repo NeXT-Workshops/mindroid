@@ -11,15 +11,9 @@ import lejos.hardware.port.Port;
 public class EV3ColorSensor extends AbstractSensor {
 
 
+    public EV3ColorSensor(Port sensorPort){
+        super(Sensors.EV3ColorSensor,sensorPort,Sensors.EV3ColorSensor.getModes()[0],SensorSampleRates.SENS_COLOR_SAMPLERATE);
 
-    public EV3ColorSensor(Port sensorPort,SensorMessages.SensorMode_ mode){
-        super(SensorSampleRates.SENS_COLOR_SAMPLERATE);
-        isSensorCreated = create(sensorPort,Sensors.EV3ColorSensor,mode); //Creates Lejos.EV3ColorSensor. acceptable
-        if(isSensorCreated){
-            sendSensorData();
-        }
-
-        //System.out.println(toString());;
     }
 
     @Override

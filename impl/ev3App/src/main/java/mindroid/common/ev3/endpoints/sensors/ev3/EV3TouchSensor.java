@@ -10,15 +10,8 @@ import lejos.hardware.port.Port;
 
 public class EV3TouchSensor extends AbstractSensor {
 
-    public EV3TouchSensor(Port sensorPort, SensorMessages.SensorMode_ mode) {
-        super(SensorSampleRates.SENS_TOUCH_SAMPLERATE);
-
-        isSensorCreated = create(sensorPort, Sensors.EV3TouchSensor,mode); //Creates Lejos.EV3ColorSensor. acceptable
-
-        if(isSensorCreated){
-            sendSensorData();
-        }
-        //System.out.println(toString());;
+    public EV3TouchSensor(Port sensorPort) {
+        super(Sensors.EV3TouchSensor,sensorPort,Sensors.EV3TouchSensor.getModes()[0],SensorSampleRates.SENS_TOUCH_SAMPLERATE);
     }
 
     @Override
@@ -32,7 +25,7 @@ public class EV3TouchSensor extends AbstractSensor {
     
 	@Override
 	public String toString() {
-		return "EV3ColorSensor [sensor=" + sensor + ", sensortype=" + sensortype + ", sensormode=" + sensormode
+		return "EV3TouchSensor [sensor=" + sensor + ", sensortype=" + sensortype + ", sensormode=" + sensormode
 				+ ", sensorPort=" + sensorPort + ", sampleRate=" + sampleRate + ", isSensorCreated=" + isSensorCreated
 				+ "]";
 	}

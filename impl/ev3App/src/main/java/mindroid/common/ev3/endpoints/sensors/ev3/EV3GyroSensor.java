@@ -11,13 +11,8 @@ import lejos.hardware.port.Port;
 public class EV3GyroSensor extends AbstractSensor {
 
 
-    public EV3GyroSensor(Port sensorPort, SensorMessages.SensorMode_ mode) {
-        super(SensorSampleRates.SENS_GYRO_SAMPLERATE);
-        isSensorCreated = create(sensorPort, Sensors.EV3GyroSensor,mode); //Creates Lejos.EV3ColorSensor. acceptable
-        if(isSensorCreated){
-            sendSensorData();
-        }
-        //System.out.println(toString());;
+    public EV3GyroSensor(Port sensorPort) {
+        super(Sensors.EV3GyroSensor,sensorPort,Sensors.EV3GyroSensor.getModes()[0],SensorSampleRates.SENS_GYRO_SAMPLERATE);
     }
 
     @Override
@@ -31,7 +26,7 @@ public class EV3GyroSensor extends AbstractSensor {
     
 	@Override
 	public String toString() {
-		return "EV3ColorSensor [sensor=" + sensor + ", sensortype=" + sensortype + ", sensormode=" + sensormode
+		return "EV3GyroSensor [sensor=" + sensor + ", sensortype=" + sensortype + ", sensormode=" + sensormode
 				+ ", sensorPort=" + sensorPort + ", sampleRate=" + sampleRate + ", isSensorCreated=" + isSensorCreated
 				+ "]";
 	}

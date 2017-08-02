@@ -10,13 +10,9 @@ import lejos.hardware.port.Port;
 
 public class EV3IRSensor extends AbstractSensor {
 
-    public EV3IRSensor(Port sensorPort, SensorMessages.SensorMode_ mode) {
-        super(SensorSampleRates.SENS_IR_SAMPLERATE);
-        isSensorCreated = create(sensorPort, Sensors.EV3IRSensor,mode); //Creates Lejos.EV3ColorSensor. acceptable
-        if(isSensorCreated){
-            sendSensorData();
-        }
-        //System.out.println(toString());
+
+    public EV3IRSensor(Port sensorPort) {
+        super(Sensors.EV3IRSensor,sensorPort,Sensors.EV3IRSensor.getModes()[0],SensorSampleRates.SENS_IR_SAMPLERATE);
     }
 
     @Override
@@ -30,7 +26,7 @@ public class EV3IRSensor extends AbstractSensor {
     
 	@Override
 	public String toString() {
-		return "EV3ColorSensor [sensor=" + sensor + ", sensortype=" + sensortype + ", sensormode=" + sensormode
+		return "EV3IRSensor [sensor=" + sensor + ", sensortype=" + sensortype + ", sensormode=" + sensormode
 				+ ", sensorPort=" + sensorPort + ", sampleRate=" + sampleRate + ", isSensorCreated=" + isSensorCreated
 				+ "]";
 	}

@@ -11,15 +11,8 @@ import lejos.hardware.port.Port;
 
 public class EV3UltrasonicSensor extends AbstractSensor {
 
-    public EV3UltrasonicSensor(Port sensorPort, SensorMessages.SensorMode_ mode) {
-        super(SensorSampleRates.SENS_ULTRASONIC_SAMPLERATE);
-
-        isSensorCreated = create(sensorPort, Sensors.EV3UltrasonicSensor,mode); //Creates Lejos.EV3ColorSensor. acceptable
-
-        if(isSensorCreated){
-            sendSensorData();
-        }
-        //System.out.println(toString());
+    public EV3UltrasonicSensor(Port sensorPort) {
+        super(Sensors.EV3UltrasonicSensor,sensorPort,Sensors.EV3UltrasonicSensor.getModes()[0],SensorSampleRates.SENS_ULTRASONIC_SAMPLERATE);
     }
 
     @Override
@@ -33,7 +26,7 @@ public class EV3UltrasonicSensor extends AbstractSensor {
     
 	@Override
 	public String toString() {
-		return "EV3ColorSensor [sensor=" + sensor + ", sensortype=" + sensortype + ", sensormode=" + sensormode
+		return "EV3UltrasonicSensor [sensor=" + sensor + ", sensortype=" + sensortype + ", sensormode=" + sensormode
 				+ ", sensorPort=" + sensorPort + ", sampleRate=" + sampleRate + ", isSensorCreated=" + isSensorCreated
 				+ "]";
 	}
@@ -73,4 +66,6 @@ public class EV3UltrasonicSensor extends AbstractSensor {
         };
         new Thread(run).start(); //Starts sending data
     }
+
+
 }

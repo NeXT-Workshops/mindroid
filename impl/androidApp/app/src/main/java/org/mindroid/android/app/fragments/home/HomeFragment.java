@@ -182,7 +182,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
 
         try {
-            robot.makeRobot();
+            robot.loadStatemachines();
             spinner_selectedStatemachine.setAdapter(getStatemachineIDAdapter());
         } catch (StateAlreadyExists stateAlreadyExists) {
             stateAlreadyExists.printStackTrace();
@@ -355,12 +355,15 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             @Override
             public void onClick(View v) {
                 try {
+                    //Creates the Robot
                     robot.makeRobot();
+                    //Creates and executes the Task to connect to the Brick
+                    ConnectToBrickTask task = new ConnectToBrickTask(parentActivity,msgConnectToRobot);
+                    task.execute(); //String is not important
                 } catch (StateAlreadyExists stateAlreadyExists) {
                     stateAlreadyExists.printStackTrace();
                 }
-                ConnectToBrickTask task = new ConnectToBrickTask(parentActivity,msgConnectToRobot);
-                task.execute(); //String is not important
+
             }
         });
 

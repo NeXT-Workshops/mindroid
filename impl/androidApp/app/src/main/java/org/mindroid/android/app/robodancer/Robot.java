@@ -43,43 +43,42 @@ public class Robot {
 
     }
 
-    /**
-     * TODO Refactor
-     */
-    public void makeRobot() throws StateAlreadyExists {
+    public void loadStatemachines() throws StateAlreadyExists {
         if(mindroidStatemachine == null || mindroidImperative == null){
             mindroidStatemachine = new MindroidLVL1();
             mindroidImperative = new MindroidLVL2();
         }
+    }
 
-        System.out.println("## App.Robot.makeRobot() got called ");
-
-        //Load port Configuration
-        //TODO Load changed Settings/Configuration
-
+    /**
+     * Configurate the Robot at the RobotFactory and build the Robot.
+     * @throws StateAlreadyExists
+     */
+    public void makeRobot() throws StateAlreadyExists {
+        //TODO Add some hasChanged var to detect changes in configurations and only rebuild robot, when changes appear
         //Config
-        roFactory.setRobotConfig(robotPortConfig);
-        roFactory.setBrickIP(Settings.getInstance().ev3IP);
-        roFactory.setBrickTCPPort(Settings.getInstance().ev3TCPPort);
-        roFactory.setMSGServerIP(Settings.getInstance().serverIP);
-        roFactory.setMSGServerTCPPort(Settings.getInstance().serverTCPPort);
-        roFactory.setRobotServerPort(Settings.getInstance().robotServerPort);
-        roFactory.setRobotID(Settings.getInstance().robotID);
+        if(mindroidStatemachine != null && mindroidImperative != null) {
+            roFactory.setRobotConfig(robotPortConfig);
+            roFactory.setBrickIP(Settings.getInstance().ev3IP);
+            roFactory.setBrickTCPPort(Settings.getInstance().ev3TCPPort);
+            roFactory.setMSGServerIP(Settings.getInstance().serverIP);
+            roFactory.setMSGServerTCPPort(Settings.getInstance().serverTCPPort);
+            roFactory.setRobotServerPort(Settings.getInstance().robotServerPort);
+            roFactory.setRobotID(Settings.getInstance().robotID);
 
-        //Add Statemachines
-        roFactory.addStatemachine(mindroidStatemachine.getStatemachineCollection());
-        roFactory.addStatemachine(mindroidImperative.getStatemachineCollection());
+            //Add Statemachines
+            roFactory.addStatemachine(mindroidStatemachine.getStatemachineCollection());
+            roFactory.addStatemachine(mindroidImperative.getStatemachineCollection());
 
-        //Create Robot
-        commandCenter = roFactory.createRobot();
+            //Create the Robot
+            commandCenter = roFactory.createRobot();
+        }else{
+            System.out.println("[Robot:makeRobot] statemachine collections are null");
+        }
     }
 
     /**
      *
-     * Der EV3 muss auf USB eingestellt werden und eine statische IP zugewiesen bekommen, sowie
-     * die Subnetz Maske 255.255.0.0. Den PC-Ausgang des Bricks mit dem Rechner verbinden.
-     * ACHTUNG: Bei uns musste für die Verbindung von EV3 und Smartphone die Subnetzmaske wieder auf
-     * automatic gestellt werden!!
      *
      */
     public void connectToBrick() throws IOException {

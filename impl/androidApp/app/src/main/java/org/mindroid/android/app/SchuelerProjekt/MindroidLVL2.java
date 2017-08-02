@@ -8,7 +8,7 @@ import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 import org.mindroid.impl.robot.Robot;
 
 /**
- * Created by Torbe on 03.05.2017.
+ * Created by Torben on 03.05.2017.
  * Easiest programming level.
  */
 public class MindroidLVL2 extends LVL2API {

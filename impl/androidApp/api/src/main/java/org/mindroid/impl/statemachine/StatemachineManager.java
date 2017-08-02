@@ -257,7 +257,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
             while(!sm.isActive()){
                 try {
                     Thread.sleep(50);
-                    System.out.println("Wait until statemachine got started.. [StatemachineID: "+sm.getID()+"]");
+                    System.out.println("[StatemachineManager:startStatemachine] Wait until statemachine got started.. [StatemachineID: "+sm.getID()+"]");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

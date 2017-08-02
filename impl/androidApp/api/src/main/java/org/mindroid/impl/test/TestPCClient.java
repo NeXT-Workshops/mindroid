@@ -26,9 +26,10 @@ import java.io.IOException;
 public class TestPCClient{
 
     public static String brickIP = "10.0.1.1";
-    public static String msgServerIP = "192.168.178.42";
+    public static String msgServerIP = "127.0.0.1";
     public static String robotID = "Testrobot 1";
 
+    public static IStatemachine sm;
 
     public static void main(String args[]){
         new TestPCClientRobot();
@@ -55,7 +56,21 @@ public class TestPCClient{
                 Thread.sleep(10000);
                 System.out.println("[TestRobot:PC-Client] initialized!");
 
-                commandCenter.startStatemachine("lightshowSmall");
+                commandCenter.startStatemachine(TestPCClient.sm.getID());
+
+                Thread.sleep(20000);
+
+                commandCenter.stopStatemachine(TestPCClient.sm.getID());
+
+                Thread.sleep(5000);
+
+                commandCenter.startStatemachine(TestPCClient.sm.getID());
+
+                Thread.sleep(20000);
+
+                commandCenter.stopStatemachine(TestPCClient.sm.getID());
+
+
             } catch (StateAlreadyExists stateAlreadyExists) {
                 stateAlreadyExists.printStackTrace();
             } catch (IOException e) {
@@ -70,7 +85,7 @@ public class TestPCClient{
         }
 
         public void initRobot() throws StateAlreadyExists {
-            IStatemachine sm = lightshowSmall();
+            TestPCClient.sm = lightshowSmall();
             StatemachineCollection statemachineCollection = new StatemachineCollection();
             statemachineCollection.addStatemachine(sm.getID(),sm);
 

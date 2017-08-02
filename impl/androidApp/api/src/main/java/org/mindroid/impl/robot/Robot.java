@@ -133,7 +133,7 @@ public final class Robot {
         this.statemachineManager = statemachineManager;
     }
 
-    public static synchronized RobotController getRobotController(){
+    public static RobotController getRobotController(){
         return robotController;
     }
 
@@ -145,7 +145,7 @@ public final class Robot {
         this.robotID = robotID;
     }
 
-    public synchronized boolean isMessageingEnabled() {
+    public boolean isMessageingEnabled() {
         return messageingEnabled;
     }
 

@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 /**
- * Created by Felicia Ruppel on 19.04.17.
+ *  Created by Felicia Ruppel on 19.04.17.
+ *
+ *  Receives Inter Robot Messages
+ *
  */
 
 public class RobotServer implements IRobotServer {

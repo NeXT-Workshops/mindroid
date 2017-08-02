@@ -318,7 +318,8 @@ public class MindroidLVL1 extends LVL1API {
                 motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
                 motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
 
-                messenger.sendMessage(player_dest,"START");
+                sendMessage(player_dest,"START");
+
             }
         };
 
@@ -327,7 +328,7 @@ public class MindroidLVL1 extends LVL1API {
         Transition trans_iamLeader = new Transition(cnstr_leader){
             @Override
             public void run(){
-                messenger.sendMessage(player_dest,"I AM THE LEADER");
+                sendMessage(player_dest,"I AM THE LEADER");
             }
         };
 
@@ -419,16 +420,16 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 int color;
-                messenger.sendMessage(SERVER_LOG,"Calculating light.. ");
+                sendMessage(SERVER_LOG,"Calculating light.. ");
                 do {
                     color = (int)Math.round(Math.random() *1000 * 3);
                     switch(color){
-                        case 1: messenger.sendMessage(player_dest,cmd_red); messenger.sendMessage(SERVER_LOG,"sent Command: "+cmd_red); break;
-                        case 2: messenger.sendMessage(player_dest,cmd_yellow); messenger.sendMessage(SERVER_LOG,"sent Command: "+cmd_yellow); break;
-                        case 3: messenger.sendMessage(player_dest,cmd_green); messenger.sendMessage(SERVER_LOG,"sent Command: "+cmd_green); break;
+                        case 1: sendMessage(player_dest,cmd_red); sendMessage(SERVER_LOG,"sent Command: "+cmd_red); break;
+                        case 2: sendMessage(player_dest,cmd_yellow); sendMessage(SERVER_LOG,"sent Command: "+cmd_yellow); break;
+                        case 3: sendMessage(player_dest,cmd_green); sendMessage(SERVER_LOG,"sent Command: "+cmd_green); break;
                     }
                 }while(!(color >= 1 && color <= 3));
-                messenger.sendMessage(SERVER_LOG,"Command sent to "+other_player);
+                sendMessage(SERVER_LOG,"Command sent to "+other_player);
             }
         };
 
@@ -445,7 +446,7 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 brickController.setEV3StatusLight(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
-                messenger.sendMessage(SERVER_LOG,"Watch "+myRobotID+"s Lightshow!");
+                sendLogMessage("Watch "+myRobotID+"s Lightshow!");
             }
         };
 
@@ -453,7 +454,7 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
-                messenger.sendMessage(SERVER_LOG,"Watch "+myRobotID+"s Lightshow!");
+                sendLogMessage("Watch "+myRobotID+"s Lightshow!");
             }
         };
 
@@ -461,7 +462,7 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
-                messenger.sendMessage(SERVER_LOG,"Watch "+myRobotID+"s Lightshow!");
+                sendLogMessage("Watch "+myRobotID+"s Lightshow!");
             }
         };
 
@@ -501,7 +502,7 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 System.out.println("Executing overwritten transition run method.");
-                messenger.sendMessage(SERVER_LOG,"Executing tranistionmethod");
+                sendLogMessage("Executing tranistionmethod");
             }
         };
 
@@ -544,7 +545,7 @@ public class MindroidLVL1 extends LVL1API {
         IState state_idle = new State("Idle"){
             @Override
             public void run(){
-                messenger.sendMessage(SERVER_LOG,"Who should sent the Command?");
+                sendLogMessage("Who should sent the Command?");
             }
         };
 
@@ -555,16 +556,16 @@ public class MindroidLVL1 extends LVL1API {
             public void run(){
                 int color;
                 System.out.println("Running transition --> 'trans_send_first_cmd' --> Calculating light..");
-                messenger.sendMessage(SERVER_LOG,"Calculating light.. ");
+                sendLogMessage("Calculating light.. ");
                 do {
                     color = (int)Math.round(Math.random() *1000 * 3);
                     switch(color){
-                        case 1: messenger.sendMessage(player_dest,cmd_red); break;
-                        case 2: messenger.sendMessage(player_dest,cmd_yellow); break;
-                        case 3: messenger.sendMessage(player_dest,cmd_green); break;
+                        case 1: sendMessage(player_dest,cmd_red); break;
+                        case 2: sendMessage(player_dest,cmd_yellow); break;
+                        case 3: sendMessage(player_dest,cmd_green); break;
                     }
                 }while(!(color >= 1 && color <= 3));
-                messenger.sendMessage(SERVER_LOG,"Command sent to "+other_player);
+                sendLogMessage("Command sent to "+other_player);
             }
         };
 
@@ -580,7 +581,7 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 brickController.setEV3StatusLight(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
-                messenger.sendMessage(SERVER_LOG,"Watch "+myRobotID+"s Lightshow!");
+                sendLogMessage("Watch "+myRobotID+"s Lightshow!");
             }
         };
 
@@ -588,7 +589,7 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
-                messenger.sendMessage(SERVER_LOG,"Watch "+myRobotID+"s Lightshow!");
+                sendLogMessage("Watch "+myRobotID+"s Lightshow!");
             }
         };
 
@@ -596,7 +597,7 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
-                messenger.sendMessage(SERVER_LOG,"Watch "+myRobotID+"s Lightshow!");
+                sendLogMessage("Watch "+myRobotID+"s Lightshow!");
             }
         };
 
@@ -608,12 +609,12 @@ public class MindroidLVL1 extends LVL1API {
                 do {
                     color = (int)Math.round(Math.random() *1000 * 3);
                     switch(color){
-                        case 1: messenger.sendMessage(player_dest,cmd_red); break;
-                        case 2: messenger.sendMessage(player_dest,cmd_yellow); break;
-                        case 3: messenger.sendMessage(player_dest,cmd_green); break;
+                        case 1: sendMessage(player_dest,cmd_red); break;
+                        case 2: sendMessage(player_dest,cmd_yellow); break;
+                        case 3: sendMessage(player_dest,cmd_green); break;
                     }
                 }while(!(color >= 1 && color <= 3));
-                messenger.sendMessage(SERVER_LOG,"Command sent to "+other_player);
+                sendLogMessage("Command sent to "+other_player);
             }
         };
 
@@ -741,10 +742,10 @@ public class MindroidLVL1 extends LVL1API {
                 int number;
                 do {
                     number = (int)Math.round(Math.random() * 3);
-                    messenger.sendMessage(SERVER_LOG,"Calculated Number"+number);
+                    sendLogMessage("Calculated Number"+number);
                 }while(!(number >= 1 && number <= 3));
-                messenger.sendMessage(myRobotID,""+number);
-                messenger.sendMessage(SERVER_LOG,""+number+" - "+myRobotID);
+                sendMessage(myRobotID,""+number);
+                sendLogMessage(""+number+" - "+myRobotID);
             }
         };
 

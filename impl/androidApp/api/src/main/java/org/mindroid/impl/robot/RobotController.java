@@ -18,8 +18,8 @@ public class RobotController {
         this.motorControl = new MotorController(robot);
         this.sensorControl = new SensorController(robot);
         this.brickController = new BrickController(robot);
-        if(robot.messageingEnabled){
-            this.messenger = robot.messenger;
+        if(robot.isMessageingEnabled()){
+            this.messenger = robot.getMessenger();
         }
         this.robotID = robot.robotID;
     }
@@ -37,7 +37,7 @@ public class RobotController {
         return sensorControl;
     }
 
-    public synchronized IMessenger getMessenger() {
+    public IMessenger getMessenger() {
         return messenger;
     }
 

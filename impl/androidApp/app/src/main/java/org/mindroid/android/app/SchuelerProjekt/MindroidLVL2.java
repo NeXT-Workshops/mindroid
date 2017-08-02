@@ -21,8 +21,7 @@ public class MindroidLVL2 extends LVL2API {
     @Override
     public void run() {
         
-        messenger = Robot.getRobotController().getMessenger();
-        if(messenger!=null) messenger.sendMessage(IMessenger.SERVER_LOG, "Imperative Implementation is running!");
+        sendLogMessage("Imperative Implementation is running!");
 
 
         //Example Wall-Ping-Pong

@@ -1,5 +1,6 @@
 package mindroid.common.ev3.endpoints.sensors.ev3;
 
+import lejos.robotics.filter.MeanFilter;
 import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.common.messages.Sensors;
 import lejos.hardware.port.Port;
@@ -36,4 +37,40 @@ public class EV3UltrasonicSensor extends AbstractSensor {
 				+ ", sensorPort=" + sensorPort + ", sampleRate=" + sampleRate + ", isSensorCreated=" + isSensorCreated
 				+ "]";
 	}
+
+	@Override
+    protected void sendSensorData() {
+        //Uses Meanfilter for the data
+        MeanFilter tmpFilter = null;
+        if(sensor != null) {
+            tmpFilter = new MeanFilter(sensor, 5);
+        }
+        final MeanFilter filter = tmpFilter;
+
+        Runnable run = new Runnable() {
+            @Override
+            public void run() {
+                float[] sample = new float[filter.sampleSize()];
+                while (filter != null /*&& filter != null*/) {
+                    try {
+                        filter.fetchSample(sample, 0);
+
+                        for (SensorListener tmp_listener : listener) {
+                            if(tmp_listener != null) {
+                                tmp_listener.handleSensorData(sample);
+                            }
+                        }
+                    }catch(IndexOutOfBoundsException e){
+                        e.printStackTrace();
+                    }
+                    try {
+                        Thread.sleep(sampleRate);
+                    } catch (InterruptedException e) {
+                        //System.err.println("SensorEndpoint - Thread could not sleep.");
+                    }
+                }
+            }
+        };
+        new Thread(run).start(); //Starts sending data
+    }
 }

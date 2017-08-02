@@ -71,13 +71,6 @@ public abstract class AbstractSensor {
     public abstract boolean setSensorMode(SensorMessages.SensorMode_ newMode);
 
     protected void sendSensorData() {
-        //TODO may use MeanFilter
-        /*MeanFilter tmpFilter = null;
-        if(sensor != null) {
-            tmpFilter = new MeanFilter(sensor, 7);
-        }
-        final MeanFilter filter = tmpFilter;*/
-
         Runnable run = new Runnable() {
             @Override
             public void run() {

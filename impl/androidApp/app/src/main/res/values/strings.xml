@@ -19,6 +19,8 @@
     <string name="dialog_msg_disconnect_from_robot">Disconnecting..</string>
     <string name="dialog_msg_start_robot">Starting robot..</string>
     <string name="dialog_msg_stop_robot">Stopping robot..</string>
+    <string name="info_txt_msg_activate_tetherting">Tethering is not activated! Activate Tethering to connect to the EV3!</string>
+    <string name="info_txt_msg_activate_usb_not_found">USB cable is not plugged in! Check your usb connection!</string>
 
     <!-- Settings Fragment -->
     <string name="btn_text_save_settings">save Settings</string>

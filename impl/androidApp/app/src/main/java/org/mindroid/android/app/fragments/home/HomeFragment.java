@@ -75,11 +75,13 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     Activity parentActivity;
 
     // Resources
-    String msgConnectToRobot;
-    String msgDisconnectFromRobot;
-    String msgInitConfiguration;
-    String msgStartRobot;
-    String msgStopRobot;
+    private String msgConnectToRobot;
+    private String msgDisconnectFromRobot;
+    private String msgInitConfiguration;
+    private String msgStartRobot;
+    private String msgStopRobot;
+    private String infoUsbNotFound;
+    private String infoTetheringNotActiavted;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -139,6 +141,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         msgInitConfiguration = getResources().getString(R.string.dialog_msg_init_config);
         msgStartRobot = getResources().getString(R.string.dialog_msg_start_robot);
         msgStopRobot = getResources().getString(R.string.dialog_msg_stop_robot);
+        infoTetheringNotActiavted = getResources().getString(R.string.info_txt_msg_activate_tetherting);
+        infoUsbNotFound = getResources().getString(R.string.info_txt_msg_activate_usb_not_found);
     }
 
     @Override
@@ -270,11 +274,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 boolean isTetheringActive = false;
 
                 if(!(isUSBConnected = isUSBConnected(parentActivity))){
-                    sb.append("USB Kabel ist nicht eingesteckt. Prüfe die USB-Verbindung!");
+                    sb.append(infoUsbNotFound);
                 }
 
                 if(isUSBConnected && !(isTetheringActive = isTetheringActivated(parentActivity))){
-                    sb.append("Tethering ist nicht aktiviert. Aktiviere Tethering, um eine Verbindung zum Brick herzustellen!");
+                    sb.append(infoTetheringNotActiavted);
                     btn_activateTethering.setVisibility(Button.VISIBLE);
                 }else{
                     btn_activateTethering.setVisibility(Button.GONE);

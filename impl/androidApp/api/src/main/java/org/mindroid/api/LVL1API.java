@@ -19,7 +19,7 @@ public abstract class LVL1API implements IMindroidMain {
     public MotorController motorController = robotController.getMotorController();
     public BrickController brickController = robotController.getBrickController();
     public SensorController sensorController = robotController.getSensorController();
-    private IMessenger messenger = Robot.getRobotController().getMessenger();
+    //private IMessenger messenger = Robot.getRobotController().getMessenger();
     public String myRobotID = Robot.getRobotController().getRobotID();
 
     @Override
@@ -55,8 +55,8 @@ public abstract class LVL1API implements IMindroidMain {
      * @param message 'msg to send'
      */
     public void sendMessage(String destination, String message){
-        if(messenger != null){
-            messenger.sendMessage(destination,message);
+        if(Robot.getRobotController().getMessenger() != null){
+            Robot.getRobotController().getMessenger().sendMessage(destination,message);
         }else{
             System.out.println("[LVL1API:sendMessage] Tried to send a message, but the Messenger was null");
         }
@@ -69,8 +69,8 @@ public abstract class LVL1API implements IMindroidMain {
      * @param message 'message to send'
      */
     public void broadcastMessage(String message){
-        if(messenger != null){
-            sendMessage(IMessenger.BROADCAST,message);
+        if(Robot.getRobotController().getMessenger() != null){
+            Robot.getRobotController().getMessenger().sendMessage(IMessenger.BROADCAST,message);
         }else{
             System.out.println("[LVL1API:broadcastMessage] Tried to broadcast a message, but the Messenger was null");
         }
@@ -81,8 +81,8 @@ public abstract class LVL1API implements IMindroidMain {
      * @param logmessage 'the log message'
      */
     public void sendLogMessage(String logmessage){
-        if(messenger != null){
-            sendMessage(IMessenger.SERVER_LOG,logmessage);
+        if(Robot.getRobotController().getMessenger() != null){
+            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,logmessage);
         }else{
             System.out.println("[LVL1API:sendLogMessage] Tried to send a logmessage, but the Messenger was null");
         }

@@ -13,14 +13,15 @@ public class RobotController {
     private IMessenger messenger;
     private String robotID = "";
 
+    private Robot robot;
 
     public RobotController(Robot robot){
+        this.robot = robot;
+
         this.motorControl = new MotorController(robot);
         this.sensorControl = new SensorController(robot);
         this.brickController = new BrickController(robot);
-        if(robot.isMessageingEnabled()){
-            this.messenger = robot.getMessenger();
-        }
+
         this.robotID = robot.robotID;
     }
 
@@ -38,7 +39,12 @@ public class RobotController {
     }
 
     public IMessenger getMessenger() {
-        return messenger;
+        if(this.robot.isMessageingEnabled()){
+            return robot.getMessenger();
+        }else{
+            return null;
+        }
+
     }
 
     public String getRobotID() {

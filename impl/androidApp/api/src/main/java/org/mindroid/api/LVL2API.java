@@ -161,7 +161,9 @@ public abstract class LVL2API extends LVL1API {
 
     /** //TODO check port config before creating SM
      * //TODO method does not work yet
-    public final boolean wasTouched() {
+     *
+     **/
+    /*public final boolean wasTouched() {
         if (sensorEvaluatingStatemachines.containsKey("touched") && sensorEvaluatingStatemachines.get("touched") instanceof DiscreteValueStateMachine) {
             return (((DiscreteValueStateMachine) sensorEvaluatingStatemachines.get("touched")).getResult() == Touch.HIT);
         } else {
@@ -172,9 +174,14 @@ public abstract class LVL2API extends LVL1API {
             startStatemachine("touched");
             return (touchedSM.getResult() == Touch.HIT);
         }
-    }
-    **/
+    }*/
 
+    /**
+     * Checks if a specified message was received
+     * @param message expected message
+     * @param source expected source of the message
+     * @return true - if message received , otherwise false
+     */
     public final boolean wasMsgReceived(String message, String source) {
         //TODO needs to be tested
         if (sensorEvaluatingStatemachines.containsKey("Msg"+ message + source) && sensorEvaluatingStatemachines.get("Msg"+ message + source) instanceof BooleanStatemachine) {

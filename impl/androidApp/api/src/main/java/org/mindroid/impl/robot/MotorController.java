@@ -21,6 +21,11 @@ public class MotorController implements IMotorControl {
         this.robot = robot;
     }
 
+    /**
+     * Set the motor speed
+     * @param motorPort port of the motor
+     * @param speed 1-100% motor speed value
+     */
     @Override
     public final void setMotorSpeed(EV3PortID motorPort, int speed) {
         IMotor IMotor = getMotor(motorPort);
@@ -31,6 +36,11 @@ public class MotorController implements IMotorControl {
         }
     }
 
+    /**
+     * Set the Motor direction
+     * @param motorPort port of the motor
+     * @param direction forward/backward
+     */
     @Override
     public final  void setMotorDirection(EV3PortID motorPort, int direction) {
         IMotor IMotor = getMotor(motorPort);
@@ -46,6 +56,10 @@ public class MotorController implements IMotorControl {
         }
     }
 
+    /**
+     * Stop the motor
+     * @param motorPort stops the motor at motor port
+     */
     @Override
     public final void stop(EV3PortID motorPort) {
         IMotor IMotor = getMotor(motorPort);
@@ -58,6 +72,11 @@ public class MotorController implements IMotorControl {
         }
     }
 
+    /**
+     * Rotate the motor: Only works with regulated Motor
+     * @param motorPort port of the motor
+     * @param angle +/- angle to rotate
+     */
     @Override
     public final void rotate(EV3PortID motorPort,int angle) {
         IMotor IMotor = getMotor(motorPort);
@@ -73,6 +92,11 @@ public class MotorController implements IMotorControl {
         }
     }
 
+    /**
+     * Rotate to a specified angle: Only works with regulated Motor
+     * @param motorPort port of the motor
+     * @param angle angle to rotate to
+     */
     @Override
     public final void rotateTo(EV3PortID motorPort,int angle) {
         IMotor IMotor = getMotor(motorPort);

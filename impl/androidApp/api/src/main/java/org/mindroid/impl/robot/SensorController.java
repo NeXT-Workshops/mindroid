@@ -19,6 +19,11 @@ public class SensorController implements ISensorControl{
         this.robot = robot;
     }
 
+    /**
+     * Change the sensor mode
+     * @param sensport port of the sensor
+     * @param mode new sensor mode
+     */
     @Override
     public void changeSensorMode(EV3PortID sensport, SensorMessages.SensorMode_ mode) {
         EV3Sensor sensor = getSensor(sensport);

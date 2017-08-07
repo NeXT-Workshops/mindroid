@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Robodancer</string>
+    <string name="app_name">Mindroid</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Einstellungen</string>
@@ -13,8 +13,9 @@
     <string name="btn_text_start_robot">Start</string>
     <string name="btn_text_stop_robot">stop</string>
     <string name="btn_text_disconnect">Verbindung trennen</string>
-    <string name="btn_text_connect">Verbindung zum Roboter herstellen</string>
+    <string name="btn_text_connect">Verbindung zum EV3 Brick wird hergestellt</string>
     <string name="dialog_msg_connect_to_robot">Verbindung wird aufgebaut..</string>
+    <string name="dialog_msg_connect_to_robot_error">Verbindung zum EV3 Brick konnte nicht hergestellt werden! Ueberprüfe ob der EV3 Brick bereit ist, sowie die USB-Verbindung. Versuche es nocheinmal!</string>
     <string name="dialog_msg_init_config">Der Roboter wird konfiguriert..</string>
     <string name="dialog_msg_disconnect_from_robot">Trennen..</string>
     <string name="dialog_msg_start_robot">Roboter wird gestartet..</string>

@@ -76,6 +76,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     // Resources
     private String msgConnectToRobot;
+    private String msgConnectToRobotError;
     private String msgDisconnectFromRobot;
     private String msgInitConfiguration;
     private String msgStartRobot;
@@ -137,6 +138,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
         //Get Resources
         msgConnectToRobot = getResources().getString(R.string.dialog_msg_connect_to_robot);
+        msgConnectToRobotError = getResources().getString(R.string.dialog_msg_connect_to_robot_error);
         msgDisconnectFromRobot = getResources().getString(R.string.dialog_msg_disconnect_from_robot);
         msgInitConfiguration = getResources().getString(R.string.dialog_msg_init_config);
         msgStartRobot = getResources().getString(R.string.dialog_msg_start_robot);
@@ -529,7 +531,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 result = robot.isConnected();
             } catch (IOException e){
                 e.printStackTrace();
-                mListener.showErrorDialog("Exception",e.getMessage());
+                mListener.showErrorDialog("Exception",msgConnectToRobotError);
             }
             robot.isConnectedToBrick = result;
             return result;

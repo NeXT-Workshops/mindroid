@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Robodancer</string>
+    <string name="app_name">Mindroid</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
@@ -13,8 +13,9 @@
     <string name="btn_text_start_robot">Start</string>
     <string name="btn_text_stop_robot">stop</string>
     <string name="btn_text_disconnect">disconnect</string>
-    <string name="btn_text_connect">connect to robot</string>
+    <string name="btn_text_connect">connect to EV3 Brick</string>
     <string name="dialog_msg_connect_to_robot">Connecting..</string>
+    <string name="dialog_msg_connect_to_robot_error">Unable to connect to the EV3 Brick. Check if the EV3 Brick is Ready and if the cable is plugged in and try again.</string>
     <string name="dialog_msg_init_config">Configurating your Robot..</string>
     <string name="dialog_msg_disconnect_from_robot">Disconnecting..</string>
     <string name="dialog_msg_start_robot">Starting robot..</string>

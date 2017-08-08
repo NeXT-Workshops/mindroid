@@ -25,21 +25,20 @@ public class MindroidLVL2 extends LVL2API {
 
 
         //Example Wall-Ping-Pong
-        while (true) {
+        while (true  && !isInterrupted()) {
             forward();
-            while (distanceGreaterThan(0.15f)) {
+            while (distanceGreaterThan(0.15f) && !isInterrupted()) {
                 delay(300);
             }
             stopMotors();
             backward();
             delay(1200);
             setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.BLINKING);
-
             turnLeft(130);
-            setLED(EV3StatusLightColor.OFF,EV3StatusLightInterval.BLINKING);
+            setLED(EV3StatusLightColor.OFF, EV3StatusLightInterval.BLINKING);
             stopMotors();
-        }
 
+        }
     }
     
 

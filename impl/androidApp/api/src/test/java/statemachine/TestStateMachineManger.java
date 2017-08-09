@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mindroid.api.statemachine.*;
 import org.mindroid.api.statemachine.constraints.IConstraint;
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
@@ -40,7 +40,7 @@ public class TestStateMachineManger {
 
 
 	@Before
-	public void initStatemachine() throws StateAlreadyExists {
+	public void initStatemachine() throws StateAlreadyExistsException {
 		start = new State(state_name_start){
 			@Override
 			public void run(){

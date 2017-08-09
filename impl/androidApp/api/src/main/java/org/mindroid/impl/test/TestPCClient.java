@@ -8,7 +8,7 @@ import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
 import org.mindroid.api.statemachine.ITransition;
 import org.mindroid.api.statemachine.constraints.IConstraint;
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.common.messages.NetworkPortConfig;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
@@ -71,7 +71,7 @@ public class TestPCClient{
                 commandCenter.stopStatemachine(TestPCClient.sm.getID());
 
 
-            } catch (StateAlreadyExists stateAlreadyExists) {
+            } catch (StateAlreadyExistsException stateAlreadyExists) {
                 stateAlreadyExists.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -84,7 +84,7 @@ public class TestPCClient{
             }
         }
 
-        public void initRobot() throws StateAlreadyExists {
+        public void initRobot() throws StateAlreadyExistsException {
             TestPCClient.sm = lightshowSmall();
             StatemachineCollection statemachineCollection = new StatemachineCollection();
             statemachineCollection.addStatemachine(sm.getID(),sm);
@@ -109,7 +109,7 @@ public class TestPCClient{
 
 
 
-        public IStatemachine lightshowSmall() throws StateAlreadyExists {
+        public IStatemachine lightshowSmall() throws StateAlreadyExistsException {
             IStatemachine sm = new Statemachine("lightshowSmall");
 
 

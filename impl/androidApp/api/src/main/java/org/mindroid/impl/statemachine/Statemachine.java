@@ -10,8 +10,9 @@ import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.api.statemachine.exception.DuplicateTransitionException;
 import org.mindroid.api.statemachine.exception.NoCurrentStateSetException;
 import org.mindroid.api.statemachine.exception.NoSuchStateException;
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.api.statemachine.properties.ITimeProperty;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.statemachine.constraints.TimeExpired;
 
 public class Statemachine implements IStatemachine{
@@ -28,6 +29,14 @@ public class Statemachine implements IStatemachine{
 	HashMap<String,IState> states = new HashMap<String,IState>();
 	
 	private ArrayList<IState> lstStates = new ArrayList<IState>();
+
+
+
+	/**
+	 * True if there is an error.
+	 * for example: states with the same id.
+	 */
+	private boolean invalidStatemachine = false;
 
 	private boolean isActive = false;
 
@@ -62,18 +71,24 @@ public class Statemachine implements IStatemachine{
 	}
 
 	@Override
-	public Collection<? extends ITransition> currentStateTransitions() throws NoCurrentStateSetException {
+	public Collection<? extends ITransition> currentStateTransitions() {
 		if(currentState != null){
 			return currentState.getTransitions();
 		}else{
-			throw new NoCurrentStateSetException("Current State is null");
+			Exception noCurrentState = new NoCurrentStateSetException("Current State is null");
+			ErrorHandlerManager.getInstance().handleError(noCurrentState,this.getClass(),getID());
+			setInvalidStatemachine(true);
+			return null; //TODO Check what happens if null will actually be returned
 		}
 	}
 
 	@Override
-	public void addState(IState state) throws StateAlreadyExists {
+	public void addState(IState state)  {
 		if(this.states.containsKey(state.getName())){
-			throw new StateAlreadyExists("This Statemachine already has a State with this name: "+state.getName());
+			//throw new StateAlreadyExistsException("This Statemachine already has a State with this name: "+state.getName());
+			Exception stateExists = new StateAlreadyExistsException("This Statemachine already has a State with this name: "+state.getName());
+			ErrorHandlerManager.getInstance().handleError(stateExists,this.getClass(),getID());
+			setInvalidStatemachine(true);
 		}else{
 			this.states.put(state.getName(), state);
 		}
@@ -101,11 +116,15 @@ public class Statemachine implements IStatemachine{
 				//Add StateInformation to TimeProperties/(no more yet) in Constraint
 				addStateInformationToProperties(tmpTransition.getConstraint(),source);
 			} catch (DuplicateTransitionException e) {
-				e.printStackTrace();
+				ErrorHandlerManager.getInstance().handleError(e,Statemachine.class,"");
+				setInvalidStatemachine(true);
+				//e.printStackTrace();
 			}
 			
 		}else{
-			new NoSuchStateException("At least one of the given sates: "+source.getName()+", "+destination.getName()+" does not exist!").printStackTrace();
+			Exception noSuchState = new NoSuchStateException("At least one of the given sates: "+source.getName()+", "+destination.getName()+" does not exist!");
+			ErrorHandlerManager.getInstance().handleError(noSuchState,this.getClass(),getID());
+			setInvalidStatemachine(true);
 		}
 		
 	}
@@ -129,7 +148,7 @@ public class Statemachine implements IStatemachine{
 	}
 
 	@Override
-	public void addStates(Collection<IState> states) throws StateAlreadyExists{
+	public void addStates(Collection<IState> states) {
 		for(IState s : states){
 			addState(s);
 		}
@@ -151,6 +170,7 @@ public class Statemachine implements IStatemachine{
 	@Override
 	public void start() throws NoStartStateException {
 		if(startState == null){
+			setInvalidStatemachine(true); //Statemachine has to start to detect this issue, so this is maybe to late then
 			throw new NoStartStateException("No Start State specified for this (ID:'"+getID()+"') Statemachine. Use setStartState(..) to specify a State to begin with!");
 		}else {
 			currentState = startState;
@@ -208,5 +228,13 @@ public class Statemachine implements IStatemachine{
 		this.isMessageingAllowed = value;
 	}
 
+	@Override
+	public boolean isInvalidStatemachine() {
+		return invalidStatemachine;
+	}
+
+	public void setInvalidStatemachine(boolean invalidStatemachine) {
+		this.invalidStatemachine = invalidStatemachine;
+	}
 
 }

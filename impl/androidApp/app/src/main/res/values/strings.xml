@@ -15,12 +15,16 @@
     <string name="btn_text_disconnect">disconnect</string>
     <string name="btn_text_connect">connect to EV3 Brick</string>
     <string name="dialog_msg_connect_to_robot">Connecting..</string>
-    <string name="dialog_msg_connect_to_robot_error">Unable to connect to the EV3 Brick. Check if the EV3 Brick is Ready and if the cable is plugged in and try again.</string>
+    <string name="dialog_msg_connect_to_robot_error">Unable to connect to the EV3 Brick. Check if the EV3 Brick is Ready
+        and if the cable is plugged in and try again.
+    </string>
     <string name="dialog_msg_init_config">Configurating your Robot..</string>
     <string name="dialog_msg_disconnect_from_robot">Disconnecting..</string>
     <string name="dialog_msg_start_robot">Starting robot..</string>
     <string name="dialog_msg_stop_robot">Stopping robot..</string>
-    <string name="info_txt_msg_activate_tetherting">Tethering is not activated! Activate Tethering to connect to the EV3!</string>
+    <string name="info_txt_msg_activate_tetherting">Tethering is not activated! Activate Tethering to connect to the
+        EV3!
+    </string>
     <string name="info_txt_msg_activate_usb_not_found">USB cable is not plugged in! Check your usb connection!</string>
 
     <!-- Settings Fragment -->

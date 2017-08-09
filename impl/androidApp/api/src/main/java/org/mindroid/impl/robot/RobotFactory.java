@@ -1,6 +1,7 @@
 package org.mindroid.impl.robot;
 
 import org.mindroid.api.communication.IRobotServer;
+import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.robot.*;
 import org.mindroid.api.robot.context.IConstraintEvaluator;
 import org.mindroid.api.robot.control.IBrickControl;
@@ -14,6 +15,7 @@ import org.mindroid.common.messages.Sensors;
 import org.mindroid.impl.communication.Messenger;
 import org.mindroid.impl.communication.RobotServer;
 import org.mindroid.impl.configuration.RobotConfigurator;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 import org.mindroid.impl.robot.context.RobotContextState;
@@ -242,6 +244,11 @@ public final class RobotFactory implements IRobotFactory {
     @Override
     public void addStatemachine(StatemachineCollection statemachines) {
         myRobot.getStatemachineManager().addStatemachines(statemachines);
+    }
+
+    @Override
+    public void addErrorHandler(AbstractErrorHandler errorHandler){
+        ErrorHandlerManager.getInstance().registerErrorHandler(errorHandler);
     }
 
     @Override

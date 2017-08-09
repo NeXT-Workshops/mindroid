@@ -5,7 +5,7 @@ import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.motor.Motor;
 import org.mindroid.impl.statemachine.*;
@@ -13,13 +13,10 @@ import org.mindroid.impl.statemachine.constraints.GT;
 import org.mindroid.impl.statemachine.constraints.LT;
 import org.mindroid.impl.statemachine.constraints.MsgReceived;
 import org.mindroid.impl.statemachine.constraints.Rotation;
-import org.mindroid.impl.statemachine.constraints.TimeExpired;
 import org.mindroid.impl.statemachine.properties.MessageProperty;
-import org.mindroid.impl.statemachine.properties.Seconds;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Angle;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
-import org.mindroid.impl.statemachine.properties.sensorproperties.Touch;
 
 import java.util.HashMap;
 
@@ -40,7 +37,7 @@ public abstract class LVL2API extends LVL1API {
     private ImperativeStatemachine imperativeStatemachine;
 
 
-    public LVL2API() throws StateAlreadyExists {
+    public LVL2API() {
         motorA = new Motor(motorController,EV3PortIDs.PORT_A);
         motorB = new Motor(motorController,EV3PortIDs.PORT_B);
         motorC = new Motor(motorController,EV3PortIDs.PORT_C);
@@ -85,7 +82,7 @@ public abstract class LVL2API extends LVL1API {
 
 
 
-    public final IStatemachine initStatemachine() throws StateAlreadyExists {
+    public final IStatemachine initStatemachine() {
         ImperativeStatemachine sm = new ImperativeStatemachine(IMPERATIVE_STATEMACHINE_ID);
 
         IState state_start = new State("Running state"){

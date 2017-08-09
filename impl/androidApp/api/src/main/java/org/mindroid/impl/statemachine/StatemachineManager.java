@@ -7,12 +7,14 @@ import org.mindroid.api.statemachine.*;
 import org.mindroid.api.statemachine.constraints.AbstractLogicOperator;
 import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.api.statemachine.properties.ITimeProperty;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.robot.Robot;
 import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
 import org.mindroid.impl.robot.context.StartCondition;
 import org.mindroid.impl.statemachine.constraints.TimeExpired;
+import org.xml.sax.ErrorHandler;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -250,7 +252,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                         sm.start();
                         System.out.print("[Statemachine-Thread][StatemachineID: "+sm.getID()+"] Statemachine started");
                     } catch (NoStartStateException e) {
-                        e.printStackTrace();//TODO call error handler
+                        ErrorHandlerManager.getInstance().handleError(e,StatemachineManager.class,sm.getID());
                     }
                     // System.out.println("## Statemachine "+sm.getID()+" is now running in Thread ##");
                 }

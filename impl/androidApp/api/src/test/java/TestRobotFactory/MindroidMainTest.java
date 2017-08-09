@@ -4,7 +4,7 @@ import org.mindroid.api.statemachine.IMindroidMain;
 import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.impl.robot.*;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.statemachine.State;
@@ -30,7 +30,7 @@ public class MindroidMainTest implements IMindroidMain {
     //TODO HashMap<String,RobotEvent> events = Robot.getInstance().getRobotEvents();
 
 
-    public void initStatemachine() throws StateAlreadyExists {
+    public void initStatemachine() throws StateAlreadyExistsException {
 
         IState state_forward = new State("Forward") {
             @Override
@@ -101,7 +101,7 @@ public class MindroidMainTest implements IMindroidMain {
 
 
     @Override
-    public StatemachineCollection getStatemachineCollection() throws StateAlreadyExists {
+    public StatemachineCollection getStatemachineCollection() throws StateAlreadyExistsException {
         StatemachineCollection sc = new StatemachineCollection();
         sc.addStatemachine("main",sm);
         return sc;

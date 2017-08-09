@@ -2,8 +2,11 @@ package org.mindroid.android.app.robodancer;
 
 
 
+import org.mindroid.android.app.SchuelerProjekt.ErrorStatemachines;
 import org.mindroid.android.app.SchuelerProjekt.MindroidLVL1;
 import org.mindroid.android.app.SchuelerProjekt.MindroidLVL2;
+import org.mindroid.android.app.errorhandling.APIErrorHandler;
+import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.impl.configuration.RobotPortConfig;
 import org.mindroid.api.robot.IRobotFactory;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
@@ -11,7 +14,6 @@ import org.mindroid.api.statemachine.IMindroidMain;
 
 import java.io.IOException;
 
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 import org.mindroid.impl.robot.RobotFactory;
@@ -30,20 +32,19 @@ public class Robot {
 
     IRobotFactory roFactory = new RobotFactory();
     //-------- Robot
-    RobotPortConfig robotPortConfig = new RobotPortConfig(); //TODO Dependency/Linked to SchuelerProjekt
+    public RobotPortConfig robotPortConfig = new RobotPortConfig(); //TODO Dependency/Linked to SchuelerProjekt#
+    //TODO Refactor: Make more dynamic: add collections of statemachines dynamically
     public IMindroidMain mindroidStatemachine; //TODO Dependency/Linked to SchuelerProjekt
     public IMindroidMain mindroidImperative; //TODO Dependency/Linked to SchuelerProjekt
 
     String runningStatemachineID = "";
 
-
-
-
     public Robot() {
 
     }
 
-    public void loadStatemachines() throws StateAlreadyExists {
+    public void loadStatemachines()  {
+        //TODO Refactor: Make more dynamic
         if(mindroidStatemachine == null || mindroidImperative == null){
             mindroidStatemachine = new MindroidLVL1();
             mindroidImperative = new MindroidLVL2();
@@ -52,9 +53,8 @@ public class Robot {
 
     /**
      * Configurate the Robot at the RobotFactory and build the Robot.
-     * @throws StateAlreadyExists
      */
-    public void makeRobot() throws StateAlreadyExists {
+    public void makeRobot()  {
         //TODO Add some hasChanged var to detect changes in configurations and only rebuild robot, when changes appear
         //Config
         if(mindroidStatemachine != null && mindroidImperative != null) {
@@ -122,24 +122,28 @@ public class Robot {
      * @return IDs of Statemachines as String[]
      */
     public String[] getStatemachineIDs(){
-        try {
-            int size_imp = mindroidImperative.getStatemachineCollection().getStatemachineKeySet().size();
-            int size_state = mindroidStatemachine.getStatemachineCollection().getStatemachineKeySet().size();
-            String[] ids = new String[size_imp+size_state];
-            int index = 0;
-            for (String id : mindroidImperative.getStatemachineCollection().getStatemachineKeySet()) {
-                ids[index] = id;
+        //TODO Refactor: Make more dynamic
+        int size_imp = mindroidImperative.getStatemachineCollection().getStatemachineKeySet().size();
+        int size_state = mindroidStatemachine.getStatemachineCollection().getStatemachineKeySet().size();
+        String[] tmpIDs = new String[size_imp+size_state];
+        int index = 0;
+        for (String id : mindroidImperative.getStatemachineCollection().getStatemachineKeySet()) {
+            //Only add valid statemachines!
+                tmpIDs[index] = id;
                 index++;
-            }
-            for (String id : mindroidStatemachine.getStatemachineCollection().getStatemachineKeySet()) {
-                ids[index] = id;
-                index++;
-            }
-            return ids;
-        } catch (StateAlreadyExists stateAlreadyExists) {
-            stateAlreadyExists.printStackTrace();
         }
-        return null;
+        for (String id : mindroidStatemachine.getStatemachineCollection().getStatemachineKeySet()) {
+            //Only add valid statemachines!
+            tmpIDs[index] = id;
+            index++;
+
+        }
+        String[] ids = new String[index];
+        for (int i = 0; i < index; i++) {
+            ids[i] = tmpIDs[i];
+        }
+
+        return ids;
     }
 
     public boolean isConnected() {
@@ -180,5 +184,9 @@ public class Robot {
 
     public void disconnect() {
         commandCenter.disconnect();
+    }
+
+    public void registerErrorHandler(AbstractErrorHandler errorHandler){
+        roFactory.addErrorHandler(errorHandler);
     }
 }

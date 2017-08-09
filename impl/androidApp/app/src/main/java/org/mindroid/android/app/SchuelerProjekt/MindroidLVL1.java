@@ -8,7 +8,7 @@ import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
 import org.mindroid.api.statemachine.ITransition;
 import org.mindroid.api.statemachine.constraints.IConstraint;
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.statemachine.State;
 import org.mindroid.impl.statemachine.Statemachine;
@@ -32,14 +32,11 @@ import static org.mindroid.api.communication.IMessenger.SERVER_LOG;
 
 public class MindroidLVL1 extends LVL1API {
 
-
-
-
-    public MindroidLVL1() throws StateAlreadyExists {
+    public MindroidLVL1() {
         initStatemachines();
     }
 
-    public void initStatemachines() throws StateAlreadyExists {
+    public void initStatemachines()  {
 
         IStatemachine tmpStatemachine;
         //Statemachine rotate 90 degrees
@@ -74,7 +71,7 @@ public class MindroidLVL1 extends LVL1API {
     }
 
 
-    public IStatemachine displayDrawingTestStatemachine() throws StateAlreadyExists {
+    public IStatemachine displayDrawingTestStatemachine()  {
         IStatemachine sm = new Statemachine("TestDisplayStatemachine");
 
         IState state_clearDisplay = new State("createClearDisplayMsg"){
@@ -107,9 +104,9 @@ public class MindroidLVL1 extends LVL1API {
     /**
      * Plays Sounds sequentially singleBeep,doubleBeep,sequenceDown,sequenceUp,buzz
      * @return
-     * @throws StateAlreadyExists
+     * @throws StateAlreadyExistsException
      */
-    public IStatemachine soundTestStatemachine () throws StateAlreadyExists {
+    public IStatemachine soundTestStatemachine () {
         IStatemachine sm = new Statemachine("TestSoundStatemachine");
 
         IState state_beep = new State("SingleBeep"){
@@ -169,7 +166,7 @@ public class MindroidLVL1 extends LVL1API {
         return sm;
     }
 
-    public IStatemachine roationMachine() throws StateAlreadyExists {
+    public IStatemachine roationMachine() {
         IStatemachine sm = new Statemachine("RotationMachine");
 
         IState state_rotate = new State("Rotating"){
@@ -214,7 +211,7 @@ public class MindroidLVL1 extends LVL1API {
     }
 
 
-    public IStatemachine synchronizedWallPingPong() throws StateAlreadyExists{
+    public IStatemachine synchronizedWallPingPong() {
         IStatemachine sm = new Statemachine("syncWallPingPong");
 
         final String cmd_red = "RED";
@@ -377,7 +374,7 @@ public class MindroidLVL1 extends LVL1API {
     }
 
 
-    public IStatemachine lightshowBig() throws StateAlreadyExists {
+    public IStatemachine lightshowBig() {
         IStatemachine sm = new Statemachine("lightShow");
 
         final String cmd_red = "RED";
@@ -492,7 +489,7 @@ public class MindroidLVL1 extends LVL1API {
         return sm;
     }
 
-    public IStatemachine testSM() throws StateAlreadyExists {
+    public IStatemachine testSM() {
         IStatemachine sm = new Statemachine("testSM");
 
         IState state_A = new State("STATE A");
@@ -516,7 +513,7 @@ public class MindroidLVL1 extends LVL1API {
     }
 
 
-    public IStatemachine lightshowSmall() throws StateAlreadyExists {
+    public IStatemachine lightshowSmall() {
         IStatemachine sm = new Statemachine("lightshowSmall");
 
         final String cmd_red = "RED";
@@ -639,7 +636,7 @@ public class MindroidLVL1 extends LVL1API {
         return sm;
     }
 
-    public IStatemachine wallPingPong() throws StateAlreadyExists {
+    public IStatemachine wallPingPong() {
         IStatemachine sm = new Statemachine("SingleWallPingPong");
 
         IState state_forward = new State("Forward") {
@@ -733,7 +730,7 @@ public class MindroidLVL1 extends LVL1API {
         return sm;
     }
 
-    public IStatemachine testTransitionCopy() throws StateAlreadyExists {
+    public IStatemachine testTransitionCopy() {
         IStatemachine sm = new Statemachine("testTransitionCopy");
         IState state_mathRandom = new State("Random Number State"){
             @Override

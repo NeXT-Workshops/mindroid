@@ -3,7 +3,7 @@ package org.mindroid.api;
 import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.statemachine.IMindroidMain;
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.robot.*;
 import org.mindroid.impl.statemachine.StatemachineCollection;
@@ -23,7 +23,7 @@ public abstract class LVL1API implements IMindroidMain {
     public String myRobotID = Robot.getRobotController().getRobotID();
 
     @Override
-    public final StatemachineCollection getStatemachineCollection() throws StateAlreadyExists {
+    public final StatemachineCollection getStatemachineCollection() {
         return  statemachineCollection;
     }
 

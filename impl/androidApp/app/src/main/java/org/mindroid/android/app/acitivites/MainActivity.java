@@ -19,6 +19,7 @@ import android.util.DisplayMetrics;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.dialog.ErrorDialog;
+import org.mindroid.android.app.errorhandling.APIErrorHandler;
 import org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment;
 import org.mindroid.android.app.fragments.myrobot.MyRobotFragment;
 import org.mindroid.android.app.fragments.home.HomeFragment;
@@ -26,11 +27,12 @@ import org.mindroid.android.app.fragments.NavigationDrawerFragment;
 import org.mindroid.android.app.fragments.home.RobotSetupInfoFragment;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Settings;
+import org.mindroid.api.errorhandling.AbstractErrorHandler;
 
 import java.util.Locale;
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SettingsFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,SettingsFragment.OnSettingsChanged, MyRobotFragment.OnFragmentInteractionListener, RobotSetupInfoFragment.OnFragmentInteractionListener{
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SettingsFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,SettingsFragment.OnSettingsChanged, MyRobotFragment.OnFragmentInteractionListener, RobotSetupInfoFragment.OnFragmentInteractionListener,IErrorHandler{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -42,7 +44,7 @@ public class MainActivity extends Activity
      */
     private CharSequence mTitle;
 
-
+    private APIErrorHandler errorHandler = new APIErrorHandler(this);
 
     /** Used Fragments **/
     private final Fragment HOME_FRAGMENT = HomeFragment.newInstance("","");
@@ -137,8 +139,6 @@ public class MainActivity extends Activity
                 .commit();
     }
 
-
-
     @Override
     public void showErrorDialog(final String title, final String message){
         final Context context = this;
@@ -169,4 +169,8 @@ public class MainActivity extends Activity
 
     }
 
+    @Override
+    public AbstractErrorHandler getErrorHandler() {
+        return errorHandler;
+    }
 }

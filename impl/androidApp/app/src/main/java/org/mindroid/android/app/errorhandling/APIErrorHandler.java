@@ -31,6 +31,9 @@ public class APIErrorHandler extends AbstractErrorHandler{
 
         }else if(source == StatemachineManager.class){
             handleStatemachineManagerErrors(e,msg);
+        }else {
+            //Anything else
+            mainActivity.showErrorDialog("Error", source.toString()+":\n"+e.getMessage());
         }
 
         System.out.println("[APIErrorHandler:handleError] "+logMessage);

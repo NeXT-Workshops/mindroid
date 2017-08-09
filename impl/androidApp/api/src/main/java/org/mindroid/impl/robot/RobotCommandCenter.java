@@ -2,6 +2,7 @@ package org.mindroid.impl.robot;
 
 
 import org.mindroid.api.robot.control.IRobotCommandCenter;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 
 import java.io.IOException;
@@ -44,12 +45,13 @@ public class RobotCommandCenter implements IRobotCommandCenter {
         long start_timer = System.currentTimeMillis();
         while(!robot.getRobotConfigurator().getBrick().isBrickReady()){
             if(timeout < System.currentTimeMillis() - start_timer){
-                throw new IOException("RobotCommandCenter: Connection timed out!");
+                Exception e = new IOException("RobotCommandCenter: Connection timed out!");
+                ErrorHandlerManager.getInstance().handleError(e,RobotCommandCenter.class,e.toString());
             }
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                ErrorHandlerManager.getInstance().handleError(e,RobotCommandCenter.class,e.toString());
             }
         }
     }

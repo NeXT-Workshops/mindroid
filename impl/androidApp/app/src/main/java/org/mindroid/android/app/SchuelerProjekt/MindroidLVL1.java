@@ -104,7 +104,6 @@ public class MindroidLVL1 extends LVL1API {
     /**
      * Plays Sounds sequentially singleBeep,doubleBeep,sequenceDown,sequenceUp,buzz
      * @return
-     * @throws StateAlreadyExistsException
      */
     public IStatemachine soundTestStatemachine () {
         IStatemachine sm = new Statemachine("TestSoundStatemachine");

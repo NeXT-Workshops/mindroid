@@ -2,10 +2,8 @@ package org.mindroid.android.app.robodancer;
 
 
 
-import org.mindroid.android.app.SchuelerProjekt.ErrorStatemachines;
 import org.mindroid.android.app.SchuelerProjekt.MindroidLVL1;
 import org.mindroid.android.app.SchuelerProjekt.MindroidLVL2;
-import org.mindroid.android.app.errorhandling.APIErrorHandler;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.impl.configuration.RobotPortConfig;
 import org.mindroid.api.robot.IRobotFactory;
@@ -37,7 +35,7 @@ public class Robot {
     public IMindroidMain mindroidStatemachine; //TODO Dependency/Linked to SchuelerProjekt
     public IMindroidMain mindroidImperative; //TODO Dependency/Linked to SchuelerProjekt
 
-    String runningStatemachineID = "";
+    String statemachinesGroupID = "";
 
     public Robot() {
 
@@ -159,7 +157,7 @@ public class Robot {
      * @param id
      */
     public void startStatemachine(String id) {
-        runningStatemachineID = id;
+        statemachinesGroupID = id;
         commandCenter.startStatemachine(id);
     }
 
@@ -168,13 +166,13 @@ public class Robot {
      * @param id
      */
     public void stopStatemachine(String id) {
-        runningStatemachineID = "";
+        statemachinesGroupID = "";
         commandCenter.stopStatemachine(id);
     }
 
     public void stop() {
-        if(runningStatemachineID != ""){
-            commandCenter.stopStatemachine(runningStatemachineID);
+        if(statemachinesGroupID != ""){
+            commandCenter.stopStatemachine(statemachinesGroupID);
         }
     }
 

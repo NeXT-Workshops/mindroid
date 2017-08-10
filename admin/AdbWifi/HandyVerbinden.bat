@@ -48,8 +48,8 @@ if %ip_address% == 0.0.0.0 goto noIP
 :setupWifiConnection
 @echo Die Wifi-Verbindung wird gestartet...
 @set cmd="adb shell ip route | findstr "wlan0" | findstr /r "[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*""
-@for /f "tokens=3" %%a in ('!cmd!') do @set ip_address=%%a
-@for /f "tokens=1  delims=/" %%a in ("%ip_address%") do @set ip_address=%%a
+@rem ip address is the ninth token/"word":
+@for /f "tokens=9" %%a in ('!cmd!') do @set ip_address=%%a
 @if "%ip_address%" == "0.0.0.0" goto WifiError
 
 @echo off

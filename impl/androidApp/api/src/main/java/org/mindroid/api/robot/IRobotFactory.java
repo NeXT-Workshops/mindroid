@@ -1,5 +1,6 @@
 package org.mindroid.api.robot;
 
+import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.impl.statemachine.StatemachineCollection;
 
@@ -22,6 +23,8 @@ public interface IRobotFactory {
     public void setRobotID(String robotID);
 
     public void addStatemachine(StatemachineCollection statemachines);
+
+    void addErrorHandler(AbstractErrorHandler errorHandler);
 
     /** Clears all properties **/
     public void clearConfiguration();

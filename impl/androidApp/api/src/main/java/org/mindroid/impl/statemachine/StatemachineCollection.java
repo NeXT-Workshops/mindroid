@@ -18,18 +18,23 @@ public class StatemachineCollection {
         statemachines = new HashMap<String,ArrayList<IStatemachine>>();
     }
 
+
     /**
      *
      * Adds a Single running Statemachine to the Collection.
      * Statemachines with the same id will be overwritten.
+     * Statemachine will only be added if it is not invalid.
      *
      * @param statemachine
      */
     public void addStatemachine(String groupID,IStatemachine statemachine){
         //TODO may throw a warning if statemachine/group with the same id already exists and will be overwritten
-        ArrayList<IStatemachine> statemachines = new ArrayList<IStatemachine>(1);
-        statemachines.add(statemachine);
-        this.statemachines.put(groupID,statemachines);
+        if(!statemachine.isInvalidStatemachine()) {
+            //Single Statemachine will be handled as a Group of Statemachines (but always only one) -> groupID == statemachinID (but not neccessarily)
+            ArrayList<IStatemachine> statemachines = new ArrayList<IStatemachine>(1);
+            statemachines.add(statemachine);
+            this.statemachines.put(groupID, statemachines);
+        }
     }
 
     /**
@@ -44,16 +49,10 @@ public class StatemachineCollection {
             ArrayList<IStatemachine> existingSMs = this.statemachines.get(groupID);
 
             for (IStatemachine newSM : statemachines) {
-                if(!this.statemachines.get(groupID).contains(newSM)){
+                if(!this.statemachines.get(groupID).contains(newSM) && !newSM.isInvalidStatemachine()){
                     this.statemachines.get(groupID).add(newSM);
                 }
             }
-            //Testprintout
-            //System.out.println("## StatemachineCollection.addParallelStatemachines(..): Collection: ");
-            // for (int i = 0; i < this.statemachines.get(groupID).size(); i++) {
-            //    System.out.println("## "+i+". "+this.statemachines.get(groupID).get(i));
-            //}
-
         }else {
             ArrayList<IStatemachine> collection = new ArrayList<IStatemachine>(statemachines.length);
             this.statemachines.put(groupID, collection);

@@ -21,13 +21,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.mindroid.android.app.R;
+import org.mindroid.android.app.acitivites.IErrorHandler;
 import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.android.app.asynctasks.ProgressTask;
 import org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.Settings;
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 
 import java.io.IOException;
 
@@ -76,6 +77,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     // Resources
     private String msgConnectToRobot;
+    private String msgConnectToRobotError;
     private String msgDisconnectFromRobot;
     private String msgInitConfiguration;
     private String msgStartRobot;
@@ -116,6 +118,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
         parentActivity = getActivity();
 
+        if(parentActivity instanceof IErrorHandler){
+            robot.registerErrorHandler(((IErrorHandler) parentActivity).getErrorHandler());
+        }
+
         loadRobotPortConfiguration();
 
         /** Load Connection Properties **/
@@ -137,6 +143,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
         //Get Resources
         msgConnectToRobot = getResources().getString(R.string.dialog_msg_connect_to_robot);
+        msgConnectToRobotError = getResources().getString(R.string.dialog_msg_connect_to_robot_error);
         msgDisconnectFromRobot = getResources().getString(R.string.dialog_msg_disconnect_from_robot);
         msgInitConfiguration = getResources().getString(R.string.dialog_msg_init_config);
         msgStartRobot = getResources().getString(R.string.dialog_msg_start_robot);
@@ -152,44 +159,40 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         View view=inflater.inflate(R.layout.fragment_home, container, false);
         /** Instantiate buttons and textviews **/
 
-            btn_initConfiguration = (Button) view.findViewById(R.id.btn_initConfig);
-            btn_connect = (Button) view.findViewById(R.id.btn_connect);
-            btn_disconnect = (Button) view.findViewById(R.id.btn_disconnect);
-            spinner_selectedStatemachine = (Spinner) view.findViewById(R.id.spinner_selectedStatemachine);
-            btn_startRobot = (Button) view.findViewById(R.id.btn_startRobot);
-            btn_stopRobot = (Button) view.findViewById(R.id.btn_stopRobot);
+        btn_initConfiguration = (Button) view.findViewById(R.id.btn_initConfig);
+        btn_connect = (Button) view.findViewById(R.id.btn_connect);
+        btn_disconnect = (Button) view.findViewById(R.id.btn_disconnect);
+        spinner_selectedStatemachine = (Spinner) view.findViewById(R.id.spinner_selectedStatemachine);
+        btn_startRobot = (Button) view.findViewById(R.id.btn_startRobot);
+        btn_stopRobot = (Button) view.findViewById(R.id.btn_stopRobot);
 
-            /** ActivateTethering-Information Box **/
-            layout_info = (FrameLayout) view.findViewById(R.id.layout_infobox);
-            txt_info = (TextView) view.findViewById(R.id.txt_info);
-            btn_activateTethering = (Button) view.findViewById(R.id.btn_activateTethering);
+        /** ActivateTethering-Information Box **/
+        layout_info = (FrameLayout) view.findViewById(R.id.layout_infobox);
+        txt_info = (TextView) view.findViewById(R.id.txt_info);
+        btn_activateTethering = (Button) view.findViewById(R.id.btn_activateTethering);
 
-            btn_activateTethering.setText(getResources().getString(R.string.btn_text_activate_tethering));
-            btn_connect.setText(getResources().getString(R.string.btn_text_connect));
-            btn_disconnect.setText(getResources().getString(R.string.btn_text_disconnect));
-            btn_disconnect.setVisibility(View.GONE);
-            btn_initConfiguration.setText(getResources().getString(R.string.btn_text_init_config));
-            btn_startRobot.setText(getResources().getString(R.string.btn_text_start_robot));
-            btn_stopRobot.setText(getResources().getString(R.string.btn_text_stop_robot));
-
-
-            //Add RobotSetupInfo Fragment
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.container_robotSetupInfo, RobotSetupInfoFragment.newInstance("",""));
-            //transaction.addToBackStack(null);
-            transaction.commit();
+        btn_activateTethering.setText(getResources().getString(R.string.btn_text_activate_tethering));
+        btn_connect.setText(getResources().getString(R.string.btn_text_connect));
+        btn_disconnect.setText(getResources().getString(R.string.btn_text_disconnect));
+        btn_disconnect.setVisibility(View.GONE);
+        btn_initConfiguration.setText(getResources().getString(R.string.btn_text_init_config));
+        btn_startRobot.setText(getResources().getString(R.string.btn_text_start_robot));
+        btn_stopRobot.setText(getResources().getString(R.string.btn_text_stop_robot));
 
 
-        try {
-            robot.loadStatemachines();
-            spinner_selectedStatemachine.setAdapter(getStatemachineIDAdapter());
-        } catch (StateAlreadyExists stateAlreadyExists) {
-            stateAlreadyExists.printStackTrace();
-            mListener.showErrorDialog("Error on create",stateAlreadyExists.getMessage());
-        }
+        //Add RobotSetupInfo Fragment
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.container_robotSetupInfo, RobotSetupInfoFragment.newInstance("",""));
+        //transaction.addToBackStack(null);
+        transaction.commit();
 
 
+
+        robot.loadStatemachines();
+        spinner_selectedStatemachine.setAdapter(getStatemachineIDAdapter());
+
+        //mListener.showErrorDialog("Error on create",stateAlreadyExists.getMessage());
 
         setButtonListeners();
 
@@ -354,16 +357,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    //Creates the Robot
-                    robot.makeRobot();
-                    //Creates and executes the Task to connect to the Brick
-                    ConnectToBrickTask task = new ConnectToBrickTask(parentActivity,msgConnectToRobot);
-                    task.execute(); //String is not important
-                } catch (StateAlreadyExists stateAlreadyExists) {
-                    stateAlreadyExists.printStackTrace();
-                }
-
+                //Creates the Robot
+                robot.makeRobot();
+                //Creates and executes the Task to connect to the Brick
+                ConnectToBrickTask task = new ConnectToBrickTask(parentActivity,msgConnectToRobot);
+                task.execute(); //String is not important
             }
         });
 
@@ -529,7 +527,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 result = robot.isConnected();
             } catch (IOException e){
                 e.printStackTrace();
-                mListener.showErrorDialog("Exception",e.getMessage());
+                mListener.showErrorDialog("Exception",msgConnectToRobotError);
             }
             robot.isConnectedToBrick = result;
             return result;

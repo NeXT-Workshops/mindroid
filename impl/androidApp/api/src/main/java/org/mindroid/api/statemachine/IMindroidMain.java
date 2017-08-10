@@ -1,6 +1,6 @@
 package org.mindroid.api.statemachine;
 
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.impl.statemachine.StatemachineCollection;
 
 /**
@@ -8,6 +8,6 @@ import org.mindroid.impl.statemachine.StatemachineCollection;
  */
 
 public interface IMindroidMain {
-    StatemachineCollection getStatemachineCollection() throws StateAlreadyExists;
+    StatemachineCollection getStatemachineCollection();
 
 }

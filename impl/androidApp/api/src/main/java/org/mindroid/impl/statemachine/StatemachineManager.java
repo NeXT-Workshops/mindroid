@@ -7,12 +7,14 @@ import org.mindroid.api.statemachine.*;
 import org.mindroid.api.statemachine.constraints.AbstractLogicOperator;
 import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.api.statemachine.properties.ITimeProperty;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.robot.Robot;
 import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
 import org.mindroid.impl.robot.context.StartCondition;
 import org.mindroid.impl.statemachine.constraints.TimeExpired;
+import org.xml.sax.ErrorHandler;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -220,6 +222,10 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         System.out.println ("## startStatemachines(IStatemachine sm) called with --> sm-id: "+sm.getID());
         System.out.println("isAtive:"+sm.isActive());
         System.out.println("SM.ToString"+ sm.toString());
+        if(sm instanceof ImperativeStatemachine){
+            ((ImperativeStatemachine)sm).setInterrupted(false);
+        }
+
         if(!sm.isActive()) { //If sm is not active already --> start statemachine
             System.out.println ("## The Statemachine is not active already and will be started --> sm-id: "+sm.getID());
             final Runnable runSM = new Runnable() {
@@ -246,7 +252,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                         sm.start();
                         System.out.print("[Statemachine-Thread][StatemachineID: "+sm.getID()+"] Statemachine started");
                     } catch (NoStartStateException e) {
-                        e.printStackTrace();//TODO call error handler
+                        ErrorHandlerManager.getInstance().handleError(e,StatemachineManager.class,sm.getID());
                     }
                     // System.out.println("## Statemachine "+sm.getID()+" is now running in Thread ##");
                 }
@@ -274,7 +280,8 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      *
      * @param groupID of one Statemachine - or a GroupID of a group of parallel running Statemachines
      */
-    public synchronized void stopStatemachines(String groupID){
+    public void stopStatemachines(String groupID){
+        System.out.println("[StatemachineManager] trying to stop Statemachines");
         //Stop all motors
         Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_A);
         Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_B);
@@ -287,9 +294,6 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
             return;
         }
 
-        System.out.println("### Number of Statemachines to Stop: "+statemachines.size());
-
-
         for (IStatemachine statemachine : statemachines) {
             stopStatemachine(statemachine);
         }
@@ -300,20 +304,17 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      * @param sm
      */
     private void stopStatemachine(IStatemachine sm){
-        System.out.println("### Trying to stop Statemachine: "+sm.getID());
 
-        //Hard-Kill Imperative Statemachine Thread
-        if(sm.getID().equals(LVL2API.IMPERATIVE_STATEMACHINE_ID)){
-            System.out.println("### Imperative Statemachine, trying to kill Thread with stop()");
-            //runningStatemachineThreads.get(sm.getID()).stop();
-
-            System.out.println("### Imperative Statemachin killed by thread.stop()");
+        //Stop statemachine
+        if(sm instanceof ImperativeStatemachine){
+            if(Robot.getInstance().isMessageingEnabled()){
+                Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Interrupted Statemachine: "+sm.getID());
+            }
+            ((ImperativeStatemachine)sm).setInterrupted(true);
         }
-            //Stop statemachine
+
+
         sm.stop();
-
-
-
         if(Robot.getInstance().isMessageingEnabled()){
             Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+sm.getID());
         }

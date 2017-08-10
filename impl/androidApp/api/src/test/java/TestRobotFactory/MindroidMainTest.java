@@ -4,7 +4,7 @@ import org.mindroid.api.statemachine.IMindroidMain;
 import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.impl.robot.*;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.statemachine.State;
@@ -30,7 +30,7 @@ public class MindroidMainTest implements IMindroidMain {
     //TODO HashMap<String,RobotEvent> events = Robot.getInstance().getRobotEvents();
 
 
-    public void initStatemachine() throws StateAlreadyExists {
+    public void initStatemachine(){
 
         IState state_forward = new State("Forward") {
             @Override
@@ -79,29 +79,11 @@ public class MindroidMainTest implements IMindroidMain {
         sm.addState(state_backward);
         sm.addState(state_turn);
 
-        //TODO refactor Events
-        //IUltrasonicSensorEvent wall_hit = new UltrasonicSensorEvent(IUltrasonicSensorEvent.UltrasonicEventType.COLLISION_WALL, ultrasonic_front);
-        //IUltrasonicSensorEvent no_wall_hit = new UltrasonicSensorEvent(IUltrasonicSensorEvent.UltrasonicEventType.NO_WALL, ultrasonic_front);
-
-        //TimeEvent delay_1sec_backward = new TimeEvent(1, state_backward);
-        //TimeEvent delay_1sec_turn = new TimeEvent(1.3f, state_turn);
-
-        //--- Transitionen
-        //ITransition if_delay_1sec_backward = new Transition(delay_1sec_backward);
-        //ITransition if_delay_1sec_turn = new Transition(delay_1sec_turn);
-
-        // TODO
-        //ITransition if_wall_hit = new Transition(wall_hit);
-        //ITransition if_no_wall_hit = new Transition(no_wall_hit);
-
-        //sm.addTransition(if_wall_hit, state_forward, state_backward); TODO uncomment
-        //sm.addTransition(if_delay_1sec_backward, state_backward, state_turn);
-        //sm.addTransition(if_delay_1sec_turn, state_turn, state_forward);
     }
 
 
     @Override
-    public StatemachineCollection getStatemachineCollection() throws StateAlreadyExists {
+    public StatemachineCollection getStatemachineCollection() {
         StatemachineCollection sc = new StatemachineCollection();
         sc.addStatemachine("main",sm);
         return sc;

@@ -19,11 +19,20 @@ public class BrickController implements IBrickControl {
     }
 
     // ------------- STATUS LIGHT OPERATIONS -------------
+
+    /**
+     * Set the LED of the Brick
+     * @param color the wanted color
+     * @param interval the blink interval of the led
+     */
     @Override
     public void setEV3StatusLight(EV3StatusLightColor color, EV3StatusLightInterval interval) {
         robot.getBrick().setEV3StatusLight(color,interval);
     }
 
+    /**
+     * Reset the LED- of the Brick
+     */
     @Override
     public void resetEV3StatusLight() {
         robot.getBrick().resetEV3StatusLight();
@@ -32,49 +41,84 @@ public class BrickController implements IBrickControl {
 
 
     // ------------- SSOUND OPERATIONS -------------
+
+    /**
+     * Play a single beep
+     */
     @Override
     public void singleBeep() {
         robot.getBrick().singleBeep();
     }
 
+    /**
+     * Play a double beep
+     */
     @Override
     public void doubleBeep() {
         robot.getBrick().doubleBeep();
     }
 
+    /**
+     * Play a buzz-sound.
+     */
     @Override
     public void buzz() {
         robot.getBrick().buzz();
     }
 
+    /**
+     * Play a downward beep sequence
+     */
     @Override
     public void beepSequenceDown() {
         robot.getBrick().beepSequenceDown();
     }
 
+    /**
+     * Play a upward beep sequence
+     */
     @Override
     public void beepSequenceUp() {
         robot.getBrick().beepSequenceUp();
     }
 
+    /**
+     * Set Volume
+     * @param volume volume of the sound
+     */
     @Override
     public void setVolume(int volume) {
         robot.getBrick().setVolume(volume);
     }
 
     // ------------- DISPLAY OPERATIONS -------------
+
+    /**
+     * Clear the Brick-Display
+     */
     @Override
     public void clearDisplay() {
         //TODO Not working correctly yet
         robot.getBrick().clearDisplay();
     }
 
+    /**
+     * Draw a String on the Brick-Display
+     * @param str String to display
+     * @param posX position x
+     * @param posY position y
+     */
     @Override
     public void drawString(String str,int posX, int posY) {
         //TODO Not working correctly yet
         robot.getBrick().drawString(str,posX,posY);
     }
 
+    /**
+     * TODO DOES NOT WORK YET
+     * Draw an image.
+     * @param str image name
+     */
     @Override
     public void drawImage(String str) {
         //TODO not implemented on EV3Display

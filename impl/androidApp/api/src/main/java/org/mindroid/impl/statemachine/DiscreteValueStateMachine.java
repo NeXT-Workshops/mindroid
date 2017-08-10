@@ -2,7 +2,7 @@ package org.mindroid.impl.statemachine;
 
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.ITransition;
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.api.statemachine.properties.SimpleEV3SensorProperty;
 import org.mindroid.impl.statemachine.constraints.EQ;
 
@@ -31,11 +31,8 @@ public class DiscreteValueStateMachine extends Statemachine {
             IState state = new State("Value "+ values[i]);
             states.add(state);
 
-            try {
-                this.addState(state);
-                if (i==0) {this.setStartState(state);}
-            } catch (StateAlreadyExists stateAlreadyExists) {
-            }
+            this.addState(state);
+            if (i==0) {this.setStartState(state);}
         }
 
         for (int j=0; j< values.length; j++) {

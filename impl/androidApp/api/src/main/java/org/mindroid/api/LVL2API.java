@@ -5,7 +5,7 @@ import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
-import org.mindroid.api.statemachine.exception.StateAlreadyExists;
+import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.motor.Motor;
 import org.mindroid.impl.statemachine.*;
@@ -13,13 +13,10 @@ import org.mindroid.impl.statemachine.constraints.GT;
 import org.mindroid.impl.statemachine.constraints.LT;
 import org.mindroid.impl.statemachine.constraints.MsgReceived;
 import org.mindroid.impl.statemachine.constraints.Rotation;
-import org.mindroid.impl.statemachine.constraints.TimeExpired;
 import org.mindroid.impl.statemachine.properties.MessageProperty;
-import org.mindroid.impl.statemachine.properties.Seconds;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Angle;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
-import org.mindroid.impl.statemachine.properties.sensorproperties.Touch;
 
 import java.util.HashMap;
 
@@ -36,16 +33,20 @@ public abstract class LVL2API extends LVL1API {
     private HashMap<String, Statemachine> sensorEvaluatingStatemachines = new HashMap<>();
 
     public static final String IMPERATIVE_STATEMACHINE_ID = "Imperative Statemachine Implementation";
+    public static final String IMPERATIVE_GROUP_ID = "LVL2APIMACHINE";
+    private ImperativeStatemachine imperativeStatemachine;
 
-    public LVL2API() throws StateAlreadyExists {
+
+    public LVL2API() {
         motorA = new Motor(motorController,EV3PortIDs.PORT_A);
         motorB = new Motor(motorController,EV3PortIDs.PORT_B);
         motorC = new Motor(motorController,EV3PortIDs.PORT_C);
         motorD = new Motor(motorController,EV3PortIDs.PORT_D);
 
         initSensorStatemachines();
-        statemachineCollection.addParallelStatemachines("LVL2APIMachine", sensorEvaluatingStatemachines.values().toArray(new Statemachine[sensorEvaluatingStatemachines.values().size()]));
-        statemachineCollection.addParallelStatemachines("LVL2APIMachine",initStatemachine());
+        statemachineCollection.addParallelStatemachines(IMPERATIVE_GROUP_ID, sensorEvaluatingStatemachines.values().toArray(new Statemachine[sensorEvaluatingStatemachines.values().size()]));
+        imperativeStatemachine = (ImperativeStatemachine)initStatemachine();
+        statemachineCollection.addParallelStatemachines(IMPERATIVE_GROUP_ID,imperativeStatemachine);
     }
 
     /**
@@ -80,14 +81,14 @@ public abstract class LVL2API extends LVL1API {
 
 
 
-    public final IStatemachine initStatemachine() throws StateAlreadyExists {
-        Statemachine sm = new Statemachine(IMPERATIVE_STATEMACHINE_ID);
+
+    public final IStatemachine initStatemachine() {
+        ImperativeStatemachine sm = new ImperativeStatemachine(IMPERATIVE_STATEMACHINE_ID);
 
         IState state_start = new State("Running state"){
             @Override
             public void run(){
                 LVL2API.this.run();
-
             }
         };
 
@@ -100,7 +101,9 @@ public abstract class LVL2API extends LVL1API {
     public abstract void run();
 
     public final void setLED(EV3StatusLightColor color, EV3StatusLightInterval interval){
-        brickController.setEV3StatusLight(color,interval);
+        if(!isInterrupted()) {
+            brickController.setEV3StatusLight(color, interval);
+        }
     }
 
 
@@ -115,7 +118,14 @@ public abstract class LVL2API extends LVL1API {
 
     }
 
-
+    /**
+     *
+     *
+     * @return true if the imperative Statemachine got interrupted (by stopping it)
+     */
+    public final boolean isInterrupted(){
+        return imperativeStatemachine.isInterrupted();
+    }
 
 
 
@@ -161,7 +171,9 @@ public abstract class LVL2API extends LVL1API {
 
     /** //TODO check port config before creating SM
      * //TODO method does not work yet
-    public final boolean wasTouched() {
+     *
+     **/
+    /*public final boolean wasTouched() {
         if (sensorEvaluatingStatemachines.containsKey("touched") && sensorEvaluatingStatemachines.get("touched") instanceof DiscreteValueStateMachine) {
             return (((DiscreteValueStateMachine) sensorEvaluatingStatemachines.get("touched")).getResult() == Touch.HIT);
         } else {
@@ -172,9 +184,14 @@ public abstract class LVL2API extends LVL1API {
             startStatemachine("touched");
             return (touchedSM.getResult() == Touch.HIT);
         }
-    }
-    **/
+    }*/
 
+    /**
+     * Checks if a specified message was received
+     * @param message expected message
+     * @param source expected source of the message
+     * @return true - if message received , otherwise false
+     */
     public final boolean wasMsgReceived(String message, String source) {
         //TODO needs to be tested
         if (sensorEvaluatingStatemachines.containsKey("Msg"+ message + source) && sensorEvaluatingStatemachines.get("Msg"+ message + source) instanceof BooleanStatemachine) {
@@ -233,9 +250,11 @@ public abstract class LVL2API extends LVL1API {
 
 
     public final void delay(long milliseconds) {
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
+        if(!isInterrupted()) {
+            try {
+                Thread.sleep(milliseconds);
+            } catch (InterruptedException e) {
+            }
         }
     }
 
@@ -244,24 +263,26 @@ public abstract class LVL2API extends LVL1API {
      * @param degrees angle
      */
     public final void turnLeft(int degrees) {
-        //TODO check port config before creating SM
-        BooleanStatemachine angleSM = new BooleanStatemachine("angleSM",false, new Rotation((-1)*degrees,new Angle(EV3PortIDs.PORT_3)),null);
-        registerStatemachine(angleSM);
-        startStatemachine("angleSM");
-        motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
-        motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_FORWARD);
-        motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-        motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
-        while(!angleSM.getResult()){
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        if(!isInterrupted()) {
+            //TODO check port config before creating SM
+            BooleanStatemachine angleSM = new BooleanStatemachine("angleSM", false, new Rotation((-1) * degrees, new Angle(EV3PortIDs.PORT_3)), null);
+            registerStatemachine(angleSM);
+            startStatemachine(angleSM.getID());
+            motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
+            motorController.setMotorDirection(EV3PortIDs.PORT_D, IMotorControl.MOTOR_FORWARD);
+            motorController.setMotorSpeed(EV3PortIDs.PORT_A, 50);
+            motorController.setMotorSpeed(EV3PortIDs.PORT_D, 50);
+            while (!angleSM.getResult() && !isInterrupted()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+            stopStatemachine(angleSM.getID());
+            motorController.stop(EV3PortIDs.PORT_A);
+            motorController.stop(EV3PortIDs.PORT_D);
         }
-        stopStatemachine("angleSM");
-        motorController.stop(EV3PortIDs.PORT_A);
-        motorController.stop(EV3PortIDs.PORT_D);
     }
 
     /**
@@ -269,23 +290,25 @@ public abstract class LVL2API extends LVL1API {
      * @param degrees angle
      */
     public final void turnRight(int degrees) {
-        BooleanStatemachine angleSM = new BooleanStatemachine("angleSM",false, new Rotation(degrees, new Angle(EV3PortIDs.PORT_3)),null);
-        registerStatemachine(angleSM);
-        startStatemachine("angleSM");
-        motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_FORWARD);
-        motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_BACKWARD);
-        motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-        motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
-        while(!angleSM.getResult()){
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        if(!isInterrupted()) {
+            BooleanStatemachine angleSM = new BooleanStatemachine("angleSM", false, new Rotation(degrees, new Angle(EV3PortIDs.PORT_3)), null);
+            registerStatemachine(angleSM);
+            startStatemachine("angleSM");
+            motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_FORWARD);
+            motorController.setMotorDirection(EV3PortIDs.PORT_D, IMotorControl.MOTOR_BACKWARD);
+            motorController.setMotorSpeed(EV3PortIDs.PORT_A, 50);
+            motorController.setMotorSpeed(EV3PortIDs.PORT_D, 50);
+            while (!angleSM.getResult() && !isInterrupted()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+            stopStatemachine("angleSM");
+            motorController.stop(EV3PortIDs.PORT_A);
+            motorController.stop(EV3PortIDs.PORT_D);
         }
-        stopStatemachine("angleSM");
-        motorController.stop(EV3PortIDs.PORT_A);
-        motorController.stop(EV3PortIDs.PORT_D);
     }
 
     /**
@@ -293,17 +316,19 @@ public abstract class LVL2API extends LVL1API {
      * @param milliseconds time in milliseconds
      */
     public final void turnLeftTime(int milliseconds) {
-        motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
-        motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_FORWARD);
-        motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-        motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if(!isInterrupted()) {
+            motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
+            motorController.setMotorDirection(EV3PortIDs.PORT_D, IMotorControl.MOTOR_FORWARD);
+            motorController.setMotorSpeed(EV3PortIDs.PORT_A, 50);
+            motorController.setMotorSpeed(EV3PortIDs.PORT_D, 50);
+            try {
+                Thread.sleep(milliseconds);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            motorController.stop(EV3PortIDs.PORT_A);
+            motorController.stop(EV3PortIDs.PORT_D);
         }
-        motorController.stop(EV3PortIDs.PORT_A);
-        motorController.stop(EV3PortIDs.PORT_D);
     }
 
     /**
@@ -311,17 +336,19 @@ public abstract class LVL2API extends LVL1API {
      * @param milliseconds time in milliseconds
      */
     public final void turnRightTime(int milliseconds) {
-        motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_FORWARD);
-        motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_BACKWARD);
-        motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-        motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if(!isInterrupted()) {
+            motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_FORWARD);
+            motorController.setMotorDirection(EV3PortIDs.PORT_D, IMotorControl.MOTOR_BACKWARD);
+            motorController.setMotorSpeed(EV3PortIDs.PORT_A, 50);
+            motorController.setMotorSpeed(EV3PortIDs.PORT_D, 50);
+            try {
+                Thread.sleep(milliseconds);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            motorController.stop(EV3PortIDs.PORT_A);
+            motorController.stop(EV3PortIDs.PORT_D);
         }
-        motorController.stop(EV3PortIDs.PORT_A);
-        motorController.stop(EV3PortIDs.PORT_D);
     }
 
 
@@ -330,6 +357,20 @@ public abstract class LVL2API extends LVL1API {
         motorB.stop();
         motorC.stop();
         motorD.stop();
+    }
+
+    @Override
+    public void forward(){
+        if(!isInterrupted()){
+            super.forward();
+        }
+    }
+
+    @Override
+    public void backward(){
+        if(!isInterrupted()){
+            super.backward();
+        }
     }
 
 }

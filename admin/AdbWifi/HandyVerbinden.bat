@@ -15,7 +15,7 @@
 @set JAVA_HOME=%~3
 @set ANDROID_HOME_DRIVE=%ANDROID_HOME:~0,2%
 @setlocal EnableDelayedExpansion
-%ANDROID_HOME_DRIVE%
+@%ANDROID_HOME_DRIVE%
 @cd "%ANDROID_HOME%\platform-tools\"
 :welcome
 @echo off
@@ -48,7 +48,7 @@ if %ip_address% == 0.0.0.0 goto noIP
 :setupWifiConnection
 @echo Die Wifi-Verbindung wird gestartet...
 
-@set cmd="adb shell netcfg | findstr "wlan0" | findstr /r "[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*""
+@set cmd="adb shell ip route | findstr "wlan0" | findstr /r "[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*""
 @for /f "tokens=3" %%a in ('!cmd!') do @set ip_address=%%a
 @for /f "tokens=1  delims=/" %%a in ("%ip_address%") do @set ip_address=%%a
 @if "%ip_address%" == "0.0.0.0" goto WifiError
@@ -61,11 +61,15 @@ if %ip_address% == 0.0.0.0 goto noIP
 
 :FirstConnectionEstablished
 @echo ^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-
-@set /P input2=Bitte noch nicht das Fenster schliessen. Schritt 1 ist geschafft^^! Folge nun den Anweisungen in der Anleitung.
+@echo ^-^-^-
+@echo Bitte noch nicht das Fenster schliessen
+@echo ^-^-^-
+@set /P input2='Schritt 1 ist geschafft^^! Folge nun den Anweisungen in der Anleitung.
 @if /I "%input2%"=="ok" goto reconnecting
 @goto FirstConnectionEstablished
 
 :androidHomeNotSetError
+@echo ^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-
 @echo Die Variable 'ANDROID_HOME' ist nicht gesetzt.
 @echo Bitte wende dich an einen Betreuer.
 @pause

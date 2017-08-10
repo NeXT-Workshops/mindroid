@@ -11,13 +11,10 @@ public class Robot extends LVL2API {
 
     @Override
     public void run() {
-        
-        sendLogMessage("Implementation is running!");
-
-        brickController.drawString("Hello World!", 1, 1);
-        
+        brickController.drawString("Hello World!", 1, 1);        
     }
     
 }
+
 
 

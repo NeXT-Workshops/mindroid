@@ -119,6 +119,7 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
    @Override
     public void disconnected(Connection connection) {
         super.disconnected(connection);
+        client.close();
         readyForCommands = false;
     }
 

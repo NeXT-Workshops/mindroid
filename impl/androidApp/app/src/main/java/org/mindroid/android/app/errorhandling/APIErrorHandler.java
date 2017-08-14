@@ -48,12 +48,16 @@ public class APIErrorHandler extends AbstractErrorHandler{
             mainActivity.showErrorDialog("Duplicate Transition",msg);
         }else if(e instanceof NoCurrentStateSetException){
             mainActivity.showErrorDialog("No Current State Set Exception","The current state of the Statemachine '"+msg+"' is null!");
+        }else{
+            mainActivity.showErrorDialog("Error", "Statemachine Error appeared: \n" + e.getMessage());
         }
     }
 
     private void handleStatemachineManagerErrors(Exception e, String msg) {
         if(e instanceof NoStartStateException) {
             mainActivity.showErrorDialog("No Start State set","The Statemachine '"+msg+"' does not have a State to start with! Specify the Start-State to execute your Statemachine.");
+        }else{
+            mainActivity.showErrorDialog("Error","StatemachineManager:  Error appeared: \n" +  e.getMessage());
         }
     }
 }

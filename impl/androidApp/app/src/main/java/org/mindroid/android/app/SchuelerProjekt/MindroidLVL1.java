@@ -51,9 +51,6 @@ public class MindroidLVL1 extends LVL1API {
         //Statemachine Wall lightshow
         tmpStatemachine = lightshowBig();
         statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
-        //Statemachine test
-        tmpStatemachine = testSM();
-        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
         //Statemachine test lightshow
         tmpStatemachine = lightshowSmall();
         statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
@@ -488,31 +485,7 @@ public class MindroidLVL1 extends LVL1API {
         return sm;
     }
 
-    public IStatemachine testSM() {
-        IStatemachine sm = new Statemachine("testSM");
-
-        IState state_A = new State("STATE A");
-        IState state_B = new State("STATE B");
-
-        Transition transition = new Transition(new TimeExpired(new Seconds(3))){
-            @Override
-            public void run(){
-                System.out.println("Executing overwritten transition run method.");
-                sendLogMessage("Executing tranistionmethod");
-            }
-        };
-
-        sm.addState(state_A);
-        sm.setStartState(state_A);
-        sm.addState(state_B);
-
-        sm.addTransition(transition,state_A,state_B);
-
-        return sm;
-    }
-
-
-    public IStatemachine lightshowSmall() {
+     public IStatemachine lightshowSmall() {
         IStatemachine sm = new Statemachine("lightshowSmall");
 
         final String cmd_red = "RED";

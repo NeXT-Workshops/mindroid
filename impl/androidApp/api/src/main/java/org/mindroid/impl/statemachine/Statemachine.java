@@ -181,7 +181,9 @@ public class Statemachine implements IStatemachine{
 
 	@Override
 	public void stop(){
-		currentState.deactivate();
+		if(currentState != null) {
+			currentState.deactivate();
+		}
 		this.isActive = false;
 		currentState = null;
 	}

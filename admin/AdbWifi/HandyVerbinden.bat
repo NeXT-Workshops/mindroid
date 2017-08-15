@@ -1,17 +1,16 @@
 @rem ###############################################################################################
 @rem
-@rem  This bat file checks whether an android phone is connected and proceeds
-@rem  to set up adb via Wifi.
+@rem This bat file checks whether an android phone is connected and proceeds
+@rem to set up adb via Wifi.
 @rem
-@rem  The location of the Android SDK needs to be configured in the script.
+@rem The location of the Android SDK is extracted from the env. var. ANDROID_HOME.
 @rem
+@rem Author: Felicia Ruppel
 @rem  
 @rem ###############################################################################################
 
 :preconditioncheck
 @if "%ANDROID_HOME%"=="" goto androidHomeNotSetError
-
-@rem @set ANDROID_HOME=C:\Users\luo\AppData\Local\Android\sdk
 @set JAVA_HOME=%~3
 @set ANDROID_HOME_DRIVE=%ANDROID_HOME:~0,2%
 @setlocal EnableDelayedExpansion
@@ -96,6 +95,6 @@ goto startConnection
 
 :finished
 @echo ^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-
-@echo Das Verbinden war erfolgreich^^! Du kannst dieses Fenster schlieáen.	
+@echo Das Verbinden war erfolgreich^^! Du kannst dieses Fenster schliessen.	
 @pause
 exit

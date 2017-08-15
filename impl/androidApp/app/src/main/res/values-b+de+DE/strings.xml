@@ -13,7 +13,7 @@
     <string name="btn_text_start_robot">Start</string>
     <string name="btn_text_stop_robot">stop</string>
     <string name="btn_text_disconnect">Verbindung trennen</string>
-    <string name="btn_text_connect">Verbindung zum EV3-Brick hergestellen</string>
+    <string name="btn_text_connect">Verbindung zum EV3-Brick herstellen</string>
     <string name="dialog_msg_connect_to_robot">Verbindung wird aufgebaut..</string>
     <string name="dialog_msg_connect_to_robot_error">Verbindung zum EV3-Brick konnte nicht hergestellt werden! Ueberprüfe ob der EV3 Brick bereit ist, sowie die USB-Verbindung. Versuche es nochmal!</string>
     <string name="dialog_msg_init_config">Der Roboter wird konfiguriert..</string>

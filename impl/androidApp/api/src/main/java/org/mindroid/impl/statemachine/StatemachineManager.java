@@ -253,6 +253,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                         System.out.print("[Statemachine-Thread][StatemachineID: "+sm.getID()+"] Statemachine started");
                     } catch (NoStartStateException e) {
                         ErrorHandlerManager.getInstance().handleError(e,StatemachineManager.class,sm.getID());
+
                     }
                     // System.out.println("## Statemachine "+sm.getID()+" is now running in Thread ##");
                 }
@@ -269,6 +270,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                 }
 
             }
+            System.out.println("[StatemachineManager:startStatemachine] Wait until statemachine got started.. [StatemachineID: "+sm.getID()+"] is running");
         }
 
         //System.out.println("## 'Start Statemachine'-Thread is running! ##");
@@ -313,8 +315,9 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
             ((ImperativeStatemachine)sm).setInterrupted(true);
         }
 
-
+        //stop statemachine
         sm.stop();
+
         if(Robot.getInstance().isMessageingEnabled()){
             Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+sm.getID());
         }

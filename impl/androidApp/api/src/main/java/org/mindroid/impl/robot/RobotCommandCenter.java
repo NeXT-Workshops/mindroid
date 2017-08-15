@@ -16,6 +16,7 @@ import java.io.IOException;
 public class RobotCommandCenter implements IRobotCommandCenter {
 
     Robot robot;
+    private boolean isConfigurated = false;
 
     public RobotCommandCenter(Robot robot){
         this.robot = robot;
@@ -24,7 +25,6 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     @Override
     public void startStatemachine(String id) {
         robot.getStatemachineManager().startStatemachines(id);
-
     }
 
     @Override
@@ -58,12 +58,21 @@ public class RobotCommandCenter implements IRobotCommandCenter {
 
     @Override
     public boolean isConnected() {
-        return robot.getRobotConfigurator().getBrick().isConnected();
+        if(robot.getRobotConfigurator() != null && robot.getRobotConfigurator().getBrick() != null) {
+            return robot.getRobotConfigurator().getBrick().isConnected();
+        }else{
+            return false;
+        }
     }
 
     @Override
     public boolean initializeConfiguration() throws BrickIsNotReadyException {
-        return robot.getRobotConfigurator().initializeConfiguration();
+        return (isConfigurated = robot.getRobotConfigurator().initializeConfiguration());
+    }
+
+    @Override
+    public boolean isConfigurated() {
+        return isConnected() && isConfigurated;
     }
 
     @Override

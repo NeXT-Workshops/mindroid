@@ -21,10 +21,8 @@ import org.mindroid.impl.robot.RobotFactory;
  */
 public class Robot {
 
-    public boolean isConnectedToBrick = false;
-    public boolean isConfigurationBuilt = false;
-
     public boolean isRunning = false;
+
 
     IRobotCommandCenter commandCenter;
 
@@ -35,7 +33,7 @@ public class Robot {
     public IMindroidMain mindroidStatemachine; //TODO Dependency/Linked to SchuelerProjekt
     public IMindroidMain mindroidImperative; //TODO Dependency/Linked to SchuelerProjekt
 
-    String statemachinesGroupID = "";
+    String runningStatemachinesGroupID = "";
 
     public Robot() {
 
@@ -83,38 +81,6 @@ public class Robot {
         commandCenter.connectToBrick();
     }
 
-    private void checkState(){
-        Runnable task = new Runnable(){
-            @Override
-            public void run(){
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                isConnectedToBrick = commandCenter.isConnected();
-            }
-        };
-    }
-
-
-    public boolean isConnectedToBrick() {
-        return isConnectedToBrick;
-    }
-
-    public void setConnectedToBrick(boolean connectedToBrick) {
-        isConnectedToBrick = connectedToBrick;
-    }
-
-    public boolean isConfigurationBuilt() {
-        return isConfigurationBuilt;
-    }
-
-    public void setConfigurationBuilt(boolean configurationBuilt) {
-        isConfigurationBuilt = configurationBuilt;
-    }
-
     /**
      * Returns the IDs of Statemachine-Groups (Group of parallel Statemachines) and Single-Statemachines
      * @return IDs of Statemachines as String[]
@@ -145,11 +111,23 @@ public class Robot {
     }
 
     public boolean isConnected() {
-        return commandCenter.isConnected();
+        if(commandCenter != null) {
+            return commandCenter.isConnected();
+        }else{
+            return false;
+        }
     }
 
     public boolean initializeConfiguration() throws BrickIsNotReadyException, PortIsAlreadyInUseException {
         return commandCenter.initializeConfiguration();
+    }
+
+    public boolean isConfigurated(){
+        if(commandCenter != null) {
+            return commandCenter.isConfigurated();
+        }else{
+            return false;
+        }
     }
 
     /**
@@ -157,7 +135,7 @@ public class Robot {
      * @param id
      */
     public void startStatemachine(String id) {
-        statemachinesGroupID = id;
+        runningStatemachinesGroupID = id;
         commandCenter.startStatemachine(id);
     }
 
@@ -166,13 +144,13 @@ public class Robot {
      * @param id
      */
     public void stopStatemachine(String id) {
-        statemachinesGroupID = "";
+        runningStatemachinesGroupID = "";
         commandCenter.stopStatemachine(id);
     }
 
     public void stop() {
-        if(statemachinesGroupID != ""){
-            commandCenter.stopStatemachine(statemachinesGroupID);
+        if(!runningStatemachinesGroupID.equals("")){
+            commandCenter.stopStatemachine(runningStatemachinesGroupID);
         }
     }
 

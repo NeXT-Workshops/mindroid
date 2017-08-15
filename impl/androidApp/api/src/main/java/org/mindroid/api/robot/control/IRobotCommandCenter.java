@@ -19,6 +19,7 @@ public interface IRobotCommandCenter {
     boolean isConnected();
 
     boolean initializeConfiguration() throws BrickIsNotReadyException, PortIsAlreadyInUseException; //TODO initializeConfiguration()
+    boolean isConfigurated();
 
     void disconnect();
 

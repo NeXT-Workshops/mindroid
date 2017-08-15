@@ -249,22 +249,19 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             public void run(){
                 boolean positiveUSBState = isUSBConnected(parentActivity) && isTetheringActivated(parentActivity);
 
-                btn_connect.setEnabled(!robot.isConnectedToBrick && positiveUSBState);
+                btn_connect.setEnabled(!robot.isConnected() && positiveUSBState);
 
-                btn_connect.setVisibility((!robot.isConnectedToBrick && positiveUSBState) ? View.VISIBLE : View.GONE);
+                btn_connect.setVisibility((!robot.isConnected() && positiveUSBState) ? View.VISIBLE : View.GONE);
 
-                btn_disconnect.setVisibility(robot.isConnectedToBrick ? View.VISIBLE : View.GONE);
+                btn_disconnect.setVisibility(robot.isConnected() ? View.VISIBLE : View.GONE);
 
-                btn_initConfiguration.setEnabled(robot.isConnectedToBrick && !robot.isConfigurationBuilt && positiveUSBState);
+                btn_initConfiguration.setEnabled(robot.isConnected() && !robot.isConfigurated() && positiveUSBState);
 
-                btn_startRobot.setEnabled(robot.isConnectedToBrick && robot.isConfigurationBuilt && !robot.isRunning && positiveUSBState && !spinner_selectedStatemachine.getSelectedItem().toString().isEmpty());
+                btn_startRobot.setEnabled(robot.isConnected() && robot.isConfigurated() && !robot.isRunning && positiveUSBState && !spinner_selectedStatemachine.getSelectedItem().toString().isEmpty());
 
                 btn_stopRobot.setEnabled(robot.isRunning);
 
                 spinner_selectedStatemachine.setEnabled(!robot.isRunning);
-
-
-
             }
         };
 
@@ -293,7 +290,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
                     //Stop robot
                     if(robot.isRunning){
-                        robot.stop();
+                        StartStopRobotTask task_stopRobot = new StartStopRobotTask(parentActivity,msgStartRobot);
+                        task_stopRobot.execute(STOP_ROBOT);
+
+                        DisconnectFromBrickTask task_disconnect = new DisconnectFromBrickTask(parentActivity,msgDisconnectFromRobot);
+                        task_disconnect.execute();
                     }
                 }else{
                     layout_info.setVisibility(FrameLayout.GONE);
@@ -529,7 +530,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 e.printStackTrace();
                 mListener.showErrorDialog("Exception",msgConnectToRobotError);
             }
-            robot.isConnectedToBrick = result;
             return result;
         }
     }
@@ -550,8 +550,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 e.printStackTrace();
                 mListener.showErrorDialog("Exception",e.getMessage());
             }
-            robot.isConfigurationBuilt = result;
-            robot.isConnectedToBrick = result;
             return result;
         }
     }
@@ -574,7 +572,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 mListener.showErrorDialog("Exception",e.getMessage());
                 e.printStackTrace();
             }
-            robot.isConfigurationBuilt = result;
             return result;
         }
     }

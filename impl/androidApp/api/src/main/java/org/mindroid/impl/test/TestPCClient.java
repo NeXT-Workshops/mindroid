@@ -3,6 +3,7 @@ package org.mindroid.impl.test;
 import org.mindroid.api.LVL1API;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
+import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
@@ -19,6 +20,8 @@ import org.mindroid.impl.statemachine.Statemachine;
 import org.mindroid.impl.statemachine.StatemachineCollection;
 import org.mindroid.impl.statemachine.Transition;
 import org.mindroid.impl.statemachine.constraints.*;
+import org.mindroid.impl.statemachine.properties.Milliseconds;
+import org.mindroid.impl.statemachine.properties.Seconds;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
 
 import java.io.IOException;
@@ -35,17 +38,17 @@ public class TestPCClient{
         new TestPCClientRobot();
     }
 
-    private static class TestPCClientRobot extends LVL1API{
+    private static class TestPCClientRobot extends LVL1API {
         IRobotCommandCenter commandCenter;
 
-        public TestPCClientRobot(){
+        public TestPCClientRobot() {
             try {
                 System.out.println("[TestRobot:PC-Client] making robot");
                 initRobot();
                 System.out.println("[TestRobot:PC-Client] Connecting to brick");
                 commandCenter.connectToBrick();
 
-                while(!commandCenter.isConnected()){
+                while (!commandCenter.isConnected()) {
                     Thread.sleep(100);
                     System.out.println("[TestRobot:PC-Client] connecting..");
                 }
@@ -62,15 +65,6 @@ public class TestPCClient{
 
                 commandCenter.stopStatemachine(TestPCClient.sm.getID());
 
-                Thread.sleep(5000);
-
-                commandCenter.startStatemachine(TestPCClient.sm.getID());
-
-                Thread.sleep(20000);
-
-                commandCenter.stopStatemachine(TestPCClient.sm.getID());
-
-
             } catch (StateAlreadyExistsException stateAlreadyExists) {
                 stateAlreadyExists.printStackTrace();
             } catch (IOException e) {
@@ -85,9 +79,9 @@ public class TestPCClient{
         }
 
         public void initRobot() throws StateAlreadyExistsException {
-            TestPCClient.sm = lightshowSmall();
+            TestPCClient.sm = wallPingPong();
             StatemachineCollection statemachineCollection = new StatemachineCollection();
-            statemachineCollection.addStatemachine(sm.getID(),sm);
+            statemachineCollection.addStatemachine(sm.getID(), sm);
 
             RobotFactory roFactory = new RobotFactory();
             System.out.println("## App.Robot.makeRobot() got called ");
@@ -108,46 +102,99 @@ public class TestPCClient{
         }
 
 
+        public IStatemachine wallPingPong() {
+            IStatemachine sm = new Statemachine("SingleWallPingPong");
 
-        public IStatemachine lightshowSmall() throws StateAlreadyExistsException {
-            IStatemachine sm = new Statemachine("lightshowSmall");
-
-
-
-            /** Waits for command to start with sending an command or wait**/
-            IState state_idle = new State("Idle"){
+            IState state_forward = new State("Forward") {
                 @Override
-                public void run(){
-                    brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
+                public void run() {
+                    System.out.println(this.getName() + " isActive\n");
+                    //FORWARD
+                    motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_FORWARD);
+                    motorController.setMotorDirection(EV3PortIDs.PORT_D, IMotorControl.MOTOR_FORWARD);
+
+                    brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+
+
+                    motorController.setMotorSpeed(EV3PortIDs.PORT_A, 50);
+                    motorController.setMotorSpeed(EV3PortIDs.PORT_D, 50);
                 }
             };
 
-            IState state_red = new State("state red"){
+            IState state_time_test = new State("NothingFound :(") {
                 @Override
-                public void run(){
-                    brickController.setEV3StatusLight(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
+                public void run() {
+                    System.out.println(this.getName() + " isActive\n");
+                    //FORWARD
+                    motorController.stop(EV3PortIDs.PORT_A);
+                    motorController.stop(EV3PortIDs.PORT_D);
+
+                    brickController.resetEV3StatusLight();
                 }
             };
 
-            IConstraint distance_collision = new LT(0.15f, new Distance(EV3PortIDs.PORT_2));
-            ITransition trans_collision = new Transition(distance_collision);
 
-            IConstraint distance_no_collision = new GT(0.20f, new Distance(EV3PortIDs.PORT_2));
-            ITransition trans_no_collision = new Transition(distance_collision);
+            IState state_backward = new State("backward") {
+                @Override
+                public void run() {
+                    System.out.println(this.getName() + " isActive\n");
+                    //BACKWARD
+                    motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
+                    motorController.setMotorDirection(EV3PortIDs.PORT_D, IMotorControl.MOTOR_BACKWARD);
+
+                    brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
+
+                    motorController.setMotorSpeed(EV3PortIDs.PORT_A, 50);
+                    motorController.setMotorSpeed(EV3PortIDs.PORT_D, 50);
+                }
+            };
+
+            IState state_turn = new State("turn") {
+                @Override
+                public void run() {
+                    System.out.println(this.getName() + " isActive\n");
+                    //TURN LEFT
+                    motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
+                    motorController.setMotorDirection(EV3PortIDs.PORT_D, IMotorControl.MOTOR_FORWARD);
+
+                    brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
+
+                    motorController.setMotorSpeed(EV3PortIDs.PORT_A, 50);
+                    motorController.setMotorSpeed(EV3PortIDs.PORT_D, 50);
+                }
+            };
+
+            //Set start states ------
+            sm.addState(state_forward);
+            sm.setStartState(state_forward);
+
+            //Add States ------
+            sm.addState(state_time_test);
+            sm.addState(state_backward);
+            sm.addState(state_turn);
+
+            IConstraint distance_collision = new LT(0.10f, new Distance(EV3PortIDs.PORT_2));
+            IConstraint time_driving_backward = new TimeExpired(new Milliseconds(1200));
+
+            IConstraint time_180turn = new TimeExpired(new Milliseconds(1300));
+
+            IConstraint time_stop = new TimeExpired(new Seconds(25));
 
 
-            sm.addState(state_idle);
-            sm.setStartState(state_idle);
+            //--- Transitionen
+            ITransition collision = new Transition(distance_collision);
+            ITransition drive_backwards = new Transition(time_driving_backward);
+            ITransition done_turn_180 = new Transition(time_180turn);
+            ITransition stop = new Transition(time_stop);
 
-            sm.addState(state_red);
 
-            sm.addTransition(trans_collision,state_idle,state_red);
-            sm.addTransition(trans_no_collision,state_red,state_idle);
-
+            sm.addTransition(collision, state_forward, state_backward);
+            sm.addTransition(drive_backwards, state_backward, state_turn);
+            sm.addTransition(done_turn_180, state_turn, state_forward);
+            sm.addTransition(stop, state_forward, state_time_test);
 
             return sm;
         }
+
     }
-
-
 }

@@ -97,7 +97,9 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
+                if(mDrawerListView.getChildAt(position).isEnabled()) {
+                    selectItem(position);
+                }
             }
         });
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
@@ -110,6 +112,7 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section3),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
         return mDrawerListView;
     }
 
@@ -281,5 +284,9 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+    public ListView getmDrawerListView() {
+        return mDrawerListView;
     }
 }

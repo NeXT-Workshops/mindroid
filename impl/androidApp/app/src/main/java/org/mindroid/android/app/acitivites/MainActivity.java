@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 
+import android.widget.ListView;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.dialog.ErrorDialog;
 import org.mindroid.android.app.errorhandling.APIErrorHandler;
@@ -103,6 +104,7 @@ public class MainActivity extends Activity
         transaction.commit();
     }
 
+
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
@@ -116,6 +118,7 @@ public class MainActivity extends Activity
                 break;
         }
     }
+
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
@@ -167,6 +170,10 @@ public class MainActivity extends Activity
         finish();
         startActivity(refresh);
 
+    }
+
+    public ListView getMenuItemListView(){
+        return mNavigationDrawerFragment.getmDrawerListView();
     }
 
     @Override

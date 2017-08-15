@@ -11,8 +11,8 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "org.mindroid.android.app"
-        minSdkVersion 25
-        targetSdkVersion 25
+        minSdkVersion 23
+        targetSdkVersion 23
         versionCode 1
         versionName mindroidVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -63,6 +63,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.2.0'
     }
 }

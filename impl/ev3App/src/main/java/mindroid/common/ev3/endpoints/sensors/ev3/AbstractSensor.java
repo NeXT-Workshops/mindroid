@@ -103,6 +103,10 @@ public abstract class AbstractSensor {
                 float[] sample = new float[sensor.sampleSize()];
                 while (sensor != null /*&& filter != null*/) {
                     try {
+                        //Check if array length is correct. Wrong length can appear when sensormode changes
+                        if(sample.length != sensor.sampleSize()){
+                            sample = new float[sensor.sampleSize()];
+                        }
 
                         sensor.fetchSample(sample, 0);
                         //filter.fetchSample(sample,0);

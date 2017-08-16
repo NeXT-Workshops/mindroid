@@ -1,4 +1,4 @@
-package org.mindroid.android.app.SchuelerProjekt;
+package org.mindroid.android.app.statemachinesimpl;
 
 import org.mindroid.api.LVL1API;
 import org.mindroid.api.ev3.EV3StatusLightColor;
@@ -8,7 +8,6 @@ import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
 import org.mindroid.api.statemachine.ITransition;
 import org.mindroid.api.statemachine.constraints.IConstraint;
-import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.statemachine.State;
 import org.mindroid.impl.statemachine.Statemachine;

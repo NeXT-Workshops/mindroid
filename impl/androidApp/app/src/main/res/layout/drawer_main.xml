@@ -8,4 +8,4 @@
           android:dividerHeight="0dp"
           android:footerDividersEnabled="false"
           android:headerDividersEnabled="false"
-          tools:context="org.mindroid.android.app.fragments.NavigationDrawerFragment"/>
+          tools:context="org.mindroid.android.app.fragments.NavigationDrawerFragment" android:id="@+id/menu_item_view"/>

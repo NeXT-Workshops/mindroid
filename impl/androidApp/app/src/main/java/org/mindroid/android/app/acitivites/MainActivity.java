@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -28,6 +30,7 @@ import org.mindroid.android.app.fragments.NavigationDrawerFragment;
 import org.mindroid.android.app.fragments.home.RobotSetupInfoFragment;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Settings;
+import org.mindroid.android.app.serviceloader.StatemachineService;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 
 import java.util.Locale;
@@ -52,11 +55,16 @@ public class MainActivity extends Activity
     private final Fragment CONFIG_FRAGMENT = MyRobotFragment.newInstance("","");
     private final Fragment SETTINGS_FRAGMENT = SettingsFragment.newInstance("","");
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        /** init Statemachine Service**/
+        initStatemachineService();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -76,6 +84,11 @@ public class MainActivity extends Activity
                     .commit();
         }
 
+    }
+
+    private void initStatemachineService(){
+        StatemachineService.getInstance();
+        StatemachineService.packageManager = getPackageManager();
     }
 
     @Override

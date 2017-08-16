@@ -1,14 +1,9 @@
-package org.mindroid.android.app.SchuelerProjekt;
+package org.mindroid.android.app.statemachinesimpl;
 
 import org.mindroid.api.LVL1API;
-import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
-import org.mindroid.api.statemachine.ITransition;
-import org.mindroid.api.statemachine.NoStartStateException;
 import org.mindroid.impl.statemachine.State;
 import org.mindroid.impl.statemachine.Statemachine;
-
-import java.util.Collection;
 
 /**
  * Created by torben on 09.08.2017.

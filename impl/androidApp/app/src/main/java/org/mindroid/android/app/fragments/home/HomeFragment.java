@@ -22,7 +22,7 @@ import org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.Settings;
-import org.mindroid.android.app.serviceloader.StatemachineService;
+//import org.mindroid.android.app.serviceloader.StatemachineService;
 import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 
 import java.io.IOException;
@@ -414,7 +414,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     public ArrayAdapter<String> getStatemachineIDAdapter() {
         //Add Statemachine ids to Dropdown-ui
-        return new ArrayAdapter<String>(parentActivity, android.R.layout.simple_spinner_dropdown_item, StatemachineService.getInstance().getStatemachineCollectionIDs());
+        return new ArrayAdapter<String>(parentActivity, android.R.layout.simple_spinner_dropdown_item, robot.getStatemachineIDs()/*StatemachineService.getInstance().getStatemachineCollectionIDs()*/);
 
     }
 

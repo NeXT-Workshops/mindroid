@@ -1,0 +1,86 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             tools:context=".fragments.sensormonitoring.SensorObservationFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_alignStart="@+id/sobs_sensor_port"
+                android:layout_alignEnd="@+id/sobs_sensormode" android:layout_below="@+id/view">
+            <TextView
+                    android:text="port"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/sobs_sensor_port"
+                    android:layout_alignParentTop="true" android:layout_alignParentStart="true"
+                    android:layout_marginStart="18dp"/>
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/sobs_sensortype"
+                    android:layout_marginStart="38dp"
+                    tools:text="sensortype" android:layout_alignBaseline="@+id/sobs_sensor_port"
+                    android:layout_alignBottom="@+id/sobs_sensor_port" android:layout_toEndOf="@+id/sobs_sensor_port"
+            />
+            <TextView
+                    android:text="sensormode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/sobs_sensormode"
+                    android:layout_marginStart="38dp"
+                    android:layout_alignBaseline="@+id/sobs_sensortype" android:layout_alignBottom="@+id/sobs_sensortype"
+                    android:layout_toEndOf="@+id/sobs_sensortype"/>
+        </LinearLayout>
+    </FrameLayout>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black"
+            android:layout_marginTop="20dp" android:layout_alignStart="@+id/sobs_sensor_port"
+            android:layout_alignEnd="@+id/sobs_sensormode" android:layout_marginLeft="15dp"
+            android:layout_marginRight="25dp"/>
+    <ToggleButton
+            android:text="pause"
+            android:layout_width="31dp"
+            android:layout_height="114dp" android:id="@+id/btn_toggle_pause" android:layout_marginTop="25dp"
+            android:layout_marginRight="25dp" android:layout_marginLeft="310dp"/>
+    <TextView
+            android:text="last value:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/txtView_txt_last_value" android:layout_marginTop="30dp"
+            android:layout_marginLeft="15dp"/>
+    <TextView
+            android:text="0.15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/txtView_last_value" android:layout_marginTop="30dp"
+            android:layout_marginLeft="90dp"/>
+    <TextView
+            android:text="Avg. Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/txtView_txt_avg_value" android:layout_marginTop="30dp"
+            android:layout_marginLeft="170dp"/>
+    <TextView
+            android:text="0.26"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/txtView_avg_value" android:layout_marginLeft="250dp"
+            android:layout_marginTop="30dp"/>
+    <TextView
+            android:text="Last measured Values:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/txtView_txt_last_x_values" android:layout_weight="1"
+            android:layout_marginLeft="15dp" android:layout_marginTop="55dp"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="33dp" android:layout_marginTop="75dp" android:layout_marginLeft="15dp"
+            android:layout_marginRight="25dp" android:id="@+id/linLayout_last_values">
+
+    </LinearLayout>
+</FrameLayout>

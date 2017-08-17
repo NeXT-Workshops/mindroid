@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import org.mindroid.android.app.R;
 
 /**
+ *
+ * //TODO Not in use yet
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link Log.OnFragmentInteractionListener} interface

@@ -1,6 +1,5 @@
 package org.mindroid.android.app.fragments.home;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -10,7 +9,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.NavigationView;
 import android.view.*;
 import android.widget.*;
 
@@ -23,9 +21,10 @@ import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.Settings;
 import org.mindroid.android.app.serviceloader.StatemachineService;
-import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
+
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -80,6 +79,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private String infoUsbNotFound;
     private String infoTetheringNotActiavted;
 
+    private HashMap<Integer,Boolean> menuItemAlwaysEnabled = new HashMap<>();
+
     public HomeFragment() {
         // Required empty public constructor
 
@@ -116,6 +117,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         if(parentActivity instanceof IErrorHandler){
             robot.registerErrorHandler(((IErrorHandler) parentActivity).getErrorHandler());
         }
+        getMenuEnabledSettings();
+
 
         loadRobotPortConfiguration();
 
@@ -123,7 +126,13 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         loadConnectionProperties();
     }
 
-
+    private void getMenuEnabledSettings() {
+        //Settings menu enable
+        menuItemAlwaysEnabled.put(0,true);
+        menuItemAlwaysEnabled.put(1,true);
+        menuItemAlwaysEnabled.put(2,false);
+        menuItemAlwaysEnabled.put(3,false);
+    }
 
 
     @Override
@@ -428,7 +437,9 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         ListView mDrawerListView;
         if((mDrawerListView = parentActivity.getMenuItemListView()) != null) {
             for(int i = 0; i < mDrawerListView.getChildCount(); i++){
-                mDrawerListView.getChildAt(i).setEnabled(enable);
+                if(!menuItemAlwaysEnabled.get(i)) {
+                    mDrawerListView.getChildAt(i).setEnabled(enable);
+                }
             }
         }
     }

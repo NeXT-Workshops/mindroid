@@ -82,9 +82,9 @@
     <string name="text_ok_button">OK</string>
 
     <!-- Navigation Drawer item titles -->
-    <string name="title_section1">Home</string>
-    <string name="title_section2">Mein Roboter</string>
-    <string name="title_section3">Einstellungen</string>
+    <string name="title_home">Home</string>
+    <string name="title_myrobot">Mein Roboter</string>
+    <string name="title_settings">Einstellungen</string>
 
     <string name="action_example">Example action</string>
 

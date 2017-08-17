@@ -2,14 +2,22 @@ package org.mindroid.android.app.robodancer;
 
 
 
+
+import org.mindroid.android.app.fragments.sensormonitoring.SensorListener;
 import org.mindroid.android.app.serviceloader.StatemachineService;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
+import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.impl.configuration.RobotPortConfig;
 import org.mindroid.api.robot.IRobotFactory;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.mindroid.impl.ev3.EV3PortID;
+import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 import org.mindroid.impl.robot.RobotFactory;
@@ -26,15 +34,21 @@ public class Robot {
 
     IRobotFactory roFactory = new RobotFactory();
     //-------- Robot
-    public RobotPortConfig robotPortConfig = new RobotPortConfig(); //TODO Dependency/Linked to SchuelerProjekt#
-    //TODO Refactor: Make more dynamic: add collections of statemachines dynamically
-    //public IMindroidMain mindroidStatemachine; //TODO Dependency/Linked to SchuelerProjekt
-    //public IMindroidMain mindroidImperative; //TODO Dependency/Linked to SchuelerProjekt
+    public RobotPortConfig robotPortConfig = new RobotPortConfig();
 
     String runningStatemachinesGroupID = "";
 
-    public Robot() {
+    private HashMap<EV3PortID,IEV3SensorEventListener> sensorListener = new HashMap<>();
 
+    public Robot() {
+        initSensorListener();
+    }
+
+    private void initSensorListener() {
+        sensorListener.put(EV3PortIDs.PORT_1,new SensorListener(EV3PortIDs.PORT_1));
+        sensorListener.put(EV3PortIDs.PORT_2,new SensorListener(EV3PortIDs.PORT_2));
+        sensorListener.put(EV3PortIDs.PORT_3,new SensorListener(EV3PortIDs.PORT_3));
+        sensorListener.put(EV3PortIDs.PORT_4,new SensorListener(EV3PortIDs.PORT_4));
     }
 
     /**
@@ -50,7 +64,11 @@ public class Robot {
         roFactory.setMSGServerTCPPort(Settings.getInstance().serverTCPPort);
         roFactory.setRobotServerPort(Settings.getInstance().robotServerPort);
         roFactory.setRobotID(Settings.getInstance().robotID);
+        for(EV3PortID port : sensorListener.keySet()){
+            roFactory.registerSensorListener(port,sensorListener.get(port));
+        }
 
+        //
         //Add StatemachineCollections
         for (int i = 0; i < StatemachineService.getInstance().getStatemachineCollections().size(); i++) {
             roFactory.addStatemachine(StatemachineService.getInstance().getStatemachineCollections().get(i));
@@ -58,7 +76,6 @@ public class Robot {
 
         //Create the Robot
         commandCenter = roFactory.createRobot();
-
     }
 
     /**
@@ -123,5 +140,9 @@ public class Robot {
 
     public void registerErrorHandler(AbstractErrorHandler errorHandler){
         roFactory.addErrorHandler(errorHandler);
+    }
+
+    public SensorListener getListenerForPort(EV3PortID port){
+        return (SensorListener) sensorListener.get(port);
     }
 }

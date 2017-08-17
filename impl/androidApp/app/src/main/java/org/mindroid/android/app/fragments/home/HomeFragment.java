@@ -363,6 +363,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_disconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(robot.isRunning){
+                    StartStopRobotTask task = new StartStopRobotTask(parentActivity,msgStopRobot);
+                    task.execute(STOP_ROBOT);
+                }
+
                 DisconnectFromBrickTask task = new DisconnectFromBrickTask(parentActivity,msgDisconnectFromRobot);
                 task.execute();
             }

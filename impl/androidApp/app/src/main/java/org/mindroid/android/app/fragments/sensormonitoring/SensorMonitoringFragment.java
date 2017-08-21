@@ -11,14 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.android.app.fragments.home.HomeFragment;
-import org.mindroid.android.app.fragments.home.RobotSetupInfoFragment;
-import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.android.app.robodancer.Robot;
 
@@ -58,6 +54,8 @@ public class SensorMonitoringFragment extends Fragment implements SensorObservat
     private SensorObservationFragment sensor_port3_monitor;
     private SensorObservationFragment sensor_port4_monitor;
 
+    private String infoMessage;
+
     public SensorMonitoringFragment() {
         // Required empty public constructor
     }
@@ -94,6 +92,7 @@ public class SensorMonitoringFragment extends Fragment implements SensorObservat
         sensor_port3_monitor.registerSensorListener(robot.getListenerForPort(EV3PortIDs.PORT_3));
         sensor_port4_monitor.registerSensorListener(robot.getListenerForPort(EV3PortIDs.PORT_4));
 
+        infoMessage = getResources().getString(R.string.dialog_info_message);
     }
 
     @Override
@@ -108,6 +107,12 @@ public class SensorMonitoringFragment extends Fragment implements SensorObservat
         addSensorObservationToUI(sensor_port2_monitor);
         addSensorObservationToUI(sensor_port3_monitor);
         addSensorObservationToUI(sensor_port4_monitor);
+
+        if(!robot.isRunning){
+            if(getActivity() instanceof MainActivity){
+                ((MainActivity) getActivity()).showInfoDialog("Info",infoMessage);
+            }
+        }
 
         return view;
     }

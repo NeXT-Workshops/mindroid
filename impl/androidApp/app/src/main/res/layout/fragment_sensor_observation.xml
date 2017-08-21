@@ -2,7 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             tools:context=".fragments.sensormonitoring.SensorObservationFragment">
+             tools:context=".fragments.sensormonitoring.SensorObservationFragment" android:minHeight="115dp">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -35,7 +35,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/sobs_sensormode"
                     android:layout_marginStart="38dp"
-                    android:layout_alignBaseline="@+id/sobs_sensortype" android:layout_alignBottom="@+id/sobs_sensortype"
+                    android:layout_alignBaseline="@+id/sobs_sensortype"
+                    android:layout_alignBottom="@+id/sobs_sensortype"
                     android:layout_toEndOf="@+id/sobs_sensortype"/>
         </LinearLayout>
     </FrameLayout>
@@ -46,41 +47,87 @@
             android:layout_marginTop="20dp" android:layout_alignStart="@+id/sobs_sensor_port"
             android:layout_alignEnd="@+id/sobs_sensormode" android:layout_marginLeft="15dp"
             android:layout_marginRight="25dp"/>
-    <ToggleButton
-            android:text="pause"
-            android:layout_width="31dp"
-            android:layout_height="114dp" android:id="@+id/btn_toggle_pause" android:layout_marginTop="25dp"
-            android:layout_marginRight="25dp" android:layout_marginLeft="310dp"/>
     <TextView
-            android:text="last value:"
+            android:text="Sensor Values
+"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/txtView_txt_last_value" android:layout_marginTop="30dp"
+            android:layout_height="wrap_content" android:id="@+id/txtView_txt_last_value"
+            android:layout_marginTop="30dp"
             android:layout_marginLeft="15dp"/>
-    <TextView
-            android:text="0.15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/txtView_last_value" android:layout_marginTop="30dp"
-            android:layout_marginLeft="90dp"/>
-    <TextView
-            android:text="Avg. Value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/txtView_txt_avg_value" android:layout_marginTop="30dp"
-            android:layout_marginLeft="170dp"/>
-    <TextView
-            android:text="0.26"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/txtView_avg_value" android:layout_marginLeft="250dp"
-            android:layout_marginTop="30dp"/>
-    <TextView
-            android:text="Last measured Values:"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/txtView_txt_last_x_values" android:layout_weight="1"
-            android:layout_marginLeft="15dp" android:layout_marginTop="55dp"/>
     <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="33dp" android:layout_marginTop="75dp" android:layout_marginLeft="15dp"
-            android:layout_marginRight="25dp" android:id="@+id/linLayout_last_values">
-
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:id="@+id/linLayout_values_container"
+            android:layout_marginLeft="35dp" android:layout_marginTop="50dp" android:layout_height="match_parent"
+            android:minWidth="200dp" android:paddingTop="0dp">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_weight="1" android:minWidth="200dp"
+                android:paddingTop="0dp" android:visibility="visible">
+            <TextView
+                    android:text="0.26"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot1_description"
+                    android:minWidth="100dp"/>
+            <TextView
+                    android:text="Avg. Value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot1_value"
+                    android:minWidth="100dp"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_weight="1" android:paddingTop="5dp"
+                android:visibility="visible">
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot2_description"
+                    android:layout_weight="1"
+                    android:minWidth="100dp"/>
+            <TextView
+                    android:text="0.15"
+                    android:layout_width="124dp"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot2_value"
+                    android:minWidth="100dp"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_weight="1" android:visibility="visible"
+                android:paddingTop="5dp">
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot3_description"
+                    android:layout_weight="1"
+                    android:minWidth="100dp"/>
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot3_value"
+                    android:layout_weight="1" android:minWidth="100dp"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_weight="1" android:visibility="visible"
+                android:paddingTop="5dp">
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot4_description"
+                    android:layout_weight="1"
+                    android:minWidth="100dp"/>
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot4_value"
+                    android:layout_weight="1" android:minWidth="100dp"/>
+        </LinearLayout>
     </LinearLayout>
+
+
 </FrameLayout>

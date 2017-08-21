@@ -19,6 +19,7 @@ import android.util.DisplayMetrics;
 import android.widget.ListView;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.dialog.ErrorDialog;
+import org.mindroid.android.app.dialog.InfoDialog;
 import org.mindroid.android.app.errorhandling.APIErrorHandler;
 import org.mindroid.android.app.fragments.myrobot.MyRobotFragment;
 import org.mindroid.android.app.fragments.home.HomeFragment;
@@ -174,6 +175,17 @@ public class MainActivity extends Activity
             @Override
             public void run() {
                 ErrorDialog.newInstance(context,title,message).show();
+            }
+        };
+        runOnUiThread(showErrorDialog);
+    }
+
+    public void showInfoDialog(final String title, final String message){
+        final Context context = this;
+        Runnable showErrorDialog = new Runnable(){
+            @Override
+            public void run() {
+                InfoDialog.newInstance(context,title,message).show();
             }
         };
         runOnUiThread(showErrorDialog);

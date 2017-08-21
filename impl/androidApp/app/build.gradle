@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 
 apply from: file('../../include/common/build.gradle')
 
+
+
 mindroidVersion = ext.mindroidVersion
 javaSourceLevel = ext.javaSourceLevel
 javaTargetLevel = ext.javaTargetLevel
@@ -31,6 +33,7 @@ android {
     lintOptions {
         abortOnError false
     }
+
 }
 
 
@@ -47,14 +50,15 @@ dependencies {
          */
         exclude group: 'org.json'
     }
-    compile project(':ev3Messages')
+
+    compile (project(':ev3Messages'))
     compile 'com.esotericsoftware.kryo:kryo:2.24.0'
     compile 'com.esotericsoftware:kryonet:2.22.0-RC1'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.test:runner:0.5'
-    //compile 'com.google.android.gms:play-services:42'
     compile 'com.android.support:design:25.3.1'
+
 }
 
 buildscript {

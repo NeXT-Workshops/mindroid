@@ -45,7 +45,7 @@ public final class Robot {
         statemachineManager = StatemachineManager.getInstance();
     }
 
-    public EV3Sensor getSensor_S1() {
+    public EV3Sensor getSensorS1() {
         return sensor_S1;
     }
 
@@ -57,31 +57,31 @@ public final class Robot {
         this.robotConfigurator = robotConfigurator;
     }
 
-    protected void setSensor_S1(EV3Sensor sensor_S1) {
+    protected void setSensorS1(EV3Sensor sensor_S1) {
         this.sensor_S1 = sensor_S1;
     }
 
-    protected EV3Sensor getSensor_S2() {
+    protected EV3Sensor getSensorS2() {
         return sensor_S2;
     }
 
-    protected void setSensor_S2(EV3Sensor sensor_S2) {
+    protected void setSensorS2(EV3Sensor sensor_S2) {
         this.sensor_S2 = sensor_S2;
     }
 
-    protected EV3Sensor getSensor_S3() {
+    protected EV3Sensor getSensorS3() {
         return sensor_S3;
     }
 
-    protected void setSensor_S3(EV3Sensor sensor_S3) {
+    protected void setSensorS3(EV3Sensor sensor_S3) {
         this.sensor_S3 = sensor_S3;
     }
 
-    protected EV3Sensor getSensor_S4() {
+    protected EV3Sensor getSensorS4() {
         return sensor_S4;
     }
 
-    protected void setSensor_S4(EV3Sensor sensor_S4) {
+    protected void setSensorS4(EV3Sensor sensor_S4) {
         this.sensor_S4 = sensor_S4;
     }
 
@@ -89,7 +89,7 @@ public final class Robot {
         return IMotor_A;
     }
 
-    protected void setIMotor_A(IMotor IMotor_A) {
+    protected void setMotorA(IMotor IMotor_A) {
         this.IMotor_A = IMotor_A;
     }
 
@@ -97,7 +97,7 @@ public final class Robot {
         return IMotor_B;
     }
 
-    protected void setIMotor_B(IMotor IMotor_B) {
+    protected void setMotorB(IMotor IMotor_B) {
         this.IMotor_B = IMotor_B;
     }
 
@@ -105,7 +105,7 @@ public final class Robot {
         return IMotor_C;
     }
 
-    protected void setIMotor_C(IMotor IMotor_C) {
+    protected void setMotorC(IMotor IMotor_C) {
         this.IMotor_C = IMotor_C;
     }
 
@@ -113,7 +113,7 @@ public final class Robot {
         return IMotor_D;
     }
 
-    protected void setIMotor_D(IMotor IMotor_D) {
+    protected void setMotorD(IMotor IMotor_D) {
         this.IMotor_D = IMotor_D;
     }
 

@@ -1,9 +1,8 @@
-package org.mindroid.android.app.SchuelerProjekt;
+package org.mindroid.android.app.statemachinesimpl;
 
 import org.mindroid.api.LVL2API;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
-import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 
 /**
  * Created by Torben on 03.05.2017.

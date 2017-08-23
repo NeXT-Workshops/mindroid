@@ -8,7 +8,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -17,22 +16,33 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 
+import android.widget.ListView;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.dialog.ErrorDialog;
+import org.mindroid.android.app.dialog.InfoDialog;
 import org.mindroid.android.app.errorhandling.APIErrorHandler;
-import org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment;
 import org.mindroid.android.app.fragments.myrobot.MyRobotFragment;
 import org.mindroid.android.app.fragments.home.HomeFragment;
 import org.mindroid.android.app.fragments.NavigationDrawerFragment;
 import org.mindroid.android.app.fragments.home.RobotSetupInfoFragment;
+import org.mindroid.android.app.fragments.sensormonitoring.SensorMonitoringFragment;
+import org.mindroid.android.app.fragments.sensormonitoring.SensorObservationFragment;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
-import org.mindroid.android.app.robodancer.Settings;
+import org.mindroid.android.app.serviceloader.StatemachineService;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 
 import java.util.Locale;
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SettingsFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,SettingsFragment.OnSettingsChanged, MyRobotFragment.OnFragmentInteractionListener, RobotSetupInfoFragment.OnFragmentInteractionListener,IErrorHandler{
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        SettingsFragment.OnFragmentInteractionListener,
+        HomeFragment.OnFragmentInteractionListener,
+        SensorMonitoringFragment.OnFragmentInteractionListener,
+        SensorObservationFragment.OnFragmentInteractionListener,
+        SettingsFragment.OnSettingsChanged,
+        MyRobotFragment.OnFragmentInteractionListener,
+        RobotSetupInfoFragment.OnFragmentInteractionListener,
+        IErrorHandler{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -50,12 +60,18 @@ public class MainActivity extends Activity
     private final Fragment HOME_FRAGMENT = HomeFragment.newInstance("","");
     private final Fragment CONFIG_FRAGMENT = MyRobotFragment.newInstance("","");
     private final Fragment SETTINGS_FRAGMENT = SettingsFragment.newInstance("","");
+    private final Fragment SENSOR_MONITOR_FRAGMENT = SensorMonitoringFragment.newInstance();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        /** init Statemachine Service**/
+        initStatemachineService();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -77,6 +93,11 @@ public class MainActivity extends Activity
 
     }
 
+    private void initStatemachineService(){
+        StatemachineService.getInstance();
+        StatemachineService.packageManager = getPackageManager();
+    }
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
@@ -84,13 +105,16 @@ public class MainActivity extends Activity
         String tag;
         switch(position){
             case 0: fragment = HOME_FRAGMENT;
-                    setTitle(getResources().getString(R.string.title_section1));
+                    setTitle(getResources().getString(R.string.title_home));
                 break;//Home
-            case 1: fragment = CONFIG_FRAGMENT;
-                    setTitle(getResources().getString(R.string.title_section2));
+            case 1: fragment = SENSOR_MONITOR_FRAGMENT;
+                    setTitle(getResources().getString(R.string.title_sensor_monitoring));
+                    break;
+            case 2: fragment = CONFIG_FRAGMENT;
+                    setTitle(getResources().getString(R.string.title_myrobot));
                 break;//Configuration
-            case 2: fragment = SETTINGS_FRAGMENT;
-                    setTitle(getResources().getString(R.string.title_section3));
+            case 3: fragment = SETTINGS_FRAGMENT;
+                    setTitle(getResources().getString(R.string.title_settings));
                 break;//Settings
             default:
                 System.out.println("## MainActivity.onNavigationDrawerItemSelected(): No fragment defined for this position");
@@ -103,19 +127,24 @@ public class MainActivity extends Activity
         transaction.commit();
     }
 
+
     public void onSectionAttached(int number) {
         switch (number) {
+            case 0:
+                mTitle = getString(R.string.title_home);
+                break;
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.title_sensor_monitoring);
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+                mTitle = getString(R.string.title_myrobot);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.title_settings);
                 break;
         }
     }
+
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
@@ -151,6 +180,17 @@ public class MainActivity extends Activity
         runOnUiThread(showErrorDialog);
     }
 
+    public void showInfoDialog(final String title, final String message){
+        final Context context = this;
+        Runnable showErrorDialog = new Runnable(){
+            @Override
+            public void run() {
+                InfoDialog.newInstance(context,title,message).show();
+            }
+        };
+        runOnUiThread(showErrorDialog);
+    }
+
     /**
      * Changes the app language
      * @param localLang
@@ -169,8 +209,13 @@ public class MainActivity extends Activity
 
     }
 
+    public ListView getMenuItemListView(){
+        return mNavigationDrawerFragment.getmDrawerListView();
+    }
+
     @Override
     public AbstractErrorHandler getErrorHandler() {
         return errorHandler;
     }
+
 }

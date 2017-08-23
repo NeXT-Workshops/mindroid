@@ -36,13 +36,13 @@ public class SensorController implements ISensorControl{
 
     private EV3Sensor getSensor(EV3PortID sensport){
         if(sensport.equals(EV3PortIDs.PORT_1)){
-            return robot.getSensor_S1();
+            return robot.getSensorS1();
         }else if(sensport.equals(EV3PortIDs.PORT_2)){
-            return  robot.getSensor_S2();
+            return  robot.getSensorS2();
         }else if(sensport.equals(EV3PortIDs.PORT_3)){
-            return  robot.getSensor_S3();
+            return  robot.getSensorS3();
         }else if(sensport.equals(EV3PortIDs.PORT_4)){
-            return  robot.getSensor_S4();
+            return  robot.getSensorS4();
         }
 
         return null;

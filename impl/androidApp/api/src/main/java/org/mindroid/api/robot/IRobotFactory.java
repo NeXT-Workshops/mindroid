@@ -2,6 +2,9 @@ package org.mindroid.api.robot;
 
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
+import org.mindroid.api.sensor.IEV3SensorEventListener;
+import org.mindroid.common.messages.EV3SensorPort;
+import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.statemachine.StatemachineCollection;
 
 /**
@@ -23,6 +26,8 @@ public interface IRobotFactory {
     public void setRobotID(String robotID);
 
     public void addStatemachine(StatemachineCollection statemachines);
+
+    void registerSensorListener(EV3PortID port, IEV3SensorEventListener listener);
 
     void addErrorHandler(AbstractErrorHandler errorHandler);
 

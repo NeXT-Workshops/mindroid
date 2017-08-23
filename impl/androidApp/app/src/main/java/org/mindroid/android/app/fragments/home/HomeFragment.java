@@ -1,6 +1,5 @@
 package org.mindroid.android.app.fragments.home;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -10,15 +9,8 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.IErrorHandler;
@@ -28,9 +20,11 @@ import org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.Settings;
-import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
+import org.mindroid.android.app.serviceloader.StatemachineService;
+
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,7 +67,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     public static Robot robot = new Robot();;
 
-    Activity parentActivity;
+    MainActivity parentActivity;
 
     // Resources
     private String msgConnectToRobot;
@@ -84,6 +78,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private String msgStopRobot;
     private String infoUsbNotFound;
     private String infoTetheringNotActiavted;
+
+    private HashMap<Integer,Boolean> menuItemAlwaysEnabled = new HashMap<>();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -116,11 +112,13 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        parentActivity = getActivity();
+        parentActivity = (MainActivity) getActivity();
 
         if(parentActivity instanceof IErrorHandler){
             robot.registerErrorHandler(((IErrorHandler) parentActivity).getErrorHandler());
         }
+        getMenuEnabledSettings();
+
 
         loadRobotPortConfiguration();
 
@@ -128,7 +126,13 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         loadConnectionProperties();
     }
 
-
+    private void getMenuEnabledSettings() {
+        //Settings menu enable
+        menuItemAlwaysEnabled.put(0,true);
+        menuItemAlwaysEnabled.put(1,true);
+        menuItemAlwaysEnabled.put(2,false);
+        menuItemAlwaysEnabled.put(3,false);
+    }
 
 
     @Override
@@ -187,9 +191,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         //transaction.addToBackStack(null);
         transaction.commit();
 
-
-
-        robot.loadStatemachines();
         spinner_selectedStatemachine.setAdapter(getStatemachineIDAdapter());
 
         //mListener.showErrorDialog("Error on create",stateAlreadyExists.getMessage());
@@ -257,9 +258,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
                 btn_initConfiguration.setEnabled(robot.isConnected() && !robot.isConfigurated() && positiveUSBState);
 
-                btn_startRobot.setEnabled(robot.isConnected() && robot.isConfigurated() && !robot.isRunning && positiveUSBState && !spinner_selectedStatemachine.getSelectedItem().toString().isEmpty());
+                btn_startRobot.setEnabled(robot.isConnected() && robot.isConfigurated() && !robot.isRunning && positiveUSBState && spinner_selectedStatemachine.getSelectedItem() != null && !spinner_selectedStatemachine.getSelectedItem().toString().isEmpty());
 
                 btn_stopRobot.setEnabled(robot.isRunning);
+
+                setEnableMenuItems(!robot.isConnected());
 
                 spinner_selectedStatemachine.setEnabled(!robot.isRunning);
             }
@@ -369,6 +372,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_disconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(robot.isRunning){
+                    StartStopRobotTask task = new StartStopRobotTask(parentActivity,msgStopRobot);
+                    task.execute(STOP_ROBOT);
+                }
+
                 DisconnectFromBrickTask task = new DisconnectFromBrickTask(parentActivity,msgDisconnectFromRobot);
                 task.execute();
             }
@@ -420,9 +428,22 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     public ArrayAdapter<String> getStatemachineIDAdapter() {
         //Add Statemachine ids to Dropdown-ui
-        return new ArrayAdapter<String>(parentActivity, android.R.layout.simple_spinner_dropdown_item, robot.getStatemachineIDs());
+        return new ArrayAdapter<String>(parentActivity, android.R.layout.simple_spinner_dropdown_item, StatemachineService.getInstance().getStatemachineCollectionIDs());
 
     }
+
+    //TODO Does not work as intended
+    public void setEnableMenuItems(boolean enable){
+        ListView mDrawerListView;
+        if((mDrawerListView = parentActivity.getMenuItemListView()) != null) {
+            for(int i = 0; i < mDrawerListView.getChildCount(); i++){
+                if(!menuItemAlwaysEnabled.get(i)) {
+                    mDrawerListView.getChildAt(i).setEnabled(enable);
+                }
+            }
+        }
+    }
+
 
     /**
      * Loads the Hardware Port Configuration of the Robot and sets it.

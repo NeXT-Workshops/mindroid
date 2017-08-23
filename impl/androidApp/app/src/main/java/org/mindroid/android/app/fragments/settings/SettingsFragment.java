@@ -75,6 +75,7 @@ public class SettingsFragment extends Fragment {
 
     private Spinner spinner_language;
 
+
     public SettingsFragment() {
         // Required empty public constructor
     }

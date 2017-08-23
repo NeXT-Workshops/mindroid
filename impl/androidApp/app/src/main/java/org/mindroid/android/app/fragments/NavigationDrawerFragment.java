@@ -97,7 +97,9 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
+                if(mDrawerListView.getChildAt(position).isEnabled()) {
+                    selectItem(position);
+                }
             }
         });
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
@@ -105,11 +107,13 @@ public class NavigationDrawerFragment extends Fragment {
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 new String[]{
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
-                        getString(R.string.title_section3),
+                        getString(R.string.title_home),
+                        getString(R.string.title_sensor_monitoring),
+                        getString(R.string.title_myrobot),
+                        getString(R.string.title_settings),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
         return mDrawerListView;
     }
 
@@ -281,5 +285,9 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+    public ListView getmDrawerListView() {
+        return mDrawerListView;
     }
 }

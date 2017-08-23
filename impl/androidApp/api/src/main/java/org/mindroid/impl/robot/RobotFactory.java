@@ -1,5 +1,6 @@
 package org.mindroid.impl.robot;
 
+
 import org.mindroid.api.communication.IRobotServer;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.robot.*;
@@ -8,7 +9,9 @@ import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.api.robot.control.ISensorControl;
+import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.api.statemachine.IStatemachine;
+import org.mindroid.common.messages.EV3SensorPort;
 import org.mindroid.common.messages.Motors;
 import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.common.messages.Sensors;
@@ -16,6 +19,7 @@ import org.mindroid.impl.communication.Messenger;
 import org.mindroid.impl.communication.RobotServer;
 import org.mindroid.impl.configuration.RobotConfigurator;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
+import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 import org.mindroid.impl.robot.context.RobotContextState;
@@ -25,6 +29,7 @@ import org.mindroid.impl.statemachine.StatemachineCollection;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -46,6 +51,9 @@ public final class RobotFactory implements IRobotFactory {
     private Motors motor_B = null;
     private Motors motor_C = null;
     private Motors motor_D = null;
+
+    //Further to register SensorListeners
+    private HashMap<EV3PortID,ArrayList<IEV3SensorEventListener>> sensorListenerToRegister = new HashMap<>();
 
     //Unneccessary vars - just for testing
     private IMotorControl motorControl = Robot.getRobotController().getMotorController();
@@ -77,6 +85,16 @@ public final class RobotFactory implements IRobotFactory {
     public RobotFactory(){
         myRobot = Robot.getInstance();
         myRobotCommandCenter = new RobotCommandCenter(myRobot);
+
+        sensorListenerToRegister.put(EV3PortIDs.PORT_1,new ArrayList<IEV3SensorEventListener>());
+        sensorListenerToRegister.put(EV3PortIDs.PORT_2,new ArrayList<IEV3SensorEventListener>());
+        sensorListenerToRegister.put(EV3PortIDs.PORT_3,new ArrayList<IEV3SensorEventListener>());
+        sensorListenerToRegister.put(EV3PortIDs.PORT_4,new ArrayList<IEV3SensorEventListener>());
+
+        sensorListenerToRegister.get(EV3PortIDs.PORT_1).add(RobotContextState.getInstance());
+        sensorListenerToRegister.get(EV3PortIDs.PORT_2).add(RobotContextState.getInstance());
+        sensorListenerToRegister.get(EV3PortIDs.PORT_3).add(RobotContextState.getInstance());
+        sensorListenerToRegister.get(EV3PortIDs.PORT_4).add(RobotContextState.getInstance());
     }
 
     @Override
@@ -121,32 +139,43 @@ public final class RobotFactory implements IRobotFactory {
             robotConfigurator.addMotorConfigurationSet(motor_A,motor_B,motor_C,motor_D);
 
             try {
-                myRobot.setSensor_S1(robotConfigurator.createSensor(EV3PortIDs.PORT_1));
-                myRobot.setSensor_S2(robotConfigurator.createSensor(EV3PortIDs.PORT_2));
-                myRobot.setSensor_S3(robotConfigurator.createSensor(EV3PortIDs.PORT_3));
-                myRobot.setSensor_S4(robotConfigurator.createSensor(EV3PortIDs.PORT_4));
+                myRobot.setSensorS1(robotConfigurator.createSensor(EV3PortIDs.PORT_1));
+                myRobot.setSensorS2(robotConfigurator.createSensor(EV3PortIDs.PORT_2));
+                myRobot.setSensorS3(robotConfigurator.createSensor(EV3PortIDs.PORT_3));
+                myRobot.setSensorS4(robotConfigurator.createSensor(EV3PortIDs.PORT_4));
 
-                myRobot.setIMotor_A(robotConfigurator.createMotor(EV3PortIDs.PORT_A));
-                myRobot.setIMotor_B(robotConfigurator.createMotor(EV3PortIDs.PORT_B));
-                myRobot.setIMotor_C(robotConfigurator.createMotor(EV3PortIDs.PORT_C));
-                myRobot.setIMotor_D(robotConfigurator.createMotor(EV3PortIDs.PORT_D));
+                myRobot.setMotorA(robotConfigurator.createMotor(EV3PortIDs.PORT_A));
+                myRobot.setMotorB(robotConfigurator.createMotor(EV3PortIDs.PORT_B));
+                myRobot.setMotorC(robotConfigurator.createMotor(EV3PortIDs.PORT_C));
+                myRobot.setMotorD(robotConfigurator.createMotor(EV3PortIDs.PORT_D));
             } catch (PortIsAlreadyInUseException e) {
                 robotCommandCenter = null;
                 e.printStackTrace();
             }
 
             // --- Connect Sensorobject --> with RobotContextState
-            if(myRobot.getSensor_S1() != null){
-                myRobot.getSensor_S1().registerListener(RobotContextState.getInstance());
-            }
-            if(myRobot.getSensor_S2() != null){
-                myRobot.getSensor_S2().registerListener(RobotContextState.getInstance());
-            }
-            if(myRobot.getSensor_S3() != null){
-                myRobot.getSensor_S3().registerListener(RobotContextState.getInstance());
-            }
-            if(myRobot.getSensor_S4() != null){
-                myRobot.getSensor_S4().registerListener(RobotContextState.getInstance());
+            for(EV3PortID port : sensorListenerToRegister.keySet()){
+                if(port.equals(EV3PortIDs.PORT_1) && myRobot.getSensorS1() != null){
+                    for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
+                        myRobot.getSensorS1().registerListener(iev3SensorEventListener);
+                        //System.out.println("[RobotFactory:createRobot] registered Sensor Listener "+iev3SensorEventListener);
+                    }
+                }else if(port.equals(EV3PortIDs.PORT_2) && myRobot.getSensorS2() != null){
+                    for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
+                        myRobot.getSensorS2().registerListener(iev3SensorEventListener);
+                        //System.out.println("[RobotFactory:createRobot] registered Sensor Listener "+iev3SensorEventListener);
+                    }
+                }else if(port.equals(EV3PortIDs.PORT_3) && myRobot.getSensorS3() != null){
+                    for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
+                        myRobot.getSensorS3().registerListener(iev3SensorEventListener);
+                        //System.out.println("[RobotFactory:createRobot] registered Sensor Listener "+iev3SensorEventListener);
+                    }
+                }else if(port.equals(EV3PortIDs.PORT_4) && myRobot.getSensorS4() != null){
+                    for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
+                        myRobot.getSensorS4().registerListener(iev3SensorEventListener);
+                        //System.out.println("[RobotFactory:createRobot] registered Sensor Listener "+iev3SensorEventListener);
+                    }
+                }
             }
 
             myRobot.setBrick(robotConfigurator.getBrick());
@@ -162,11 +191,10 @@ public final class RobotFactory implements IRobotFactory {
 
 
         }else{
-            //TODO may throw exception
-            System.err.println("RobotFactory.createRobot(): Error appeard while creating robot!");
+            ErrorHandlerManager.getInstance().handleError(new Exception("Could not create Robot"),this.getClass(),"RobotFactory.createRobot(): Error appeard while creating robot!");
             robotCommandCenter = null;
         }
-        System.out.println("The RobotFactory created a Robot with the following setup:\n"+toString());
+        System.out.println("[RobotFactory:createRobot] The RobotFactory created a Robot with the following setup:\n"+toString());
         return robotCommandCenter;
     }
 
@@ -244,6 +272,21 @@ public final class RobotFactory implements IRobotFactory {
     @Override
     public void addStatemachine(StatemachineCollection statemachines) {
         myRobot.getStatemachineManager().addStatemachines(statemachines);
+    }
+
+    /**
+     * Needs to be added before creating the robot
+     *
+     * @param port port the listener should listen to
+     * @param listener the sensor listener to register
+     */
+    @Override
+    public void registerSensorListener(EV3PortID port,IEV3SensorEventListener listener) {
+        if (!sensorListenerToRegister.containsKey(port)) {
+            sensorListenerToRegister.put(port,new ArrayList());
+        }
+        sensorListenerToRegister.get(port).add(listener);
+
     }
 
     @Override

@@ -7,19 +7,9 @@ build:
     pull: true
 
   ci:
-    - cd "impl"
-    # Build Android application
-    - cd "./androidApp"
-    - bash ./gradlew clean test assemble
-    - cd ..
-    # Build EV3 application
-    - cd "./ev3App"
-    - bash ../androidApp/gradlew clean test assemble
-    - cd ..
-    # Build server application
-    - cd "./serverApp"
-    - bash ../androidApp/gradlew clean test assemble
-    - cd ..
+    - bash impl/buildAndroidApp.bash
+    - bash impl/buildEV3App.bash
+    - bash impl/buildServer.bash
     # Provide test reports to Shippable
     - cp ./androidApp/api/build/test-results/TEST-*.xml /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
     - cp ./androidApp/app/build/test-results/debug/TEST-*.xml /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
@@ -34,4 +24,3 @@ integrations:
       sendConsoleLogs: true
       recipients:
         --last_committer
-        - roland.kluge@es.tu-darmstadt.de

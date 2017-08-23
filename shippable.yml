@@ -9,7 +9,7 @@ build:
   ci:
     - bash impl/buildAndroidApp.bash
     - bash impl/buildEV3App.bash
-    - bash impl/buildServer.bash
+    - bash impl/buildServerApp.bash
     # Provide test reports to Shippable
     - cp ./androidApp/api/build/test-results/TEST-*.xml /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
     - cp ./androidApp/app/build/test-results/debug/TEST-*.xml /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults

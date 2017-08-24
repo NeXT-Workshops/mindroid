@@ -1,19 +1,36 @@
 package org.mindroid.android.app.statemachinesimpl;
 
 import org.mindroid.api.LVL2API;
-import org.mindroid.api.ev3.EV3StatusLightColor;
-import org.mindroid.api.ev3.EV3StatusLightInterval;
+
+// Ich bin Robert
+public class MindroidLVL2 extends LVL2API {
+    @Override
+    public void run() {
+        // Berta code
+        //sendMessage("Robert", "Hallo Robert!");
+
+        // Robert code
+        while (!wasMsgReceived("Hallo Robert!", "Berta") && !isInterrupted()){
+            delay(100);
+        }
+        if (!isInterrupted()) {
+            brickController.drawString("Nachricht von Berta: Hallo Robert ", 1, 1);
+            sendMessage("Berta", "Hallo Berta, ich bin es, der Robert!");
+        }
+    }
+}
 
 /**
  * Created by Torben on 03.05.2017.
  * Easiest programming level.
  */
+ /*
 public class MindroidLVL2 extends LVL2API {
     @Override
     public void run() {
         sendLogMessage("Imperative Implementation is running!");
 
-        int scenario = 1;
+        int scenario = 10;
         switch(scenario)
         {
             case 1:
@@ -122,3 +139,4 @@ public class MindroidLVL2 extends LVL2API {
 
 
 }
+*/

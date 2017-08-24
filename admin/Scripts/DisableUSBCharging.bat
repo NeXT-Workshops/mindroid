@@ -1,0 +1,1 @@
+%ANDROID_HOME%/platform-tools/adb shell dumpsys battery set usb 0

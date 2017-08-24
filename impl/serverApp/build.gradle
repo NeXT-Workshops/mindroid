@@ -1,9 +1,10 @@
-apply plugin: 'java'
+apply plugin: 'application'
 apply from: '../include/common/build.gradle'
 
 sourceCompatibility = ext.javaSourceLevel
 targetCompatibility = ext.javaTargetLevel
 version = ext.mindroidVersion
+mainClassName = "org.mindroid.server.app.MindroidServerApplicationMain"
 
 jar {
     baseName = 'MindroidServerApplication'

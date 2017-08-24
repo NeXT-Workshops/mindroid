@@ -1,6 +1,8 @@
 package org.mindroid.android.app.statemachinesimpl;
 
 import org.mindroid.api.LVL2API;
+import org.mindroid.api.ev3.EV3StatusLightColor;
+import org.mindroid.api.ev3.EV3StatusLightInterval;
 
 // Ich bin Robert
 public class MindroidLVL2 extends LVL2API {
@@ -10,12 +12,38 @@ public class MindroidLVL2 extends LVL2API {
         //sendMessage("Robert", "Hallo Robert!");
 
         // Robert code
+        /*
         while (!wasMsgReceived("Hallo Robert!", "Berta") && !isInterrupted()){
             delay(100);
         }
         if (!isInterrupted()) {
             brickController.drawString("Nachricht von Berta: Hallo Robert ", 1, 1);
             sendMessage("Berta", "Hallo Berta, ich bin es, der Robert!");
+        }
+        */
+        wallPingPong();
+        
+    }
+    public void wallPingPong() {
+        int iteration = 0;
+        while (true  && !isInterrupted()) {
+            forward();
+            while (distanceGreaterThan(0.15f) && !isInterrupted()) {
+                delay(300);
+            }
+            stopMotors();
+            backward();
+            delay(1200);
+            setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.BLINKING);
+            if (iteration % 2 == 0) {
+              turnLeft(130);  
+            } else {
+              turnRight(130);
+            }
+            
+            setLED(EV3StatusLightColor.OFF, EV3StatusLightInterval.BLINKING);
+            stopMotors();
+            iteration++;
         }
     }
 }
@@ -111,22 +139,7 @@ public class MindroidLVL2 extends LVL2API {
         //TODO@Mindroid: Implement me
     }
 
-    public void wallPingPong() {
-        while (true  && !isInterrupted()) {
-            forward();
-            while (distanceGreaterThan(0.15f) && !isInterrupted()) {
-                delay(300);
-            }
-            stopMotors();
-            backward();
-            delay(1200);
-            setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.BLINKING);
-            turnLeft(130);
-            setLED(EV3StatusLightColor.OFF, EV3StatusLightInterval.BLINKING);
-            stopMotors();
 
-        }
-    }
 
     private void stayOnTable() {
         //TODO@Mindroid: Implement me

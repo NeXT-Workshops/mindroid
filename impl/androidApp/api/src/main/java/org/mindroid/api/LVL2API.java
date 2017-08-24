@@ -33,7 +33,7 @@ public abstract class LVL2API extends LVL1API {
     private HashMap<String, Statemachine> sensorEvaluatingStatemachines = new HashMap<>();
 
     public static final String IMPERATIVE_STATEMACHINE_ID = "Imperative Statemachine Implementation";
-    public static final String IMPERATIVE_GROUP_ID = "LVL2APIMACHINE";
+    public static final String IMPERATIVE_GROUP_ID = "Mindrobot";
     private ImperativeStatemachine imperativeStatemachine;
 
 

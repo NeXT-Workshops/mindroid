@@ -11,21 +11,26 @@ import java.util.Calendar;
 /**
  * Created by Felicia Ruppel on 13.03.17.
  */
-public class MindroidServerConsole extends JFrame{
+public class MindroidServerConsoleFrame extends JFrame {
 
-    private static final MindroidServerConsole console = new MindroidServerConsole();
+    private static final MindroidServerConsoleFrame console = new MindroidServerConsoleFrame();
     private final JTextArea textArea;
 
-    public static MindroidServerConsole getMindroidServerConsole() {
+    public static MindroidServerConsoleFrame getMindroidServerConsole() {
         return console;
     }
 
-    private MindroidServerConsole(){
-        super("Error Console");
+    private MindroidServerConsoleFrame(){
+        super("Mindroid Server Console");
         this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-        this.setMinimumSize(new Dimension(600,400));
+        this.setMinimumSize(new Dimension(800,500));
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
+        final Image titleImage = MindroidServerSettings.getTitleImage();
+        if (titleImage != null) {
+            this.setIconImage(titleImage);
+        }
+
         textArea = new JTextArea();
         textArea.setEditable(false);
         textArea.setLineWrap(true);

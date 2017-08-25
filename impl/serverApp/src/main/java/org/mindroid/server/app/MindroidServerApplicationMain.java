@@ -1,6 +1,5 @@
 package org.mindroid.server.app;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,12 +32,12 @@ public class MindroidServerApplicationMain {
         try {
             runServer();
         } catch (Exception e) {
-            MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
+            MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
             console.setVisible(true);
             console.appendLine("Unknown Exception. Please restart the Application. Exception Message: " + e.getMessage());
             console.appendLine(e.toString());
-            mindroidServerFrame.addContentLine("Local", "ERROR", "Server not running.");
-            mindroidServerFrame.addContentLine("Local", "INFO", "See Error console.");
+            mindroidServerFrame.addContentLine("Local", "-", "ERROR", "Server not running.");
+            mindroidServerFrame.addContentLine("Local", "-", "INFO", "See Error console.");
             mindroidServerFrame.disableRefresh(true);
         }
 
@@ -48,21 +47,21 @@ public class MindroidServerApplicationMain {
         try {
             server = new ServerSocket(port);
             invokeDisplayIPAdress();
-            mindroidServerFrame.addContentLine("Local", "INFO", "Server started");
+            mindroidServerFrame.addContentLine("Local", "-", "INFO", "Server started");
         } catch (IOException e) {
-            MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
+            MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
             console.setVisible(true);
             console.appendLine("The Server could not be started. Try restarting the Application.");
             console.appendLine(e.toString() + "\n");
-            mindroidServerFrame.addContentLine("Local", "ERROR", "Server not running.");
-            mindroidServerFrame.addContentLine("Local", "INFO", "See Error console.");
+            mindroidServerFrame.addContentLine("Local", "-", "ERROR", "Server not running.");
+            mindroidServerFrame.addContentLine("Local", "-", "INFO", "See Error console.");
             mindroidServerFrame.disableRefresh(true);
             return;
         }
 
         Thread.UncaughtExceptionHandler exceptionHandler = new Thread.UncaughtExceptionHandler() {
             public void uncaughtException(Thread th, Throwable ex) {
-                MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
+                MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
                 console.setVisible(true);
                 console.appendLine("Messages from one connection might have been lost. No need to restart the application.");
                 console.appendLine(ex.toString());
@@ -80,7 +79,7 @@ public class MindroidServerApplicationMain {
                 t.setUncaughtExceptionHandler(exceptionHandler);
                 t.start();
             } catch (IOException e) {
-                MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
+                MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
                 console.setVisible(true);
                 console.appendLine("Error while receiving a message.");
                 console.appendLine("IOException: " + e.getMessage() + "\n");
@@ -115,19 +114,19 @@ public class MindroidServerApplicationMain {
             }
             if (!privateIP.isEmpty()) {
                 mindroidServerFrame.displayIPAdress(privateIP.get(0).getHostAddress(), Color.BLACK);
-                MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
+                MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
                 console.appendLine("Available IP addresses: " + privateIP.toString());
                 console.appendLine("Connected to the router.");
                 console.appendLine("Server IP Address: " + privateIP.get(0).getHostAddress() + "\n");
             } else if (loopback != null) {
                 mindroidServerFrame.displayIPAdress(loopback.getHostAddress(), Color.RED);
-                MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
+                MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
                 console.setVisible(true);
                 console.appendLine("Check your connection to the router. Only a loopback address was found.");
                 console.appendLine("Try refreshing the IP Address (in File Menu). \n");
             } else {
                 mindroidServerFrame.displayIPAdress("Check connection.", Color.RED);
-                MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
+                MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
                 console.setVisible(true);
                 console.appendLine("Check your connection to the router.");
                 console.appendLine("Try refreshing the IP Address (in File Menu). \n");
@@ -136,7 +135,7 @@ public class MindroidServerApplicationMain {
         } catch (SocketException e1) {
             e1.printStackTrace();
             mindroidServerFrame.displayIPAdress("Check connection.", Color.RED);
-            MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
+            MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
             console.setVisible(true);
             console.appendLine("Check your connection to the router.");
             console.appendLine("Try refreshing the IP Address (in File Menu). \n");
@@ -144,7 +143,7 @@ public class MindroidServerApplicationMain {
 
     }
 
-    private static boolean isWirelessInterface(NetworkInterface n) {
+    private static boolean isWirelessInterface(final NetworkInterface n) {
         return n.getName().contains("wlan") || n.getDisplayName().toLowerCase().contains("wireless");
     }
 

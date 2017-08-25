@@ -8,11 +8,26 @@ import org.mindroid.api.ev3.EV3StatusLightInterval;
 public class MindroidLVL2 extends LVL2API {
     @Override
     public void run() {
-        // Berta code
-        //sendMessage("Robert", "Hallo Robert!");
+        forwardAndBackward();
+        //messagingBerta();
+        //messagingRobter();
+        //wallPingPong();
+        
+    }
 
-        // Robert code
-        /*
+    private void forwardAndBackward() {
+        forward();
+        delay(500);
+        backward();
+        delay(500);
+        stopMotors();
+    }
+
+    private void messagingBerta() {
+        sendMessage("Robert", "Hallo Robert!");
+    }
+
+    private void messagingRobter() {
         while (!wasMsgReceived("Hallo Robert!", "Berta") && !isInterrupted()){
             delay(100);
         }
@@ -20,10 +35,8 @@ public class MindroidLVL2 extends LVL2API {
             brickController.drawString("Nachricht von Berta: Hallo Robert ", 1, 1);
             sendMessage("Berta", "Hallo Berta, ich bin es, der Robert!");
         }
-        */
-        wallPingPong();
-        
     }
+
     public void wallPingPong() {
         int iteration = 0;
         while (true  && !isInterrupted()) {

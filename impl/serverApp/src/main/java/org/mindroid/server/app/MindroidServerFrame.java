@@ -4,12 +4,14 @@ import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +37,10 @@ public class MindroidServerFrame extends JFrame {
         super("Mindroid Server Application");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setMinimumSize(new Dimension(400,400));
+        Image titleImage = getTitleImage();
+        if (titleImage != null) {
+            this.setIconImage(titleImage);
+        }
         //Menubar
         JMenuBar menuBar = new JMenuBar();
 
@@ -151,6 +157,15 @@ public class MindroidServerFrame extends JFrame {
         this.setVisible(true);
         this.ipMapping = new HashMap<>();
 
+    }
+
+    private Image getTitleImage() {
+        try {
+            return ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("MindrobotWithTango.png"));
+        } catch (IOException e) {
+            MindroidServerConsole.getMindroidServerConsole().appendLine("Error: " + e.getMessage());
+            return null;
+        }
     }
 
 

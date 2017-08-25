@@ -3,6 +3,7 @@ package org.mindroid.impl.motor;
 import org.mindroid.api.motor.IMotor;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.robot.MotorController;
+import org.mindroid.impl.robot.MotorDirection;
 
 /**
  *  Created by Torbe on 03.05.2017.
@@ -21,12 +22,12 @@ public class Motor implements IMotor {
 
     @Override
     public final void forward() {
-        motorController.setMotorDirection(port,MotorController.FORWARD);
+        motorController.setMotorDirection(port, MotorDirection.FORWARD);
     }
 
     @Override
     public final void backward() {
-        motorController.setMotorDirection(port,MotorController.BACKWARD);
+        motorController.setMotorDirection(port, MotorDirection.BACKWARD);
     }
 
     @Override

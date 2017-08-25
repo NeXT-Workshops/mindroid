@@ -14,6 +14,7 @@ import org.mindroid.common.messages.NetworkPortConfig;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
+import org.mindroid.impl.robot.MotorDirection;
 import org.mindroid.impl.robot.RobotFactory;
 import org.mindroid.impl.statemachine.State;
 import org.mindroid.impl.statemachine.Statemachine;
@@ -110,8 +111,8 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
                     //FORWARD
-                    motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_FORWARD);
-                    motorController.setMotorDirection(EV3PortIDs.PORT_D, IMotorControl.MOTOR_FORWARD);
+                    motorController.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.FORWARD);
+                    motorController.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.FORWARD);
 
                     brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
@@ -139,8 +140,8 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
                     //BACKWARD
-                    motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
-                    motorController.setMotorDirection(EV3PortIDs.PORT_D, IMotorControl.MOTOR_BACKWARD);
+                    motorController.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.BACKWARD);
+                    motorController.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.BACKWARD);
 
                     brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
 
@@ -154,8 +155,8 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
                     //TURN LEFT
-                    motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
-                    motorController.setMotorDirection(EV3PortIDs.PORT_D, IMotorControl.MOTOR_FORWARD);
+                    motorController.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.BACKWARD);
+                    motorController.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.FORWARD);
 
                     brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 

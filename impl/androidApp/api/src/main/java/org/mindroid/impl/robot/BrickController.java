@@ -27,7 +27,7 @@ public class BrickController implements IBrickControl {
      */
     @Override
     public void setEV3StatusLight(EV3StatusLightColor color, EV3StatusLightInterval interval) {
-        robot.getBrick().setEV3StatusLight(color,interval);
+        robot.getBrick().setEV3StatusLight(color, interval);
     }
 
     /**

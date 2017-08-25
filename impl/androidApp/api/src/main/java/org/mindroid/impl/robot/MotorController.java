@@ -12,9 +12,6 @@ import org.mindroid.impl.ev3.EV3PortIDs;
 
 public class MotorController implements IMotorControl {
 
-    public static final int FORWARD = 0; //TODO
-    public static final int BACKWARD = 1; //TODO
-
     private Robot robot;
 
     public MotorController(Robot robot){
@@ -24,13 +21,13 @@ public class MotorController implements IMotorControl {
     /**
      * Set the motor speed
      * @param motorPort port of the motor
-     * @param speed 1-100% motor speed value
+     * @param speedInPercentage 1-100% motor speed value
      */
     @Override
-    public final void setMotorSpeed(EV3PortID motorPort, int speed) {
+    public final void setMotorSpeed(EV3PortID motorPort, int speedInPercentage) {
         IMotor IMotor = getMotor(motorPort);
         if(IMotor != null){
-            IMotor.setSpeed(speed);
+            IMotor.setSpeed(speedInPercentage);
         }else{
             System.err.println("Unknown motorport! at "+motorPort);
         }
@@ -42,17 +39,17 @@ public class MotorController implements IMotorControl {
      * @param direction forward/backward
      */
     @Override
-    public final  void setMotorDirection(EV3PortID motorPort, int direction) {
-        IMotor IMotor = getMotor(motorPort);
-        if(IMotor != null){
+    public final  void setMotorDirection(EV3PortID motorPort, final MotorDirection direction) {
+        final IMotor motor = getMotor(motorPort);
+        if(motor != null){
             switch(direction) {
-                case FORWARD:   IMotor.forward(); break;
-                case BACKWARD:  IMotor.backward(); break;
+                case FORWARD:   motor.forward(); break;
+                case BACKWARD:  motor.backward(); break;
                 default:
                     System.err.println("unknown direction at "+motorPort);
             }
-        }else{
-                System.err.println("Unknown motorport! "+motorPort);
+        } else{
+            System.err.println("Unknown motorport! "+motorPort);
         }
     }
 

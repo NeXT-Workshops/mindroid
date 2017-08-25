@@ -8,19 +8,29 @@ import org.mindroid.api.ev3.EV3StatusLightInterval;
 public class MindroidLVL2 extends LVL2API {
     @Override
     public void run() {
-        forwardAndBackward();
+        //square();
         //messagingBerta();
         //messagingRobter();
-        //wallPingPong();
+        wallPingPong();
         
     }
 
-    private void forwardAndBackward() {
-        forward();
-        delay(500);
-        backward();
-        delay(500);
-        stopMotors();
+    private void square() {
+        //while (!isInterrupted()) {
+            forward();
+            delay(2000);
+            turnRight(90);
+            forward();
+            delay(2000);
+            turnLeft(90);
+            backward();
+            delay(2000);
+            turnRight(90);
+            backward();
+            delay(2000);
+            stopMotors();
+        //}
+        
     }
 
     private void messagingBerta() {

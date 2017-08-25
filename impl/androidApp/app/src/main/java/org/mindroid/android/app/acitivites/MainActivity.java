@@ -13,6 +13,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 
@@ -28,6 +29,7 @@ import org.mindroid.android.app.fragments.home.RobotSetupInfoFragment;
 import org.mindroid.android.app.fragments.sensormonitoring.SensorMonitoringFragment;
 import org.mindroid.android.app.fragments.sensormonitoring.SensorObservationFragment;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
+import org.mindroid.android.app.robodancer.Settings;
 import org.mindroid.android.app.serviceloader.StatemachineService;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 
@@ -67,6 +69,7 @@ public class MainActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Settings.getInstance().setAndroidId(Secure.getString(this.getContentResolver(), Secure.ANDROID_ID));
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 

@@ -19,7 +19,7 @@
                 android:text="Freddy the First"
                 android:ems="10"
                 android:id="@+id/txt_input_robotID"
-                android:contentDescription="Name of the Robot" android:maxLines="1"/>
+                android:contentDescription="Name of the Robot" android:maxLines="1" android:hint="z.B. Lisa"/>
     </LinearLayout>
     <LinearLayout
             android:orientation="horizontal"
@@ -36,7 +36,7 @@
                 android:ems="10"
                 android:id="@+id/txt_input_groupID"
                 android:contentDescription="GroupID of the Robot" android:text="Team Blue" android:layout_weight="1"
-                android:maxLines="1"/>
+                android:maxLines="1" android:hint="z.B. Team Blue"/>
     </LinearLayout>
     <View
             android:layout_width="match_parent"

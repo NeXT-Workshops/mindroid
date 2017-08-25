@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.MainActivity;
+import org.mindroid.android.app.robodancer.Settings;
 
 import java.util.Locale;
 
@@ -278,8 +279,8 @@ public class SettingsFragment extends Fragment {
             savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_SERVER_TCP_PORT), getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT));
             txt_input_ServerTCPPort.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT) : savedVal);
 
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_ROBOT_ID), getResources().getString(R.string.DEFAULT_ROBOT_ID));
-            txt_input_robotID.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_ROBOT_ID) : savedVal);
+            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_ROBOT_ID), Settings.getInstance().generateUniqueRobotName());
+            txt_input_robotID.setText((savedVal.isEmpty()) ? Settings.getInstance().generateUniqueRobotName() : savedVal);
 
             savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_GROUP_ID), getResources().getString(R.string.DEFAULT_GROUP_ID));
             txt_input_groupID.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_GROUP_ID) : savedVal);

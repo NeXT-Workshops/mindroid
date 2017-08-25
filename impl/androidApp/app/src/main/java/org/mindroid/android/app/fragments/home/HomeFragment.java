@@ -25,6 +25,7 @@ import org.mindroid.android.app.serviceloader.StatemachineService;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,7 +78,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private String msgStartRobot;
     private String msgStopRobot;
     private String infoUsbNotFound;
-    private String infoTetheringNotActiavted;
+    private String infoTetheringNotActivated;
 
     private HashMap<Integer,Boolean> menuItemAlwaysEnabled = new HashMap<>();
 
@@ -152,7 +153,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         msgInitConfiguration = getResources().getString(R.string.dialog_msg_init_config);
         msgStartRobot = getResources().getString(R.string.dialog_msg_start_robot);
         msgStopRobot = getResources().getString(R.string.dialog_msg_stop_robot);
-        infoTetheringNotActiavted = getResources().getString(R.string.info_txt_msg_activate_tetherting);
+        infoTetheringNotActivated = getResources().getString(R.string.info_txt_msg_activate_tetherting);
         infoUsbNotFound = getResources().getString(R.string.info_txt_msg_activate_usb_not_found);
     }
 
@@ -281,7 +282,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 }
 
                 if(isUSBConnected && !(isTetheringActive = isTetheringActivated(parentActivity))){
-                    sb.append(infoTetheringNotActiavted);
+                    sb.append(infoTetheringNotActivated);
                     btn_activateTethering.setVisibility(Button.VISIBLE);
                 }else{
                     btn_activateTethering.setVisibility(Button.GONE);
@@ -504,7 +505,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         //TODO Refactor -> get settings from Settings.class
         if (connectionProperties != null) {
             String savedVal;
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_ROBOT_ID),getResources().getString(R.string.DEFAULT_ROBOT_ID));
+            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_ROBOT_ID), Settings.getInstance().generateUniqueRobotName());
             Settings.getInstance().robotID = ( (savedVal.isEmpty()) ? getResources().getString(R.string.KEY_ROBOT_ID) : savedVal);
 
             savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_GROUP_ID),getResources().getString(R.string.DEFAULT_GROUP_ID));

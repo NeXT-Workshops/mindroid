@@ -27,7 +27,12 @@ import java.util.HashMap;
  * * There are numerous comments that suggest that this class is not ready, yet.
  * * A lot of code duplication regarding "missing state machine creation"
  * * Revise all "System.err.println"s -> often, a RuntimeException would be better to signal an error!
- * * We definitely need access to (i) received messages (if any), (ii) ...
+ * * We definitely need access to (i) received messages (if any), (ii) current (Red) light value,...
+ * * Check all @Deprecated methods/classes/...
+ * * Reduce usage of nested classes (esp. for *Messages).
+ * * Check for unused classes
+ * * Update docu to EN
+ * * Javadoc should generate without warning
  */
 
 /**
@@ -86,12 +91,17 @@ public abstract class LVL2API extends LVL1API {
     /**
      * Evaluates whether the state machine has been stopped
      *
-     * @return true if the imperative statemachine got interrupted (by stopping it)
+     * @return true if the imperative state machine got interrupted (by stopping it)
      */
     public final boolean isInterrupted() {
         return imperativeStatemachine.isInterrupted();
     }
 
+    /**
+     * Evaluates whether a collision is imminent
+     * This method is equivalent to invoking {@link #distanceLessThan(float)} with the threshold {@link #getCollisionDetectionThresholdInMeters()}
+     * @return true if an collision has been detected
+     */
     public final boolean isCollisionDetected() {
         //TODO@revise: Simplify this structure: First check whether machine is present, then (if necessary) add it, then return the result
         if (sensorEvaluatingStatemachines.containsKey(SM_KEY_COLLISION_DETECTED) && sensorEvaluatingStatemachines.get(SM_KEY_COLLISION_DETECTED) instanceof BooleanStatemachine) {
@@ -105,28 +115,38 @@ public abstract class LVL2API extends LVL1API {
         }
     }
 
-    public final boolean distanceLessThan(float value) {
-        if (sensorEvaluatingStatemachines.containsKey(SM_KEY_PREFIX_DISTANCE_LESS_THAN + value) && sensorEvaluatingStatemachines.get(SM_KEY_PREFIX_DISTANCE_LESS_THAN + value) instanceof BooleanStatemachine) {
-            return ((BooleanStatemachine) sensorEvaluatingStatemachines.get(SM_KEY_PREFIX_DISTANCE_LESS_THAN + value)).getResult();
+    /**
+     * Evaluates whether the measured distance is below the given threshold
+     * @param threshold the threshold in meters
+     * @return true if the measured distance is smaller than threshold
+     */
+    public final boolean distanceLessThan(float threshold) {
+        if (sensorEvaluatingStatemachines.containsKey(SM_KEY_PREFIX_DISTANCE_LESS_THAN + threshold) && sensorEvaluatingStatemachines.get(SM_KEY_PREFIX_DISTANCE_LESS_THAN + threshold) instanceof BooleanStatemachine) {
+            return ((BooleanStatemachine) sensorEvaluatingStatemachines.get(SM_KEY_PREFIX_DISTANCE_LESS_THAN + threshold)).getResult();
         } else {
-            BooleanStatemachine sm = new BooleanStatemachine(SM_KEY_PREFIX_DISTANCE_LESS_THAN + value, false, new LT(value, new Distance(getUltrasonicSensorPort())), new GT(value, new Distance(getUltrasonicSensorPort())));
-            sensorEvaluatingStatemachines.put(SM_KEY_PREFIX_DISTANCE_LESS_THAN + value, sm);
+            BooleanStatemachine sm = new BooleanStatemachine(SM_KEY_PREFIX_DISTANCE_LESS_THAN + threshold, false, new LT(threshold, new Distance(getUltrasonicSensorPort())), new GT(threshold, new Distance(getUltrasonicSensorPort())));
+            sensorEvaluatingStatemachines.put(SM_KEY_PREFIX_DISTANCE_LESS_THAN + threshold, sm);
             registerStatemachine(sm);
-            startStatemachine(SM_KEY_PREFIX_DISTANCE_LESS_THAN + value);
+            startStatemachine(SM_KEY_PREFIX_DISTANCE_LESS_THAN + threshold);
             return sm.getResult();
         }
 
         //TODO maybe remove or stop statemachines when they are not needed anymore
     }
 
-    public final boolean distanceGreaterThan(float value) {
-        if (sensorEvaluatingStatemachines.containsKey(SM_KEY_PREFIX_DISTANCE_GREATER_THAN + value) && sensorEvaluatingStatemachines.get(SM_KEY_PREFIX_DISTANCE_GREATER_THAN + value) instanceof BooleanStatemachine) {
-            return ((BooleanStatemachine) sensorEvaluatingStatemachines.get(SM_KEY_PREFIX_DISTANCE_GREATER_THAN + value)).getResult();
+    /**
+     * Evaluates whether the measured distance is above the given threshold
+     * @param threshold the threshold in meters
+     * @return true if the measured distance is larger than threshold
+     */
+    public final boolean distanceGreaterThan(float threshold) {
+        if (sensorEvaluatingStatemachines.containsKey(SM_KEY_PREFIX_DISTANCE_GREATER_THAN + threshold) && sensorEvaluatingStatemachines.get(SM_KEY_PREFIX_DISTANCE_GREATER_THAN + threshold) instanceof BooleanStatemachine) {
+            return ((BooleanStatemachine) sensorEvaluatingStatemachines.get(SM_KEY_PREFIX_DISTANCE_GREATER_THAN + threshold)).getResult();
         } else {
-            BooleanStatemachine sm = new BooleanStatemachine(SM_KEY_PREFIX_DISTANCE_GREATER_THAN + value, true, new GT(value, new Distance(getUltrasonicSensorPort())), new LT(value, new Distance(getUltrasonicSensorPort())));
-            sensorEvaluatingStatemachines.put(SM_KEY_PREFIX_DISTANCE_GREATER_THAN + value, sm);
+            BooleanStatemachine sm = new BooleanStatemachine(SM_KEY_PREFIX_DISTANCE_GREATER_THAN + threshold, true, new GT(threshold, new Distance(getUltrasonicSensorPort())), new LT(threshold, new Distance(getUltrasonicSensorPort())));
+            sensorEvaluatingStatemachines.put(SM_KEY_PREFIX_DISTANCE_GREATER_THAN + threshold, sm);
             registerStatemachine(sm);
-            startStatemachine(SM_KEY_PREFIX_DISTANCE_GREATER_THAN + value);
+            startStatemachine(SM_KEY_PREFIX_DISTANCE_GREATER_THAN + threshold);
             return sm.getResult();
         }
 

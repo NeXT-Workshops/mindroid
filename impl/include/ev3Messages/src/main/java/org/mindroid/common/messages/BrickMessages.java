@@ -7,11 +7,12 @@ package org.mindroid.common.messages;
  *
  */
 public class BrickMessages {
-		
+
+	@Deprecated
 	public static HelloMessage newHelloThereMessage(String msg){
 		return new HelloMessage(msg);
 	}
-	
+
 	@Deprecated
 	public static CreateDisplayMessage createDisplay(){
 		return new CreateDisplayMessage();
@@ -21,27 +22,19 @@ public class BrickMessages {
 	public static class CreateDisplayMessage{
 		public CreateDisplayMessage(){}
 	}
-	
-	/**
-	 * 
-	 * @param success
-	 * @param port
-	 * @param msg
-	 * @param isSensor
-	 * @param isMotor
-	 * @return
-	 */
-	public static EndpointCreatedMessage  createEndpointCreatedMessage(boolean success,String port, String msg,boolean isSensor,boolean isMotor){
+
+	@Deprecated
+	public static EndpointCreatedMessage createEndpointCreatedMessage(boolean success,String port, String msg,boolean isSensor,boolean isMotor){
 		return new EndpointCreatedMessage(success,port,msg,isSensor,isMotor);
 	}
 	
 	
 	/**
 	 * Message send to brick to create a SensorEndpoint at the brick.
-	 * @param port
-	 * @param sensorType
-	 * @param networkPort
-	 * @return
+	 * @param port the ID of the port on the EV3 brick
+	 * @param sensorType the type of sensor to assume at the given port
+	 * @param networkPort the TCP port to use
+	 * @return the prepared message
 	 */
 	public static CreateSensorMessage createSensor(String port, Sensors sensorType, int networkPort){
 		CreateSensorMessage csm = new CreateSensorMessage();
@@ -53,10 +46,10 @@ public class BrickMessages {
 	
 	/**
 	 * Message send to the brick to create a MotorEndpoint at the brick.
-	 * @param port
-	 * @param motorType
-	 * @param networkPort
-	 * @return
+	 * @param port the ID of the port on the EV3 brick
+	 * @param motorType the type of motor so assume at the given port
+	 * @param networkPort the TCP port to use
+	 * @return the prepared message
 	 */
 	public static CreateMotorMessage createMotor(String port, Motors motorType, int networkPort){
 		CreateMotorMessage cmm = new CreateMotorMessage();
@@ -71,14 +64,13 @@ public class BrickMessages {
 	 * Hello message gets send by the Brick when connection is established 
 	 * and the Brick is ready to receive commands.
 	 * 
-	 * @author mindroid
-	 *
+	 * @author Torben Unzicker
 	 */
 	public static class HelloMessage{
-		String msg ="";
+		final String msg;
 		
 		public HelloMessage(){
-			
+			this("");
 		}
 		
 		HelloMessage(String msg){
@@ -91,7 +83,7 @@ public class BrickMessages {
 
 		@Override
 		public String toString() {
-			return "HelloThereMessage [msg=" + msg + "]";
+			return "HelloMessage [msg=" + msg + "]";
 		}
 		
 		

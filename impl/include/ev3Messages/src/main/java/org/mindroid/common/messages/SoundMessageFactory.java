@@ -5,31 +5,27 @@ package org.mindroid.common.messages;
  */
 public class SoundMessageFactory {
 
-    //Beeptypes
     public static class Beeptype{
         public static final int SINGLE_BEEP = 1;
         public static final int DOUBLE_BEEP = 2;
         public static final int BEEP_SEQUENCE_DOWNWARDS = 3;
         public static final int BEEP_SEQUENCE_UPWARDS = 4;
         public static final int LOW_BUZZ = 5;
-
-
     }
 
     /**
-     *
-     * @param type SINGLE_BEEP, DOUBLE_BEEP, BEEP_SEQUENCE_DOWNWARDS, BEEP_SEQUENCE_UPWARDS, LOW_BUZZ = 5;
-
-     * @return
+     * Creates a message that instructs the EV3 to beep according to the given type
+     * @param type the type of beep according to {@link Beeptype}
+     * @return the prepared message
      */
     public static BeepMessage createBeepMessage(int type){
         return new BeepMessage(type);
     }
 
     /**
-     *
-     * @param volume 0-100
-     * @return
+     * Creates a message that instucts the EV3 to change its volume
+     * @param volume volume level (0-100)
+     * @return the prepared message
      */
     public static SoundVolumeMessage createVolumeMessage(int volume){
         return new SoundVolumeMessage(volume);

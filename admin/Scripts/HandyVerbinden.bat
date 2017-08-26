@@ -40,7 +40,7 @@ if %ip_address% == 0.0.0.0 goto noIP
 
 :noDevice
 @echo ^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-
-@set /p input= Es konnte kein Geraet gefunden werden. Stelle sicher, dass das Ger„t verbunden ist, und druecke dann Enter: 
+@set /p input= Es konnte kein Geraet gefunden werden. Stelle sicher, dass das Geraet verbunden ist, und druecke dann Enter: 
 @goto startConnection
 
 
@@ -62,7 +62,7 @@ if %ip_address% == 0.0.0.0 goto noIP
 @echo ^-^-^-
 @echo Bitte noch nicht das Fenster schliessen
 @echo ^-^-^-
-@set /P input2='Schritt 1 ist geschafft^^! Folge nun den Anweisungen in der Anleitung.
+@set /P input2='Schritt 1 ist geschafft^^! Folge nun den Anweisungen in der Anleitung... 
 @if /I "%input2%"=="ok" goto reconnecting
 @goto FirstConnectionEstablished
 

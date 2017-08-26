@@ -26,12 +26,15 @@ import java.util.HashMap;
  * * Consistency: There is forward(); delay(...); but turnRight() and turnRight(time);
  * * There are numerous comments that suggest that this class is not ready, yet.
  * * A lot of code duplication regarding "missing state machine creation"
- * * To discuss: Remove all the !isInterrupted method invocations? Better leave it to the students?
  * * Revise all "System.err.println"s -> often, a RuntimeException would be better to signal an error!
+ * * We definitely need access to (i) received messages (if any), (ii) ...
  */
 
 /**
- * Created by Torbe on 03.05.2017.
+ * This is a superclass for all robot implementations that use the imperative paradigm.
+ *
+ * @author Torben Unzicker - Initial implementation, 03.05.2017
+ * @author Roland Kluge - Refactoring and documentation, Aug 2017
  */
 public abstract class LVL2API extends LVL1API {
 
@@ -90,6 +93,7 @@ public abstract class LVL2API extends LVL1API {
     }
 
     public final boolean isCollisionDetected() {
+        //TODO@revise: Simplify this structure: First check whether machine is present, then (if necessary) add it, then return the result
         if (sensorEvaluatingStatemachines.containsKey(SM_KEY_COLLISION_DETECTED) && sensorEvaluatingStatemachines.get(SM_KEY_COLLISION_DETECTED) instanceof BooleanStatemachine) {
             return ((BooleanStatemachine) sensorEvaluatingStatemachines.get(SM_KEY_COLLISION_DETECTED)).getResult();
         } else {

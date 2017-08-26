@@ -4,4 +4,4 @@
 **/build/**
 **/.gradle/**
 **/local.properties
-**/*.~ava
+*.~ava

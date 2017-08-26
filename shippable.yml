@@ -14,7 +14,7 @@ build:
     - cp ./impl/androidApp/api/build/test-results/TEST-*.xml /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
     - cp ./impl/androidApp/app/build/test-results/debug/TEST-*.xml /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
     - cp ./impl/androidApp/app/build/test-results/release/TEST-*.xml /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
-    - cp ./impl/include/interRobotMessages/build/test-results/TEST-*.xml /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
+    - cp ./impl/include/interRobotMessages/build/test-results/test/TEST-*.xml /root/src/github.com/Echtzeitsysteme/mindroid/shippable/testresults
    
 integrations:
   # See http://docs.shippable.com/ci/email-notifications/

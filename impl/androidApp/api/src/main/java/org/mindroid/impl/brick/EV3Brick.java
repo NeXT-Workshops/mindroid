@@ -172,6 +172,7 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 		if(isBrickReady()){
 			conn.sendTCP(StatusLightMessages.setStatusLight(color.getValue()+3*interval.getValue()));
 		}else{
+			//TODO@revise: Show in some kind of error log...
 			System.err.println("StatusLight is not ready yet. Check Brick connection!");
 		}
 	}

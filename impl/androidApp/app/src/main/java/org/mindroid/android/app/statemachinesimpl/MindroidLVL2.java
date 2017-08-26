@@ -7,14 +7,21 @@ import org.mindroid.api.LVL2API;
 public class MindroidLVL2 extends LVL2API {
     @Override
     public void run() {
+        clearDisplay();
+        drawString("Parking sensor", 1, 1);
         while (!isInterrupted()) { 
+            clearDisplay();
             if(distanceLessThan(0.30f) && distanceGreaterThan(0.15f)) {
+                drawString("OK, but could get critical...", 1, 1);
                 setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
             } else if (distanceLessThan(0.15f)) {
+                drawString("Oh oh", 1, 1);
                 setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.DOUBLE_BLINKING);
             } else {
-                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInvertal.ON);                
+                drawString("OK :-)", 1, 1);
+                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);                
             }
+            delay(100);
         }
     }
 

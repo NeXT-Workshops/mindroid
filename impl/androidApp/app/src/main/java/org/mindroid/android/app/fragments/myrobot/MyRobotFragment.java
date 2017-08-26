@@ -134,7 +134,6 @@ public class MyRobotFragment extends Fragment {
      */
     private void createSensorSelectionFragment(FragmentManager fragmentManager, LinearLayout sensor_container, String sensorPort) {
         HardwareSelectionFragment fragment = HardwareSelectionFragment.newInstance(HardwareSelectionFragment.HARDWARE_SELECTION_MODE_SENSOR,sensorPort);
-        //fragment.getView().findViewById(R.id.hardware_selection_container).setBackgroundColor(getResources().getColor(R.color.hardware_selection_elmnt));
         fragmentManager.beginTransaction()
                 .add(sensor_container.getId(), fragment)
                 .commit();

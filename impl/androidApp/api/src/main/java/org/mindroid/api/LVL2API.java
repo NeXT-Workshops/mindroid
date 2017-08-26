@@ -33,7 +33,7 @@ import java.util.HashMap;
  * * Reduce usage of nested classes (esp. for *Messages).
  * * Check for unused classes
  * * Update docu to EN
- * * Javadoc should generate without warning
+ * * Javadoc should generate without warning (in all projects!)
  */
 
 /**
@@ -48,9 +48,11 @@ public abstract class LVL2API extends LVL1API {
     private static final String IMPERATIVE_GROUP_ID = "Mindrobot";
     private static final String SM_KEY_COLLISION_DETECTED = "collisionDetection";
     private static final String SM_KEY_ANGLE = "angleSM";
-    private static final String SM_KEY_COLOR = "colorSM";
+    private static final String SM_KEY_LEFT_COLOR = "colorLeftSM";
+    private static final String SM_KEY_RIGHT_COLOR = "colorRightSM";
     private static final String SM_KEY_PREFIX_DISTANCE_GREATER_THAN = "distanceGreaterThan";
     private static final String SM_KEY_PREFIX_DISTANCE_LESS_THAN = "distanceLessThan";
+    private static final float[] COLOR_VALUES = {Color.NONE, Color.BLACK, Color.BLUE, Color.BROWN, Color.GREEN, Color.RED, Color.WHITE, Color.YELLOW};
 
     private final Motor leftMotor;
     private final Motor rightMotor;
@@ -99,25 +101,42 @@ public abstract class LVL2API extends LVL1API {
     }
 
     /**
+     * Displays the given text onto the EV3 display at the given position (xPosition, yPosition).
+     *
+     * The coordinate (0,0) is at the top-left corner of the display.
+     *
+     * @param text the text to display
+     * @param xPosition the x position
+     * @param yPosition the y position
+     */
+    public void drawString(final String text, final int xPosition, final int yPosition) {
+        this.brickController.drawString(text, xPosition, yPosition);
+    }
+
+    /**
+     * Removes everything from the EV3 display
+     */
+    public void clearDisplay() {
+        this.brickController.clearDisplay();
+    }
+
+    /**
      * Evaluates whether a collision is imminent
      * This method is equivalent to invoking {@link #distanceLessThan(float)} with the threshold {@link #getCollisionDetectionThresholdInMeters()}
+     *
      * @return true if an collision has been detected
      */
     public final boolean isCollisionDetected() {
-        //TODO@revise: Simplify this structure: First check whether machine is present, then (if necessary) add it, then return the result
-        if (sensorEvaluatingStatemachines.containsKey(SM_KEY_COLLISION_DETECTED) && sensorEvaluatingStatemachines.get(SM_KEY_COLLISION_DETECTED) instanceof BooleanStatemachine) {
-            return ((BooleanStatemachine) sensorEvaluatingStatemachines.get(SM_KEY_COLLISION_DETECTED)).getResult();
-        } else {
-            BooleanStatemachine collisionDetection = new BooleanStatemachine(SM_KEY_COLLISION_DETECTED, false, new LT(getCollisionDetectionThresholdInMeters(), new Distance(getUltrasonicSensorPort())), new GT(getCollisionDetectionThresholdInMeters(), new Distance(getUltrasonicSensorPort())));
-            sensorEvaluatingStatemachines.put(SM_KEY_COLLISION_DETECTED, collisionDetection);
-            registerStatemachine(collisionDetection);
-            startStatemachine(SM_KEY_COLLISION_DETECTED);
-            return ((BooleanStatemachine) sensorEvaluatingStatemachines.get(SM_KEY_COLLISION_DETECTED)).getResult();
+        //TODO@revise: Use the following structure to simplify the check-and-create pattern for sensor state machines
+        if (!hasStateMachine(SM_KEY_COLLISION_DETECTED)) {
+            initializeCollisionDetectionStateMachine();
         }
+        return ((BooleanStatemachine) sensorEvaluatingStatemachines.get(SM_KEY_COLLISION_DETECTED)).getResult();
     }
 
     /**
      * Evaluates whether the measured distance is below the given threshold
+     *
      * @param threshold the threshold in meters
      * @return true if the measured distance is smaller than threshold
      */
@@ -137,6 +156,7 @@ public abstract class LVL2API extends LVL1API {
 
     /**
      * Evaluates whether the measured distance is above the given threshold
+     *
      * @param threshold the threshold in meters
      * @return true if the measured distance is larger than threshold
      */
@@ -215,26 +235,28 @@ public abstract class LVL2API extends LVL1API {
 
     }
 
-    public final float getColor() {
-        if (sensorEvaluatingStatemachines.containsKey(SM_KEY_COLOR) && sensorEvaluatingStatemachines.get(SM_KEY_COLOR) instanceof DiscreteValueStateMachine) {
-            return ((DiscreteValueStateMachine) sensorEvaluatingStatemachines.get(SM_KEY_COLOR)).getResult();
-        } else {
-            float[] colorValues = {Color.NONE, Color.BLACK, Color.BLUE, Color.BROWN, Color.GREEN, Color.RED, Color.WHITE, Color.YELLOW};
-            DiscreteValueStateMachine colorSM = new DiscreteValueStateMachine(SM_KEY_COLOR, new Color(getLeftColorSensorPort()), colorValues);
-            sensorEvaluatingStatemachines.put(SM_KEY_COLOR, colorSM);
-            statemachineCollection.addParallelStatemachines(IMPERATIVE_GROUP_ID, colorSM);
-            return ((DiscreteValueStateMachine) sensorEvaluatingStatemachines.get(SM_KEY_COLOR)).getResult();
+    public final float getLeftColor() {
+        if (!hasStateMachine(SM_KEY_LEFT_COLOR)) {
+            initializeLeftColorStateMachine();
         }
+        return ((DiscreteValueStateMachine) sensorEvaluatingStatemachines.get(SM_KEY_LEFT_COLOR)).getResult();
+    }
+
+    public final float getRightColor() {
+        if (!hasStateMachine(SM_KEY_RIGHT_COLOR)) {
+            initializeLeftColorStateMachine();
+        }
+        return ((DiscreteValueStateMachine) sensorEvaluatingStatemachines.get(SM_KEY_RIGHT_COLOR)).getResult();
     }
 
     @Deprecated // Too specialized //TODO@revise
     public final boolean isColorBlack() {
-        return (getColor() == Color.BLACK);
+        return (getLeftColor() == Color.BLACK);
     }
 
     @Deprecated // Too specialized //TODO@revise
     public final boolean isColor(float color) {
-        return (getColor() == color);
+        return (getLeftColor() == color);
     }
 
     /**
@@ -471,18 +493,49 @@ public abstract class LVL2API extends LVL1API {
 
     private void initSensorStatemachines() {
         sensorEvaluatingStatemachines.clear();
-        BooleanStatemachine collisionDetection = new BooleanStatemachine(SM_KEY_COLLISION_DETECTED,
-                false,
-                new LT(getCollisionDetectionThresholdInMeters(), new Distance(getUltrasonicSensorPort())),
-                new GT(getCollisionDetectionThresholdInMeters(), new Distance(getUltrasonicSensorPort())));
-        sensorEvaluatingStatemachines.put(SM_KEY_COLLISION_DETECTED, collisionDetection);
-
-        float[] colorValues = {Color.NONE, Color.BLACK, Color.BLUE, Color.BROWN, Color.GREEN, Color.RED, Color.WHITE, Color.YELLOW};
-        DiscreteValueStateMachine colorSM = new DiscreteValueStateMachine(SM_KEY_COLOR, new Color(getLeftColorSensorPort()), colorValues);
-        sensorEvaluatingStatemachines.put(SM_KEY_COLOR, colorSM);
+        initializeCollisionDetectionStateMachine();
+        initializeLeftColorStateMachine();
+        initializeRightColorStateMachine();
 
     }
 
+    /**
+     * Returns true if a state machine is registered with the given key
+     */
+    private boolean hasStateMachine(final String smKey) {
+        return this.sensorEvaluatingStatemachines.containsKey(smKey);
+    }
+
+    /**
+     * Initializes the state machine for detecting collisions based on the ultrasonic sensor
+     */
+    private void initializeCollisionDetectionStateMachine() {
+        BooleanStatemachine collisionDetectionStateMachine = new BooleanStatemachine(SM_KEY_COLLISION_DETECTED,
+                false,
+                new LT(getCollisionDetectionThresholdInMeters(), new Distance(getUltrasonicSensorPort())),
+                new GT(getCollisionDetectionThresholdInMeters(), new Distance(getUltrasonicSensorPort())));
+        sensorEvaluatingStatemachines.put(SM_KEY_COLLISION_DETECTED, collisionDetectionStateMachine);
+        registerStatemachine(collisionDetectionStateMachine);
+        startStatemachine(SM_KEY_COLLISION_DETECTED);
+    }
+
+    /**
+     * Initializes the state machine for the left light sensor in color mode
+     */
+    private void initializeLeftColorStateMachine() {
+        final DiscreteValueStateMachine leftColorStateMachine = new DiscreteValueStateMachine(SM_KEY_LEFT_COLOR, new Color(getLeftColorSensorPort()), COLOR_VALUES);
+        sensorEvaluatingStatemachines.put(SM_KEY_LEFT_COLOR, leftColorStateMachine);
+        statemachineCollection.addParallelStatemachines(IMPERATIVE_GROUP_ID, leftColorStateMachine);
+    }
+
+    /**
+     * Initializes the state machine for the left light sensor in color mode
+     */
+    private void initializeRightColorStateMachine() {
+        final DiscreteValueStateMachine leftColorStateMachine = new DiscreteValueStateMachine(SM_KEY_RIGHT_COLOR, new Color(getRightColorSensorPort()), COLOR_VALUES);
+        sensorEvaluatingStatemachines.put(SM_KEY_RIGHT_COLOR, leftColorStateMachine);
+        statemachineCollection.addParallelStatemachines(IMPERATIVE_GROUP_ID, leftColorStateMachine);
+    }
 
     /**
      * Creates the imperative state machine.

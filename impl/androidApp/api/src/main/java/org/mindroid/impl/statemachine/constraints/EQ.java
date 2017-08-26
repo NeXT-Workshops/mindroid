@@ -44,7 +44,7 @@ public class EQ extends AbstractSensorValueComparator {
         switch(evaluationMode){
             case SIMPLE_VALUE_EVALUATION: return new EQ(getValue(), (SimpleEV3SensorProperty) getProperty());
             case COMPLEX_VALUE_EVALUATION: return new EQ(getValues(), (ComplexEV3SensorProperty) getProperty());
-            default: return null;
+            default: throw new IllegalStateException("Cannot copy EQ of type " + evaluationMode);
         }
     }
 }

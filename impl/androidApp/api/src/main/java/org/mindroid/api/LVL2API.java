@@ -28,6 +28,7 @@ import java.util.HashMap;
  * * A lot of code duplication regarding "missing state machine creation"
  * * Revise all "System.err.println"s -> often, a RuntimeException would be better to signal an error!
  * * We definitely need access to (i) received messages (if any), (ii) current (Red) light value,...
+ * * Make DiscreteStateMachine generic ("DiscreteValueStateMachine<T>"). This will also entail that EQ/... provides a generic interface
  * * Check all @Deprecated methods/classes/...
  * * Reduce usage of nested classes (esp. for *Messages).
  * * Check for unused classes

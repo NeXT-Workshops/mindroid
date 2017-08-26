@@ -50,10 +50,6 @@ public class DiscreteValueStateMachine extends Statemachine {
                 }
             }
         }
-
-
-
-
     }
 
     public float getResult() {

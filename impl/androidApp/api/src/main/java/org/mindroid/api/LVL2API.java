@@ -22,6 +22,8 @@ import java.util.HashMap;
 
 /*
  * TODO@revise: Required improvements
+ * * EV3 motors should be synchronized (When calling "backward()", one motor starts slightly prior to the other!)
+ *   Could we create a new subtype of "IMotor"?
  * * Make speed during turnLeft/turnRight configuraable
  * * Consistency: There is forward(); delay(...); but turnRight() and turnRight(time);
  * * There are numerous comments that suggest that this class is not ready, yet.
@@ -34,6 +36,8 @@ import java.util.HashMap;
  * * Check for unused classes
  * * Update docu to EN
  * * Javadoc should generate without warning (in all projects!)
+ * * Class Color should be an Enum (providing access to float value + description)
+ * * Avoid varargs and arrays in public API, rather use List<>, Collection<> or Iterable<>
  */
 
 /**
@@ -235,16 +239,32 @@ public abstract class LVL2API extends LVL1API {
 
     }
 
+    /**
+     * Returns the color ID of the left color sensor.
+     *
+     * For supported color IDs, see {@link Color}.
+     *
+     * @return left color ID
+     */
     public final float getLeftColor() {
+        //TODO@revise: Is this check necessary? We actually know that this state machine is started during initStateMachines()
         if (!hasStateMachine(SM_KEY_LEFT_COLOR)) {
             initializeLeftColorStateMachine();
         }
         return ((DiscreteValueStateMachine) sensorEvaluatingStatemachines.get(SM_KEY_LEFT_COLOR)).getResult();
     }
 
+    /**
+     * Returns the color ID of the right color sensor.
+     *
+     * For supported color IDs, see {@link Color}.
+     *
+     * @return right color ID
+     */
     public final float getRightColor() {
+        //TODO@revise: Is this check necessary? We actually know that this state machine is started during initStateMachines()
         if (!hasStateMachine(SM_KEY_RIGHT_COLOR)) {
-            initializeLeftColorStateMachine();
+            initializeRightColorStateMachine();
         }
         return ((DiscreteValueStateMachine) sensorEvaluatingStatemachines.get(SM_KEY_RIGHT_COLOR)).getResult();
     }
@@ -496,7 +516,6 @@ public abstract class LVL2API extends LVL1API {
         initializeCollisionDetectionStateMachine();
         initializeLeftColorStateMachine();
         initializeRightColorStateMachine();
-
     }
 
     /**

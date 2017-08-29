@@ -11,11 +11,12 @@
 
 :preconditioncheck
 @if "%ANDROID_HOME%"=="" goto androidHomeNotSetError
-@set JAVA_HOME=%~3
+@if not exist %ANDROID_HOME%\platform-tools\adb.exe goto noAdbError
 @set ANDROID_HOME_DRIVE=%ANDROID_HOME:~0,2%
 @setlocal EnableDelayedExpansion
 @%ANDROID_HOME_DRIVE%
 @cd "%ANDROID_HOME%\platform-tools\"
+
 :welcome
 @echo off
 @echo ^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-
@@ -95,6 +96,13 @@ goto startConnection
 :noIP
 @adb disconnect
 goto startConnection
+
+:noAdbError
+@echo ^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-
+@echo Das Tool adb ist nicht installiert.
+@echo Bitte wende dich an einen Betreuer.
+@pause
+exit 
 
 
 :finished

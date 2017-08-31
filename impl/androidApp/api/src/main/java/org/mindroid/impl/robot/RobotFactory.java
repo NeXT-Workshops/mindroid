@@ -80,8 +80,6 @@ public final class RobotFactory implements IRobotFactory {
     private Robot myRobot;
     private RobotCommandCenter myRobotCommandCenter;
 
-
-
     public RobotFactory(){
         myRobot = Robot.getInstance();
         myRobotCommandCenter = new RobotCommandCenter(myRobot);
@@ -180,7 +178,6 @@ public final class RobotFactory implements IRobotFactory {
 
             myRobot.setBrick(robotConfigurator.getBrick());
 
-
             // Connect statemachines RobotContextStateEvaluator etc with state machine
             IConstraintEvaluator evaluator = new RobotContextStateEvaluator();
             myRobot.getStatemachineManager().addConstraintEvaluator(evaluator);
@@ -231,7 +228,7 @@ public final class RobotFactory implements IRobotFactory {
             myRobot.messageingEnabled = false;
         }
 
-        //Workaround: messenger is not set when robot Controller gets initialized
+        //Workaround: messenger is not set when robot Controller gets initialized //TODO remove?
         if(Robot.getInstance().isMessageingEnabled()){
 
         }

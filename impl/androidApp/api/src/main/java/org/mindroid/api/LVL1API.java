@@ -20,7 +20,7 @@ public abstract class LVL1API implements IMindroidMain {
     public BrickController brickController = robotController.getBrickController();
     public SensorController sensorController = robotController.getSensorController();
     //private IMessenger messenger = Robot.getRobotController().getMessenger();
-    public String myRobotID = Robot.getRobotController().getRobotID();
+    //public String myRobotID = Robot.getRobotController().getRobotID();
 
     @Override
     public final StatemachineCollection getStatemachineCollection() {
@@ -86,6 +86,14 @@ public abstract class LVL1API implements IMindroidMain {
         }else{
             System.out.println("[LVL1API:sendLogMessage] Tried to send a logmessage, but the Messenger was null");
         }
+    }
+
+    /**
+     *
+     * @return robotID
+     */
+    public String getRobotID(){
+        return Robot.getRobotController().getRobotID();
     }
 
 }

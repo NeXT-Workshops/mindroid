@@ -219,7 +219,7 @@ public class MindroidLVL1 extends LVL1API {
         final String other_player;
 
         //WHO AM I?
-        if(myRobotID.equals(player_1)){
+        if(getRobotID().equals(player_1)){
             other_player = player_2;
             final String myID = player_1;
         }else{
@@ -383,7 +383,7 @@ public class MindroidLVL1 extends LVL1API {
         final String other_player;
 
         //WHO AM I?
-        if(myRobotID.equals(player_1)){
+        if(getRobotID().equals(player_1)){
             other_player = player_2;
             final String myID = player_1;
         }else{
@@ -438,7 +438,7 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 brickController.setEV3StatusLight(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
-                sendLogMessage("Watch "+myRobotID+"s Lightshow!");
+                sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
 
@@ -446,7 +446,7 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
-                sendLogMessage("Watch "+myRobotID+"s Lightshow!");
+                sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
 
@@ -454,7 +454,7 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
-                sendLogMessage("Watch "+myRobotID+"s Lightshow!");
+                sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
 
@@ -498,7 +498,7 @@ public class MindroidLVL1 extends LVL1API {
         final String other_player;
 
         //WHO AM I?
-        if(myRobotID.equals(player_1)){
+        if(getRobotID().equals(player_1)){
             other_player = player_2;
             final String myID = player_1;
         }else{
@@ -549,7 +549,7 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 brickController.setEV3StatusLight(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
-                sendLogMessage("Watch "+myRobotID+"s Lightshow!");
+                sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
 
@@ -557,7 +557,7 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
-                sendLogMessage("Watch "+myRobotID+"s Lightshow!");
+                sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
 
@@ -565,7 +565,7 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
-                sendLogMessage("Watch "+myRobotID+"s Lightshow!");
+                sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
 
@@ -712,8 +712,8 @@ public class MindroidLVL1 extends LVL1API {
                     number = (int)Math.round(Math.random() * 3);
                     sendLogMessage("Calculated Number"+number);
                 }while(!(number >= 1 && number <= 3));
-                sendMessage(myRobotID,""+number);
-                sendLogMessage(""+number+" - "+myRobotID);
+                sendMessage(getRobotID(),""+number);
+                sendLogMessage(""+number+" - "+getRobotID());
             }
         };
 
@@ -738,9 +738,9 @@ public class MindroidLVL1 extends LVL1API {
             }
         };
 
-        IConstraint constr_nr1 = new MsgReceived(new MessageProperty("1",myRobotID));
-        IConstraint constr_nr2 = new MsgReceived(new MessageProperty("2",myRobotID));
-        IConstraint constr_nr3 = new MsgReceived(new MessageProperty("3",myRobotID));
+        IConstraint constr_nr1 = new MsgReceived(new MessageProperty("1",getRobotID()));
+        IConstraint constr_nr2 = new MsgReceived(new MessageProperty("2",getRobotID()));
+        IConstraint constr_nr3 = new MsgReceived(new MessageProperty("3",getRobotID()));
         IConstraint constr_timeout = new TimeExpired(new Seconds(3));
 
         Transition trans_nr1 = new Transition(constr_nr1);

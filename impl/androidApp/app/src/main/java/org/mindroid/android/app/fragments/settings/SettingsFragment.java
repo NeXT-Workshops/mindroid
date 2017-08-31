@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.MainActivity;
+import org.mindroid.android.app.robodancer.ConnectionPropertiesChangedListener;
+import org.mindroid.android.app.robodancer.SettingsProvider;
 
 import java.util.Locale;
 
@@ -41,7 +43,7 @@ public class SettingsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private OnSettingsChanged settingsChangedListener;
+    private ConnectionPropertiesChangedListener connectionPropertiesChangedListener = SettingsProvider.getInstance();
 
     private Activity parentActivity;
 
@@ -195,7 +197,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        //Load saved Settings
+        //Load saved SettingsProvider
         loadSettings();
 
         return view;
@@ -223,7 +225,6 @@ public class SettingsFragment extends Fragment {
 
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-            settingsChangedListener = (OnSettingsChanged) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -296,7 +297,6 @@ public class SettingsFragment extends Fragment {
             return;
         }
 
-
         SharedPreferences.Editor e = parentActivity.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_connection_Data),Context.MODE_PRIVATE).edit();
         e.clear();
 
@@ -308,8 +308,6 @@ public class SettingsFragment extends Fragment {
         /** Data to connect to Server **/
         e.putString(getResources().getString(R.string.KEY_SERVER_IP),getInputServerIP());
         e.putString(getResources().getString(R.string.KEY_SERVER_TCP_PORT),txt_input_ServerTCPPort.getText().toString());
-
-
 
         /** Data to connect to EV3 Brick **/
         e.putString(getResources().getString(R.string.KEY_ROBOT_ID),txt_input_robotID.getText().toString());
@@ -323,12 +321,14 @@ public class SettingsFragment extends Fragment {
 
         showShortToast(parentActivity,getResources().getString(R.string.msg_taost_settings_saved));
 
-        settingsChangedListener.onSettingsChanged(true); //TODO check if settings have really changed
+        // Inform listener that the settings have changed
+        connectionPropertiesChangedListener.onConnectionPropertiesChangedListener();
+
     }
 
 
     /**
-     * Checks if the Settings input values are valid
+     * Checks if the SettingsProvider input values are valid
      *
      * @return
      */

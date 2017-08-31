@@ -84,7 +84,7 @@ public class SensorMonitoringFragment extends Fragment implements SensorObservat
         sensor_port2_monitor = SensorObservationFragment.newInstance("S"+EV3PortIDs.PORT_2.getLabel(), sensortypeS2,sensormodeS2);
         sensor_port3_monitor = SensorObservationFragment.newInstance("S"+EV3PortIDs.PORT_3.getLabel(), sensortypeS3,sensormodeS3);
         sensor_port4_monitor = SensorObservationFragment.newInstance("S"+EV3PortIDs.PORT_4.getLabel(), sensortypeS4,sensormodeS4);
-        //TODO set sensor listener
+
         Robot robot = HomeFragment.robot;
 
         sensor_port1_monitor.registerSensorListener(robot.getListenerForPort(EV3PortIDs.PORT_1));

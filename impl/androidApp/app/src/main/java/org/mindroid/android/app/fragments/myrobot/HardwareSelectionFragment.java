@@ -13,14 +13,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.mindroid.android.app.R;
-import org.mindroid.android.app.fragments.home.HomeFragment;
+import org.mindroid.android.app.robodancer.RobotConfigurationChangedListener;
+import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.common.messages.Sensors;
-import org.mindroid.impl.statemachine.properties.sensorproperties.RED;
 
 import java.util.HashMap;
 
@@ -30,7 +28,6 @@ import static org.mindroid.common.messages.Sensors.EV3GyroSensor;
 import static org.mindroid.common.messages.Sensors.EV3IRSensor;
 import static org.mindroid.common.messages.Sensors.EV3TouchSensor;
 import static org.mindroid.common.messages.Sensors.EV3UltrasonicSensor;
-import static org.mindroid.common.messages.Sensors.getAllSensorTypes;
 
 /**
  *
@@ -41,15 +38,17 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
     private static final String KEY_HARDWARE_SELECTION_MODE = "org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment.hardwaretype";
     private static final String KEY_HARDWARE_PORT = "org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment.hardwareport";
 
+    private RobotConfigurationChangedListener robotConfigurationChangedListener = SettingsProvider.getInstance();
+
     // TODO: Rename and change types of parameters
     private int hardware_selection_mode;
     private String hardwarePort;
 
-    public static final int HARDWARE_SELECTION_MODE_SENSOR = 0;
-    public static final int HARDWARE_SELECTION_MODE_MOTOR = 1;
+    protected static final int HARDWARE_SELECTION_MODE_SENSOR = 0;
+    protected static final int HARDWARE_SELECTION_MODE_MOTOR = 1;
 
-    public static String notDefined = "-";
-    private String[] sensortypes = {notDefined,
+
+    private String[] sensortypes = {HardwareMapping.notDefined,
             EV3ColorSensor.getName(),
             EV3UltrasonicSensor.getName(),
             EV3TouchSensor.getName(),
@@ -57,21 +56,16 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
             EV3IRSensor.getName(),
     };
 
-    private String[] motortypes = {notDefined,
+    private String[] motortypes = {HardwareMapping.notDefined,
             Motors.UnregulatedMotor.getName()
     };
 
-    private static boolean mappingInitialized = false;
-    private static HashMap<String,Motors> motorMapping;
-    private static HashMap<String,Sensors> sensorMapping;
-    private static HashMap<String,SensorMessages.SensorMode_> modeMapping;
 
+    private String selectedSensorType = HardwareMapping.notDefined;
+    private String selectedSensorMode = HardwareMapping.notDefined;
+    private String selectedMotorType =  HardwareMapping.notDefined;
 
-    String selectedSensorType = notDefined;
-    String selectedSensorMode = notDefined;
-    String selectedMotorType =  notDefined;
-
-    HashMap<String,String[]> senTypeToMode = null;
+    private HashMap<String,String[]> senTypeToMode = null;
 
     //-- UI
     private Spinner spinner_select_type;
@@ -102,60 +96,9 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
         args.putString(KEY_HARDWARE_PORT,hardwarePort);
         fragment.setArguments(args);
 
-        initMapping();
-
         return fragment;
     }
 
-    private static void initMapping(){
-        if(!mappingInitialized){
-            //Motors
-            motorMapping = new HashMap(2);
-            motorMapping.put(notDefined,null);
-            motorMapping.put(Motors.UnregulatedMotor.getName(),Motors.UnregulatedMotor);
-
-            //Sensors
-            sensorMapping = new HashMap(6);
-            sensorMapping.put(notDefined,null);
-            sensorMapping.put(EV3ColorSensor.getName(),EV3ColorSensor);
-            sensorMapping.put(EV3UltrasonicSensor.getName(),EV3UltrasonicSensor);
-            sensorMapping.put(EV3TouchSensor.getName(),EV3TouchSensor);
-            sensorMapping.put(EV3GyroSensor.getName(),EV3GyroSensor);
-            sensorMapping.put(EV3IRSensor.getName(),EV3IRSensor);
-
-            //Sensormodes
-            modeMapping = new HashMap(12);
-            modeMapping.put(notDefined,null);
-            modeMapping.put(SensorMessages.SensorMode_.RED.getValue(), SensorMessages.SensorMode_.RED);
-            modeMapping.put(SensorMessages.SensorMode_.AMBIENT.getValue(),SensorMessages.SensorMode_.AMBIENT);
-            modeMapping.put(SensorMessages.SensorMode_.COLOR_ID.getValue(),SensorMessages.SensorMode_.COLOR_ID);
-            modeMapping.put(SensorMessages.SensorMode_.RGB.getValue(),SensorMessages.SensorMode_.RGB);
-            modeMapping.put(SensorMessages.SensorMode_.DISTANCE.getValue(),SensorMessages.SensorMode_.DISTANCE);
-            modeMapping.put(SensorMessages.SensorMode_.LISTEN.getValue(),SensorMessages.SensorMode_.LISTEN);
-            modeMapping.put(SensorMessages.SensorMode_.SEEK.getValue(),SensorMessages.SensorMode_.SEEK);
-            modeMapping.put(SensorMessages.SensorMode_.ANGLE.getValue(),SensorMessages.SensorMode_.ANGLE);
-            modeMapping.put(SensorMessages.SensorMode_.RATE.getValue(), SensorMessages.SensorMode_.RATE);
-            modeMapping.put(SensorMessages.SensorMode_.RATEANDANGLE.getValue(),SensorMessages.SensorMode_.RATEANDANGLE);
-            modeMapping.put(SensorMessages.SensorMode_.TOUCH.getValue(),SensorMessages.SensorMode_.TOUCH);
-
-            mappingInitialized = true;
-        }
-    }
-
-    public static Sensors getSensorType(String type){
-        initMapping();
-        return sensorMapping.get(type);
-    }
-
-    public static SensorMessages.SensorMode_ getSensorMode(String mode){
-        initMapping();
-        return modeMapping.get(mode);
-    }
-
-    public static Motors getMotorType(String type){
-        initMapping();
-        return motorMapping.get(type);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -180,7 +123,7 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
         txtView_type = (TextView) view.findViewById(R.id.txtView_hardwareSelect_type);
         txtView_mode = (TextView) view.findViewById(R.id.txtView_hardwareSelect_mode);
 
-//Init Spinner Selection listener
+        //Init Spinner Selection listener
         spinner_select_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             int count = 0;
             @Override
@@ -201,7 +144,7 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                selectedSensorType = notDefined;
+                selectedSensorType = HardwareMapping.notDefined;
             }
         });
 
@@ -218,14 +161,14 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                selectedSensorType = notDefined;
+                selectedSensorType = HardwareMapping.notDefined;
             }
         });
 
         switch(hardware_selection_mode){
             case HARDWARE_SELECTION_MODE_MOTOR: initMotorView(); break;
             case HARDWARE_SELECTION_MODE_SENSOR: initSensorView(); break;
-        };
+        }
         loadPortConfig(hardware_selection_mode,hardwarePort);
 
         return view;
@@ -249,7 +192,7 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
         txtView_mode.setText(getResources().getString(R.string.view_sensormode));
 
         spinner_select_type.setAdapter(getSensorTypeAdapter());
-        spinner_select_mode.setAdapter(getSensorModeAdapter(notDefined));
+        spinner_select_mode.setAdapter(getSensorModeAdapter(HardwareMapping.notDefined));
 
 
     }
@@ -257,7 +200,7 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
     private boolean isValidSelection() {
         if(hardware_selection_mode == HARDWARE_SELECTION_MODE_SENSOR) {
             //VALIDATE SENSOR SELECTION
-            if (!selectedSensorType.equals(notDefined) && !selectedSensorMode.equals(notDefined)) {
+            if (!selectedSensorType.equals(HardwareMapping.notDefined) && !selectedSensorMode.equals(HardwareMapping.notDefined)) {
                 String[] modes;
                 if ((modes = senTypeToMode.get(selectedSensorType)) != null) {
                     for (String mode : modes) {
@@ -267,7 +210,7 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
                     }
                 }
                 return false;
-            }else if(selectedSensorType.equals(notDefined) && selectedSensorMode.equals(notDefined)){
+            }else if(selectedSensorType.equals(HardwareMapping.notDefined) && selectedSensorMode.equals(HardwareMapping.notDefined)){
                 //No Sensor-/Mode selected
                 return true;
             }
@@ -278,9 +221,12 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
         return false;
     }
 
+    /**
+     * Maps sensors to their available Modes
+     */
     private void initSensorTypeToModeMap() {
         senTypeToMode = new HashMap<String,String[]>();
-        senTypeToMode.put(notDefined,new String[]{notDefined});
+        senTypeToMode.put(HardwareMapping.notDefined,new String[]{HardwareMapping.notDefined});
 
         for (Sensors sensors : Sensors.getAllSensorTypes()) {
             String[] modes = new String[sensors.getModes().length];
@@ -299,7 +245,7 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
 
     private SpinnerAdapter getSensorModeAdapter(String sensortype){
         return new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, senTypeToMode.get(sensortype));
-    };
+    }
 
     private SpinnerAdapter getMotorAdapter(){
         return new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, getMotorTypes());
@@ -348,27 +294,23 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
     }
 
     private void loadPortConfig(int hardware_selection_mode, String hardwarePort){
-        SharedPreferences portConfigProperties = getActivity().getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_portConfiguration),Context.MODE_PRIVATE);
-        if(portConfigProperties != null) {
-            // ---- load sensortypes ---- //
-            String type ="";
-            String sensormode="";
-
+        if(SettingsProvider.getInstance().isInitialized()) {
             if(hardware_selection_mode == HARDWARE_SELECTION_MODE_SENSOR) {
+                String type = HardwareMapping.notDefined;
+                String sensormode = HardwareMapping.notDefined;
                 //SENSOR
                 if (hardwarePort.equals(getResources().getString(R.string.KEY_SENSOR_S1))) {
-                    type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S1), notDefined);
-                    sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S1), notDefined);
-
+                    type = SettingsProvider.getInstance().getSensorS1() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorS1().getName();
+                    sensormode = SettingsProvider.getInstance().getSensorModeS1() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorModeS1().getValue();
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_SENSOR_S2))) {
-                    type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S2), notDefined);
-                    sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S2), notDefined);
+                    type = SettingsProvider.getInstance().getSensorS2() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorS2().getName();
+                    sensormode = SettingsProvider.getInstance().getSensorModeS2() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorModeS2().getValue();
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_SENSOR_S3))) {
-                    type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S3), notDefined);
-                    sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S3), notDefined);
+                    type = SettingsProvider.getInstance().getSensorS3() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorS3().getName();
+                    sensormode = SettingsProvider.getInstance().getSensorModeS3() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorModeS3().getValue();
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_SENSOR_S4))) {
-                    type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S4), notDefined);
-                    sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S4), notDefined);
+                    type = SettingsProvider.getInstance().getSensorS4() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorS4().getName();
+                    sensormode = SettingsProvider.getInstance().getSensorModeS4() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorModeS4().getValue();
                 }
 
                 selectedSensorType = type;
@@ -382,18 +324,19 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
                 selectSpinnerItem(spinner_select_mode,sensormode);
 
             }else{
+                String type = HardwareMapping.notDefined;
                 //MOTOR
                 if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_A))) {
-                    type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_A), notDefined);
+                    type = SettingsProvider.getInstance().getMotorA() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getMotorA().getName();
 
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_B))) {
-                    type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_B), notDefined);
+                    type = SettingsProvider.getInstance().getMotorB() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getMotorB().getName();
 
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_C))) {
-                    type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_C), notDefined);
+                    type = SettingsProvider.getInstance().getMotorC() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getMotorC().getName();
 
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_D))) {
-                    type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_D), notDefined);
+                    type = SettingsProvider.getInstance().getMotorD() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getMotorD().getName();
                 }
                 selectedMotorType = type;
                 selectSpinnerItem(spinner_select_type,type);
@@ -411,6 +354,11 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
         }
     }
 
+    /**
+     * Save selected Port Configuration to SharedPreferences
+     * @param hardware_selection_mode
+     * @param hardwarePort
+     */
     private void savePortConfig(int hardware_selection_mode, String hardwarePort){
         SharedPreferences.Editor e = getActivity().getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_portConfiguration),Context.MODE_PRIVATE).edit();
         //e.clear();
@@ -421,26 +369,26 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
                     e.putString(getResources().getString(R.string.KEY_SENSOR_S1),spinner_select_type.getSelectedItem().toString());
                     e.putString(getResources().getString(R.string.KEY_SENSORMODE_S1),spinner_select_mode.getSelectedItem().toString());
 
-                    robot.getRobotPortConfig().setSensorS1(getSensorType(spinner_select_type.getSelectedItem().toString()));
-                    robot.getRobotPortConfig().setSensormodeS1(getSensorMode(spinner_select_mode.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setSensorS1(HardwareMapping.getSensorType(spinner_select_type.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setSensormodeS1(HardwareMapping.getSensorMode(spinner_select_mode.getSelectedItem().toString()));
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_SENSOR_S2))) {
                     e.putString(getResources().getString(R.string.KEY_SENSOR_S2),spinner_select_type.getSelectedItem().toString());
                     e.putString(getResources().getString(R.string.KEY_SENSORMODE_S2),spinner_select_mode.getSelectedItem().toString());
 
-                    robot.getRobotPortConfig().setSensorS2(getSensorType(spinner_select_type.getSelectedItem().toString()));
-                    robot.getRobotPortConfig().setSensormodeS2(getSensorMode(spinner_select_mode.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setSensorS2(HardwareMapping.getSensorType(spinner_select_type.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setSensormodeS2(HardwareMapping.getSensorMode(spinner_select_mode.getSelectedItem().toString()));
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_SENSOR_S3))) {
                     e.putString(getResources().getString(R.string.KEY_SENSOR_S3),spinner_select_type.getSelectedItem().toString());
                     e.putString(getResources().getString(R.string.KEY_SENSORMODE_S3),spinner_select_mode.getSelectedItem().toString());
 
-                    robot.getRobotPortConfig().setSensorS3(getSensorType(spinner_select_type.getSelectedItem().toString()));
-                    robot.getRobotPortConfig().setSensormodeS3(getSensorMode(spinner_select_mode.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setSensorS3(HardwareMapping.getSensorType(spinner_select_type.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setSensormodeS3(HardwareMapping.getSensorMode(spinner_select_mode.getSelectedItem().toString()));
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_SENSOR_S4))) {
                     e.putString(getResources().getString(R.string.KEY_SENSOR_S4),spinner_select_type.getSelectedItem().toString());
                     e.putString(getResources().getString(R.string.KEY_SENSORMODE_S4),spinner_select_mode.getSelectedItem().toString());
 
-                    robot.getRobotPortConfig().setSensorS4(getSensorType(spinner_select_type.getSelectedItem().toString()));
-                    robot.getRobotPortConfig().setSensormodeS4(getSensorMode(spinner_select_mode.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setSensorS4(HardwareMapping.getSensorType(spinner_select_type.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setSensormodeS4(HardwareMapping.getSensorMode(spinner_select_mode.getSelectedItem().toString()));
                 }
 
                e.commit();
@@ -448,19 +396,21 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
                 //MOTOR
                 if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_A))) {
                     e.putString(getResources().getString(R.string.KEY_MOTOR_A),spinner_select_type.getSelectedItem().toString());
-                    robot.getRobotPortConfig().setMotorA(getMotorType(spinner_select_type.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setMotorA(HardwareMapping.getMotorType(spinner_select_type.getSelectedItem().toString()));
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_B))) {
                     e.putString(getResources().getString(R.string.KEY_MOTOR_B),spinner_select_type.getSelectedItem().toString());
-                    robot.getRobotPortConfig().setMotorB(getMotorType(spinner_select_type.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setMotorB(HardwareMapping.getMotorType(spinner_select_type.getSelectedItem().toString()));
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_C))) {
                     e.putString(getResources().getString(R.string.KEY_MOTOR_C),spinner_select_type.getSelectedItem().toString());
-                    robot.getRobotPortConfig().setMotorC(getMotorType(spinner_select_type.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setMotorC(HardwareMapping.getMotorType(spinner_select_type.getSelectedItem().toString()));
                 } else if (hardwarePort.equals(getResources().getString(R.string.KEY_MOTOR_D))) {
                     e.putString(getResources().getString(R.string.KEY_MOTOR_D),spinner_select_type.getSelectedItem().toString());
-                    robot.getRobotPortConfig().setMotorD(getMotorType(spinner_select_type.getSelectedItem().toString()));
+                    robot.getRobotPortConfig().setMotorD(HardwareMapping.getMotorType(spinner_select_type.getSelectedItem().toString()));
                 }
                 e.commit();
             }
+            //Inform listener that changes occured
+            robotConfigurationChangedListener.onRobotConfigurationChangedListener();
         }
     }
 

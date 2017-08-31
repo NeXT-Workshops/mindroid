@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.EditText;
 import android.widget.TextView;
 import org.mindroid.android.app.R;
 
@@ -53,6 +54,11 @@ public class SensorObservationFragment extends Fragment implements Observer {
     private TextView txt_view_slot4_description;
     private TextView txt_view_slot4_value;
 
+    private TextView txtView_title_value_description;
+    private EditText txt_value_description;
+
+    private final String descr_nothing = "";
+
     //mode descrition strings
     private String descr_rgb_slot1;
     private String descr_rgb_slot2;
@@ -71,7 +77,13 @@ public class SensorObservationFragment extends Fragment implements Observer {
     private String descr_seek_slot2;
     private String descr_seek_slot3;
     private String descr_seek_slot4;
-    private final String descr_nothing = "";
+
+    //value description string //TODO mode value description
+    private String descr_mode_rgb;
+    private String descr_mode_ambient;
+    private String descr_mode_red;
+    private String descr_mode_color;
+
 
 
     private OnFragmentInteractionListener mListener;
@@ -170,6 +182,10 @@ public class SensorObservationFragment extends Fragment implements Observer {
         txt_view_slot4_description = (TextView) view.findViewById(R.id.txtView_slot4_description);
         txt_view_slot4_value = (TextView) view.findViewById(R.id.txtView_slot4_value);
 
+        txtView_title_value_description = (TextView) view.findViewById(R.id.txtView_title_value_description);
+        txt_value_description = (EditText) view.findViewById(R.id.txt_value_description);
+         //TODO mode value description
+
         txt_view_sensor_port.setText(getArguments().getString(ARG_PORT));
         txt_view_sensor_type.setText(getArguments().getString(ARG_TYPE));
         txt_view_sensor_mode.setText(getArguments().getString(ARG_MODE));
@@ -217,11 +233,19 @@ public class SensorObservationFragment extends Fragment implements Observer {
             public void run() {
                 setTextViewVisibility(sensorListener.getValueSize());
                 updateTextViewsText(sensorListener.getValueSize());
-                System.out.println("VALUE SIZE: "+sensorListener.getValueSize());
+                updateValueDescription(sensorListener.getMode());
             }
 
         };
         return updateUI;
+    }
+
+    private void updateValueDescription(SensorMode_ mode){
+        if(mode != null){
+            txt_value_description.setText(""); //TODO get description
+        }else{
+            txt_value_description.setText(descr_nothing);
+        }
     }
 
     private void updateTextViewsText(int size){

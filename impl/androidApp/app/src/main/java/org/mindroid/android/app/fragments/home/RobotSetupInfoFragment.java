@@ -1,7 +1,6 @@
 package org.mindroid.android.app.fragments.home;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -12,7 +11,8 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import org.mindroid.android.app.R;
-import org.mindroid.android.app.robodancer.Settings;
+import org.mindroid.android.app.fragments.myrobot.HardwareMapping;
+import org.mindroid.android.app.robodancer.SettingsProvider;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,25 +35,25 @@ public class RobotSetupInfoFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     /** textviews **/
-    TextView txtView_sensortype_s1;
-    TextView txtView_sensortype_s2;
-    TextView txtView_sensortype_s3;
-    TextView txtView_sensortype_s4;
+    private TextView txtView_sensortype_s1;
+    private TextView txtView_sensortype_s2;
+    private TextView txtView_sensortype_s3;
+    private TextView txtView_sensortype_s4;
 
-    TextView txtView_sensormode_s1;
-    TextView txtView_sensormode_s2;
-    TextView txtView_sensormode_s3;
-    TextView txtView_sensormode_s4;
+    private TextView txtView_sensormode_s1;
+    private TextView txtView_sensormode_s2;
+    private TextView txtView_sensormode_s3;
+    private TextView txtView_sensormode_s4;
 
-    TextView txtView_motor_a;
-    TextView txtView_motor_b;
-    TextView txtView_motor_c;
-    TextView txtView_motor_d;
+    private TextView txtView_motor_a;
+    private TextView txtView_motor_b;
+    private TextView txtView_motor_c;
+    private TextView txtView_motor_d;
 
-    TextView txtView_robot_id;
-    TextView txtView_group_id;
-    TextView txtView_msg_server_ip;
-    TextView txtView_ev3_brick_ip;
+    private TextView txtView_robot_id;
+    private TextView txtView_group_id;
+    private TextView txtView_msg_server_ip;
+    private TextView txtView_ev3_brick_ip;
 
     public RobotSetupInfoFragment() {
         // Required empty public constructor
@@ -100,10 +100,10 @@ public class RobotSetupInfoFragment extends Fragment {
         getTextviews(view);
 
         //Load Configuration and Display
-        loadPortConfig();
+        setSensorTabTexts();
 
-        //Load Info Settings and Display
-        loadInfoSettings();
+        //Load Info SettingsProvider and Display
+        setInfoTabTexts();
 
 
         //Init sensor Configuration Tab
@@ -192,73 +192,60 @@ public class RobotSetupInfoFragment extends Fragment {
     }
 
 
-    private void loadPortConfig(){
-            SharedPreferences portConfigProperties = getActivity().getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_portConfiguration),Context.MODE_PRIVATE);
-
-            final String notDefined = "-";
-
-            if(portConfigProperties != null) {
+    private void setSensorTabTexts(){
+            if(SettingsProvider.getInstance().isInitialized()) {
                 // ---- load sensortypes ---- //
-                String savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S1), "");
-                txtView_sensortype_s1.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+                String txt = SettingsProvider.getInstance().getSensorS1() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorS1().getName();
+                txtView_sensortype_s1.setText(txt);
 
-                savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S2), "");
-                txtView_sensortype_s2.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+                txt = SettingsProvider.getInstance().getSensorS2() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorS2().getName();
+                txtView_sensortype_s2.setText(txt);
 
-                savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S3), "");
-                txtView_sensortype_s3.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+                txt = SettingsProvider.getInstance().getSensorS3() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorS3().getName();
+                txtView_sensortype_s3.setText(txt);
 
-                savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S4), "");
-                txtView_sensortype_s4.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+                txt = SettingsProvider.getInstance().getSensorS4() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorS4().getName();
+                txtView_sensortype_s4.setText(txt);
 
                 // --- load sensormodes ---- //
-                savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S1), "");
-                txtView_sensormode_s1.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+                txt = SettingsProvider.getInstance().getSensorModeS1() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorModeS1().getValue();
+                txtView_sensormode_s1.setText(txt);
 
-                savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S2), "");
-                txtView_sensormode_s2.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+                txt = SettingsProvider.getInstance().getSensorModeS2() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorModeS2().getValue();
+                txtView_sensormode_s2.setText(txt);
 
-                savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S3), "");
-                txtView_sensormode_s3.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+                txt = SettingsProvider.getInstance().getSensorModeS3() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorModeS3().getValue();
+                txtView_sensormode_s3.setText(txt);
 
-                savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S4), "");
-                txtView_sensormode_s4.setText((savedVal.isEmpty()) ? notDefined : savedVal);
-
-                // --- load motors ---- //
-                savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_A), "");
-                txtView_motor_a.setText((savedVal.isEmpty()) ? notDefined : savedVal);
-
-                savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_B), "");
-                txtView_motor_b.setText((savedVal.isEmpty()) ? notDefined : savedVal);
-
-                savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_C), "");
-                txtView_motor_c.setText((savedVal.isEmpty()) ? notDefined : savedVal);
-
-                savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_D), "");
-                txtView_motor_d.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+                txt = SettingsProvider.getInstance().getSensorModeS4() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getSensorModeS4().getValue();
+                txtView_sensormode_s4.setText(txt);
+                setMotorTabTexts();
             }
     }
 
-    private void loadInfoSettings(){
-        SharedPreferences portConfigProperties = getActivity().getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_connection_Data),Context.MODE_PRIVATE);
+    private void setMotorTabTexts() {
+        if(SettingsProvider.getInstance().isInitialized()) {
+            String txt;
+            txt = SettingsProvider.getInstance().getMotorA() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getMotorA().getName();
+            txtView_motor_a.setText(txt);
 
-        final String notDefined = "-";
+            txt = SettingsProvider.getInstance().getMotorB() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getMotorB().getName();
+            txtView_motor_b.setText(txt);
 
-        if(portConfigProperties != null) {
-            // ---- load sensortypes ---- //
-            String savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_ROBOT_ID), "-");
-            txtView_robot_id.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+            txt = SettingsProvider.getInstance().getMotorC() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getMotorC().getName();
+            txtView_motor_c.setText(txt);
 
-            savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_GROUP_ID), "-");
-            txtView_group_id.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+            txt = SettingsProvider.getInstance().getMotorD() == null ? HardwareMapping.notDefined : SettingsProvider.getInstance().getMotorD().getName();
+            txtView_motor_d.setText(txt);
+        }
+    }
 
-            savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_SERVER_IP), "-").concat(":").concat(portConfigProperties.getString(getResources().getString(R.string.KEY_SERVER_TCP_PORT), getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT)));
-            txtView_msg_server_ip.setText((savedVal.isEmpty()) ? notDefined : savedVal);
-
-
-
-            savedVal = portConfigProperties.getString(getResources().getString(R.string.KEY_EV3_IP), "-").concat(":").concat(portConfigProperties.getString(getResources().getString(R.string.KEY_EV3_TCP_PORT), getResources().getString(R.string.DEFAULT_EV3_BRICK_PORT)));
-            txtView_ev3_brick_ip.setText((savedVal.isEmpty()) ? notDefined : savedVal);
+    private void setInfoTabTexts(){
+        if(SettingsProvider.getInstance().isInitialized()) {
+            txtView_robot_id.setText(SettingsProvider.getInstance().getRobotID());
+            txtView_group_id.setText(SettingsProvider.getInstance().getGroupID());
+            txtView_msg_server_ip.setText(SettingsProvider.getInstance().getServerIP());
+            txtView_ev3_brick_ip.setText(SettingsProvider.getInstance().getEv3IP());
         }
     }
 }

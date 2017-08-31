@@ -5,7 +5,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -16,10 +15,9 @@ import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.IErrorHandler;
 import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.android.app.asynctasks.ProgressTask;
-import org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
-import org.mindroid.android.app.robodancer.Settings;
+import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.serviceloader.StatemachineService;
 
 
@@ -118,16 +116,13 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             robot.registerErrorHandler(((IErrorHandler) parentActivity).getErrorHandler());
         }
         getMenuEnabledSettings();
-
-
-        loadRobotPortConfiguration();
-
-        /** Load Connection Properties **/
-        loadConnectionProperties();
     }
 
+    /**
+     *
+     */
     private void getMenuEnabledSettings() {
-        //Settings menu enable
+        //SettingsProvider menu enable
         menuItemAlwaysEnabled.put(0,true);
         menuItemAlwaysEnabled.put(1,true);
         menuItemAlwaysEnabled.put(2,false);
@@ -209,8 +204,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
     }
 
-
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -219,7 +212,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     @Override
     public void onSettingsChanged(boolean settingsChanged) {
-        //nothind todo
+        //nothing todo here
+
     }
 
     /**
@@ -362,7 +356,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             @Override
             public void onClick(View v) {
                 //Creates the Robot
-                robot.makeRobot();
+                robot.create();
                 //Creates and executes the Task to connect to the Brick
                 ConnectToBrickTask task = new ConnectToBrickTask(parentActivity,msgConnectToRobot);
                 task.execute(); //String is not important
@@ -416,12 +410,12 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         spinner_selectedStatemachine.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Settings.getInstance().selectedStatemachineID = (String) parent.getSelectedItem();
+                SettingsProvider.getInstance().selectedStatemachineID = (String) parent.getSelectedItem();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Settings.getInstance().selectedStatemachineID = "";
+                SettingsProvider.getInstance().selectedStatemachineID = "";
             }
         });
     }
@@ -442,95 +436,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 }
             }
         }
-    }
-
-
-    /**
-     * Loads the Hardware Port Configuration of the Robot and sets it.
-     */
-    private void loadRobotPortConfiguration() {
-        SharedPreferences portConfigProperties = getActivity().getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_portConfiguration),Context.MODE_PRIVATE);
-        if(portConfigProperties != null) {
-            // ---- load sensortypes ---- //
-            String type ="";
-            String sensormode="";
-
-            //--SENSORS--
-            //Sensor - S1
-            type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S1), HardwareSelectionFragment.notDefined);
-            sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S1), HardwareSelectionFragment.notDefined);
-            robot.getRobotPortConfig().setSensorS1(HardwareSelectionFragment.getSensorType(type));
-            robot.getRobotPortConfig().setSensormodeS1(HardwareSelectionFragment.getSensorMode(sensormode));
-
-            //Sensor - S2
-            type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S2), HardwareSelectionFragment.notDefined);
-            sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S2), HardwareSelectionFragment.notDefined);
-            robot.getRobotPortConfig().setSensorS2(HardwareSelectionFragment.getSensorType(type));
-            robot.getRobotPortConfig().setSensormodeS2(HardwareSelectionFragment.getSensorMode(sensormode));
-
-            //Sensor - S3
-            type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S3), HardwareSelectionFragment.notDefined);
-            sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S3), HardwareSelectionFragment.notDefined);
-            robot.getRobotPortConfig().setSensorS3(HardwareSelectionFragment.getSensorType(type));
-            robot.getRobotPortConfig().setSensormodeS3(HardwareSelectionFragment.getSensorMode(sensormode));
-
-            //Sensor - S4
-            type = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSOR_S4), HardwareSelectionFragment.notDefined);
-            sensormode = portConfigProperties.getString(getResources().getString(R.string.KEY_SENSORMODE_S4), HardwareSelectionFragment.notDefined);
-            robot.getRobotPortConfig().setSensorS4(HardwareSelectionFragment.getSensorType(type));
-            robot.getRobotPortConfig().setSensormodeS4(HardwareSelectionFragment.getSensorMode(sensormode));
-
-            //--MOTORS--
-            //Motor A
-            type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_A), HardwareSelectionFragment.notDefined);
-            robot.getRobotPortConfig().setMotorA(HardwareSelectionFragment.getMotorType(type));
-
-            //Motor B
-            type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_B), HardwareSelectionFragment.notDefined);
-            robot.getRobotPortConfig().setMotorB(HardwareSelectionFragment.getMotorType(type));
-
-            //Motor C
-            type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_C), HardwareSelectionFragment.notDefined);
-            robot.getRobotPortConfig().setMotorC(HardwareSelectionFragment.getMotorType(type));
-
-            //Motor D
-            type = portConfigProperties.getString(getResources().getString(R.string.KEY_MOTOR_D), HardwareSelectionFragment.notDefined);
-            robot.getRobotPortConfig().setMotorD(HardwareSelectionFragment.getMotorType(type));
-        }
-    }
-
-    private void loadConnectionProperties(){
-        SharedPreferences connectionProperties = getActivity().getSharedPreferences(getResources().getString(R.string.shared_pref_connection_Data), Context.MODE_PRIVATE);
-        //TODO Refactor -> get settings from Settings.class
-        if (connectionProperties != null) {
-            String savedVal;
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_ROBOT_ID),getResources().getString(R.string.DEFAULT_ROBOT_ID));
-            Settings.getInstance().robotID = ( (savedVal.isEmpty()) ? getResources().getString(R.string.KEY_ROBOT_ID) : savedVal);
-
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_GROUP_ID),getResources().getString(R.string.DEFAULT_GROUP_ID));
-            Settings.getInstance().groupID = ( (savedVal.isEmpty()) ? getResources().getString(R.string.KEY_GROUP_ID) : savedVal);
-
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_EV3_IP), getResources().getString(R.string.DEFAULT_EV3_BRICK_IP));
-            Settings.getInstance().ev3IP = ( (savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_EV3_BRICK_IP) : savedVal);
-
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_EV3_TCP_PORT),getResources().getString(R.string.DEFAULT_EV3_BRICK_PORT));
-            Settings.getInstance().ev3TCPPort = (Integer.parseInt((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_EV3_BRICK_PORT) : savedVal));
-
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_SERVER_IP), getResources().getString(R.string.DEFAULT_MSG_SERVER_IP));
-            Settings.getInstance().serverIP = ( (savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_MSG_SERVER_IP) : savedVal);
-
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_SERVER_TCP_PORT),getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT));
-            Settings.getInstance().serverTCPPort = (Integer.parseInt((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT) : savedVal));
-
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_ROBOT_SERVER_TCP_PORT),getResources().getString(R.string.DEFAULT_BRICK_MSG_SERVER_PORT));
-            Settings.getInstance().robotServerPort = (Integer.parseInt((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_BRICK_MSG_SERVER_PORT) : savedVal));
-
-        }else{
-            if(getActivity() instanceof MainActivity){
-                ((MainActivity) getActivity()).showErrorDialog("Couldn't load Connection Properties!","Connection Propertes are null! Goto Settings and save thema again!");
-            }
-        }
-
     }
 
     //--- Async Tasks
@@ -609,7 +514,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             if(params.length>0) {
                 if (params[0].equals(START_ROBOT)) { //True => Start robot, else it should stop the Robot
                     try {
-                        robot.startStatemachine(Settings.getInstance().selectedStatemachineID);
+                        robot.startStatemachine(SettingsProvider.getInstance().selectedStatemachineID);
                         return true;
                     }catch(Exception e){
                         System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
@@ -618,7 +523,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                     }
                 } else if(params[0].equals(STOP_ROBOT)) {
                     try {
-                        robot.stopStatemachine(Settings.getInstance().selectedStatemachineID);
+                        robot.stopStatemachine(SettingsProvider.getInstance().selectedStatemachineID);
                         return false;
                     }catch(Exception e){
                         System.out.println("## AsyncTask StartStopRobot. Exception: "+e);

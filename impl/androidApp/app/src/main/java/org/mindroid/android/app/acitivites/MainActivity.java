@@ -8,6 +8,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -28,6 +29,7 @@ import org.mindroid.android.app.fragments.home.RobotSetupInfoFragment;
 import org.mindroid.android.app.fragments.sensormonitoring.SensorMonitoringFragment;
 import org.mindroid.android.app.fragments.sensormonitoring.SensorObservationFragment;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
+import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.serviceloader.StatemachineService;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 
@@ -91,6 +93,17 @@ public class MainActivity extends Activity
                     .commit();
         }
 
+        initialiseSettings();
+    }
+
+    /**
+     * Initializes the SettingsProvider Instance
+     */
+    private void initialiseSettings() {
+        SharedPreferences connectionProperties = this.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_connection_Data), Context.MODE_PRIVATE);
+        SharedPreferences portConfigProperties = this.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_portConfiguration),Context.MODE_PRIVATE);
+
+        SettingsProvider.getInstance().initialize(getResources(),connectionProperties,portConfigProperties);
     }
 
     private void initStatemachineService(){
@@ -115,7 +128,7 @@ public class MainActivity extends Activity
                 break;//Configuration
             case 3: fragment = SETTINGS_FRAGMENT;
                     setTitle(getResources().getString(R.string.title_settings));
-                break;//Settings
+                break;//SettingsProvider
             default:
                 System.out.println("## MainActivity.onNavigationDrawerItemSelected(): No fragment defined for this position");
                 fragment = HOME_FRAGMENT;

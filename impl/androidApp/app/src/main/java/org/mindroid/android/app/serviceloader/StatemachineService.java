@@ -32,7 +32,6 @@ public class StatemachineService {
             "org.mindroid.android.app.statemachinesimpl.SensorMonitoring",
             "org.mindroid.android.app.statemachinesimpl.MindroidLVL2",
             "org.mindroid.android.app.statemachinesimpl.MindroidLVL1"
-
     };
 
     private final String apkPath = "/data/app/";

@@ -182,9 +182,10 @@ public class SensorObservationFragment extends Fragment implements Observer {
         txt_view_slot4_description = (TextView) view.findViewById(R.id.txtView_slot4_description);
         txt_view_slot4_value = (TextView) view.findViewById(R.id.txtView_slot4_value);
 
-        txtView_title_value_description = (TextView) view.findViewById(R.id.txtView_title_value_description);
-        txt_value_description = (EditText) view.findViewById(R.id.txt_value_description);
-         //TODO mode value description
+        //TODO mode value description
+        //txtView_title_value_description = (TextView) view.findViewById(R.id.txtView_title_value_description);
+        //txt_value_description = (EditText) view.findViewById(R.id.txt_value_description);
+
 
         txt_view_sensor_port.setText(getArguments().getString(ARG_PORT));
         txt_view_sensor_type.setText(getArguments().getString(ARG_TYPE));

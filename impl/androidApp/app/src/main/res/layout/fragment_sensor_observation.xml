@@ -89,7 +89,7 @@
                     android:minWidth="100dp"/>
             <TextView
                     android:text="0.15"
-                    android:layout_width="124dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/txtView_slot2_value"
                     android:minWidth="100dp"/>
         </LinearLayout>
@@ -128,6 +128,21 @@
                     android:layout_weight="1" android:minWidth="100dp"/>
         </LinearLayout>
     </LinearLayout>
+    <TextView
+            android:text="Value description:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/txtView_title_value_description"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="230dp"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/txt_value_description" android:layout_marginTop="45dp" android:layout_marginLeft="230dp"
+            android:editable="false" android:textSize="12sp" android:gravity="top|left" android:singleLine="false"
+            android:visibility="visible"/>
 
 
 </FrameLayout>

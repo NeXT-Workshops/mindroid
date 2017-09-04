@@ -89,6 +89,7 @@ public abstract class LVL2API extends LVL1API {
             @Override
             public void run(){
                 LVL2API.this.run();
+                //TODO recognize that statemachine is done. Change App state somehow.
             }
         };
 

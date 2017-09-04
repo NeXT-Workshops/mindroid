@@ -43,6 +43,7 @@ public class SettingsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private OnSettingsChanged settingsChangedListener;
     private ConnectionPropertiesChangedListener connectionPropertiesChangedListener = SettingsProvider.getInstance();
 
     private Activity parentActivity;
@@ -213,6 +214,7 @@ public class SettingsFragment extends Fragment {
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+
         }
     }
 
@@ -225,6 +227,7 @@ public class SettingsFragment extends Fragment {
 
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            settingsChangedListener = (OnSettingsChanged) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -324,6 +327,8 @@ public class SettingsFragment extends Fragment {
         // Inform listener that the settings have changed
         connectionPropertiesChangedListener.onConnectionPropertiesChangedListener();
 
+        //Call this listener (MainActivity) to close the Settings fragment an display the HomeFragment
+        settingsChangedListener.onSettingsChanged(true);
     }
 
 

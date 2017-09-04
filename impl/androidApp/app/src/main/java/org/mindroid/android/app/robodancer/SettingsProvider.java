@@ -8,6 +8,10 @@ import org.mindroid.common.messages.Motors;
 import org.mindroid.common.messages.SensorMessages;
 import org.mindroid.common.messages.Sensors;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 /**
  * Created by Torben on 18.04.2017.
  *
@@ -52,11 +56,23 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     private SharedPreferences portConfigProperties;
     private boolean isInitialized = false;
 
+    private String androidId = "Android ID not set";
+
     private static SettingsProvider ourInstance = new SettingsProvider();
 
     public static SettingsProvider getInstance() {
         return ourInstance;
     }
+
+    private static final List<String> DEFAULT_NAMES = Arrays.asList(
+            "Mia", "Emma", "Sofia", "Hannah", "Emilia",
+            "Anne", "Marie", "Mila", "Lina", "Lea",
+            "Amelie", "Luisa", "Johanna", "Emily", "Clara",//
+            "Ben", "Paul", "Jonas", "Elias", "Leon",
+            "Finn", "Noah", "Louis", "Lukas", "Felix",
+            "Max", "Henry", "Oskar", "Emil", "Liam"
+    );
+
 
     private SettingsProvider() {
 
@@ -81,6 +97,17 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
             //Initialization complete
             this.isInitialized = true;
         }
+    }
+
+    public void setAndroidId(final String androidId) {
+        this.androidId = androidId;
+    }
+
+    public String generateUniqueRobotName() {
+        // getResources().getString(R.string.DEFAULT_ROBOT_ID);
+        final int seed = androidId.hashCode();
+        final String selectedName = DEFAULT_NAMES.get(new Random(seed).nextInt(DEFAULT_NAMES.size()));
+        return selectedName;
     }
 
 

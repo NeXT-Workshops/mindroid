@@ -14,6 +14,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 
@@ -71,6 +72,7 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        SettingsProvider.getInstance().setAndroidId(Secure.getString(this.getContentResolver(), Secure.ANDROID_ID));
 
         /** init Statemachine Service**/
         initStatemachineService();
@@ -94,6 +96,7 @@ public class MainActivity extends Activity
         }
 
         initialiseSettings();
+
     }
 
     /**

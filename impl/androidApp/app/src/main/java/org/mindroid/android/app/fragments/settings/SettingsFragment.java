@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -256,9 +257,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void loadSettings(){
-        SharedPreferences connectionProperties = parentActivity.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_connection_Data),Context.MODE_PRIVATE);
-        if(connectionProperties != null) {
-            String savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_EV3_IP), getResources().getString(R.string.DEFAULT_EV3_BRICK_IP));
+            String savedVal = SettingsProvider.getInstance().getEv3IP();
             if(!savedVal.isEmpty()){
                 String[] val = savedVal.split("\\.");
                 txt_input_ev3ip_part1.setText(val[0]);
@@ -267,10 +266,10 @@ public class SettingsFragment extends Fragment {
                 txt_input_ev3ip_part4.setText(val[3]);
             }
 
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_EV3_TCP_PORT), getResources().getString(R.string.DEFAULT_EV3_BRICK_PORT));
+            savedVal = ""+SettingsProvider.getInstance().getEv3TCPPort();
             txt_input_EV3TCPPort.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_EV3_BRICK_PORT) : savedVal);
 
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_SERVER_IP), getResources().getString(R.string.DEFAULT_MSG_SERVER_IP));
+            savedVal = SettingsProvider.getInstance().getServerIP();
             if(!savedVal.isEmpty()){
                 String[] val = savedVal.split("\\.");
                 txt_input_serverip_part1.setText(val[0]);
@@ -279,19 +278,17 @@ public class SettingsFragment extends Fragment {
                 txt_input_serverip_part4.setText(val[3]);
             }
 
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_SERVER_TCP_PORT), getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT));
+            savedVal = ""+SettingsProvider.getInstance().getServerTCPPort();
             txt_input_ServerTCPPort.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT) : savedVal);
 
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_ROBOT_ID), getResources().getString(R.string.DEFAULT_ROBOT_ID));
-            txt_input_robotID.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_ROBOT_ID) : savedVal);
+            savedVal = SettingsProvider.getInstance().getRobotID();
+            txt_input_robotID.setText((savedVal.isEmpty()) ? SettingsProvider.getInstance().generateUniqueRobotName() : savedVal);
 
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_GROUP_ID), getResources().getString(R.string.DEFAULT_GROUP_ID));
+            savedVal = SettingsProvider.getInstance().getGroupID();
             txt_input_groupID.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_GROUP_ID) : savedVal);
 
-            savedVal = connectionProperties.getString(getResources().getString(R.string.KEY_ROBOT_SERVER_TCP_PORT), getResources().getString(R.string.DEFAULT_BRICK_MSG_SERVER_PORT));
+            savedVal = ""+SettingsProvider.getInstance().getRobotServerPort();
             txt_input_robotServerPort.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_BRICK_MSG_SERVER_PORT) : savedVal);
-        }
-
     }
 
     private void saveSettings(){

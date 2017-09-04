@@ -135,11 +135,11 @@ public class SensorMessages {
 	
 	
 	/**
-	 * This object is used to send sensordata from EV3 to Smartphone
+	 * Creates a {@link SensorEventMsg} to transmit from EV3 to the smartphone
 	 * 
-	 * @param sample
-	 * @param timestamp
-	 * @return
+	 * @param sample the raw sensor data
+	 * @param timestamp the time stamp of the measurement
+	 * @return the prepared message
 	 */
 	public static SensorEventMsg sensorEvent(float[] sample, long timestamp){
 		SensorEventMsg msg = new SensorEventMsg();
@@ -173,11 +173,10 @@ public class SensorMessages {
 	
 	
 	/**
-	 * Send this object from Smartphone to change the sensormode on the EV3
+	 * Send this object from Smartphone to change the sensor mode on the EV3
 	 * 
-	 * @param mode
-	 * @return a new object of the corresponding class: ChangeSensorModeMsg
-	 * @author Alex
+	 * @param mode the sensor mode
+	 * @return the prepared message
 	 */
 	public static ChangeSensorModeMsg changeModeTo (SensorMode_ mode){
 		ChangeSensorModeMsg msg = new ChangeSensorModeMsg();
@@ -201,9 +200,9 @@ public class SensorMessages {
 	
 	/**
 	 * Send this object containing the new sensormode to tell the smartphone
-	 * 
+	 *
+	 * @param m sensor mode
 	 * @return a new object of the corresponding class: ChangeSensorModeResponseMsg
-	 * @author Alex
 	 */
 	public static modeChangedSuccessfullyMsg sensorModeChangedTo (SensorMode_ m){
 		modeChangedSuccessfullyMsg msg = new modeChangedSuccessfullyMsg();

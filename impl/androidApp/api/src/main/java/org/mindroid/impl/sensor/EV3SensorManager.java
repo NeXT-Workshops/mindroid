@@ -51,11 +51,8 @@ public class EV3SensorManager extends Listener{
     /**
      * Creates a Sensor.
      * 
-     * @param sensorType
-     * @param sensorPort
-     * @return
-     * @throws BrickIsNotReadyException 
-     * @throws PortIsAlreadyInUseException 
+     * @return the sensor handle
+     * @throws PortIsAlreadyInUseException if the specified {@link EV3SensorPort} is already in use
      */
     public EV3Sensor createSensor(EV3PortID brick_port, Sensors sensorType, EV3SensorPort sensorPort, SensorMessages.SensorMode_ mode) throws PortIsAlreadyInUseException{
 		if(sensorType != null && sensorPort != null){
@@ -146,8 +143,6 @@ public class EV3SensorManager extends Listener{
 	/** 
 	 * Checks if a Port is a valid SensorPort of the EV3Brick
 	 * 
-	 * @param
-	 * @return
 	 *//*
 	boolean isValidSensorPort(Port port){
     	if(port == SensorPort.S1 || port == SensorPort.S2 || port == SensorPort.S3 || port == SensorPort.S4){

@@ -32,8 +32,8 @@ public abstract class LVL1API implements IMindroidMain {
      * Speed is set to 50.
      */
     public void forward() {
-        motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_FORWARD);
-        motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_FORWARD);
+        motorController.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.FORWARD);
+        motorController.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.FORWARD);
         motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
         motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
     }
@@ -43,8 +43,8 @@ public abstract class LVL1API implements IMindroidMain {
      * Speed is set to 50.
      */
     public void backward() {
-        motorController.setMotorDirection(EV3PortIDs.PORT_A, IMotorControl.MOTOR_BACKWARD);
-        motorController.setMotorDirection(EV3PortIDs.PORT_D,IMotorControl.MOTOR_BACKWARD);
+        motorController.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.BACKWARD);
+        motorController.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.BACKWARD);
         motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
         motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
     }

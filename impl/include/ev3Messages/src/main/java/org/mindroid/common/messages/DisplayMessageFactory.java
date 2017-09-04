@@ -2,25 +2,14 @@ package org.mindroid.common.messages;
 
 public class DisplayMessageFactory {
 
-
-
 	/**
-	 * creates a HelloDisplayMsg Msg;
-	 * @return
+	 * Creates a {@link HelloDisplayMsg}
+	 * @return the prepared message
 	 */
 	public static HelloDisplayMsg getHelloDisplayMsg(){
 		return new HelloDisplayMsg();
 	}
-	
-	/**
-	 * send after the client Display endpoint is connnected;
-	 * @author mindroid
-	 *
-	 */
-	public static class HelloDisplayMsg {
-		public HelloDisplayMsg() {};
-	}
-	
+
 	public static DrawStringMsg createDrawStringMsg(String str, int x, int y){
 		DrawStringMsg ds = new DrawStringMsg();
 		ds.setStr(str);
@@ -67,5 +56,14 @@ public class DisplayMessageFactory {
 	
 	public static class ClearDisplayMsg {
 		public ClearDisplayMsg(){};
+	}
+
+	/**
+	 * send after the client Display endpoint is connnected;
+	 * @author mindroid
+	 *
+	 */
+	public static class HelloDisplayMsg {
+		public HelloDisplayMsg() {};
 	}
 }

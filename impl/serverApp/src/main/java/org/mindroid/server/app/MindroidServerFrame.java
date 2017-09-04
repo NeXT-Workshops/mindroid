@@ -34,30 +34,36 @@ public class MindroidServerFrame extends JFrame {
     public MindroidServerFrame() {
         super("Mindroid Server Application");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setMinimumSize(new Dimension(400,400));
+        this.setMinimumSize(new Dimension(800,500));
+        Image titleImage = MindroidServerSettings.getTitleImage();
+        if (titleImage != null) {
+            this.setIconImage(titleImage);
+        }
         //Menubar
         JMenuBar menuBar = new JMenuBar();
 
         JMenu fileMenu = new JMenu("File");
-        JMenu helpMenu = new JMenu("Help");
+        fileMenu.setMnemonic('f');
+        //JMenu helpMenu = new JMenu("Help");
 
         JMenuItem exitMenuItem = new JMenuItem();
-        exitMenuItem.setAction(new AbstractAction("Exit") {
+        exitMenuItem.setAction(new AbstractAction("Quit") {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Close");
+            public void actionPerformed(final ActionEvent e) {
                 System.exit(0);
             }
         });
+        exitMenuItem.setMnemonic('q');
 
         JMenuItem consoleMenuItem = new JMenuItem();
         consoleMenuItem.setAction(new AbstractAction("Show Console") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
+                MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
                 console.setVisible(true);
             }
         });
+        consoleMenuItem.setMnemonic('c');
 
         refreshIP = new JMenuItem();
         refreshIP.setAction(new AbstractAction("Refresh IP Address") {
@@ -66,37 +72,36 @@ public class MindroidServerFrame extends JFrame {
                 MindroidServerApplicationMain.invokeDisplayIPAdress();
             }
         });
-
-        fileMenu.setMnemonic('f');
-        exitMenuItem.setMnemonic('x');
-        fileMenu.setMnemonic('h');
+        refreshIP.setMnemonic('r');
 
         fileMenu.add(consoleMenuItem);
         fileMenu.add(refreshIP);
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
-        menuBar.add(helpMenu);
+        //menuBar.add(helpMenu);
 
         this.setJMenuBar(menuBar);
 
         this.getContentPane().setLayout(new BorderLayout());
 
         //table at center
-        String[] columnNames = {"Time","Source","LogLevel","Content"};
+        String[] columnNames = {"Time", "Source", "Target", "Log Level", "Content"};
         DefaultTableModel model = new DefaultTableModel(columnNames,0);
 
         this.table = new JTable(model);
         JTextField tf = new JTextField();
         tf.setEditable(false);
         table.setDefaultEditor(Object.class, new DefaultCellEditor(tf));
-        table.getColumnModel().getColumn(3).setPreferredWidth(200);
         table.getColumnModel().getColumn(0).setPreferredWidth(60);
         table.getColumnModel().getColumn(1).setPreferredWidth(100);
         table.getColumnModel().getColumn(2).setPreferredWidth(100);
+        table.getColumnModel().getColumn(3).setPreferredWidth(100);
+        table.getColumnModel().getColumn(4).setPreferredWidth(200);
         table.getColumnModel().getColumn(0).setMaxWidth(70);
         table.getColumnModel().getColumn(0).setMinWidth(70);
         table.getColumnModel().getColumn(1).setMaxWidth(120);
-        table.getColumnModel().getColumn(2).setMaxWidth(100);
+        table.getColumnModel().getColumn(2).setMaxWidth(120);
+        table.getColumnModel().getColumn(3).setMaxWidth(100);
 
         table.getTableHeader().setReorderingAllowed(false);
 
@@ -153,12 +158,11 @@ public class MindroidServerFrame extends JFrame {
 
     }
 
-
     public void addContentLine(MindroidMessage deseriaLogMessage) {
         try {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
             String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-            model.addRow(new String[]{timeStamp, deseriaLogMessage.getSource().getValue(),
+            model.addRow(new String[]{timeStamp, deseriaLogMessage.getSource().getValue(), deseriaLogMessage.getDestination().getValue(),
                     deseriaLogMessage.getMessageType().toString(), deseriaLogMessage.getContent()});
         } catch (ArrayIndexOutOfBoundsException e) {
             //Tries again n times, error was caused by 2 threads accessing the table at the same time
@@ -180,7 +184,7 @@ public class MindroidServerFrame extends JFrame {
         try {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
             String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-            model.addRow(new String[]{timeStamp, deseriaLogMessage.getSource().getValue(),
+            model.addRow(new String[]{timeStamp, deseriaLogMessage.getSource().getValue(), deseriaLogMessage.getDestination().getValue(),
                     deseriaLogMessage.getMessageType().toString(), deseriaLogMessage.getContent()});
             return true;
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -189,10 +193,10 @@ public class MindroidServerFrame extends JFrame {
 
     }
 
-    public void addContentLine(String source, String logLevel, String content ) {
+    public void addContentLine(String source, String target, String logLevel, String content) {
         DefaultTableModel model = (DefaultTableModel) this.table.getModel();
         String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-        model.addRow(new String[] {timeStamp,source,logLevel,content});
+        model.addRow(new String[] {timeStamp, source, target, logLevel, content});
     }
 
     public void displayIPAdress(String address, Color color) {

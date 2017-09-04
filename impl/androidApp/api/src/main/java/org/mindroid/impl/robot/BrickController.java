@@ -27,7 +27,7 @@ public class BrickController implements IBrickControl {
      */
     @Override
     public void setEV3StatusLight(EV3StatusLightColor color, EV3StatusLightInterval interval) {
-        robot.getBrick().setEV3StatusLight(color,interval);
+        robot.getBrick().setEV3StatusLight(color, interval);
     }
 
     /**
@@ -98,7 +98,6 @@ public class BrickController implements IBrickControl {
      */
     @Override
     public void clearDisplay() {
-        //TODO Not working correctly yet
         robot.getBrick().clearDisplay();
     }
 
@@ -110,7 +109,6 @@ public class BrickController implements IBrickControl {
      */
     @Override
     public void drawString(String str,int posX, int posY) {
-        //TODO Not working correctly yet
         robot.getBrick().drawString(str,posX,posY);
     }
 

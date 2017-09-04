@@ -70,7 +70,6 @@ public class EV3MotorManager extends Listener {
 	 * Sends message to the Brick to initialize the IMotor at Brickside.
 	 * @param motorType
 	 * @param motorPort
-     * @return
      */
 	public void initializeMotor(Motors motorType, EV3MotorPort motorPort) throws BrickIsNotReadyException {
 		if(ev3Brick.isBrickReady()){

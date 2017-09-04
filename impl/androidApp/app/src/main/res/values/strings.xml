@@ -70,13 +70,13 @@
     <string name="shared_pref_portConfiguration">PortConfiguration.xml</string>
 
     <!-- Shared Preferences: DEFAULT VALUES -->
-    <string name="DEFAULT_EV3_BRICK_IP">192.168.0.240</string>
+    <string name="DEFAULT_EV3_BRICK_IP">192.168.42.253</string>
     <string name="DEFAULT_EV3_BRICK_PORT">33690</string>
-    <string name="DEFAULT_MSG_SERVER_IP">192.168.188.38</string>
+    <string name="DEFAULT_MSG_SERVER_IP">192.168.3.100</string>
     <string name="DEFAULT_MSG_SERVER_PORT">33044</string>
     <string name="DEFAULT_BRICK_MSG_SERVER_PORT">33045</string>
-    <string name="DEFAULT_ROBOT_ID">No RobotID set</string>
-    <string name="DEFAULT_GROUP_ID">No groupID set</string>
+    <string name="DEFAULT_ROBOT_ID">R</string>
+    <string name="DEFAULT_GROUP_ID">G</string>
 
 
     <!-- Shared Preferences: KEYS for Shared Preferences - ConnectionData.xml -->

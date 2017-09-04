@@ -13,9 +13,9 @@
     <string name="btn_text_start_robot">Start</string>
     <string name="btn_text_stop_robot">stop</string>
     <string name="btn_text_disconnect">Verbindung trennen</string>
-    <string name="btn_text_connect">Verbindung zum EV3 Brick wird hergestellt</string>
+    <string name="btn_text_connect">Verbindung zum EV3-Brick herstellen</string>
     <string name="dialog_msg_connect_to_robot">Verbindung wird aufgebaut..</string>
-    <string name="dialog_msg_connect_to_robot_error">Verbindung zum EV3 Brick konnte nicht hergestellt werden! Ueberprüfe ob der EV3 Brick bereit ist, sowie die USB-Verbindung. Versuche es nocheinmal!</string>
+    <string name="dialog_msg_connect_to_robot_error">Verbindung zum EV3-Brick konnte nicht hergestellt werden! Ueberprüfe ob der EV3 Brick bereit ist, sowie die USB-Verbindung. Versuche es nochmal!</string>
     <string name="dialog_msg_init_config">Der Roboter wird konfiguriert..</string>
     <string name="dialog_msg_disconnect_from_robot">Trennen..</string>
     <string name="dialog_msg_start_robot">Roboter wird gestartet..</string>
@@ -46,13 +46,13 @@
     <string name="shared_pref_portConfiguration">PortConfiguration.xml</string>
 
     <!-- Shared Preferences: DEFAULT VALUES -->
-    <string name="DEFAULT_EV3_BRICK_IP">192.168.0.240</string>
+    <string name="DEFAULT_EV3_BRICK_IP">192.168.42.253</string>
     <string name="DEFAULT_EV3_BRICK_PORT">33690</string>
-    <string name="DEFAULT_MSG_SERVER_IP">192.168.188.38</string>
+    <string name="DEFAULT_MSG_SERVER_IP">192.168.3.100</string>
     <string name="DEFAULT_MSG_SERVER_PORT">33044</string>
     <string name="DEFAULT_BRICK_MSG_SERVER_PORT">33045</string>
-    <string name="DEFAULT_ROBOT_ID">No RobotID set</string>
-    <string name="DEFAULT_GROUP_ID">No groupID set</string>
+    <string name="DEFAULT_ROBOT_ID">R</string>
+    <string name="DEFAULT_GROUP_ID">G</string>
 
 
     <!-- Shared Preferences: KEYS for Shared Preferences - ConnectionData.xml -->

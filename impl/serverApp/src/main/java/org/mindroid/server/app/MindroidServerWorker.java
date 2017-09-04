@@ -8,7 +8,6 @@ import org.mindroid.common.messages.server.MessageMarshaller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -56,7 +55,7 @@ public class MindroidServerWorker implements Runnable {
 
 
         } catch (IOException e) {
-            MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
+            MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
             console.setVisible(true);
             console.appendLine("Error while receiving or forwarding a message.");
             console.appendLine("IOException: "+e.getMessage()+"\n");
@@ -78,7 +77,7 @@ public class MindroidServerWorker implements Runnable {
                 int port = Integer.parseInt(deserializedMsg.getContent());
                 InetSocketAddress robotAddress = new InetSocketAddress(((InetSocketAddress) socketAddress).getAddress(),port);
                 mindroidServerFrame.register(deserializedMsg.getSource(), robotAddress);
-                mindroidServerFrame.addContentLine("Local","INFO", deserializedMsg.getSource().getValue()+" was registered.");
+                mindroidServerFrame.addContentLine("Local", "-", "INFO", deserializedMsg.getSource().getValue()+" was registered.");
             } else {
                 throw new IOException("Registration of "+deserializedMsg.getSource().getValue()+" failed.");
             }
@@ -86,7 +85,7 @@ public class MindroidServerWorker implements Runnable {
 
         //deliver message meant to be sent to another robot
         if(deserializedMsg.getMessageType().equals(MessageType.MESSAGE)&& !deserializedMsg.isLogMessage() && !deserializedMsg.isBroadcastMessage() ) {
-            mindroidServerFrame.addContentLine("Local","INFO", "Message from "+deserializedMsg.getSource().getValue()+" to "+deserializedMsg.getDestination().getValue()+": '"+deserializedMsg.getContent()+"'");
+            mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "INFO", deserializedMsg.getContent());
             InetSocketAddress address = mindroidServerFrame.findAddress(deserializedMsg.getDestination());
             sendMessage(deserializedMsg, address);
             }
@@ -95,7 +94,7 @@ public class MindroidServerWorker implements Runnable {
         //deliver broadcast message
         if (deserializedMsg.getDestination().getValue().equals(Destination.BROADCAST.getValue())) {
             HashMap<Destination, InetSocketAddress> ipMapping = mindroidServerFrame.getIPMapping();
-            mindroidServerFrame.addContentLine("Local","INFO", "Message from "+deserializedMsg.getSource().getValue()+" to everyone: '"+deserializedMsg.getContent()+"'");
+            mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), "everyone", "INFO", deserializedMsg.getContent());
             for(Map.Entry<Destination, InetSocketAddress> entry : ipMapping.entrySet()) {
                 if(!deserializedMsg.getSource().getValue().equals(entry.getKey().getValue())) {
                     InetSocketAddress address = entry.getValue();
@@ -122,7 +121,7 @@ public class MindroidServerWorker implements Runnable {
             socket.close();
             out.close();
         } catch (IOException e) {
-            MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
+            MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
             console.setVisible(true);
             console.appendLine("Error while forwarding a message to "+deserializedMsg.getDestination().getValue());
             console.appendLine("IOException: "+e.getMessage()+"\n");

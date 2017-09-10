@@ -8,7 +8,7 @@ import lejos.hardware.port.Port;
 import mindroid.common.ev3.endpoints.SensorEndpoint;
 import mindroid.common.ev3.endpoints.sensors.ev3.*;
 import mindroid.common.ev3.server.BrickServerImpl;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.hardware.Sensors;
 
 public class SensorManager extends HardwareInterfaceManager {
 

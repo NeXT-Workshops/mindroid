@@ -1,9 +1,9 @@
 package TestRobotFactory;
 
 import org.mindroid.api.robot.IRobotPortConfig;
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.hardware.Sensormode;
+import org.mindroid.common.messages.hardware.Sensors;
 
 /**
  * Created by torben on 02.03.2017.
@@ -32,29 +32,29 @@ public class RobotHardwareConfigurationTest implements IRobotPortConfig {
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormodeS1() {
-        return SensorMessages.SensorMode_.RED;
+    public Sensormode getSensormodeS1() {
+        return Sensormode.RED;
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormodeS2() {
-        return SensorMessages.SensorMode_.DISTANCE;
+    public Sensormode getSensormodeS2() {
+        return Sensormode.DISTANCE;
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormodeS3() {
+    public Sensormode getSensormodeS3() {
         return null;
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormodeS4() {
-        return SensorMessages.SensorMode_.RED;
+    public Sensormode getSensormodeS4() {
+        return Sensormode.RED;
     }
 
     //------------------ MOTORS ------------------
     @Override
     public Motors getMotorA() {
-        return Motors.UnregulatedMotor;   }
+        return Motors.LargeRegulatedMotor;   }
 
     @Override
     public Motors getMotorB() {
@@ -67,6 +67,6 @@ public class RobotHardwareConfigurationTest implements IRobotPortConfig {
 
     @Override
     public Motors getMotorD() {
-        return Motors.UnregulatedMotor;
+        return Motors.LargeRegulatedMotor;
     }
 }

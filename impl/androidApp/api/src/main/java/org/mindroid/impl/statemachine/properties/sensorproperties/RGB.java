@@ -2,7 +2,7 @@ package org.mindroid.impl.statemachine.properties.sensorproperties;
 
 import org.mindroid.api.statemachine.properties.ComplexEV3SensorProperty;
 import org.mindroid.api.statemachine.properties.IProperty;
-import org.mindroid.common.messages.SensorMessages;
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.ev3.EV3PortID;
 
 /**
@@ -24,7 +24,7 @@ public class RGB extends ComplexEV3SensorProperty {
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormode() {
-        return SensorMessages.SensorMode_.RGB;
+    public Sensormode getSensormode() {
+        return Sensormode.RGB;
     }
 }

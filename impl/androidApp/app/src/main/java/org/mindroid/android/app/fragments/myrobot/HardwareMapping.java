@@ -1,12 +1,13 @@
 package org.mindroid.android.app.fragments.myrobot;
 
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
+
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.hardware.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
 
 import java.util.HashMap;
 
-import static org.mindroid.common.messages.Sensors.*;
+import static org.mindroid.common.messages.hardware.Sensors.*;
 
 
 public class HardwareMapping {
@@ -14,7 +15,7 @@ public class HardwareMapping {
     private static boolean isMappingInitialized = false;
     private static HashMap<String,Motors> motorMapping;
     private static HashMap<String,Sensors> sensorMapping;
-    private static HashMap<String,SensorMessages.SensorMode_> modeMapping;
+    private static HashMap<String,Sensormode> modeMapping;
 
     public static String notDefined = "-";
 
@@ -38,17 +39,17 @@ public class HardwareMapping {
             //Sensormodes
             modeMapping = new HashMap(12);
             modeMapping.put(notDefined,null);
-            modeMapping.put(SensorMessages.SensorMode_.RED.getValue(), SensorMessages.SensorMode_.RED);
-            modeMapping.put(SensorMessages.SensorMode_.AMBIENT.getValue(),SensorMessages.SensorMode_.AMBIENT);
-            modeMapping.put(SensorMessages.SensorMode_.COLOR_ID.getValue(),SensorMessages.SensorMode_.COLOR_ID);
-            modeMapping.put(SensorMessages.SensorMode_.RGB.getValue(),SensorMessages.SensorMode_.RGB);
-            modeMapping.put(SensorMessages.SensorMode_.DISTANCE.getValue(),SensorMessages.SensorMode_.DISTANCE);
-            modeMapping.put(SensorMessages.SensorMode_.LISTEN.getValue(),SensorMessages.SensorMode_.LISTEN);
-            modeMapping.put(SensorMessages.SensorMode_.SEEK.getValue(),SensorMessages.SensorMode_.SEEK);
-            modeMapping.put(SensorMessages.SensorMode_.ANGLE.getValue(),SensorMessages.SensorMode_.ANGLE);
-            modeMapping.put(SensorMessages.SensorMode_.RATE.getValue(), SensorMessages.SensorMode_.RATE);
-            modeMapping.put(SensorMessages.SensorMode_.RATEANDANGLE.getValue(),SensorMessages.SensorMode_.RATEANDANGLE);
-            modeMapping.put(SensorMessages.SensorMode_.TOUCH.getValue(),SensorMessages.SensorMode_.TOUCH);
+            modeMapping.put(Sensormode.RED.getValue(), Sensormode.RED);
+            modeMapping.put(Sensormode.AMBIENT.getValue(),Sensormode.AMBIENT);
+            modeMapping.put(Sensormode.COLOR_ID.getValue(),Sensormode.COLOR_ID);
+            modeMapping.put(Sensormode.RGB.getValue(),Sensormode.RGB);
+            modeMapping.put(Sensormode.DISTANCE.getValue(),Sensormode.DISTANCE);
+            modeMapping.put(Sensormode.LISTEN.getValue(),Sensormode.LISTEN);
+            modeMapping.put(Sensormode.SEEK.getValue(),Sensormode.SEEK);
+            modeMapping.put(Sensormode.ANGLE.getValue(),Sensormode.ANGLE);
+            modeMapping.put(Sensormode.RATE.getValue(), Sensormode.RATE);
+            modeMapping.put(Sensormode.RATEANDANGLE.getValue(),Sensormode.RATEANDANGLE);
+            modeMapping.put(Sensormode.TOUCH.getValue(),Sensormode.TOUCH);
 
             isMappingInitialized = true;
         }
@@ -59,7 +60,7 @@ public class HardwareMapping {
      * @param key_mode - value/key of SensorMode
      * @return Enum of mapped Sensormode
      */
-    public static SensorMessages.SensorMode_ getSensorMode(String key_mode){
+    public static Sensormode getSensorMode(String key_mode){
         initMapping();
         return modeMapping.get(key_mode);
     }

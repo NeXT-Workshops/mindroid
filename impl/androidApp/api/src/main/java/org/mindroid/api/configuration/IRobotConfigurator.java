@@ -1,16 +1,16 @@
 package org.mindroid.api.configuration;
 
 import org.mindroid.api.motor.RegulatedMotor;
+import org.mindroid.common.messages.hardware.EV3MotorPort;
+import org.mindroid.common.messages.hardware.EV3SensorPort;
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.hardware.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 import org.mindroid.impl.sensor.EV3Sensor;
 
-import org.mindroid.common.messages.EV3MotorPort;
-import org.mindroid.common.messages.EV3SensorPort;
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.SensorMessages.SensorMode_;
-import org.mindroid.common.messages.Sensors;
 
 public interface IRobotConfigurator {
 
@@ -36,7 +36,7 @@ public interface IRobotConfigurator {
      */
 	String getEndpointConnectionState();
 
-	void setSensorMode(EV3SensorPort port, SensorMode_ mode);
+	void setSensorMode(EV3SensorPort port, Sensormode mode);
 	
 	/**
 	 * 
@@ -45,7 +45,7 @@ public interface IRobotConfigurator {
 	 * @param mode_S3 - set mode for sensor at port 3
 	 * @param mode_S4 - set mode for sensor at port 4
 	 */
-	void setSensorModeSet(SensorMode_ mode_S1, SensorMode_ mode_S2, SensorMode_ mode_S3, SensorMode_ mode_S4);
+	void setSensorModeSet(Sensormode mode_S1, Sensormode mode_S2, Sensormode mode_S3, Sensormode mode_S4);
 	
 	Sensors getSensorType(EV3SensorPort sensorPort);
 	

@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import org.mindroid.android.app.R;
+import org.mindroid.common.messages.hardware.Sensormode;
 
 import java.util.Observable;
 import java.util.Observer;
 
-import static org.mindroid.common.messages.SensorMessages.*;
 
 /**
  * Fragment displaying data of single Sensor
@@ -234,14 +234,14 @@ public class SensorObservationFragment extends Fragment implements Observer {
             public void run() {
                 setTextViewVisibility(sensorListener.getValueSize());
                 updateTextViewsText(sensorListener.getValueSize());
-                updateValueDescription(sensorListener.getMode());
+                //TODO implement updateValueDescription(sensorListener.getMode());
             }
 
         };
         return updateUI;
     }
 
-    private void updateValueDescription(SensorMode_ mode){
+    private void updateValueDescription(Sensormode mode){
         if(mode != null){
             txt_value_description.setText(""); //TODO get description
         }else{
@@ -286,29 +286,29 @@ public class SensorObservationFragment extends Fragment implements Observer {
 
     private String getDescriptionText(int slot) {
         System.out.println("Descriptionsize slot "+slot);
-        SensorMode_ mode = sensorListener.getMode();
+        Sensormode mode = sensorListener.getMode();
         if(mode != null) {
-            if (mode.equals(SensorMode_.RGB)) {
+            if (mode.equals(Sensormode.RGB)) {
                 return getRGBDescription(slot);
-            } else if (mode.equals(SensorMode_.AMBIENT)) {
+            } else if (mode.equals(Sensormode.AMBIENT)) {
                 return getAmbientDescription(slot);
-            } else if (mode.equals(SensorMode_.RED)) {
+            } else if (mode.equals(Sensormode.RED)) {
                 return getRedDescription(slot);
-            } else if (mode.equals(SensorMode_.COLOR_ID)) {
+            } else if (mode.equals(Sensormode.COLOR_ID)) {
                 return getColorIdDescription(slot);
-            } else if (mode.equals(SensorMode_.ANGLE)) {
+            } else if (mode.equals(Sensormode.ANGLE)) {
                 return getAngleDescription(slot);
-            } else if (mode.equals(SensorMode_.RATE)) {
+            } else if (mode.equals(Sensormode.RATE)) {
                 return getRateDescription(slot);
-            } else if (mode.equals(SensorMode_.RATEANDANGLE)) {
+            } else if (mode.equals(Sensormode.RATEANDANGLE)) {
                 return getRateAndAngleDescription(slot);
-            } else if (mode.equals(SensorMode_.LISTEN)) {
+            } else if (mode.equals(Sensormode.LISTEN)) {
                 return getListenDescription(slot);
-            } else if (mode.equals(SensorMode_.DISTANCE)) {
+            } else if (mode.equals(Sensormode.DISTANCE)) {
                 return getDistanceDescription(slot);
-            } else if (mode.equals(SensorMode_.TOUCH)) {
+            } else if (mode.equals(Sensormode.TOUCH)) {
                 return getTouchDescription(slot);
-            } else if (mode.equals(SensorMode_.SEEK)) {
+            } else if (mode.equals(Sensormode.SEEK)) {
                 return getSeekDescription(slot);
             }
         }

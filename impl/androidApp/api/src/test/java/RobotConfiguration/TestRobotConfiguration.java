@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mindroid.impl.configuration.RobotConfigurator;
 
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.hardware.Sensors;
 
 /**
  * Created by torben on 09.01.2017.
@@ -18,7 +18,7 @@ public class TestRobotConfiguration {
     public void init(){
         config = new RobotConfigurator("DummyIP",-1);
 
-        config.addMotorConfigurationSet(Motors.MediumRegulatedMotor,Motors.UnregulatedMotor,null,Motors.MediumRegulatedMotor);
+        config.addMotorConfigurationSet(Motors.MediumRegulatedMotor,Motors.MediumRegulatedMotor,null,Motors.MediumRegulatedMotor);
         config.addSensorConfigurationSet(Sensors.EV3ColorSensor,null,Sensors.EV3IRSensor,Sensors.EV3UltrasonicSensor);
     }
 

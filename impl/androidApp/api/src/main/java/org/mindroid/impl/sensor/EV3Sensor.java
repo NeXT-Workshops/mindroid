@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mindroid.api.sensor.IEV3SensorEventListener;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.hardware.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
+import org.mindroid.common.messages.sensor.*;
 import org.mindroid.impl.endpoint.ClientEndpointImpl;
 
 import com.esotericsoftware.kryonet.Connection;
 
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.SensorMessages.SensorMode_;
 import org.mindroid.impl.ev3.EV3PortID;
 
 
@@ -22,9 +22,9 @@ public class EV3Sensor extends ClientEndpointImpl {
     private List<IEV3SensorEventListener> listeners = new ArrayList<>(2);
     //private final EV3SensorManager sensorManager;
 
-    private SensorMode_ initialMode = null;
-    private SensorMode_ currentMode = null;
-    private SensorMode_ modeToWaitFor = null;
+    private Sensormode initialMode = null;
+    private Sensormode currentMode = null;
+    private Sensormode modeToWaitFor = null;
 
     private boolean ready = false;
 
@@ -38,7 +38,7 @@ public class EV3Sensor extends ClientEndpointImpl {
      * @param tcpPort
      * @param brickTimeout
      */
-    public EV3Sensor(String ip, int tcpPort, int brickTimeout,Sensors sensorType,EV3PortID brick_port,SensorMessages.SensorMode_ mode) {
+    public EV3Sensor(String ip, int tcpPort, int brickTimeout,Sensors sensorType,EV3PortID brick_port,Sensormode mode) {
         super(ip, tcpPort, brickTimeout);
         this.sensorType = sensorType;
         this.brick_port = brick_port;
@@ -59,10 +59,10 @@ public class EV3Sensor extends ClientEndpointImpl {
         Thread t = new Thread() {
             @Override
             public void run() {
-                if (object instanceof SensorMessages.SensorEventMsg) {
+                if (object instanceof SensorEventMessage) {
 
-                    float[] sample = ((SensorMessages.SensorEventMsg) object).getSample();
-                    long timestamp = ((SensorMessages.SensorEventMsg) object).getTimestamp();
+                    float[] sample = ((SensorEventMessage) object).getSample();
+                    long timestamp = ((SensorEventMessage) object).getTimestamp();
                     EV3SensorEvent sensorevent = new EV3SensorEvent(sensor, sample, timestamp, currentMode);
 
                     for (IEV3SensorEventListener listener : listeners) {
@@ -72,28 +72,28 @@ public class EV3Sensor extends ClientEndpointImpl {
                     return;
                 }
 
-                if (object.getClass() == SensorMessages.HelloSensorMessage.class) {
-                    System.out.println(((SensorMessages.HelloSensorMessage) object).toString());
+                if (object.getClass() == HelloSensorMessage.class) {
+                    System.out.println(((HelloSensorMessage) object).toString());
                     ready = true;
                     return;
                 }
 
                 //Status Message
-                if (object.getClass() == SensorMessages.StatusMessage.class) {
-                    System.out.println("EV3Sensor: " + ((SensorMessages.StatusMessage) object).getMsg()); //+"\n at port: "+((SensorMessages.SensorErrorMessage)object).getPort()
+                if (object.getClass() == SensorStatusMessage.class) {
+                    System.out.println("EV3Sensor: " + ((SensorStatusMessage) object).getMsg()); //+"\n at port: "+((SensorMessages.SensorErrorMessage)object).getPort()
                     return;
                 }
 
                 //Error Message
-                if (object.getClass() == SensorMessages.SensorErrorMessage.class) {
-                    SensorMessages.SensorErrorMessage msg = (SensorMessages.SensorErrorMessage) object;
+                if (object.getClass() == SensorErrorMessage.class) {
+                    SensorErrorMessage msg = (SensorErrorMessage) object;
                     System.out.println("EV3Sensor: SensorErrorMessage: " + msg.getErrorMsg() + " at Port " + msg.getPort()); //+"\n at port: "+((SensorMessages.SensorErrorMessage)object).getPort()
                     return;
                 }
 
                 //Message that sensormode was changed successfully
-                if (object.getClass() == SensorMessages.modeChangedSuccessfullyMsg.class) {
-                    currentMode = ((SensorMessages.modeChangedSuccessfullyMsg) object).getMode();
+                if (object.getClass() == ModeChangedSuccessfullyMessage.class) {
+                    currentMode = ((ModeChangedSuccessfullyMessage) object).getMode();
                     System.out.println("EV3Sensor: current Mode is " + currentMode);
                     return;
                 }
@@ -124,8 +124,8 @@ public class EV3Sensor extends ClientEndpointImpl {
      * @param newMode
      * @author Alex
      */
-    public void changeSensorToMode(SensorMode_ newMode) {
-        client.sendTCP(SensorMessages.changeModeTo(newMode));
+    public void changeSensorToMode(Sensormode newMode) {
+        client.sendTCP(SensorMessageFactory.changeModeTo(newMode));
     }
 
     public void disconnectFromEndpoint() {
@@ -142,7 +142,7 @@ public class EV3Sensor extends ClientEndpointImpl {
     }
 
 
-    public SensorMode_ getCurrentMode() {
+    public Sensormode getCurrentMode() {
         return currentMode;
     }
 

@@ -8,12 +8,12 @@ import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import mindroid.common.ev3.app.HardwareInterfaceManager.BrickType;
 import mindroid.common.ev3.endpoints.brick.EV3BrickEndpoint;
-import org.mindroid.common.messages.BrickMessages;
-import org.mindroid.common.messages.BrickMessages.CreateMotorMessage;
-import org.mindroid.common.messages.BrickMessages.CreateSensorMessage;
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.brick.BrickMessagesFactory;
+import org.mindroid.common.messages.brick.CreateMotorMessage;
+import org.mindroid.common.messages.brick.CreateSensorMessage;
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.sensor.SensorMessageFactory;
+import org.mindroid.common.messages.hardware.Sensors;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -117,7 +117,7 @@ public class DeviceManager extends Listener {
     @Override
     public void connected(Connection connection) {
         super.connected(connection);
-        connection.sendTCP(BrickMessages.newHelloThereMessage("Hello, this is the Endpoint Manager of the EV3Brick - Connection established!"));
+        connection.sendTCP(BrickMessagesFactory.newHelloThereMessage("Hello, this is the Endpoint Manager of the EV3Brick - Connection established!"));
         Display.showSystemIsReadyAndConnected();
     }
 
@@ -128,15 +128,15 @@ public class DeviceManager extends Listener {
         final Connection conn = connection;
 
         if (!isBlocked) {
-            if (object.getClass() == BrickMessages.CreateSensorMessage.class) {
-                final CreateSensorMessage msg = (BrickMessages.CreateSensorMessage) object;
+            if (object.getClass() == CreateSensorMessage.class) {
+                final CreateSensorMessage msg = (CreateSensorMessage) object;
 
                 handleCreateSensorMessage(conn, msg);
                 return;
             }
 
-            if (object.getClass() == BrickMessages.CreateMotorMessage.class) {
-                final CreateMotorMessage msg = (BrickMessages.CreateMotorMessage) object;
+            if (object.getClass() == CreateMotorMessage.class) {
+                final CreateMotorMessage msg = (CreateMotorMessage) object;
                 handleCreateMotorMessage(conn, msg);
                 return;
             }
@@ -157,15 +157,15 @@ public class DeviceManager extends Listener {
 
                 if (motorPorts.containsKey(msg.getPort())) {
                     if (createMotorEndpoint(motorPorts.get(msg.getPort()), msg.getMotorType(), msg.getNetworkPort())) {
-                        conn.sendTCP(BrickMessages.createEndpointCreatedMessage(true, msg.getPort(), "Motor endpoint created: " + msg.getPort(), false, true));
+                        conn.sendTCP(BrickMessagesFactory.createEndpointCreatedMessage(true, msg.getPort(), "Motor endpoint created: " + msg.getPort(), false, true));
                     } else {
                         isBlocked = true;
                         //System.out.println("System got blocked by handleCreateMotorMethod");
-                        conn.sendTCP(BrickMessages.createEndpointCreatedMessage(false, msg.getPort(), "Motor endpoint not created: " + msg.getPort(), false, true));
+                        conn.sendTCP(BrickMessagesFactory.createEndpointCreatedMessage(false, msg.getPort(), "Motor endpoint not created: " + msg.getPort(), false, true));
 
                     }
                 } else {
-                    conn.sendTCP(BrickMessages.createEndpointCreatedMessage(false, msg.getPort(), "Port not found!" + msg.getPort(), false, true));
+                    conn.sendTCP(BrickMessagesFactory.createEndpointCreatedMessage(false, msg.getPort(), "Port not found!" + msg.getPort(), false, true));
                 }
             }
         };
@@ -182,19 +182,19 @@ public class DeviceManager extends Listener {
                 if (sensPorts.containsKey(msg.getPort())) {
                     try {
                         if (createSensorEndpoint(sensPorts.get(msg.getPort()), msg.getSensorType(), msg.getNetworkPort())) {
-                            conn.sendTCP(BrickMessages.createEndpointCreatedMessage(true, msg.getPort(), "Sensor endpoint created: " + msg.getPort(), true, false));
+                            conn.sendTCP(BrickMessagesFactory.createEndpointCreatedMessage(true, msg.getPort(), "Sensor endpoint created: " + msg.getPort(), true, false));
                         } else {
                             isBlocked = true;
-                            conn.sendTCP(BrickMessages.createEndpointCreatedMessage(false, msg.getPort(), "Sensor endpoint not created: " + msg.getPort(), true, false));
+                            conn.sendTCP(BrickMessagesFactory.createEndpointCreatedMessage(false, msg.getPort(), "Sensor endpoint not created: " + msg.getPort(), true, false));
                         }
                     } catch (IOException e) {
-                        conn.sendTCP(BrickMessages.createEndpointCreatedMessage(false, msg.getPort(), "IOException: Sensor endpoint not created: " + msg.getPort(), true, false) + "\n " + e.toString());
+                        conn.sendTCP(BrickMessagesFactory.createEndpointCreatedMessage(false, msg.getPort(), "IOException: Sensor endpoint not created: " + msg.getPort(), true, false) + "\n " + e.toString());
                         e.printStackTrace();
                     }
 
 
                 } else {
-                    conn.sendTCP(SensorMessages.createSensorErrorMessage(null, "Port not found!"));
+                    conn.sendTCP(SensorMessageFactory.createSensorErrorMessage(null, "Port not found!"));
                 }
             }
         };

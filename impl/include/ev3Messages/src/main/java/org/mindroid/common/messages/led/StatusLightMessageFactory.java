@@ -1,6 +1,6 @@
-package org.mindroid.common.messages;
+package org.mindroid.common.messages.led;
 
-public class StatusLightMessages {
+public class StatusLightMessageFactory {
 	
 	/**
 	 * 
@@ -14,22 +14,11 @@ public class StatusLightMessages {
 	 * @param val the status light code
 	 * @return the prepared message
 	 */
-	public static SetStatusLightMsg setStatusLight(int val){
-		SetStatusLightMsg slm = new SetStatusLightMsg();
+	public static SetStatusLightMessage createSetStatusLightMessage(int val){
+		SetStatusLightMessage slm = new SetStatusLightMessage();
 		slm.setVal(val);
 		return slm;
 	}
 	
-	public static class SetStatusLightMsg{
-		
-		public int val = 0;
-		public SetStatusLightMsg(){ };
-		public int getVal() {
-			return val;
-		}
-		public void setVal(int val) {
-			this.val = val;
-		}
-		
-	}
+
 }

@@ -1,7 +1,6 @@
 package org.mindroid.api.robot.control;
 
 import org.mindroid.impl.robot.MotorDirection;
-import org.mindroid.impl.robot.Robot;
 import org.mindroid.impl.ev3.EV3PortID;
 
 /**

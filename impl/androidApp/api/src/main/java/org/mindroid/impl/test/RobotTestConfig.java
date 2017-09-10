@@ -2,9 +2,9 @@ package org.mindroid.impl.test;
 
 
 import org.mindroid.api.robot.IRobotPortConfig;
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.hardware.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
 
 public class RobotTestConfig implements IRobotPortConfig {
 
@@ -30,23 +30,23 @@ public class RobotTestConfig implements IRobotPortConfig {
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormodeS1() {
-        return SensorMessages.SensorMode_.COLOR_ID;
+    public Sensormode getSensormodeS1() {
+        return Sensormode.COLOR_ID;
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormodeS2() {
-        return SensorMessages.SensorMode_.DISTANCE;
+    public Sensormode getSensormodeS2() {
+        return Sensormode.DISTANCE;
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormodeS3() {
+    public Sensormode getSensormodeS3() {
         return null;
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormodeS4() {
-        return SensorMessages.SensorMode_.COLOR_ID;
+    public Sensormode getSensormodeS4() {
+        return Sensormode.COLOR_ID;
     }
 
     //------------------ MOTORS ------------------

@@ -7,7 +7,7 @@ import org.mindroid.api.IMessageListener;
 import org.mindroid.api.sensor.IEV3SensorEvent;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.api.statemachine.ITimeEvent;
-import org.mindroid.common.messages.SensorMessages;
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
@@ -73,7 +73,7 @@ public class RobotContextState implements IRobotContextState,IEV3SensorEventList
 
 
     @Override
-    public synchronized SensorMessages.SensorMode_ getSensorMode(EV3PortID sensorPort) {
+    public synchronized Sensormode getSensorMode(EV3PortID sensorPort) {
 
         if(sensorPort.equals(EV3PortIDs.PORT_1)){
             return sensor_output_S1.getSensorMode();

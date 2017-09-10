@@ -3,7 +3,6 @@ package org.mindroid.impl.test;
 import org.mindroid.api.LVL1API;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
-import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;

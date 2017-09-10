@@ -9,11 +9,14 @@ import lejos.hardware.Sound;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.LCD;
-import org.mindroid.common.messages.DisplayMessageFactory;
-import org.mindroid.common.messages.SoundMessageFactory;
-import org.mindroid.common.messages.StatusLightMessages.SetStatusLightMsg;
+import org.mindroid.common.messages.display.ClearDisplayMessage;
+import org.mindroid.common.messages.display.DisplayMessageFactory;
+import org.mindroid.common.messages.display.DrawStringMessage;
+import org.mindroid.common.messages.led.SetStatusLightMessage;
+import org.mindroid.common.messages.sound.BeepMessage;
 import lejos.hardware.ev3.LocalEV3;
 import mindroid.common.ev3.app.DeviceManager;
+import org.mindroid.common.messages.sound.SoundVolumeMessage;
 
 
 /**
@@ -35,7 +38,7 @@ public class EV3BrickEndpoint extends Listener {
 	@Override
 	public void connected(Connection connection) {
 		super.connected(connection);
-		connection.sendTCP(DisplayMessageFactory.getHelloDisplayMsg());
+		connection.sendTCP(DisplayMessageFactory.getHelloDisplayMessage());
 	}
 
 	@Override
@@ -52,8 +55,8 @@ public class EV3BrickEndpoint extends Listener {
 	 * @param object
 	 */
 	private void handleStatusLightMessages(Object object) {
-		if(object.getClass() == SetStatusLightMsg.class){
-			SetStatusLightMsg msg = (SetStatusLightMsg) object;
+		if(object.getClass() == SetStatusLightMessage.class){
+			SetStatusLightMessage msg = (SetStatusLightMessage) object;
 			LocalEV3.get().getLED().setPattern(msg.getVal());
 
 		}
@@ -64,15 +67,15 @@ public class EV3BrickEndpoint extends Listener {
 	 * @param object
 	 */
 	private void handleDisplayMessages(Object object) {
-		if(object.getClass() == DisplayMessageFactory.DrawStringMsg.class){
-			DisplayMessageFactory.DrawStringMsg ds = (DisplayMessageFactory.DrawStringMsg) object;
+		if(object.getClass() == DrawStringMessage.class){
+			DrawStringMessage ds = (DrawStringMessage) object;
 			LocalEV3.get().getGraphicsLCD().setColor(GraphicsLCD.BLACK);
 			LocalEV3.get().getGraphicsLCD().setFont(Font.getDefaultFont());
 			LocalEV3.get().getGraphicsLCD().drawString(ds.getStr(),ds.getX(),ds.getY(),GraphicsLCD.TOP);
 			return;
 		}
 		
-		if(object.getClass() == DisplayMessageFactory.ClearDisplayMsg.class){
+		if(object.getClass() == ClearDisplayMessage.class){
 			LCD.clearDisplay();
 			return;
 		}
@@ -81,17 +84,17 @@ public class EV3BrickEndpoint extends Listener {
 	private void handleSoundMessages(Object object){
 		//System.out.println(object.toString());
 		//Handle Beep Message
-		if(object.getClass() ==  SoundMessageFactory.BeepMessage.class){
-			switch(((SoundMessageFactory.BeepMessage)object).getBeep()){
-				case SoundMessageFactory.Beeptype.SINGLE_BEEP:
+		if(object.getClass() ==  BeepMessage.class){
+			switch(((BeepMessage)object).getBeep()){
+				case BeepMessage.Beeptype.SINGLE_BEEP:
 					Sound.beep(); break;
-				case SoundMessageFactory.Beeptype.DOUBLE_BEEP:
+				case BeepMessage.Beeptype.DOUBLE_BEEP:
 					Sound.twoBeeps(); break;
-				case SoundMessageFactory.Beeptype.BEEP_SEQUENCE_DOWNWARDS:
+				case BeepMessage.Beeptype.BEEP_SEQUENCE_DOWNWARDS:
 					Sound.beepSequence(); break;
-				case SoundMessageFactory.Beeptype.BEEP_SEQUENCE_UPWARDS:
+				case BeepMessage.Beeptype.BEEP_SEQUENCE_UPWARDS:
 					Sound.beepSequenceUp(); break;
-				case SoundMessageFactory.Beeptype.LOW_BUZZ:
+				case BeepMessage.Beeptype.LOW_BUZZ:
 					Sound.buzz(); break;
 
 				default: //DO nothing;
@@ -100,8 +103,8 @@ public class EV3BrickEndpoint extends Listener {
 		}
 
 		//Handle Volume Message
-		if(object.getClass() ==  SoundMessageFactory.SoundVolumeMessage.class){
-			Sound.setVolume(((SoundMessageFactory.SoundVolumeMessage)object).getVolume());
+		if(object.getClass() ==  SoundVolumeMessage.class){
+			Sound.setVolume(((SoundVolumeMessage)object).getVolume());
 			return;
 		}
 	}

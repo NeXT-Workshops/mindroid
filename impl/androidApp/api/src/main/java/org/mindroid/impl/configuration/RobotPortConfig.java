@@ -1,9 +1,9 @@
 package org.mindroid.impl.configuration;
 
 import org.mindroid.api.robot.IRobotPortConfig;
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.hardware.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
 
 
 /**
@@ -17,10 +17,10 @@ public class RobotPortConfig implements IRobotPortConfig {
     private Sensors sensorS3 = null;
     private Sensors sensorS4 = null;
 
-    private SensorMessages.SensorMode_ sensormodeS1 = null;
-    private SensorMessages.SensorMode_ sensormodeS2 = null;
-    private SensorMessages.SensorMode_ sensormodeS3 = null;
-    private SensorMessages.SensorMode_ sensormodeS4 = null;
+    private Sensormode sensormodeS1 = null;
+    private Sensormode sensormodeS2 = null;
+    private Sensormode sensormodeS3 = null;
+    private Sensormode sensormodeS4 = null;
 
     private Motors motorA = null;
     private Motors motorB = null;
@@ -48,22 +48,22 @@ public class RobotPortConfig implements IRobotPortConfig {
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormodeS1() { //SensorMessages.SensorMode_.COLOR_ID;
+    public Sensormode getSensormodeS1() { //SensorMessages.SensorMode_.COLOR_ID;
         return sensormodeS1;
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormodeS2() { //SensorMessages.SensorMode_.DISTANCE;
+    public Sensormode getSensormodeS2() { //SensorMessages.SensorMode_.DISTANCE;
         return sensormodeS2;
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormodeS3() { //SensorMessages.SensorMode_.ANGLE;
+    public Sensormode getSensormodeS3() { //SensorMessages.SensorMode_.ANGLE;
         return sensormodeS3;
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormodeS4() { //SensorMessages.SensorMode_.COLOR_ID;
+    public Sensormode getSensormodeS4() { //SensorMessages.SensorMode_.COLOR_ID;
         return sensormodeS4;
     }
 
@@ -102,19 +102,19 @@ public class RobotPortConfig implements IRobotPortConfig {
         this.sensorS4 = sensorS4;
     }
 
-    public void setSensormodeS1(SensorMessages.SensorMode_ sensormodeS1) {
+    public void setSensormodeS1(Sensormode sensormodeS1) {
         this.sensormodeS1 = sensormodeS1;
     }
 
-    public void setSensormodeS2(SensorMessages.SensorMode_ sensormodeS2) {
+    public void setSensormodeS2(Sensormode sensormodeS2) {
         this.sensormodeS2 = sensormodeS2;
     }
 
-    public void setSensormodeS3(SensorMessages.SensorMode_ sensormodeS3) {
+    public void setSensormodeS3(Sensormode sensormodeS3) {
         this.sensormodeS3 = sensormodeS3;
     }
 
-    public void setSensormodeS4(SensorMessages.SensorMode_ sensormodeS4) {
+    public void setSensormodeS4(Sensormode sensormodeS4) {
         this.sensormodeS4 = sensormodeS4;
     }
 

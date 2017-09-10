@@ -1,8 +1,7 @@
 package org.mindroid.api.robot.control;
 
-        import org.mindroid.api.ev3.EV3StatusLightColor;
-        import org.mindroid.api.ev3.EV3StatusLightEnabled;
-        import org.mindroid.api.ev3.EV3StatusLightInterval;
+import org.mindroid.api.ev3.EV3StatusLightColor;
+import org.mindroid.api.ev3.EV3StatusLightInterval;
 
 /**
  * Created by torben on 02.03.2017.

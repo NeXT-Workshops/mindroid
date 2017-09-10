@@ -1,4 +1,4 @@
-package org.mindroid.common.messages;
+package org.mindroid.common.messages.hardware;
 
 public enum EV3SensorPort {
     	S1("S1"),

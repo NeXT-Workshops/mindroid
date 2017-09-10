@@ -4,7 +4,6 @@ import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by torben on 02.03.2017.

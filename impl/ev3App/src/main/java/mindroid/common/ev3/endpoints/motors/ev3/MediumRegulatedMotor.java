@@ -2,8 +2,9 @@ package mindroid.common.ev3.endpoints.motors.ev3;
 
 import java.io.IOException;
 
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.RegulatedMotorMessages;
+import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.motor.*;
 import lejos.hardware.motor.BaseRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.Port;
@@ -14,17 +15,17 @@ import lejos.robotics.BaseMotor;
  */
 public class MediumRegulatedMotor extends AbstractMotor implements MotorMessageListener {
 
-	public RegulatedMotorMessages.MotorState motorState;
+	public MotorState motorState;
 	
 	public MediumRegulatedMotor(Port motorPort) throws IOException {
 		super(motorPort);
 		this.motor = createMotor(motorPort);
 		this.motortype = Motors.MediumRegulatedMotor;
-		this.motorState = new RegulatedMotorMessages.MotorState();
+		this.motorState = new MotorState();
 
 	}
 
-	public RegulatedMotorMessages.MotorState getMotorState() {
+	public MotorState getMotorState() {
 		if(this.motorState != null){
 			this.motorState.setAcceleration(((BaseRegulatedMotor) motor).getAcceleration());
 			this.motorState.setLimitAngle(((BaseRegulatedMotor) motor).getLimitAngle());
@@ -33,7 +34,7 @@ public class MediumRegulatedMotor extends AbstractMotor implements MotorMessageL
 			this.motorState.setRotationSpeed(((BaseRegulatedMotor) motor).getRotationSpeed());
 			this.motorState.setTachoCount(((BaseRegulatedMotor) motor).getTachoCount());
 		}else{
-			this.motorState = new RegulatedMotorMessages.MotorState();
+			this.motorState = new MotorState();
 			return getMotorState();
 		}
 		return this.motorState;
@@ -44,35 +45,34 @@ public class MediumRegulatedMotor extends AbstractMotor implements MotorMessageL
 		return new EV3MediumRegulatedMotor(motorPort);
 	}
 
+	@Override
 	public void handleMotorMessage(Object msg) {
-		if(msg instanceof RegulatedMotorMessages.RotateMessage){
-			((EV3MediumRegulatedMotor) motor).rotate(((RegulatedMotorMessages.RotateMessage)msg).getAngle());
+		if(msg instanceof RotateMessage){
+			((EV3LargeRegulatedMotor) motor).rotate(((RotateMessage)msg).getAngle());
 			return;
 		}
-		
-		if(msg instanceof RegulatedMotorMessages.RotateToMessage){
-			((EV3MediumRegulatedMotor) motor).rotateTo(((RegulatedMotorMessages.RotateToMessage)msg).getAngle());
-			return;			
+
+		if(msg instanceof RotateToMessage){
+			((EV3LargeRegulatedMotor) motor).rotateTo(((RotateToMessage)msg).getAngle());
+			return;
 		}
-		
-		if (msg instanceof RegulatedMotorMessages.ForwardMsg) {
-			
+
+		if (msg instanceof ForwardMessage) {
 			motor.forward();
 			return;
 		}
-		if (msg instanceof RegulatedMotorMessages.BackwardMsg) {
+		if (msg instanceof BackwardMessage) {
 			motor.backward();
 			return;
 		}
-		if (msg instanceof RegulatedMotorMessages.StopMsg) {
+		if (msg instanceof StopMessage) {
 			motor.stop();
 			return;
 		}
-		if (msg instanceof RegulatedMotorMessages.SetSpeedMsg) {
-			((EV3MediumRegulatedMotor) motor).setSpeed(((RegulatedMotorMessages.SetSpeedMsg) msg).getSpeed());
+		if (msg instanceof SetMotorSpeedMessage) {
+			((EV3LargeRegulatedMotor) motor).setSpeed(((SetMotorSpeedMessage) msg).getSpeed());
 			return;
 		}
-		// Drop packet otherwise
 	}
 
 	@Override

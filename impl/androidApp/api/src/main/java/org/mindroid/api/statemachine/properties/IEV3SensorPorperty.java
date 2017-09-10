@@ -1,6 +1,6 @@
 package org.mindroid.api.statemachine.properties;
 
-import org.mindroid.common.messages.SensorMessages;
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.ev3.EV3PortID;
 
 /**
@@ -8,7 +8,7 @@ import org.mindroid.impl.ev3.EV3PortID;
  */
 public interface IEV3SensorPorperty extends IProperty {
 
-    SensorMessages.SensorMode_ getSensormode();
+    Sensormode getSensormode();
 
     EV3PortID getSensorPort();
 }

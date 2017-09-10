@@ -3,10 +3,10 @@ package mindroid.common.ev3.endpoints;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-import com.esotericsoftware.minlog.Log;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.PortException;
 import mindroid.common.ev3.endpoints.motors.ev3.*;
+import org.mindroid.common.messages.motor.MotorState;
+import org.mindroid.common.messages.motor.RegulatedMotorMessagesFactory;
 
 public class MotorEndpoint extends Listener{
 	
@@ -21,9 +21,11 @@ public class MotorEndpoint extends Listener{
 	}
 
 	private void checkMotorState(){
+
 		Runnable run = new Runnable() {
 			@Override
 			public void run() {
+				MotorState motorState;
 				while (true) {
 					try {
 						Thread.sleep(UPDATETIME);
@@ -33,9 +35,12 @@ public class MotorEndpoint extends Listener{
 					}
 					if(conn != null && conn.isConnected() && motor != null){
 						switch(motor.getMotortype()){
-							case LargeRegulatedMotor:  conn.sendTCP(((LargeRegulatedMotor)motor).getMotorState()); break;
-							case MediumRegulatedMotor: conn.sendTCP(((MediumRegulatedMotor)motor).getMotorState()); break;
-							default: break;
+							case LargeRegulatedMotor:  motorState = ((LargeRegulatedMotor)motor).getMotorState(); break;
+							case MediumRegulatedMotor: motorState = ((MediumRegulatedMotor)motor).getMotorState(); break;
+							default: motorState = null; break;
+						}
+						if(motorState != null) {
+							conn.sendTCP(RegulatedMotorMessagesFactory.createMotorStateMessage(motorState));
 						}
 					}
 

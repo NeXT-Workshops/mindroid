@@ -11,10 +11,9 @@ import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.api.robot.control.ISensorControl;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.api.statemachine.IStatemachine;
-import org.mindroid.common.messages.EV3SensorPort;
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.hardware.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.communication.Messenger;
 import org.mindroid.impl.communication.RobotServer;
 import org.mindroid.impl.configuration.RobotConfigurator;
@@ -42,10 +41,10 @@ public final class RobotFactory implements IRobotFactory {
     private Sensors sensor_S3 = null;
     private Sensors sensor_S4 = null;
 
-    private SensorMessages.SensorMode_ mode_S1 = null;
-    private SensorMessages.SensorMode_ mode_S2 = null;
-    private SensorMessages.SensorMode_ mode_S3 = null;
-    private SensorMessages.SensorMode_ mode_S4 = null;
+    private Sensormode mode_S1 = null;
+    private Sensormode mode_S2 = null;
+    private Sensormode mode_S3 = null;
+    private Sensormode mode_S4 = null;
 
     private Motors motor_A = null;
     private Motors motor_B = null;

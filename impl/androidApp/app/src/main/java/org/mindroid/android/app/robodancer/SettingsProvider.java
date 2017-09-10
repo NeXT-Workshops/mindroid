@@ -4,9 +4,9 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.fragments.myrobot.HardwareMapping;
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.hardware.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
 
 import java.util.Arrays;
 import java.util.List;
@@ -219,19 +219,19 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
         return HardwareMapping.getSensorType(sensorS4);
     }
 
-    public SensorMessages.SensorMode_ getSensorModeS1() {
+    public Sensormode getSensorModeS1() {
         return HardwareMapping.getSensorMode(sensorModeS1);
     }
 
-    public SensorMessages.SensorMode_ getSensorModeS2() {
+    public Sensormode getSensorModeS2() {
         return HardwareMapping.getSensorMode(sensorModeS2);
     }
 
-    public SensorMessages.SensorMode_ getSensorModeS3() {
+    public Sensormode getSensorModeS3() {
         return HardwareMapping.getSensorMode(sensorModeS3);
     }
 
-    public SensorMessages.SensorMode_ getSensorModeS4() {
+    public Sensormode getSensorModeS4() {
         return HardwareMapping.getSensorMode(sensorModeS4);
     }
 

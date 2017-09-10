@@ -6,8 +6,8 @@ import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.api.statemachine.constraints.AbstractLogicOperator;
 import org.mindroid.api.statemachine.constraints.IComparator;
 import org.mindroid.api.statemachine.constraints.IConstraint;
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
+import org.mindroid.common.messages.hardware.Sensors;
 import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.robot.context.StartCondition;
@@ -35,19 +35,19 @@ public class TestConstraints {
         float[] test_value_flase = {25};
 
         IRobotContextState contextState = new RobotContextState();
-        EV3Sensor testSensor = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, SensorMessages.SensorMode_.DISTANCE);
+        EV3Sensor testSensor = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
         IEV3SensorEventListener rcs = (IEV3SensorEventListener) contextState;
-        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_true,0, SensorMessages.SensorMode_.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_true,0, Sensormode.DISTANCE));
 
         Distance distance = new Distance( EV3PortIDs.PORT_1);
         IConstraint lowerThan = new LT(test_distance[0],distance);
 
         assertTrue(((IComparator) lowerThan).evaluate(contextState));
 
-        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_flase,0, SensorMessages.SensorMode_.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_flase,0, Sensormode.DISTANCE));
         assertFalse(((IComparator) lowerThan).evaluate(contextState));
 
-        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_flase,0, SensorMessages.SensorMode_.LISTEN));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_flase,0, Sensormode.LISTEN));
         assertFalse(((IComparator) lowerThan).evaluate(contextState));
 
     }
@@ -59,16 +59,16 @@ public class TestConstraints {
         float[] test_value_true = {25};
 
         IRobotContextState contextState = new RobotContextState();
-        EV3Sensor testSensor = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, SensorMessages.SensorMode_.DISTANCE);
+        EV3Sensor testSensor = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
         IEV3SensorEventListener rcs = (IEV3SensorEventListener) contextState;
-        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_true,0, SensorMessages.SensorMode_.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_true,0, Sensormode.DISTANCE));
 
         Distance distance = new Distance( EV3PortIDs.PORT_1);
         IConstraint gt = new GT(test_distance[0],distance);
 
         assertTrue(((IComparator) gt).evaluate(contextState));
 
-        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_false,0, SensorMessages.SensorMode_.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_false,0, Sensormode.DISTANCE));
         assertFalse(((IComparator) gt).evaluate(contextState));
     }
 
@@ -79,16 +79,16 @@ public class TestConstraints {
         float[] test_value_true = {20};
 
         IRobotContextState contextState = new RobotContextState();
-        EV3Sensor testSensor = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, SensorMessages.SensorMode_.DISTANCE);
+        EV3Sensor testSensor = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
         IEV3SensorEventListener rcs = (IEV3SensorEventListener) contextState;
-        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_true,0, SensorMessages.SensorMode_.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_true,0, Sensormode.DISTANCE));
 
         Distance distance = new Distance( EV3PortIDs.PORT_1);
         IConstraint eq = new EQ(test_distance[0],distance);
 
         assertTrue(((IComparator) eq).evaluate(contextState));
 
-        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_false,0, SensorMessages.SensorMode_.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_false,0, Sensormode.DISTANCE));
         assertFalse(((IComparator) eq).evaluate(contextState));
     }
 
@@ -98,14 +98,14 @@ public class TestConstraints {
         float[] test_value_s1 = {20};
         float[] test_value_s2 = {19};
 
-        EV3Sensor testSensor_1 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, SensorMessages.SensorMode_.DISTANCE);
-        EV3Sensor testSensor_2 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_2, SensorMessages.SensorMode_.DISTANCE);
+        EV3Sensor testSensor_1 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
+        EV3Sensor testSensor_2 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_2, Sensormode.DISTANCE);
 
         IRobotContextState contextState = new RobotContextState();
 
         IEV3SensorEventListener rcs = (IEV3SensorEventListener) contextState;
-        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor_1,test_value_s1,0, SensorMessages.SensorMode_.DISTANCE));
-        rcs.handleSensorEvent(EV3PortIDs.PORT_2,new EV3SensorEvent(testSensor_2,test_value_s2,0, SensorMessages.SensorMode_.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor_1,test_value_s1,0, Sensormode.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_2,new EV3SensorEvent(testSensor_2,test_value_s2,0, Sensormode.DISTANCE));
 
         Distance distance_s1 = new Distance( EV3PortIDs.PORT_1);
         IConstraint eq_s1 = new EQ(test_distance[0],distance_s1);
@@ -121,8 +121,8 @@ public class TestConstraints {
         assertTrue(((AbstractLogicOperator)or).evaluate(result_s1,result_s2));
 
 
-        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor_1,new float[]{test_distance[0]+2},0, SensorMessages.SensorMode_.DISTANCE));
-        rcs.handleSensorEvent(EV3PortIDs.PORT_2,new EV3SensorEvent(testSensor_2,new float[]{test_distance[0]-2},0, SensorMessages.SensorMode_.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor_1,new float[]{test_distance[0]+2},0, Sensormode.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_2,new EV3SensorEvent(testSensor_2,new float[]{test_distance[0]-2},0, Sensormode.DISTANCE));
         result_s1 = ((IComparator) eq_s1).evaluate(contextState);
         result_s2 = ((IComparator) eq_s2).evaluate(contextState);
         assertFalse(result_s1);
@@ -136,14 +136,14 @@ public class TestConstraints {
         float[] test_value_s1 = {20};
         float[] test_value_s2 = {19};
 
-        EV3Sensor testSensor_1 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, SensorMessages.SensorMode_.DISTANCE);
-        EV3Sensor testSensor_2 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_2, SensorMessages.SensorMode_.DISTANCE);
+        EV3Sensor testSensor_1 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
+        EV3Sensor testSensor_2 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_2, Sensormode.DISTANCE);
 
         IRobotContextState contextState = new RobotContextState();
 
         IEV3SensorEventListener rcs = (IEV3SensorEventListener) contextState;
-        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor_1,test_value_s1,0, SensorMessages.SensorMode_.DISTANCE));
-        rcs.handleSensorEvent(EV3PortIDs.PORT_2,new EV3SensorEvent(testSensor_2,test_value_s2,0, SensorMessages.SensorMode_.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor_1,test_value_s1,0, Sensormode.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_2,new EV3SensorEvent(testSensor_2,test_value_s2,0, Sensormode.DISTANCE));
 
         Distance distance_s1 = new Distance( EV3PortIDs.PORT_1);
         IConstraint eq_s1 = new EQ(test_distance[0],distance_s1);
@@ -159,8 +159,8 @@ public class TestConstraints {
         assertFalse(((AbstractLogicOperator)and).evaluate(result_s1,result_s2));
 
 
-        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor_1,test_distance,0, SensorMessages.SensorMode_.DISTANCE));
-        rcs.handleSensorEvent(EV3PortIDs.PORT_2,new EV3SensorEvent(testSensor_2,test_distance,0, SensorMessages.SensorMode_.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor_1,test_distance,0, Sensormode.DISTANCE));
+        rcs.handleSensorEvent(EV3PortIDs.PORT_2,new EV3SensorEvent(testSensor_2,test_distance,0, Sensormode.DISTANCE));
         result_s1 = ((IComparator) eq_s1).evaluate(contextState);
         result_s2 = ((IComparator) eq_s2).evaluate(contextState);
         assertTrue(result_s1);

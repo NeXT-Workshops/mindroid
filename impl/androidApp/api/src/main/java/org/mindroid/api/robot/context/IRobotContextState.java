@@ -2,7 +2,7 @@ package org.mindroid.api.robot.context;
 
 import org.mindroid.api.sensor.IEV3SensorEvent;
 import org.mindroid.api.statemachine.ITimeEvent;
-import org.mindroid.common.messages.SensorMessages;
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.robot.context.StartCondition;
@@ -21,7 +21,7 @@ public interface IRobotContextState {
 
     ArrayList<MindroidMessage> getMessages();
 
-    SensorMessages.SensorMode_ getSensorMode(EV3PortID sensorPort);
+    Sensormode getSensorMode(EV3PortID sensorPort);
 
     StartCondition getStartCondition();
 

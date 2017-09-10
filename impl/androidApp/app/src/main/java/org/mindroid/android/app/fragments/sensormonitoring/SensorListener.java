@@ -3,7 +3,7 @@ package org.mindroid.android.app.fragments.sensormonitoring;
 
 import org.mindroid.api.sensor.IEV3SensorEvent;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
-import org.mindroid.common.messages.SensorMessages;
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.ev3.EV3PortID;
 
 
@@ -19,7 +19,7 @@ public class SensorListener extends Observable implements IEV3SensorEventListene
     private float[] values;
 
     private EV3PortID port;
-    private SensorMessages.SensorMode_ mode;
+    private Sensormode mode;
 
 
     public SensorListener(EV3PortID port){
@@ -61,7 +61,7 @@ public class SensorListener extends Observable implements IEV3SensorEventListene
         }
     }
 
-    public SensorMessages.SensorMode_ getMode() {
+    public Sensormode getMode() {
         return mode;
     }
 
@@ -69,38 +69,6 @@ public class SensorListener extends Observable implements IEV3SensorEventListene
         mode = null;
         values = null;
     }
-
-    /**
-     * Returns the Last Value
-     * @param pos index of the value [0;SIZE_LAST_VALUES]
-     * @return sensor value
-     */
-    /*public float getValueAt(int pos){
-        if(pos >= 0 && pos < SIZE_LAST_VALUES){
-            return lastValues[pos];
-        }else{
-            return -1f;
-        }
-    }*/
-
-    /**
-     *
-     * @return the last received sensor value
-     */
-
-
-    /**
-     *
-     * @return The avg value of the last SIZE_LAST_VALUES values
-     */
-    /*public float getAvgValue() {
-        float sum = 0;
-        for (float value : lastValues) {
-            sum+=value;
-        }
-
-        return sum/SIZE_LAST_VALUES;
-    }*/
 
 
 }

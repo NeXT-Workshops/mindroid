@@ -7,6 +7,11 @@ import org.mindroid.api.configuration.IRobotConfigurator;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.motor.RegulatedMotor;
+import org.mindroid.common.messages.hardware.EV3MotorPort;
+import org.mindroid.common.messages.hardware.EV3SensorPort;
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.hardware.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.endpoint.ClientEndpointImpl;
 import org.mindroid.impl.ev3.EV3PortID;
@@ -17,11 +22,7 @@ import org.mindroid.impl.motor.EV3MotorManager;
 import org.mindroid.impl.sensor.EV3Sensor;
 import org.mindroid.impl.sensor.EV3SensorManager;
 
-import org.mindroid.common.messages.EV3MotorPort;
-import org.mindroid.common.messages.EV3SensorPort;
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.SensorMessages.SensorMode_;
-import org.mindroid.common.messages.Sensors;
+
 
 /**
  *
@@ -31,7 +32,7 @@ import org.mindroid.common.messages.Sensors;
 public class RobotConfigurator implements IRobotConfigurator {
 
 	private HashMap<EV3SensorPort,Sensors> sensorConfiguration = new HashMap<EV3SensorPort,Sensors>(4);
-	private HashMap<EV3SensorPort,SensorMode_> sensorModeConfiguration = new HashMap<EV3SensorPort,SensorMode_>(4);
+	private HashMap<EV3SensorPort,Sensormode> sensorModeConfiguration = new HashMap<EV3SensorPort,Sensormode>(4);
 	private HashMap<EV3MotorPort,Motors> motorConfiguration = new HashMap<EV3MotorPort,Motors>(4);
 	
 	private HashMap<EV3SensorPort,EV3Sensor> sensors = new HashMap<EV3SensorPort,EV3Sensor>(4);
@@ -296,7 +297,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 
 
 	@Override
-	public void setSensorMode(EV3SensorPort port, SensorMode_ mode) {
+	public void setSensorMode(EV3SensorPort port, Sensormode mode) {
 		if(sensors.containsKey(port)){
 			sensors.get(port).changeSensorToMode(mode);
 		}
@@ -305,7 +306,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 
 
 	@Override
-	public void setSensorModeSet(SensorMode_ mode_S1, SensorMode_ mode_S2, SensorMode_ mode_S3, SensorMode_ mode_S4) {
+	public void setSensorModeSet(Sensormode mode_S1, Sensormode mode_S2, Sensormode mode_S3, Sensormode mode_S4) {
 			sensorModeConfiguration.put(EV3SensorPort.S1,mode_S1);
 			sensorModeConfiguration.put(EV3SensorPort.S2,mode_S2);
 			sensorModeConfiguration.put(EV3SensorPort.S3,mode_S3);

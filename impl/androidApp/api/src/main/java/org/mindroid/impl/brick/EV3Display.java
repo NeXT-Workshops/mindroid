@@ -1,12 +1,9 @@
 package org.mindroid.impl.brick;
 
 
-import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
-import org.mindroid.common.messages.DisplayMessageFactory;
-import org.mindroid.impl.endpoint.ClientEndpointImpl;
-
 import com.esotericsoftware.kryonet.Connection;
+import org.mindroid.common.messages.display.DisplayMessageFactory;
 
 /**
  * Display Endpoint classes. Used to send proper messages to the brick
@@ -38,14 +35,14 @@ public class EV3Display extends Listener{
 	/**
 	 * Draw a String on the IEV3Display
 	 * 
-	 * @param str
-	 * @param posX
-	 * @param posY
+	 * @param str String to draw
+	 * @param posX startposition x of the string
+	 * @param posY startposition y of the string
 	 * @return false if display not ready 
 	 */
 	public boolean drawString(String str,int posX, int posY){
 		if(connection != null){
-			connection.sendTCP(DisplayMessageFactory.createDrawStringMsg(str, posX, posY));
+			connection.sendTCP(DisplayMessageFactory.createDrawStringMessage(str, posX, posY));
 			return true;
 		}
 		return false;
@@ -58,7 +55,7 @@ public class EV3Display extends Listener{
 	 */
 	public boolean clearDisplay(){
 		if(connection != null){
-			connection.sendTCP(DisplayMessageFactory.createClearDisplayMsg());
+			connection.sendTCP(DisplayMessageFactory.createClearDisplayMessage());
 			return true;
 		}
 		return false;

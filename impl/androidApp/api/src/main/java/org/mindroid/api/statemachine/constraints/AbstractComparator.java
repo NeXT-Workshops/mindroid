@@ -1,8 +1,6 @@
 package org.mindroid.api.statemachine.constraints;
 
-import org.mindroid.api.statemachine.properties.IMessageProperty;
 import org.mindroid.api.statemachine.properties.IProperty;
-import org.mindroid.api.statemachine.properties.ITimeProperty;
 
 /**
  * Created by torben on 10.03.2017.

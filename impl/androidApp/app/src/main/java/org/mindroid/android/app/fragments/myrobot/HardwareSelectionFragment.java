@@ -17,17 +17,17 @@ import android.widget.TextView;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.robodancer.RobotConfigurationChangedListener;
 import org.mindroid.android.app.robodancer.SettingsProvider;
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.hardware.Sensors;
 
 import java.util.HashMap;
 
 import static org.mindroid.android.app.fragments.home.HomeFragment.robot;
-import static org.mindroid.common.messages.Sensors.EV3ColorSensor;
-import static org.mindroid.common.messages.Sensors.EV3GyroSensor;
-import static org.mindroid.common.messages.Sensors.EV3IRSensor;
-import static org.mindroid.common.messages.Sensors.EV3TouchSensor;
-import static org.mindroid.common.messages.Sensors.EV3UltrasonicSensor;
+import static org.mindroid.common.messages.hardware.Sensors.EV3ColorSensor;
+import static org.mindroid.common.messages.hardware.Sensors.EV3GyroSensor;
+import static org.mindroid.common.messages.hardware.Sensors.EV3IRSensor;
+import static org.mindroid.common.messages.hardware.Sensors.EV3TouchSensor;
+import static org.mindroid.common.messages.hardware.Sensors.EV3UltrasonicSensor;
 
 /**
  *

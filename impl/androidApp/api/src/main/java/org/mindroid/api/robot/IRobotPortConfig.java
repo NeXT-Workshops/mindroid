@@ -1,8 +1,9 @@
 package org.mindroid.api.robot;
 
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
+
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.hardware.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
 
 /**
  * Created by torben on 02.03.2017.
@@ -37,25 +38,25 @@ public interface IRobotPortConfig {
      *
      * @return the mode the sensor should run
      */
-    SensorMessages.SensorMode_ getSensormodeS1();
+    Sensormode getSensormodeS1();
 
     /**
      *
      * @return the mode the sensor should run
      */
-    SensorMessages.SensorMode_ getSensormodeS2();
+    Sensormode getSensormodeS2();
 
     /**
      *
      * @return the mode the sensor should run
      */
-    SensorMessages.SensorMode_ getSensormodeS3();
+    Sensormode getSensormodeS3();
 
     /**
      *
      * @return the mode the sensor should run
      */
-    SensorMessages.SensorMode_ getSensormodeS4();
+    Sensormode getSensormodeS4();
 
     /**
      *

@@ -1,8 +1,8 @@
 package org.mindroid.api.sensor;
 
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.sensor.EV3Sensor;
 
-import org.mindroid.common.messages.SensorMessages.SensorMode_;
 
 public interface IEV3SensorEvent  {
     EV3Sensor getSensor();
@@ -11,7 +11,7 @@ public interface IEV3SensorEvent  {
 
     long getTimeStamp();
     
-    SensorMode_ getSensorMode();
+    Sensormode getSensorMode();
 
 
 }

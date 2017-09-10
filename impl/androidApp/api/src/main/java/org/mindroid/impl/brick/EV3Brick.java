@@ -3,10 +3,14 @@ package org.mindroid.impl.brick;
 import java.io.IOException;
 
 import org.mindroid.api.ev3.EV3StatusLightColor;
-import org.mindroid.api.ev3.EV3StatusLightEnabled;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.common.messages.*;
+import org.mindroid.common.messages.brick.HelloMessage;
+import org.mindroid.common.messages.led.StatusLightMessageFactory;
+import org.mindroid.common.messages.sound.BeepMessage;
+import org.mindroid.common.messages.sound.SoundMessageFactory;
+import org.mindroid.common.messages.sound.SoundVolumeMessage;
 import org.mindroid.impl.motor.EV3MotorManager;
 import org.mindroid.impl.sensor.EV3SensorManager;
 
@@ -108,10 +112,10 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 	@Override
 	public void received(Connection connection,Object object){
 		/** First answer from the Brick if the Connection is established **/
-		if(object.getClass() == BrickMessages.HelloMessage.class){
+		if(object.getClass() == HelloMessage.class){
 			readyForCommands = true;
 			conn = connection;
-			System.out.println("Local-EV3Brick: "+((BrickMessages.HelloMessage)object).toString());
+			System.out.println("Local-EV3Brick: "+ object.toString());
 		}
 		
 	}
@@ -170,7 +174,7 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 	@Override
 	public void setEV3StatusLight(EV3StatusLightColor color, EV3StatusLightInterval interval) {
 		if(isBrickReady()){
-			conn.sendTCP(StatusLightMessages.setStatusLight(color.getValue()+3*interval.getValue()));
+			conn.sendTCP(StatusLightMessageFactory.createSetStatusLightMessage((color.getValue()+3*interval.getValue())));
 		}else{
 			//TODO@revise: Show in some kind of error log...
 			System.err.println("StatusLight is not ready yet. Check Brick connection!");
@@ -180,7 +184,7 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 	@Override
 	public void resetEV3StatusLight() {
 		if(isBrickReady()){
-			conn.sendTCP(StatusLightMessages.setStatusLight(0));
+			conn.sendTCP(StatusLightMessageFactory.createSetStatusLightMessage(0));
 		}else{
 			System.err.println("StatusLight is not ready yet. Check Brick connection!");
 		}
@@ -195,30 +199,30 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 
 	public void singleBeep(){
 		if(isBrickReady()){
-			conn.sendTCP(SoundMessageFactory.createBeepMessage(SoundMessageFactory.Beeptype.SINGLE_BEEP));
+			conn.sendTCP(SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.SINGLE_BEEP));
 		}
 	}
 
 	public void doubleBeep() {
 		if(isBrickReady()){
-			conn.sendTCP(SoundMessageFactory.createBeepMessage(SoundMessageFactory.Beeptype.DOUBLE_BEEP));
+			conn.sendTCP(SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.DOUBLE_BEEP));
 		}
 	}
 
 	public void buzz() {
 		if(isBrickReady()){
-			conn.sendTCP(SoundMessageFactory.createBeepMessage(SoundMessageFactory.Beeptype.LOW_BUZZ));
+			conn.sendTCP(SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.LOW_BUZZ));
 		}
 	}
 
 	public void beepSequenceDown() {
 		if(isBrickReady()){
-			conn.sendTCP(SoundMessageFactory.createBeepMessage(SoundMessageFactory.Beeptype.BEEP_SEQUENCE_DOWNWARDS));
+			conn.sendTCP(SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.BEEP_SEQUENCE_DOWNWARDS));
 		}
 	}
 	public void beepSequenceUp() {
 		if(isBrickReady()){
-			conn.sendTCP(SoundMessageFactory.createBeepMessage(SoundMessageFactory.Beeptype.BEEP_SEQUENCE_UPWARDS));
+			conn.sendTCP(SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.BEEP_SEQUENCE_UPWARDS));
 		}
 	}
 

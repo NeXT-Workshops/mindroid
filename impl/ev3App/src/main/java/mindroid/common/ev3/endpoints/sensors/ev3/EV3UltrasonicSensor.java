@@ -1,8 +1,8 @@
 package mindroid.common.ev3.endpoints.sensors.ev3;
 
 import lejos.robotics.filter.MeanFilter;
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
+import org.mindroid.common.messages.hardware.Sensors;
 import lejos.hardware.port.Port;
 
 /**
@@ -16,7 +16,7 @@ public class EV3UltrasonicSensor extends AbstractSensor {
     }
 
     @Override
-    public boolean setSensorMode(SensorMessages.SensorMode_ newMode) {
+    public boolean setSensorMode(Sensormode newMode) {
         if(Sensors.EV3UltrasonicSensor.isValidMode(newMode)){
             sensor.setCurrentMode(newMode.getValue());
             return true;

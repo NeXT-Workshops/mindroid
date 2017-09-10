@@ -8,10 +8,9 @@ import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.robotics.filter.MeanFilter;
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.hardware.Sensors;
 import lejos.hardware.port.Port;
+import org.mindroid.common.messages.hardware.Sensormode;
 
 /**
  * Created by torben on 27.01.2017.
@@ -21,7 +20,7 @@ public abstract class AbstractSensor {
 
     BaseSensor sensor = null;
     Sensors sensortype = null;
-    SensorMessages.SensorMode_ sensormode = null;
+    Sensormode sensormode = null;
     Port sensorPort;
 
     final long sampleRate;
@@ -37,7 +36,7 @@ public abstract class AbstractSensor {
      * @param mode
      * @param sampleRate
      */
-    public AbstractSensor(Sensors sensortype,Port sensorPort,SensorMessages.SensorMode_ mode,long sampleRate){
+    public AbstractSensor(Sensors sensortype, Port sensorPort, Sensormode mode, long sampleRate){
         this.sensortype = sensortype;
         this.sensorPort = sensorPort;
         this.sensormode = mode;
@@ -94,7 +93,7 @@ public abstract class AbstractSensor {
         return true;
     }
 
-    public abstract boolean setSensorMode(SensorMessages.SensorMode_ newMode);
+    public abstract boolean setSensorMode(Sensormode newMode);
 
     protected void sendSensorData() {
         Runnable run = new Runnable() {

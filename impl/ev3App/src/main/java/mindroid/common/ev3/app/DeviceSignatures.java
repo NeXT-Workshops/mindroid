@@ -1,5 +1,8 @@
 package mindroid.common.ev3.app;
 
+/**
+ * Currently not in use
+ */
 public enum DeviceSignatures {
 	
 	//Sensors

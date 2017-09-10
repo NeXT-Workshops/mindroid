@@ -1,9 +1,7 @@
 package org.mindroid.api;
 
 import org.mindroid.api.communication.IMessenger;
-import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.statemachine.IMindroidMain;
-import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.robot.*;
 import org.mindroid.impl.statemachine.StatemachineCollection;

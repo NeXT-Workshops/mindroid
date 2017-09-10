@@ -1,6 +1,6 @@
 package mindroid.common.ev3.endpoints.motors.ev3;
 
-import org.mindroid.common.messages.Motors;
+import org.mindroid.common.messages.hardware.Motors;
 import lejos.hardware.port.Port;
 import lejos.robotics.BaseMotor;
 

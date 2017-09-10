@@ -5,6 +5,11 @@ import java.util.Map;
 
 import org.mindroid.api.endpoint.ClientEndpoint;
 import org.mindroid.api.motor.RegulatedMotor;
+import org.mindroid.common.messages.brick.EndpointCreatedMessage;
+import org.mindroid.common.messages.brick.BrickMessagesFactory;
+import org.mindroid.common.messages.brick.EndpointCreatedMessage;
+import org.mindroid.common.messages.hardware.EV3MotorPort;
+import org.mindroid.common.messages.hardware.Motors;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
@@ -13,9 +18,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-import org.mindroid.common.messages.BrickMessages;
-import org.mindroid.common.messages.EV3MotorPort;
-import org.mindroid.common.messages.Motors;
+
 import org.mindroid.common.messages.NetworkPortConfig;
 
 
@@ -75,7 +78,7 @@ public class EV3MotorManager extends Listener {
 		if(ev3Brick.isBrickReady()){
 			if(motorType != null && motorPort != null) {
 				if (motors.containsKey(motorPort)) {
-					brickClient.sendTCP(BrickMessages.createMotor(motorPort.getValue(), motorType, portToTCPPort.get(motorPort)));
+					brickClient.sendTCP(BrickMessagesFactory.createMotor(motorPort.getValue(), motorType, portToTCPPort.get(motorPort)));
 				}else{
 					//TODO throw Exception IMotor wurde noch nicht created!
 				}
@@ -100,8 +103,8 @@ public class EV3MotorManager extends Listener {
 		/** Message if the Endpoint-creation was successful or not **/
     	System.out.println("Local-EV3MotorManager: received a message!");
     	
-		if(object.getClass() == BrickMessages.EndpointCreatedMessage.class){
-			BrickMessages.EndpointCreatedMessage ecmsg = (BrickMessages.EndpointCreatedMessage)object;
+		if(object.getClass() == EndpointCreatedMessage.class){
+			EndpointCreatedMessage ecmsg = (EndpointCreatedMessage)object;
 			System.out.println("Local-EV3MotorManager: Received a EndpointCreatedMessage! -> "+ecmsg.toString());
 			if(ecmsg.isMotor()){
 				if(ecmsg.isSuccess()){

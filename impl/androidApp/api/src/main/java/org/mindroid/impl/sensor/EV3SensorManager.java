@@ -6,6 +6,11 @@ import java.util.Map;
 
 
 import org.mindroid.common.messages.*;
+import org.mindroid.common.messages.brick.BrickMessagesFactory;
+import org.mindroid.common.messages.brick.EndpointCreatedMessage;
+import org.mindroid.common.messages.hardware.EV3SensorPort;
+import org.mindroid.common.messages.hardware.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
@@ -54,7 +59,7 @@ public class EV3SensorManager extends Listener{
      * @return the sensor handle
      * @throws PortIsAlreadyInUseException if the specified {@link EV3SensorPort} is already in use
      */
-    public EV3Sensor createSensor(EV3PortID brick_port, Sensors sensorType, EV3SensorPort sensorPort, SensorMessages.SensorMode_ mode) throws PortIsAlreadyInUseException{
+    public EV3Sensor createSensor(EV3PortID brick_port, Sensors sensorType, EV3SensorPort sensorPort, Sensormode mode) throws PortIsAlreadyInUseException{
 		if(sensorType != null && sensorPort != null){
 			if(sensors.containsKey(sensorPort)){
 				throw new PortIsAlreadyInUseException(sensorPort.toString());
@@ -68,12 +73,12 @@ public class EV3SensorManager extends Listener{
 		}
     }
 
-	public void initializeSensor(Sensors sensorType,EV3SensorPort sensorPort) throws BrickIsNotReadyException {
+	public void initializeSensor(Sensors sensorType, EV3SensorPort sensorPort) throws BrickIsNotReadyException {
 		System.out.println("Local-EV3SensorManager: initSensor called");
 		if(ev3Brick.isBrickReady()){
 			if(sensorType != null && sensorPort != null){
 				if(sensors.containsKey(sensorPort)){
-					brickClient.sendTCP(BrickMessages.createSensor(sensorPort.getValue(), sensorType, portToTCPPort.get(sensorPort)));
+					brickClient.sendTCP(BrickMessagesFactory.createSensor(sensorPort.getValue(), sensorType, portToTCPPort.get(sensorPort)));
 				}else{
 					//TODO throw SensorPort is not defined Exception
 				}
@@ -92,8 +97,8 @@ public class EV3SensorManager extends Listener{
     	Runnable handleMessage = new Runnable(){
 			@Override
 			public void run(){
-		    	if(object.getClass() == BrickMessages.EndpointCreatedMessage.class){
-					BrickMessages.EndpointCreatedMessage ecmsg = (BrickMessages.EndpointCreatedMessage)object;
+		    	if(object.getClass() == EndpointCreatedMessage.class){
+					EndpointCreatedMessage ecmsg = (EndpointCreatedMessage)object;
 					
 					if(ecmsg.isSensor()){
 						System.out.println("Local-EV3SensorManager: Received a EndpointCreatedMessage! -> "+ecmsg.toString());

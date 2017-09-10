@@ -1,4 +1,4 @@
-package org.mindroid.common.messages;
+package org.mindroid.common.messages.hardware;
 
 /**
  * Valid and implemented Motors

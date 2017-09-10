@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.esotericsoftware.kryonet.Listener;
 
-import org.mindroid.common.messages.Motors;
+import org.mindroid.common.messages.hardware.Motors;
 import lejos.hardware.port.Port;
 import mindroid.common.ev3.endpoints.MotorEndpoint;
 import mindroid.common.ev3.endpoints.motors.ev3.LargeRegulatedMotor;

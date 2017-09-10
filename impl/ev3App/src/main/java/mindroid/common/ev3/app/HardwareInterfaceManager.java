@@ -16,8 +16,6 @@ import lejos.hardware.port.Port;
  *
  */
 public abstract class HardwareInterfaceManager {
-	protected final long OBSERVE_PORT_DELAY = 250;
-	
 	HashMap<Port,Listener> endpoints = null;
 
 	@Deprecated

@@ -18,8 +18,6 @@ public class MotorManager extends HardwareInterfaceManager{
 	
 	public MotorManager(BrickType bType) {
 		super(bType);
-
-		// TODO Auto-generated constructor stub
 	}
 
 	

@@ -10,14 +10,14 @@ import org.mindroid.impl.ev3.EV3PortID;
  * Created by torben on 10.03.2017.
  */
 public class Color extends SimpleEV3SensorProperty {
-    public static final float NONE = 0f;
-    public static final float BLACK = 1f;
-    public static final float BLUE = 2f;
-    public static final float GREEN = 3f;
-    public static final float YELLOW = 4f;
-    public static final float RED = 5f;
-    public static final float WHITE = 6f;
-    public static final float BROWN = 7f;
+    public static final float NONE = -1f;
+    public static final float BLACK = 0f;
+    public static final float BLUE = 1f;
+    public static final float GREEN = 2f;
+    public static final float YELLOW = 3f;
+    public static final float RED = 4f;
+    public static final float WHITE = 5f;
+    public static final float BROWN = 6f;
 
     public Color(EV3PortID port) {
         super(port);

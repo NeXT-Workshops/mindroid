@@ -19,6 +19,7 @@ public class EV3GyroSensor extends AbstractSensor {
     public boolean setSensorMode(Sensormode newMode) {
         if(Sensors.EV3GyroSensor.isValidMode(newMode)){
             sensor.setCurrentMode(newMode.getValue());
+            this.sensormode = newMode;
             return true;
         }
         return false;

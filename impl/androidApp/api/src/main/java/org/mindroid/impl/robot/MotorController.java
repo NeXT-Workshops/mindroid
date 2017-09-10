@@ -1,15 +1,16 @@
 package org.mindroid.impl.robot;
 
-import org.mindroid.api.motor.IMotor;
 import org.mindroid.api.motor.RegulatedMotor;
 import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 
 /**
+ *
+ * Used to control the Motor at a given port
+ *
  * Created by torben on 02.03.2017.
  */
-
 public class MotorController implements IMotorControl {
 
     private Robot robot;
@@ -25,9 +26,9 @@ public class MotorController implements IMotorControl {
      */
     @Override
     public final void setMotorSpeed(EV3PortID motorPort, int speedInPercentage) {
-        IMotor IMotor = getMotor(motorPort);
-        if(IMotor != null){
-            IMotor.setSpeed(speedInPercentage);
+        RegulatedMotor motor = getMotor(motorPort);
+        if(motor != null){
+            motor.setSpeed(speedInPercentage);
         }else{
             System.err.println("Unknown motorport! at "+motorPort);
         }
@@ -40,7 +41,7 @@ public class MotorController implements IMotorControl {
      */
     @Override
     public final  void setMotorDirection(EV3PortID motorPort, final MotorDirection direction) {
-        final IMotor motor = getMotor(motorPort);
+        final RegulatedMotor motor = getMotor(motorPort);
         if(motor != null){
             switch(direction) {
                 case FORWARD:   motor.forward(); break;
@@ -59,13 +60,14 @@ public class MotorController implements IMotorControl {
      */
     @Override
     public final void stop(EV3PortID motorPort) {
-        IMotor IMotor = getMotor(motorPort);
+        RegulatedMotor motor = getMotor(motorPort);
 
-        if(IMotor != null){
-            IMotor.stop();
-            IMotor.setSpeed(0);
+        if(motor != null){
+            motor.stop();
+            motor.setSpeed(0);
         }else{
             System.err.println("Unknown motorport! "+motorPort);
+            //TODO call App Error Handling
         }
     }
 
@@ -76,16 +78,13 @@ public class MotorController implements IMotorControl {
      */
     @Override
     public final void rotate(EV3PortID motorPort,int angle) {
-        IMotor IMotor = getMotor(motorPort);
+        RegulatedMotor motor = getMotor(motorPort);
 
-        if(IMotor != null){
-            if(IMotor instanceof RegulatedMotor){
-                ((RegulatedMotor) IMotor).rotate(angle);
-            }else{
-                System.err.println("Motortype does not support this operation (Rotate()) at "+motorPort);
-            }
+        if(motor != null){
+            motor.rotate(angle);
         }else{
             System.err.println("Unknown motorport!");
+            //TODO Call App Error Handling
         }
     }
 
@@ -96,21 +95,18 @@ public class MotorController implements IMotorControl {
      */
     @Override
     public final void rotateTo(EV3PortID motorPort,int angle) {
-        IMotor IMotor = getMotor(motorPort);
+        RegulatedMotor motor = getMotor(motorPort);
 
-        if(IMotor != null){
-            if(IMotor instanceof RegulatedMotor){
-                ((RegulatedMotor) IMotor).rotateTo(angle);
-            }else{
-                System.err.println("Motortype does not support this operation (rotateTo()) at "+motorPort);
-            }
+        if(motor != null){
+            motor.rotateTo(angle);
         }else{
             System.err.println("Unknown motorport! "+motorPort);
+            //TODO Call App Error Handling
         }
     }
 
 
-    private final IMotor getMotor(EV3PortID motorPort){
+    private final RegulatedMotor getMotor(EV3PortID motorPort){
         if(motorPort.equals(EV3PortIDs.PORT_A)){
             return robot.getIMotor_A();
         }else if(motorPort.equals(EV3PortIDs.PORT_B)){

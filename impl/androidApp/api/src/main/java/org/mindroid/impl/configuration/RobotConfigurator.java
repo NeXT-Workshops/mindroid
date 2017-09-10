@@ -6,7 +6,7 @@ import java.util.HashMap;
 import org.mindroid.api.configuration.IRobotConfigurator;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
-import org.mindroid.api.motor.IMotor;
+import org.mindroid.api.motor.RegulatedMotor;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.endpoint.ClientEndpointImpl;
 import org.mindroid.impl.ev3.EV3PortID;
@@ -35,7 +35,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 	private HashMap<EV3MotorPort,Motors> motorConfiguration = new HashMap<EV3MotorPort,Motors>(4);
 	
 	private HashMap<EV3SensorPort,EV3Sensor> sensors = new HashMap<EV3SensorPort,EV3Sensor>(4);
-	private HashMap<EV3MotorPort,IMotor> motors = new HashMap<EV3MotorPort,IMotor>(4);
+	private HashMap<EV3MotorPort,RegulatedMotor> motors = new HashMap<EV3MotorPort,RegulatedMotor>(4);
 	
 	/** Experimental Values - may need a change **/
 	private final int DURATION_DEVICE_INITIALIZATION = 5000;
@@ -183,7 +183,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 	}
 
 	@Override
-	public IMotor createMotor(EV3PortID motorPort) throws PortIsAlreadyInUseException {
+	public RegulatedMotor createMotor(EV3PortID motorPort) throws PortIsAlreadyInUseException {
 		EV3MotorPort motPort = null;
 		if(EV3PortIDs.PORT_A == motorPort){
 			motPort = EV3MotorPort.A;
@@ -195,16 +195,16 @@ public class RobotConfigurator implements IRobotConfigurator {
 			motPort = EV3MotorPort.D;
 		}
 		if(motPort != null && !motors.containsKey(motPort)){
-			IMotor IMotor = motorManager.createMotor(getMotorType(motPort), motPort);
-			motors.put(motPort, IMotor);
-			return IMotor;
+			RegulatedMotor motor = motorManager.createMotor(getMotorType(motPort), motPort);
+			motors.put(motPort, motor);
+			return motor;
 		}else{
 			return null;
 		}
 	}
 
 	@Override
-	public IMotor getMotor(EV3MotorPort motorPort) {
+	public RegulatedMotor getMotor(EV3MotorPort motorPort) {
 		return motors.get(motorPort);
 	}
 

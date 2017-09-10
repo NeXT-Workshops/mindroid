@@ -14,6 +14,8 @@ public interface IMotorControl {
     void setMotorDirection(EV3PortID motorPort, MotorDirection direction);
     void stop(EV3PortID motorPort);
 
-    public void rotate(EV3PortID motorPort,int angle);
-    public void rotateTo(EV3PortID motorPort,int angle);
+    void rotate(EV3PortID motorPort,int angle);
+
+    void rotateTo(EV3PortID motorPort,int angle);
+    //TODO implement the other Regulated Motor methods (from interface  RegulatedMotor)
 }

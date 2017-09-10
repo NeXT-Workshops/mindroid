@@ -36,13 +36,6 @@ public class MessageRegistrar {
 		kryo.register(RegulatedMotorMessages.RotateMessage.class);
 		kryo.register(RegulatedMotorMessages.RotateToMessage.class);
 		kryo.register(RegulatedMotorMessages.MotorState.class);
-
-		//UnregulatedMotorMessages
-		kryo.register(UnregulatedMotorMessages.BackwardMsg.class);
-		kryo.register(UnregulatedMotorMessages.ForwardMsg.class);
-		kryo.register(UnregulatedMotorMessages.SetPowerMsg.class);
-		kryo.register(UnregulatedMotorMessages.StopMsg.class);
-		kryo.register(UnregulatedMotorMessages.MotorState.class);
 	
 		//SensorMessages
 		kryo.register(SensorMessages.SensorEventMsg.class);

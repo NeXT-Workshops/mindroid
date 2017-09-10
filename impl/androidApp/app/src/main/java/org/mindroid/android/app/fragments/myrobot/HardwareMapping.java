@@ -23,8 +23,8 @@ public class HardwareMapping {
             //Motors
             motorMapping = new HashMap(3);
             motorMapping.put(notDefined,null);
-            motorMapping.put(Motors.UnregulatedMotor.getName(),Motors.UnregulatedMotor);
             motorMapping.put(Motors.LargeRegulatedMotor.getName(),Motors.LargeRegulatedMotor);
+            motorMapping.put(Motors.MediumRegulatedMotor.getName(),Motors.MediumRegulatedMotor);
 
             //Sensors
             sensorMapping = new HashMap(6);

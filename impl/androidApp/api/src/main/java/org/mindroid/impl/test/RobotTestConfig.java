@@ -52,7 +52,7 @@ public class RobotTestConfig implements IRobotPortConfig {
     //------------------ MOTORS ------------------
     @Override
     public Motors getMotorA() {
-        return Motors.UnregulatedMotor;   }
+        return Motors.LargeRegulatedMotor;   }
 
     @Override
     public Motors getMotorB() {
@@ -65,6 +65,6 @@ public class RobotTestConfig implements IRobotPortConfig {
 
     @Override
     public Motors getMotorD() {
-        return Motors.UnregulatedMotor;
+        return Motors.LargeRegulatedMotor;
     }
 }

@@ -7,7 +7,6 @@ package org.mindroid.common.messages;
  *
  */ //TODO Rename to MotorType
 public enum Motors {
-	UnregulatedMotor("Unregulated Motor"),
 	MediumRegulatedMotor("Medium Regulated Motor"),
 	LargeRegulatedMotor("Large Regulated Motor");
 

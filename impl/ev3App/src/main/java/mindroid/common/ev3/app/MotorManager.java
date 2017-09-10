@@ -9,7 +9,6 @@ import lejos.hardware.port.Port;
 import mindroid.common.ev3.endpoints.MotorEndpoint;
 import mindroid.common.ev3.endpoints.motors.ev3.LargeRegulatedMotor;
 import mindroid.common.ev3.endpoints.motors.ev3.MediumRegulatedMotor;
-import mindroid.common.ev3.endpoints.motors.ev3.EV3UnregulatedMotor;
 import mindroid.common.ev3.server.BrickServerImpl;
 
 public class MotorManager extends HardwareInterfaceManager{
@@ -34,9 +33,6 @@ public class MotorManager extends HardwareInterfaceManager{
 			((MotorEndpoint)endpoints.get(port)).getMotor().close();//TODO
 			//System.out.println("Motor.createMotorEndpoint() at "+port.toString()+" -> aktueller motortyp passt nicht - erzeuge neuen motortyp");
 			switch(motortype){
-				case UnregulatedMotor:
-					((MotorEndpoint)endpoints.get(port)).setMotor(new EV3UnregulatedMotor(port));
-					return true;
 				case MediumRegulatedMotor:
 					((MotorEndpoint)endpoints.get(port)).setMotor(new MediumRegulatedMotor(port));
 					return true;
@@ -50,9 +46,6 @@ public class MotorManager extends HardwareInterfaceManager{
 		Listener endpoint = null;
 
 		switch(motortype){
-			case UnregulatedMotor:
-				endpoint = new MotorEndpoint(new EV3UnregulatedMotor(port));
-				break;
 			case MediumRegulatedMotor:
 				endpoint = new MotorEndpoint(new MediumRegulatedMotor(port));
 				break;

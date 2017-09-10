@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.mindroid.api.endpoint.ClientEndpoint;
-import org.mindroid.api.motor.IMotor;
+import org.mindroid.api.motor.RegulatedMotor;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
@@ -21,7 +21,7 @@ import org.mindroid.common.messages.NetworkPortConfig;
 
 public class EV3MotorManager extends Listener {
 
-    private Map<EV3MotorPort, IMotor> motors;
+    private Map<EV3MotorPort, RegulatedMotor> motors;
     private Map<EV3MotorPort, ClientEndpoint> endpoints;
 
     private HashMap<EV3MotorPort,Integer> portToTCPPort;
@@ -42,15 +42,14 @@ public class EV3MotorManager extends Listener {
         motors = new HashMap<>(4);
     }
 
-    public IMotor createMotor(Motors motorType, EV3MotorPort motorPort) throws PortIsAlreadyInUseException {
+    public RegulatedMotor createMotor(Motors motorType, EV3MotorPort motorPort) throws PortIsAlreadyInUseException {
 		if(motorType != null && motorPort != null){
 			if(motors.containsKey(motorPort)){
 				throw new PortIsAlreadyInUseException(motorPort.toString());
 			}else{
 				//System.out.println("Local-EV3MotorManager: creating IMotor");
-				IMotor ev3IMotor = null;
+				RegulatedMotor ev3IMotor = null;
 				switch(motorType){
-					case UnregulatedMotor: ev3IMotor = new EV3UnregulatedMotor(ev3Brick.EV3Brick_IP, portToTCPPort.get(motorPort), EV3Brick.BRICK_TIMEOUT); break;
 					case MediumRegulatedMotor: ev3IMotor = new EV3RegulatedMotor(ev3Brick.EV3Brick_IP, portToTCPPort.get(motorPort), EV3Brick.BRICK_TIMEOUT); break;
 					case LargeRegulatedMotor: ev3IMotor = new EV3RegulatedMotor(ev3Brick.EV3Brick_IP, portToTCPPort.get(motorPort), EV3Brick.BRICK_TIMEOUT); break;
 					default: ev3IMotor = null;

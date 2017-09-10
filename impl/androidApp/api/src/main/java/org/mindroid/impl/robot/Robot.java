@@ -1,7 +1,7 @@
 package org.mindroid.impl.robot;
 
 import org.mindroid.api.communication.IMessenger;
-import org.mindroid.api.motor.IMotor;
+import org.mindroid.api.motor.RegulatedMotor;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.configuration.RobotConfigurator;
 import org.mindroid.impl.sensor.EV3Sensor;
@@ -23,10 +23,10 @@ public final class Robot {
     private EV3Sensor sensor_S3 = null;
     private EV3Sensor sensor_S4 = null;
 
-    private IMotor IMotor_A = null;
-    private IMotor IMotor_B = null;
-    private IMotor IMotor_C = null;
-    private IMotor IMotor_D = null;
+    private RegulatedMotor IMotor_A = null;
+    private RegulatedMotor IMotor_B = null;
+    private RegulatedMotor IMotor_C = null;
+    private RegulatedMotor IMotor_D = null;
 
     private StatemachineManager statemachineManager;
 
@@ -85,35 +85,35 @@ public final class Robot {
         this.sensor_S4 = sensor_S4;
     }
 
-    protected IMotor getIMotor_A() {
+    protected RegulatedMotor getIMotor_A() {
         return IMotor_A;
     }
 
-    protected void setMotorA(IMotor IMotor_A) {
+    protected void setMotorA(RegulatedMotor IMotor_A) {
         this.IMotor_A = IMotor_A;
     }
 
-    protected IMotor getIMotor_B() {
+    protected RegulatedMotor getIMotor_B() {
         return IMotor_B;
     }
 
-    protected void setMotorB(IMotor IMotor_B) {
+    protected void setMotorB(RegulatedMotor IMotor_B) {
         this.IMotor_B = IMotor_B;
     }
 
-    protected IMotor getIMotor_C() {
+    protected RegulatedMotor getIMotor_C() {
         return IMotor_C;
     }
 
-    protected void setMotorC(IMotor IMotor_C) {
+    protected void setMotorC(RegulatedMotor IMotor_C) {
         this.IMotor_C = IMotor_C;
     }
 
-    protected IMotor getIMotor_D() {
+    protected RegulatedMotor getIMotor_D() {
         return IMotor_D;
     }
 
-    protected void setMotorD(IMotor IMotor_D) {
+    protected void setMotorD(RegulatedMotor IMotor_D) {
         this.IMotor_D = IMotor_D;
     }
 

@@ -35,7 +35,6 @@ public class MotorEndpoint extends Listener{
 						switch(motor.getMotortype()){
 							case LargeRegulatedMotor:  conn.sendTCP(((LargeRegulatedMotor)motor).getMotorState()); break;
 							case MediumRegulatedMotor: conn.sendTCP(((MediumRegulatedMotor)motor).getMotorState()); break;
-							case UnregulatedMotor: conn.sendTCP(((EV3UnregulatedMotor)motor).getMotorState()); break;
 							default: break;
 						}
 					}

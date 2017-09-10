@@ -21,9 +21,10 @@ public class HardwareMapping {
     private static void initMapping() {
         if(!isMappingInitialized){
             //Motors
-            motorMapping = new HashMap(2);
+            motorMapping = new HashMap(3);
             motorMapping.put(notDefined,null);
             motorMapping.put(Motors.UnregulatedMotor.getName(),Motors.UnregulatedMotor);
+            motorMapping.put(Motors.LargeRegulatedMotor.getName(),Motors.LargeRegulatedMotor);
 
             //Sensors
             sensorMapping = new HashMap(6);
@@ -81,6 +82,22 @@ public class HardwareMapping {
     public static Motors getMotorType(String key_type){
         initMapping();
         return motorMapping.get(key_type);
+    }
+
+    /**
+     * Returns the motor labels as String array
+     * @return array of motor labels
+     */
+    public static String[] getMotorLabels(){
+        return motorMapping.keySet().toArray(new String[motorMapping.keySet().size()]);
+    }
+
+    /**
+     * Returns the Sensorlabels as a String array
+     * @return array of the sensor labels
+     */
+    public static String[] getSensorLabels(){
+        return sensorMapping.keySet().toArray(new String[sensorMapping.keySet().size()]);
     }
 
 }

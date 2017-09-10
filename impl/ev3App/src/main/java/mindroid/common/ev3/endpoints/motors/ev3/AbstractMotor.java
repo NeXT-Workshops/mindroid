@@ -43,7 +43,9 @@ public abstract class AbstractMotor {
     public void setMotortype(Motors motortype) {
         this.motortype = motortype;
     }
-    
+
+
+
     /**
      * Closes the Lejos motor-port
      */

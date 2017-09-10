@@ -10,7 +10,7 @@ import com.esotericsoftware.kryonet.Connection;
 import org.mindroid.common.messages.UnregulatedMotorMessages;
 import org.mindroid.common.messages.UnregulatedMotorMessages.MotorState;
 
-
+//TODO remove this class as it will be replaced by LargeRegulatedMotor and MediumRegulatedMotor
 public class EV3UnregulatedMotor extends ClientEndpointImpl implements UnregulatedMotor {
 
     private boolean isMoving = false;

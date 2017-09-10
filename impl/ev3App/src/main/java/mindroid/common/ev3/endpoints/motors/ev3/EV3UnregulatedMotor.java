@@ -42,6 +42,7 @@ public class EV3UnregulatedMotor extends AbstractMotor implements MotorMessageLi
 		// Drop packet otherwise
 	}
 
+
 	public UnregulatedMotorMessages.MotorState getMotorState() {
 		if(motorState != null) {
 			motorState.setMoving(motor.isMoving());

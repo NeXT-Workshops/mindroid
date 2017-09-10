@@ -52,6 +52,7 @@ public class EV3MotorManager extends Listener {
 				switch(motorType){
 					case UnregulatedMotor: ev3IMotor = new EV3UnregulatedMotor(ev3Brick.EV3Brick_IP, portToTCPPort.get(motorPort), EV3Brick.BRICK_TIMEOUT); break;
 					case MediumRegulatedMotor: ev3IMotor = new EV3RegulatedMotor(ev3Brick.EV3Brick_IP, portToTCPPort.get(motorPort), EV3Brick.BRICK_TIMEOUT); break;
+					case LargeRegulatedMotor: ev3IMotor = new EV3RegulatedMotor(ev3Brick.EV3Brick_IP, portToTCPPort.get(motorPort), EV3Brick.BRICK_TIMEOUT); break;
 					default: ev3IMotor = null;
 				}
 
@@ -67,7 +68,7 @@ public class EV3MotorManager extends Listener {
     }
 
 	/**
-	 * Sends message to the Brick to initialize the IMotor at Brickside.
+	 * Sends message to the Brick to create/initialize the IMotor at Brickside.
 	 * @param motorType
 	 * @param motorPort
      */

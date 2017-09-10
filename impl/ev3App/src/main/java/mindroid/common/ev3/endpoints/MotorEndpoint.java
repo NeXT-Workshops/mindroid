@@ -4,11 +4,9 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import com.esotericsoftware.minlog.Log;
+import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.PortException;
-import mindroid.common.ev3.endpoints.motors.ev3.AbstractMotor;
-import mindroid.common.ev3.endpoints.motors.ev3.MediumRegulatedMotor;
-import mindroid.common.ev3.endpoints.motors.ev3.EV3UnregulatedMotor;
-import mindroid.common.ev3.endpoints.motors.ev3.MotorMessageListener;
+import mindroid.common.ev3.endpoints.motors.ev3.*;
 
 public class MotorEndpoint extends Listener{
 	
@@ -35,6 +33,7 @@ public class MotorEndpoint extends Listener{
 					}
 					if(conn != null && conn.isConnected() && motor != null){
 						switch(motor.getMotortype()){
+							case LargeRegulatedMotor:  conn.sendTCP(((LargeRegulatedMotor)motor).getMotorState()); break;
 							case MediumRegulatedMotor: conn.sendTCP(((MediumRegulatedMotor)motor).getMotorState()); break;
 							case UnregulatedMotor: conn.sendTCP(((EV3UnregulatedMotor)motor).getMotorState()); break;
 							default: break;

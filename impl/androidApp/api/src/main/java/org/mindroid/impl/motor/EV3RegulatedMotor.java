@@ -10,7 +10,9 @@ import com.esotericsoftware.kryonet.Connection;
 import org.mindroid.common.messages.RegulatedMotorMessages;
 import org.mindroid.common.messages.RegulatedMotorMessages.MotorState;
 
-
+/**
+ * Endpoint to control a RegulatedMotor (Large and Medium)
+ */
 public class EV3RegulatedMotor extends ClientEndpointImpl implements RegulatedMotor{
 
 	private int rotationSpeed = -1;

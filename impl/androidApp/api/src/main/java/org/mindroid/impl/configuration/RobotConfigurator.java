@@ -25,7 +25,7 @@ import org.mindroid.common.messages.Sensors;
 
 /**
  *
- * Configurates the Robot in the mean of which hardware is added to which port.
+ * Configurates the Robot in the mean of which hardware is plugged in which port.
  *
  */
 public class RobotConfigurator implements IRobotConfigurator {
@@ -132,7 +132,6 @@ public class RobotConfigurator implements IRobotConfigurator {
 		return endpointState.toString();
 	}
 
-
 	@Override
 	public void addSensorType(EV3SensorPort sensorPort, Sensors sensor){
 		if(sensorPort != null && sensor != null){
@@ -141,9 +140,9 @@ public class RobotConfigurator implements IRobotConfigurator {
 	}
 	
 	@Override
-	public void addMotorType(EV3MotorPort motorPort, Motors motor){
-		if(motorPort != null && motor != null){
-			motorConfiguration.put(motorPort, motor);
+	public void addMotorType(EV3MotorPort motorPort, Motors motortype){
+		if(motorPort != null && motortype != null){
+			motorConfiguration.put(motorPort, motortype);
 		}
 	}
 		

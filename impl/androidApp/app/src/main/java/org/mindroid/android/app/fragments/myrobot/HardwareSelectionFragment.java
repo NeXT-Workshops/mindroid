@@ -47,20 +47,6 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
     protected static final int HARDWARE_SELECTION_MODE_SENSOR = 0;
     protected static final int HARDWARE_SELECTION_MODE_MOTOR = 1;
 
-
-    private String[] sensortypes = {HardwareMapping.notDefined,
-            EV3ColorSensor.getName(),
-            EV3UltrasonicSensor.getName(),
-            EV3TouchSensor.getName(),
-            EV3GyroSensor.getName(),
-            EV3IRSensor.getName(),
-    };
-
-    private String[] motortypes = {HardwareMapping.notDefined,
-            Motors.UnregulatedMotor.getName()
-    };
-
-
     private String selectedSensorType = HardwareMapping.notDefined;
     private String selectedSensorMode = HardwareMapping.notDefined;
     private String selectedMotorType =  HardwareMapping.notDefined;
@@ -252,11 +238,11 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
     }
 
     private String[] getMotorTypes(){
-        return motortypes;
+        return HardwareMapping.getMotorLabels();
     }
 
     private String[] getSensorTypes() {
-        return sensortypes;
+        return HardwareMapping.getSensorLabels();
     }
 
     private void initMotorView() {

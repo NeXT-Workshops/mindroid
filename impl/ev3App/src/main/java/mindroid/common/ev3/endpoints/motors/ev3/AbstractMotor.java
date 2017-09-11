@@ -106,4 +106,23 @@ public abstract class AbstractMotor {
         return false;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AbstractMotor that = (AbstractMotor) o;
+
+        if (motorPort != null ? !motorPort.equals(that.motorPort) : that.motorPort != null) return false;
+        if (motor != null ? !motor.equals(that.motor) : that.motor != null) return false;
+        return motortype == that.motortype;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = motorPort != null ? motorPort.hashCode() : 0;
+        result = 31 * result + (motor != null ? motor.hashCode() : 0);
+        result = 31 * result + (motortype != null ? motortype.hashCode() : 0);
+        return result;
+    }
 }

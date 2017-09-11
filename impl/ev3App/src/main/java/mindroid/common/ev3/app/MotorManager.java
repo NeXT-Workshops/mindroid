@@ -7,8 +7,8 @@ import com.esotericsoftware.kryonet.Listener;
 import org.mindroid.common.messages.hardware.Motors;
 import lejos.hardware.port.Port;
 import mindroid.common.ev3.endpoints.MotorEndpoint;
-import mindroid.common.ev3.endpoints.motors.ev3.LargeRegulatedMotor;
-import mindroid.common.ev3.endpoints.motors.ev3.MediumRegulatedMotor;
+import mindroid.common.ev3.endpoints.motors.ev3.LargeRegulatedIMotor;
+import mindroid.common.ev3.endpoints.motors.ev3.MediumRegulatedIMotor;
 import mindroid.common.ev3.server.BrickServerImpl;
 
 public class MotorManager extends HardwareInterfaceManager{
@@ -34,10 +34,10 @@ public class MotorManager extends HardwareInterfaceManager{
 			//System.out.println("Motor.createMotorEndpoint() at "+port.toString()+" -> aktueller motortyp passt nicht - erzeuge neuen motortyp");
 			switch(motortype){
 				case MediumRegulatedMotor:
-					((MotorEndpoint)endpoints.get(port)).setMotor(new MediumRegulatedMotor(port));
+					((MotorEndpoint)endpoints.get(port)).setMotor(new MediumRegulatedIMotor(port));
 					return true;
 				case LargeRegulatedMotor:
-					((MotorEndpoint)endpoints.get(port)).setMotor(new LargeRegulatedMotor(port));
+					((MotorEndpoint)endpoints.get(port)).setMotor(new LargeRegulatedIMotor(port));
 					return true;
 				default: return false;
 			}
@@ -47,10 +47,10 @@ public class MotorManager extends HardwareInterfaceManager{
 
 		switch(motortype){
 			case MediumRegulatedMotor:
-				endpoint = new MotorEndpoint(new MediumRegulatedMotor(port));
+				endpoint = new MotorEndpoint(new MediumRegulatedIMotor(port));
 				break;
 			case LargeRegulatedMotor:
-				endpoint = new MotorEndpoint(new LargeRegulatedMotor(port));
+				endpoint = new MotorEndpoint(new LargeRegulatedIMotor(port));
 				break;
 			default: return false;
 		}

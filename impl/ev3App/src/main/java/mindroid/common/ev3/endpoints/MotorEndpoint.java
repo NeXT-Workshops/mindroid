@@ -35,8 +35,8 @@ public class MotorEndpoint extends Listener{
 					}
 					if(conn != null && conn.isConnected() && motor != null){
 						switch(motor.getMotortype()){
-							case LargeRegulatedMotor:  motorState = ((LargeRegulatedMotor)motor).getMotorState(); break;
-							case MediumRegulatedMotor: motorState = ((MediumRegulatedMotor)motor).getMotorState(); break;
+							case LargeRegulatedMotor:  motorState = ((LargeRegulatedIMotor)motor).getMotorState(); break;
+							case MediumRegulatedMotor: motorState = ((MediumRegulatedIMotor)motor).getMotorState(); break;
 							default: motorState = null; break;
 						}
 						if(motorState != null) {
@@ -63,9 +63,9 @@ public class MotorEndpoint extends Listener{
 
 	@Override
 	public void received(Connection connection, Object msg){		
-		if(motor != null && conn != null && motor instanceof MotorMessageListener) {
+		if(motor != null && conn != null && motor instanceof IMotorMessageListener) {
 			//System.out.println("Motor.handleMotorMessage(): "+ msg.toString());
-			((MotorMessageListener) motor).handleMotorMessage(msg);
+			((IMotorMessageListener) motor).handleMotorMessage(msg);
 		}
 	}
 

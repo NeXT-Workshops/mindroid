@@ -44,10 +44,66 @@ public abstract class AbstractMotor {
         this.motortype = motortype;
     }
 
-
-
     /**
      * Closes the Lejos motor-port
      */
     abstract public void close();
+
+    /**
+     * Calls forward on the lejos motor Object.
+     * Causes motor to rotate forward until stop() or flt() is called.
+     * Checks if lejos motor is not null.
+     */
+    public void forward(){
+        if(motor != null) {
+            motor.forward();
+        }
+    }
+
+    /**
+     * Calls flt on the lejos motor Object.
+     * Motor loses all power, causing the rotor to float freely to a stop.
+     * Checks if lejos motor is not null..
+     */
+    public void flt(){
+        if(motor != null){
+            motor.flt();
+        }
+    }
+
+    /**
+     * Calls backward on the lejos motor Object.
+     * Causes motor to rotate backwards until stop() or flt() is called.
+     * Checks if lejos motor is not null..
+     */
+    public void backward(){
+        if(motor != null){
+            motor.backward();
+        }
+    }
+
+    /**
+     * Calls stop on the lejos motor Object.
+     * Causes motor to stop immediately.
+     * Checks if lejos motor is not null..
+     */
+    public void stop(){
+        if(motor != null){
+            motor.stop();
+        }
+    }
+
+    /**
+     * Calls isMoving on the lejos motor Object.
+     * Return true if the motor is moving.
+     * Checks if lejos motor is not null..
+     * @return true if motor is moving
+     */
+    public boolean isMoving(){
+        if(motor != null){
+            return motor.isMoving();
+        }
+        return false;
+    }
+
 }

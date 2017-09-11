@@ -9,13 +9,20 @@ import java.util.HashMap;
 /**
  *  This class synchronizes Regulated Motors.
  *  This class is used to execute Motor operations synchronized with the given Motors.
+ *
  *  @author Torben
  */
 public class SynchronizedRegulatedMotorGroup {
 
+    /**
+     *  {@value #MIN_MOTOR_COUNT}
+     */
+    public static final int MIN_MOTOR_COUNT = 2;
 
-    private final int MIN_MOTOR_COUNT = 2;
-    private final int MAX_MOTOR_COUNT = 4;
+    /**
+     *  {@value #MAX_MOTOR_COUNT}
+     */
+    public static final int MAX_MOTOR_COUNT = 4;
 
     private AbstractRegulatedIMotor[] synchronizedMotors;
 
@@ -30,23 +37,30 @@ public class SynchronizedRegulatedMotorGroup {
 
     }
 
-
+    /**
+     * This Method creates a synchronized Block to execute the given Motor operations.
+     * Each given motor, defined by {@link #setSynchronizedMotors(AbstractRegulatedIMotor[])} can only execute one non blocking operation.
+     *
+     * @param operations - operations {@link SynchronizedMotorOperation} sorted by Motorport [A,..,D] to [operation,..,operation] size has to be equal {@link #MAX_MOTOR_COUNT}
+     */
     public synchronized void executeSynchronizedOperation(SynchronizedMotorOperation[] operations){
         if(isMotorSetValid() && operations.length == MAX_MOTOR_COUNT){
             int start_index = getStartIndex();
             if(start_index >= 0 ){
                 AbstractRegulatedIMotor[] motorPartners = getMotorPartners(start_index);
 
-
+                //Synchronize motors
                 synchronizedMotors[start_index].synchronizeWith(motorPartners);
-                synchronizedMotors[start_index].startSynchronization();
 
+                //Start synchronization block
+                synchronizedMotors[start_index].startSynchronization();
 
                 //Execute Operations. Information: Only non blocking calls (operations) can be used between start/end.!!
                 for (int i = 0; i < synchronizedMotors.length; i++) {
                     executeOperation(synchronizedMotors[i],operations[i]);
                 }
 
+                //End Synchronization block
                 synchronizedMotors[start_index].endSynchronization();
 
                 //Wait until complete.
@@ -55,13 +69,16 @@ public class SynchronizedRegulatedMotorGroup {
                         synchronizedMotors[i].waitComplete();
                     }
                 }
-
-
-
             }
         }
     }
 
+    /**
+     * Executes the Operation on the given Motor.
+     * This is only called in a synchronized motor operation block!
+     * @param syncMotor - motor to execute the operation on
+     * @param operation - operation to execute {@link SynchronizedMotorOperation}
+     */
     private void executeOperation(AbstractRegulatedIMotor syncMotor, SynchronizedMotorOperation operation) {
         if(syncMotor != null && operation != null){
             switch(operation){
@@ -83,6 +100,10 @@ public class SynchronizedRegulatedMotorGroup {
         }
     }
 
+    /**
+     * Returns the first motor.
+     * @return the first motor.
+     */
     private int getStartIndex(){
         for (int i = 0; i < synchronizedMotors.length; i++) {
             if(synchronizedMotors[i] != null){
@@ -92,6 +113,11 @@ public class SynchronizedRegulatedMotorGroup {
         return -1;
     }
 
+    /**
+     * Returns the motor parners the first motor should be synchronized with
+     * @param start_index index of the first motor
+     * @return returns the motor partners to sync with.
+     */
     private AbstractRegulatedIMotor[] getMotorPartners(int start_index){
         start_index++;
         AbstractRegulatedIMotor[] motorPartners = new AbstractRegulatedIMotor[nbOfMotors - 1];
@@ -110,7 +136,7 @@ public class SynchronizedRegulatedMotorGroup {
      * Checks if all given Motors are unique and more than one exists.
      * Sorts the motors by port A->D. Stored in the field synchronizedMotors.
      * Sets the nbOfMotors field.
-     * Result is stored in local field which can be obtained by calling isMotorSetValid() {@Link #isMotorSetValid()}.
+     * Result is stored in local field which can be obtained by calling {@link #isMotorSetValid()} .
      */
     private void validateSynchronizedMotors(){
         if(checkArraySize()){
@@ -138,7 +164,7 @@ public class SynchronizedRegulatedMotorGroup {
 
     /**
      * Checks if the given Motor Array has a proper size.
-     * The allowed size is defined by {@Link #MIN_MOTOR_COUNT} and {@Link #MAX_MOTOR_COUNT}
+     * The allowed size is defined by {@link #MIN_MOTOR_COUNT} and {@link #MAX_MOTOR_COUNT}
      * @return true - if enough motors are registered/set.
      */
     private boolean checkArraySize(){
@@ -147,7 +173,7 @@ public class SynchronizedRegulatedMotorGroup {
 
     /**
      * Sets the motors operating synchronized
-     * Also checks if all motors are valid, means unique. Result is stored and can be obtained by calling @Link #isMotorSetValid()}.
+     * Also checks if all motors are valid, means unique. Result is stored and can be obtained by calling @link #isMotorSetValid()}.
      * @param synchronizedMotors set of motors which should execute operation synchronized
      */
     public void setSynchronizedMotors(AbstractRegulatedIMotor[] synchronizedMotors) {
@@ -155,6 +181,11 @@ public class SynchronizedRegulatedMotorGroup {
         validateSynchronizedMotors();
     }
 
+    /**
+     * Returns true if the motor set is valid and fulfills the rules of the class.
+     * Size has to be betweend {@link #MIN_MOTOR_COUNT} and {@link #MAX_MOTOR_COUNT}
+     * @return true - if motorset is valid
+     */
     public boolean isMotorSetValid() {
         return isMotorSetValid;
     }

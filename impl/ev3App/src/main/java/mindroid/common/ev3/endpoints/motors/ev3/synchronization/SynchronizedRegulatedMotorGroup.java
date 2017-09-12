@@ -3,12 +3,13 @@ package mindroid.common.ev3.endpoints.motors.ev3.synchronization;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 import mindroid.common.ev3.endpoints.motors.ev3.AbstractRegulatedIMotor;
+import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperation;
 
 import java.util.HashMap;
 
 /**
  *  This class synchronizes Regulated Motors.
- *  This class is used to execute Motor operations synchronized with the given Motors.
+ *  It is used to execute Motor operations synchronized with the given Motors.
  *
  *  @author Torben
  */
@@ -81,7 +82,7 @@ public class SynchronizedRegulatedMotorGroup {
      */
     private void executeOperation(AbstractRegulatedIMotor syncMotor, SynchronizedMotorOperation operation) {
         if(syncMotor != null && operation != null){
-            switch(operation){
+            switch(operation.getOptype()){
                 case FLT:
                     syncMotor.flt(true);
                     break;
@@ -143,7 +144,9 @@ public class SynchronizedRegulatedMotorGroup {
             HashMap<Port,AbstractRegulatedIMotor> portToMotorMapping = new HashMap<Port,AbstractRegulatedIMotor>(synchronizedMotors.length);
 
             for (AbstractRegulatedIMotor motor : synchronizedMotors) {
-                portToMotorMapping.put(motor.getMotorPort(),motor);
+                if(motor != null) {
+                    portToMotorMapping.put(motor.getMotorPort(), motor);
+                }
             }
             nbOfMotors = portToMotorMapping.size();
             synchronizedMotors = new AbstractRegulatedIMotor[MAX_MOTOR_COUNT];

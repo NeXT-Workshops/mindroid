@@ -9,6 +9,10 @@ import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.common.messages.hardware.Sensors;
 import org.mindroid.common.messages.led.SetStatusLightMessage;
 import org.mindroid.common.messages.motor.*;
+import org.mindroid.common.messages.motor.synchronization.CreateSynchronizedMotorsMessage;
+import org.mindroid.common.messages.motor.synchronization.OperationType;
+import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperation;
+import org.mindroid.common.messages.motor.synchronization.SynchronizedOperationMessage;
 import org.mindroid.common.messages.sensor.*;
 import org.mindroid.common.messages.sound.BeepMessage;
 import org.mindroid.common.messages.sound.SoundVolumeMessage;
@@ -46,6 +50,12 @@ public class MessageRegistrar {
 		kryo.register(RotateToMessage.class);
 		kryo.register(MotorState.class);
 		kryo.register(MotorStateMessage.class);
+
+		//Synchronized Motor Group Messages
+		kryo.register(OperationType.class);
+		kryo.register(SynchronizedMotorOperation.class);
+		kryo.register(SynchronizedOperationMessage.class);
+		kryo.register(CreateSynchronizedMotorsMessage.class);
 	
 		//Sensor Messages
 		kryo.register(SensorEventMessage.class);

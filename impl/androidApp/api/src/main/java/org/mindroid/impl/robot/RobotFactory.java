@@ -58,7 +58,7 @@ public final class RobotFactory implements IRobotFactory {
     private HashMap<EV3PortID,ArrayList<IEV3SensorEventListener>> sensorListenerToRegister = new HashMap<>();
 
     //Unneccessary vars - just for testing
-    private MotorProvider motorControl = Robot.getRobotController().getMotorProvider();
+    private MotorProvider motorProvider = Robot.getRobotController().getMotorProvider();
     private ISensorControl sensorControl = Robot.getRobotController().getSensorController();
     private IBrickControl brickControl = Robot.getRobotController().getBrickController();
 
@@ -345,7 +345,7 @@ public final class RobotFactory implements IRobotFactory {
                 ",\n motor_B=" + motor_B +
                 ",\n motor_C=" + motor_C +
                 ",\n motor_D=" + motor_D +
-                ",\n motorControl=" + motorControl +
+                ",\n motorProvider=" + motorProvider +
                 ",\n sensorControl=" + sensorControl +
                 ",\n brickControl=" + brickControl +
                 ",\n brickIP='" + brickIP + '\'' +

@@ -1,5 +1,6 @@
 package org.mindroid.impl.robot;
 
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
@@ -26,7 +27,7 @@ public class MotorProvider implements org.mindroid.api.robot.control.MotorProvid
         motors = new HashMap<>(4);
     }
 
-    private final EV3RegulatedMotorEndpoint getMotorEndpoint(EV3PortID motorPort){
+    private EV3RegulatedMotorEndpoint getMotorEndpoint(EV3PortID motorPort){
         if(motorPort.equals(EV3PortIDs.PORT_A)){
             return robot.getIMotor_A();
         }else if(motorPort.equals(EV3PortIDs.PORT_B)){
@@ -49,10 +50,10 @@ public class MotorProvider implements org.mindroid.api.robot.control.MotorProvid
             if(motors.containsKey(motorPort)){
                 return motors.get(motorPort);
             }
-            motors.put(motorPort,new Motor(getMotorEndpoint(motorPort), motorPort));//TODO check what happens, when the motorEndpoint is null?
+
+            motors.put(motorPort,new Motor(getMotorEndpoint(motorPort), motorPort));//TODO check what happens, when the motorEndpoint is null? -> Send an info message?
             return motors.get(motorPort);
         }
         return null;
-        //TODO maybe throw an error if motor is null?
     }
 }

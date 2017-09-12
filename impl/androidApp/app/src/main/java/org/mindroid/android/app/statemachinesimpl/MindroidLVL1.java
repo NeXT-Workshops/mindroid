@@ -172,8 +172,8 @@ public class MindroidLVL1 extends LVL1API {
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(50);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(50);
+                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
 
             }
         };
@@ -250,8 +250,8 @@ public class MindroidLVL1 extends LVL1API {
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(50);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(50);
+                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
             }
         };
 
@@ -277,8 +277,8 @@ public class MindroidLVL1 extends LVL1API {
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(50);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(50);
+                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
             }
         };
 
@@ -292,8 +292,8 @@ public class MindroidLVL1 extends LVL1API {
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(50);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(50);
+                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
             }
         };
 
@@ -307,8 +307,8 @@ public class MindroidLVL1 extends LVL1API {
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(50);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(50);
+                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
 
                 sendMessage(player_dest,"START");
 
@@ -621,8 +621,8 @@ public class MindroidLVL1 extends LVL1API {
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(50);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(50);
+                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
             }
         };
 
@@ -648,8 +648,8 @@ public class MindroidLVL1 extends LVL1API {
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(50);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(50);
+                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
             }
         };
 
@@ -663,8 +663,8 @@ public class MindroidLVL1 extends LVL1API {
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(50);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(50);
+                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
             }
         };
 

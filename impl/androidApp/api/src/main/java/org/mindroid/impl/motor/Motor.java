@@ -20,7 +20,9 @@ public class Motor implements RegulatedMotor {
 
     @Override
     public final void forward() {
-        motorEndpoint.forward();
+        if(motorEndpoint != null) {
+            motorEndpoint.forward();
+        }
     }
 
     @Override
@@ -157,9 +159,26 @@ public class Motor implements RegulatedMotor {
         return false;
     }
 
-
-
     public EV3PortID getPort() {
         return port;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Motor motor = (Motor) o;
+
+        if (motorEndpoint != null ? !motorEndpoint.equals(motor.motorEndpoint) : motor.motorEndpoint != null)
+            return false;
+        return port != null ? port.equals(motor.port) : motor.port == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = motorEndpoint != null ? motorEndpoint.hashCode() : 0;
+        result = 31 * result + (port != null ? port.hashCode() : 0);
+        return result;
     }
 }

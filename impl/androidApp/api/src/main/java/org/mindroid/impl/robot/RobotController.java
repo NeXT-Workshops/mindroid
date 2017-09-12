@@ -25,7 +25,6 @@ public class RobotController {
         this.robotID = robot.robotID;
     }
 
-    //TODO may add motortype as parameter to return specific controler for the motortype
     public MotorProvider getMotorProvider() {
         return motorControl;
     }

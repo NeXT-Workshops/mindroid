@@ -3,7 +3,6 @@ package org.mindroid.android.app.statemachinesimpl;
 import org.mindroid.api.LVL1API;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
-import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
 import org.mindroid.api.statemachine.ITransition;
@@ -169,13 +168,13 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 //TURN RIGHT
-                motorController.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.FORWARD);
-                motorController.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.BACKWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.FORWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.BACKWARD);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 
-                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
             }
         };
 
@@ -187,8 +186,8 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run(){
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
-                motorController.stop(EV3PortIDs.PORT_A);
-                motorController.stop(EV3PortIDs.PORT_D);
+                motorProvider.stop(EV3PortIDs.PORT_A);
+                motorProvider.stop(EV3PortIDs.PORT_D);
             }
         };
 
@@ -234,8 +233,8 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run() {
                 //FORWARD
-                motorController.stop(EV3PortIDs.PORT_A);
-                motorController.stop(EV3PortIDs.PORT_D);
+                motorProvider.stop(EV3PortIDs.PORT_A);
+                motorProvider.stop(EV3PortIDs.PORT_D);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.BLINKING);
             }
@@ -246,13 +245,13 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run() {
                 //FORWARD
-                motorController.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.FORWARD);
-                motorController.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.FORWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
-                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
             }
         };
 
@@ -260,8 +259,8 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run() {
                 //Wait
-                motorController.stop(EV3PortIDs.PORT_A);
-                motorController.stop(EV3PortIDs.PORT_D);
+                motorProvider.stop(EV3PortIDs.PORT_A);
+                motorProvider.stop(EV3PortIDs.PORT_D);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.BLINKING);
             }
@@ -273,13 +272,13 @@ public class MindroidLVL1 extends LVL1API {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //BACKWARD
-                motorController.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
-                motorController.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.BACKWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.BACKWARD);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
 
-                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
             }
         };
 
@@ -288,13 +287,13 @@ public class MindroidLVL1 extends LVL1API {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //TURN LEFT
-                motorController.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
-                motorController.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 
-                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
             }
         };
 
@@ -303,13 +302,13 @@ public class MindroidLVL1 extends LVL1API {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //TURN LEFT
-                motorController.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.FORWARD);
-                motorController.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.FORWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
-                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
 
                 sendMessage(player_dest,"START");
 
@@ -616,14 +615,14 @@ public class MindroidLVL1 extends LVL1API {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //FORWARD
-                motorController.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.FORWARD);
-                motorController.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.FORWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
 
-                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
             }
         };
 
@@ -632,8 +631,8 @@ public class MindroidLVL1 extends LVL1API {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //FORWARD
-                motorController.stop(EV3PortIDs.PORT_A);
-                motorController.stop(EV3PortIDs.PORT_D);
+                motorProvider.stop(EV3PortIDs.PORT_A);
+                motorProvider.stop(EV3PortIDs.PORT_D);
 
                 brickController.resetEV3StatusLight();
             }
@@ -645,13 +644,13 @@ public class MindroidLVL1 extends LVL1API {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //BACKWARD
-                motorController.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
-                motorController.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.BACKWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.BACKWARD);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
 
-                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
             }
         };
 
@@ -660,13 +659,13 @@ public class MindroidLVL1 extends LVL1API {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //TURN LEFT
-                motorController.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
-                motorController.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 
-                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
             }
         };
 

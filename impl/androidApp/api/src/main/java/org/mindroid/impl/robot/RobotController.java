@@ -7,7 +7,7 @@ import org.mindroid.api.communication.IMessenger;
  */
 public class RobotController {
 
-    private MotorController motorControl;
+    private MotorProvider motorControl;
     private BrickController brickController;
     private SensorController sensorControl;
     private IMessenger messenger;
@@ -18,7 +18,7 @@ public class RobotController {
     public RobotController(Robot robot){
         this.robot = robot;
 
-        this.motorControl = new MotorController(robot);
+        this.motorControl = new MotorProvider(robot);
         this.sensorControl = new SensorController(robot);
         this.brickController = new BrickController(robot);
 
@@ -26,7 +26,7 @@ public class RobotController {
     }
 
     //TODO may add motortype as parameter to return specific controler for the motortype
-    public MotorController getMotorController() {
+    public MotorProvider getMotorController() {
         return motorControl;
     }
 

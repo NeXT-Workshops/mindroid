@@ -47,6 +47,7 @@ public class MessageRegistrar {
 		kryo.register(RotateToMessage.class);
 		kryo.register(MotorState.class);
 		kryo.register(MotorStateMessage.class);
+		kryo.register(FltMessage.class);
 
 		//Synchronized Motor Group Messages
 		kryo.register(OperationType.class);

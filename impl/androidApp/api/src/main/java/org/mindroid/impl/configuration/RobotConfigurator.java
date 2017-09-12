@@ -19,7 +19,8 @@ import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 import org.mindroid.impl.motor.EV3MotorManager;
-import org.mindroid.impl.sensor.EV3Sensor;
+import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
+import org.mindroid.impl.sensor.EV3SensorEndpoint;
 import org.mindroid.impl.sensor.EV3SensorManager;
 
 
@@ -35,7 +36,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 	private HashMap<EV3SensorPort,Sensormode> sensorModeConfiguration = new HashMap<EV3SensorPort,Sensormode>(4);
 	private HashMap<EV3MotorPort,Motors> motorConfiguration = new HashMap<EV3MotorPort,Motors>(4);
 	
-	private HashMap<EV3SensorPort,EV3Sensor> sensors = new HashMap<EV3SensorPort,EV3Sensor>(4);
+	private HashMap<EV3SensorPort,EV3SensorEndpoint> sensors = new HashMap<EV3SensorPort,EV3SensorEndpoint>(4);
 	private HashMap<EV3MotorPort,RegulatedMotor> motors = new HashMap<EV3MotorPort,RegulatedMotor>(4);
 	
 	/** Experimental Values - may need a change **/
@@ -158,7 +159,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 	}
 
 	@Override
-	public EV3Sensor createSensor(EV3PortID sensPort) throws PortIsAlreadyInUseException {
+	public EV3SensorEndpoint createSensor(EV3PortID sensPort) throws PortIsAlreadyInUseException {
 		EV3SensorPort sensorPort = null;
 		if(EV3PortIDs.PORT_1 == sensPort){
 			sensorPort = EV3SensorPort.S1;
@@ -170,7 +171,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 			sensorPort = EV3SensorPort.S4;
 		}
 		if(sensorPort != null && !sensors.containsKey(sensorPort)){
-			EV3Sensor sensor = sensorManager.createSensor(sensPort,getSensorType(sensorPort),sensorPort,sensorModeConfiguration.get(sensorPort));
+			EV3SensorEndpoint sensor = sensorManager.createSensor(sensPort,getSensorType(sensorPort),sensorPort,sensorModeConfiguration.get(sensorPort));
 			sensors.put(sensorPort, sensor);
 			return sensor;
 		}else{
@@ -179,12 +180,12 @@ public class RobotConfigurator implements IRobotConfigurator {
 	}
 
 	@Override
-	public EV3Sensor getSensor(EV3SensorPort sensorPort) {
+	public EV3SensorEndpoint getSensor(EV3SensorPort sensorPort) {
 		return sensors.get(sensorPort);
 	}
 
 	@Override
-	public RegulatedMotor createMotor(EV3PortID motorPort) throws PortIsAlreadyInUseException {
+	public EV3RegulatedMotorEndpoint createMotor(EV3PortID motorPort) throws PortIsAlreadyInUseException {
 		EV3MotorPort motPort = null;
 		if(EV3PortIDs.PORT_A == motorPort){
 			motPort = EV3MotorPort.A;
@@ -196,7 +197,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 			motPort = EV3MotorPort.D;
 		}
 		if(motPort != null && !motors.containsKey(motPort)){
-			RegulatedMotor motor = motorManager.createMotor(getMotorType(motPort), motPort);
+			EV3RegulatedMotorEndpoint motor = motorManager.createMotor(getMotorType(motPort), motPort);
 			motors.put(motPort, motor);
 			return motor;
 		}else{

@@ -2,26 +2,28 @@ package org.mindroid.common.messages.motor;
 
 public class MotorState {
 
-    int rotationSpeed;
-    int limitAngle;
-    int acceleration;
-    int tachoCount;
-    float position;
-    float maxSpeed;
+    private int rotationSpeed = -1;
+    private int limitAngle = -1;
+    private int acceleration = -1;
+    private int tachoCount = -1;
+    private int speed = -1;
+    private float position = -1f;
+    private float maxSpeed = -1f;
+    private boolean isMoving = false;
 
     public MotorState() { }
 
 
-    //TODO refactor
     public MotorState(int rotationSpeed, int limitAngle, int acceleration, int tachoCount, float position,
-                             float maxSpeed) {
-        super();
+                             int speed,float maxSpeed, boolean isMoving) {
         this.rotationSpeed = rotationSpeed;
         this.limitAngle = limitAngle;
         this.acceleration = acceleration;
         this.tachoCount = tachoCount;
         this.position = position;
         this.maxSpeed = maxSpeed;
+        this.isMoving = isMoving;
+        this.speed = speed;
     }
 
 
@@ -72,5 +74,21 @@ public class MotorState {
 
     public void setMaxSpeed(float maxSpeed) {
         this.maxSpeed = maxSpeed;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 }

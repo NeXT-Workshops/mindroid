@@ -8,6 +8,7 @@ import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.motor.Motor;
 import org.mindroid.impl.robot.MotorDirection;
+import org.mindroid.impl.robot.MotorProvider;
 import org.mindroid.impl.statemachine.*;
 import org.mindroid.impl.statemachine.constraints.GT;
 import org.mindroid.impl.statemachine.constraints.LT;
@@ -69,8 +70,8 @@ public abstract class LVL2API extends LVL1API {
 
 
     public LVL2API() {
-        leftMotor = new Motor(motorController, getLeftMotorPort());
-        rightMotor = new Motor(motorController, getRightMotorPort());
+        leftMotor = motorProvider.getMotor(getLeftMotorPort());
+        rightMotor = motorProvider.getMotor(getRightMotorPort());
 
         initSensorStatemachines();
         statemachineCollection.addParallelStatemachines(IMPERATIVE_GROUP_ID, sensorEvaluatingStatemachines.values().toArray(new Statemachine[sensorEvaluatingStatemachines.values().size()]));
@@ -306,16 +307,16 @@ public abstract class LVL2API extends LVL1API {
             BooleanStatemachine angleSM = new BooleanStatemachine(SM_KEY_ANGLE, false, new Rotation((-1) * degrees, new Angle(getGyroSensorPort())), null);
             registerStatemachine(angleSM);
             startStatemachine(angleSM.getID());
-            motorController.setMotorDirection(getLeftMotorPort(), MotorDirection.BACKWARD);
-            motorController.setMotorDirection(getRightMotorPort(), MotorDirection.FORWARD);
-            motorController.setMotorSpeed(getLeftMotorPort(), getMotorSpeedDuringRotation());
-            motorController.setMotorSpeed(getRightMotorPort(), getMotorSpeedDuringRotation());
+            leftMotor.backward();
+            rightMotor.forward();
+            leftMotor.setSpeed(getMotorSpeedDuringRotation());
+            rightMotor.setSpeed(getMotorSpeedDuringRotation());
             while (!angleSM.getResult() && !isInterrupted()) {
                 delay(getTurnAngleCheckIntervalInMilliseconds());
             }
             stopStatemachine(angleSM.getID());
-            motorController.stop(getLeftMotorPort());
-            motorController.stop(getRightMotorPort());
+            leftMotor.stop();
+            rightMotor.stop();
         }
     }
 
@@ -330,16 +331,16 @@ public abstract class LVL2API extends LVL1API {
             BooleanStatemachine angleSM = new BooleanStatemachine(SM_KEY_ANGLE, false, new Rotation(degrees, new Angle(getGyroSensorPort())), null);
             registerStatemachine(angleSM);
             startStatemachine(SM_KEY_ANGLE);
-            motorController.setMotorDirection(getLeftMotorPort(), MotorDirection.FORWARD);
-            motorController.setMotorDirection(getRightMotorPort(), MotorDirection.BACKWARD);
-            motorController.setMotorSpeed(getLeftMotorPort(), getMotorSpeedDuringRotation());
-            motorController.setMotorSpeed(getRightMotorPort(), getMotorSpeedDuringRotation());
+            leftMotor.forward();
+            rightMotor.backward();
+            leftMotor.setSpeed(getMotorSpeedDuringRotation());
+            rightMotor.setSpeed(getMotorSpeedDuringRotation());
             while (!angleSM.getResult() && !isInterrupted()) {
                 delay(getTurnAngleCheckIntervalInMilliseconds());
             }
             stopStatemachine(SM_KEY_ANGLE);
-            motorController.stop(getLeftMotorPort());
-            motorController.stop(getRightMotorPort());
+            leftMotor.stop();
+            rightMotor.stop();
         }
     }
 
@@ -350,13 +351,13 @@ public abstract class LVL2API extends LVL1API {
      */
     public final void turnLeftTime(int milliseconds) {
         if (!isInterrupted()) {
-            motorController.setMotorDirection(getLeftMotorPort(), MotorDirection.BACKWARD);
-            motorController.setMotorDirection(getRightMotorPort(), MotorDirection.FORWARD);
-            motorController.setMotorSpeed(getLeftMotorPort(), getMotorSpeedDuringRotation());
-            motorController.setMotorSpeed(getRightMotorPort(), getMotorSpeedDuringRotation());
+            leftMotor.backward();
+            rightMotor.forward();
+            leftMotor.setSpeed(getMotorSpeedDuringRotation());
+            rightMotor.setSpeed(getMotorSpeedDuringRotation());
             delay(milliseconds);
-            motorController.stop(getLeftMotorPort());
-            motorController.stop(getRightMotorPort());
+            leftMotor.stop();
+            rightMotor.stop();
         }
     }
 
@@ -368,13 +369,13 @@ public abstract class LVL2API extends LVL1API {
      */
     public final void turnRightTime(int milliseconds) {
         if (!isInterrupted()) {
-            motorController.setMotorDirection(getLeftMotorPort(), MotorDirection.FORWARD);
-            motorController.setMotorDirection(getRightMotorPort(), MotorDirection.BACKWARD);
-            motorController.setMotorSpeed(getLeftMotorPort(), getMotorSpeedDuringRotation());
-            motorController.setMotorSpeed(getRightMotorPort(), getMotorSpeedDuringRotation());
+            leftMotor.forward();
+            rightMotor.backward();
+            leftMotor.setSpeed(getMotorSpeedDuringRotation());
+            rightMotor.setSpeed(getMotorSpeedDuringRotation());
             delay(milliseconds);
-            motorController.stop(getLeftMotorPort());
-            motorController.stop(getRightMotorPort());
+            leftMotor.stop();
+            rightMotor.stop();
         }
     }
 
@@ -455,7 +456,7 @@ public abstract class LVL2API extends LVL1API {
     /**
      * Returns the motor speed that is used for turn methods
      *
-     * @see org.mindroid.impl.robot.MotorController#setMotorSpeed(EV3PortID, int)
+     * @see Motor#setSpeed(int)
      */
     protected int getMotorSpeedDuringRotation() {
         return 50;

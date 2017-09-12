@@ -6,7 +6,7 @@ import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.robot.*;
 import org.mindroid.api.robot.context.IConstraintEvaluator;
 import org.mindroid.api.robot.control.IBrickControl;
-import org.mindroid.api.robot.control.IMotorControl;
+import org.mindroid.api.robot.control.MotorProvider;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.api.robot.control.ISensorControl;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
@@ -36,16 +36,19 @@ import java.util.HashMap;
  */
 public final class RobotFactory implements IRobotFactory {
     // ---------------- VON AUSSEN GESETZTE VARIABLEN ------------------------
+    //stores Sensortypes plugged to the ports
     private Sensors sensor_S1 = null;
     private Sensors sensor_S2 = null;
     private Sensors sensor_S3 = null;
     private Sensors sensor_S4 = null;
 
+    //stores sensormodes used by the sensors connected to the ports
     private Sensormode mode_S1 = null;
     private Sensormode mode_S2 = null;
     private Sensormode mode_S3 = null;
     private Sensormode mode_S4 = null;
 
+    //stores Motortypes plugged to the ports
     private Motors motor_A = null;
     private Motors motor_B = null;
     private Motors motor_C = null;
@@ -55,7 +58,7 @@ public final class RobotFactory implements IRobotFactory {
     private HashMap<EV3PortID,ArrayList<IEV3SensorEventListener>> sensorListenerToRegister = new HashMap<>();
 
     //Unneccessary vars - just for testing
-    private IMotorControl motorControl = Robot.getRobotController().getMotorController();
+    private MotorProvider motorControl = Robot.getRobotController().getMotorController();
     private ISensorControl sensorControl = Robot.getRobotController().getSensorController();
     private IBrickControl brickControl = Robot.getRobotController().getBrickController();
 

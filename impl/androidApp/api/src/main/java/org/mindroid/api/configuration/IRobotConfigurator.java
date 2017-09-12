@@ -9,7 +9,7 @@ import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
-import org.mindroid.impl.sensor.EV3Sensor;
+import org.mindroid.impl.sensor.EV3SensorEndpoint;
 
 
 public interface IRobotConfigurator {
@@ -51,9 +51,9 @@ public interface IRobotConfigurator {
 	
 	Motors getMotorType(EV3MotorPort motorPort);
 
-	EV3Sensor createSensor(EV3PortID sensorPort) throws BrickIsNotReadyException, PortIsAlreadyInUseException;
+	EV3SensorEndpoint createSensor(EV3PortID sensorPort) throws BrickIsNotReadyException, PortIsAlreadyInUseException;
 
-	EV3Sensor getSensor(EV3SensorPort sensorPort);
+	EV3SensorEndpoint getSensor(EV3SensorPort sensorPort);
 
 	RegulatedMotor createMotor(EV3PortID motorPort) throws BrickIsNotReadyException, PortIsAlreadyInUseException;
 

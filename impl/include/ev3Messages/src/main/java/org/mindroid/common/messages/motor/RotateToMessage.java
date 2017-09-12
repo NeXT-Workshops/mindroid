@@ -1,12 +1,25 @@
 package org.mindroid.common.messages.motor;
 
 public class RotateToMessage{
-    int angle;
+    private boolean immidiateReturn;
+    private int angle;
+
     public RotateToMessage(){ }
+
+    public RotateToMessage(int angle){
+        this.angle = angle;
+    }
+
+    public RotateToMessage(int angle,boolean immidiateReturn){
+        this.angle = angle;
+        this.immidiateReturn = immidiateReturn;
+    }
+
     public int getAngle() {
         return angle;
     }
-    public void setAngle(int anlge) {
-        this.angle = anlge;
-    };
+
+    public boolean isImmidiateReturn() {
+        return immidiateReturn;
+    }
 }

@@ -32,7 +32,7 @@ public class EV3SensorManager extends Listener{
 
 	EV3Brick ev3Brick;	
 	
-    private Map<EV3SensorPort, EV3Sensor> sensors;
+    private Map<EV3SensorPort, EV3SensorEndpoint> sensors;
 
     private HashMap<EV3SensorPort,Integer> portToTCPPort;
     
@@ -59,14 +59,14 @@ public class EV3SensorManager extends Listener{
      * @return the sensor handle
      * @throws PortIsAlreadyInUseException if the specified {@link EV3SensorPort} is already in use
      */
-    public EV3Sensor createSensor(EV3PortID brick_port, Sensors sensorType, EV3SensorPort sensorPort, Sensormode mode) throws PortIsAlreadyInUseException{
+    public EV3SensorEndpoint createSensor(EV3PortID brick_port, Sensors sensorType, EV3SensorPort sensorPort, Sensormode mode) throws PortIsAlreadyInUseException{
 		if(sensorType != null && sensorPort != null){
 			if(sensors.containsKey(sensorPort)){
 				throw new PortIsAlreadyInUseException(sensorPort.toString());
 			}else{
-				EV3Sensor ev3Sensor = new EV3Sensor(ev3Brick.EV3Brick_IP, portToTCPPort.get(sensorPort), EV3Brick.BRICK_TIMEOUT,sensorType,brick_port, mode);
-				sensors.put(sensorPort, ev3Sensor);
-				return ev3Sensor;
+				EV3SensorEndpoint ev3SensorEndpoint = new EV3SensorEndpoint(ev3Brick.EV3Brick_IP, portToTCPPort.get(sensorPort), EV3Brick.BRICK_TIMEOUT,sensorType,brick_port, mode);
+				sensors.put(sensorPort, ev3SensorEndpoint);
+				return ev3SensorEndpoint;
 			}
 		}else{
 			return null;
@@ -133,7 +133,7 @@ public class EV3SensorManager extends Listener{
 		}
 	}
     
-    void close(EV3Sensor sensor) {
+    void close(EV3SensorEndpoint sensor) {
         /*List<Integer> tmpPorts = new ArrayList<>(4);
         for (Integer port : sensors.keySet()) {
             if (sensors.containsKey(port) && sensors.get(port).equals(sensor)) {

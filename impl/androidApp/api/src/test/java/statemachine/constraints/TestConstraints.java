@@ -11,7 +11,7 @@ import org.mindroid.common.messages.hardware.Sensors;
 import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.robot.context.StartCondition;
-import org.mindroid.impl.sensor.EV3Sensor;
+import org.mindroid.impl.sensor.EV3SensorEndpoint;
 import org.mindroid.impl.sensor.EV3SensorEvent;
 import org.mindroid.impl.statemachine.State;
 import org.mindroid.impl.statemachine.TimeEvent;
@@ -35,7 +35,7 @@ public class TestConstraints {
         float[] test_value_flase = {25};
 
         IRobotContextState contextState = new RobotContextState();
-        EV3Sensor testSensor = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
+        EV3SensorEndpoint testSensor = new EV3SensorEndpoint("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
         IEV3SensorEventListener rcs = (IEV3SensorEventListener) contextState;
         rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_true,0, Sensormode.DISTANCE));
 
@@ -59,7 +59,7 @@ public class TestConstraints {
         float[] test_value_true = {25};
 
         IRobotContextState contextState = new RobotContextState();
-        EV3Sensor testSensor = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
+        EV3SensorEndpoint testSensor = new EV3SensorEndpoint("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
         IEV3SensorEventListener rcs = (IEV3SensorEventListener) contextState;
         rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_true,0, Sensormode.DISTANCE));
 
@@ -79,7 +79,7 @@ public class TestConstraints {
         float[] test_value_true = {20};
 
         IRobotContextState contextState = new RobotContextState();
-        EV3Sensor testSensor = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
+        EV3SensorEndpoint testSensor = new EV3SensorEndpoint("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
         IEV3SensorEventListener rcs = (IEV3SensorEventListener) contextState;
         rcs.handleSensorEvent(EV3PortIDs.PORT_1,new EV3SensorEvent(testSensor,test_value_true,0, Sensormode.DISTANCE));
 
@@ -98,8 +98,8 @@ public class TestConstraints {
         float[] test_value_s1 = {20};
         float[] test_value_s2 = {19};
 
-        EV3Sensor testSensor_1 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
-        EV3Sensor testSensor_2 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_2, Sensormode.DISTANCE);
+        EV3SensorEndpoint testSensor_1 = new EV3SensorEndpoint("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
+        EV3SensorEndpoint testSensor_2 = new EV3SensorEndpoint("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_2, Sensormode.DISTANCE);
 
         IRobotContextState contextState = new RobotContextState();
 
@@ -136,8 +136,8 @@ public class TestConstraints {
         float[] test_value_s1 = {20};
         float[] test_value_s2 = {19};
 
-        EV3Sensor testSensor_1 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
-        EV3Sensor testSensor_2 = new EV3Sensor("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_2, Sensormode.DISTANCE);
+        EV3SensorEndpoint testSensor_1 = new EV3SensorEndpoint("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_1, Sensormode.DISTANCE);
+        EV3SensorEndpoint testSensor_2 = new EV3SensorEndpoint("-",1,1, Sensors.EV3UltrasonicSensor,EV3PortIDs.PORT_2, Sensormode.DISTANCE);
 
         IRobotContextState contextState = new RobotContextState();
 

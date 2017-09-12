@@ -1,10 +1,10 @@
 package org.mindroid.impl.robot;
 
 import org.mindroid.api.communication.IMessenger;
-import org.mindroid.api.motor.RegulatedMotor;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.configuration.RobotConfigurator;
-import org.mindroid.impl.sensor.EV3Sensor;
+import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
+import org.mindroid.impl.sensor.EV3SensorEndpoint;
 import org.mindroid.impl.statemachine.StatemachineManager;
 
 /**
@@ -18,15 +18,17 @@ public final class Robot {
 
     EV3Brick brick;
 
-    private EV3Sensor sensor_S1 = null;
-    private EV3Sensor sensor_S2 = null;
-    private EV3Sensor sensor_S3 = null;
-    private EV3Sensor sensor_S4 = null;
+    //Sensor Endpoints
+    private EV3SensorEndpoint sensor_S1 = null;
+    private EV3SensorEndpoint sensor_S2 = null;
+    private EV3SensorEndpoint sensor_S3 = null;
+    private EV3SensorEndpoint sensor_S4 = null;
 
-    private RegulatedMotor IMotor_A = null;
-    private RegulatedMotor IMotor_B = null;
-    private RegulatedMotor IMotor_C = null;
-    private RegulatedMotor IMotor_D = null;
+    //Motor Endpoints
+    private EV3RegulatedMotorEndpoint IMotor_A = null;
+    private EV3RegulatedMotorEndpoint IMotor_B = null;
+    private EV3RegulatedMotorEndpoint IMotor_C = null;
+    private EV3RegulatedMotorEndpoint IMotor_D = null;
 
     private StatemachineManager statemachineManager;
 
@@ -45,7 +47,7 @@ public final class Robot {
         statemachineManager = StatemachineManager.getInstance();
     }
 
-    public EV3Sensor getSensorS1() {
+    public EV3SensorEndpoint getSensorS1() {
         return sensor_S1;
     }
 
@@ -57,63 +59,63 @@ public final class Robot {
         this.robotConfigurator = robotConfigurator;
     }
 
-    protected void setSensorS1(EV3Sensor sensor_S1) {
+    protected void setSensorS1(EV3SensorEndpoint sensor_S1) {
         this.sensor_S1 = sensor_S1;
     }
 
-    protected EV3Sensor getSensorS2() {
+    protected EV3SensorEndpoint getSensorS2() {
         return sensor_S2;
     }
 
-    protected void setSensorS2(EV3Sensor sensor_S2) {
+    protected void setSensorS2(EV3SensorEndpoint sensor_S2) {
         this.sensor_S2 = sensor_S2;
     }
 
-    protected EV3Sensor getSensorS3() {
+    protected EV3SensorEndpoint getSensorS3() {
         return sensor_S3;
     }
 
-    protected void setSensorS3(EV3Sensor sensor_S3) {
+    protected void setSensorS3(EV3SensorEndpoint sensor_S3) {
         this.sensor_S3 = sensor_S3;
     }
 
-    protected EV3Sensor getSensorS4() {
+    protected EV3SensorEndpoint getSensorS4() {
         return sensor_S4;
     }
 
-    protected void setSensorS4(EV3Sensor sensor_S4) {
+    protected void setSensorS4(EV3SensorEndpoint sensor_S4) {
         this.sensor_S4 = sensor_S4;
     }
 
-    protected RegulatedMotor getIMotor_A() {
+    protected EV3RegulatedMotorEndpoint getIMotor_A() {
         return IMotor_A;
     }
 
-    protected void setMotorA(RegulatedMotor IMotor_A) {
+    protected void setMotorA(EV3RegulatedMotorEndpoint IMotor_A) {
         this.IMotor_A = IMotor_A;
     }
 
-    protected RegulatedMotor getIMotor_B() {
+    protected EV3RegulatedMotorEndpoint getIMotor_B() {
         return IMotor_B;
     }
 
-    protected void setMotorB(RegulatedMotor IMotor_B) {
+    protected void setMotorB(EV3RegulatedMotorEndpoint IMotor_B) {
         this.IMotor_B = IMotor_B;
     }
 
-    protected RegulatedMotor getIMotor_C() {
+    protected EV3RegulatedMotorEndpoint getIMotor_C() {
         return IMotor_C;
     }
 
-    protected void setMotorC(RegulatedMotor IMotor_C) {
+    protected void setMotorC(EV3RegulatedMotorEndpoint IMotor_C) {
         this.IMotor_C = IMotor_C;
     }
 
-    protected RegulatedMotor getIMotor_D() {
+    protected EV3RegulatedMotorEndpoint getIMotor_D() {
         return IMotor_D;
     }
 
-    protected void setMotorD(RegulatedMotor IMotor_D) {
+    protected void setMotorD(EV3RegulatedMotorEndpoint IMotor_D) {
         this.IMotor_D = IMotor_D;
     }
 

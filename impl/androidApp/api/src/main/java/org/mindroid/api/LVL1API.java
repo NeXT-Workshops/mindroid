@@ -14,7 +14,7 @@ public abstract class LVL1API implements IMindroidMain {
     public StatemachineCollection statemachineCollection = new StatemachineCollection();
 
     public RobotController robotController = Robot.getRobotController();
-    public MotorController motorController = robotController.getMotorController();
+    public MotorProvider motorProvider = robotController.getMotorController();
     public BrickController brickController = robotController.getBrickController();
     public SensorController sensorController = robotController.getSensorController();
     //private IMessenger messenger = Robot.getRobotController().getMessenger();
@@ -30,10 +30,10 @@ public abstract class LVL1API implements IMindroidMain {
      * Speed is set to 50.
      */
     public void forward() {
-        motorController.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.FORWARD);
-        motorController.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.FORWARD);
-        motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-        motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+        motorProvider.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.FORWARD);
+        motorProvider.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.FORWARD);
+        motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
+        motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
     }
 
     /**
@@ -41,10 +41,10 @@ public abstract class LVL1API implements IMindroidMain {
      * Speed is set to 50.
      */
     public void backward() {
-        motorController.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.BACKWARD);
-        motorController.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.BACKWARD);
-        motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-        motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+        motorProvider.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.BACKWARD);
+        motorProvider.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.BACKWARD);
+        motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
+        motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
     }
 
     /**

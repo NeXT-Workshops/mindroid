@@ -19,6 +19,7 @@ public abstract class AbstractRegulatedIMotor extends AbstractMotor implements I
         getMotor().close();
     }
 
+    // TODO maybe only send motorState on request? auslastung?
     public MotorState getMotorState() {
         if(this.motorState != null){
             this.motorState.setAcceleration(getMotor().getAcceleration());
@@ -27,6 +28,8 @@ public abstract class AbstractRegulatedIMotor extends AbstractMotor implements I
             this.motorState.setPosition(getMotor().getMaxSpeed());
             this.motorState.setRotationSpeed(getMotor().getRotationSpeed());
             this.motorState.setTachoCount(getMotor().getTachoCount());
+            this.motorState.setMoving(getMotor().isMoving());
+            this.motorState.setSpeed(getMotor().getSpeed());
         }else{
             this.motorState = new MotorState();
             return getMotorState();

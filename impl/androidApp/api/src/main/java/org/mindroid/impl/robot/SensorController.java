@@ -4,7 +4,7 @@ import org.mindroid.api.robot.control.ISensorControl;
 import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
-import org.mindroid.impl.sensor.EV3Sensor;
+import org.mindroid.impl.sensor.EV3SensorEndpoint;
 
 
 /**
@@ -26,7 +26,7 @@ public class SensorController implements ISensorControl{
      */
     @Override
     public void changeSensorMode(EV3PortID sensport, Sensormode mode) {
-        EV3Sensor sensor = getSensor(sensport);
+        EV3SensorEndpoint sensor = getSensor(sensport);
         if(sensor != null){
             sensor.changeSensorToMode(mode);
         }else{
@@ -34,7 +34,7 @@ public class SensorController implements ISensorControl{
         }
     }
 
-    private EV3Sensor getSensor(EV3PortID sensport){
+    private EV3SensorEndpoint getSensor(EV3PortID sensport){
         if(sensport.equals(EV3PortIDs.PORT_1)){
             return robot.getSensorS1();
         }else if(sensport.equals(EV3PortIDs.PORT_2)){

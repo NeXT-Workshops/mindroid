@@ -1,10 +1,8 @@
 package TestRobotFactory;
 
 import org.mindroid.api.statemachine.IMindroidMain;
-import org.mindroid.api.robot.control.IMotorControl;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
-import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.impl.robot.*;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.statemachine.State;
@@ -20,7 +18,7 @@ public class MindroidMainTest implements IMindroidMain {
 
     IStatemachine sm = new Statemachine("main");
     RobotController robotController = Robot.getRobotController();
-    MotorController motorController = robotController.getMotorController();
+    MotorProvider motorProvider = robotController.getMotorController();
     BrickController brickController = robotController.getBrickController();
     SensorController sensorController = robotController.getSensorController();
 
@@ -37,11 +35,11 @@ public class MindroidMainTest implements IMindroidMain {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //FORWARD
-                motorController.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.FORWARD);
-                motorController.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.FORWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
 
-                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
             }
         };
 
@@ -50,11 +48,11 @@ public class MindroidMainTest implements IMindroidMain {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //BACKWARD
-                motorController.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
-                motorController.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.BACKWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.BACKWARD);
 
-                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
             }
         };
 
@@ -63,11 +61,11 @@ public class MindroidMainTest implements IMindroidMain {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //TURN LEFT
-                motorController.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
-                motorController.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
+                motorProvider.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
 
-                motorController.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorController.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
+                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
             }
         };
 

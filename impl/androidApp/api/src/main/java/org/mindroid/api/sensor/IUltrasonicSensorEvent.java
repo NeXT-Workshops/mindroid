@@ -1,6 +1,6 @@
 package org.mindroid.api.sensor;
 
-import org.mindroid.impl.sensor.EV3Sensor;
+import org.mindroid.impl.sensor.EV3SensorEndpoint;
 
 public interface IUltrasonicSensorEvent {
 	
@@ -17,7 +17,7 @@ public interface IUltrasonicSensorEvent {
 	
 	UltrasonicEventType getEvent();
 	
-	EV3Sensor getEventSource();
+	EV3SensorEndpoint getEventSource();
 	
 	long getTimeStamp();
 

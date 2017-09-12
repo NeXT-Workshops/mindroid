@@ -16,7 +16,7 @@ import org.mindroid.impl.ev3.EV3PortID;
 
 
 //TODO Extend Listener Functionality: adding mode; value; and more?
-public class EV3Sensor extends ClientEndpointImpl {
+public class EV3SensorEndpoint extends ClientEndpointImpl {
 
 
     private List<IEV3SensorEventListener> listeners = new ArrayList<>(2);
@@ -28,7 +28,7 @@ public class EV3Sensor extends ClientEndpointImpl {
 
     private boolean ready = false;
 
-    private final EV3Sensor sensor = this;
+    private final EV3SensorEndpoint sensor = this;
 
     private Sensors sensorType;
     private EV3PortID brick_port;
@@ -38,7 +38,7 @@ public class EV3Sensor extends ClientEndpointImpl {
      * @param tcpPort
      * @param brickTimeout
      */
-    public EV3Sensor(String ip, int tcpPort, int brickTimeout,Sensors sensorType,EV3PortID brick_port,Sensormode mode) {
+    public EV3SensorEndpoint(String ip, int tcpPort, int brickTimeout, Sensors sensorType, EV3PortID brick_port, Sensormode mode) {
         super(ip, tcpPort, brickTimeout);
         this.sensorType = sensorType;
         this.brick_port = brick_port;
@@ -80,21 +80,21 @@ public class EV3Sensor extends ClientEndpointImpl {
 
                 //Status Message
                 if (object.getClass() == SensorStatusMessage.class) {
-                    System.out.println("EV3Sensor: " + ((SensorStatusMessage) object).getMsg()); //+"\n at port: "+((SensorMessages.SensorErrorMessage)object).getPort()
+                    System.out.println("EV3SensorEndpoint: " + ((SensorStatusMessage) object).getMsg()); //+"\n at port: "+((SensorMessages.SensorErrorMessage)object).getPort()
                     return;
                 }
 
                 //Error Message
                 if (object.getClass() == SensorErrorMessage.class) {
                     SensorErrorMessage msg = (SensorErrorMessage) object;
-                    System.out.println("EV3Sensor: SensorErrorMessage: " + msg.getErrorMsg() + " at Port " + msg.getPort()); //+"\n at port: "+((SensorMessages.SensorErrorMessage)object).getPort()
+                    System.out.println("EV3SensorEndpoint: SensorErrorMessage: " + msg.getErrorMsg() + " at Port " + msg.getPort()); //+"\n at port: "+((SensorMessages.SensorErrorMessage)object).getPort()
                     return;
                 }
 
                 //Message that sensormode was changed successfully
                 if (object.getClass() == ModeChangedSuccessfullyMessage.class) {
                     currentMode = ((ModeChangedSuccessfullyMessage) object).getMode();
-                    System.out.println("EV3Sensor: current Mode is " + currentMode);
+                    System.out.println("EV3SensorEndpoint: current Mode is " + currentMode);
                     return;
                 }
             }

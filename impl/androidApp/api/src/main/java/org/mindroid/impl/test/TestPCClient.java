@@ -110,14 +110,14 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
                     //FORWARD
-                    motorController.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.FORWARD);
-                    motorController.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.FORWARD);
+                    motorProvider.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.FORWARD);
+                    motorProvider.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.FORWARD);
 
                     brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
 
-                    motorController.setMotorSpeed(EV3PortIDs.PORT_A, 50);
-                    motorController.setMotorSpeed(EV3PortIDs.PORT_D, 50);
+                    motorProvider.setMotorSpeed(EV3PortIDs.PORT_A, 50);
+                    motorProvider.setMotorSpeed(EV3PortIDs.PORT_D, 50);
                 }
             };
 
@@ -126,8 +126,8 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
                     //FORWARD
-                    motorController.stop(EV3PortIDs.PORT_A);
-                    motorController.stop(EV3PortIDs.PORT_D);
+                    motorProvider.stop(EV3PortIDs.PORT_A);
+                    motorProvider.stop(EV3PortIDs.PORT_D);
 
                     brickController.resetEV3StatusLight();
                 }
@@ -139,13 +139,13 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
                     //BACKWARD
-                    motorController.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.BACKWARD);
-                    motorController.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.BACKWARD);
+                    motorProvider.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.BACKWARD);
+                    motorProvider.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.BACKWARD);
 
                     brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
 
-                    motorController.setMotorSpeed(EV3PortIDs.PORT_A, 50);
-                    motorController.setMotorSpeed(EV3PortIDs.PORT_D, 50);
+                    motorProvider.setMotorSpeed(EV3PortIDs.PORT_A, 50);
+                    motorProvider.setMotorSpeed(EV3PortIDs.PORT_D, 50);
                 }
             };
 
@@ -154,13 +154,13 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
                     //TURN LEFT
-                    motorController.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.BACKWARD);
-                    motorController.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.FORWARD);
+                    motorProvider.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.BACKWARD);
+                    motorProvider.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.FORWARD);
 
                     brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 
-                    motorController.setMotorSpeed(EV3PortIDs.PORT_A, 50);
-                    motorController.setMotorSpeed(EV3PortIDs.PORT_D, 50);
+                    motorProvider.setMotorSpeed(EV3PortIDs.PORT_A, 50);
+                    motorProvider.setMotorSpeed(EV3PortIDs.PORT_D, 50);
                 }
             };
 

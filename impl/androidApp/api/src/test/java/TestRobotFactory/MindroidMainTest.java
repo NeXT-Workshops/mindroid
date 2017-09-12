@@ -35,11 +35,11 @@ public class MindroidMainTest implements IMindroidMain {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //FORWARD
-                motorProvider.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.FORWARD);
-                motorProvider.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
+                motorProvider.getMotor((EV3PortIDs.PORT_A)).forward();
+                motorProvider.getMotor((EV3PortIDs.PORT_D)).forward();
 
-                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.getMotor((EV3PortIDs.PORT_A)).setSpeed(500);
+                motorProvider.getMotor((EV3PortIDs.PORT_D)).setSpeed(500);
             }
         };
 
@@ -48,11 +48,11 @@ public class MindroidMainTest implements IMindroidMain {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //BACKWARD
-                motorProvider.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
-                motorProvider.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.BACKWARD);
+                motorProvider.getMotor((EV3PortIDs.PORT_A)).backward();
+                motorProvider.getMotor((EV3PortIDs.PORT_D)).backward();
 
-                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.getMotor((EV3PortIDs.PORT_A)).setSpeed(500);
+                motorProvider.getMotor((EV3PortIDs.PORT_D)).setSpeed(500);
             }
         };
 
@@ -61,11 +61,11 @@ public class MindroidMainTest implements IMindroidMain {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //TURN LEFT
-                motorProvider.setMotorDirection(EV3PortIDs.PORT_A,MotorDirection.BACKWARD);
-                motorProvider.setMotorDirection(EV3PortIDs.PORT_D,MotorDirection.FORWARD);
+                motorProvider.getMotor((EV3PortIDs.PORT_A)).backward();
+                motorProvider.getMotor((EV3PortIDs.PORT_D)).forward();
 
-                motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
-                motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
+                motorProvider.getMotor((EV3PortIDs.PORT_A)).setSpeed(500);
+                motorProvider.getMotor((EV3PortIDs.PORT_D)).setSpeed(500);
             }
         };
 

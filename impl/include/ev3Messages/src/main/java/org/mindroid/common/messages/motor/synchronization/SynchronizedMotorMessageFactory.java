@@ -24,7 +24,11 @@ public class SynchronizedMotorMessageFactory {
         return new SynchronizedOperationMessage(new SynchronizedMotorOperation[]{opForPortA,opForPortB,opForPortC,opForPortD});
     }
 
-    public static CreateSynchronizedMotorsMessage createCreateSynchronizedMotorsMessage(EV3MotorPort[] ports){
+    public static CreateSynchronizedMotorsMessage createCreateSynchronizedMotorsMessage(String[] ports){
         return new CreateSynchronizedMotorsMessage(ports);
+    }
+
+    public static SynchronizedMotorGroupCreatedMessage createCreationSuccessMessage(boolean isSuccess){
+        return new SynchronizedMotorGroupCreatedMessage(isSuccess);
     }
 }

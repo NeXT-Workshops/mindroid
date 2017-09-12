@@ -11,7 +11,10 @@ import mindroid.common.ev3.endpoints.brick.EV3BrickEndpoint;
 import org.mindroid.common.messages.brick.BrickMessagesFactory;
 import org.mindroid.common.messages.brick.CreateMotorMessage;
 import org.mindroid.common.messages.brick.CreateSensorMessage;
+import org.mindroid.common.messages.hardware.EV3MotorPort;
 import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.motor.synchronization.CreateSynchronizedMotorsMessage;
+import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorMessageFactory;
 import org.mindroid.common.messages.sensor.SensorMessageFactory;
 import org.mindroid.common.messages.hardware.Sensors;
 
@@ -67,6 +70,7 @@ public class DeviceManager extends Listener {
 
     /**
      * Queued Methods "Create-Motor/Sensor" are handled one by one in this method
+     * TODO Refactor/Remove that one
      */
     private void checkForCreationThread() {
         Thread checkForThread = new Thread() {
@@ -140,8 +144,16 @@ public class DeviceManager extends Listener {
                 handleCreateMotorMessage(conn, msg);
                 return;
             }
+
+            if (object.getClass() == CreateSynchronizedMotorsMessage.class) {
+                final CreateSynchronizedMotorsMessage msg = (CreateSynchronizedMotorsMessage) object;
+                handleCreateSynchronizedMotorsMessage(conn, msg);
+                return;
+            }
         }
     }
+
+
 
     @Override
     public void disconnected(Connection connection) {
@@ -203,6 +215,32 @@ public class DeviceManager extends Listener {
         return;
     }
 
+    private void handleCreateSynchronizedMotorsMessage(Connection conn, CreateSynchronizedMotorsMessage msg) {
+       if(msg.getMotorPorts() != null) {
+           try {
+               boolean creationSucess = createSynchronizedMotorGroup(getMotorPortMapping(msg.getMotorPorts()));
+               if(creationSucess){
+                    conn.sendTCP(SynchronizedMotorMessageFactory.createCreationSuccessMessage(true));
+               }else{
+                   conn.sendTCP(SynchronizedMotorMessageFactory.createCreationSuccessMessage(false));
+               }
+           } catch (IOException e) {
+               e.printStackTrace();
+               conn.sendTCP(SynchronizedMotorMessageFactory.createCreationSuccessMessage(false));
+           }
+       }else{
+           //TODO ERROR HANDLING
+       }
+    }
+
+    private Port[] getMotorPortMapping(String[] ports){
+        Port[] mappedPorts = new Port[ports.length];
+        for (int i = 0; i < ports.length; i++) {
+            mappedPorts[i] = motorPorts.get(ports[i]);
+        }
+        return mappedPorts;
+    }
+
 
     /**
      * @param port
@@ -227,5 +265,9 @@ public class DeviceManager extends Listener {
             e.printStackTrace();
         }
         return false;
+    }
+
+    private boolean createSynchronizedMotorGroup(Port[] ports) throws IOException {
+        return mm.createSynchronizedMotorEndpoint(ports);
     }
 }

@@ -5,6 +5,8 @@ import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
 import org.mindroid.impl.motor.Motor;
 
+import java.util.HashMap;
+
 /**
  *
  * This class is used to control all Motors. The wanted operation will be executed by the motor
@@ -17,8 +19,11 @@ public class MotorProvider implements org.mindroid.api.robot.control.MotorProvid
 
     private Robot robot;
 
+    HashMap<EV3PortID,Motor> motors;
+
     public MotorProvider(Robot robot){
         this.robot = robot;
+        motors = new HashMap<>(4);
     }
 
     private final EV3RegulatedMotorEndpoint getMotorEndpoint(EV3PortID motorPort){
@@ -41,7 +46,11 @@ public class MotorProvider implements org.mindroid.api.robot.control.MotorProvid
      */
     public Motor getMotor(EV3PortID motorPort){
         if(motorPort == EV3PortIDs.PORT_A || motorPort == EV3PortIDs.PORT_B || motorPort == EV3PortIDs.PORT_C ||motorPort == EV3PortIDs.PORT_D){
-            return new Motor(getMotorEndpoint(motorPort), motorPort);
+            if(motors.containsKey(motorPort)){
+                return motors.get(motorPort);
+            }
+            motors.put(motorPort,new Motor(getMotorEndpoint(motorPort), motorPort));//TODO check what happens, when the motorEndpoint is null?
+            return motors.get(motorPort);
         }
         return null;
         //TODO maybe throw an error if motor is null?

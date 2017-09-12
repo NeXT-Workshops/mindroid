@@ -7,8 +7,6 @@ import org.mindroid.api.statemachine.IStatemachine;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.motor.Motor;
-import org.mindroid.impl.robot.MotorDirection;
-import org.mindroid.impl.robot.MotorProvider;
 import org.mindroid.impl.statemachine.*;
 import org.mindroid.impl.statemachine.constraints.GT;
 import org.mindroid.impl.statemachine.constraints.LT;

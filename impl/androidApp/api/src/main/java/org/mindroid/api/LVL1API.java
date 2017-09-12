@@ -14,7 +14,7 @@ public abstract class LVL1API implements IMindroidMain {
     public StatemachineCollection statemachineCollection = new StatemachineCollection();
 
     public RobotController robotController = Robot.getRobotController();
-    public MotorProvider motorProvider = robotController.getMotorController();
+    public MotorProvider motorProvider = robotController.getMotorProvider();
     public BrickController brickController = robotController.getBrickController();
     public SensorController sensorController = robotController.getSensorController();
     //private IMessenger messenger = Robot.getRobotController().getMessenger();
@@ -30,10 +30,11 @@ public abstract class LVL1API implements IMindroidMain {
      * Speed is set to 50.
      */
     public void forward() {
-        motorProvider.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.FORWARD);
-        motorProvider.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.FORWARD);
-        motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
-        motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
+        motorProvider.getMotor(EV3PortIDs.PORT_A).forward();
+        motorProvider.getMotor(EV3PortIDs.PORT_D).forward();
+        motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(50);
+        motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(50);
+
     }
 
     /**
@@ -41,10 +42,10 @@ public abstract class LVL1API implements IMindroidMain {
      * Speed is set to 50.
      */
     public void backward() {
-        motorProvider.setMotorDirection(EV3PortIDs.PORT_A, MotorDirection.BACKWARD);
-        motorProvider.setMotorDirection(EV3PortIDs.PORT_D, MotorDirection.BACKWARD);
-        motorProvider.setMotorSpeed(EV3PortIDs.PORT_A,50);
-        motorProvider.setMotorSpeed(EV3PortIDs.PORT_D,50);
+        motorProvider.getMotor(EV3PortIDs.PORT_A).backward();
+        motorProvider.getMotor(EV3PortIDs.PORT_D).backward();
+        motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(50);
+        motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(50);
     }
 
     /**

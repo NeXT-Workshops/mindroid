@@ -26,7 +26,7 @@ public class RobotController {
     }
 
     //TODO may add motortype as parameter to return specific controler for the motortype
-    public MotorProvider getMotorController() {
+    public MotorProvider getMotorProvider() {
         return motorControl;
     }
 

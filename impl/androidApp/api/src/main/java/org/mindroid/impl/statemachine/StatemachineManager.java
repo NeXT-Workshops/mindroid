@@ -14,7 +14,6 @@ import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
 import org.mindroid.impl.robot.context.StartCondition;
 import org.mindroid.impl.statemachine.constraints.TimeExpired;
-import org.xml.sax.ErrorHandler;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -285,10 +284,10 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
     public void stopStatemachines(String groupID){
         System.out.println("[StatemachineManager] trying to stop Statemachines");
         //Stop all motors
-        Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_A);
-        Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_B);
-        Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_C);
-        Robot.getRobotController().getMotorController().stop(EV3PortIDs.PORT_D);
+        Robot.getRobotController().getMotorProvider().getMotor(EV3PortIDs.PORT_A).stop();
+        Robot.getRobotController().getMotorProvider().getMotor(EV3PortIDs.PORT_B).stop();
+        Robot.getRobotController().getMotorProvider().getMotor(EV3PortIDs.PORT_C).stop();
+        Robot.getRobotController().getMotorProvider().getMotor(EV3PortIDs.PORT_D).stop();
 
         ArrayList<IStatemachine> statemachines = statemachineCollection.getStatemachineList(groupID);
 

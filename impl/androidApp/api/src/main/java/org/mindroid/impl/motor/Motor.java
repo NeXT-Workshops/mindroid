@@ -25,92 +25,136 @@ public class Motor implements RegulatedMotor {
 
     @Override
     public final void backward() {
-        motorEndpoint.backward();
+        if(motorEndpoint != null) {
+            motorEndpoint.backward();
+        }
     }
 
     @Override
     public final void stop() {
-        motorEndpoint.stop();
+        if(motorEndpoint != null) {
+            motorEndpoint.stop();
+        }
     }
 
     @Override
     public void flt() {
-        motorEndpoint.flt();
+        if(motorEndpoint != null) {
+            motorEndpoint.flt();
+        }
     }
 
     @Override
     public void stop(boolean immediateReturn) {
-        motorEndpoint.stop(immediateReturn);
+        if(motorEndpoint != null) {
+            motorEndpoint.stop(immediateReturn);
+        }
     }
 
     @Override
     public final void setSpeed(int speed) {
-        motorEndpoint.setSpeed(speed);
+        if(motorEndpoint != null) {
+            motorEndpoint.setSpeed(speed);
+        }
     }
 
     @Override
     public void rotate(int angle) {
-        motorEndpoint.rotate(angle);
+        if(motorEndpoint != null) {
+            motorEndpoint.rotate(angle);
+        }
     }
 
     @Override
     public void rotateTo(int angle) {
-        motorEndpoint.rotateTo(angle);
+        if(motorEndpoint != null) {
+            motorEndpoint.rotateTo(angle);
+        }
     }
 
     @Override
     public void flt(boolean immediateReturn) {
-        motorEndpoint.flt(immediateReturn);
+        if(motorEndpoint != null) {
+            motorEndpoint.flt(immediateReturn);
+        }
     }
 
     @Override
     public void rotate(int angle, boolean immediateReturn) {
-        motorEndpoint.rotate(angle,immediateReturn);
+        if(motorEndpoint != null) {
+            motorEndpoint.rotate(angle, immediateReturn);
+        }
     }
 
     @Override
     public void rotateTo(int limitAngle, boolean immediateReturn) {
-        motorEndpoint.rotateTo(limitAngle, immediateReturn);
+        if(motorEndpoint != null) {
+            motorEndpoint.rotateTo(limitAngle, immediateReturn);
+        }
     }
 
     @Override
     public int getRotationSpeed() {
-        return motorEndpoint.getRotationSpeed();
+        if(motorEndpoint != null) {
+            return motorEndpoint.getRotationSpeed();
+        }
+        return -1;
     }
 
     @Override
     public int getLimitAngle() {
-        return motorEndpoint.getLimitAngle();
+        if(motorEndpoint != null) {
+            return motorEndpoint.getLimitAngle();
+        }
+        return -1;
     }
 
     @Override
     public int getAcceleration() {
-        return motorEndpoint.getAcceleration();
+        if(motorEndpoint != null) {
+            return motorEndpoint.getAcceleration();
+        }
+        return -1;
     }
 
     @Override
     public int getTachoCount() {
-        return motorEndpoint.getTachoCount();
+        if(motorEndpoint != null) {
+            return motorEndpoint.getTachoCount();
+        }
+        return -1;
     }
 
     @Override
     public float getPosition() {
-        return motorEndpoint.getPosition();
+        if(motorEndpoint != null) {
+            return motorEndpoint.getPosition();
+        }
+        return -1f;
     }
 
     @Override
     public int getSpeed() {
-        return motorEndpoint.getSpeed();
+        if(motorEndpoint != null) {
+            return motorEndpoint.getSpeed();
+        }
+        return -1;
     }
 
     @Override
     public float getMaxSpeed() {
-        return motorEndpoint.getMaxSpeed();
+        if(motorEndpoint != null) {
+            return motorEndpoint.getMaxSpeed();
+        }
+        return -1f;
     }
 
     @Override
     public boolean isMoving() {
-        return motorEndpoint.isMoving();
+        if(motorEndpoint != null) {
+            return motorEndpoint.isMoving();
+        }
+        return false;
     }
 
 

@@ -18,7 +18,7 @@ public class MindroidMainTest implements IMindroidMain {
 
     IStatemachine sm = new Statemachine("main");
     RobotController robotController = Robot.getRobotController();
-    MotorProvider motorProvider = robotController.getMotorController();
+    MotorProvider motorProvider = robotController.getMotorProvider();
     BrickController brickController = robotController.getBrickController();
     SensorController sensorController = robotController.getSensorController();
 

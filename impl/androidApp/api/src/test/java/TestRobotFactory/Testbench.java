@@ -23,7 +23,7 @@ public class Testbench {
         IRobotPortConfig config = new RobotHardwareConfigurationTest();
         IMindroidMain mindroid = new MindroidMainTest();
         IRobotCommandCenter robotControl;
-        final String brickIP = "192.168.137.2";
+        final String brickIP = "10.0.1.1";
 
         IRobotFactory rf = new RobotFactory();
 

@@ -614,6 +614,8 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
+                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
                 //FORWARD
                 motorProvider.getMotor(EV3PortIDs.PORT_A).forward();
                 motorProvider.getMotor(EV3PortIDs.PORT_D).forward();
@@ -621,8 +623,7 @@ public class MindroidLVL1 extends LVL1API {
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
+
             }
         };
 

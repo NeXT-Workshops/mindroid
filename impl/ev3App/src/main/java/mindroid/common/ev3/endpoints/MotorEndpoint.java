@@ -33,6 +33,7 @@ public class MotorEndpoint extends Listener{
 						//System.err.println("MotorEndpoint - Thread could not sleep.");
 						e.printStackTrace();
 					}
+					//TODO check if Motorstate needs to be send periodically, slows the motors?
 					if(conn != null && conn.isConnected() && motor != null){
 						switch(motor.getMotortype()){
 							case LargeRegulatedMotor:  motorState = ((LargeRegulatedIMotor)motor).getMotorState(); break;
@@ -64,7 +65,6 @@ public class MotorEndpoint extends Listener{
 	@Override
 	public void received(Connection connection, Object msg){		
 		if(motor != null && conn != null && motor instanceof IMotorMessageListener) {
-			//System.out.println("Motor.handleMotorMessage(): "+ msg.toString());
 			((IMotorMessageListener) motor).handleMotorMessage(msg);
 		}
 	}

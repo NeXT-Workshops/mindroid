@@ -21,6 +21,7 @@ public class Motor implements RegulatedMotor {
     @Override
     public final void forward() {
         if(motorEndpoint != null) {
+            System.out.println("[Motor:forward()] forward got called!");
             motorEndpoint.forward();
         }
     }
@@ -180,5 +181,13 @@ public class Motor implements RegulatedMotor {
         int result = motorEndpoint != null ? motorEndpoint.hashCode() : 0;
         result = 31 * result + (port != null ? port.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Motor{" +
+                "motorEndpoint=" +  motorEndpoint == null ? "null" : motorEndpoint +
+                ", port=" + port +
+                '}';
     }
 }

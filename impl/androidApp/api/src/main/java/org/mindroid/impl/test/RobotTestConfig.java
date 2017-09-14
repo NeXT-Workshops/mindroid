@@ -21,7 +21,7 @@ public class RobotTestConfig implements IRobotPortConfig {
 
     @Override
     public Sensors getSensorS3() {
-        return null;
+        return Sensors.EV3GyroSensor;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class RobotTestConfig implements IRobotPortConfig {
 
     @Override
     public Sensormode getSensormodeS3() {
-        return null;
+        return Sensormode.RATE;
     }
 
     @Override

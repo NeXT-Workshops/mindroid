@@ -9,6 +9,7 @@ import org.mindroid.common.messages.motor.RegulatedMotorMessagesFactory;
 import org.mindroid.impl.endpoint.ClientEndpointImpl;
 
 import com.esotericsoftware.kryonet.Connection;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 
 
 /**
@@ -95,13 +96,15 @@ public class EV3RegulatedMotorEndpoint extends ClientEndpointImpl implements Reg
 	@Override
 	public void forward() {
 		if(client.isConnected()){
+			System.out.println("[EV3RegulatedMotorEndpoint:forward()] forward got called!");
 			client.sendTCP(RegulatedMotorMessagesFactory.createForwardMessage());
+			System.out.println("[EV3RegulatedMotorEndpoint:forward()] forward-message sent!");
 		}
 	}
 
 	@Override
 	public void backward() {
-		if(client.isConnected()){
+		if(isClientReady()){
 			client.sendTCP(RegulatedMotorMessagesFactory.createBackwardMessage());
 		}
 	}
@@ -115,14 +118,14 @@ public class EV3RegulatedMotorEndpoint extends ClientEndpointImpl implements Reg
 
 	@Override
 	public void flt() {
-		if(client.isConnected()){
+		if(isClientReady()){
 			client.sendTCP(RegulatedMotorMessagesFactory.createFltMessage());
 		}
 	}
 
 	@Override
 	public void stop(boolean immediateReturn) {
-		if(client.isConnected()){
+		if(isClientReady()){
 			client.sendTCP(RegulatedMotorMessagesFactory.createStopMessage(immediateReturn));
 		}
 	}
@@ -134,42 +137,42 @@ public class EV3RegulatedMotorEndpoint extends ClientEndpointImpl implements Reg
 		}else if(speed > MAX_SPEED){
 			speed = MAX_SPEED;
 		}
-		if(client.isConnected()){
+		if(isClientReady()){
 			client.sendTCP(RegulatedMotorMessagesFactory.createSetSpeedMessage(speed));
 		}
 	}
 
 	@Override
 	public void rotate(int angle) {
-		if(client.isConnected()){
+		if(isClientReady()){
 			client.sendTCP(RegulatedMotorMessagesFactory.createRotateMessage(angle));
 		}
 	}
 
 	@Override
 	public void rotateTo(int angle) {
-		if(client.isConnected()){
+		if(isClientReady()){
 			client.sendTCP(RegulatedMotorMessagesFactory.createRotateToMessage(angle));
 		}
 	}
 
 	@Override
 	public void flt(boolean immediateReturn) {
-		if(client.isConnected()){
+		if(isClientReady()){
 			client.sendTCP(RegulatedMotorMessagesFactory.createFltMessage());
 		}
 	}
 
 	@Override
 	public void rotate(int angle, boolean immediateReturn) {
-		if(client.isConnected()){
+		if(isClientReady()){
 			client.sendTCP(RegulatedMotorMessagesFactory.createRotateMessage(angle,immediateReturn));
 		}
 	}
 
 	@Override
 	public void rotateTo(int limitAngle, boolean immediateReturn) {
-		if(client.isConnected()){
+		if(isClientReady()){
 			client.sendTCP(RegulatedMotorMessagesFactory.createRotateToMessage(limitAngle,immediateReturn));
 		}
 	}

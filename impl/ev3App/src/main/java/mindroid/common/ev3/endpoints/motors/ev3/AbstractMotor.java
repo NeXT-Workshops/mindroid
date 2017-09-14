@@ -1,5 +1,6 @@
 package mindroid.common.ev3.endpoints.motors.ev3;
 
+import mindroid.common.ev3.endpoints.motors.ev3.exceptions.NoMotorFoundException;
 import org.mindroid.common.messages.hardware.Motors;
 import lejos.hardware.port.Port;
 import lejos.robotics.BaseMotor;

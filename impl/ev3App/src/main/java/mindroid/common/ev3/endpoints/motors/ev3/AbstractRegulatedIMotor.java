@@ -4,6 +4,7 @@ import lejos.hardware.motor.BaseRegulatedMotor;
 import lejos.hardware.port.Port;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.RegulatedMotorListener;
+import mindroid.common.ev3.endpoints.motors.ev3.exceptions.NoMotorFoundException;
 import org.mindroid.common.messages.motor.*;
 
 public abstract class AbstractRegulatedIMotor extends AbstractMotor implements IMotorMessageListener,RegulatedMotor {
@@ -47,6 +48,12 @@ public abstract class AbstractRegulatedIMotor extends AbstractMotor implements I
 
     @Override
     public void handleMotorMessage(Object msg) {
+        System.out.println(msg.toString());
+        if(motor == null){
+            new NoMotorFoundException("Motor not found: "+motorPort.getName()).printStackTrace();
+            return;
+        }
+
         if (msg instanceof ForwardMessage) {
             forward();
             return;
@@ -95,16 +102,16 @@ public abstract class AbstractRegulatedIMotor extends AbstractMotor implements I
     }
 
     @Override
-    public void stop(boolean b) {
+    public void stop(boolean immidiateReturn) {
         if(getMotor() != null) {
-            getMotor().stop(b);
+            getMotor().stop(immidiateReturn);
         }
     }
 
     @Override
-    public void flt(boolean b) {
+    public void flt(boolean immidiateReturn) {
         if(getMotor() != null) {
-            getMotor().flt(b);
+            getMotor().flt(immidiateReturn);
         }
     }
 
@@ -116,30 +123,30 @@ public abstract class AbstractRegulatedIMotor extends AbstractMotor implements I
     }
 
     @Override
-    public void rotate(int i, boolean b) {
+    public void rotate(int angle, boolean immidiateReturn) {
         if(getMotor() != null) {
-            getMotor().rotate(i,b);
+            getMotor().rotate(angle,immidiateReturn);
         }
     }
 
     @Override
-    public void rotate(int i) {
+    public void rotate(int angle) {
         if(getMotor() != null) {
-            getMotor().rotate(i);
+            getMotor().rotate(angle);
         }
     }
 
     @Override
-    public void rotateTo(int i) {
+    public void rotateTo(int limitAngle) {
         if(getMotor() != null) {
-            getMotor().rotateTo(i);
+            getMotor().rotateTo(limitAngle);
         }
     }
 
     @Override
-    public void rotateTo(int i, boolean b) {
+    public void rotateTo(int limitAngle, boolean immidiateReturn) {
         if(getMotor() != null) {
-            getMotor().rotateTo(i,b);
+            getMotor().rotateTo(limitAngle,immidiateReturn);
         }
     }
 
@@ -152,9 +159,9 @@ public abstract class AbstractRegulatedIMotor extends AbstractMotor implements I
     }
 
     @Override
-    public void setSpeed(int i) {
+    public void setSpeed(int speed) {
         if(getMotor() != null) {
-            getMotor().setSpeed(i);
+            getMotor().setSpeed(speed);
         }
     }
 

@@ -47,10 +47,11 @@ public class MotorProvider implements org.mindroid.api.robot.control.MotorProvid
      */
     public Motor getMotor(EV3PortID motorPort){
         if(motorPort == EV3PortIDs.PORT_A || motorPort == EV3PortIDs.PORT_B || motorPort == EV3PortIDs.PORT_C ||motorPort == EV3PortIDs.PORT_D){
-            if(motors.containsKey(motorPort)){
+            if(motors.containsKey(motorPort)){ //Check if motor object already created
+                System.out.println("[MotorProvider:getMotor()] returned motor:"+motors.get(motorPort).toString());
                 return motors.get(motorPort);
             }
-
+            //When not already created, create and put into hashmap
             motors.put(motorPort,new Motor(getMotorEndpoint(motorPort), motorPort));//TODO check what happens, when the motorEndpoint is null? -> Send an info message?
             return motors.get(motorPort);
         }

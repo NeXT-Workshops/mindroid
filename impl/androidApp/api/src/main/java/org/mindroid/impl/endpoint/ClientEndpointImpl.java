@@ -46,8 +46,9 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
         	client.setKeepAliveTCP(10000);
             client.connect(this.brickTimeout, this.ip, this.tcpPort,this.tcpPort-NetworkPortConfig.UDP_OFFSET); 
         } catch (IOException e) {
-            System.err.println("brick connection timed out");
+            System.err.println("[ClientEndpointImpl:connect()] Connection timed out!");
             e.printStackTrace();
+            //TODO Properly error handling
         	//throw new EV3Exception("You must have entered a wrong IP.");
         }
 
@@ -88,6 +89,7 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
     @Override
     public void disconnected(Connection connection) {
         super.disconnected(connection);
+        setClientReady(false);
         stop();
     }
 
@@ -112,5 +114,17 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
 		result = 31 * result + tcpPort;
 		result = 31 * result + brickTimeout;
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "ClientEndpointImpl{" +
+				"client=" + client +
+				", ip='" + ip + '\'' +
+				", tcpPort=" + tcpPort +
+				", brickTimeout=" + brickTimeout +
+				", clientReady=" + clientReady +
+				", areMessagesRegistered=" + areMessagesRegistered +
+				'}';
 	}
 }

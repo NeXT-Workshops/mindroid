@@ -63,7 +63,7 @@ public abstract class AbstractRegulatedIMotor extends AbstractMotor implements I
             return;
         }
         if (msg instanceof StopMessage) {
-            stop();
+            stop(((StopMessage) msg).isImmidiateReturn());
             return;
         }
 
@@ -73,16 +73,23 @@ public abstract class AbstractRegulatedIMotor extends AbstractMotor implements I
         }
 
         if(msg instanceof RotateMessage){
-            rotate(((RotateMessage)msg).getAngle());
+            rotate(((RotateMessage)msg).getAngle(),((RotateMessage) msg).isImmediateReturn());
             return;
         }
 
         if(msg instanceof RotateToMessage){
-            rotateTo(((RotateToMessage)msg).getAngle());
+            rotateTo(((RotateToMessage)msg).getAngle(),((RotateToMessage) msg).isImmediateRetrun());
             return;
         }
 
-        //TODO implement further messages
+        if(msg instanceof FltMessage){
+            flt(((FltMessage) msg).isImmediateRetrun());
+        }
+
+        if(msg instanceof AccelerationMessage){
+            setAcceleration(((AccelerationMessage) msg).getAcceleration());
+        }
+        
     }
 
 

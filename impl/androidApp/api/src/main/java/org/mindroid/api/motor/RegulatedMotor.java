@@ -77,6 +77,12 @@ public interface RegulatedMotor{
 	void rotateTo(int limitAngle, boolean immediateReturn);
 
 	/**
+	 * Set the required rate of acceleration degrees/s/s
+	 * @param acceleration -
+	 */
+	void setAcceleration(int acceleration);
+
+	/**
 	 * Returns the current motor speed.
 	 * @return motor speed in degrees per second
 	 */

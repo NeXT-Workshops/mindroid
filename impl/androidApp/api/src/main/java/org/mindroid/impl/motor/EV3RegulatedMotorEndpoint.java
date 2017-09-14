@@ -177,6 +177,13 @@ public class EV3RegulatedMotorEndpoint extends ClientEndpointImpl implements Reg
 		}
 	}
 
+	@Override
+	public void setAcceleration(int acceleration) {
+		if(isClientReady()){
+			client.sendTCP(RegulatedMotorMessagesFactory.createSetAccelerationMessage(acceleration));
+		}
+	}
+
 
 	@Override
 	public String toString() {

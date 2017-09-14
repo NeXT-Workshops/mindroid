@@ -15,8 +15,8 @@ public abstract class RegulatedMotorMessagesFactory {
 		return new RotateToMessage(angle);
 	}
 
-	public static RotateToMessage createRotateToMessage(int angle, boolean immidiateReturn){
-		return new RotateToMessage(angle,immidiateReturn);
+	public static RotateToMessage createRotateToMessage(int angle, boolean immediateReturn){
+		return new RotateToMessage(angle,immediateReturn);
 	}
 
 	public static RotateMessage createRotateMessage(int angle){
@@ -25,8 +25,8 @@ public abstract class RegulatedMotorMessagesFactory {
 
 
 
-	public static RotateMessage createRotateMessage(int angle, boolean immidiateReturn){
-		return new RotateMessage(angle,immidiateReturn);
+	public static RotateMessage createRotateMessage(int angle, boolean immediateReturn){
+		return new RotateMessage(angle,immediateReturn);
 	}
 	
 	public static SetMotorSpeedMessage createSetSpeedMessage(int speed) {
@@ -45,10 +45,16 @@ public abstract class RegulatedMotorMessagesFactory {
 		return new StopMessage();
 	}
 
-	public static StopMessage createStopMessage(boolean immidiateReturn) {
-		return new StopMessage(immidiateReturn);
+	public static StopMessage createStopMessage(boolean immediateReturn) {
+		return new StopMessage(immediateReturn);
 	}
 
 	public static FltMessage createFltMessage() { return new FltMessage();}
+
+	public static FltMessage createFltMessage(boolean immediateReturn) { return new FltMessage(immediateReturn);}
+
+	public static AccelerationMessage createSetAccelerationMessage(int acceleration){
+		return new AccelerationMessage(acceleration);
+	}
 
 }

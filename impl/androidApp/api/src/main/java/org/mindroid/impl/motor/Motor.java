@@ -1,6 +1,6 @@
 package org.mindroid.impl.motor;
 
-import org.mindroid.api.motor.RegulatedMotor;
+import org.mindroid.api.motor.IRegulatedMotor;
 import org.mindroid.impl.ev3.EV3PortID;
 
 /**
@@ -8,7 +8,7 @@ import org.mindroid.impl.ev3.EV3PortID;
  *
  *  This Class is used by the user to control the Motor at a specified port hiding the Network stuff.
  */
-public class Motor implements RegulatedMotor {
+public class Motor implements IRegulatedMotor {
 
     private EV3RegulatedMotorEndpoint motorEndpoint;
     private EV3PortID port;
@@ -93,6 +93,13 @@ public class Motor implements RegulatedMotor {
     public void rotateTo(int limitAngle, boolean immediateReturn) {
         if(motorEndpoint != null) {
             motorEndpoint.rotateTo(limitAngle, immediateReturn);
+        }
+    }
+
+    @Override
+    public void setAcceleration(int acceleration) {
+        if(motorEndpoint != null){
+            motorEndpoint.setAcceleration(acceleration);
         }
     }
 

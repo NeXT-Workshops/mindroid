@@ -10,6 +10,8 @@ import org.mindroid.api.statemachine.ITransition;
 import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.common.messages.NetworkPortConfig;
+import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperation;
+import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperationFactory;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
@@ -78,7 +80,7 @@ public class TestPCClient{
         }
 
         public void initRobot() throws StateAlreadyExistsException {
-            TestPCClient.sm = wallPingPong();
+            TestPCClient.sm = syncdMotorTest();
             StatemachineCollection statemachineCollection = new StatemachineCollection();
             statemachineCollection.addStatemachine(sm.getID(), sm);
 
@@ -100,6 +102,29 @@ public class TestPCClient{
             commandCenter = roFactory.createRobot();
         }
 
+
+        public IStatemachine syncdMotorTest(){
+            IStatemachine sm = new Statemachine("SyncedMotorsTest");
+
+            IState state_forward = new State("Forward") {
+                @Override
+                public void run() {
+                    System.out.println(this.getName() + " isActive\n");
+
+                    SynchronizedMotorOperation rotate = SynchronizedMotorOperationFactory.createRotateOperation(720);
+                    SynchronizedMotorOperation noOperation = SynchronizedMotorOperationFactory.createNoOperation();
+
+                    //FORWARD
+                    motorProvider.getSynchronizedMotors().executeSynchronizedOperation(rotate,noOperation,noOperation,rotate);
+
+                    brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                }
+            };
+            sm.addState(state_forward);
+            sm.setStartState(state_forward);
+
+            return sm;
+        }
 
         public IStatemachine wallPingPong() {
             IStatemachine sm = new Statemachine("SingleWallPingPong");

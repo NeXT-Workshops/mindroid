@@ -2,14 +2,13 @@ package org.mindroid.impl.motor;
 
 
 
-import org.mindroid.api.motor.RegulatedMotor;
+import org.mindroid.api.motor.IRegulatedMotor;
 import org.mindroid.common.messages.motor.MotorState;
 import org.mindroid.common.messages.motor.MotorStateMessage;
 import org.mindroid.common.messages.motor.RegulatedMotorMessagesFactory;
 import org.mindroid.impl.endpoint.ClientEndpointImpl;
 
 import com.esotericsoftware.kryonet.Connection;
-import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 
 
 /**
@@ -17,7 +16,7 @@ import org.mindroid.impl.errorhandling.ErrorHandlerManager;
  * It is listening on the connection handeling the Motorstate message.
  * It is sending messages to control the motor of the EV3 using the open Connection.
  */
-public class EV3RegulatedMotorEndpoint extends ClientEndpointImpl implements RegulatedMotor{
+public class EV3RegulatedMotorEndpoint extends ClientEndpointImpl implements IRegulatedMotor {
 
 	private int rotationSpeed = -1;
 	private int limitAngle = -1;

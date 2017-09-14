@@ -4,6 +4,7 @@ import org.mindroid.api.communication.IMessenger;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.configuration.RobotConfigurator;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
+import org.mindroid.impl.motor.SynchronizedMotorsEndpoint;
 import org.mindroid.impl.sensor.EV3SensorEndpoint;
 import org.mindroid.impl.statemachine.StatemachineManager;
 
@@ -29,6 +30,9 @@ public final class Robot {
     private EV3RegulatedMotorEndpoint IMotor_B = null;
     private EV3RegulatedMotorEndpoint IMotor_C = null;
     private EV3RegulatedMotorEndpoint IMotor_D = null;
+
+    //Synchronized Motors Endpoint
+    private SynchronizedMotorsEndpoint syncedMotors;
 
     private StatemachineManager statemachineManager;
 
@@ -121,6 +125,14 @@ public final class Robot {
 
     protected StatemachineManager getStatemachineManager() {
         return statemachineManager;
+    }
+
+    public SynchronizedMotorsEndpoint getSyncedMotors() {
+        return syncedMotors;
+    }
+
+    public void setSyncedMotors(SynchronizedMotorsEndpoint syncedMotors) {
+        this.syncedMotors = syncedMotors;
     }
 
     protected EV3Brick getBrick() {

@@ -89,7 +89,7 @@ public abstract class AbstractRegulatedIMotor extends AbstractMotor implements I
         if(msg instanceof AccelerationMessage){
             setAcceleration(((AccelerationMessage) msg).getAcceleration());
         }
-        
+
     }
 
 

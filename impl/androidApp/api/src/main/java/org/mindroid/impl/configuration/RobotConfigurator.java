@@ -6,7 +6,7 @@ import java.util.HashMap;
 import org.mindroid.api.configuration.IRobotConfigurator;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
-import org.mindroid.api.motor.RegulatedMotor;
+import org.mindroid.api.motor.IRegulatedMotor;
 import org.mindroid.common.messages.hardware.EV3MotorPort;
 import org.mindroid.common.messages.hardware.EV3SensorPort;
 import org.mindroid.common.messages.hardware.Motors;
@@ -20,6 +20,7 @@ import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 import org.mindroid.impl.motor.EV3MotorManager;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
+import org.mindroid.impl.motor.SynchronizedMotorsEndpoint;
 import org.mindroid.impl.sensor.EV3SensorEndpoint;
 import org.mindroid.impl.sensor.EV3SensorManager;
 
@@ -37,7 +38,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 	private HashMap<EV3MotorPort,Motors> motorConfiguration = new HashMap<EV3MotorPort,Motors>(4);
 	
 	private HashMap<EV3SensorPort,EV3SensorEndpoint> sensors = new HashMap<EV3SensorPort,EV3SensorEndpoint>(4);
-	private HashMap<EV3MotorPort,RegulatedMotor> motors = new HashMap<EV3MotorPort,RegulatedMotor>(4);
+	private HashMap<EV3MotorPort,IRegulatedMotor> motors = new HashMap<EV3MotorPort,IRegulatedMotor>(4);
 	
 	/** Experimental Values - may need a change **/
 	private final int DURATION_DEVICE_INITIALIZATION = 5000;
@@ -58,6 +59,9 @@ public class RobotConfigurator implements IRobotConfigurator {
 	private StringBuffer endpointState;
 	/** String that capsulate information about the current configuration (Sensor-Port;IMotor-Port)**/
 	private StringBuffer str_config;
+	private EV3PortID[] syncedMotorPorts;
+	private SynchronizedMotorsEndpoint syncedMotorsEndpoint;
+
 	/**
 	 *
 	 * @param robotIP
@@ -97,6 +101,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 		addMotorType(EV3MotorPort.C,motor_C);
 		addMotorType(EV3MotorPort.D,motor_D);
 	}
+
 
 	@Override
 	public String getConfiguration() {
@@ -180,11 +185,6 @@ public class RobotConfigurator implements IRobotConfigurator {
 	}
 
 	@Override
-	public EV3SensorEndpoint getSensor(EV3SensorPort sensorPort) {
-		return sensors.get(sensorPort);
-	}
-
-	@Override
 	public EV3RegulatedMotorEndpoint createMotor(EV3PortID motorPort) throws PortIsAlreadyInUseException {
 		EV3MotorPort motPort = null;
 		if(EV3PortIDs.PORT_A == motorPort){
@@ -206,8 +206,19 @@ public class RobotConfigurator implements IRobotConfigurator {
 	}
 
 	@Override
-	public RegulatedMotor getMotor(EV3MotorPort motorPort) {
-		return motors.get(motorPort);
+	public SynchronizedMotorsEndpoint createSynchronizedMotorsEndpoint() {
+		this.syncedMotorsEndpoint = motorManager.createSynchronizedMotorsEndpoint();
+		return syncedMotorsEndpoint;
+	}
+
+	@Override
+	public void setSyncedMotorPorts(EV3PortID[] ports) {
+		this.syncedMotorPorts = ports;
+	}
+
+	@Override
+	public EV3PortID[] getSyncedMotorPorts() {
+		return this.syncedMotorPorts;
 	}
 
 	// TODO MAY CAN BE REMOVED COMPLETELY, REPLACED BY createMotor; createSensor
@@ -234,12 +245,13 @@ public class RobotConfigurator implements IRobotConfigurator {
 				if (type != null) {
 					if(!motors.containsKey(motorPort)){
 						//motors.put(motorPort, motorManager.createMotor(type, motorPort));
-						//TODO Throw Exception: Sensor that should be there wasn't created!
+						//TODO Throw Exception: Motor that should be there wasn't created!
 					}
 					motorManager.initializeMotor(type,motorPort);
 				}
 			}
 
+			// Wait until Sensor And motors are Created
 			boolean init_complete = false;
 			while(!init_complete){
 
@@ -251,6 +263,19 @@ public class RobotConfigurator implements IRobotConfigurator {
 					e.printStackTrace();
 				}
 			}
+
+			//Initialize Synchronized Motor Group
+			motorManager.initializeSyncedMotorGroup(getSyncedMotorPorts());
+
+			//Wait until Synced Motor group is created
+			while(!this.syncedMotorsEndpoint.isClientReady()){
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+
 
 			Runnable readyLight = new Runnable(){
 				@Override

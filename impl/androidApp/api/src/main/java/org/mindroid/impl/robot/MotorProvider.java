@@ -5,6 +5,7 @@ import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
 import org.mindroid.impl.motor.Motor;
+import org.mindroid.impl.motor.SynchronizedMotors;
 
 import java.util.HashMap;
 
@@ -56,5 +57,9 @@ public class MotorProvider implements org.mindroid.api.robot.control.MotorProvid
             return motors.get(motorPort);
         }
         return null;
+    }
+
+    public SynchronizedMotors getSynchronizedMotors(){
+        return new SynchronizedMotors(robot.getSyncedMotors());
     }
 }

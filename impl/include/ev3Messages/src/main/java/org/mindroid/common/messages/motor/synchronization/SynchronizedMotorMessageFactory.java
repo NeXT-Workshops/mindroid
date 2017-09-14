@@ -4,7 +4,7 @@ import org.mindroid.common.messages.hardware.EV3MotorPort;
 
 public class SynchronizedMotorMessageFactory {
 
-    public static SynchronizedOperationMessage createSynchronizedMotorOperation(SynchronizedMotorOperation opForPortA,SynchronizedMotorOperation opForPortB,SynchronizedMotorOperation opForPortC,SynchronizedMotorOperation opForPortD){
+    public static SynchronizedOperationMessage createSynchronizedMotorOperationMessage(SynchronizedMotorOperation opForPortA, SynchronizedMotorOperation opForPortB, SynchronizedMotorOperation opForPortC, SynchronizedMotorOperation opForPortD){
         if(opForPortA == null){
             opForPortA = SynchronizedMotorOperationFactory.createNoOperation();
         }
@@ -24,6 +24,11 @@ public class SynchronizedMotorMessageFactory {
         return new SynchronizedOperationMessage(new SynchronizedMotorOperation[]{opForPortA,opForPortB,opForPortC,opForPortD});
     }
 
+    /**
+     * Returns a message creating a synchronized Group
+     * @param ports label of the ports
+     * @return Message to create a synchronized motor group
+     */
     public static CreateSynchronizedMotorsMessage createCreateSynchronizedMotorsMessage(String[] ports){
         return new CreateSynchronizedMotorsMessage(ports);
     }

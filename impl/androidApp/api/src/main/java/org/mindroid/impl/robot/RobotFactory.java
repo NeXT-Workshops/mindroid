@@ -54,6 +54,9 @@ public final class RobotFactory implements IRobotFactory {
     private Motors motor_C = null;
     private Motors motor_D = null;
 
+    //Synchronized Motor Group
+    private EV3PortID[] syncedMotors = {};
+
     //Further to register SensorListeners
     private HashMap<EV3PortID,ArrayList<IEV3SensorEventListener>> sensorListenerToRegister = new HashMap<>();
 
@@ -125,6 +128,9 @@ public final class RobotFactory implements IRobotFactory {
             motor_B = robotConfig.getMotorB();
             motor_C = robotConfig.getMotorC();
             motor_D = robotConfig.getMotorD();
+
+            //Synced Motors
+            this.syncedMotors =getSyncedMotorPorts();
         }else{
             throw new NullPointerException("No RobotConfig set!");
         }
@@ -137,6 +143,7 @@ public final class RobotFactory implements IRobotFactory {
             robotConfigurator.addSensorConfigurationSet(sensor_S1,sensor_S2,sensor_S3,sensor_S4);
             robotConfigurator.setSensorModeSet(mode_S1,mode_S2,mode_S3,mode_S4);
             robotConfigurator.addMotorConfigurationSet(motor_A,motor_B,motor_C,motor_D);
+            robotConfigurator.setSyncedMotorPorts(syncedMotors);
 
             try {
                 myRobot.setSensorS1(robotConfigurator.createSensor(EV3PortIDs.PORT_1));
@@ -148,7 +155,11 @@ public final class RobotFactory implements IRobotFactory {
                 myRobot.setMotorB(robotConfigurator.createMotor(EV3PortIDs.PORT_B));
                 myRobot.setMotorC(robotConfigurator.createMotor(EV3PortIDs.PORT_C));
                 myRobot.setMotorD(robotConfigurator.createMotor(EV3PortIDs.PORT_D));
+
+                myRobot.setSyncedMotors(robotConfigurator.createSynchronizedMotorsEndpoint());
+
             } catch (PortIsAlreadyInUseException e) {
+                //TODO maybe add proper error handling or remove exception?
                 robotCommandCenter = null;
                 e.printStackTrace();
             }
@@ -195,6 +206,23 @@ public final class RobotFactory implements IRobotFactory {
         }
         System.out.println("[RobotFactory:createRobot] The RobotFactory created a Robot with the following setup:\n"+toString());
         return robotCommandCenter;
+    }
+
+    private EV3PortID[] getSyncedMotorPorts() {
+        ArrayList<EV3PortID> syncedMotorPorts = new ArrayList<EV3PortID>(4);
+        if(robotConfig.isMotorASynchronized()){
+            syncedMotorPorts.add(EV3PortIDs.PORT_A);
+        }
+        if(robotConfig.isMotorBSynchronized()){
+            syncedMotorPorts.add(EV3PortIDs.PORT_B);
+        }
+        if(robotConfig.isMotorCSynchronized()){
+            syncedMotorPorts.add(EV3PortIDs.PORT_C);
+        }
+        if(robotConfig.isMotorDSynchronized()){
+            syncedMotorPorts.add(EV3PortIDs.PORT_D);
+        }
+        return syncedMotorPorts.toArray(new EV3PortID[syncedMotorPorts.size()]);
     }
 
     /**

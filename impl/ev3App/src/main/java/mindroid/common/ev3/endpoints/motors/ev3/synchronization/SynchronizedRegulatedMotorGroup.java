@@ -18,7 +18,7 @@ public class SynchronizedRegulatedMotorGroup {
     /**
      *  {@value #MIN_MOTOR_COUNT}
      */
-    public static final int MIN_MOTOR_COUNT = 2;
+    public static final int MIN_MOTOR_COUNT = 1;
 
     /**
      *  {@value #MAX_MOTOR_COUNT}

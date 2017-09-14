@@ -49,7 +49,14 @@ public class SynchronizedMotorOperationFactory {
         return NO_OPERATION;
     }
 
-
+    /**
+     * Creates a message containg the operations which will be run on the motorgroup.
+     * @param operations - sorted array (by port) of operations running on each motor in the group
+     * @return SynchronizedOperationMessage
+     */
+    public static SynchronizedOperationMessage createSynchronizedOperationMessage(SynchronizedMotorOperation[] operations){
+        return new SynchronizedOperationMessage(operations);
+    }
 
 
 

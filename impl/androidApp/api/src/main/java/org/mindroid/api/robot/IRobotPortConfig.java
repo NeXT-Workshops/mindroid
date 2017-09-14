@@ -81,4 +81,28 @@ public interface IRobotPortConfig {
      * @return motor type - or null if no sensor is connected
      */
     Motors getMotorD();
+
+    /**
+     * if Motor at Port A is part of the synchronized Motor Group
+     * @return true - if motors are synchronized
+     */
+    boolean isMotorASynchronized();
+
+    /**
+     * if Motor at Port B is part of the synchronized Motor Group
+     * @return true - if motors are synchronized
+     */
+    boolean isMotorBSynchronized();
+
+    /**
+     * if Motor at Port C is part of the synchronized Motor Group
+     * @return true - if motors are synchronized
+     */
+    boolean isMotorCSynchronized();
+
+    /**
+     * if Motor at Port D is part of the synchronized Motor Group
+     * @return true - if motors are synchronized
+     */
+    boolean isMotorDSynchronized();
 }

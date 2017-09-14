@@ -1,6 +1,6 @@
 package org.mindroid.api.motor;
 
-public interface RegulatedMotor{
+public interface IRegulatedMotor {
 	
 	public static final int MAX_SPEED = 1000;
 	public static final int MIN_SPEED = 0;

@@ -3,8 +3,28 @@ package org.mindroid.common.messages.motor.synchronization;
 public class SynchronizedMotorOperationFactory {
 
     private static final SynchronizedMotorOperation NO_OPERATION = new SynchronizedMotorOperation(OperationType.NO_OPERATION);
+    private static final SynchronizedMotorOperation FORWARD = new SynchronizedMotorOperation(OperationType.FORWARD);
+    private static final SynchronizedMotorOperation BACKWARD = new SynchronizedMotorOperation(OperationType.BACKWARD);
     private static final SynchronizedMotorOperation FLT = new SynchronizedMotorOperation(OperationType.FLT);
     private static final SynchronizedMotorOperation STOP = new SynchronizedMotorOperation(OperationType.STOP);
+
+
+    /**
+     * Creates a synchronized operation to set the motor into forward mode.
+     * @return SynchronizedMotorOperation {@link SynchronizedMotorOperation}
+     */
+    public static SynchronizedMotorOperation createForwardOperation(){
+        return FORWARD;
+    }
+
+
+    /**
+     * Creates a synchronized operation to set the motor into backward mode.
+     * @return SynchronizedMotorOperation {@link SynchronizedMotorOperation}
+     */
+    public static SynchronizedMotorOperation createBackwardOperation(){
+        return BACKWARD;
+    }
 
 
     /**

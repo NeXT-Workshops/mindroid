@@ -42,13 +42,13 @@ public abstract class AbstractRegulatedIMotor extends AbstractMotor implements I
         this.motorState = motorState;
     }
 
+    @Override
     public BaseRegulatedMotor getMotor(){
         return (BaseRegulatedMotor) motor;
     }
 
     @Override
     public void handleMotorMessage(Object msg) {
-        System.out.println(msg.toString());
         if(motor == null){
             new NoMotorFoundException("Motor not found: "+motorPort.getName()).printStackTrace();
             return;

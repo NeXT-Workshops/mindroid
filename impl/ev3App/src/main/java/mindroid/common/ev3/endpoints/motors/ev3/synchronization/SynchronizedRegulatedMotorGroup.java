@@ -83,6 +83,12 @@ public class SynchronizedRegulatedMotorGroup {
     private void executeOperation(AbstractRegulatedIMotor syncMotor, SynchronizedMotorOperation operation) {
         if(syncMotor != null && operation != null){
             switch(operation.getOptype()){
+                case FORWARD:
+                    syncMotor.forward();
+                    break;
+                case BACKWARD:
+                    syncMotor.backward();
+                    break;
                 case FLT:
                     syncMotor.flt(true);
                     break;

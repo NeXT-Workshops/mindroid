@@ -111,11 +111,12 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
 
-                    SynchronizedMotorOperation rotate = SynchronizedMotorOperationFactory.createRotateOperation(720);
+                    //SynchronizedMotorOperation rotate = SynchronizedMotorOperationFactory.createRotateOperation(720);
+                    SynchronizedMotorOperation forward = SynchronizedMotorOperationFactory.createForwardOperation();
                     SynchronizedMotorOperation noOperation = SynchronizedMotorOperationFactory.createNoOperation();
 
                     //FORWARD
-                    motorProvider.getSynchronizedMotors().executeSynchronizedOperation(rotate,noOperation,noOperation,rotate);
+                    motorProvider.getSynchronizedMotors().executeSynchronizedOperation(forward,noOperation,noOperation,forward);
 
                     brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
                 }

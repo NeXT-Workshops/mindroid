@@ -5,6 +5,8 @@ package org.mindroid.common.messages.motor.synchronization;
  */
 public enum OperationType {
     NO_OPERATION,
+    FORWARD,
+    BACKWARD,
     STOP,
     FLT,
     ROTATE,

@@ -204,7 +204,8 @@ public final class RobotFactory implements IRobotFactory {
     }
 
     /**
-     * Setups the Statemachine Engine
+     * Setups the Statemachine Engine.
+     *
      */
     private void setupStatemachineEngine() {
         IConstraintEvaluator evaluator = new RobotContextStateEvaluator();

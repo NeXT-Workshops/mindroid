@@ -34,7 +34,6 @@ public class EV3SensorEndpoint extends ClientEndpointImpl {
 
     private EV3PortID brick_port;
 
-    private float[] sensorValue;
 
     /**
      * @param ip
@@ -68,7 +67,6 @@ public class EV3SensorEndpoint extends ClientEndpointImpl {
                     long timestamp = ((SensorEventMessage) object).getTimestamp();
                     EV3SensorEvent sensorevent = new EV3SensorEvent(sensor, sensorValue, timestamp, currentMode);
 
-                    //TODO, may refactor this: current use is at the Statemachine Engine
                     for (IEV3SensorEventListener listener : listeners) {
                         //value = sensorevent.getSample();
                         listener.handleSensorEvent(brick_port,sensorevent);
@@ -164,7 +162,4 @@ public class EV3SensorEndpoint extends ClientEndpointImpl {
         }
     }
 
-    public float[] getSensorValue() {
-        return sensorValue;
-    }
 }

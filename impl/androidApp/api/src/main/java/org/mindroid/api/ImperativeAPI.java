@@ -1,14 +1,12 @@
 package org.mindroid.api;
 
-import org.mindroid.impl.robot.BrickController;
-import org.mindroid.impl.robot.MotorProvider;
-import org.mindroid.impl.robot.Robot;
-import org.mindroid.impl.robot.RobotController;
+import org.mindroid.impl.robot.*;
 
 public abstract class ImperativeAPI {
 
     public RobotController robotController = Robot.getRobotController();
     public MotorProvider motorProvider = robotController.getMotorProvider();
+    public SensorProvider sensorProvider = robotController.getSensorProvider();
     public BrickController brickController = robotController.getBrickController();
 
     private String implementationID = "";
@@ -56,4 +54,6 @@ public abstract class ImperativeAPI {
     public boolean isInterrupted() {
         return isInterrupted;
     }
+
+
 }

@@ -2,15 +2,18 @@ package org.mindroid.api;
 
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.motor.Motor;
+import org.mindroid.impl.sensor.Sensor;
 import org.mindroid.impl.statemachine.BooleanStatemachine;
 import org.mindroid.impl.statemachine.DiscreteValueStateMachine;
 import org.mindroid.impl.statemachine.constraints.GT;
 import org.mindroid.impl.statemachine.constraints.LT;
 import org.mindroid.impl.statemachine.constraints.MsgReceived;
 import org.mindroid.impl.statemachine.constraints.Rotation;
+import org.mindroid.impl.statemachine.properties.Colors;
 import org.mindroid.impl.statemachine.properties.MessageProperty;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Angle;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
@@ -35,6 +38,12 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
     public ImperativeWorkshopAPI(String implementationID) {
         super(implementationID);
     }
+
+
+
+
+    // --------------------- BRICK CONTROLLING METHODS: Display, LED ---------------------
+
 
     /**
      * Sets the LED to the given color
@@ -68,16 +77,24 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
         this.brickController.clearDisplay();
     }
 
+
+
+    // --------------------- SENSOR EVALUATING METHODS: Display, LED ---------------------
+
+
     /**
      * Returns the color ID of the left color sensor.
      *
-     * For supported color IDs, see {@link Color}.
+     * For supported color IDs, see {@link org.mindroid.impl.statemachine.properties.Colors}.
      *
      * @return left color ID
      */
-    public final float getLeftColor() {
-        //TODO implement // Return Color
-        return 0f;
+    public final Colors getLeftColor() {
+        if(getLeftColorSensor().getSensormode().equals(Sensormode.COLOR_ID)){
+            return getColor(getLeftColorSensor().getValue()[0]);
+        }else{
+            return Colors.NONE;
+        }
     }
 
     /**
@@ -87,26 +104,66 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
      *
      * @return right color ID
      */
-    public final float getRightColor() {
-        //TODO implement // Return Color
-        return 0f;
+    public Colors getRightColor() {
+        if(getRightColorSensor().getSensormode().equals(Sensormode.COLOR_ID)){
+            return getColor(getRightColorSensor().getValue()[0]);
+        }else{
+            return Colors.NONE;
+        }
     }
 
     /**
-     * This method waits until the given amount of time has passed.
-     * This method is blocking.
-     *
-     * @param milliseconds the time in milliseconds
+     * Returns the Color {@link Colors} fitting to the given value
+     * @param value - float value meassured by the color sensor
+     * @return the color fitting the given value
      */
-    public final void delay(long milliseconds) {
-        if (!isInterrupted()) {
-            try {
-                Thread.sleep(milliseconds);
-            } catch (final InterruptedException e) {
-                // Ignore
-            }
+    private Colors getColor(float value){
+        if(getLeftColorSensor().getValue()[0] == Colors.BLACK.getValue()) {
+            return Colors.BLACK;
+        }else if(getLeftColorSensor().getValue()[0] == Colors.BLUE.getValue()) {
+            return Colors.BLUE;
+        }else if(getLeftColorSensor().getValue()[0] == Colors.GREEN.getValue()) {
+            return Colors.GREEN;
+        }else if(getLeftColorSensor().getValue()[0] == Colors.YELLOW.getValue()) {
+            return Colors.YELLOW;
+        }else if(getLeftColorSensor().getValue()[0] == Colors.RED.getValue()) {
+            return Colors.RED;
+        }else if(getLeftColorSensor().getValue()[0] == Colors.WHITE.getValue()) {
+            return Colors.WHITE;
+        }else if(getLeftColorSensor().getValue()[0] == Colors.BROWN.getValue()) {
+            return Colors.BROWN;
+        }else{
+            return Colors.NONE;
         }
     }
+
+    /**
+     * Returns the Distance measured by the Distance Sensor
+     *
+     * @return distance value in meter
+     */
+    public float getDistance(){
+        if(getUltrasonicSensor().getSensormode().equals(Sensormode.DISTANCE)){
+            return getUltrasonicSensor().getValue()[0];
+        }else{
+            return -1f;
+        }
+        
+    }
+
+
+
+    /**
+     * Returns the current Angle of the Robot given by the Gyrosensor.
+     * @return angle in degree
+     */
+    public float getAngle(){
+        return getGyroSensor().getValue()[0];
+    }
+
+
+
+    // ------ Motor Controlling Methods ------
 
     /**
      * The robot rotates counterclockwise by the given angle.
@@ -117,7 +174,6 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
     public final void turnLeft(int degrees) {
         //TODO implement
     }
-
 
     /**
      * The robot rotates clockwise by the given angle. The method blocks until the rotation is completed.
@@ -136,7 +192,6 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
     public final void turnLeftTime(int milliseconds) {
         //TODO Implement
     }
-
 
     /**
      * The robot rotates clockwise for the specified time. The method blocks until the rotation is completed.
@@ -162,6 +217,14 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
         //TODO Implement
     }
 
+    public void synchronizedForward() {
+        //TODO Implement
+    }
+
+    public void synchronizedForward(int distance) {
+        //TODO Implement
+    }
+
     /**
      * Starts driving backward and returns immediately
      * Use {@link #backward()} to stop driving.
@@ -170,6 +233,53 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
         //TODO Implement
     }
 
+    public void synchronizedBackward() {
+        //TODO Implement
+    }
+
+    public void synchronizedBackward(int distance) {
+        //TODO Implement
+    }
+
+    // ------ Methods for code sugar ------
+
+
+    /**
+     * This method waits until the given amount of time has passed.
+     * This method is blocking.
+     *
+     * @param milliseconds the time in milliseconds
+     */
+    public final void delay(long milliseconds) {
+        if (!isInterrupted()) {
+            try {
+                Thread.sleep(milliseconds);
+            } catch (final InterruptedException e) {
+                // Ignore
+            }
+        }
+    }
+
+
+
+
+
+    // ------ Getter Methods Sensors ------
+    protected Sensor getLeftColorSensor(){
+        return sensorProvider.getSensor(getLeftColorSensorPort());
+    }
+
+    protected Sensor getRightColorSensor(){
+        return sensorProvider.getSensor(getRightColorSensorPort());
+    }
+
+    protected Sensor getUltrasonicSensor(){
+        return sensorProvider.getSensor(getUltrasonicSensorPort());
+    }
+
+    protected Sensor getGyroSensor(){
+        return sensorProvider.getSensor(getGyroSensorPort());
+    }
 
     // ------ Getter-Method Hardware Ports ------
     /**

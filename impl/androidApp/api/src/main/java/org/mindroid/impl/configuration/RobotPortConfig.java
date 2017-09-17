@@ -86,26 +86,6 @@ public class RobotPortConfig implements IRobotPortConfig {
         return motorD;
     }
 
-    @Override
-    public boolean isMotorASynchronized() {
-        return false;
-    }
-
-    @Override
-    public boolean isMotorBSynchronized() {
-        return false;
-    }
-
-    @Override
-    public boolean isMotorCSynchronized() {
-        return false;
-    }
-
-    @Override
-    public boolean isMotorDSynchronized() {
-        return false;
-    }
-
     public void setSensorS1(Sensors sensorS1) {
         this.sensorS1 = sensorS1;
     }

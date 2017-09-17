@@ -79,7 +79,7 @@ public class TestPCClient{
             }
         }
 
-        public void initRobot() throws StateAlreadyExistsException {
+        private void initRobot() throws StateAlreadyExistsException {
             TestPCClient.sm = syncdMotorTest();
             StatemachineCollection statemachineCollection = new StatemachineCollection();
             statemachineCollection.addStatemachine(sm.getID(), sm);
@@ -111,7 +111,7 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
 
-                    //SynchronizedMotorOperation rotate = SynchronizedMotorOperationFactory.createRotateOperation(720);
+                    SynchronizedMotorOperation rotate = SynchronizedMotorOperationFactory.createRotateOperation(720);
                     SynchronizedMotorOperation forward = SynchronizedMotorOperationFactory.createForwardOperation();
                     SynchronizedMotorOperation noOperation = SynchronizedMotorOperationFactory.createNoOperation();
 

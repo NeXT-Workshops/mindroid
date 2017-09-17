@@ -28,6 +28,8 @@ public class MotorManager extends HardwareInterfaceManager{
 		super(bType);
 	}
 
+	private SynchronizedRegulatedMotorGroup syncedMotorGroup = null;
+	private SyncedMotorGroupEndpoint syncedMotorEndpoint = null;
 
 	public boolean createMotorEndpoint(Port port, Motors motortype, int networkPort) throws IOException {
 		if(endpoints.containsKey(port)){
@@ -77,45 +79,24 @@ public class MotorManager extends HardwareInterfaceManager{
 		}
 	}
 
-	public boolean createSynchronizedMotorEndpoint(final Port[] syncedMotorPorts){
-		//Exctract motors from motor-endpoints fitting to given ports
-		ArrayList<AbstractMotor> motors = getAbstractMotorsFromEndpoints(syncedMotorPorts);
-
+	public boolean createSynchronizedMotorEndpoint(){
 		//Create Synchronized Motor Group
-		SynchronizedRegulatedMotorGroup syncedMotorGroup = getSynchronizedMotorGroup(motors);
+		if(syncedMotorGroup == null) {
+			syncedMotorGroup = new SynchronizedRegulatedMotorGroup(this);
+		}
 
-		if(syncedMotorGroup.isMotorSetValid()){
+		if(syncedMotorEndpoint == null) {
 			SyncedMotorGroupEndpoint syncedMotorEndpoint = new SyncedMotorGroupEndpoint(syncedMotorGroup);
 			BrickServerImpl brickServer = new BrickServerImpl(NetworkPortConfig.SYNCED_MOTOR_GROUP);
 			brickServer.addListener(syncedMotorEndpoint);
-			return true;
-		}else{
-			return false;
 		}
+
+		return true;
 	}
 
-	private ArrayList<AbstractMotor> getAbstractMotorsFromEndpoints(Port[] syncedMotorPorts) {
-		ArrayList<AbstractMotor> motors = new ArrayList<>(syncedMotorPorts.length);
-		AbstractMotor tmpMotor;
-		for (Port syncedMotorPort : syncedMotorPorts) {
-			if(endpoints.get(syncedMotorPort) instanceof MotorEndpoint){
-				tmpMotor = ((MotorEndpoint)endpoints.get(syncedMotorPort)).getMotor();
-				if(tmpMotor instanceof AbstractRegulatedIMotor){
-					motors.add(tmpMotor);
-				}
-			}
-		}
-		return motors;
+
+	public MotorEndpoint getMotorEndpoint(Port motorport){
+		return (MotorEndpoint) endpoints.get(motorport);
 	}
-
-	private SynchronizedRegulatedMotorGroup getSynchronizedMotorGroup(ArrayList<AbstractMotor> motors){
-		AbstractRegulatedIMotor[] syncedMotors = motors.toArray(new AbstractRegulatedIMotor[motors.size()]);
-
-		SynchronizedRegulatedMotorGroup syncedMotorGroup = new SynchronizedRegulatedMotorGroup();
-		syncedMotorGroup.setSynchronizedMotors(syncedMotors);
-
-		return syncedMotorGroup;
-	}
-
 
 }

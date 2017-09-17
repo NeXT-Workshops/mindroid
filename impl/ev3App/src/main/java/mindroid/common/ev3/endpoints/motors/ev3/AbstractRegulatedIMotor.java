@@ -217,6 +217,15 @@ public abstract class AbstractRegulatedIMotor extends AbstractMotor implements I
         }
     }
 
+    public void synchronizeWith(AbstractRegulatedIMotor[] regMotors) {
+        RegulatedMotor[] toSyncMotors = new RegulatedMotor[regMotors.length];
+        for (int i = 0; i < regMotors.length; i++) {
+            toSyncMotors[i] = regMotors[i].getMotor();
+        }
+
+        synchronizeWith(toSyncMotors);
+    }
+
     @Override
     public void startSynchronization() {
         if(getMotor() != null) {

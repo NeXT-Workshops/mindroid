@@ -70,23 +70,4 @@ public class RobotHardwareConfigurationTest implements IRobotPortConfig {
         return Motors.LargeRegulatedMotor;
     }
 
-    @Override
-    public boolean isMotorASynchronized() {
-        return false;
-    }
-
-    @Override
-    public boolean isMotorBSynchronized() {
-        return false;
-    }
-
-    @Override
-    public boolean isMotorCSynchronized() {
-        return false;
-    }
-
-    @Override
-    public boolean isMotorDSynchronized() {
-        return false;
-    }
 }

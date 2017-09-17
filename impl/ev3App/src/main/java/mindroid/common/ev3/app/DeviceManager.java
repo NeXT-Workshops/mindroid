@@ -216,20 +216,16 @@ public class DeviceManager extends Listener {
     }
 
     private void handleCreateSynchronizedMotorsMessage(Connection conn, CreateSynchronizedMotorsMessage msg) {
-       if(msg.getMotorPorts() != null) {
-           try {
-               boolean creationSucess = createSynchronizedMotorGroup(getMotorPortMapping(msg.getMotorPorts()));
-               if(creationSucess){
-                    conn.sendTCP(SynchronizedMotorMessageFactory.createCreationSuccessMessage(true));
-               }else{
-                   conn.sendTCP(SynchronizedMotorMessageFactory.createCreationSuccessMessage(false));
-               }
-           } catch (IOException e) {
-               e.printStackTrace();
+       try {
+           boolean creationSucess = createSynchronizedMotorGroup();
+           if(creationSucess){
+                conn.sendTCP(SynchronizedMotorMessageFactory.createCreationSuccessMessage(true));
+           }else{
                conn.sendTCP(SynchronizedMotorMessageFactory.createCreationSuccessMessage(false));
            }
-       }else{
-           //TODO ERROR HANDLING
+       } catch (IOException e) {
+           e.printStackTrace();
+           conn.sendTCP(SynchronizedMotorMessageFactory.createCreationSuccessMessage(false));
        }
     }
 
@@ -267,7 +263,7 @@ public class DeviceManager extends Listener {
         return false;
     }
 
-    private boolean createSynchronizedMotorGroup(Port[] ports) throws IOException {
-        return mm.createSynchronizedMotorEndpoint(ports);
+    private boolean createSynchronizedMotorGroup() throws IOException {
+        return mm.createSynchronizedMotorEndpoint();
     }
 }

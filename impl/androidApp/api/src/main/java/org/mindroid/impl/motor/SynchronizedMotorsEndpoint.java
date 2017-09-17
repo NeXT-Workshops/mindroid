@@ -21,6 +21,9 @@ public class SynchronizedMotorsEndpoint extends ClientEndpointImpl implements IS
     public void executeSynchronizedOperation(SynchronizedMotorOperation operationPortA, SynchronizedMotorOperation operationPortB, SynchronizedMotorOperation operationPortC, SynchronizedMotorOperation operationPortD) {
         if(isClientReady()){
             client.sendTCP(SynchronizedMotorMessageFactory.createSynchronizedMotorOperationMessage(operationPortA,operationPortB,operationPortC,operationPortD));
+            System.out.println("[SynchronizedMotorEndpoint:executeSynchronizedOperation] operation message sent");
+        }else{
+            System.out.println("[SynchronizedMotorEndpoint:executeSynchronizedOperation] operation message NOT sent");
         }
     }
 }

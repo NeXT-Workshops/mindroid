@@ -26,11 +26,10 @@ public class SynchronizedMotorMessageFactory {
 
     /**
      * Returns a message creating a synchronized Group
-     * @param ports label of the ports
      * @return Message to create a synchronized motor group
      */
-    public static CreateSynchronizedMotorsMessage createCreateSynchronizedMotorsMessage(String[] ports){
-        return new CreateSynchronizedMotorsMessage(ports);
+    public static CreateSynchronizedMotorsMessage createCreateSynchronizedMotorsMessage(){
+        return new CreateSynchronizedMotorsMessage();
     }
 
     public static SynchronizedMotorGroupCreatedMessage createCreationSuccessMessage(boolean isSuccess){

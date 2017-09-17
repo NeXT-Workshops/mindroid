@@ -100,19 +100,11 @@ public class EV3MotorManager extends Listener {
 	}
 
 	/**
-	 * Initializes the Synced Motor group.
-	 * Sends a message containing the ports of the motors which are in the group to the EV3.
-	 * This message will initiate the createion Porcess of the synced group.
-	 * @param ports - ports of the motors to synchronize
+	 * Initializes the Synced Motor group to execute Synchronized motor operations
+	 *
 	 */
-	public void initializeSyncedMotorGroup(EV3PortID[] ports){
-		if(ports != null){
-			String[] portLabels = new String[ports.length];
-			for (int i = 0; i < ports.length; i++) {
-				portLabels[i] = ports[i].getLabel();
-			}
-			brickClient.sendTCP(SynchronizedMotorMessageFactory.createCreateSynchronizedMotorsMessage(portLabels));
-		}
+	public void initializeSyncedMotorGroup(){
+		brickClient.sendTCP(SynchronizedMotorMessageFactory.createCreateSynchronizedMotorsMessage());
 	}
 
 	public void disconnectMotors(){

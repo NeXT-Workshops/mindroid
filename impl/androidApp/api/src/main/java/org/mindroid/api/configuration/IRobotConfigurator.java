@@ -102,10 +102,6 @@ public interface IRobotConfigurator {
 	 */
 	SynchronizedMotorsEndpoint createSynchronizedMotorsEndpoint();
 
-	void setSyncedMotorPorts(EV3PortID[] ports);
-
-	EV3PortID[] getSyncedMotorPorts();
-
 	//------------- Build the wholoe Configuration
 	/**
 	 * Build the Configuration

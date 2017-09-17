@@ -211,16 +211,6 @@ public class RobotConfigurator implements IRobotConfigurator {
 		return syncedMotorsEndpoint;
 	}
 
-	@Override
-	public void setSyncedMotorPorts(EV3PortID[] ports) {
-		this.syncedMotorPorts = ports;
-	}
-
-	@Override
-	public EV3PortID[] getSyncedMotorPorts() {
-		return this.syncedMotorPorts;
-	}
-
 	// TODO MAY CAN BE REMOVED COMPLETELY, REPLACED BY createMotor; createSensor
 	/** Talks to the Brick - tell him what motor/sensor is connected to its port **/
 	@Override
@@ -265,7 +255,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 			}
 
 			//Initialize Synchronized Motor Group
-			motorManager.initializeSyncedMotorGroup(getSyncedMotorPorts());
+			motorManager.initializeSyncedMotorGroup();
 
 			//Wait until Synced Motor group is created
 			while(!this.syncedMotorsEndpoint.isClientReady()){

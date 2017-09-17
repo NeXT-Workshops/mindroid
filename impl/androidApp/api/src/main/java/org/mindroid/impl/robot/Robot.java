@@ -3,6 +3,7 @@ package org.mindroid.impl.robot;
 import org.mindroid.api.communication.IMessenger;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.configuration.RobotConfigurator;
+import org.mindroid.impl.imperative.ImperativeImplManager;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
 import org.mindroid.impl.motor.SynchronizedMotorsEndpoint;
 import org.mindroid.impl.sensor.EV3SensorEndpoint;
@@ -35,6 +36,7 @@ public final class Robot {
     private SynchronizedMotorsEndpoint syncedMotors;
 
     private StatemachineManager statemachineManager;
+    private ImperativeImplManager imperativeImplManager;
 
     protected boolean messageingEnabled = false;
     protected IMessenger messenger = null;
@@ -49,6 +51,7 @@ public final class Robot {
 
     private Robot(){
         statemachineManager = StatemachineManager.getInstance();
+        imperativeImplManager = ImperativeImplManager.getInstance();
     }
 
     public EV3SensorEndpoint getSensorS1() {
@@ -143,10 +146,6 @@ public final class Robot {
         this.brick = brick;
     }
 
-    protected void setStatemachineManager(StatemachineManager statemachineManager) {
-        this.statemachineManager = statemachineManager;
-    }
-
     public static RobotController getRobotController(){
         return robotController;
     }
@@ -165,5 +164,9 @@ public final class Robot {
 
     protected IMessenger getMessenger() {
         return messenger;
+    }
+
+    public ImperativeImplManager getImperativeImplManager() {
+        return ImperativeImplManager.getInstance();
     }
 }

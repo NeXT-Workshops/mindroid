@@ -1,6 +1,6 @@
 package org.mindroid.impl.test;
 
-import org.mindroid.api.LVL1API;
+import org.mindroid.api.StatemachineAPI;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
@@ -39,7 +39,7 @@ public class TestPCClient{
         new TestPCClientRobot();
     }
 
-    private static class TestPCClientRobot extends LVL1API {
+    private static class TestPCClientRobot extends StatemachineAPI {
         IRobotCommandCenter commandCenter;
 
         public TestPCClientRobot() {

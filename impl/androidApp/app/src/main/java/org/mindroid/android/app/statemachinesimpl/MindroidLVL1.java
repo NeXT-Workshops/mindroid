@@ -1,6 +1,6 @@
 package org.mindroid.android.app.statemachinesimpl;
 
-import org.mindroid.api.LVL1API;
+import org.mindroid.api.StatemachineAPI;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.statemachine.IState;
@@ -30,7 +30,7 @@ import static org.mindroid.api.communication.IMessenger.SERVER_LOG;
  *
  */
 
-public class MindroidLVL1 extends LVL1API {
+public class MindroidLVL1 extends StatemachineAPI {
 
     public MindroidLVL1() {
         initStatemachines();

@@ -10,18 +10,81 @@ import java.io.IOException;
  */
 
 public interface IRobotCommandCenter {
-    void startStatemachine(String id);
-    void stopStatemachine(String id);
-    String[] getStatemachines();
 
+    // ------ Setup Controlling ------
+
+    /**
+     * Connect the Phone to the Brick
+     * @throws IOException - If connection error occurs
+     */
     void connectToBrick() throws IOException;
-    boolean isConnected();
 
-    boolean initializeConfiguration() throws BrickIsNotReadyException, PortIsAlreadyInUseException; //TODO initializeConfiguration()
-    boolean isConfigurated();
-
+    /**
+     * Disconnect Phone from the Brick.
+     */
     void disconnect();
 
+    /**
+     * Returns the Connection-State of the Phone to Brick Connection
+     * @return true if connection is established
+     */
+    boolean isConnected();
 
-    //public IRobotState getRobotState(); TODO
+    /**
+     * Initializes the Configuration of your Robot.
+     * Brick gets the Information of the Configuration of the Robot and set the Endpoints up.
+     * @return true if the initializeation is complete
+     * @throws BrickIsNotReadyException - thrown if an error on the Brick Connection occurred
+     * @throws PortIsAlreadyInUseException - If you tried to initialize a brick-Hardware port twice.
+     */
+    boolean initializeConfiguration() throws BrickIsNotReadyException, PortIsAlreadyInUseException; //TODO initializeConfiguration()
+
+    /**
+     * Returns if the Configuration is complete
+     * @return true - if Configuration has finished and is complete.
+     */
+    boolean isConfigurated();
+
+
+    //public IRobotState getRobotState(); TODO: May return the current State of the robot
+
+    // ------ Controlling of the Statemachine Engine ------
+    /**
+     * Start a statemachine with the given ID.
+     * @param id - unique id identifiying the statemachine to run
+     */
+    void startStatemachine(String id);
+
+    /**
+     * Stop a statemachine with the given ID.
+     * @param id - unique id identifiying the statemachine to stop
+     */
+    void stopStatemachine(String id);
+
+    /**
+     * Get all registered Statemachines by ther IDs
+     * @return String of the Statemachine IDs
+     */
+    String[] getStatemachines();
+
+    // ------ Controlling the Imperative Engine ------
+
+    /**
+     * Starts executing the Implementation with the given ID
+     * @param id - unique id identifiying the imperative implementation to start
+     */
+    void startImperativeImplemenatation(String id);
+
+    /**
+     * Stops executing the Implementation with the given ID
+     * @param id - unique id identifiying the imperative implementation to stop
+     */
+    void stopImperativeImplementation(String id);
+
+    /**
+     * Returns all registered Imperative Implementations IDs
+     * @return Array of IDs of registered Imperative Implementations
+     */
+    String[] getImperativeImplementations();
+
 }

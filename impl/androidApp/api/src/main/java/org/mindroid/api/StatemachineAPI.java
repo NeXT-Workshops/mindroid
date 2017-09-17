@@ -10,7 +10,7 @@ import org.mindroid.impl.statemachine.StatemachineCollection;
 /**
  * Created by Torbe on 03.05.2017.
  */
-public abstract class LVL1API implements IMindroidMain {
+public abstract class StatemachineAPI implements IMindroidMain {
 
     public StatemachineCollection statemachineCollection = new StatemachineCollection();
 
@@ -58,7 +58,7 @@ public abstract class LVL1API implements IMindroidMain {
         if(Robot.getRobotController().getMessenger() != null){
             Robot.getRobotController().getMessenger().sendMessage(destination,message);
         }else{
-            System.out.println("[LVL1API:sendMessage] Tried to send a message, but the Messenger was null");
+            System.out.println("[StatemachineAPI:sendMessage] Tried to send a message, but the Messenger was null");
         }
     }
 
@@ -72,7 +72,7 @@ public abstract class LVL1API implements IMindroidMain {
         if(Robot.getRobotController().getMessenger() != null){
             Robot.getRobotController().getMessenger().sendMessage(IMessenger.BROADCAST,message);
         }else{
-            System.out.println("[LVL1API:broadcastMessage] Tried to broadcast a message, but the Messenger was null");
+            System.out.println("[StatemachineAPI:broadcastMessage] Tried to broadcast a message, but the Messenger was null");
         }
     }
 
@@ -84,7 +84,7 @@ public abstract class LVL1API implements IMindroidMain {
         if(Robot.getRobotController().getMessenger() != null){
             Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,logmessage);
         }else{
-            System.out.println("[LVL1API:sendLogMessage] Tried to send a logmessage, but the Messenger was null");
+            System.out.println("[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null");
         }
     }
 

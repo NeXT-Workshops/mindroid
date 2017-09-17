@@ -39,6 +39,21 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     }
 
     @Override
+    public void startImperativeImplemenatation(String id) {
+        robot.getImperativeImplManager().startImperativeImplementation(id);
+    }
+
+    @Override
+    public void stopImperativeImplementation(String id) {
+        robot.getImperativeImplManager().stopImperativeImplementation(id);
+    }
+
+    @Override
+    public String[] getImperativeImplementations() {
+        return robot.getImperativeImplManager().getImperativeImplIDs();
+    }
+
+    @Override
     public void connectToBrick() throws IOException {
         long timeout = 30000;
         robot.getRobotConfigurator().getBrick().connect();

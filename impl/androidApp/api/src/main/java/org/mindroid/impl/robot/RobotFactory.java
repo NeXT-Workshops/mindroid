@@ -1,6 +1,7 @@
 package org.mindroid.impl.robot;
 
 
+import org.mindroid.api.ImperativeAPI;
 import org.mindroid.api.communication.IRobotServer;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.robot.*;
@@ -8,7 +9,6 @@ import org.mindroid.api.robot.context.IConstraintEvaluator;
 import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.api.robot.control.MotorProvider;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
-import org.mindroid.api.robot.control.ISensorControl;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.api.statemachine.IStatemachine;
 import org.mindroid.common.messages.hardware.Motors;
@@ -21,6 +21,7 @@ import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
+import org.mindroid.impl.imperative.ImperativeImplManager;
 import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.robot.context.RobotContextStateEvaluator;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
@@ -71,7 +72,7 @@ public final class RobotFactory implements IRobotFactory {
 
     IRobotPortConfig robotConfig;
 
-    private HashMap<String,IStatemachine> statemachines = new HashMap<String,IStatemachine>();
+
 
     // ----------------------- Verwendete Variablen ------------------------------
 
@@ -287,6 +288,11 @@ public final class RobotFactory implements IRobotFactory {
     @Override
     public void addStatemachine(StatemachineCollection statemachines) {
         myRobot.getStatemachineManager().addStatemachines(statemachines);
+    }
+
+    @Override
+    public void addImperativeImplementation(ImperativeAPI imperativeImplementation) {
+        myRobot.getImperativeImplManager().addImperativeImplementation(imperativeImplementation);
     }
 
     /**

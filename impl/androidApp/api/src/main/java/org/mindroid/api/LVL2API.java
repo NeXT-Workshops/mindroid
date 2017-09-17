@@ -45,7 +45,7 @@ import java.util.HashMap;
  * @author Torben Unzicker - Initial implementation, 03.05.2017
  * @author Roland Kluge - Refactoring and documentation, Aug 2017
  */
-public abstract class LVL2API extends LVL1API {
+public abstract class LVL2API extends StatemachineAPI {
 
     private static final String IMPERATIVE_STATEMACHINE_ID = "Imperative Statemachine Implementation";
     private static final String IMPERATIVE_GROUP_ID = "Mindrobot";

@@ -1,6 +1,7 @@
 package org.mindroid.api.robot.control;
 
 import org.mindroid.common.messages.hardware.Sensormode;
+import org.mindroid.common.messages.hardware.Sensors;
 import org.mindroid.impl.ev3.EV3PortID;
 
 /**
@@ -10,6 +11,14 @@ import org.mindroid.impl.ev3.EV3PortID;
 public interface ISensorControl {
 
 
-    void changeSensorMode(EV3PortID sensor, Sensormode mode);
+    void changeSensorMode(Sensormode mode);
+
+    float[] getValue();
+
+    Sensormode getSensormode();
+
+    EV3PortID getPort();
+
+    Sensors getSensorType();
 
 }

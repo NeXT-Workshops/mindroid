@@ -3,6 +3,7 @@ package org.mindroid.api;
 import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.statemachine.IMindroidMain;
 import org.mindroid.impl.ev3.EV3PortIDs;
+import org.mindroid.impl.robot.MotorProvider;
 import org.mindroid.impl.robot.*;
 import org.mindroid.impl.statemachine.StatemachineCollection;
 
@@ -16,7 +17,7 @@ public abstract class LVL1API implements IMindroidMain {
     public RobotController robotController = Robot.getRobotController();
     public MotorProvider motorProvider = robotController.getMotorProvider();
     public BrickController brickController = robotController.getBrickController();
-    public SensorController sensorController = robotController.getSensorController();
+    public SensorProvider sensorProvider = robotController.getSensorProvider();
     //private IMessenger messenger = Robot.getRobotController().getMessenger();
     //public String myRobotID = Robot.getRobotController().getRobotID();
 

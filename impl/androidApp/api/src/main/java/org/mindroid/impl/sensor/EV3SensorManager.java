@@ -22,7 +22,7 @@ import com.esotericsoftware.kryonet.Listener;
 
 /**
  * 
- * Manages the Sensors.
+ * Manages the SensorEndpoints.
  * Has a connection to the Brick.
  * 
  * @author Torben

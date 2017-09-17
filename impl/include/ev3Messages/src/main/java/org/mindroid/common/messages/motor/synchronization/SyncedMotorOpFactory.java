@@ -62,7 +62,7 @@ public class SyncedMotorOpFactory {
     }
 
     /**
-     * Creates an synchronized operation doing nothing
+     * Creates an synchronized operation doing nothing. The  NoOperation will not have any effect on the motor. The Motor continues doing what it did before.
      * @return SynchronizedMotorOperation {@link SynchronizedMotorOperation}
      */
     public static SynchronizedMotorOperation createNoOperation(){

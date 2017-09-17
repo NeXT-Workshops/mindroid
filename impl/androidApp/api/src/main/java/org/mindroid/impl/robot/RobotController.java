@@ -7,9 +7,9 @@ import org.mindroid.api.communication.IMessenger;
  */
 public class RobotController {
 
-    private MotorProvider motorControl;
+    private MotorProvider motorProvider;
     private BrickController brickController;
-    private SensorController sensorControl;
+    private SensorProvider sensorProvider;
     private IMessenger messenger;
     private String robotID = "";
 
@@ -18,23 +18,23 @@ public class RobotController {
     public RobotController(Robot robot){
         this.robot = robot;
 
-        this.motorControl = new MotorProvider(robot);
-        this.sensorControl = new SensorController(robot);
+        this.motorProvider = new MotorProvider(robot);
+        this.sensorProvider = new SensorProvider(robot);
         this.brickController = new BrickController(robot);
 
         this.robotID = robot.robotID;
     }
 
     public MotorProvider getMotorProvider() {
-        return motorControl;
+        return motorProvider;
     }
 
     public BrickController getBrickController() {
         return brickController;
     }
 
-    public SensorController getSensorController() {
-        return sensorControl;
+    public SensorProvider getSensorProvider() {
+        return sensorProvider;
     }
 
     public IMessenger getMessenger() {

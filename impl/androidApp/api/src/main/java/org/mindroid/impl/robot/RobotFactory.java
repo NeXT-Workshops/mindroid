@@ -59,7 +59,7 @@ public final class RobotFactory implements IRobotFactory {
 
     //Unneccessary vars - just for testing
     private MotorProvider motorProvider = Robot.getRobotController().getMotorProvider();
-    private ISensorControl sensorControl = Robot.getRobotController().getSensorController();
+    private SensorProvider sensorControl = Robot.getRobotController().getSensorProvider();
     private IBrickControl brickControl = Robot.getRobotController().getBrickController();
 
     private String brickIP = null;
@@ -186,9 +186,10 @@ public final class RobotFactory implements IRobotFactory {
             myRobot.setBrick(robotConfigurator.getBrick());
 
             // Connect statemachines RobotContextStateEvaluator etc with state machine
-            IConstraintEvaluator evaluator = new RobotContextStateEvaluator();
-            myRobot.getStatemachineManager().addConstraintEvaluator(evaluator);
-            RobotContextStateManager.getInstance().registerRobotContextStateListener(evaluator);
+            setupStatemachineEngine();
+
+            //TODO setup Imperative Engine
+
 
             //---------------- CREATE MESSENGER and ROBOTSERVER
             createNetworkCommunicationInterfaces();
@@ -200,6 +201,15 @@ public final class RobotFactory implements IRobotFactory {
         }
         System.out.println("[RobotFactory:createRobot] The RobotFactory created a Robot with the following setup:\n"+toString());
         return robotCommandCenter;
+    }
+
+    /**
+     * Setups the Statemachine Engine
+     */
+    private void setupStatemachineEngine() {
+        IConstraintEvaluator evaluator = new RobotContextStateEvaluator();
+        myRobot.getStatemachineManager().addConstraintEvaluator(evaluator);
+        RobotContextStateManager.getInstance().registerRobotContextStateListener(evaluator);
     }
 
     /**

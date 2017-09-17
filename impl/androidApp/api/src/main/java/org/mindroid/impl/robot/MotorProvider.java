@@ -6,6 +6,7 @@ import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
 import org.mindroid.impl.motor.Motor;
 import org.mindroid.impl.motor.SynchronizedMotors;
+import org.mindroid.impl.robot.Robot;
 
 import java.util.HashMap;
 

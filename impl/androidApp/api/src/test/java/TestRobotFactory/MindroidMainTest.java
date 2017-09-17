@@ -3,6 +3,7 @@ package TestRobotFactory;
 import org.mindroid.api.statemachine.IMindroidMain;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
+import org.mindroid.impl.robot.MotorProvider;
 import org.mindroid.impl.robot.*;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.statemachine.State;
@@ -20,7 +21,7 @@ public class MindroidMainTest implements IMindroidMain {
     RobotController robotController = Robot.getRobotController();
     MotorProvider motorProvider = robotController.getMotorProvider();
     BrickController brickController = robotController.getBrickController();
-    SensorController sensorController = robotController.getSensorController();
+    SensorProvider sensorProvider = robotController.getSensorProvider();
 
     //RobotEvent collision = RuleFactory.createCollisionRule(EV3PortIds.S1,"<",20);
     //RobotEvent no_ground = RuleFactory.createBrightnessRule(EV3PortIds.S2,"<",0.6);

@@ -11,7 +11,6 @@ import mindroid.common.ev3.endpoints.brick.EV3BrickEndpoint;
 import org.mindroid.common.messages.brick.BrickMessagesFactory;
 import org.mindroid.common.messages.brick.CreateMotorMessage;
 import org.mindroid.common.messages.brick.CreateSensorMessage;
-import org.mindroid.common.messages.hardware.EV3MotorPort;
 import org.mindroid.common.messages.hardware.Motors;
 import org.mindroid.common.messages.motor.synchronization.CreateSynchronizedMotorsMessage;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorMessageFactory;

@@ -1,6 +1,6 @@
 package org.mindroid.common.messages.motor.synchronization;
 
-public class SynchronizedMotorOperationFactory {
+public class SyncedMotorOpFactory {
 
     private static final SynchronizedMotorOperation NO_OPERATION = new SynchronizedMotorOperation(OperationType.NO_OPERATION);
     private static final SynchronizedMotorOperation FORWARD = new SynchronizedMotorOperation(OperationType.FORWARD);

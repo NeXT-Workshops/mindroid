@@ -11,9 +11,7 @@ import org.mindroid.common.messages.hardware.EV3MotorPort;
 import org.mindroid.common.messages.hardware.Motors;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorGroupCreatedMessage;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorMessageFactory;
-import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperationFactory;
 import org.mindroid.impl.brick.EV3Brick;
-import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 

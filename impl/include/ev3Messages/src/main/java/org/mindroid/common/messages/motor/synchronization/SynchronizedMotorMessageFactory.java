@@ -1,24 +1,22 @@
 package org.mindroid.common.messages.motor.synchronization;
 
-import org.mindroid.common.messages.hardware.EV3MotorPort;
-
 public class SynchronizedMotorMessageFactory {
 
     public static SynchronizedOperationMessage createSynchronizedMotorOperationMessage(SynchronizedMotorOperation opForPortA, SynchronizedMotorOperation opForPortB, SynchronizedMotorOperation opForPortC, SynchronizedMotorOperation opForPortD){
         if(opForPortA == null){
-            opForPortA = SynchronizedMotorOperationFactory.createNoOperation();
+            opForPortA = SyncedMotorOpFactory.createNoOperation();
         }
 
         if(opForPortB == null){
-            opForPortB = SynchronizedMotorOperationFactory.createNoOperation();
+            opForPortB = SyncedMotorOpFactory.createNoOperation();
         }
 
         if(opForPortC == null){
-            opForPortC = SynchronizedMotorOperationFactory.createNoOperation();
+            opForPortC = SyncedMotorOpFactory.createNoOperation();
         }
 
         if(opForPortD == null){
-            opForPortD = SynchronizedMotorOperationFactory.createNoOperation();
+            opForPortD = SyncedMotorOpFactory.createNoOperation();
         }
 
         return new SynchronizedOperationMessage(new SynchronizedMotorOperation[]{opForPortA,opForPortB,opForPortC,opForPortD});

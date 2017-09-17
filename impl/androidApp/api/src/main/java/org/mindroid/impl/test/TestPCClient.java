@@ -11,7 +11,7 @@ import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.common.messages.NetworkPortConfig;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperation;
-import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperationFactory;
+import org.mindroid.common.messages.motor.synchronization.SyncedMotorOpFactory;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
@@ -111,9 +111,9 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
 
-                    SynchronizedMotorOperation rotate = SynchronizedMotorOperationFactory.createRotateOperation(720);
-                    SynchronizedMotorOperation forward = SynchronizedMotorOperationFactory.createForwardOperation();
-                    SynchronizedMotorOperation noOperation = SynchronizedMotorOperationFactory.createNoOperation();
+                    SynchronizedMotorOperation rotate = SyncedMotorOpFactory.createRotateOperation(720);
+                    SynchronizedMotorOperation forward = SyncedMotorOpFactory.createForwardOperation();
+                    SynchronizedMotorOperation noOperation = SyncedMotorOpFactory.createNoOperation();
 
                     //FORWARD
                     motorProvider.getSynchronizedMotors().executeSynchronizedOperation(forward,noOperation,noOperation,forward);

@@ -7,6 +7,8 @@ import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
 import org.mindroid.api.statemachine.ITransition;
 import org.mindroid.api.statemachine.constraints.IConstraint;
+import org.mindroid.common.messages.motor.synchronization.SyncedMotorOpFactory;
+import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperation;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.statemachine.State;
 import org.mindroid.impl.statemachine.Statemachine;
@@ -617,8 +619,10 @@ public class MindroidLVL1 extends LVL1API {
                 motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
                 motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
                 //FORWARD
-                motorProvider.getMotor(EV3PortIDs.PORT_A).forward();
-                motorProvider.getMotor(EV3PortIDs.PORT_D).forward();
+                SynchronizedMotorOperation forwardOp = SyncedMotorOpFactory.createForwardOperation();
+                SynchronizedMotorOperation noOp = SyncedMotorOpFactory.createNoOperation();
+
+                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(forwardOp, noOp,noOp,forwardOp);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
@@ -631,9 +635,12 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
-                //FORWARD
-                motorProvider.getMotor(EV3PortIDs.PORT_A).stop();
-                motorProvider.getMotor(EV3PortIDs.PORT_D).stop();
+                //STOP
+                SynchronizedMotorOperation stopOp = SyncedMotorOpFactory.createStopOperation();
+                SynchronizedMotorOperation noOp = SyncedMotorOpFactory.createNoOperation();
+
+                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(stopOp, noOp,noOp,stopOp);
+
                 brickController.resetEV3StatusLight();
             }
         };
@@ -644,13 +651,15 @@ public class MindroidLVL1 extends LVL1API {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //BACKWARD
-                motorProvider.getMotor(EV3PortIDs.PORT_A).backward();
-                motorProvider.getMotor(EV3PortIDs.PORT_D).backward();
+                SynchronizedMotorOperation backwardOp = SyncedMotorOpFactory.createBackwardOperation();
+                SynchronizedMotorOperation noOp = SyncedMotorOpFactory.createNoOperation();
+
+                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(backwardOp, noOp,noOp,backwardOp);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
+                //motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                //motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
             }
         };
 
@@ -658,14 +667,18 @@ public class MindroidLVL1 extends LVL1API {
             @Override
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
+
                 //TURN LEFT
-                motorProvider.getMotor(EV3PortIDs.PORT_A).backward();
-                motorProvider.getMotor(EV3PortIDs.PORT_D).backward();
+                SynchronizedMotorOperation backwardOp = SyncedMotorOpFactory.createBackwardOperation();
+                SynchronizedMotorOperation forwardOp = SyncedMotorOpFactory.createForwardOperation();
+                SynchronizedMotorOperation noOp = SyncedMotorOpFactory.createNoOperation();
+
+                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(backwardOp, noOp,noOp,forwardOp);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
+                //motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                //motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
             }
         };
 

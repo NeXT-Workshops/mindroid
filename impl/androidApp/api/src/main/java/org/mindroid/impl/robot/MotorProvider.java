@@ -22,7 +22,9 @@ public class MotorProvider implements org.mindroid.api.robot.control.MotorProvid
 
     private Robot robot;
 
-    HashMap<EV3PortID,Motor> motors;
+    private HashMap<EV3PortID,Motor> motors;
+
+    private SynchronizedMotors syncedMotors;
 
     public MotorProvider(Robot robot){
         this.robot = robot;
@@ -61,6 +63,11 @@ public class MotorProvider implements org.mindroid.api.robot.control.MotorProvid
     }
 
     public SynchronizedMotors getSynchronizedMotors(){
-        return new SynchronizedMotors(robot.getSyncedMotors());
+        if(syncedMotors == null){
+            return (syncedMotors = new SynchronizedMotors(robot.getSyncedMotors()));
+        }else{
+            return syncedMotors;
+        }
+
     }
 }

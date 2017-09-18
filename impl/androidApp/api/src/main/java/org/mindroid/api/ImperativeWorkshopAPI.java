@@ -2,22 +2,14 @@ package org.mindroid.api;
 
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
+import org.mindroid.api.robot.IDifferentialPilot;
 import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
-import org.mindroid.impl.motor.Motor;
+import org.mindroid.impl.robot.DifferentialPilot;
 import org.mindroid.impl.sensor.Sensor;
-import org.mindroid.impl.statemachine.BooleanStatemachine;
-import org.mindroid.impl.statemachine.DiscreteValueStateMachine;
-import org.mindroid.impl.statemachine.constraints.GT;
-import org.mindroid.impl.statemachine.constraints.LT;
-import org.mindroid.impl.statemachine.constraints.MsgReceived;
-import org.mindroid.impl.statemachine.constraints.Rotation;
 import org.mindroid.impl.statemachine.properties.Colors;
-import org.mindroid.impl.statemachine.properties.MessageProperty;
-import org.mindroid.impl.statemachine.properties.sensorproperties.Angle;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
-import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
 
 /**
  * This API is build on the Imperative API.
@@ -29,16 +21,20 @@ import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
  *
  * @author Torben Unzicker 17.09.17
  */
-public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
+public abstract class ImperativeWorkshopAPI extends ImperativeAPI implements IDifferentialPilot {
     //TODO Create some Interface to add a specific robot Configurateion: Check how to use it on app-site when creating the Robot using the RobotFactory.
+    //TODO Maybe introduce an selfmade DifferentialPilot for precision controlling of the robot (Interface and Class)
+    //TODO Methods for Messageing
+
+    private DifferentialPilot diffPilot;
 
     /**
      * @param implementationID - The ID of your Implementation. Necessary to run your implementation later on.
      */
     public ImperativeWorkshopAPI(String implementationID) {
         super(implementationID);
+        this.diffPilot = new DifferentialPilot(motorProvider.getSynchronizedMotors(), getLeftMotorPort(),getRightMotorPort(),0.56f,12.5f);
     }
-
 
 
 
@@ -148,7 +144,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
         }else{
             return -1f;
         }
-        
+
     }
 
 
@@ -171,8 +167,9 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
      *
      * @param degrees the angle in degrees
      */
+    @Override
     public final void turnLeft(int degrees) {
-        //TODO implement
+        diffPilot.turnLeft(degrees);
     }
 
     /**
@@ -180,8 +177,9 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
      *
      * @param degrees angle
      */
+    @Override
     public final void turnRight(int degrees) {
-        //TODO implement
+        diffPilot.turnRight(degrees);
     }
 
     /**
@@ -205,43 +203,38 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
     /**
      * Stops all motors
      */
-    public void stopMotor(EV3PortID motorport) {
+    public void stop(EV3PortID motorport) {
         //TODO Implement
     }
 
     /**
      * Starts driving forward and returns immediately
-     * Use {@link #forward()} to stop driving.
+     * Use {@link #stop()} to stop driving.
      */
     public void forward() {
         //TODO Implement
     }
 
-    public void synchronizedForward() {
-        //TODO Implement
-    }
-
-    public void synchronizedForward(int distance) {
-        //TODO Implement
+    @Override
+    public void forward(float distance) {
+        diffPilot.forward(distance);
     }
 
     /**
      * Starts driving backward and returns immediately
-     * Use {@link #backward()} to stop driving.
+     * Use {@link #stop()} to stop driving.
      */
     public void backward() {
         //TODO Implement
     }
 
-    public void synchronizedBackward() {
-        //TODO Implement
+    @Override
+    public void backward(float distance) {
+        diffPilot.backward(distance);
     }
 
-    public void synchronizedBackward(int distance) {
-        //TODO Implement
-    }
 
-    // ------ Methods for code sugar ------
+    // ------ Methods to add some code sugar ------
 
 
     /**
@@ -259,8 +252,6 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
             }
         }
     }
-
-
 
 
 
@@ -285,7 +276,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
     /**
      * Returns the {@link EV3PortID} of the left unregulated motor
      */
-    protected EV3PortID getLeftMotor() {
+    protected EV3PortID getLeftMotorPort() {
         return EV3PortIDs.PORT_A;
     }
 

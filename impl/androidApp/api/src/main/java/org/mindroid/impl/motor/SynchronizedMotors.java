@@ -15,4 +15,11 @@ public class SynchronizedMotors implements ISynchronizedMotors {
     public void executeSynchronizedOperation(SynchronizedMotorOperation operationPortA, SynchronizedMotorOperation operationPortB, SynchronizedMotorOperation operationPortC, SynchronizedMotorOperation operationPortD) {
         syncedMotorsEndpoint.executeSynchronizedOperation(operationPortA,operationPortB,operationPortC,operationPortD);
     }
+
+    @Override
+    public void executeSynchronizedOperation(SynchronizedMotorOperation[] operations) {
+        if(operations.length == 4) {
+            syncedMotorsEndpoint.executeSynchronizedOperation(operations);
+        }
+    }
 }

@@ -26,4 +26,11 @@ public class SynchronizedMotorsEndpoint extends ClientEndpointImpl implements IS
             System.out.println("[SynchronizedMotorEndpoint:executeSynchronizedOperation] operation message NOT sent");
         }
     }
+
+    @Override
+    public void executeSynchronizedOperation(SynchronizedMotorOperation[] operations) {
+        if(operations.length == 4) {
+            executeSynchronizedOperation(operations[0], operations[1], operations[2], operations[3]);
+        }
+    }
 }

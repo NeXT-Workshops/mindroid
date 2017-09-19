@@ -23,7 +23,6 @@ import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
  */
 public abstract class ImperativeWorkshopAPI extends ImperativeAPI implements IDifferentialPilot {
     //TODO Create some Interface to add a specific robot Configurateion: Check how to use it on app-site when creating the Robot using the RobotFactory.
-    //TODO Maybe introduce an selfmade DifferentialPilot for precision controlling of the robot (Interface and Class)
     //TODO Methods for Messageing
 
     private DifferentialPilot diffPilot;
@@ -36,42 +35,6 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI implements IDi
         this.diffPilot = new DifferentialPilot(motorProvider.getSynchronizedMotors(), getLeftMotorPort(),getRightMotorPort(),0.56f,12.5f);
     }
 
-
-
-    // --------------------- BRICK CONTROLLING METHODS: Display, LED ---------------------
-
-
-    /**
-     * Sets the LED to the given color
-     *
-     * @param color    the {@link EV3StatusLightColor} to use
-     * @param interval the blink interval in milliseconds
-     */
-    public final void setLED(EV3StatusLightColor color, EV3StatusLightInterval interval) {
-        if (!isInterrupted()) {
-            brickController.setEV3StatusLight(color, interval);
-        }
-    }
-
-    /**
-     * Displays the given text onto the EV3 display at the given position (xPosition, yPosition).
-     *
-     * The coordinate (0,0) is at the top-left corner of the display.
-     *
-     * @param text the text to display
-     * @param xPosition the x position
-     * @param yPosition the y position
-     */
-    public void drawString(final String text, final int xPosition, final int yPosition) {
-        this.brickController.drawString(text, xPosition, yPosition);
-    }
-
-    /**
-     * Removes everything from the EV3 display
-     */
-    public void clearDisplay() {
-        this.brickController.clearDisplay();
-    }
 
 
 
@@ -234,24 +197,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI implements IDi
     }
 
 
-    // ------ Methods to add some code sugar ------
 
-
-    /**
-     * This method waits until the given amount of time has passed.
-     * This method is blocking.
-     *
-     * @param milliseconds the time in milliseconds
-     */
-    public final void delay(long milliseconds) {
-        if (!isInterrupted()) {
-            try {
-                Thread.sleep(milliseconds);
-            } catch (final InterruptedException e) {
-                // Ignore
-            }
-        }
-    }
 
 
 

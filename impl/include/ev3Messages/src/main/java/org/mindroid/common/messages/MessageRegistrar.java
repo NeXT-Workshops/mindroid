@@ -55,8 +55,10 @@ public class MessageRegistrar {
 		kryo.register(SynchronizedMotorOperation.class);
 		kryo.register(SynchronizedMotorOperation[].class);
 		kryo.register(SynchronizedOperationMessage.class);
+		kryo.register(SyncedMotorOpCompleteMessage.class);
 		kryo.register(CreateSynchronizedMotorsMessage.class);
 		kryo.register(SynchronizedMotorGroupCreatedMessage.class);
+
 
 	
 		//Sensor Messages

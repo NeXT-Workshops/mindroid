@@ -30,8 +30,16 @@ public class ImperativeImplManager {
      * @param id - unique id identifiying the imperative implementation to start
      */
     public void startImperativeImplementation(String id){
-        ImperativeAPI implementation = imperativeImplementations.get(id);
-        implementation.run();
+        final ImperativeAPI implementation = imperativeImplementations.get(id);
+
+        Runnable runImpl = new Runnable(){
+            @Override
+            public void run() {
+                implementation.run();
+            }
+        };
+        new Thread(runImpl).start();
+
     }
 
     /**

@@ -40,7 +40,7 @@ public class SynchronizedRegulatedMotorGroup {
      *
      * @param operations - operations {@link SynchronizedMotorOperation} sorted by Motorport [A,..,D] to [operation,..,operation] size has to be equal {@link #MAX_MOTOR_COUNT}
      */
-    public void executeSynchronizedOperation(SynchronizedMotorOperation[] operations){
+    public void executeSynchronizedOperation(SynchronizedMotorOperation[] operations,boolean isBlocked){
             if(operations.length != motorports.length){
                 //TODO May throw an error
                 return;
@@ -67,11 +67,13 @@ public class SynchronizedRegulatedMotorGroup {
                 firstMotor.endSynchronization();
 
                 //Wait until complete.
-                /*for (int i = 0; i < motorPartnersEndpoints.length; i++) {
-                    if (motorPartnersEndpoints[i] != null) {
-                        motorPartnersEndpoints[i].waitComplete();
+                if(isBlocked) {
+                    for (int i = 0; i < motorPartnersEndpoints.length; i++) {
+                        if (motorPartnersEndpoints[i] != null) {
+                            motorPartnersEndpoints[i].waitComplete();
+                        }
                     }
-                }*/
+                }
             }else{
                 //NO MOTOR FOUND
             }

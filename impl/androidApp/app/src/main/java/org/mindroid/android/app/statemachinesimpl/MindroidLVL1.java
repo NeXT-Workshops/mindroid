@@ -622,7 +622,7 @@ public class MindroidLVL1 extends StatemachineAPI {
                 SynchronizedMotorOperation forwardOp = SyncedMotorOpFactory.createForwardOperation();
                 SynchronizedMotorOperation noOp = SyncedMotorOpFactory.createNoOperation();
 
-                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(forwardOp, noOp,noOp,forwardOp);
+                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(forwardOp, noOp,noOp,forwardOp,false);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
@@ -639,7 +639,7 @@ public class MindroidLVL1 extends StatemachineAPI {
                 SynchronizedMotorOperation stopOp = SyncedMotorOpFactory.createStopOperation();
                 SynchronizedMotorOperation noOp = SyncedMotorOpFactory.createNoOperation();
 
-                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(stopOp, noOp,noOp,stopOp);
+                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(stopOp, noOp,noOp,stopOp,false);
 
                 brickController.resetEV3StatusLight();
             }
@@ -654,7 +654,7 @@ public class MindroidLVL1 extends StatemachineAPI {
                 SynchronizedMotorOperation backwardOp = SyncedMotorOpFactory.createBackwardOperation();
                 SynchronizedMotorOperation noOp = SyncedMotorOpFactory.createNoOperation();
 
-                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(backwardOp, noOp,noOp,backwardOp);
+                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(backwardOp, noOp,noOp,backwardOp,false);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
 
@@ -673,7 +673,7 @@ public class MindroidLVL1 extends StatemachineAPI {
                 SynchronizedMotorOperation forwardOp = SyncedMotorOpFactory.createForwardOperation();
                 SynchronizedMotorOperation noOp = SyncedMotorOpFactory.createNoOperation();
 
-                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(backwardOp, noOp,noOp,forwardOp);
+                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(backwardOp, noOp,noOp,forwardOp,false);
 
                 brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 

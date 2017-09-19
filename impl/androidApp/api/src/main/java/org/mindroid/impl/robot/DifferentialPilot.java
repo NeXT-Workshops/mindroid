@@ -50,7 +50,7 @@ public class DifferentialPilot implements IDifferentialPilot {
             return; //TODO maybe errorhandling
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true); //TODO Make Wait complete
     }
 
     @Override
@@ -65,7 +65,7 @@ public class DifferentialPilot implements IDifferentialPilot {
             return; //TODO maybe errorhandling
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true); //TODO Make Wait complete
     }
 
 
@@ -83,7 +83,7 @@ public class DifferentialPilot implements IDifferentialPilot {
             return; //TODO maybe errorhandling
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true); //TODO Make Wait complete
     }
 
     @Override
@@ -99,7 +99,7 @@ public class DifferentialPilot implements IDifferentialPilot {
             return; //TODO maybe errorhandling
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true); //TODO Make Wait complete
     }
 
     /**

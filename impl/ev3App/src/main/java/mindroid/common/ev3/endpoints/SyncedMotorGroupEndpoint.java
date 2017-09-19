@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Listener;
 import lejos.hardware.port.PortException;
 import lejos.robotics.RegulatedMotor;
 import mindroid.common.ev3.endpoints.motors.ev3.synchronization.SynchronizedRegulatedMotorGroup;
+import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorMessageFactory;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperation;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedOperationMessage;
 
@@ -31,7 +32,7 @@ public class SyncedMotorGroupEndpoint extends Listener {
     @Override
     public void received(Connection connection, Object msg){
         if(msg instanceof SynchronizedOperationMessage){
-            runSynchronizedMotorOperations( ((SynchronizedOperationMessage) msg).getOperations() );
+            runSynchronizedMotorOperations( ((SynchronizedOperationMessage) msg).getOperations() , ((SynchronizedOperationMessage) msg).isBlocked());
         }
     }
 
@@ -40,7 +41,11 @@ public class SyncedMotorGroupEndpoint extends Listener {
         conn.close();
     }
 
-    private void runSynchronizedMotorOperations(SynchronizedMotorOperation[] operations){
-        syncedMotorGroup.executeSynchronizedOperation(operations);
+    private void runSynchronizedMotorOperations(SynchronizedMotorOperation[] operations,boolean isBlocked){
+        syncedMotorGroup.executeSynchronizedOperation(operations,isBlocked);
+        if(isBlocked){
+            //sent when a blocked synced motor operation is comepleted
+            conn.sendTCP(SynchronizedMotorMessageFactory.createSyncedMotorOperationCompleteMessage());
+        }
     }
 }

@@ -74,8 +74,8 @@ public class SyncedMotorOpFactory {
      * @param operations - sorted array (by port) of operations running on each motor in the group
      * @return SynchronizedOperationMessage
      */
-    public static SynchronizedOperationMessage createSynchronizedOperationMessage(SynchronizedMotorOperation[] operations){
-        return new SynchronizedOperationMessage(operations);
+    public static SynchronizedOperationMessage createSynchronizedOperationMessage(SynchronizedMotorOperation[] operations,boolean isBlocked){
+        return new SynchronizedOperationMessage(operations,isBlocked);
     }
 
 

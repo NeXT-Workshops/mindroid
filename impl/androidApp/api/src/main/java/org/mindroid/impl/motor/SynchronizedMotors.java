@@ -12,14 +12,14 @@ public class SynchronizedMotors implements ISynchronizedMotors {
     }
 
     @Override
-    public void executeSynchronizedOperation(SynchronizedMotorOperation operationPortA, SynchronizedMotorOperation operationPortB, SynchronizedMotorOperation operationPortC, SynchronizedMotorOperation operationPortD) {
-        syncedMotorsEndpoint.executeSynchronizedOperation(operationPortA,operationPortB,operationPortC,operationPortD);
+    public void executeSynchronizedOperation(SynchronizedMotorOperation operationPortA, SynchronizedMotorOperation operationPortB, SynchronizedMotorOperation operationPortC, SynchronizedMotorOperation operationPortD,boolean isBlocked) {
+        syncedMotorsEndpoint.executeSynchronizedOperation(operationPortA,operationPortB,operationPortC,operationPortD,isBlocked);
     }
 
     @Override
-    public void executeSynchronizedOperation(SynchronizedMotorOperation[] operations) {
+    public void executeSynchronizedOperation(SynchronizedMotorOperation[] operations,boolean isBlocked) {
         if(operations.length == 4) {
-            syncedMotorsEndpoint.executeSynchronizedOperation(operations);
+            syncedMotorsEndpoint.executeSynchronizedOperation(operations,isBlocked);
         }
     }
 }

@@ -116,7 +116,7 @@ public class TestPCClient{
                     SynchronizedMotorOperation noOperation = SyncedMotorOpFactory.createNoOperation();
 
                     //FORWARD
-                    motorProvider.getSynchronizedMotors().executeSynchronizedOperation(forward,noOperation,noOperation,forward);
+                    motorProvider.getSynchronizedMotors().executeSynchronizedOperation(forward,noOperation,noOperation,forward,false);
 
                     brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
                 }

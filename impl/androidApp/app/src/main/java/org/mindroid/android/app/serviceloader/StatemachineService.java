@@ -59,6 +59,7 @@ public class StatemachineService {
         }
 
     }
+
     /**
      *
      * @param classname e.g. "android.app.NotificationManager"
@@ -113,25 +114,13 @@ public class StatemachineService {
         return scs;
     }
 
-    public String[] getStatemachineCollectionIDs(){
-        int size=0;
-        for (int i = 0; i < scs.size(); i++) {
-            size += scs.get(i).getStatemachineKeySet().size();
-        }
+    public ArrayList<String> getStatemachineCollectionIDs(){
+        ArrayList<String> ids = new ArrayList<String>();
 
-        String[] tmpIDs = new String[size];
-        int index = 0;
         for (int i = 0; i < scs.size(); i++) {
             for(String id : scs.get(i).getStatemachineKeySet()){
-                tmpIDs[index] = id;
-                index++;
+                ids.add(id);
             }
-        }
-
-        //TODO check if it can be removed!
-        String[] ids = new String[index];
-        for (int i = 0; i < index; i++) {
-            ids[i] = tmpIDs[i];
         }
 
         return ids;

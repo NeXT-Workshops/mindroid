@@ -4,7 +4,9 @@ package org.mindroid.android.app.robodancer;
 
 
 import org.mindroid.android.app.fragments.sensormonitoring.SensorListener;
+import org.mindroid.android.app.serviceloader.ImperativeImplService;
 import org.mindroid.android.app.serviceloader.StatemachineService;
+import org.mindroid.api.ImperativeAPI;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.impl.configuration.RobotPortConfig;
@@ -34,7 +36,8 @@ public class Robot {
     //-------- Robot
     private RobotPortConfig robotPortConfig = new RobotPortConfig();
 
-    String runningStatemachinesGroupID = "";
+    // The ID of the Implementation currently running - if empty ("") no implementation is running.
+    private String runningImplementationID = "";
 
     private HashMap<EV3PortID,IEV3SensorEventListener> sensorListener = new HashMap<>();
 
@@ -71,6 +74,11 @@ public class Robot {
         //Add StatemachineCollections
         for (int i = 0; i < StatemachineService.getInstance().getStatemachineCollections().size(); i++) {
             roFactory.addStatemachine(StatemachineService.getInstance().getStatemachineCollections().get(i));
+        }
+
+        //Add Imperative Implementations
+        for (ImperativeAPI imperativeImpl : ImperativeImplService.getInstance().getImperativeImplCollection()) {
+            roFactory.addImperativeImplementation(imperativeImpl);
         }
 
         //Create the Robot
@@ -123,11 +131,57 @@ public class Robot {
     }
 
     /**
+     * Start executing the Implementation with the given ID.
+     * If there is an Imperative and a Statemachine Implementation with the same ID the Imperative one will be started.
+     * @param id - of the implementation
+     */
+    public void startExecuteImplementation(String id){
+        if (ImperativeImplService.getInstance().getImperativeImplIDs().contains(id)) {
+            startImperativeImpl(id);
+        }else if(StatemachineService.getInstance().getStatemachineCollectionIDs().contains(id)){
+            startStatemachine(id);
+        }else{
+            //TODO errorhandling?
+        }
+    }
+
+    /**
+     * Stop the running Implementation.
+     */
+    public void stopRunningImplmentation(){
+        if (ImperativeImplService.getInstance().getImperativeImplIDs().contains(runningImplementationID)) {
+            stopImperativeImpl(runningImplementationID);
+        }else if(StatemachineService.getInstance().getStatemachineCollectionIDs().contains(runningImplementationID)){
+            stopStatemachine(runningImplementationID);
+        }else{
+            //TODO errorhandling?
+        }
+    }
+
+    /**
+     * Start an Imperative Implementation
+     * @param id
+     */
+    private void startImperativeImpl(String id) {
+        runningImplementationID = id;
+        commandCenter.startImperativeImplemenatation(id);
+    }
+
+    /**
+     * Stop an Imperative Implementation
+     * @param id
+     */
+    private void stopImperativeImpl(String id) {
+        runningImplementationID = "";
+        commandCenter.stopImperativeImplementation(id);
+    }
+
+    /**
      * Start Group of-/Statemachine with id
      * @param id
      */
-    public void startStatemachine(String id) {
-        runningStatemachinesGroupID = id;
+    private void startStatemachine(String id) {
+        runningImplementationID = id;
         commandCenter.startStatemachine(id);
     }
 
@@ -135,16 +189,12 @@ public class Robot {
      * Stop the Group of-/Statemachine with id
      * @param id
      */
-    public void stopStatemachine(String id) {
-        runningStatemachinesGroupID = "";
+    private void stopStatemachine(String id) {
+        runningImplementationID = "";
         commandCenter.stopStatemachine(id);
     }
 
-    public void stop() {
-        if(!runningStatemachinesGroupID.equals("")){
-            commandCenter.stopStatemachine(runningStatemachinesGroupID);
-        }
-    }
+
 
     public RobotPortConfig getRobotPortConfig() {
         return robotPortConfig;

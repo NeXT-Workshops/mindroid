@@ -18,10 +18,12 @@ import org.mindroid.android.app.asynctasks.ProgressTask;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
+import org.mindroid.android.app.serviceloader.ImperativeImplService;
 import org.mindroid.android.app.serviceloader.StatemachineService;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -52,7 +54,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private Button btn_stopRobot;
 
 
-    private Spinner spinner_selectedStatemachine;
+    private Spinner spinner_selectedImplementation;
 
     /** Information Box **/
     private FrameLayout layout_info;
@@ -161,7 +163,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_initConfiguration = (Button) view.findViewById(R.id.btn_initConfig);
         btn_connect = (Button) view.findViewById(R.id.btn_connect);
         btn_disconnect = (Button) view.findViewById(R.id.btn_disconnect);
-        spinner_selectedStatemachine = (Spinner) view.findViewById(R.id.spinner_selectedStatemachine);
+        spinner_selectedImplementation = (Spinner) view.findViewById(R.id.spinner_selectedStatemachine);
         btn_startRobot = (Button) view.findViewById(R.id.btn_startRobot);
         btn_stopRobot = (Button) view.findViewById(R.id.btn_stopRobot);
 
@@ -186,7 +188,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         //transaction.addToBackStack(null);
         transaction.commit();
 
-        spinner_selectedStatemachine.setAdapter(getStatemachineIDAdapter());
+        spinner_selectedImplementation.setAdapter(getImplementationIDAdapter());
 
         //mListener.showErrorDialog("Error on create",stateAlreadyExists.getMessage());
 
@@ -252,13 +254,13 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
                 btn_initConfiguration.setEnabled(robot.isConnected() && !robot.isConfigurated() && positiveUSBState);
 
-                btn_startRobot.setEnabled(robot.isConnected() && robot.isConfigurated() && !robot.isRunning && positiveUSBState && spinner_selectedStatemachine.getSelectedItem() != null && !spinner_selectedStatemachine.getSelectedItem().toString().isEmpty());
+                btn_startRobot.setEnabled(robot.isConnected() && robot.isConfigurated() && !robot.isRunning && positiveUSBState && spinner_selectedImplementation.getSelectedItem() != null && !spinner_selectedImplementation.getSelectedItem().toString().isEmpty());
 
                 btn_stopRobot.setEnabled(robot.isRunning);
 
                 setEnableMenuItems(!robot.isConnected());
 
-                spinner_selectedStatemachine.setEnabled(!robot.isRunning);
+                spinner_selectedImplementation.setEnabled(!robot.isRunning);
             }
         };
 
@@ -407,22 +409,41 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             }
         });
 
-        spinner_selectedStatemachine.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+        spinner_selectedImplementation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SettingsProvider.getInstance().selectedStatemachineID = (String) parent.getSelectedItem();
+                SettingsProvider.getInstance().selectedImplementationID = (String) parent.getSelectedItem();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                SettingsProvider.getInstance().selectedStatemachineID = "";
+                SettingsProvider.getInstance().selectedImplementationID = "";
             }
         });
     }
 
-    public ArrayAdapter<String> getStatemachineIDAdapter() {
+    public ArrayAdapter<String> getImplementationIDAdapter() {
         //Add Statemachine ids to Dropdown-ui
-        return new ArrayAdapter<String>(parentActivity, android.R.layout.simple_spinner_dropdown_item, StatemachineService.getInstance().getStatemachineCollectionIDs());
+        ArrayList<String> imperativeImplIDs = ImperativeImplService.getInstance().getImperativeImplIDs();
+        ArrayList<String>  statemachineIDs = StatemachineService.getInstance().getStatemachineCollectionIDs();
+
+        ArrayList<String> collectedIDs = new ArrayList<String>(imperativeImplIDs.size()+statemachineIDs.size());
+
+        for (String imperativeImplID : imperativeImplIDs) {
+            if(imperativeImplID!= null){
+                collectedIDs.add(imperativeImplID);
+            }
+        }
+
+        for (String statemachineID : statemachineIDs) {
+            if(statemachineID != null){
+                collectedIDs.add(statemachineID);
+            }
+        }
+
+        String[] allIDs = collectedIDs.toArray(new String[collectedIDs.size()]);
+
+        return new ArrayAdapter<String>(parentActivity, android.R.layout.simple_spinner_dropdown_item, allIDs);
 
     }
 
@@ -514,7 +535,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             if(params.length>0) {
                 if (params[0].equals(START_ROBOT)) { //True => Start robot, else it should stop the Robot
                     try {
-                        robot.startStatemachine(SettingsProvider.getInstance().selectedStatemachineID);
+                        robot.startExecuteImplementation(SettingsProvider.getInstance().selectedImplementationID);
                         return true;
                     }catch(Exception e){
                         System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
@@ -523,7 +544,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                     }
                 } else if(params[0].equals(STOP_ROBOT)) {
                     try {
-                        robot.stopStatemachine(SettingsProvider.getInstance().selectedStatemachineID);
+                        robot.stopRunningImplmentation();
                         return false;
                     }catch(Exception e){
                         System.out.println("## AsyncTask StartStopRobot. Exception: "+e);

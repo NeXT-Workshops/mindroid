@@ -25,7 +25,9 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     /** public Robot Attributes **/
     private String robotID = "ROBOT_ID";
     private String groupID = "GROUP_ID";
-    public String selectedStatemachineID = "";
+
+    //Selected Implementation ID - Selected by Spinner in UI of the HomeFragment
+    public String selectedImplementationID = "";
 
     /** public Connection Attributes **/
     private String ev3IP = "-";
@@ -270,7 +272,7 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
         return "SettingsProvider{" +
                 "robotID='" + robotID + '\'' +
                 ", groupID='" + groupID + '\'' +
-                ", selectedStatemachineID='" + selectedStatemachineID + '\'' +
+                ", selectedImplementationID='" + selectedImplementationID + '\'' +
                 ", ev3IP='" + ev3IP + '\'' +
                 ", ev3TCPPort=" + ev3TCPPort +
                 ", serverIP='" + serverIP + '\'' +

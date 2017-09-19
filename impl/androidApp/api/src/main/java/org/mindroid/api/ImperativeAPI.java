@@ -96,8 +96,19 @@ public abstract class ImperativeAPI {
 
     // ------ Messaging ------
 
-    
 
+    public void getMessageBySource(String source){
+        //TODO implement
+    }
+
+    public boolean hasMessage(){
+        //TODO implement
+        return false;
+    }
+
+    public void getNextMessage(){
+        //TODO implement
+    }
 
     /**
      * Send a Message to anothers Robot 'destination'

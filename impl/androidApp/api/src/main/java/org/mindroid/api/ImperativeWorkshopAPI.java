@@ -32,7 +32,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI implements IDi
      */
     public ImperativeWorkshopAPI(String implementationID) {
         super(implementationID);
-        this.diffPilot = new DifferentialPilot(motorProvider.getSynchronizedMotors(), getLeftMotorPort(),getRightMotorPort(),0.56f,12.5f);
+        this.diffPilot = new DifferentialPilot(motorProvider, getLeftMotorPort(),getRightMotorPort(),5.6f,12.5f);
     }
 
 

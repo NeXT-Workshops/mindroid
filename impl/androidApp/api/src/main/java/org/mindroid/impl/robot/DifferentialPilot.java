@@ -12,7 +12,7 @@ import org.mindroid.impl.motor.SynchronizedMotors;
  */
 public class DifferentialPilot implements IDifferentialPilot {
 
-    private SynchronizedMotors syncedMotors;
+    private MotorProvider motorProvider;
     private EV3PortID leftMotor;
     private EV3PortID rightMotor;
     private float wheelDiameter;
@@ -22,14 +22,14 @@ public class DifferentialPilot implements IDifferentialPilot {
 
     /**
      *
-     * @param syncedMotors synchronized motor group
+     * @param motorProvider motorprovider to access synced motor group
      * @param leftMotor port of left motor
      * @param rightMotor port of right motor
      * @param wheelDiameter in cm
      * @param trackWidth in cm
      */
-    public DifferentialPilot(SynchronizedMotors syncedMotors, EV3PortID leftMotor, EV3PortID rightMotor, float wheelDiameter, float trackWidth) {
-        this.syncedMotors = syncedMotors;
+    public DifferentialPilot(MotorProvider motorProvider, EV3PortID leftMotor, EV3PortID rightMotor, float wheelDiameter, float trackWidth) {
+        this.motorProvider = motorProvider;
         this.leftMotor = leftMotor;
         this.rightMotor = rightMotor;
         this.wheelDiameter = wheelDiameter;
@@ -39,9 +39,9 @@ public class DifferentialPilot implements IDifferentialPilot {
     }
 
     @Override
-    public void forward(float cm) {
-        int degrees = calculateDegreesByDistance(cm);
-
+    public void forward(float distance) {
+        int degrees = calculateDegreesByDistance(distance);
+        System.out.println("[DifferentialPilot:forward("+distance+")] calculated degrees: "+degrees);
         SynchronizedMotorOperation forward = SyncedMotorOpFactory.createRotateOperation(degrees);
 
         SynchronizedMotorOperation[] operations = getNoOperationSet();
@@ -50,12 +50,12 @@ public class DifferentialPilot implements IDifferentialPilot {
             return; //TODO maybe errorhandling
         }
 
-        syncedMotors.executeSynchronizedOperation(operations); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations); //TODO Make Wait complete
     }
 
     @Override
-    public void backward(float cm) {
-        int degrees = (-1)*calculateDegreesByDistance(cm);
+    public void backward(float distance) {
+        int degrees = (-1)*calculateDegreesByDistance(distance);
 
         SynchronizedMotorOperation backward = SyncedMotorOpFactory.createRotateOperation(degrees);
 
@@ -65,7 +65,7 @@ public class DifferentialPilot implements IDifferentialPilot {
             return; //TODO maybe errorhandling
         }
 
-        syncedMotors.executeSynchronizedOperation(operations); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations); //TODO Make Wait complete
     }
 
 
@@ -83,7 +83,7 @@ public class DifferentialPilot implements IDifferentialPilot {
             return; //TODO maybe errorhandling
         }
 
-        syncedMotors.executeSynchronizedOperation(operations); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations); //TODO Make Wait complete
     }
 
     @Override
@@ -99,7 +99,7 @@ public class DifferentialPilot implements IDifferentialPilot {
             return; //TODO maybe errorhandling
         }
 
-        syncedMotors.executeSynchronizedOperation(operations); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations); //TODO Make Wait complete
     }
 
     /**
@@ -108,7 +108,7 @@ public class DifferentialPilot implements IDifferentialPilot {
      * @return degree the wheel needs to rotate to travel the wanted distance
      */
     private int calculateDegreesByDistance(float distance){
-        return (int) (distance/ wheelCircumference)*360;
+        return (int) ((distance/ wheelCircumference)*360f);
     }
 
     /**
@@ -117,7 +117,7 @@ public class DifferentialPilot implements IDifferentialPilot {
      * @return wheel rotation degree
      */
     private int calculateCircularArc(int degrees){
-        return (int) (((float) (((float) degrees)/360))* trackCircumference);
+        return calculateDegreesByDistance((((float) degrees)/360f * trackCircumference));
     }
 
 

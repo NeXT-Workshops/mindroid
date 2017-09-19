@@ -15,7 +15,9 @@ public class RectangleDriver extends ImperativeWorkshopAPI {
 
     @Override
     public void run() {
-        forward(10f);
+        //forward(10f);
         //TODO implement blocking
+        //turnLeft(90);
+        turnRight(90);
     }
 }

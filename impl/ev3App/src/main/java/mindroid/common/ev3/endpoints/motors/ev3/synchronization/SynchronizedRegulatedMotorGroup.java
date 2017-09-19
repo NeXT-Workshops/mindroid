@@ -47,7 +47,6 @@ public class SynchronizedRegulatedMotorGroup {
             }
             AbstractRegulatedIMotor firstMotor = getFirstMotor();
             AbstractRegulatedIMotor[] motorPartnersEndpoints = getMotorPartners();
-
             if(firstMotor != null && this.motorPortIndex != -1) {
                 //Synchronize motors
                 firstMotor.synchronizeWith(motorPartnersEndpoints);

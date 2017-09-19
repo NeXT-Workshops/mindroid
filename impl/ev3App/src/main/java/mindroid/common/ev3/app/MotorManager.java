@@ -86,7 +86,7 @@ public class MotorManager extends HardwareInterfaceManager{
 		}
 
 		if(syncedMotorEndpoint == null) {
-			SyncedMotorGroupEndpoint syncedMotorEndpoint = new SyncedMotorGroupEndpoint(syncedMotorGroup);
+			syncedMotorEndpoint = new SyncedMotorGroupEndpoint(syncedMotorGroup);
 			BrickServerImpl brickServer = new BrickServerImpl(NetworkPortConfig.SYNCED_MOTOR_GROUP);
 			brickServer.addListener(syncedMotorEndpoint);
 		}

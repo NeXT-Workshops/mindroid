@@ -14,11 +14,11 @@
 cd /D %~1
 set ANDROID_HOME=%~2
 set JAVA_HOME=%~3
-call %ANDROID_HOME%\platform-tools\adb get-state
-
+@set devices_attached=0
+@FOR /F "tokens=* skip=1 delims=" %%A in ('%ANDROID_HOME%\platform-tools\adb devices') do @set devices_attached=1
 @echo off
-if "%ERRORLEVEL%" == "0" goto installAndAssemble
-goto assembleOnly
+@if "%devices_attached%" == "1" goto installAndAssemble
+@goto assembleOnly
 
 :installAndAssemble
 @echo on

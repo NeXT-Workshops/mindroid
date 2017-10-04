@@ -30,7 +30,18 @@ call gradlew.bat installDebug --daemon 0<nul
 exit
 
 :installAndOpen
-call gradlew.bat installDebug --daemon 0<nul &&  call %ANDROID_HOME%\platform-tools\adb shell monkey -p %packageName% -c android.intent.category.LAUNCHER 1
+call gradlew.bat installDebug --daemon 0<nul
+@echo off
+@SETLOCAL ENABLEDELAYEDEXPANSION 
+:: OPEN ON ALL ATTACHED DEVICES ::
+@FOR /F "tokens=1,2 skip=1" %%A IN ('%ANDROID_HOME%\platform-tools\adb devices') DO (
+    @SET IS_DEV=%%B
+if "!IS_DEV!" == "device" (
+   @SET SERIAL=%%A
+   @call %ANDROID_HOME%\platform-tools\adb -s !SERIAL! shell monkey -p %packageName% -c android.intent.category.LAUNCHER 1
+)
+)
+@ENDLOCAL
 exit
 
 :assembleOnly

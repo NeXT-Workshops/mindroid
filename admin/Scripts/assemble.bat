@@ -9,6 +9,10 @@
 @rem  projectDir  directory of main folder of the android project that contains gradlew.bat
 @rem  sdkDir      directory of android sdk
 @rem  jdkDir      directory of java jdk
+@rem
+@rem To use this script in conjunction with the JavaEditor, replace the file 'assemble.bat' in the
+@rem root directory of the JavaEditor with this file.
+@rem 
 @rem ###############################################################################################
 
 cd /D %~1

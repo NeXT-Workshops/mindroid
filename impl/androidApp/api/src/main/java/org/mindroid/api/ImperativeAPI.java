@@ -3,15 +3,20 @@ package org.mindroid.api;
 import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
+import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.robot.*;
 
 public abstract class ImperativeAPI {
 
-    public RobotController robotController = Robot.getRobotController();
-    public MotorProvider motorProvider = robotController.getMotorProvider();
-    public SensorProvider sensorProvider = robotController.getSensorProvider();
-    public BrickController brickController = robotController.getBrickController();
+    private RobotController robotController = Robot.getRobotController();
+    private MotorProvider motorProvider = robotController.getMotorProvider();
+    private SensorProvider sensorProvider = robotController.getSensorProvider();
+    private BrickController brickController = robotController.getBrickController();
 
+    /**
+     * To identify the Implementation.
+     * ID will be shown in the Apps dropdown.
+     */
     private String implementationID = "";
     private boolean isInterrupted = false;
 
@@ -96,18 +101,12 @@ public abstract class ImperativeAPI {
 
     // ------ Messaging ------
 
-
-    public void getMessageBySource(String source){
-        //TODO implement
-    }
-
     public boolean hasMessage(){
-        //TODO implement
-        return false;
+        return robotController.getMessenger().hasMessage();
     }
 
-    public void getNextMessage(){
-        //TODO implement
+    public MindroidMessage getNextMessage(){
+        return robotController.getMessenger().getNextMessage();
     }
 
     /**
@@ -149,6 +148,15 @@ public abstract class ImperativeAPI {
         }
     }
 
+    // ------ get Some Providers -------
+
+    public MotorProvider getMotorProvider() {
+        return motorProvider;
+    }
+
+    public SensorProvider getSensorProvider() {
+        return sensorProvider;
+    }
 
     // ------ Methods to add some code sugar ------
 

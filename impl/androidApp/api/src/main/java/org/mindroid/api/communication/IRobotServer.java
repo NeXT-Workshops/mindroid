@@ -1,7 +1,5 @@
 package org.mindroid.api.communication;
 
-import org.mindroid.api.IMessageListener;
-
 /**
  *
  * Server running on the robot to receive messages from other robots

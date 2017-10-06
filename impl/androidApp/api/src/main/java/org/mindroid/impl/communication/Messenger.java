@@ -1,5 +1,6 @@
 package org.mindroid.impl.communication;
 
+import org.mindroid.api.communication.IMessageListener;
 import org.mindroid.api.communication.IMessenger;
 import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.LogLevel;
@@ -12,17 +13,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 /**
  * Created by Felicia Ruppel on 04.04.17.
  */
 
-public class Messenger implements IMessenger {
+public class Messenger implements IMessenger, IMessageListener {
+
+    public static final String SERVER_LOG = Destination.SERVER_LOG.getValue();
+    public static final String BROADCAST = Destination.BROADCAST.getValue();
 
     private String robotID;
     private InetAddress serverip;
     private int serverport;
+
+    private final ArrayList<MindroidMessage> messages = new ArrayList<MindroidMessage>();
 
     public  Messenger(String ownName, InetAddress serverip, int serverport){
         this.robotID = ownName;
@@ -43,8 +49,7 @@ public class Messenger implements IMessenger {
         sendMessage(msgObj);
     }
 
-    @Override
-    public void sendMessage(MindroidMessage msg) {
+    private void sendMessage(MindroidMessage msg) {
         final MindroidMessage msgFinal = msg;
         Thread client = new Thread() {
             public void run() {
@@ -84,4 +89,27 @@ public class Messenger implements IMessenger {
     }
 
 
+    @Override
+    public void handleMessage(MindroidMessage msg) {
+        getMessages().add(msg);
+    }
+
+    @Override
+    public int getReceivedMessagesCount(){
+        return getMessages().size();
+    }
+
+    @Override
+    public boolean hasMessage() {
+        return getMessages().iterator().hasNext();
+    }
+
+    @Override
+    public MindroidMessage getNextMessage() {
+        return getMessages().iterator().next();
+    }
+
+    private ArrayList<MindroidMessage> getMessages(){
+        return messages;
+    }
 }

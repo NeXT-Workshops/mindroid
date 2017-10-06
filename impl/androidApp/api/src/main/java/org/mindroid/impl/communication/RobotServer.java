@@ -1,6 +1,6 @@
 package org.mindroid.impl.communication;
 
-import org.mindroid.api.IMessageListener;
+import org.mindroid.api.communication.IMessageListener;
 import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.communication.IRobotServer;
 

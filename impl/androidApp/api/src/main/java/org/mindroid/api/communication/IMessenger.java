@@ -18,20 +18,25 @@ public interface IMessenger {
      * Sends a message to the given destination. If the destination is the server, MessageType INFO is used.
      * For other Log-MessageTypes use sendLogMessage(String content, MessageType type)
      *
+     * @param destination - destination of the message
+     * @param content - text of the message
      */
-    void sendMessage(String destination, String msg);
+    void sendMessage(String destination, String content);
 
-    void sendMessage(MindroidMessage msg);
 
     /**
+     *
      * Is called by the Robot Server. Does not need to be called manually.
+     *
+     * @param port - port of the server
      */
     void registerToServer(int port);
+
     /**
      * Sends a log message to the server.
      *
-     * @param content
-     * @param logLevel
+     * @param content - content of the message
+     * @param logLevel - log level of the message
      */
     void sendLogMessage(String content, LogLevel logLevel);
 

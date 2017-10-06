@@ -3,7 +3,7 @@ package org.mindroid.impl.robot.context;
 import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.robot.context.IRobotContextState;
 import org.mindroid.api.ITimeEventListener;
-import org.mindroid.api.IMessageListener;
+import org.mindroid.api.communication.IMessageListener;
 import org.mindroid.api.sensor.IEV3SensorEvent;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.api.statemachine.ITimeEvent;

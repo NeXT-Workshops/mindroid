@@ -7,6 +7,7 @@ import org.mindroid.common.messages.server.MindroidMessage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -15,11 +16,11 @@ import java.util.Scanner;
 
 public class ServerWorker implements Runnable {
     private Socket socket;
-    private IMessageListener listener;
+    private ArrayList<IMessageListener> listeners;
 
-    public ServerWorker(final Socket socket, final IMessageListener listener) {
+    public ServerWorker(final Socket socket, final ArrayList<IMessageListener> listeners) {
         this.socket = socket;
-        this.listener = listener;
+        this.listeners = listeners;
     }
 
     @Override
@@ -38,8 +39,10 @@ public class ServerWorker implements Runnable {
                     //TODO finding the end of a message could be solved without "}"
                     if(line.endsWith("}")){
                         MindroidMessage deserializedMsg = messageMarshaller.deserializeMessage(sb.toString());
-                        if(listener != null) {
-                            listener.handleMessage(deserializedMsg);
+                        if(listeners != null) {
+                            for (IMessageListener listener : listeners) {
+                                listener.handleMessage(deserializedMsg);
+                            }
                         }
                         sb = new StringBuilder();
 

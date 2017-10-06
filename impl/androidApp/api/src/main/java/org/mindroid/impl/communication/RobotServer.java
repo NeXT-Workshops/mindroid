@@ -6,6 +6,7 @@ import org.mindroid.api.communication.IRobotServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 
 /**
  *  Created by Felicia Ruppel on 19.04.17.
@@ -15,7 +16,7 @@ import java.net.ServerSocket;
  */
 
 public class RobotServer implements IRobotServer {
-    private IMessageListener listener;
+    private final ArrayList<IMessageListener> listeners = new ArrayList();
     private ServerSocket server = null;
     private int port;
     private static boolean isRunning = false;
@@ -61,7 +62,7 @@ public class RobotServer implements IRobotServer {
                     ++iteration;
                     ServerWorker w;
                     try {
-                        w = new ServerWorker(server.accept(), listener);
+                        w = new ServerWorker(server.accept(), listeners);
                         Thread workerThread = new Thread(w);
                         workerThread.setUncaughtExceptionHandler(exceptionHandler);
                         workerThread.start();
@@ -87,6 +88,6 @@ public class RobotServer implements IRobotServer {
 
     @Override
     public void registerMsgListener(IMessageListener listener) {
-        this.listener = listener;
+        listeners.add(listener);
     }
 }

@@ -91,6 +91,7 @@ public class Messenger implements IMessenger, IMessageListener {
 
     @Override
     public void handleMessage(MindroidMessage msg) {
+        //sendMessage(SERVER_LOG,robotID+": I handle a message now");
         getMessages().add(msg);
     }
 
@@ -101,6 +102,7 @@ public class Messenger implements IMessenger, IMessageListener {
 
     @Override
     public boolean hasMessage() {
+        //sendMessage(SERVER_LOG,robotID+": Do i have a message? "+getMessages().iterator().hasNext());
         return getMessages().iterator().hasNext();
     }
 

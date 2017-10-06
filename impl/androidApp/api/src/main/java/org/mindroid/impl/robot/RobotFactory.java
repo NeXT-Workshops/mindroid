@@ -224,13 +224,14 @@ public final class RobotFactory implements IRobotFactory {
                 public void run(){
                     try {
                         //Initialize Messenger
-                        myRobot.messenger = new Messenger(myRobot.getRobotID(), InetAddress.getByName(msgServerIP),msgServerTCPPort);
+                        Robot.getInstance().messenger = new Messenger(myRobot.getRobotID(), InetAddress.getByName(msgServerIP),msgServerTCPPort);
                         Robot.getRobotController().setMessenger(Robot.getInstance().messenger);
-                        myRobot.messageingEnabled = true;
+                        Robot.getInstance().messageingEnabled = true;
                         //Initialize RobotServer
                         if(isValidTCPPort(robotServerPort)) {
                             IRobotServer robotServer = new RobotServer(robotServerPort,myRobot.messenger);
                             robotServer.registerMsgListener(RobotContextState.getInstance());
+                            robotServer.registerMsgListener(Robot.getInstance().getMessenger());
                             robotServer.start();
                         }else{
                             //TODO send error message to error-handler

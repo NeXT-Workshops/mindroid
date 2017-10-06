@@ -73,13 +73,13 @@ public class MindroidLVL1 extends StatemachineAPI {
 
         IState state_clearDisplay = new State("createClearDisplayMsg"){
             public void run(){
-                brickController.clearDisplay();
+                clearDisplay();
             }
         };
 
         IState state_drawString = new State("createDrawStringMsg"){
             public void run(){
-                brickController.drawString("Teststring",50,50);
+                drawString("Teststring",50,50);
             }
         };
 
@@ -109,15 +109,15 @@ public class MindroidLVL1 extends StatemachineAPI {
 
             public void run(){
 
-                brickController.setVolume(50);
-                brickController.singleBeep();
+                setSoundVolume(50);
+                playSingleBeep();
             }
         };
 
 
         IState state_doubleBeep = new State("DoubleBeep"){
             public void run(){
-                brickController.doubleBeep();
+                playDoubleBeep();
             }
         };
 
@@ -125,20 +125,20 @@ public class MindroidLVL1 extends StatemachineAPI {
 
         IState state_buzz = new State("Buzz"){
             public void run(){
-                brickController.buzz();
+                playBuzzSound();
             }
         };
 
         IState state_sequenceDown = new State("SequenceDown"){
             public void run(){
-                brickController.beepSequenceDown();
+                playBeepSequenceDown();
             }
         };
 
 
         IState state_sequenceUp = new State("SequenceUp"){
             public void run(){
-                brickController.beepSequenceUp();
+                playBeepSequenceUp();
             }
         };
 
@@ -169,13 +169,13 @@ public class MindroidLVL1 extends StatemachineAPI {
             @Override
             public void run(){
                 //TURN RIGHT
-                motorProvider.getMotor(EV3PortIDs.PORT_A).forward();
-                motorProvider.getMotor(EV3PortIDs.PORT_D).backward();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).forward();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).backward();
 
-                brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
+                setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
 
             }
         };
@@ -187,9 +187,9 @@ public class MindroidLVL1 extends StatemachineAPI {
         IState state_wait = new State("waiting a while"){
             @Override
             public void run(){
-                brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
-                motorProvider.getMotor(EV3PortIDs.PORT_A).stop();
-                motorProvider.getMotor(EV3PortIDs.PORT_D).stop();
+                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).stop();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).stop();
             }
         };
 
@@ -235,10 +235,10 @@ public class MindroidLVL1 extends StatemachineAPI {
             @Override
             public void run() {
                 //FORWARD
-                motorProvider.getMotor(EV3PortIDs.PORT_A).stop();
-                motorProvider.getMotor(EV3PortIDs.PORT_D).stop();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).stop();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).stop();
 
-                brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.BLINKING);
+                setLED(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.BLINKING);
             }
         };
 
@@ -247,13 +247,13 @@ public class MindroidLVL1 extends StatemachineAPI {
             @Override
             public void run() {
                 //FORWARD
-                motorProvider.getMotor(EV3PortIDs.PORT_A).forward();
-                motorProvider.getMotor(EV3PortIDs.PORT_D).forward();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).forward();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).forward();
 
-                brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
             }
         };
 
@@ -261,10 +261,10 @@ public class MindroidLVL1 extends StatemachineAPI {
             @Override
             public void run() {
                 //Wait
-                motorProvider.getMotor(EV3PortIDs.PORT_A).stop();
-                motorProvider.getMotor(EV3PortIDs.PORT_D).stop();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).stop();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).stop();
 
-                brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.BLINKING);
+                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.BLINKING);
             }
         };
 
@@ -274,13 +274,13 @@ public class MindroidLVL1 extends StatemachineAPI {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //BACKWARD
-                motorProvider.getMotor(EV3PortIDs.PORT_A).backward();
-                motorProvider.getMotor(EV3PortIDs.PORT_D).backward();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).backward();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).backward();
 
-                brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
+                setLED(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
             }
         };
 
@@ -289,13 +289,13 @@ public class MindroidLVL1 extends StatemachineAPI {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //TURN LEFT
-                motorProvider.getMotor(EV3PortIDs.PORT_A).backward();
-                motorProvider.getMotor(EV3PortIDs.PORT_D).forward();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).backward();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).forward();
 
-                brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
+                setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
             }
         };
 
@@ -304,13 +304,13 @@ public class MindroidLVL1 extends StatemachineAPI {
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
                 //TURN LEFT
-                motorProvider.getMotor(EV3PortIDs.PORT_A).forward();
-                motorProvider.getMotor(EV3PortIDs.PORT_D).forward();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).forward();
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).forward();
 
-                brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
 
                 sendMessage(player_dest,"START");
 
@@ -401,7 +401,7 @@ public class MindroidLVL1 extends StatemachineAPI {
         IState state_idle = new State("Idle"){
             @Override
             public void run(){
-                //brickController.resetEV3StatusLight();
+                //brickController.resetLED();
             }
         };
 
@@ -439,7 +439,7 @@ public class MindroidLVL1 extends StatemachineAPI {
         State state_red = new State("Show Red Light"){
             @Override
             public void run(){
-                brickController.setEV3StatusLight(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
+                setLED(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
                 sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
@@ -447,7 +447,7 @@ public class MindroidLVL1 extends StatemachineAPI {
         State state_yellow = new State("Show Yellow Light"){
             @Override
             public void run(){
-                brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
+                setLED(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
                 sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
@@ -455,7 +455,7 @@ public class MindroidLVL1 extends StatemachineAPI {
         State state_green = new State("Show Green Light"){
             @Override
             public void run(){
-                brickController.setEV3StatusLight(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
+                setLED(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
                 sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
@@ -550,7 +550,7 @@ public class MindroidLVL1 extends StatemachineAPI {
         Transition trans_red = new Transition(light_red){
             @Override
             public void run(){
-                brickController.setEV3StatusLight(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
+                setLED(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
                 sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
@@ -558,7 +558,7 @@ public class MindroidLVL1 extends StatemachineAPI {
         Transition trans_yellow = new Transition(light_yellow){
             @Override
             public void run(){
-                brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
+                setLED(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
                 sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
@@ -566,7 +566,7 @@ public class MindroidLVL1 extends StatemachineAPI {
         Transition trans_green = new Transition(light_green){
             @Override
             public void run(){
-                brickController.setEV3StatusLight(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
+                setLED(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
                 sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
@@ -616,15 +616,15 @@ public class MindroidLVL1 extends StatemachineAPI {
             @Override
             public void run() {
                 System.out.println(this.getName() + " isActive\n");
-                motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
-                motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
+                getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
                 //FORWARD
                 SynchronizedMotorOperation forwardOp = SyncedMotorOpFactory.createForwardOperation();
                 SynchronizedMotorOperation noOp = SyncedMotorOpFactory.createNoOperation();
 
-                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(forwardOp, noOp,noOp,forwardOp,false);
+                getMotorProvider().getSynchronizedMotors().executeSynchronizedOperation(forwardOp, noOp,noOp,forwardOp,false);
 
-                brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
 
 
@@ -639,9 +639,9 @@ public class MindroidLVL1 extends StatemachineAPI {
                 SynchronizedMotorOperation stopOp = SyncedMotorOpFactory.createStopOperation();
                 SynchronizedMotorOperation noOp = SyncedMotorOpFactory.createNoOperation();
 
-                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(stopOp, noOp,noOp,stopOp,false);
+                getMotorProvider().getSynchronizedMotors().executeSynchronizedOperation(stopOp, noOp,noOp,stopOp,false);
 
-                brickController.resetEV3StatusLight();
+                resetLED();
             }
         };
 
@@ -654,12 +654,12 @@ public class MindroidLVL1 extends StatemachineAPI {
                 SynchronizedMotorOperation backwardOp = SyncedMotorOpFactory.createBackwardOperation();
                 SynchronizedMotorOperation noOp = SyncedMotorOpFactory.createNoOperation();
 
-                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(backwardOp, noOp,noOp,backwardOp,false);
+                getMotorProvider().getSynchronizedMotors().executeSynchronizedOperation(backwardOp, noOp,noOp,backwardOp,false);
 
-                brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
+                setLED(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
 
-                //motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
-                //motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
+                //getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                //getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
             }
         };
 
@@ -673,12 +673,12 @@ public class MindroidLVL1 extends StatemachineAPI {
                 SynchronizedMotorOperation forwardOp = SyncedMotorOpFactory.createForwardOperation();
                 SynchronizedMotorOperation noOp = SyncedMotorOpFactory.createNoOperation();
 
-                motorProvider.getSynchronizedMotors().executeSynchronizedOperation(backwardOp, noOp,noOp,forwardOp,false);
+                getMotorProvider().getSynchronizedMotors().executeSynchronizedOperation(backwardOp, noOp,noOp,forwardOp,false);
 
-                brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
+                setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 
-                //motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(500);
-                //motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(500);
+                //getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
+                //getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
             }
         };
 
@@ -719,7 +719,7 @@ public class MindroidLVL1 extends StatemachineAPI {
         IState state_mathRandom = new State("Random Number State"){
             @Override
             public void run(){
-                brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.DOUBLE_BLINKING);
+                setLED(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.DOUBLE_BLINKING);
                 int number;
                 do {
                     number = (int)Math.round(Math.random() * 3);
@@ -733,21 +733,21 @@ public class MindroidLVL1 extends StatemachineAPI {
         IState state_nr1 = new State("State NR1"){
             @Override
             public void run(){
-                brickController.setEV3StatusLight(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
+                setLED(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
             }
         };
 
         IState state_nr2 = new State("State NR2"){
             @Override
             public void run(){
-                brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
+                setLED(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
             }
         };
 
         IState state_nr3 = new State("State NR3"){
             @Override
             public void run(){
-                brickController.setEV3StatusLight(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
+                setLED(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
             }
         };
 

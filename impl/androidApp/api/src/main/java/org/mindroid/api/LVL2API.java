@@ -44,7 +44,10 @@ import java.util.HashMap;
  *
  * @author Torben Unzicker - Initial implementation, 03.05.2017
  * @author Roland Kluge - Refactoring and documentation, Aug 2017
+ *
+ * Deprecated: will be removed soon
  */
+@Deprecated
 public abstract class LVL2API extends StatemachineAPI {
 
     private static final String IMPERATIVE_STATEMACHINE_ID = "Imperative Statemachine Implementation";
@@ -68,8 +71,8 @@ public abstract class LVL2API extends StatemachineAPI {
 
 
     public LVL2API() {
-        leftMotor = motorProvider.getMotor(getLeftMotorPort());
-        rightMotor = motorProvider.getMotor(getRightMotorPort());
+        leftMotor = getMotorProvider().getMotor(getLeftMotorPort());
+        rightMotor = getMotorProvider().getMotor(getRightMotorPort());
 
         initSensorStatemachines();
         statemachineCollection.addParallelStatemachines(IMPERATIVE_GROUP_ID, sensorEvaluatingStatemachines.values().toArray(new Statemachine[sensorEvaluatingStatemachines.values().size()]));
@@ -82,17 +85,6 @@ public abstract class LVL2API extends StatemachineAPI {
      */
     public abstract void run();
 
-    /**
-     * Sets the LED to the given color
-     *
-     * @param color    the {@link EV3StatusLightColor} to use
-     * @param interval the blink interval in milliseconds
-     */
-    public final void setLED(EV3StatusLightColor color, EV3StatusLightInterval interval) {
-        if (!isInterrupted()) {
-            brickController.setEV3StatusLight(color, interval);
-        }
-    }
 
     /**
      * Evaluates whether the state machine has been stopped
@@ -103,25 +95,7 @@ public abstract class LVL2API extends StatemachineAPI {
         return imperativeStatemachine.isInterrupted();
     }
 
-    /**
-     * Displays the given text onto the EV3 display at the given position (xPosition, yPosition).
-     *
-     * The coordinate (0,0) is at the top-left corner of the display.
-     *
-     * @param text the text to display
-     * @param xPosition the x position
-     * @param yPosition the y position
-     */
-    public void drawString(final String text, final int xPosition, final int yPosition) {
-        this.brickController.drawString(text, xPosition, yPosition);
-    }
 
-    /**
-     * Removes everything from the EV3 display
-     */
-    public void clearDisplay() {
-        this.brickController.clearDisplay();
-    }
 
     /**
      * Evaluates whether a collision is imminent

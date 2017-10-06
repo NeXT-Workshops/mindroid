@@ -1,7 +1,5 @@
 package org.mindroid.api;
 
-import org.mindroid.api.ev3.EV3StatusLightColor;
-import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.robot.IDifferentialPilot;
 import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.ev3.EV3PortID;
@@ -32,7 +30,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI implements IDi
      */
     public ImperativeWorkshopAPI(String implementationID) {
         super(implementationID);
-        this.diffPilot = new DifferentialPilot(motorProvider, getLeftMotorPort(),getRightMotorPort(),5.6f,12.5f);
+        this.diffPilot = new DifferentialPilot(getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),5.6f,12.5f);
     }
 
 
@@ -197,25 +195,21 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI implements IDi
     }
 
 
-
-
-
-
     // ------ Getter Methods Sensors ------
     protected Sensor getLeftColorSensor(){
-        return sensorProvider.getSensor(getLeftColorSensorPort());
+        return getSensorProvider().getSensor(getLeftColorSensorPort());
     }
 
     protected Sensor getRightColorSensor(){
-        return sensorProvider.getSensor(getRightColorSensorPort());
+        return getSensorProvider().getSensor(getRightColorSensorPort());
     }
 
     protected Sensor getUltrasonicSensor(){
-        return sensorProvider.getSensor(getUltrasonicSensorPort());
+        return getSensorProvider().getSensor(getUltrasonicSensorPort());
     }
 
     protected Sensor getGyroSensor(){
-        return sensorProvider.getSensor(getGyroSensorPort());
+        return getSensorProvider().getSensor(getGyroSensorPort());
     }
 
     // ------ Getter-Method Hardware Ports ------

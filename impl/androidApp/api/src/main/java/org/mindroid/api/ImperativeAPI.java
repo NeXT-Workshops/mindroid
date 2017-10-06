@@ -1,17 +1,10 @@
 package org.mindroid.api;
 
-import org.mindroid.api.communication.IMessenger;
-import org.mindroid.api.ev3.EV3StatusLightColor;
-import org.mindroid.api.ev3.EV3StatusLightInterval;
-import org.mindroid.common.messages.server.MindroidMessage;
-import org.mindroid.impl.robot.*;
+/**
+ * This Class defines the Imperative API.
+ */
+public abstract class ImperativeAPI extends BasicAPI {
 
-public abstract class ImperativeAPI {
-
-    private RobotController robotController = Robot.getRobotController();
-    private MotorProvider motorProvider = robotController.getMotorProvider();
-    private SensorProvider sensorProvider = robotController.getSensorProvider();
-    private BrickController brickController = robotController.getBrickController();
 
     /**
      * To identify the Implementation.
@@ -64,102 +57,7 @@ public abstract class ImperativeAPI {
     }
 
 
-    // --------------------- BRICK CONTROLLING METHODS: Display, LED ---------------------
-
-
-    /**
-     * Sets the LED to the given color
-     *
-     * @param color    the {@link EV3StatusLightColor} to use
-     * @param interval the blink interval in milliseconds
-     */
-    public final void setLED(EV3StatusLightColor color, EV3StatusLightInterval interval) {
-        if (!isInterrupted()) {
-            brickController.setEV3StatusLight(color, interval);
-        }
-    }
-
-    /**
-     * Displays the given text onto the EV3 display at the given position (xPosition, yPosition).
-     *
-     * The coordinate (0,0) is at the top-left corner of the display.
-     *
-     * @param text the text to display
-     * @param xPosition the x position
-     * @param yPosition the y position
-     */
-    public void drawString(final String text, final int xPosition, final int yPosition) {
-        this.brickController.drawString(text, xPosition, yPosition);
-    }
-
-    /**
-     * Removes everything from the EV3 display
-     */
-    public void clearDisplay() {
-        this.brickController.clearDisplay();
-    }
-
-    // ------ Messaging ------
-
-    public boolean hasMessage(){
-        return robotController.getMessenger().hasMessage();
-    }
-
-    public MindroidMessage getNextMessage(){
-        return robotController.getMessenger().getNextMessage();
-    }
-
-    /**
-     * Send a Message to anothers Robot 'destination'
-     * @param destination 'robotID'
-     * @param message 'msg to send'
-     */
-    public void sendMessage(String destination, String message){
-        if(Robot.getRobotController().getMessenger() != null){
-            Robot.getRobotController().getMessenger().sendMessage(destination,message);
-        }else{
-            System.out.println("[StatemachineAPI:sendMessage] Tried to send a message, but the Messenger was null");
-        }
-    }
-
-    /**
-     * TODO UNTESTED; WILL PROBABLY NOT WORK
-     *
-     * Broadcast a message to all Robots in Group.
-     * @param message 'message to send'
-     */
-    public void broadcastMessage(String message){
-        if(Robot.getRobotController().getMessenger() != null){
-            Robot.getRobotController().getMessenger().sendMessage(IMessenger.BROADCAST,message);
-        }else{
-            System.out.println("[StatemachineAPI:broadcastMessage] Tried to broadcast a message, but the Messenger was null");
-        }
-    }
-
-    /**
-     * The logmessage will be sent to the message-server and displayed.
-     * @param logmessage 'the log message'
-     */
-    public void sendLogMessage(String logmessage){
-        if(Robot.getRobotController().getMessenger() != null){
-            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,logmessage);
-        }else{
-            System.out.println("[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null");
-        }
-    }
-
-    // ------ get Some Providers -------
-
-    public MotorProvider getMotorProvider() {
-        return motorProvider;
-    }
-
-    public SensorProvider getSensorProvider() {
-        return sensorProvider;
-    }
-
     // ------ Methods to add some code sugar ------
-
 
     /**
      * This method waits until the given amount of time has passed.

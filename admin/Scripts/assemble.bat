@@ -9,16 +9,20 @@
 @rem  projectDir  directory of main folder of the android project that contains gradlew.bat
 @rem  sdkDir      directory of android sdk
 @rem  jdkDir      directory of java jdk
+@rem
+@rem To use this script in conjunction with the JavaEditor, replace the file 'assemble.bat' in the
+@rem root directory of the JavaEditor with this file.
+@rem 
 @rem ###############################################################################################
 
 cd /D %~1
 set ANDROID_HOME=%~2
 set JAVA_HOME=%~3
-call %ANDROID_HOME%\platform-tools\adb get-state
-
+@set devices_attached=0
+@FOR /F "tokens=* skip=1 delims=" %%A in ('%ANDROID_HOME%\platform-tools\adb devices') do @set devices_attached=1
 @echo off
-if "%ERRORLEVEL%" == "0" goto installAndAssemble
-goto assembleOnly
+@if "%devices_attached%" == "1" goto installAndAssemble
+@goto assembleOnly
 
 :installAndAssemble
 @echo on
@@ -30,7 +34,18 @@ call gradlew.bat installDebug --daemon 0<nul
 exit
 
 :installAndOpen
-call gradlew.bat installDebug --daemon 0<nul &&  call %ANDROID_HOME%\platform-tools\adb shell monkey -p %packageName% -c android.intent.category.LAUNCHER 1
+call gradlew.bat installDebug --daemon 0<nul
+@echo off
+@SETLOCAL ENABLEDELAYEDEXPANSION 
+:: OPEN ON ALL ATTACHED DEVICES ::
+@FOR /F "tokens=1,2 skip=1" %%A IN ('%ANDROID_HOME%\platform-tools\adb devices') DO (
+    @SET IS_DEV=%%B
+if "!IS_DEV!" == "device" (
+   @SET SERIAL=%%A
+   @call %ANDROID_HOME%\platform-tools\adb -s !SERIAL! shell monkey -p %packageName% -c android.intent.category.LAUNCHER 1
+)
+)
+@ENDLOCAL
 exit
 
 :assembleOnly

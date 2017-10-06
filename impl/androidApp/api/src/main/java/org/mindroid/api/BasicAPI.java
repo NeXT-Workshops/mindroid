@@ -17,6 +17,8 @@ public abstract class BasicAPI {
     private BrickController brickController = robotController.getBrickController();
 
 
+    // -------------------- getting Robot ID ---------------------
+
     /**
      * Returns the Robot ID.
      * @return robot id

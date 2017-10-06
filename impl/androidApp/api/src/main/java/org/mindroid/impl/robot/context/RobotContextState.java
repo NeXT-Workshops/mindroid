@@ -173,6 +173,21 @@ public class RobotContextState implements IRobotContextState,IEV3SensorEventList
     }
 
     @Override
+    public boolean hasMessage() {
+        return receivedMessages.iterator().hasNext();
+    }
+
+    @Override
+    public MindroidMessage getNextMessage() {
+        return receivedMessages.iterator().next();
+    }
+
+    @Override
+    public int getReceivedMessagesCount() {
+        return receivedMessages.size();
+    }
+
+    @Override
     public synchronized String toString() {
         return "RobotContextState{" +
                 "sensor_output_S1=" + sensor_output_S1 +

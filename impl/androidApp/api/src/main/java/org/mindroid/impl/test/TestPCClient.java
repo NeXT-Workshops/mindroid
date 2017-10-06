@@ -116,9 +116,9 @@ public class TestPCClient{
                     SynchronizedMotorOperation noOperation = SyncedMotorOpFactory.createNoOperation();
 
                     //FORWARD
-                    motorProvider.getSynchronizedMotors().executeSynchronizedOperation(forward,noOperation,noOperation,forward,false);
+                    getMotorProvider().getSynchronizedMotors().executeSynchronizedOperation(forward,noOperation,noOperation,forward,false);
 
-                    brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                    setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
                 }
             };
             sm.addState(state_forward);
@@ -135,14 +135,14 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
                     //FORWARD
-                    motorProvider.getMotor(EV3PortIDs.PORT_A).forward();
-                    motorProvider.getMotor(EV3PortIDs.PORT_D).forward();
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_A).forward();
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_D).forward();
 
-                    brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                    setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 
 
-                    motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed( 50);
-                    motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(  50);
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed( 50);
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(  50);
                 }
             };
 
@@ -151,10 +151,10 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
                     //FORWARD
-                    motorProvider.getMotor(EV3PortIDs.PORT_A).stop();
-                    motorProvider.getMotor(EV3PortIDs.PORT_D).stop();
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_A).stop();
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_D).stop();
 
-                    brickController.resetEV3StatusLight();
+                    resetLED();
                 }
             };
 
@@ -164,13 +164,13 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
                     //BACKWARD
-                    motorProvider.getMotor(EV3PortIDs.PORT_A).backward();
-                    motorProvider.getMotor(EV3PortIDs.PORT_D).backward();
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_A).backward();
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_D).backward();
 
-                    brickController.setEV3StatusLight(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
+                    setLED(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
 
-                    motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(50);
-                    motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(50);
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(50);
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(50);
                 }
             };
 
@@ -179,13 +179,13 @@ public class TestPCClient{
                 public void run() {
                     System.out.println(this.getName() + " isActive\n");
                     //TURN LEFT
-                    motorProvider.getMotor(EV3PortIDs.PORT_A).backward();
-                    motorProvider.getMotor(EV3PortIDs.PORT_D).forward();
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_A).backward();
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_D).forward();
 
-                    brickController.setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
+                    setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
 
-                    motorProvider.getMotor(EV3PortIDs.PORT_A).setSpeed(50);
-                    motorProvider.getMotor(EV3PortIDs.PORT_D).setSpeed(50);
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(50);
+                    getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(50);
                 }
             };
 

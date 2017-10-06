@@ -3,6 +3,7 @@ package org.mindroid.impl.robot;
 import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
+import org.mindroid.impl.brick.Textsize;
 
 /**
  * Created by torben on 02.03.2017.
@@ -107,8 +108,8 @@ public class BrickController implements IBrickControl {
      * @param posY position y
      */
     @Override
-    public void drawString(String str,int posX, int posY) {
-        robot.getBrick().drawString(str,posX,posY);
+    public void drawString(String str, Textsize textsize, int posX, int posY) {
+        robot.getBrick().drawString(str,textsize,posX,posY);
     }
 
     /**

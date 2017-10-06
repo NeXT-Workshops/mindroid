@@ -2,6 +2,7 @@ package org.mindroid.android.app.imperativeimpl;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.impl.brick.Textsize;
 
 public class TestMessageAccess extends ImperativeWorkshopAPI {
 
@@ -29,8 +30,8 @@ public class TestMessageAccess extends ImperativeWorkshopAPI {
 
             MindroidMessage msg = getNextMessage();
 
-            drawString("I received a message from "+ msg.getSource(),2,50);
-            drawString("Content: "+msg.getContent(),2,70);
+            drawString("I received a message from "+ msg.getSource(), Textsize.SMALL,2,50);
+            drawString("Content: "+msg.getContent(), Textsize.SMALL,2,70);
 
             String msgContent = "This is message number " + counter;
             delay(2500);

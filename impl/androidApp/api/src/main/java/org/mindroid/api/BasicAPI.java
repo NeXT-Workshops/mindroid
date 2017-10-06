@@ -4,6 +4,7 @@ import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.impl.brick.Textsize;
 import org.mindroid.impl.robot.*;
 
 /**
@@ -53,11 +54,12 @@ public abstract class BasicAPI {
      * The coordinate (0,0) is at the top-left corner of the display.
      *
      * @param text the text to display
+     * @param textsize Size of the string drawn on the display
      * @param xPosition the x position
      * @param yPosition the y position
      */
-    public final void drawString(final String text, final int xPosition, final int yPosition) {
-        this.brickController.drawString(text, xPosition, yPosition);
+    public final void drawString(final String text, final Textsize textsize, final int xPosition, final int yPosition) {
+        this.brickController.drawString(text,textsize, xPosition, yPosition);
     }
 
     /**

@@ -21,9 +21,10 @@ public class DisplayMessageFactory {
 	 * @param y - Position y
 	 * @return a Draw String message with the given Parameters
 	 */
-	public static DrawStringMessage createDrawStringMessage(final String str, final int x, final int y){
+	public static DrawStringMessage createDrawStringMessage(final String str, final int textsize,final int x, final int y){
 		DrawStringMessage ds = new DrawStringMessage();
 		ds.setStr(str);
+		ds.setTextsize(textsize);
 		ds.setX(x);
 		ds.setY(y);
 		return ds;

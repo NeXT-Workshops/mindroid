@@ -9,6 +9,7 @@ import org.mindroid.api.statemachine.ITransition;
 import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.common.messages.motor.synchronization.SyncedMotorOpFactory;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperation;
+import org.mindroid.impl.brick.Textsize;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.statemachine.State;
 import org.mindroid.impl.statemachine.Statemachine;
@@ -79,7 +80,9 @@ public class MindroidLVL1 extends StatemachineAPI {
 
         IState state_drawString = new State("createDrawStringMsg"){
             public void run(){
-                drawString("Teststring",50,50);
+                drawString("SMALL STRING", Textsize.SMALL,1,10);
+                drawString("MEDIUM STRING", Textsize.MEDIUM,1,25);
+                drawString("LARGE STRING", Textsize.LARGE,1,45);
             }
         };
 

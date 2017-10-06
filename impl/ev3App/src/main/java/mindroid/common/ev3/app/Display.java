@@ -51,7 +51,7 @@ public class Display {
      * @param y y coordinate (px)
      * @param anchor anchor (e.g. {@link GraphicsLCD#TOP}
      */
-    private static void drawString(final String text, final int x, final int y, int anchor) {
+    public static void drawString(final String text, final int x, final int y, int anchor) {
         LocalEV3.get().getGraphicsLCD().drawString(text, x, y, anchor);
     }
 
@@ -59,7 +59,7 @@ public class Display {
      * Configures the display to use the given font for the subsequent calls to 'draw...' methods
      * @param font the font to use
      */
-    private static void configureFont(final Font font) {
+    public static void configureFont(final Font font) {
         LocalEV3.get().getGraphicsLCD().setFont(font);
     }
 

@@ -9,6 +9,7 @@ import lejos.hardware.Sound;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.LCD;
+import mindroid.common.ev3.app.Display;
 import org.mindroid.common.messages.display.ClearDisplayMessage;
 import org.mindroid.common.messages.display.DisplayMessageFactory;
 import org.mindroid.common.messages.display.DrawStringMessage;
@@ -70,8 +71,13 @@ public class EV3BrickEndpoint extends Listener {
 		if(object.getClass() == DrawStringMessage.class){
 			DrawStringMessage ds = (DrawStringMessage) object;
 			LocalEV3.get().getGraphicsLCD().setColor(GraphicsLCD.BLACK);
-			LocalEV3.get().getGraphicsLCD().setFont(Font.getDefaultFont());
-			LocalEV3.get().getGraphicsLCD().drawString(ds.getStr(),ds.getX(),ds.getY(),GraphicsLCD.TOP);
+			switch (ds.getTextsize()){
+				case 1: Display.configureFont(Font.getSmallFont()); break;
+				case 2: Display.configureFont(Font.getDefaultFont()); break;
+				case 3: Display.configureFont(Font.getLargeFont()); break;
+				default: Display.configureFont(Font.getDefaultFont());
+			}
+			Display.drawString(ds.getStr(),ds.getX(),ds.getY(),GraphicsLCD.TOP);
 			return;
 		}
 		

@@ -36,13 +36,14 @@ public class EV3Display extends Listener{
 	 * Draw a String on the IEV3Display
 	 * 
 	 * @param str String to draw
+	 * @param textsize Size of the string drawn on the display
 	 * @param posX startposition x of the string
 	 * @param posY startposition y of the string
 	 * @return false if display not ready 
 	 */
-	public boolean drawString(String str,int posX, int posY){
+	public boolean drawString(String str,Textsize textsize,int posX, int posY){
 		if(connection != null){
-			connection.sendTCP(DisplayMessageFactory.createDrawStringMessage(str, posX, posY));
+			connection.sendTCP(DisplayMessageFactory.createDrawStringMessage(str,textsize.getValue(),  posX, posY));
 			return true;
 		}
 		return false;

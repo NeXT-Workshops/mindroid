@@ -232,8 +232,8 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 	}
 
 	@Override
-	public void drawString(String str, int posX, int posY) {
-		getDisplay().drawString(str,posX,posY);
+	public void drawString(String str,Textsize textsize, int posX, int posY) {
+		getDisplay().drawString(str,textsize,posX,posY);
 	}
 
 	@Override

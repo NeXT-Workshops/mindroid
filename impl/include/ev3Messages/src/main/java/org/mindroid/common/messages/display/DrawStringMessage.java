@@ -6,6 +6,7 @@ package org.mindroid.common.messages.display;
  */
 public class DrawStringMessage {
     String str;
+    int textsize;
     int x;
     int y;
 
@@ -34,4 +35,12 @@ public class DrawStringMessage {
     public void setY(int y) {
         this.y = y;
     };
+
+    public int getTextsize() {
+        return textsize;
+    }
+
+    public void setTextsize(int textsize) {
+        this.textsize = textsize;
+    }
 }

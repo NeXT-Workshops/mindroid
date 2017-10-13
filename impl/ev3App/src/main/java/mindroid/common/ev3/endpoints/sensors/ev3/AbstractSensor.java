@@ -87,9 +87,9 @@ public abstract class AbstractSensor {
             return false;
         }
 
-        if(this.sensormode != null && !setSensorMode(this.sensormode)){ //If i couldnt set the sensor mode, set to null
-            this.sensormode = null;
-        }
+        //set sensormode
+        setSensorMode(this.sensormode);
+
         return true;
     }
 

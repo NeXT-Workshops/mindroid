@@ -50,6 +50,14 @@ public class SensorProvider{
             }
             //When not already created, create and put into hashmap
             sensors.put(sensorPort,new Sensor(getSensorEndpoint(sensorPort), sensorPort));//TODO check what happens, when the sensorEndpoint is null? -> Send an info message?
+
+            //This sleep is necessary to get the Sensor-Object up to date (receiving the first event messsage) Otherwise problems can occur. Maybe find another solution
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             return sensors.get(sensorPort);
         }
         return null;

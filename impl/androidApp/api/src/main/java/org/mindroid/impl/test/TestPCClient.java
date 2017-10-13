@@ -1,5 +1,6 @@
 package org.mindroid.impl.test;
 
+import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.api.StatemachineAPI;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
@@ -33,6 +34,8 @@ public class TestPCClient{
     public static String msgServerIP = "127.0.0.1";
     public static String robotID = "Testrobot 1";
 
+    private static final String impID = "TestImperativeImpl";
+
     public static IStatemachine sm;
 
     public static void main(String args[]){
@@ -60,7 +63,7 @@ public class TestPCClient{
                 Thread.sleep(10000);
                 System.out.println("[TestRobot:PC-Client] initialized!");
 
-                commandCenter.startStatemachine(TestPCClient.sm.getID());
+                commandCenter.startImperativeImplemenatation(impID);
 
                 Thread.sleep(20000);
 
@@ -94,6 +97,7 @@ public class TestPCClient{
             roFactory.setMSGServerTCPPort(NetworkPortConfig.SERVER_PORT);
             roFactory.setRobotServerPort(NetworkPortConfig.ROBOT_SERVER_PORT);
             roFactory.setRobotID(robotID);
+            roFactory.addImperativeImplementation(new TestImperativeImpl());
 
             //Add Statemachines
             roFactory.addStatemachine(statemachineCollection);
@@ -221,5 +225,18 @@ public class TestPCClient{
             return sm;
         }
 
+    }
+
+    private static class TestImperativeImpl extends ImperativeWorkshopAPI{
+
+        public TestImperativeImpl() {
+            super(impID);
+        }
+
+        @Override
+        public void run() {
+            delay(500);
+            turnRight(90);
+        }
     }
 }

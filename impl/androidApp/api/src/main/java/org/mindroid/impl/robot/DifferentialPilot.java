@@ -1,11 +1,12 @@
 package org.mindroid.impl.robot;
 
 import org.mindroid.api.robot.IDifferentialPilot;
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.common.messages.motor.synchronization.SyncedMotorOpFactory;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperation;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
-import org.mindroid.impl.motor.SynchronizedMotors;
+import org.mindroid.impl.sensor.Sensor;
 
 /**
  * Precise controlling of the robot.
@@ -13,12 +14,15 @@ import org.mindroid.impl.motor.SynchronizedMotors;
 public class DifferentialPilot implements IDifferentialPilot {
 
     private MotorProvider motorProvider;
+    private SensorProvider sensorProvider;
     private EV3PortID leftMotor;
     private EV3PortID rightMotor;
+    private EV3PortID gyroPort;
     private float wheelDiameter;
     private float trackWidth;
     private final float wheelCircumference;
     private final float trackCircumference;
+    private final float angleThreshold = 2f;
 
     /**
      *
@@ -32,6 +36,28 @@ public class DifferentialPilot implements IDifferentialPilot {
         this.motorProvider = motorProvider;
         this.leftMotor = leftMotor;
         this.rightMotor = rightMotor;
+        this.wheelDiameter = wheelDiameter;
+        this.trackWidth = trackWidth;
+        wheelCircumference = (float) (Math.PI * this.wheelDiameter);
+        trackCircumference = (float) (Math.PI * this.trackWidth);
+    }
+
+    /**
+     *
+     * @param motorProvider motorprovider to access synced motor group
+     * @param leftMotor port of left motor
+     * @param rightMotor port of right motor
+     * @param sensorProvider to access gyro sensor
+     * @param gyroPort gyrosensor to support angle correction
+     * @param wheelDiameter in cm
+     * @param trackWidth in cm
+     */
+    public DifferentialPilot(MotorProvider motorProvider, EV3PortID leftMotor, EV3PortID rightMotor, SensorProvider sensorProvider, EV3PortID gyroPort, float wheelDiameter, float trackWidth) {
+        this.motorProvider = motorProvider;
+        this.leftMotor = leftMotor;
+        this.rightMotor = rightMotor;
+        this.sensorProvider = sensorProvider;
+        this.gyroPort = gyroPort;
         this.wheelDiameter = wheelDiameter;
         this.trackWidth = trackWidth;
         wheelCircumference = (float) (Math.PI * this.wheelDiameter);
@@ -72,22 +98,42 @@ public class DifferentialPilot implements IDifferentialPilot {
 
     @Override
     public void turnLeft(int degrees) {
+        float targetAngle = -1;
+        if(isAngleCorrectionEnabled()){
+            targetAngle = calculateTargetAngle(true,degrees);
+
+        }
+
         int rotateDegree = calculateCircularArc(degrees);
 
         SynchronizedMotorOperation forward = SyncedMotorOpFactory.createRotateOperation(rotateDegree);
-        SynchronizedMotorOperation backward = SyncedMotorOpFactory.createRotateOperation((-1)*rotateDegree);
+        SynchronizedMotorOperation backward = SyncedMotorOpFactory.createRotateOperation((-1) * rotateDegree);
 
         SynchronizedMotorOperation[] operations = getNoOperationSet();
 
-        if (!setMotorOperations(backward,forward, operations)){
+        if (!setMotorOperations(backward, forward, operations)) {
             return; //TODO maybe errorhandling
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations, true); //TODO Make Wait complete
+
+        if(isAngleCorrectionEnabled()) {
+            //Check result
+            doAngleCorrection(targetAngle);
+        }
     }
+
+
 
     @Override
     public void turnRight(int degrees) {
+        System.out.println("[DifferentialPilot:doAngleCorrection] turnRight called; Degrees: "+degrees);
+        float targetAngle = -1;
+        if(isAngleCorrectionEnabled()){
+            targetAngle = calculateTargetAngle(false,degrees);
+            System.out.println("[DifferentialPilot:doAngleCorrection] calculated Target Angle; targetAngle: "+targetAngle);
+        }
+
         int rotateDegree = calculateCircularArc(degrees);
 
         SynchronizedMotorOperation forward = SyncedMotorOpFactory.createRotateOperation(rotateDegree);
@@ -100,6 +146,89 @@ public class DifferentialPilot implements IDifferentialPilot {
         }
 
         motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true); //TODO Make Wait complete
+
+        if(isAngleCorrectionEnabled()) {
+            //Check result
+            System.out.println("[DifferentialPilot:turnRight] do angle correction will be called");
+            doAngleCorrection(targetAngle);
+
+        }
+    }
+
+
+
+    /**
+     *
+     * @param turnLeft - true if turn left, false if turn right
+     *
+     * @return targeted angle
+     */
+    private float calculateTargetAngle(boolean turnLeft, float degrees) {
+        float currentValue = getGyroAngleValue();
+        float targetValue;
+
+        if(turnLeft){
+            targetValue = currentValue + degrees;
+        }else{
+            targetValue = currentValue - degrees;
+        }
+
+        return targetValue;
+    }
+
+    /**
+     * Returns the value of the gyro sensor if proper sensormode is active.
+     * @return angle measured by gyro - '-1' if wrong mode is running
+     */
+    private float getGyroAngleValue() {
+        int index;
+        switch(sensorProvider.getSensor(gyroPort).getSensormode()){
+            case ANGLE: index = 0; break;
+            case RATEANDANGLE: index = 1; break;
+            default: index= -1;
+        }
+        if(index != -1) {
+            return sensorProvider.getSensor(gyroPort).getValue()[index];
+        }else{
+            return -1;
+        }
+    }
+
+    /**
+     * returns true if angle correction is possible
+     * @return boolean
+     */
+    private boolean isAngleCorrectionEnabled() {
+        boolean validSensorMode = false;
+        if(sensorProvider != null && gyroPort != null){
+            validSensorMode = sensorProvider.getSensor(gyroPort) != null && sensorProvider.getSensor(gyroPort).getSensormode() != null;
+            if(validSensorMode) {
+                validSensorMode = sensorProvider.getSensor(gyroPort).getSensormode().equals(Sensormode.ANGLE) || sensorProvider.getSensor(gyroPort).getSensormode().equals(Sensormode.RATEANDANGLE);
+            }
+        }
+        return validSensorMode;
+    }
+
+    /**
+     * Checks if a angle correction is necessary and calls the propre turn method.
+     * @param targetAngle - targeted angle
+     */
+    private void doAngleCorrection(float targetAngle) {
+        System.out.println("[DifferentialPilot:doAngleCorrection] targetAngle: "+targetAngle);
+        System.out.println("[DifferentialPilot:doAngleCorrection] getGyroAngleValue(): "+getGyroAngleValue());
+        float degreeDiff = (getGyroAngleValue() - targetAngle);
+        System.out.println("[DifferentialPilot:doAngleCorrection] degreeDiff: "+degreeDiff);
+
+
+        boolean isNewAngleInBounds = (Math.abs(degreeDiff) <= angleThreshold);
+        System.out.println("[DifferentialPilot:doAngleCorrection] isNewAngleInBounds: "+isNewAngleInBounds);
+        if(!isNewAngleInBounds){ //Not in bounds -> correct angle by turn
+            if(degreeDiff > 0){
+                turnRight(Math.abs((int)degreeDiff));
+            }else{
+                turnLeft(Math.abs((int)degreeDiff));
+            }
+        }
     }
 
     /**

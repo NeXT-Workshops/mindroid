@@ -30,10 +30,9 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI implements IDi
      */
     public ImperativeWorkshopAPI(String implementationID) {
         super(implementationID);
-        this.diffPilot = new DifferentialPilot(getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),5.6f,12.5f);
+        //This DiffPilot supports angle correction while truning
+        this.diffPilot = new DifferentialPilot(getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),getSensorProvider(),getGyroSensorPort(),5.6f,12.5f);
     }
-
-
 
 
     // --------------------- SENSOR EVALUATING METHODS: Display, LED ---------------------

@@ -16,6 +16,7 @@ public class ImperativeImplService {
     // Array with Implementations to load
     private String[] foundClasses = {
             "org.mindroid.android.app.imperativeimpl.RectangleDriver",
+            "org.mindroid.android.app.imperativeimpl.RectangleDriver3",
             "org.mindroid.android.app.imperativeimpl.RectangleDriver2",
             "org.mindroid.android.app.imperativeimpl.TestSmallServoMotor",
             "org.mindroid.android.app.imperativeimpl.TestMessageAccess"

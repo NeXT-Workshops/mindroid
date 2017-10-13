@@ -48,7 +48,7 @@ public class Sensor implements ISensorControl,IEV3SensorEventListener {
 
     @Override
     public void handleSensorEvent(EV3PortID port, IEV3SensorEvent event) {
-        if(this.port == port){
+        if(this.port.equals(port)){
            setValue(event.getSample());
            setSensorMode(event.getSensorMode());
         }

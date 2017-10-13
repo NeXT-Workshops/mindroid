@@ -41,7 +41,7 @@ public class RobotTestConfig implements IRobotPortConfig {
 
     @Override
     public Sensormode getSensormodeS3() {
-        return Sensormode.RATE;
+        return Sensormode.ANGLE;
     }
 
     @Override

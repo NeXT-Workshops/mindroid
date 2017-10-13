@@ -12,21 +12,8 @@ import org.mindroid.impl.robot.*;
  */
 public abstract class BasicAPI {
 
-    private RobotController robotController = Robot.getRobotController();
-    private MotorProvider motorProvider = robotController.getMotorProvider();
-    private SensorProvider sensorProvider = robotController.getSensorProvider();
-    private BrickController brickController = robotController.getBrickController();
 
 
-    // -------------------- getting Robot ID ---------------------
-
-    /**
-     * Returns the Robot ID.
-     * @return robot id
-     */
-    public final String getRobotID(){
-        return Robot.getRobotController().getRobotID();
-    }
 
     // --------------------- BRICK CONTROLLING METHODS: Display, LED, Sounds ---------------------
 
@@ -37,7 +24,7 @@ public abstract class BasicAPI {
      * @param interval the blink interval in milliseconds
      */
     public final void setLED(EV3StatusLightColor color, EV3StatusLightInterval interval) {
-        brickController.setEV3StatusLight(color, interval);
+        getBrickController().setEV3StatusLight(color, interval);
     }
 
     /**
@@ -45,7 +32,7 @@ public abstract class BasicAPI {
      *
      */
     public final void resetLED(){
-        brickController.resetEV3StatusLight();
+        getBrickController().resetEV3StatusLight();
     }
 
     /**
@@ -59,14 +46,14 @@ public abstract class BasicAPI {
      * @param yPosition the y position
      */
     public final void drawString(final String text, final Textsize textsize, final int xPosition, final int yPosition) {
-        this.brickController.drawString(text,textsize, xPosition, yPosition);
+        getBrickController().drawString(text,textsize, xPosition, yPosition);
     }
 
     /**
      * Removes everything from the EV3 display
      */
     public final void clearDisplay() {
-        this.brickController.clearDisplay();
+        getBrickController().clearDisplay();
     }
 
     /**
@@ -75,53 +62,53 @@ public abstract class BasicAPI {
      *
      */
     public final void setSoundVolume(int volume){
-        brickController.setVolume(Math.max(0,Math.min(100,volume)));
+        getBrickController().setVolume(Math.max(0,Math.min(100,volume)));
     }
 
     /**
      *  Plays a buzz sound on the brick.
      */
     public final void playBuzzSound(){
-        brickController.buzz();
+        getBrickController().buzz();
     }
 
     /**
      * Plays a single beep sound on the brick.
      */
     public final void playSingleBeep(){
-        brickController.singleBeep();
+        getBrickController().singleBeep();
     }
 
     /**
      * Plays a double beep sound on the brick.
      */
     public final void playDoubleBeep(){
-        brickController.doubleBeep();
+        getBrickController().doubleBeep();
     }
 
     /**
      * plays a beep sequence upwards sound on the brick.
      */
     public final void playBeepSequenceUp(){
-        brickController.beepSequenceUp();
+        getBrickController().beepSequenceUp();
     }
 
     /**
      * plays a beep sequence downwards sound on the brick.
      */
     public final void playBeepSequenceDown(){
-        brickController.beepSequenceDown();
+        getBrickController().beepSequenceDown();
     }
 
 
     // ------ Messaging ------
 
     public final boolean hasMessage(){
-        return robotController.getMessenger().hasMessage();
+        return getRobotController().getMessenger().hasMessage();
     }
 
     public final MindroidMessage getNextMessage(){
-        return robotController.getMessenger().getNextMessage();
+        return getRobotController().getMessenger().getNextMessage();
     }
 
     /**
@@ -170,7 +157,7 @@ public abstract class BasicAPI {
      * @return Motorprovider
      */
     public final MotorProvider getMotorProvider() {
-        return motorProvider;
+        return Robot.getRobotController().getMotorProvider();
     }
 
     /**
@@ -178,9 +165,33 @@ public abstract class BasicAPI {
      * @return Sensors
      */
     public final SensorProvider getSensorProvider() {
-        return sensorProvider;
+        return Robot.getRobotController().getSensorProvider();
+    }
+
+    /**
+     * Returns the Brick controller to run brick operations.
+     * @return brickcontroller
+     */
+    public final BrickController getBrickController(){
+        return Robot.getRobotController().getBrickController();
+    }
+
+    /**
+     * Returns the Robot Controller
+     * @return robotController
+     */
+    public final RobotController getRobotController(){
+        return Robot.getRobotController();
     }
 
 
+    // -------------------- getting Robot ID ---------------------
 
+    /**
+     * Returns the Robot ID.
+     * @return robot id
+     */
+    public final String getRobotID(){
+        return getRobotController().getRobotID();
+    }
 }

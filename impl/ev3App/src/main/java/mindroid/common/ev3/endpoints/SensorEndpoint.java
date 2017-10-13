@@ -80,7 +80,7 @@ public class SensorEndpoint extends Listener implements SensorListener {
 	@Override
 	public void handleSensorData(float[] sample) {
 		if(this.connection != null && sample != null){
-			this.connection.sendTCP(SensorMessageFactory.sensorEvent(sample, System.nanoTime()));
+			this.connection.sendTCP(SensorMessageFactory.sensorEvent(sample,sensor.getSensormode(), System.nanoTime()));
 		}
 	}
 

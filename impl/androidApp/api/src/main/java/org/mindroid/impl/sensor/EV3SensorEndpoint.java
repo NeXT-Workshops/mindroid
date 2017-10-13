@@ -62,10 +62,8 @@ public class EV3SensorEndpoint extends ClientEndpointImpl {
             @Override
             public void run() {
                 if (object instanceof SensorEventMessage) {
-
-                    float[] sensorValue = ((SensorEventMessage) object).getSample();
-                    long timestamp = ((SensorEventMessage) object).getTimestamp();
-                    EV3SensorEvent sensorevent = new EV3SensorEvent(sensor, sensorValue, timestamp, currentMode);
+                    SensorEventMessage eventMsg = (SensorEventMessage) object;
+                    EV3SensorEvent sensorevent = new EV3SensorEvent(sensor, eventMsg.getSample(), eventMsg.getTimestamp(), eventMsg.getSensormode());
 
                     for (IEV3SensorEventListener listener : listeners) {
                         //value = sensorevent.getSample();

@@ -46,9 +46,10 @@ public class SensorMessageFactory {
 	 * @param timestamp the time stamp of the measurement
 	 * @return the prepared message
 	 */
-	public static SensorEventMessage sensorEvent(float[] sample, long timestamp){
+	public static SensorEventMessage sensorEvent(float[] sample, Sensormode mode, long timestamp){
 		SensorEventMessage msg = new SensorEventMessage();
 		msg.setSample(sample);
+		msg.setSensormode(mode);
 		msg.setTimestamp(timestamp);
 		return msg;
 	}

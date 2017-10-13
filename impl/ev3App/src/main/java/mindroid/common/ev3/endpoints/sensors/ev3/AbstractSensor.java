@@ -150,6 +150,10 @@ public abstract class AbstractSensor {
         return sensor.sampleSize();
     }
 
+    public Sensormode getSensormode() {
+        return sensormode;
+    }
+
     /**
      * Sensor Starts sending Data
      */

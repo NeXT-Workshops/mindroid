@@ -29,6 +29,15 @@ public abstract class ImperativeAPI extends BasicAPI {
      */
     public abstract void run();
 
+    /**
+     * Start the execution of the Implementation
+     * Executes run method.
+     * Stops all motors, when execution finished.
+     */
+    public void start(){
+        run();
+        getMotorProvider().stopAllMotors();
+    }
 
     /**
      * Sets the isInterrupted field to true to stop the execution of this method

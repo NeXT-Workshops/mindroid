@@ -70,4 +70,13 @@ public class MotorProvider implements org.mindroid.api.robot.control.MotorProvid
         }
 
     }
+
+    /**
+     * Stops all motors that were accessed by getMotor(..) method.
+     */
+    public void stopAllMotors(){
+        for (EV3PortID ev3PortID : motors.keySet()) {
+            motors.get(ev3PortID).stop();
+        }
+    }
 }

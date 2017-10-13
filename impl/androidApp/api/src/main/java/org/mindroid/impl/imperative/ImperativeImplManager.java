@@ -35,7 +35,7 @@ public class ImperativeImplManager {
         Runnable runImpl = new Runnable(){
             @Override
             public void run() {
-                implementation.run();
+                implementation.start();
             }
         };
         new Thread(runImpl).start();

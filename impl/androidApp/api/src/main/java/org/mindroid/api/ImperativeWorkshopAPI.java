@@ -19,11 +19,13 @@ import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
  *
  * @author Torben Unzicker 17.09.17
  */
-public abstract class ImperativeWorkshopAPI extends ImperativeAPI implements IDifferentialPilot {
+public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
     //TODO Create some Interface to add a specific robot Configurateion: Check how to use it on app-site when creating the Robot using the RobotFactory.
-    //TODO Methods for Messageing
 
-    private DifferentialPilot diffPilot;
+    /**
+     * The Differential pilot is used to execute synchronized motor operations and precise robot drive control.
+     */
+    private final DifferentialPilot diffPilot;
 
     /**
      * @param implementationID - The ID of your Implementation. Necessary to run your implementation later on.
@@ -107,8 +109,6 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI implements IDi
 
     }
 
-
-
     /**
      * Returns the current Angle of the Robot given by the Gyrosensor.
      * @return angle in degree
@@ -117,7 +117,8 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI implements IDi
         return getGyroSensor().getValue()[0];
     }
 
-
+    //TODO May add further method to change sensormode.
+    //TODO Add getter method for other possible sensormodes.
 
     // ------ Motor Controlling Methods ------
 
@@ -127,70 +128,101 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI implements IDi
      *
      * @param degrees the angle in degrees
      */
-    @Override
     public final void turnLeft(int degrees) {
-        diffPilot.turnLeft(degrees);
+        if(!isInterrupted()) {
+            diffPilot.turnLeft(degrees);
+        }
     }
 
     /**
      * The robot rotates clockwise by the given angle. The method blocks until the rotation is completed.
-     *
+     * Returns without action if system got interrupted.
      * @param degrees angle
      */
-    @Override
     public final void turnRight(int degrees) {
-        diffPilot.turnRight(degrees);
+        if(!isInterrupted()) {
+            diffPilot.turnRight(degrees);
+        }
     }
 
     /**
-     * The robot rotates counterclockwise for the specified time. The method blocks until the rotation is completed.
-     *
-     * @param milliseconds time in milliseconds
-     */
-    public final void turnLeftTime(int milliseconds) {
-        //TODO Implement
-    }
-
-    /**
-     * The robot rotates clockwise for the specified time. The method blocks until the rotation is completed.
-     *
-     * @param milliseconds time in milliseconds
-     */
-    public final void turnRightTime(int milliseconds) {
-        //TODO Implement
-    }
-
-    /**
-     * Stops all motors
+     * Stops the Motor at the given Port.
      */
     public void stop(EV3PortID motorport) {
-        //TODO Implement
+        getMotorProvider().getMotor(motorport).stop();
     }
 
     /**
-     * Starts driving forward and returns immediately
-     * Use {@link #stop()} to stop driving.
+     * Stops the left and right motor of the robot.
+     * Synchronized and blocking operation.
+     *
      */
-    public void forward() {
-        //TODO Implement
-    }
-
-    @Override
-    public void forward(float distance) {
-        diffPilot.forward(distance);
+    public void stop(){
+        diffPilot.stop();
     }
 
     /**
-     * Starts driving backward and returns immediately
-     * Use {@link #stop()} to stop driving.
+     * Sets the left and right motor into float mode.
+     * Synchronized and blocking operation.
+     * Returns without action if system got interrupted.
+     *
      */
-    public void backward() {
-        //TODO Implement
+    public void flt(){
+        if(!isInterrupted()) {
+            diffPilot.flt();
+        }
     }
 
-    @Override
-    public void backward(float distance) {
-        diffPilot.backward(distance);
+    /**
+     * Starts driving driveDistanceForward and returns immediately.
+     * Returns without action if system got interrupted.
+     *
+     * Use {@link #stop()} to stop driving.
+     * @param speed - speed of the motors [0-1000] deg/sec. Possible MaxSpeed depends on battery power!
+     */
+    public void forward(int speed) {
+        if(!isInterrupted()) {
+            diffPilot.driveFroward(speed);
+        }
+    }
+
+
+    /**
+     * Drives forward.
+     * Synchronized motor operation and blocking method.
+     * Returns without action if system got interrupted.
+     *
+     * @param distance - distance to drive in cm
+     */
+    public void driveDistanceForward(float distance) {
+        if(!isInterrupted()) {
+            diffPilot.driveDistanceForward(distance);
+        }
+    }
+
+    /**
+     * Starts driving driveDistanceBackward and returns immediately.
+     * Returns without action if system got interrupted.
+     * Use {@link #stop()} to stop driving.
+     * @param speed - speed of the motors [0-1000] deg/sec. Possible MaxSpeed depends on battery power!
+     */
+    public void backward(int speed) {
+        if(!isInterrupted()) {
+            diffPilot.driveBackward(speed);
+        }
+    }
+
+    /**
+     * Drives backward.
+     * Synchronized motor operation and blocking method.
+     * Returns without action if system got interrupted.
+     *
+     * @param distance - distance to drive in cm
+     */
+    public void driveDistanceBackward(float distance) {
+        if(!isInterrupted()) {
+            diffPilot.driveDistanceBackward(distance);
+        }
     }
 
 

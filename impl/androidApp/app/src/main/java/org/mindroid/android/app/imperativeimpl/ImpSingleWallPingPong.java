@@ -12,13 +12,15 @@ public class ImpSingleWallPingPong extends ImperativeWorkshopAPI {
     @Override
     public void run() {
         do {
-            forward(); //Forward is not implemented yet!
+            forward(500);
 
             while (getDistance() > 0.15f && !isInterrupted()) {
                 delay(25);
             }
+            stop();
 
-            backward(10);
+            driveDistanceBackward(10);
+
             turnLeft(180);
 
         }while(!isInterrupted());

@@ -11,19 +11,19 @@ public class RectangleDriver2 extends ImperativeWorkshopAPI {
 
     @Override
     public void run() {
-        forward(25f);
+        driveDistanceForward(25f);
         turnLeft(90);
 
-        backward(25f);
+        driveDistanceBackward(25f);
         turnRight(270);
 
-        forward(25f);
+        driveDistanceForward(25f);
         turnRight(90);
 
-        forward(12.5f);
+        driveDistanceForward(12.5f);
         turnLeft(180);
 
-        backward(12.5f);
+        driveDistanceBackward(12.5f);
         turnLeft(90);
     }
 }

@@ -15,16 +15,16 @@ public class RectangleDriver extends ImperativeWorkshopAPI {
 
     @Override
     public void run() {
-        forward(25f);
+        driveDistanceForward(25f);
         turnRight(90);
 
-        forward(25f);
+        driveDistanceForward(25f);
         turnRight(90);
 
-        forward(25f);
+        driveDistanceForward(25f);
         turnRight(90);
 
-        forward(25f);
+        driveDistanceForward(25f);
         turnRight(90);
     }
 }

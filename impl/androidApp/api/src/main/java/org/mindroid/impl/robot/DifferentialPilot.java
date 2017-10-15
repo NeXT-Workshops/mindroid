@@ -6,10 +6,11 @@ import org.mindroid.common.messages.motor.synchronization.SyncedMotorOpFactory;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperation;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
+import org.mindroid.impl.motor.SynchronizedMotorsEndpoint;
 import org.mindroid.impl.sensor.Sensor;
 
 /**
- * Precise controlling of the robot.
+ * The Differential pilot is used to execute synchronized motor operations and precise robot drive control.
  */
 public class DifferentialPilot implements IDifferentialPilot {
 
@@ -65,9 +66,8 @@ public class DifferentialPilot implements IDifferentialPilot {
     }
 
     @Override
-    public void forward(float distance) {
+    public void driveDistanceForward(float distance) {
         int degrees = calculateDegreesByDistance(distance);
-        System.out.println("[DifferentialPilot:forward("+distance+")] calculated degrees: "+degrees);
         SynchronizedMotorOperation forward = SyncedMotorOpFactory.createRotateOperation(degrees);
 
         SynchronizedMotorOperation[] operations = getNoOperationSet();
@@ -80,7 +80,7 @@ public class DifferentialPilot implements IDifferentialPilot {
     }
 
     @Override
-    public void backward(float distance) {
+    public void driveDistanceBackward(float distance) {
         int degrees = (-1)*calculateDegreesByDistance(distance);
 
         SynchronizedMotorOperation backward = SyncedMotorOpFactory.createRotateOperation(degrees);
@@ -94,6 +94,45 @@ public class DifferentialPilot implements IDifferentialPilot {
         motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true); //TODO Make Wait complete
     }
 
+    @Override
+    public void driveFroward(int speed) {
+        setMotorSpeed(speed);
+
+        SynchronizedMotorOperation forward = SyncedMotorOpFactory.createForwardOperation();
+        SynchronizedMotorOperation[] operations = getNoOperationSet();
+
+        if (!setMotorOperations(forward, forward, operations)) {
+            return; //TODO maybe errorhandling
+        }
+
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations, false); //TODO Make Wait complete
+    }
+
+    @Override
+    public void driveBackward(int speed) {
+        setMotorSpeed(speed);
+
+        SynchronizedMotorOperation backward = SyncedMotorOpFactory.createBackwardOperation();
+        SynchronizedMotorOperation[] operations = getNoOperationSet();
+
+        if (!setMotorOperations(backward,backward, operations)){
+            return; //TODO maybe errorhandling
+        }
+
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,false); //TODO Make Wait complete
+    }
+
+    @Override
+    public void flt() {
+        SynchronizedMotorOperation flt = SyncedMotorOpFactory.createFltOperation();
+        SynchronizedMotorOperation[] operations = getNoOperationSet();
+
+        if (!setMotorOperations(flt,flt, operations)){
+            return; //TODO maybe errorhandling
+        }
+
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true); //TODO Make Wait complete
+    }
 
 
     @Override
@@ -155,7 +194,17 @@ public class DifferentialPilot implements IDifferentialPilot {
         }
     }
 
+    @Override
+    public void stop(){
+        SynchronizedMotorOperation stop = SyncedMotorOpFactory.createStopOperation();
+        SynchronizedMotorOperation[] operations = getNoOperationSet();
 
+        if(!setMotorOperations(stop,stop,operations)){
+            return;
+        }
+
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true);
+    }
 
     /**
      *
@@ -303,4 +352,15 @@ public class DifferentialPilot implements IDifferentialPilot {
         return new SynchronizedMotorOperation[]{noOp,noOp,noOp,noOp};
     }
 
+    /**
+     * Sets the motor speed of left and right motors.
+     * Not a synchronized motor operation. Unblocking.
+     *
+     * @param speed - speed
+     */
+    @Override
+    public void setMotorSpeed(int speed) {
+        motorProvider.getMotor(leftMotor).setSpeed(speed);
+        motorProvider.getMotor(rightMotor).setSpeed(speed);
+    }
 }

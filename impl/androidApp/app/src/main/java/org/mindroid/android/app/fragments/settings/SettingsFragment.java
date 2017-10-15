@@ -10,19 +10,15 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.android.app.robodancer.ConnectionPropertiesChangedListener;
 import org.mindroid.android.app.robodancer.SettingsProvider;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 
+import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -78,6 +74,7 @@ public class SettingsFragment extends Fragment {
     private EditText txt_input_serverip_part4;
 
     private Spinner spinner_language;
+    private Switch switch_chargePhone;
 
 
     public SettingsFragment() {
@@ -162,6 +159,8 @@ public class SettingsFragment extends Fragment {
         txt_input_ServerTCPPort.setText(R.string.DEFAULT_MSG_SERVER_PORT);
         txt_input_robotServerPort.setText(R.string.DEFAULT_BRICK_MSG_SERVER_PORT);
 
+        //Charging phone switch
+        initChargePhoneSwitch(view);
 
         //Language spinner
         spinner_language = (Spinner) view.findViewById(R.id.spinner_language);
@@ -203,6 +202,35 @@ public class SettingsFragment extends Fragment {
         loadSettings();
 
         return view;
+    }
+
+    /**
+     * Initializes the switch to enable/disable phone chargin
+     * @param view view
+     */
+    private void initChargePhoneSwitch(View view) {
+        switch_chargePhone = (Switch) view.findViewById(R.id.switch_chargePhone);
+        switch_chargePhone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                try {
+                    ProcessBuilder proBuilder = new ProcessBuilder();
+                    proBuilder.command("su").start();
+                    if(switch_chargePhone.isChecked()){
+                        //enable charge phone
+                        proBuilder.command("echo 1 > /sys/class/power_supply/battery/charging_enabled").start();
+                    }else{
+                        //disable charge phone
+                        proBuilder.command("echo 0 > /sys/class/power_supply/battery/charging_enabled").start();
+                    }
+                    //proBuilder.start();
+                } catch (IOException e) {
+                        ErrorHandlerManager.getInstance().handleError(e,this.getClass(),e.toString());
+                }
+            }
+        });
+
+        //Disabled switch, because it is not working as intended:
+        switch_chargePhone.setVisibility(View.GONE);
     }
 
     private void changeLanguage(Locale localLang) {

@@ -335,6 +335,12 @@
 
         </LinearLayout>
 
+        <Switch
+                android:text="Charge phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/switch_chargePhone"
+                android:layout_weight="1" android:splitTrack="false" android:showText="true"
+                android:visibility="visible"/>
         <Button
             android:id="@+id/btn_saveSettings"
             android:layout_width="match_parent"

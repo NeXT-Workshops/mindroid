@@ -91,7 +91,7 @@ public class DeviceManager extends Listener {
                 while (creationThreads.size() == 0) {
                     try {
                         Thread.sleep(500);
-                        
+
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

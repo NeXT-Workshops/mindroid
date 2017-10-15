@@ -31,9 +31,9 @@ import static org.mindroid.api.communication.IMessenger.SERVER_LOG;
  *
  */
 
-public class MindroidLVL1 extends StatemachineAPI {
+public class MindroidStatemachines extends StatemachineAPI {
 
-    public MindroidLVL1() {
+    public MindroidStatemachines() {
         initStatemachines();
     }
 

@@ -9,6 +9,19 @@ import org.mindroid.impl.statemachine.StatemachineCollection;
  */
 public abstract class StatemachineAPI extends BasicAPI implements IMindroidMain {
 
+    /*
+ * TODO@revise: Required improvements
+ *   Could we create a new subtype of "IMotor"?
+ * * Consistency: There is forward(); delay(...); but turnRight() and turnRight(time);
+ * * There are numerous comments that suggest that this class is not ready, yet.
+ * * A lot of code duplication regarding "missing state machine creation"
+ * * Revise all "System.err.println"s -> often, a RuntimeException would be better to signal an error!
+ * * Check for unused classes
+ * * Update docu to EN
+ * * Javadoc should generate without warning (in all projects!)
+ * * Avoid varargs and arrays in public API, rather use List<>, Collection<> or Iterable<>
+ */
+
     public final StatemachineCollection statemachineCollection = new StatemachineCollection();
 
 

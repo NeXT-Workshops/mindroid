@@ -2,8 +2,6 @@ package mindroid.common.ev3.endpoints.motors.ev3;
 
 import java.io.IOException;
 
-import lejos.robotics.RegulatedMotor;
-import lejos.robotics.RegulatedMotorListener;
 import org.mindroid.common.messages.hardware.Motors;
 import org.mindroid.common.messages.motor.*;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;

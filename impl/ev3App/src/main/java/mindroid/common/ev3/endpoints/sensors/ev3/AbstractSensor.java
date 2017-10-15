@@ -83,7 +83,6 @@ public abstract class AbstractSensor {
             }
         }catch(IllegalArgumentException IAE){
             /* May appear while creating a Sensor (Invalid Sensor mode) - error in lejos */
-            System.out.println("[AbstractSensor:create] - Error - IllegalArgumentException appeared while creating a Sensor! \n"+IAE.toString());
             return false;
         }
 

@@ -32,7 +32,7 @@ public class EV3SensorManager extends Listener{
 
 	EV3Brick ev3Brick;	
 	
-    private Map<EV3SensorPort, EV3SensorEndpoint> sensors;
+    private Map<EV3SensorPort, EV3SensorEndpoint> sensorEndpoints;
 
     private HashMap<EV3SensorPort,Integer> portToTCPPort;
     
@@ -48,7 +48,7 @@ public class EV3SensorManager extends Listener{
         portToTCPPort.put(EV3SensorPort.S4, NetworkPortConfig.SENSOR_PORT_4);
         
        
-        sensors = new HashMap<>(4);
+        sensorEndpoints = new HashMap<>(4);
         
     }
     
@@ -61,11 +61,11 @@ public class EV3SensorManager extends Listener{
      */
     public EV3SensorEndpoint createSensor(EV3PortID brick_port, Sensors sensorType, EV3SensorPort sensorPort, Sensormode mode) throws PortIsAlreadyInUseException{
 		if(sensorType != null && sensorPort != null){
-			if(sensors.containsKey(sensorPort)){
+			if(sensorEndpoints.containsKey(sensorPort)){
 				throw new PortIsAlreadyInUseException(sensorPort.toString());
 			}else{
 				EV3SensorEndpoint ev3SensorEndpoint = new EV3SensorEndpoint(ev3Brick.EV3Brick_IP, portToTCPPort.get(sensorPort), EV3Brick.BRICK_TIMEOUT,sensorType,brick_port, mode);
-				sensors.put(sensorPort, ev3SensorEndpoint);
+				sensorEndpoints.put(sensorPort, ev3SensorEndpoint);
 				return ev3SensorEndpoint;
 			}
 		}else{
@@ -77,7 +77,7 @@ public class EV3SensorManager extends Listener{
 		System.out.println("Local-EV3SensorManager: initSensor called");
 		if(ev3Brick.isBrickReady()){
 			if(sensorType != null && sensorPort != null){
-				if(sensors.containsKey(sensorPort)){
+				if(sensorEndpoints.containsKey(sensorPort)){
 					brickClient.sendTCP(BrickMessagesFactory.createSensor(sensorPort.getValue(), sensorType, portToTCPPort.get(sensorPort)));
 				}else{
 					//TODO throw SensorPort is not defined Exception
@@ -105,15 +105,19 @@ public class EV3SensorManager extends Listener{
 						
 						if(ecmsg.isSuccess()){
 							System.out.println("Local-EV3SensorManager: isSuccess at port "+ecmsg.getPort()+"#");
-							if(sensors.containsKey(EV3SensorPort.getPort(ecmsg.getPort()))){
+							if(sensorEndpoints.containsKey(EV3SensorPort.getPort(ecmsg.getPort()))){
 								System.out.println("Local-EV3SensorManager: Endpoint creation successfull - connect to endpoint!");
-								sensors.get(EV3SensorPort.getPort(ecmsg.getPort())).connect();
-								sensors.get(EV3SensorPort.getPort(ecmsg.getPort())).initSensorMode();
+								sensorEndpoints.get(EV3SensorPort.getPort(ecmsg.getPort())).connect();
+								sensorEndpoints.get(EV3SensorPort.getPort(ecmsg.getPort())).initSensorMode();
+
+								//Set that creation was a success on brick site. will be evaluated by configurator
+								((EV3SensorEndpoint) sensorEndpoints.get(EV3SensorPort.getPort(ecmsg.getPort()))).setHasCreationFailed(false);
 							}else{
 								System.out.println("Local-EV3SensorManager: Sensor does not exist");
 							}
 						}else{
-							//TODO Tell Sensor/IMotor Manager that endpoint creation failed
+							//Set that creation hast failed on brick site. will be evaluated by configurator
+							((EV3SensorEndpoint) sensorEndpoints.get(EV3SensorPort.getPort(ecmsg.getPort()))).setHasCreationFailed(true);
 						}
 					}
 				}
@@ -126,36 +130,12 @@ public class EV3SensorManager extends Listener{
 	 * disconnects the Sensor Connections
 	 */
 	public void disconnectSensors(){
-		for(EV3SensorPort key:sensors.keySet()){
-			if(sensors.get(key) != null){
-				sensors.get(key).disconnect();
+		for(EV3SensorPort key: sensorEndpoints.keySet()){
+			if(sensorEndpoints.get(key) != null){
+				sensorEndpoints.get(key).disconnect();
 			}
 		}
 	}
-    
-    void close(EV3SensorEndpoint sensor) {
-        /*List<Integer> tmpPorts = new ArrayList<>(4);
-        for (Integer port : sensors.keySet()) {
-            if (sensors.containsKey(port) && sensors.get(port).equals(sensor)) {
-                tmpPorts.add(port);
-            }
-        }
-        for (Integer port : tmpPorts) {
-            sensors.remove(port);
-        }*/
-    }
-    
-	/** 
-	 * Checks if a Port is a valid SensorPort of the EV3Brick
-	 * 
-	 *//*
-	boolean isValidSensorPort(Port port){
-    	if(port == SensorPort.S1 || port == SensorPort.S2 || port == SensorPort.S3 || port == SensorPort.S4){
-    		return true;
-    	}else{
-    		return false;
-    	}		
-	}*/
 
 	public void setBrickClient(Client brickClient) {
 		this.brickClient = brickClient;

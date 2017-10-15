@@ -127,11 +127,15 @@ public class EV3MotorManager extends Listener {
 					if(motors.containsKey(EV3MotorPort.getPort(ecmsg.getPort()))){
 						System.out.println("Local-EV3MotorManager: Endpoint creation successfull - connect to endpoint!");
 						endpoints.get(EV3MotorPort.getPort(ecmsg.getPort())).connect();
+
+						//Set that creation was a success on brick site. will be evaluated by configurator
+						((EV3RegulatedMotorEndpoint)endpoints.get(EV3MotorPort.getPort(ecmsg.getPort()))).setHasCreationFailed(false);
 					}else{
 						System.out.println("Local-EV3MotorManager: Sensor does not exist");
 					}
 				}else{
-					//TODO Tell Sensor/IMotor Manager that endpoint creation failed
+					//Set that creation failed on brick site. will be evaluated by configurator
+					((EV3RegulatedMotorEndpoint)endpoints.get(EV3MotorPort.getPort(ecmsg.getPort()))).setHasCreationFailed(true);
 				}
 			}
 		}

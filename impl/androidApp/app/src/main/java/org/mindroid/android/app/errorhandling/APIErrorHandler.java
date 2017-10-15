@@ -1,6 +1,7 @@
 package org.mindroid.android.app.errorhandling;
 
 import android.app.Activity;
+import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.statemachine.NoStartStateException;
@@ -8,6 +9,7 @@ import org.mindroid.api.statemachine.exception.DuplicateTransitionException;
 import org.mindroid.api.statemachine.exception.NoCurrentStateSetException;
 import org.mindroid.api.statemachine.exception.NoSuchStateException;
 import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
+import org.mindroid.impl.robot.RobotCommandCenter;
 import org.mindroid.impl.statemachine.Statemachine;
 import org.mindroid.impl.statemachine.StatemachineManager;
 
@@ -31,6 +33,8 @@ public class APIErrorHandler extends AbstractErrorHandler{
 
         }else if(source == StatemachineManager.class){
             handleStatemachineManagerErrors(e,msg);
+        }else if(source == RobotCommandCenter.class){
+            handleRobotCommandCenterErrors(e,msg);
         }else {
             //Anything else
             mainActivity.showErrorDialog("Error", source.toString()+":\n"+e.getMessage());
@@ -39,6 +43,24 @@ public class APIErrorHandler extends AbstractErrorHandler{
         System.out.println("[APIErrorHandler:handleError] "+logMessage);
     }
 
+    /**
+     * Handles exception received from the Statemachine Manager class
+     * @param e exception
+     * @param msg - error messages
+     */
+    private void handleRobotCommandCenterErrors(Exception e, String msg) {
+        if(msg.equals(RobotCommandCenter.ERROR_INITIALIZATION)){
+            String errorTitle = mainActivity.getResources().getString(R.string.errortext_title_initialization);
+            String errorMsg = mainActivity.getResources().getString(R.string.errortext_msg_initialization);
+            mainActivity.showErrorDialog(errorTitle,errorMsg);
+        }
+    }
+
+    /**
+     * Handles errors received from statemachine class
+     * @param e - exception
+     * @param msg - error msg
+     */
     private void handleStatemachineErrors(Exception e, String msg) {
         if(e instanceof StateAlreadyExistsException){
             mainActivity.showErrorDialog("Duplicate State","The Statemachine "+msg+" can not be executed, because at least two states with the same ID exists. Check your Statemachine!");
@@ -53,6 +75,11 @@ public class APIErrorHandler extends AbstractErrorHandler{
         }
     }
 
+    /**
+     * Handles exception received from the Statemachine Manager class
+     * @param e - exception
+     * @param msg - error msg
+     */
     private void handleStatemachineManagerErrors(Exception e, String msg) {
         if(e instanceof NoStartStateException) {
             mainActivity.showErrorDialog("No Start State set","The Statemachine '"+msg+"' does not have a State to start with! Specify the Start-State to execute your Statemachine.");

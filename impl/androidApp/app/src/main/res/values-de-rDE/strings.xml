@@ -21,4 +21,8 @@
     <string name="dialog_info_message">Es läuft derzeit kein Zustandsautomat! Starte einen Zustandsautomaten, um dieses
         Feature zu verwenden und die Welt aus den Augen deines Roboters zu betrachten!
     </string>
+    <string name="errortext_title_initialization">Konfiguration fehlgeschlagen!</string>
+    <string name="errortext_msg_initialization">Die Konfiguration eines Motors/Sensors ist fehlgeschlagen. Überprüfe die
+        Portverbindungen am Brick und die eingestelle Konfig in der App. Versuche es dann nochmal!
+    </string>
 </resources>

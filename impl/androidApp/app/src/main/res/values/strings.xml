@@ -115,6 +115,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="errortext_title_initialization">Configuration Error</string>
+    <string name="errortext_msg_initialization">The Configuration of at least one Sensor/Motor failed. Check port
+        connections on the brick and your configuration in the App.
+    </string>
 
 
 </resources>

@@ -34,6 +34,8 @@ public class EV3SensorEndpoint extends ClientEndpointImpl {
 
     private EV3PortID brick_port;
 
+    // Gets set (true) when the creation on Brick site failed.
+    private boolean hasCreationFailed = false;
 
     /**
      * @param ip
@@ -160,4 +162,11 @@ public class EV3SensorEndpoint extends ClientEndpointImpl {
         }
     }
 
+    public boolean hasCreationFailed() {
+        return hasCreationFailed;
+    }
+
+    public void setHasCreationFailed(boolean hasCreationFailed) {
+        this.hasCreationFailed = hasCreationFailed;
+    }
 }

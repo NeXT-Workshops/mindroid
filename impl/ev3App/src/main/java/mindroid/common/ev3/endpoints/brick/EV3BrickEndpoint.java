@@ -44,11 +44,9 @@ public class EV3BrickEndpoint extends Listener {
 
 	@Override
 	public void received(Connection connection, Object object) {
-		if(!DeviceManager.isBlocked){
-			handleDisplayMessages(object);
-			handleStatusLightMessages(object);
-			handleSoundMessages(object);
-		}
+		handleDisplayMessages(object);
+		handleStatusLightMessages(object);
+		handleSoundMessages(object);
 	}
 
 	/**

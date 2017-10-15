@@ -54,6 +54,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 	private EV3Brick brick;
 
 	final static String DELIMITER = ":";
+	final static String CREATION_FAILED = "ERROR";
 
 	/** Capsulate Information about the connection state (connected/disconnected) to the Endpoints (Motors and Sensors on the Brick) **/
 	private StringBuffer endpointState;
@@ -127,11 +128,24 @@ public class RobotConfigurator implements IRobotConfigurator {
 		for(EV3SensorPort key : sensorConfiguration.keySet()){
 			endpointState.append(key.getValue()).append(DELIMITER).append(sensors.get(key).client.isConnected());
 			endpointState.append("\n");
+
+			if(sensors.get(key).hasCreationFailed()){
+				endpointState.append(DELIMITER).append(CREATION_FAILED);
+
+				//With the error string added the initialization process will stop and has to be started again by the user. Therefore reset the value for the next iteration
+				(sensors.get(key)).setHasCreationFailed(false);
+			}
 		}
 
 		for(EV3MotorPort key : motorConfiguration.keySet()){
 			if(motors.get(key) instanceof ClientEndpointImpl){
 				endpointState.append(key.getValue()).append(DELIMITER).append( ((ClientEndpointImpl)motors.get(key)).client.isConnected()).append("\n");
+				if(((EV3RegulatedMotorEndpoint)motors.get(key)).hasCreationFailed()){
+					endpointState.append(DELIMITER).append(CREATION_FAILED);
+
+					//With the error string added the initialization process will stop and has to be started again by the user. Therefore reset the value for the next iteration
+					((EV3RegulatedMotorEndpoint)motors.get(key)).setHasCreationFailed(false);
+				}
 			}
 		}
 
@@ -243,14 +257,21 @@ public class RobotConfigurator implements IRobotConfigurator {
 
 			// Wait until Sensor And motors are Created
 			boolean init_complete = false;
+			boolean hasCreationFailed = false;
 			while(!init_complete){
-
-				init_complete = checkEndpointConnectionState(getEndpointConnectionState());
+				String endpointState = getEndpointConnectionState();
+				hasCreationFailed = hasEndpointCreationFailed(endpointState);
+				init_complete = checkEndpointConnectionState(endpointState);
 
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+				}
+
+				if(hasCreationFailed){
+					//Abort initialization, because the creation of a sensor/motor on the brick failed.
+					return false;
 				}
 			}
 
@@ -293,6 +314,20 @@ public class RobotConfigurator implements IRobotConfigurator {
 			return false;
 		}else{
 			return true;
+		}
+	}
+
+	/**
+	 * Checks if an creation on brick site error is reported.
+	 * Returns true if an error has occured. false otherwise.
+	 * @param endpntState call getEndpointState
+	 * @return true - if creation failed.
+	 */
+	private boolean hasEndpointCreationFailed(String endpntState){
+		if(endpntState.contains(CREATION_FAILED)){
+			return true;
+		}else{
+			return false;
 		}
 	}
 

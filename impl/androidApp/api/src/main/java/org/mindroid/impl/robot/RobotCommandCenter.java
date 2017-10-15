@@ -18,6 +18,8 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     Robot robot;
     private boolean isConfigurated = false;
 
+    public final static String ERROR_INITIALIZATION = "INITIALIZATION ERROR";
+
     public RobotCommandCenter(Robot robot){
         this.robot = robot;
     }
@@ -82,7 +84,11 @@ public class RobotCommandCenter implements IRobotCommandCenter {
 
     @Override
     public boolean initializeConfiguration() throws BrickIsNotReadyException {
-        return (isConfigurated = robot.getRobotConfigurator().initializeConfiguration());
+        isConfigurated = robot.getRobotConfigurator().initializeConfiguration();
+        if(!isConfigurated) {
+            ErrorHandlerManager.getInstance().handleError(new Exception("Initialization of a Sensor/motor Failed"), this.getClass(), ERROR_INITIALIZATION);
+        }
+        return isConfigurated ;
     }
 
     @Override

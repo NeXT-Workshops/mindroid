@@ -32,6 +32,8 @@ public class EV3RegulatedMotorEndpoint extends ClientEndpointImpl implements IRe
 		super(ip,tcpPort,brickTimeout); 
 	}
 
+	// Gets set (true) when the creation on Brick site failed.
+	private boolean hasCreationFailed = false;
 
 	//---------- Incomming message handling
 
@@ -190,7 +192,12 @@ public class EV3RegulatedMotorEndpoint extends ClientEndpointImpl implements IRe
 				+ acceleration + ", tachoCount=" + tachoCount + ", position=" + position + ", maxSpeed=" + maxSpeed
 				+ "]";
 	}
-	
-	
 
+	public boolean hasCreationFailed() {
+		return hasCreationFailed;
+	}
+
+	public void setHasCreationFailed(boolean hasCreationFailed) {
+		this.hasCreationFailed = hasCreationFailed;
+	}
 }

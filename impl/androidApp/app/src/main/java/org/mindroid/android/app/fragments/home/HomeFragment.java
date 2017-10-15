@@ -512,7 +512,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             boolean result = false;
 
             try{
-
                 result = robot.initializeConfiguration();;
             }catch(Exception e){
                 System.out.println("## AsyncTask initRobotConfig. Exception: "+e);

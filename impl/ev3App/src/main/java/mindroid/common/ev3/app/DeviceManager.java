@@ -33,13 +33,6 @@ public class DeviceManager extends Listener {
     //TODO createServer : EV3BrickServer Method for every Port; Add Sensor as listener afterwards
 
 
-    /**
-     * true -> Stop proccessing. Ignore Messages. LED will blink red.
-     * <p>
-     * Wrong Sensor/Motor at port -> true
-     * Sensor/Motor Detection faild -> true
-     **/
-    public static boolean isBlocked = false;
     SensorManager sm;
     MotorManager mm;
     HashMap<String, Port> sensPorts = new HashMap<>(4);
@@ -76,39 +69,35 @@ public class DeviceManager extends Listener {
 
             @Override
             public void run() {
-                Thread currentThread = null;
-                while (!isBlocked) {
+            Thread currentThread = null;
+            while(true) {
 
-                    if (creationThreads.size() > 0 && currentThread == null) {
-                        currentThread = creationThreads.poll();
-                    }
+                if (creationThreads.size() > 0 && currentThread == null) {
+                    currentThread = creationThreads.poll();
+                }
 
-                    if (currentThread != null) {
-                        currentThread.start();
-                        while (currentThread.isAlive()) {
-                            try {
-                                Thread.sleep(50);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        currentThread = null;
-                    }
-
-                    while (creationThreads.size() == 0) {
+                if (currentThread != null) {
+                    currentThread.start();
+                    while (currentThread.isAlive()) {
                         try {
-                            Thread.sleep(500);
+                            Thread.sleep(50);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        //TODO maybe end Thread after a while when no threads get added
                     }
+                    currentThread = null;
                 }
-                //System.out.println("IS_BLOCKED "+isBlocked);
-                if (isBlocked) {
-                    //System.out.println("CreationThreadMethod is blocked!");
-                    LocalEV3.get().getLED().setPattern(5); //Blink red
+
+                while (creationThreads.size() == 0) {
+                    try {
+                        Thread.sleep(500);
+                        
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    //TODO maybe end Thread after a while when no threads get added
                 }
+            }
             }
 
 
@@ -129,26 +118,23 @@ public class DeviceManager extends Listener {
     public void received(Connection connection, Object object) {
         //Received a request from smartphone to change to a different sensor mode
         final Connection conn = connection;
+        if (object.getClass() == CreateSensorMessage.class) {
+            final CreateSensorMessage msg = (CreateSensorMessage) object;
 
-        if (!isBlocked) {
-            if (object.getClass() == CreateSensorMessage.class) {
-                final CreateSensorMessage msg = (CreateSensorMessage) object;
+            handleCreateSensorMessage(conn, msg);
+            return;
+        }
 
-                handleCreateSensorMessage(conn, msg);
-                return;
-            }
+        if (object.getClass() == CreateMotorMessage.class) {
+            final CreateMotorMessage msg = (CreateMotorMessage) object;
+            handleCreateMotorMessage(conn, msg);
+            return;
+        }
 
-            if (object.getClass() == CreateMotorMessage.class) {
-                final CreateMotorMessage msg = (CreateMotorMessage) object;
-                handleCreateMotorMessage(conn, msg);
-                return;
-            }
-
-            if (object.getClass() == CreateSynchronizedMotorsMessage.class) {
-                final CreateSynchronizedMotorsMessage msg = (CreateSynchronizedMotorsMessage) object;
-                handleCreateSynchronizedMotorsMessage(conn, msg);
-                return;
-            }
+        if (object.getClass() == CreateSynchronizedMotorsMessage.class) {
+            final CreateSynchronizedMotorsMessage msg = (CreateSynchronizedMotorsMessage) object;
+            handleCreateSynchronizedMotorsMessage(conn, msg);
+            return;
         }
     }
 
@@ -170,10 +156,8 @@ public class DeviceManager extends Listener {
                     if (createMotorEndpoint(motorPorts.get(msg.getPort()), msg.getMotorType(), msg.getNetworkPort())) {
                         conn.sendTCP(BrickMessagesFactory.createEndpointCreatedMessage(true, msg.getPort(), "Motor endpoint created: " + msg.getPort(), false, true));
                     } else {
-                        isBlocked = true;
-                        //System.out.println("System got blocked by handleCreateMotorMethod");
+                        //Motor Creation failed
                         conn.sendTCP(BrickMessagesFactory.createEndpointCreatedMessage(false, msg.getPort(), "Motor endpoint not created: " + msg.getPort(), false, true));
-
                     }
                 } else {
                     conn.sendTCP(BrickMessagesFactory.createEndpointCreatedMessage(false, msg.getPort(), "Port not found!" + msg.getPort(), false, true));
@@ -195,14 +179,13 @@ public class DeviceManager extends Listener {
                         if (createSensorEndpoint(sensPorts.get(msg.getPort()), msg.getSensorType(), msg.getNetworkPort())) {
                             conn.sendTCP(BrickMessagesFactory.createEndpointCreatedMessage(true, msg.getPort(), "Sensor endpoint created: " + msg.getPort(), true, false));
                         } else {
-                            isBlocked = true;
+                            //Sensor Creation failed
                             conn.sendTCP(BrickMessagesFactory.createEndpointCreatedMessage(false, msg.getPort(), "Sensor endpoint not created: " + msg.getPort(), true, false));
                         }
                     } catch (IOException e) {
                         conn.sendTCP(BrickMessagesFactory.createEndpointCreatedMessage(false, msg.getPort(), "IOException: Sensor endpoint not created: " + msg.getPort(), true, false) + "\n " + e.toString());
                         e.printStackTrace();
                     }
-
 
                 } else {
                     conn.sendTCP(SensorMessageFactory.createSensorErrorMessage(null, "Port not found!"));

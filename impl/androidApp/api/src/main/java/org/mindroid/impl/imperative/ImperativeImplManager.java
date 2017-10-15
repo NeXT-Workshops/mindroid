@@ -48,7 +48,7 @@ public class ImperativeImplManager {
      */
     public void stopImperativeImplementation(String id){
         ImperativeAPI implementation = imperativeImplementations.get(id);
-        implementation.stop();
+        implementation.stopExecution();
     }
 
     public String[] getImperativeImplIDs(){

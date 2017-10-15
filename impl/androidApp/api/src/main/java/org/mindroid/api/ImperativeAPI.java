@@ -1,7 +1,7 @@
 package org.mindroid.api;
 
 /**
- * This Class defines the Imperative API.
+ * This Class defines the basic Imperative Implementation API.
  */
 public abstract class ImperativeAPI extends BasicAPI {
 
@@ -32,9 +32,9 @@ public abstract class ImperativeAPI extends BasicAPI {
     /**
      * Start the execution of the Implementation
      * Executes run method.
-     * Stops all motors, when execution finished.
+     * Stops all motors, when execution finished/got interrupted.
      */
-    public void start(){
+    public final void start(){
         run();
         getMotorProvider().stopAllMotors();
     }
@@ -42,26 +42,26 @@ public abstract class ImperativeAPI extends BasicAPI {
     /**
      * Sets the isInterrupted field to true to stop the execution of this method
      */
-    public void stop(){
+    public final void stopExecution(){
         this.isInterrupted = true;
     }
 
 
     // -------- Getter and Setter --------
-    public String getImplementationID() {
+    public final String getImplementationID() {
         return implementationID;
     }
 
-    public void setImplementationID(String implementationID) {
+    public final void setImplementationID(String implementationID) {
         this.implementationID = implementationID;
     }
 
     /**
-     * Returns true, when stop {@link #stop()} got called.
+     * Returns true, when stop {@link #stopExecution()} got called.
      *
      * @return true, when execution should stop
      */
-    public boolean isInterrupted() {
+    public final boolean isInterrupted() {
         return isInterrupted;
     }
 

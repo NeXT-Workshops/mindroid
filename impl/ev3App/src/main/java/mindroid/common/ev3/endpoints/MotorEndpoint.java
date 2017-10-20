@@ -40,7 +40,7 @@ public class MotorEndpoint extends Listener{
 							case MediumRegulatedMotor: motorState = ((MediumRegulatedIMotor)motor).getMotorState(); break;
 							default: motorState = null; break;
 						}
-						if(motorState != null) {
+						if(motorState != null && conn != null) {
 							conn.sendTCP(RegulatedMotorMessagesFactory.createMotorStateMessage(motorState));
 						}
 					}

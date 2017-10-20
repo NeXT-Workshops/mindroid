@@ -22,7 +22,15 @@ public interface IDifferentialPilot {
      *
      * @param speed - speed of the motors [0-1000] deg/sec. Possible MaxSpeed depends on battery power!
      */
-    void driveFroward(int speed);
+    void driveForward(int speed);
+
+    /**
+     * Drives both motors synchronized forward.
+     * Method is unblocked.
+     *
+     * Note: Uses the current speed of the motor
+     */
+    void driveForward();
 
     /**
      * Drives both motors  synchronized backward.
@@ -31,6 +39,14 @@ public interface IDifferentialPilot {
      * @param speed - speed of the motors [0-1000] deg/sec. Possible MaxSpeed depends on battery power!
      */
     void driveBackward(int speed);
+
+    /**
+     * Drives both motors synchronized forward.
+     * Method is unblocked.
+     *
+     * Note: Uses the current speed of the motor
+     */
+    void driveBackward();
 
     /**
      * Both motors will be set in flt mode.
@@ -47,11 +63,27 @@ public interface IDifferentialPilot {
     void turnLeft(int degrees);
 
     /**
+     * Turn left by given degrees.
+     * This is a blocked operation.
+     * @param degrees degrees to turn
+     * @param speed speed 0 - 1000
+     */
+    void turnLeft(int degrees, int speed);
+
+    /**
      * Turn right
      * This is a blocked operation.
      * @param degrees  degrees to turn
      */
     void turnRight(int degrees);
+
+    /**
+     * Turn right.
+     * This is a blocked operation.
+     * @param degrees  degrees to turn
+     * @param speed speed 0 - 1000
+     */
+    void turnRight(int degrees, int speed);
 
     /**
      * Blocked synchronized stop operation.

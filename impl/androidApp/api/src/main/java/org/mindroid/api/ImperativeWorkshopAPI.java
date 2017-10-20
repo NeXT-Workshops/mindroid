@@ -1,6 +1,5 @@
 package org.mindroid.api;
 
-import org.mindroid.api.robot.IDifferentialPilot;
 import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
@@ -19,7 +18,7 @@ import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
  *
  * @author Torben Unzicker 17.09.17
  */
-public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
+public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     //TODO Create some Interface to add a specific robot Configurateion: Check how to use it on app-site when creating the Robot using the RobotFactory.
 
     /**
@@ -125,12 +124,27 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
     /**
      * The robot rotates counterclockwise by the given angle.
      * This method blocks until the rotation is completed.
+     * Returns without action if system got interrupted.
      *
      * @param degrees the angle in degrees
      */
     public final void turnLeft(int degrees) {
         if(!isInterrupted()) {
             diffPilot.turnLeft(degrees);
+        }
+    }
+
+    /**
+     * The robot rotates counterclockwise by the given angle.
+     * This method blocks until the rotation is completed.
+     * Returns without action if system got interrupted.
+     *
+     * @param degrees degrees to turn
+     * @param speed speed 0 - 1000
+     */
+    public final void turnLeft(int degrees,int speed) {
+        if(!isInterrupted()) {
+            diffPilot.turnLeft(degrees,speed);
         }
     }
 
@@ -142,6 +156,19 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
     public final void turnRight(int degrees) {
         if(!isInterrupted()) {
             diffPilot.turnRight(degrees);
+        }
+    }
+
+    /**
+     * The robot rotates clockwise by the given angle. The method blocks until the rotation is completed.
+     * Returns without action if system got interrupted.
+     *
+     * @param degrees  degrees to turn
+     * @param speed speed 0 - 1000
+     */
+    public final void turnRight(int degrees,int speed) {
+        if(!isInterrupted()) {
+            diffPilot.turnRight(degrees,speed);
         }
     }
 
@@ -182,7 +209,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
      */
     public void forward(int speed) {
         if(!isInterrupted()) {
-            diffPilot.driveFroward(speed);
+            diffPilot.driveForward(speed);
         }
     }
 
@@ -209,6 +236,17 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI {
     public void backward(int speed) {
         if(!isInterrupted()) {
             diffPilot.driveBackward(speed);
+        }
+    }
+
+    /**
+     * Sets the motorspeed of the left and right motors
+     *
+     * @param speed - motorspeed [0 - 1000]
+     */
+    public void setMotorSpeed(int speed){
+        if(!isInterrupted()){
+            diffPilot.setMotorSpeed(speed);
         }
     }
 

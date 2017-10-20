@@ -73,10 +73,10 @@ public class DifferentialPilot implements IDifferentialPilot {
         SynchronizedMotorOperation[] operations = getNoOperationSet();
 
         if (!setMotorOperations(forward,forward, operations)){
-            return; //TODO maybe errorhandling
+            return;
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true);
     }
 
     @Override
@@ -88,38 +88,46 @@ public class DifferentialPilot implements IDifferentialPilot {
         SynchronizedMotorOperation[] operations = getNoOperationSet();
 
         if (!setMotorOperations(backward,backward, operations)){
-            return; //TODO maybe errorhandling
+            return;
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true);
     }
 
     @Override
-    public void driveFroward(int speed) {
+    public void driveForward(int speed) {
         setMotorSpeed(speed);
+        driveForward();
+    }
 
+    @Override
+    public void driveForward() {
         SynchronizedMotorOperation forward = SyncedMotorOpFactory.createForwardOperation();
         SynchronizedMotorOperation[] operations = getNoOperationSet();
 
         if (!setMotorOperations(forward, forward, operations)) {
-            return; //TODO maybe errorhandling
+            return;
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations, false); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations, false);
     }
 
     @Override
     public void driveBackward(int speed) {
         setMotorSpeed(speed);
+        driveBackward();
+    }
 
+    @Override
+    public void driveBackward() {
         SynchronizedMotorOperation backward = SyncedMotorOpFactory.createBackwardOperation();
         SynchronizedMotorOperation[] operations = getNoOperationSet();
 
         if (!setMotorOperations(backward,backward, operations)){
-            return; //TODO maybe errorhandling
+            return;
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,false); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,false);
     }
 
     @Override
@@ -128,10 +136,10 @@ public class DifferentialPilot implements IDifferentialPilot {
         SynchronizedMotorOperation[] operations = getNoOperationSet();
 
         if (!setMotorOperations(flt,flt, operations)){
-            return; //TODO maybe errorhandling
+            return;
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true);
     }
 
 
@@ -151,10 +159,10 @@ public class DifferentialPilot implements IDifferentialPilot {
         SynchronizedMotorOperation[] operations = getNoOperationSet();
 
         if (!setMotorOperations(backward, forward, operations)) {
-            return; //TODO maybe errorhandling
+            return;
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations, true); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations, true);
 
         if(isAngleCorrectionEnabled()) {
             //Check result
@@ -162,6 +170,12 @@ public class DifferentialPilot implements IDifferentialPilot {
         }
     }
 
+    @Override
+    public void turnLeft(int degrees, int speed) {
+        motorProvider.getMotor(leftMotor).setSpeed(speed);
+        motorProvider.getMotor(rightMotor).setSpeed(speed);
+        turnLeft(degrees);
+    }
 
 
     @Override
@@ -181,10 +195,10 @@ public class DifferentialPilot implements IDifferentialPilot {
         SynchronizedMotorOperation[] operations = getNoOperationSet();
 
         if (!setMotorOperations(forward,backward, operations)){
-            return; //TODO maybe errorhandling
+            return;
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true); //TODO Make Wait complete
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true);
 
         if(isAngleCorrectionEnabled()) {
             //Check result
@@ -192,6 +206,13 @@ public class DifferentialPilot implements IDifferentialPilot {
             doAngleCorrection(targetAngle);
 
         }
+    }
+
+    @Override
+    public void turnRight(int degrees, int speed) {
+        motorProvider.getMotor(leftMotor).setSpeed(speed);
+        motorProvider.getMotor(rightMotor).setSpeed(speed);
+        turnRight(degrees);
     }
 
     @Override

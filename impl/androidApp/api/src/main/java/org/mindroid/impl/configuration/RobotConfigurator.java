@@ -296,7 +296,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 				public void run(){
 				brick.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
 				pause(DURATION_READY_GREENLIGHT);
-				brick.resetEV3StatusLight();
+				brick.setLEDOff();
 				}
 			};
 			new Thread(readyLight).start();

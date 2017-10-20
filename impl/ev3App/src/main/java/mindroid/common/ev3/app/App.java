@@ -36,7 +36,8 @@ public class App implements Runnable {
 		try {
 			LocalEV3.get().getLED().setPattern(2); //RED Light, always on, waiting for connection
 			Display.showPleaseWait();
-			
+
+			//Main Server Running on Brick receiving initialization messages, brick messages (Display,LED,Buttons, etc).
 			BrickServerImpl server = new BrickServerImpl(NetworkPortConfig.BRICK_PORT);
 			EV3BrickEndpoint brick = new EV3BrickEndpoint();
 			
@@ -44,6 +45,7 @@ public class App implements Runnable {
 			DeviceManager endpointManager = new DeviceManager(); 
 
 			server.addListener(brick);
+			server.addListener(new ButtonObserver());
 			server.addListener(endpointManager);
 
 			LocalEV3.get().getLED().setPattern(3);

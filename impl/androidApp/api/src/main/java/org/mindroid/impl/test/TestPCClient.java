@@ -158,7 +158,7 @@ public class TestPCClient{
                     getMotorProvider().getMotor(EV3PortIDs.PORT_A).stop();
                     getMotorProvider().getMotor(EV3PortIDs.PORT_D).stop();
 
-                    resetLED();
+                    setLEDOff();
                 }
             };
 

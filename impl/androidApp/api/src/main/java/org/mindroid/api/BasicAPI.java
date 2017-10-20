@@ -4,7 +4,10 @@ import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.impl.brick.Button;
+import org.mindroid.impl.brick.EV3Button;
 import org.mindroid.impl.brick.Textsize;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.robot.*;
 
 /**
@@ -15,7 +18,7 @@ public abstract class BasicAPI {
 
 
 
-    // --------------------- BRICK CONTROLLING METHODS: Display, LED, Sounds ---------------------
+    // --------------------- BRICK CONTROLLING METHODS: Display, LED, Sounds, Buttons ---------------------
 
     /**
      * Sets the LED to the given color
@@ -28,11 +31,11 @@ public abstract class BasicAPI {
     }
 
     /**
-     * Resets the LED on the Brick.
+     * Turns off the LED
      *
      */
-    public final void resetLED(){
-        getBrickController().resetEV3StatusLight();
+    public final void setLEDOff(){
+        getBrickController().setLEDOff();
     }
 
     /**
@@ -98,6 +101,189 @@ public abstract class BasicAPI {
      */
     public final void playBeepSequenceDown(){
         getBrickController().beepSequenceDown();
+    }
+
+    /**
+     * Returns the button with the given id;
+     * @param buttonID
+     * @return
+     */
+    protected EV3Button getButton(Button buttonID){
+        EV3Button button;
+        if (getBrickController().getButtonProvider() != null) {
+            if((button = getBrickController().getButtonProvider().getButton(buttonID)) != null){
+                return button;
+            }else{
+                ErrorHandlerManager.getInstance().handleError(new NullPointerException("Button is null"),BasicAPI.class,"Button is null: "+buttonID);
+            }
+        }else{
+            ErrorHandlerManager.getInstance().handleError(new NullPointerException("ButtonProvider is null"),BasicAPI.class,"Button provider is null");
+        }
+        return null;
+    }
+
+    /**
+     * Returns true if the button is pressed
+     * @param button - button to check
+     * @return boolean
+     */
+    public final boolean isButtonPressed(Button button){
+        EV3Button ev3button = getButton(button);
+        if(ev3button != null) {
+            return ev3button.isPressed();
+        }
+        return false;
+
+    }
+
+    /**
+     * Returns true if the button is released
+     * @param button - button to check
+     * @return boolean
+     */
+    public final boolean isButtonReleased(Button button){
+        EV3Button ev3button = getButton(button);
+        if(ev3button != null) {
+            return !getButton(button).isPressed();
+        }
+        return false;
+    }
+
+    /**
+     * returns true if the button got clicked
+     * @param button - button
+     * @return boolean
+     */
+    public final boolean isButtonClicked(Button button){
+        EV3Button ev3button = getButton(button);
+        if(ev3button != null) {
+            return ev3button.isClicked();
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if the enter button is pressed
+     * @return boolean
+     */
+    public final boolean isEnterButtonPressed(){
+        return isButtonPressed(Button.ENTER);
+    }
+
+    /**
+     * Returns true if the enter button is released
+     * @return boolean
+     */
+    public final boolean isEnterButtonReleased(){
+        return isButtonReleased(Button.ENTER);
+    }
+
+
+    /**
+     * Returns true if the button got clicked
+     * @return boolean
+     */
+    public final boolean isEnterButtonClicked(){
+        return isButtonClicked(Button.ENTER);
+    }
+
+    /**
+     * Returns true if the left button is pressed
+     * @return boolean
+     */
+    public final boolean isLeftButtonPressed(){
+        return isButtonPressed(Button.LEFT);
+    }
+
+    /**
+     * Returns true if the left button is released
+     * @return boolean
+     */
+    public final boolean isLeftButtonReleased(){
+        return isButtonReleased(Button.LEFT);
+    }
+
+
+    /**
+     * Returns true if the button got clicked
+     * @return boolean
+     */
+    public final boolean isLeftButtonClicked(){
+        return isButtonClicked(Button.LEFT);
+    }
+
+    /**
+     * Returns true if the right button is pressed
+     * @return boolean
+     */
+    public final boolean isRightButtonPressed(){
+        return isButtonPressed(Button.RIGHT);
+    }
+
+    /**
+     * Returns true if the right button is released
+     * @return boolean
+     */
+    public final boolean isRightButtonReleased(){
+        return isButtonReleased(Button.RIGHT);
+    }
+
+
+    /**
+     * Returns true if the button got clicked
+     * @return boolean
+     */
+    public final boolean isRightButtonClicked(){
+        return isButtonClicked(Button.RIGHT);
+    }
+
+    /**
+     * Returns true if the up button is pressed
+     * @return boolean
+     */
+    public final boolean isUpButtonPressed(){
+        return isButtonPressed(Button.UP);
+    }
+
+    /**
+     * Returns true if the up button is released
+     * @return boolean
+     */
+    public final boolean isUpButtonReleased(){
+        return isButtonReleased(Button.UP);
+    }
+
+
+    /**
+     * Returns true if the button got clicked
+     * @return boolean
+     */
+    public final boolean isUpButtonClicked(){
+        return isButtonClicked(Button.UP);
+    }
+
+    /**
+     * Returns true if the down button is pressed
+     * @return boolean
+     */
+    public final boolean isDownButtonPressed(){
+        return isButtonPressed(Button.DOWN);
+    }
+
+    /**
+     * Returns true if the down button is released
+     * @return boolean
+     */
+    public final boolean isDownuttonReleased(){
+        return isButtonReleased(Button.DOWN);
+    }
+
+    /**
+     * Returns true if the button got clicked
+     * @return boolean
+     */
+    public final boolean isDownButtonClicked(){
+        return isButtonClicked(Button.DOWN);
     }
 
 

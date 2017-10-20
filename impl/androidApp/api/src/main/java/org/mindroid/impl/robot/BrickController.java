@@ -3,6 +3,7 @@ package org.mindroid.impl.robot;
 import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
+import org.mindroid.impl.brick.ButtonProvider;
 import org.mindroid.impl.brick.Textsize;
 
 /**
@@ -34,8 +35,8 @@ public class BrickController implements IBrickControl {
      * Reset the LED- of the Brick
      */
     @Override
-    public void resetEV3StatusLight() {
-        robot.getBrick().resetEV3StatusLight();
+    public void setLEDOff() {
+        robot.getBrick().setLEDOff();
     }
 
 
@@ -82,6 +83,14 @@ public class BrickController implements IBrickControl {
         robot.getBrick().beepSequenceUp();
     }
 
+    // ------------- BUTTON PROVIDER -------------
+
+
+    @Override
+    public ButtonProvider getButtonProvider() {
+        return robot.getBrick().getButtonProvider();
+    }
+
     /**
      * Set Volume
      * @param volume volume of the sound
@@ -122,5 +131,7 @@ public class BrickController implements IBrickControl {
         //TODO not implemented on EV3Display
         robot.getBrick().drawImage(str);
     }
+
+
 
 }

@@ -404,7 +404,7 @@ public class MindroidStatemachines extends StatemachineAPI {
         IState state_idle = new State("Idle"){
             @Override
             public void run(){
-                //brickController.resetLED();
+                //brickController.setLEDOff();
             }
         };
 
@@ -644,7 +644,7 @@ public class MindroidStatemachines extends StatemachineAPI {
 
                 getMotorProvider().getSynchronizedMotors().executeSynchronizedOperation(stopOp, noOp,noOp,stopOp,false);
 
-                resetLED();
+                setLEDOff();
             }
         };
 

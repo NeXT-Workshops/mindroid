@@ -6,6 +6,7 @@ import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.common.messages.*;
+import org.mindroid.common.messages.brick.ButtonMessage;
 import org.mindroid.common.messages.brick.HelloMessage;
 import org.mindroid.common.messages.led.StatusLightMessageFactory;
 import org.mindroid.common.messages.sound.BeepMessage;
@@ -36,6 +37,7 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
     /** Manager classes for endpoints */
     final EV3MotorManager motorManager;
     final EV3SensorManager sensorManager;
+    private final ButtonProvider buttonProvider;
     private EV3Display display;
 
     /** Brick is ready for commands - will be set true when hello-msg from brick is received!**/
@@ -56,7 +58,18 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
         
         motorManager 	= new EV3MotorManager(this);
         sensorManager 	= new EV3SensorManager(this);
+
+        buttonProvider = new ButtonProvider();
+        buttonProvider.addButton(new EV3Button(Button.ENTER));
+        buttonProvider.addButton(new EV3Button(Button.LEFT));
+        buttonProvider.addButton(new EV3Button(Button.RIGHT));
+        buttonProvider.addButton(new EV3Button(Button.UP));
+        buttonProvider.addButton(new EV3Button(Button.DOWN));
+
+
         display = new EV3Display();
+
+
 
 		System.out.println("Local-EV3Brick: Starte client.. ");
 		client = new Client();
@@ -116,6 +129,23 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 			readyForCommands = true;
 			conn = connection;
 			System.out.println("Local-EV3Brick: "+ object.toString());
+		}
+
+		if(object.getClass() == ButtonMessage.class){
+			ButtonMessage msg = (ButtonMessage) object;
+			EV3Button button;
+			button = buttonProvider.getButton(ButtonProvider.getMappedID(msg.getButtonID()));
+			if(button != null){
+				if(msg.getButtonAction() == ButtonAction.RELEASED.getValue()){
+					button.setIsPressed(false);
+					return;
+				}
+
+				if(msg.getButtonAction() == ButtonAction.PRESSED.getValue()){
+					button.setIsPressed(true);
+					return;
+				}
+			}
 		}
 		
 	}
@@ -182,7 +212,7 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 	}
 
 	@Override
-	public void resetEV3StatusLight() {
+	public void setLEDOff() {
 		if(isBrickReady()){
 			conn.sendTCP(StatusLightMessageFactory.createSetStatusLightMessage(0));
 		}else{
@@ -241,5 +271,8 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 		getDisplay().drawImage(str);
 	}
 
-
+	@Override
+	public ButtonProvider getButtonProvider() {
+		return buttonProvider;
+	}
 }

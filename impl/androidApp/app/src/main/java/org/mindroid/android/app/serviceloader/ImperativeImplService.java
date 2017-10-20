@@ -21,6 +21,7 @@ public class ImperativeImplService {
             "org.mindroid.android.app.imperativeimpl.ImpSingleWallPingPong",
             "org.mindroid.android.app.imperativeimpl.SpeedTestForBackward",
             "org.mindroid.android.app.imperativeimpl.SpeedTestTurns",
+            "org.mindroid.android.app.imperativeimpl.ButtonTest",
             "org.mindroid.android.app.imperativeimpl.ImpSingleWallPingPong",
             "org.mindroid.android.app.imperativeimpl.TestMessageAccess"
     };

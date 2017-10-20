@@ -38,6 +38,10 @@ public class MessageRegistrar {
 		kryo.register(HelloDisplayMessage.class);
 		kryo.register(ClearDisplayMessage.class);
 
+		//Brick Button Messages
+		kryo.register(ButtonMessage.class);
+
+
 		//Regulated Motor Messages
 		kryo.register(BackwardMessage.class);
 		kryo.register(ForwardMessage.class);

@@ -271,6 +271,9 @@ public class RobotConfigurator implements IRobotConfigurator {
 
 				if(hasCreationFailed){
 					//Abort initialization, because the creation of a sensor/motor on the brick failed.
+					motorManager.disconnectMotors();
+					sensorManager.disconnectSensors();
+
 					return false;
 				}
 			}

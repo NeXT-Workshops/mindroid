@@ -115,6 +115,9 @@ public class SynchronizedRegulatedMotorGroup {
     private void executeOperation(AbstractRegulatedIMotor syncMotor, SynchronizedMotorOperation operation) {
         if(syncMotor != null && operation != null){
             switch(operation.getOptype()){
+                case SET_SPEED:
+                    syncMotor.setSpeed(operation.getValue());
+                    break;
                 case FORWARD:
                     syncMotor.forward();
                     break;

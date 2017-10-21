@@ -80,6 +80,12 @@ public class DifferentialPilot implements IDifferentialPilot {
     }
 
     @Override
+    public void driveDistanceForward(float distance, int speed) {
+        setMotorSpeed(speed);
+        driveDistanceForward(distance);
+    }
+
+    @Override
     public void driveDistanceBackward(float distance) {
         int degrees = (-1)*calculateDegreesByDistance(distance);
 
@@ -92,6 +98,12 @@ public class DifferentialPilot implements IDifferentialPilot {
         }
 
         motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true);
+    }
+
+    @Override
+    public void driveDistanceBackward(float distance,int speed) {
+        setMotorSpeed(speed);
+        driveDistanceBackward(distance);
     }
 
     @Override
@@ -221,6 +233,24 @@ public class DifferentialPilot implements IDifferentialPilot {
         SynchronizedMotorOperation[] operations = getNoOperationSet();
 
         if(!setMotorOperations(stop,stop,operations)){
+            return;
+        }
+
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true);
+    }
+
+    /**
+     * Sets the motor speed of left and right motors.
+     * Synchronized Motor Operation. Blocked.
+     *
+     * @param speed - speed
+     */
+    @Override
+    public void setMotorSpeed(int speed) {
+        SynchronizedMotorOperation setSpeedOp = SyncedMotorOpFactory.createSetSpeedOperation(speed);
+        SynchronizedMotorOperation[] operations = getNoOperationSet();
+
+        if (!setMotorOperations(setSpeedOp,setSpeedOp, operations)){
             return;
         }
 
@@ -371,17 +401,5 @@ public class DifferentialPilot implements IDifferentialPilot {
     private SynchronizedMotorOperation[] getNoOperationSet(){
         SynchronizedMotorOperation noOp = SyncedMotorOpFactory.createNoOperation();
         return new SynchronizedMotorOperation[]{noOp,noOp,noOp,noOp};
-    }
-
-    /**
-     * Sets the motor speed of left and right motors.
-     * Not a synchronized motor operation. Unblocking.
-     *
-     * @param speed - speed
-     */
-    @Override
-    public void setMotorSpeed(int speed) {
-        motorProvider.getMotor(leftMotor).setSpeed(speed);
-        motorProvider.getMotor(rightMotor).setSpeed(speed);
     }
 }

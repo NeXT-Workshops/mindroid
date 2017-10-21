@@ -5,16 +5,32 @@ public interface IDifferentialPilot {
     /**
      * Drive driveDistanceForward the given distance
      * This is a blocked operation.
-     * @param distance in cm
+     * @param distance - distance to drive in cm
      */
     void driveDistanceForward(float distance);
 
     /**
+     * Drive driveDistanceForward the given distance
+     * This is a blocked operation.
+     * @param distance - distance to drive in cm
+     * @param speed - speed
+     */
+    void driveDistanceForward(float distance, int speed);
+
+    /**
      * Drive driveDistanceBackward the given distance
      * This is a blocked operation.
-     * @param distance in cm
+     * @param distance - distance to drive in cm
      */
     void driveDistanceBackward(float distance);
+
+    /**
+     * Drive driveDistanceBackward the given distance
+     * This is a blocked operation.
+     * @param distance - distance to drive in cm
+     * @param speed - speed
+     */
+    void driveDistanceBackward(float distance, int speed);
 
     /**
      * Drives both motors synchronized forward.

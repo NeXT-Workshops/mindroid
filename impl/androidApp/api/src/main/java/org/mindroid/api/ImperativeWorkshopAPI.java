@@ -213,6 +213,15 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
         }
     }
 
+    /**
+     * Drives forward.
+     * The current speed will be used.
+     */
+    public void forward(){
+        if(!isInterrupted()){
+            diffPilot.driveForward();
+        }
+    }
 
     /**
      * Drives forward.
@@ -228,7 +237,21 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     }
 
     /**
-     * Starts driving driveDistanceBackward and returns immediately.
+     * Drives forward.
+     * Synchronized motor operation and blocking method.
+     * Returns without action if system got interrupted.
+     *
+     * @param distance - distance to drive in cm
+     * @param speed - speed
+     */
+    public void driveDistanceForward(float distance,int speed) {
+        if(!isInterrupted()) {
+            diffPilot.driveDistanceForward(distance,speed);
+        }
+    }
+
+    /**
+     * Starts driving backward and returns immediately.
      * Returns without action if system got interrupted.
      * Use {@link #stop()} to stop driving.
      * @param speed - speed of the motors [0-1000] deg/sec. Possible MaxSpeed depends on battery power!
@@ -240,13 +263,12 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     }
 
     /**
-     * Sets the motorspeed of the left and right motors
-     *
-     * @param speed - motorspeed [0 - 1000]
+     * Drives Backward.
+     * The current speed will be used.
      */
-    public void setMotorSpeed(int speed){
+    public void backward(){
         if(!isInterrupted()){
-            diffPilot.setMotorSpeed(speed);
+            diffPilot.driveBackward();
         }
     }
 
@@ -263,6 +285,30 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
         }
     }
 
+    /**
+     * Drives backward.
+     * Synchronized motor operation and blocking method.
+     * Returns without action if system got interrupted.
+     *
+     * @param distance - distance to drive
+     * @param speed - speed
+     */
+    public void driveDistanceBackward(float distance,int speed) {
+        if(!isInterrupted()) {
+            diffPilot.driveDistanceBackward(distance,speed);
+        }
+    }
+
+    /**
+     * Sets the motorspeed of the left and right motors
+     *
+     * @param speed - motorspeed [0 - 1000]
+     */
+    public void setMotorSpeed(int speed){
+        if(!isInterrupted()){
+            diffPilot.setMotorSpeed(speed);
+        }
+    }
 
     // ------ Getter Methods Sensors ------
     protected Sensor getLeftColorSensor(){

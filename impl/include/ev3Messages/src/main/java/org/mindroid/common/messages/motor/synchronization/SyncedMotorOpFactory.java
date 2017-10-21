@@ -10,6 +10,15 @@ public class SyncedMotorOpFactory {
 
 
     /**
+     * Creates a synchronized operation to set speed of the motor.
+     * @param speed - speed
+     * @return SynchronizedMotorOperation {@link SynchronizedMotorOperation}
+     */
+    public static SynchronizedMotorOperation createSetSpeedOperation(int speed){
+        return new SynchronizedMotorOperation(OperationType.SET_SPEED, speed);
+    }
+
+    /**
      * Creates a synchronized operation to set the motor into forward mode.
      * @return SynchronizedMotorOperation {@link SynchronizedMotorOperation}
      */

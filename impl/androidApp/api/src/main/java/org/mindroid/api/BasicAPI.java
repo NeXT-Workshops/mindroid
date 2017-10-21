@@ -16,6 +16,7 @@ import org.mindroid.impl.robot.*;
 public abstract class BasicAPI {
 
 
+    //TODO maybe add Constructor to automatically register Implementation to some component which the app can get access to to get implementation classes
 
 
     // --------------------- BRICK CONTROLLING METHODS: Display, LED, Sounds, Buttons ---------------------

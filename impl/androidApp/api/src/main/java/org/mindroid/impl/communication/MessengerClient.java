@@ -8,6 +8,7 @@ import org.mindroid.common.messages.server.MessageMarshaller;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -58,6 +59,8 @@ public class MessengerClient implements IMessenger, IMessageListener {
                     PrintWriter out = new PrintWriter(socket.getOutputStream(),
                             true);
 
+
+
                     MessageMarshaller serverMessageMarshaller = new MessageMarshaller();
                     String serializedMessage = serverMessageMarshaller.serialize(msgFinal);
 
@@ -67,8 +70,7 @@ public class MessengerClient implements IMessenger, IMessageListener {
                     out.close();
 
                 }  catch (IOException e) {
-                    e.printStackTrace();
-                    //TODO view Exception in app
+                    ErrorHandlerManager.getInstance().handleError(e,MessengerClient.class,e.toString());
                 }
             }
         };

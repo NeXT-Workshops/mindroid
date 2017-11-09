@@ -3,6 +3,7 @@ package org.mindroid.impl.communication;
 import org.mindroid.api.communication.IMessageListener;
 import org.mindroid.api.communication.IMessageServer;
 import org.mindroid.api.communication.IMessenger;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -44,14 +45,12 @@ public class MessageServer implements IMessageServer {
                     isRunning = true;
 
                 } catch (IOException e) {
-                    //TODO view in app
-                    e.printStackTrace();
+                    ErrorHandlerManager.getInstance().handleError(e,MessageServer.class,e.getMessage());
                 }
 
                 Thread.UncaughtExceptionHandler exceptionHandler = new Thread.UncaughtExceptionHandler() {
                     public void uncaughtException(Thread th, Throwable ex) {
-                        //TODO view in app
-                        ex.printStackTrace();
+                        ErrorHandlerManager.getInstance().handleError(ex,MessageServer.class,ex.getMessage());
                     }
                 };
 
@@ -67,8 +66,7 @@ public class MessageServer implements IMessageServer {
                         workerThread.setUncaughtExceptionHandler(exceptionHandler);
                         workerThread.start();
                     } catch (IOException e) {
-                        //TODO view in app
-                        e.printStackTrace();
+                        ErrorHandlerManager.getInstance().handleError(e,MessageServer.class,e.getMessage());
                     }
                 }
             } else {

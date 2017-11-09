@@ -3,6 +3,7 @@ package org.mindroid.impl.communication;
 import org.mindroid.api.communication.IMessageListener;
 import org.mindroid.common.messages.server.MessageMarshaller;
 import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,8 +56,7 @@ public class ServerWorker implements Runnable {
 
 
         } catch (IOException e) {
-            e.printStackTrace();
-            //TODO view exception in app
+            ErrorHandlerManager.getInstance().handleError(e,ServerWorker.class,e.getMessage());
         }
     }
 }

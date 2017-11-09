@@ -1,7 +1,6 @@
 package org.mindroid.impl.robot;
 
-import org.mindroid.api.communication.IMessenger;
-import org.mindroid.impl.communication.Messenger;
+import org.mindroid.impl.communication.MessengerClient;
 
 /**
  * Created by torben on 27.03.2017.
@@ -11,7 +10,7 @@ public class RobotController {
     private MotorProvider motorProvider;
     private BrickController brickController;
     private SensorProvider sensorProvider;
-    private Messenger messenger;
+    private MessengerClient messenger;
     private String robotID = "";
 
     private Robot robot;
@@ -38,7 +37,7 @@ public class RobotController {
         return sensorProvider;
     }
 
-    public Messenger getMessenger() {
+    public MessengerClient getMessenger() {
         if(this.robot.isMessageingEnabled()){
             return robot.getMessenger();
         }else{
@@ -51,7 +50,7 @@ public class RobotController {
         return robotID;
     }
 
-    protected void setMessenger(Messenger messenger) {
+    protected void setMessenger(MessengerClient messenger) {
         this.messenger = messenger;
     }
 

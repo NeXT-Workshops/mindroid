@@ -2,7 +2,7 @@ package org.mindroid.impl.robot;
 
 
 import org.mindroid.api.ImperativeAPI;
-import org.mindroid.api.communication.IRobotServer;
+import org.mindroid.api.communication.IMessageServer;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.robot.*;
 import org.mindroid.api.robot.context.IConstraintEvaluator;
@@ -10,18 +10,16 @@ import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.api.robot.control.MotorProvider;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
-import org.mindroid.api.statemachine.IStatemachine;
 import org.mindroid.common.messages.hardware.Motors;
 import org.mindroid.common.messages.hardware.Sensors;
 import org.mindroid.common.messages.hardware.Sensormode;
-import org.mindroid.impl.communication.Messenger;
-import org.mindroid.impl.communication.RobotServer;
+import org.mindroid.impl.communication.MessageServer;
+import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.configuration.RobotConfigurator;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
-import org.mindroid.impl.imperative.ImperativeImplManager;
 import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.robot.context.RobotContextStateEvaluator;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
@@ -215,7 +213,7 @@ public final class RobotFactory implements IRobotFactory {
     }
 
     /**
-     * Creates the Messenger and the RobotServer.
+     * Creates the MessengerClient and the MessageServer.
      */
     private void createNetworkCommunicationInterfaces() {
         if(isValidIP(msgServerIP) && isValidTCPPort(msgServerTCPPort)){
@@ -223,13 +221,13 @@ public final class RobotFactory implements IRobotFactory {
                 @Override
                 public void run(){
                     try {
-                        //Initialize Messenger
-                        Robot.getInstance().messenger = new Messenger(myRobot.getRobotID(), InetAddress.getByName(msgServerIP),msgServerTCPPort);
+                        //Initialize MessengerClient
+                        Robot.getInstance().messenger = new MessengerClient(myRobot.getRobotID(), InetAddress.getByName(msgServerIP),msgServerTCPPort);
                         Robot.getRobotController().setMessenger(Robot.getInstance().messenger);
                         Robot.getInstance().messageingEnabled = true;
-                        //Initialize RobotServer
+                        //Initialize MessageServer
                         if(isValidTCPPort(robotServerPort)) {
-                            IRobotServer robotServer = new RobotServer(robotServerPort,myRobot.messenger);
+                            IMessageServer robotServer = new MessageServer(robotServerPort,myRobot.messenger);
                             robotServer.registerMsgListener(RobotContextState.getInstance());
                             robotServer.registerMsgListener(Robot.getInstance().getMessenger());
                             robotServer.start();

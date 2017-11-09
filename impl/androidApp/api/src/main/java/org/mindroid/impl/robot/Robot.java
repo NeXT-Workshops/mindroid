@@ -1,8 +1,7 @@
 package org.mindroid.impl.robot;
 
-import org.mindroid.api.communication.IMessenger;
 import org.mindroid.impl.brick.EV3Brick;
-import org.mindroid.impl.communication.Messenger;
+import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.configuration.RobotConfigurator;
 import org.mindroid.impl.imperative.ImperativeImplManager;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
@@ -40,7 +39,7 @@ public final class Robot {
     private ImperativeImplManager imperativeImplManager;
 
     protected boolean messageingEnabled = false;
-    protected Messenger messenger = null;
+    protected MessengerClient messenger = null;
 
     private static Robot robot = new Robot();
 
@@ -163,7 +162,7 @@ public final class Robot {
         return messageingEnabled;
     }
 
-    protected Messenger getMessenger() {
+    protected MessengerClient getMessenger() {
         return messenger;
     }
 

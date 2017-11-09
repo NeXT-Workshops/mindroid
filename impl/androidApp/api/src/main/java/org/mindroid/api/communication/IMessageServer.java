@@ -6,7 +6,7 @@ package org.mindroid.api.communication;
  *
  * Created by torben on 04.04.2017.
  */
-public interface IRobotServer {
+public interface IMessageServer {
 
     void start();
 
@@ -22,7 +22,7 @@ public interface IRobotServer {
     /**
      * Verwendungsidee:
      *
-     * IRobotServer server = new Server(tcpport);
+     * IMessageServer server = new Server(tcpport);
      *
      * Wenn der Server Nachrichten bekommt ruft er die listener auf:
      *  >> listener.handleMessage(msg);

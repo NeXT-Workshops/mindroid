@@ -1,8 +1,8 @@
 package org.mindroid.impl.communication;
 
 import org.mindroid.api.communication.IMessageListener;
+import org.mindroid.api.communication.IMessageServer;
 import org.mindroid.api.communication.IMessenger;
-import org.mindroid.api.communication.IRobotServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  */
 
-public class RobotServer implements IRobotServer {
+public class MessageServer implements IMessageServer {
     private final ArrayList<IMessageListener> listeners = new ArrayList();
     private ServerSocket server = null;
     private int port;
@@ -27,7 +27,7 @@ public class RobotServer implements IRobotServer {
      * @param port
      * @param messenger is needed to register the robot server at the main server
      */
-    public  RobotServer(int port, IMessenger messenger){
+    public MessageServer(int port, IMessenger messenger){
         this.port = port;
         this.messenger = messenger;
     }

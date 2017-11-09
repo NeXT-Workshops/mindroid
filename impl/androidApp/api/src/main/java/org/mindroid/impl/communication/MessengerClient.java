@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * Created by Felicia Ruppel on 04.04.17.
  */
 
-public class Messenger implements IMessenger, IMessageListener {
+public class MessengerClient implements IMessenger, IMessageListener {
 
     public static final String SERVER_LOG = Destination.SERVER_LOG.getValue();
     public static final String BROADCAST = Destination.BROADCAST.getValue();
@@ -30,7 +30,7 @@ public class Messenger implements IMessenger, IMessageListener {
 
     private final ArrayList<MindroidMessage> messages = new ArrayList<MindroidMessage>();
 
-    public  Messenger(String ownName, InetAddress serverip, int serverport){
+    public MessengerClient(String ownName, InetAddress serverip, int serverport){
         this.robotID = ownName;
         this.serverip = serverip;
         this.serverport = serverport;

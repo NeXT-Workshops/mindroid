@@ -50,7 +50,9 @@ public class MessageServer implements IMessageServer {
 
                 Thread.UncaughtExceptionHandler exceptionHandler = new Thread.UncaughtExceptionHandler() {
                     public void uncaughtException(Thread th, Throwable ex) {
-                        ErrorHandlerManager.getInstance().handleError(ex,MessageServer.class,ex.getMessage());
+                        if(ex instanceof Exception) {
+                            ErrorHandlerManager.getInstance().handleError((Exception)ex, MessageServer.class, ex.getMessage());
+                        }
                     }
                 };
 

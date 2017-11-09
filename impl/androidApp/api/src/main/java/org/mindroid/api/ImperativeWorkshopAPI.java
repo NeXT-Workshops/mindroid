@@ -12,14 +12,14 @@ import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
  * This API is build on the Imperative API.
  *
  * It is used for the Mindroid Workshop of the TU-Darmstadt Real-Time Systems Lab and is used with
- * a specific Robot-Setup.
+ * a specific robot-Setup.
  *
- * It provides Methods to control the Robot properly.
+ * It provides Methods to control the robot properly.
  *
  * @author Torben Unzicker 17.09.17
  */
 public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
-    //TODO Create some Interface to add a specific robot Configurateion: Check how to use it on app-site when creating the Robot using the RobotFactory.
+    //TODO Create some Interface to add a specific robot Configurateion: Check how to use it on app-site when creating the robot using the robotFactory.
 
     /**
      * The Differential pilot is used to execute synchronized motor operations and precise robot drive control.
@@ -109,7 +109,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     }
 
     /**
-     * Returns the current Angle of the Robot given by the Gyrosensor.
+     * Returns the current Angle of the robot given by the Gyrosensor.
      * @return angle in degree
      */
     public float getAngle(){

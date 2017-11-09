@@ -299,7 +299,7 @@ public abstract class BasicAPI {
     }
 
     /**
-     * Send a Message to anothers Robot 'destination'
+     * Send a Message to anothers robot 'destination'
      * @param destination 'robotID'
      * @param message 'msg to send'
      */
@@ -314,7 +314,7 @@ public abstract class BasicAPI {
     /**
      * TODO UNTESTED; WILL PROBABLY NOT WORK
      *
-     * Broadcast a message to all Robots in Group.
+     * Broadcast a message to all robots in Group.
      * @param message 'message to send'
      */
     public final void broadcastMessage(String message){
@@ -364,7 +364,7 @@ public abstract class BasicAPI {
     }
 
     /**
-     * Returns the Robot Controller
+     * Returns the robot Controller
      * @return robotController
      */
     public final RobotController getRobotController(){
@@ -372,10 +372,10 @@ public abstract class BasicAPI {
     }
 
 
-    // -------------------- getting Robot ID ---------------------
+    // -------------------- getting robot ID ---------------------
 
     /**
-     * Returns the Robot ID.
+     * Returns the robot ID.
      * @return robot id
      */
     public final String getRobotID(){

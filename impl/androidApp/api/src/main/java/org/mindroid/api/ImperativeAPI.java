@@ -22,7 +22,7 @@ public abstract class ImperativeAPI extends BasicAPI {
     }
 
     /**
-     * Implementation of the Robots behavior.
+     * Implementation of the robots behavior.
      * This method will be executed by the imperative Engine.
      *
      * Note: To stop the execution of this implementation properly all loops have to exit when the method isInterrupted {@link #isInterrupted}returns true!

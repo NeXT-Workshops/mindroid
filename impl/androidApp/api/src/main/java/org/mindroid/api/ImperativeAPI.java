@@ -10,7 +10,7 @@ public abstract class ImperativeAPI extends BasicAPI {
      * To identify the Implementation.
      * ID will be shown in the Apps dropdown.
      */
-    private String implementationID = "";
+    private final String implementationID;
     private boolean isInterrupted = false;
 
     /**
@@ -36,7 +36,9 @@ public abstract class ImperativeAPI extends BasicAPI {
      */
     public final void start(){
         run();
+        //When run is finished (imperative impl got stopped (interrupted) or just code is done) - reset former state
         getMotorProvider().stopAllMotors();
+        this.isInterrupted = false;
     }
 
     /**
@@ -50,10 +52,6 @@ public abstract class ImperativeAPI extends BasicAPI {
     // -------- Getter and Setter --------
     public final String getImplementationID() {
         return implementationID;
-    }
-
-    public final void setImplementationID(String implementationID) {
-        this.implementationID = implementationID;
     }
 
     /**

@@ -7,25 +7,10 @@ package org.mindroid.api.communication;
  * Created by torben on 04.04.2017.
  */
 public interface IMessageServer {
-
-    void start();
-
-    void stop();
-
-
     /*
      *
      * @param listener
      */
     void registerMsgListener(IMessageListener listener);
 
-    /**
-     * Verwendungsidee:
-     *
-     * IMessageServer server = new Server(tcpport);
-     *
-     * Wenn der Server Nachrichten bekommt ruft er die listener auf:
-     *  >> listener.handleMessage(msg);
-     *
-     */
 }

@@ -52,7 +52,7 @@ public class TestPCClient{
                 System.out.println("[TestRobot:PC-Client] Connecting to brick");
                 commandCenter.connectToBrick();
 
-                while (!commandCenter.isConnected()) {
+                while (!commandCenter.isConnectedToBrick()) {
                     Thread.sleep(100);
                     System.out.println("[TestRobot:PC-Client] connecting..");
                 }

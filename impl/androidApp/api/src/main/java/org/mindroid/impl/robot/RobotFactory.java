@@ -2,7 +2,6 @@ package org.mindroid.impl.robot;
 
 
 import org.mindroid.api.ImperativeAPI;
-import org.mindroid.api.communication.IMessageServer;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.robot.*;
 import org.mindroid.api.robot.context.IConstraintEvaluator;
@@ -13,7 +12,6 @@ import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.common.messages.hardware.Motors;
 import org.mindroid.common.messages.hardware.Sensors;
 import org.mindroid.common.messages.hardware.Sensormode;
-import org.mindroid.impl.communication.MessageServer;
 import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.configuration.RobotConfigurator;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
@@ -152,9 +150,7 @@ public final class RobotFactory implements IRobotFactory {
                 myRobot.setSyncedMotors(robotConfigurator.createSynchronizedMotorsEndpoint());
 
             } catch (PortIsAlreadyInUseException e) {
-                //TODO maybe add proper error handling or remove exception?
-                robotCommandCenter = null;
-                e.printStackTrace();
+                ErrorHandlerManager.getInstance().handleError(e,RobotFactory.class,e.getMessage());
             }
 
             // --- Connect Sensorobject --> with RobotContextState
@@ -187,10 +183,13 @@ public final class RobotFactory implements IRobotFactory {
             // Connect statemachines RobotContextStateEvaluator etc with state machine
             setupStatemachineEngine();
 
-            //TODO setup Imperative Engine
-
-
             //---------------- CREATE MESSENGER and ROBOTSERVER
+            //Disconnect and Remove old messenger from the former created robot. (The new messenger may connect to another ServerIP etc.)
+            if(Robot.getInstance().messenger != null){
+                Robot.getInstance().messenger.disconnect();
+                Robot.getInstance().messenger = null;
+            }
+            //Create Messenger with specified properties
             createNetworkCommunicationInterfaces();
 
 
@@ -213,7 +212,9 @@ public final class RobotFactory implements IRobotFactory {
     }
 
     /**
-     * Creates the MessengerClient and the MessageServer.
+     * Creates the MessengerClient.
+     * The messenger will NOT be connected to the Server! This has to be done by the User!
+     *
      */
     private void createNetworkCommunicationInterfaces() {
         if(isValidIP(msgServerIP) && isValidTCPPort(msgServerTCPPort)){
@@ -224,19 +225,10 @@ public final class RobotFactory implements IRobotFactory {
                         //Initialize MessengerClient
                         Robot.getInstance().messenger = new MessengerClient(myRobot.getRobotID(), InetAddress.getByName(msgServerIP),msgServerTCPPort);
                         Robot.getRobotController().setMessenger(Robot.getInstance().messenger);
-                        Robot.getInstance().messageingEnabled = true;
-                        //Initialize MessageServer
-                        if(isValidTCPPort(robotServerPort)) {
-                            IMessageServer robotServer = new MessageServer(robotServerPort,myRobot.messenger);
-                            robotServer.registerMsgListener(RobotContextState.getInstance());
-                            robotServer.registerMsgListener(Robot.getInstance().getMessenger());
-                            robotServer.start();
-                        }else{
-                            //TODO send error message to error-handler
-                        }
+                        Robot.getInstance().messageingEnabled = true; //TODO maybe remove this field, as it does not fulfil its original purpose anymore (replaced by messenger.isConnected())
 
                     } catch (UnknownHostException e) {
-                        e.printStackTrace();
+                        ErrorHandlerManager.getInstance().handleError(e,RobotFactory.class,e.getMessage());
                     }
                 }
             };
@@ -244,13 +236,8 @@ public final class RobotFactory implements IRobotFactory {
         }else{
             myRobot.messenger = null;
             myRobot.messageingEnabled = false;
+            ErrorHandlerManager.getInstance().handleError(new IllegalArgumentException("Invalid Server IP/Port"),RobotFactory.class,"Illegal ServerIP or/and Port. Therefore messaging will not work!");
         }
-
-        //Workaround: messenger is not set when robot Controller gets initialized //TODO remove?
-        if(Robot.getInstance().isMessageingEnabled()){
-
-        }
-
     }
 
     @Override

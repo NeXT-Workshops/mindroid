@@ -1,6 +1,7 @@
 package org.mindroid.impl.communication;
 
 import org.mindroid.api.communication.IMessageListener;
+import org.mindroid.api.communication.IMessageServer;
 import org.mindroid.api.communication.IMessenger;
 import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.LogLevel;
@@ -13,14 +14,22 @@ import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 /**
  * Created by Felicia Ruppel on 04.04.17.
+ *
+ * Refactored by Torben Unzicker 09.11.17
+ * - This Class now connects to the message server and provides an output stream for sending messages (as before) but in addition
+ *   uses the ServerWorker to handle incoming messages.
+ * - The Connection to the Server will now be kept alive until disconnectFromBrick gets called.
+ * - This class now offers an isConnectedToBrick() method.
+ *
  */
-
-public class MessengerClient implements IMessenger, IMessageListener {
+public class MessengerClient implements IMessenger, IMessageListener,IMessageServer {
 
     public static final String SERVER_LOG = Destination.SERVER_LOG.getValue();
     public static final String BROADCAST = Destination.BROADCAST.getValue();
@@ -29,14 +38,101 @@ public class MessengerClient implements IMessenger, IMessageListener {
     private InetAddress serverip;
     private int serverport;
 
+    private final Socket socket;
+    private PrintWriter out;
+    private ServerWorker in; //handles incoming messages
+
+    private final MessageMarshaller serverMessageMarshaller = new MessageMarshaller();
     private final ArrayList<MindroidMessage> messages = new ArrayList<MindroidMessage>();
 
     public MessengerClient(String ownName, InetAddress serverip, int serverport){
         this.robotID = ownName;
         this.serverip = serverip;
         this.serverport = serverport;
+        this.socket = new Socket();
+        setSocketProperties();
     }
 
+    private void setSocketProperties(){
+        try {
+            socket.setKeepAlive(true);
+        } catch (SocketException e) {
+            ErrorHandlerManager.getInstance().handleError(e,MessengerClient.class,"Could not set keepAlive: "+e.getMessage());
+        }
+    }
+
+    /**
+     * Sends the message if a connection is established.
+     * If not conection is established the ErrorHandlerManager will be called about this problem.
+     * @param msg - msg to send
+     */
+    private synchronized void sendMessage(MindroidMessage msg){
+        out.println(getSerializedMessage(msg));
+    }
+
+    /**
+     * Connects the messenger with the MessageServer.
+     * The Connection will be keeped alive.
+     * Only connects if the connection is not established yet.
+     */
+    public synchronized boolean connect(){
+        if(!isConnected()) {
+            try {
+                //Socket
+                socket.connect(new InetSocketAddress(serverip, serverport), 5000);
+
+                //OutputStream
+                out = new PrintWriter(socket.getOutputStream(),
+                        true);
+
+                //InputStream - also adds this class as a listener
+                in = new ServerWorker(socket,this);
+                in.addMessageListener(this);
+                new Thread(in).start();
+
+                //Register to server
+                registerToServer(serverport);
+
+                return true;
+            } catch (IOException e) {
+                disconnect();
+                ErrorHandlerManager.getInstance().handleError(e, MessengerClient.class, "Error while trying to connect to message Server: " + e.getMessage());
+                return false;
+            }
+        }else{
+            ErrorHandlerManager.getInstance().handleError(new Exception("Connection not established"), MessengerClient.class, "socket null or already conected");
+            return false;
+        }
+
+    }
+
+    /**
+     * Disconnects the Client.
+     * Closes all open Streams.
+     */
+    public synchronized void disconnect(){
+        if(out != null){
+            out.println("<close>");
+            out.close();
+        }
+
+        if(socket != null){
+            try {
+                socket.close();
+            } catch (IOException e) {
+                ErrorHandlerManager.getInstance().handleError(e, MessengerClient.class, "Error while closing MessengerClient: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Returns the serialized message
+     * @param msg - msg to serialize
+     * @return serialized message as String
+     */
+    private String getSerializedMessage(MindroidMessage msg){
+        return serverMessageMarshaller.serialize(msg);
+    }
 
     @Override
     public void sendMessage(String destination, String content) {
@@ -50,34 +146,6 @@ public class MessengerClient implements IMessenger, IMessageListener {
         sendMessage(msgObj);
     }
 
-    private void sendMessage(MindroidMessage msg) {
-        final MindroidMessage msgFinal = msg;
-        Thread client = new Thread() {
-            public void run() {
-                try {
-                    Socket socket = new Socket(serverip, serverport);
-                    PrintWriter out = new PrintWriter(socket.getOutputStream(),
-                            true);
-
-
-
-                    MessageMarshaller serverMessageMarshaller = new MessageMarshaller();
-                    String serializedMessage = serverMessageMarshaller.serialize(msgFinal);
-
-                    out.println(serializedMessage);
-                    out.println("<close>");
-                    socket.close();
-                    out.close();
-
-                }  catch (IOException e) {
-                    ErrorHandlerManager.getInstance().handleError(e,MessengerClient.class,e.toString());
-                }
-            }
-        };
-        new Thread(client).start();
-    }
-
-
     @Override
     public void registerToServer(int port) {
         MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, MessageType.REGISTRATION, ""+port);
@@ -90,10 +158,21 @@ public class MessengerClient implements IMessenger, IMessageListener {
         sendMessage(msgObj);
     }
 
+    @Override
+    public synchronized boolean isConnected() {
+        if(socket != null && in != null){
+            return in.isConnected();
+        }
+        return false;
+    }
 
+
+    /**
+     * This messengerClient is registered to the server worker. The messages the server worker receives will be added to the client using this method
+     * @param msg - message to handle
+     */
     @Override
     public void handleMessage(MindroidMessage msg) {
-        //sendMessage(SERVER_LOG,robotID+": I handle a message now");
         getMessages().add(msg);
     }
 
@@ -104,7 +183,6 @@ public class MessengerClient implements IMessenger, IMessageListener {
 
     @Override
     public boolean hasMessage() {
-        //sendMessage(SERVER_LOG,robotID+": Do i have a message? "+getMessages().iterator().hasNext());
         return getMessages().iterator().hasNext();
     }
 
@@ -115,5 +193,12 @@ public class MessengerClient implements IMessenger, IMessageListener {
 
     private ArrayList<MindroidMessage> getMessages(){
         return messages;
+    }
+
+    @Override
+    public void registerMsgListener(IMessageListener listener) {
+        if(in != null){
+            in.addMessageListener(listener);
+        }
     }
 }

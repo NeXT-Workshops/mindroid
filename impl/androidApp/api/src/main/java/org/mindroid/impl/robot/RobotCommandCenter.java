@@ -15,7 +15,14 @@ import java.io.IOException;
  */
 public class RobotCommandCenter implements IRobotCommandCenter {
 
-    Robot robot;
+    /**
+     * The Robot Object this RommandCenter is observing
+     */
+    protected Robot robot;
+
+    /**
+     * True if the Configuration (sensors/motors) succeed.
+     */
     private boolean isConfigurated = false;
 
     public final static String ERROR_INITIALIZATION = "INITIALIZATION ERROR";
@@ -74,7 +81,7 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     }
 
     @Override
-    public boolean isConnected() {
+    public boolean isConnectedToBrick() {
         if(robot.getRobotConfigurator() != null && robot.getRobotConfigurator().getBrick() != null) {
             return robot.getRobotConfigurator().getBrick().isConnected();
         }else{
@@ -93,11 +100,34 @@ public class RobotCommandCenter implements IRobotCommandCenter {
 
     @Override
     public boolean isConfigurated() {
-        return isConnected() && isConfigurated;
+        return isConnectedToBrick() && isConfigurated;
     }
 
     @Override
-    public void disconnect() {
+    public synchronized boolean isMessengerConnected() {
+        if(robot.getMessenger() != null) {
+            return robot.getMessenger().isConnected();
+        }else{
+            return false;
+        }
+    }
+
+    @Override
+    public synchronized boolean connectMessenger() {
+        if(robot.getMessenger() != null) {
+            return robot.getMessenger().connect();
+        }else{
+            return false;
+        }
+    }
+
+    @Override
+    public synchronized void disconnectMessenger() {
+        robot.getMessenger().disconnect();
+    }
+
+    @Override
+    public void disconnectFromBrick() {
         robot.getRobotConfigurator().getBrick().disconnect();
     }
 }

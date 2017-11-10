@@ -83,6 +83,8 @@ public class Robot {
 
         //Create the Robot
         commandCenter = roFactory.createRobot();
+
+
     }
 
     private void updateRobotPortConfig() {
@@ -103,16 +105,32 @@ public class Robot {
     }
 
     /**
-     *
-     *
+     * Returns the state of the messenger client.
+     * Returns false, if the command center is null (no robot created yet by - call create() first!)
+     * @return true if the messenger client is connected to the message server
      */
+    public boolean isMessengerConnected(){
+        if(commandCenter != null) {
+            return commandCenter.isMessengerConnected();
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * Connects the messenger client to the message server
+     */
+    public boolean connectMessengerClient(){
+        return commandCenter.connectMessenger();
+    }
+
     public void connectToBrick() throws IOException {
         commandCenter.connectToBrick();
     }
 
     public boolean isConnected() {
         if(commandCenter != null) {
-            return commandCenter.isConnected();
+            return commandCenter.isConnectedToBrick();
         }else{
             return false;
         }
@@ -201,7 +219,7 @@ public class Robot {
     }
 
     public void disconnect() {
-        commandCenter.disconnect();
+        commandCenter.disconnectFromBrick();
     }
 
     public void registerErrorHandler(AbstractErrorHandler errorHandler){

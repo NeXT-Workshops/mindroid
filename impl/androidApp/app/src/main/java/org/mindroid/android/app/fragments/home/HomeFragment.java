@@ -5,7 +5,9 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.*;
@@ -53,6 +55,9 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private Button btn_startRobot;
     private Button btn_stopRobot;
 
+    //Message client Connection state
+    private TextView txtView_msgServerConnectionState;
+
 
     private Spinner spinner_selectedImplementation;
 
@@ -65,7 +70,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private final String START_ROBOT = "start";
     private final String STOP_ROBOT ="stop";
 
-    public static Robot robot = new Robot();;
+    public static Robot robot = new Robot();
 
     MainActivity parentActivity;
 
@@ -172,6 +177,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         txt_info = (TextView) view.findViewById(R.id.txt_info);
         btn_activateTethering = (Button) view.findViewById(R.id.btn_activateTethering);
 
+        //Radio Button displaying connection state to the message server
+        txtView_msgServerConnectionState = (TextView) view.findViewById(R.id.txtView_msgServerConnectionState);
+
+
         btn_activateTethering.setText(getResources().getString(R.string.btn_text_activate_tethering));
         btn_connect.setText(getResources().getString(R.string.btn_text_connect));
         btn_disconnect.setText(getResources().getString(R.string.btn_text_disconnect));
@@ -261,6 +270,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 setEnableMenuItems(!robot.isConnected());
 
                 spinner_selectedImplementation.setEnabled(!robot.isRunning);
+
+
             }
         };
 
@@ -301,19 +312,36 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             }
         };
 
+        final Runnable checkMessageClientConnectionState = new Runnable() {
+            @Override
+            public void run() {
+
+                if(robot.isMessengerConnected()){
+                    txtView_msgServerConnectionState.setText("Messenger: connected");
+                    txtView_msgServerConnectionState.setBackgroundColor(Color.GREEN);
+                }else{
+                    txtView_msgServerConnectionState.setText("Messenger: disconnected");
+                    txtView_msgServerConnectionState.setBackgroundColor(Color.RED);
+                }
+
+            }
+        };
 
 
         //final Context cntxt_mainActivity = this;
         Runnable check = new Runnable() {
             @Override
             public void run() {
-                while(true) {//TODO remove ?
+                while(true) {
 
                     //Enable/disable control buttons (Connect to brick, init configuration, start robot,stop robot)
                     parentActivity.runOnUiThread(taskUpdateButtonEnableState);
 
                     //Update View of the current State
                     parentActivity.runOnUiThread(taskCheckUSBState);
+
+                    //Checks the messenger connection state
+                    parentActivity.runOnUiThread(checkMessageClientConnectionState);
 
                     try {
                         Thread.sleep(33);
@@ -352,13 +380,43 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         return (intent.getExtras().getBoolean("rndis"));
     }
 
+    /**
+     * Blocking Method. Waits until the given task is finished.
+     * Set the status check delay by setting the millis.
+     * @param task - task to wait for completion
+     * @param millis - sleeptime should be >0
+     */
+    private void waitForTaskCompletion(AsyncTask task, long millis){
+        while(task.getStatus() == AsyncTask.Status.FINISHED){
+            sleep(millis);
+        }
+    }
+
+    private void sleep(long millis){
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void setButtonListeners() {
 
         btn_connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Creates the Robot
-                robot.create();
+                CreateRobotTask createRobotTask = new CreateRobotTask(parentActivity,"Creating your Robot");
+                createRobotTask.execute();
+
+                waitForTaskCompletion(createRobotTask,20);
+
+                //Messenger Client Task - messenger connects to messageserver
+                ConnectMessengerTask msgClientTask = new ConnectMessengerTask(parentActivity,"Messenger Client tries to connect");
+                msgClientTask.execute();
+
+                waitForTaskCompletion(msgClientTask,20);
+
                 //Creates and executes the Task to connect to the Brick
                 ConnectToBrickTask task = new ConnectToBrickTask(parentActivity,msgConnectToRobot);
                 task.execute(); //String is not important
@@ -563,4 +621,36 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
     }
 
+    private class ConnectMessengerTask extends ProgressTask{
+
+        public ConnectMessengerTask(Context context,String progressMsg) {
+            super(context,progressMsg);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            if(!robot.isMessengerConnected()) {
+                robot.connectMessengerClient();
+            }
+
+            return robot.isMessengerConnected();
+        }
+
+    }
+
+    private class CreateRobotTask extends ProgressTask{
+
+        public CreateRobotTask(Context context,String progressMsg) {
+            super(context,progressMsg);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            //Create Robot
+            robot.create();
+
+            return true;
+        }
+
+    }
 }

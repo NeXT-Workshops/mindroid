@@ -22,13 +22,13 @@ public interface IRobotCommandCenter {
     /**
      * Disconnect Phone from the Brick.
      */
-    void disconnect();
+    void disconnectFromBrick();
 
     /**
      * Returns the Connection-State of the Phone to Brick Connection
      * @return true if connection is established
      */
-    boolean isConnected();
+    boolean isConnectedToBrick();
 
     /**
      * Initializes the Configuration of your Robot.
@@ -44,6 +44,22 @@ public interface IRobotCommandCenter {
      * @return true - if Configuration has finished and is complete.
      */
     boolean isConfigurated();
+
+    /**
+     * Returns true if the messenger-client is connected to the Message server.
+     * @return true if connected
+     */
+    boolean isMessengerConnected();
+
+    /**
+     * Connects the Messenger-client to the Message Server.
+     */
+    boolean connectMessenger();
+
+    /**
+     * Disconnects the Messenger-Client from the server.
+     */
+    void disconnectMessenger();
 
 
     //public IRobotState getRobotState(); TODO: May return the current State of the robot

@@ -333,6 +333,7 @@ public abstract class BasicAPI {
         if(Robot.getRobotController().getMessenger() != null){
             Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,logmessage);
         }else{
+            ErrorHandlerManager.getInstance().handleError(new Exception("[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null"),BasicAPI.class,"[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null");
             System.out.println("[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null");
         }
     }

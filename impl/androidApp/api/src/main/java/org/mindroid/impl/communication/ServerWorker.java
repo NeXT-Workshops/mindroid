@@ -13,15 +13,20 @@ import java.util.Scanner;
 
 /**
  * Created by Felicia Ruppel on 19.04.17.
+ *
+ * - Handles incoming messages
  */
-
 public class ServerWorker implements Runnable {
     private Socket socket;
     private ArrayList<IMessageListener> listeners;
 
-    public ServerWorker(final Socket socket, final ArrayList<IMessageListener> listeners) {
+    private MessengerClient owner;
+    private boolean isConnected = false;
+
+    public ServerWorker(final Socket socket,MessengerClient client) {
         this.socket = socket;
-        this.listeners = listeners;
+        this.listeners = new ArrayList<IMessageListener>();
+        this.owner = client;
     }
 
     @Override
@@ -31,8 +36,8 @@ public class ServerWorker implements Runnable {
             Scanner scanner = new Scanner(inputStream);
             StringBuilder sb = new StringBuilder();
             MessageMarshaller messageMarshaller = new MessageMarshaller();
-            boolean connected =true;
-            while(connected) {
+            isConnected = true;
+            while(isConnected) {
                 if(scanner.hasNextLine())
                 {
                     String line = scanner.nextLine();
@@ -49,8 +54,17 @@ public class ServerWorker implements Runnable {
 
                     }
                     if (line.contains("<close>")) {
-                        connected = false;
+                        isConnected = false;
+                        //Close messenger client
+                        owner.disconnect();
                     }
+                }else{
+                    //Connection closed
+                    isConnected = false; //Stop listening
+                    //Close messenger client
+                    owner.disconnect();
+                    //Just for testing --> will be shown in app
+                    ErrorHandlerManager.getInstance().handleError(new Exception("ServerWorker: Connection closed"),ServerWorker.class,"ServerWorker: Connection closed");
                 }
             }
 
@@ -58,5 +72,18 @@ public class ServerWorker implements Runnable {
         } catch (IOException e) {
             ErrorHandlerManager.getInstance().handleError(e,ServerWorker.class,e.getMessage());
         }
+    }
+
+    protected boolean isConnected() {
+        return isConnected;
+    }
+
+    /**
+     * Adds a message listener to the server worker.
+     * The message listener will receive the incoming messages.
+     * @param messageListener - msg Listener
+     */
+    protected void addMessageListener(IMessageListener messageListener){
+        listeners.add(messageListener);
     }
 }

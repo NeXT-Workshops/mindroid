@@ -42,6 +42,10 @@
                     android:weightSum="1"
                     tools:ignore="NotSibling,UselessParent">
 
+                    <TextView
+                            android:text="TextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" android:id="@+id/txtView_msgServerConnectionState"/>
                     <FrameLayout
                         android:id="@+id/layout_infobox"
                         android:layout_width="match_parent"

@@ -48,7 +48,7 @@ public class MindroidServerWorker implements Runnable {
                 }
                 if (line.contains("<close>")) {
                     connected = false;
-            }
+                }
             }
             //else thread sleep, 5s break TODO
             }
@@ -75,8 +75,7 @@ public class MindroidServerWorker implements Runnable {
             if (socketAddress instanceof InetSocketAddress) {
                 //the port was sent as content of the registration message
                 int port = Integer.parseInt(deserializedMsg.getContent());
-                InetSocketAddress robotAddress = new InetSocketAddress(((InetSocketAddress) socketAddress).getAddress(),port);
-                mindroidServerFrame.register(deserializedMsg.getSource(), robotAddress);
+                mindroidServerFrame.register(deserializedMsg.getSource(), socket, (InetSocketAddress) socketAddress, port);
                 mindroidServerFrame.addContentLine("Local", "-", "INFO", deserializedMsg.getSource().getValue()+" was registered.");
             } else {
                 throw new IOException("Registration of "+deserializedMsg.getSource().getValue()+" failed.");
@@ -86,18 +85,18 @@ public class MindroidServerWorker implements Runnable {
         //deliver message meant to be sent to another robot
         if(deserializedMsg.getMessageType().equals(MessageType.MESSAGE)&& !deserializedMsg.isLogMessage() && !deserializedMsg.isBroadcastMessage() ) {
             mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "INFO", deserializedMsg.getContent());
-            InetSocketAddress address = mindroidServerFrame.findAddress(deserializedMsg.getDestination());
-            sendMessage(deserializedMsg, address);
+            Socket socket = mindroidServerFrame.findSocket(deserializedMsg.getDestination());
+            sendMessage(deserializedMsg, socket);
             }
 
 
         //deliver broadcast message
         if (deserializedMsg.getDestination().getValue().equals(Destination.BROADCAST.getValue())) {
-            HashMap<Destination, InetSocketAddress> ipMapping = mindroidServerFrame.getIPMapping();
+            HashMap<Destination, Socket> socketMapping = mindroidServerFrame.getSocketMapping();
             mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), "everyone", "INFO", deserializedMsg.getContent());
-            for(Map.Entry<Destination, InetSocketAddress> entry : ipMapping.entrySet()) {
+            for(Map.Entry<Destination, Socket> entry : socketMapping.entrySet()) {
                 if(!deserializedMsg.getSource().getValue().equals(entry.getKey().getValue())) {
-                    InetSocketAddress address = entry.getValue();
+                    Socket address = entry.getValue();
                     sendMessage(new MindroidMessage(deserializedMsg.getSource(),entry.getKey(), deserializedMsg.getMessageType(),deserializedMsg.getContent()), address);
                 }
             }
@@ -105,21 +104,18 @@ public class MindroidServerWorker implements Runnable {
 
     }
 
-    private void sendMessage(MindroidMessage deserializedMsg, InetSocketAddress address) throws IOException{
-        if (address==null) {
-            throw new IOException("The message to "+deserializedMsg.getDestination().getValue()+" has not been sent because its ip address is not known.");
+    private void sendMessage(MindroidMessage deserializedMsg, Socket socket) throws IOException{
+        if (socket==null) {
+            throw new IOException("The message to "+deserializedMsg.getDestination().getValue()+" has not been sent because the address is unknown.");
         }
         try {
-            Socket socket = new Socket(address.getAddress(), address.getPort());
+            //Socket socket = new Socket(address.getAddress(), address.getPort());
             PrintWriter out = new PrintWriter(socket.getOutputStream(),
                     true);
 
             String serializedMessage = messageMarshaller.serialize(deserializedMsg);
 
             out.println(serializedMessage);
-            out.println("<close>");
-            socket.close();
-            out.close();
         } catch (IOException e) {
             MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
             console.setVisible(true);

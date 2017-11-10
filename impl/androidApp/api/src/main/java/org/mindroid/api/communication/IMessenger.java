@@ -40,6 +40,11 @@ public interface IMessenger {
      */
     void sendLogMessage(String content, LogLevel logLevel);
 
+    /**
+     * Returns the state of the connection.
+     * @return true if connected
+     */
+    boolean isConnected();
 
 
 }

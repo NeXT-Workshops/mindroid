@@ -10,7 +10,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,6 +32,7 @@ public class MindroidServerFrame extends JFrame {
     private final int SOURCE_COL = 1;  //Column that contains a message's source
     private final int LEVEL_COL = 2;
     private HashMap<Destination, InetSocketAddress> ipMapping;
+    private HashMap<Destination, Socket> socketMapping;
 
 
     public MindroidServerFrame() {
@@ -155,6 +159,7 @@ public class MindroidServerFrame extends JFrame {
         this.pack();
         this.setVisible(true);
         this.ipMapping = new HashMap<>();
+        this.socketMapping = new HashMap<>();
 
     }
 
@@ -224,13 +229,22 @@ public class MindroidServerFrame extends JFrame {
         availableColors.remove(0);
     }
 
-    public void register(RobotId robotId, InetSocketAddress address) {
-        ipMapping.put(new Destination(robotId.getValue()),address);
+    public void register(RobotId robotId, Socket socket, InetSocketAddress socketAddress, int port) throws IOException {
+        ipMapping.put(new Destination(robotId.getValue()), new InetSocketAddress( ((InetSocketAddress)socketAddress).getAddress(), port));
+        socketMapping.put(new Destination(robotId.getValue()), socket);
     }
 
     public InetSocketAddress findAddress(Destination destination) {
         return ipMapping.get(destination);
     }
 
+    public Socket findSocket(Destination destination){
+        return socketMapping.get(destination);
+    }
+
     public HashMap<Destination, InetSocketAddress> getIPMapping() {return ipMapping;}
+
+    public HashMap<Destination, Socket> getSocketMapping() {
+        return socketMapping;
+    }
 }

@@ -106,12 +106,12 @@ public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends 
 	 * Disconnects all open Connections to the Brick!
 	 */
 	public void disconnect(){
-		System.out.println("[EV3-BRICK:disconnect()] executing disconnect");
+		System.out.println("[EV3-BRICK:disconnectFromBrick()] executing disconnectFromBrick");
 		client.close();
-		System.out.println("[EV3-BRICK:disconnect()] client state: "+client.isConnected());
+		System.out.println("[EV3-BRICK:disconnectFromBrick()] client state: "+client.isConnected());
 		getSensorManager().disconnectSensors();
 		getMotorManager().disconnectMotors();
-		System.out.println("[EV3-BRICK:disconnect()] Sensors and motors got disconnected");
+		System.out.println("[EV3-BRICK:disconnectFromBrick()] Sensors and motors got disconnected");
 	}
     
 	public EV3MotorManager getMotorManager() {

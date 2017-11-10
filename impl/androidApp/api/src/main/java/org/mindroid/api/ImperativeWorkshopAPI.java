@@ -194,7 +194,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      * Returns without action if system got interrupted.
      *
      */
-    public void flt(){
+    public void enableFloatMode(){
         if(!isInterrupted()) {
             diffPilot.flt();
         }

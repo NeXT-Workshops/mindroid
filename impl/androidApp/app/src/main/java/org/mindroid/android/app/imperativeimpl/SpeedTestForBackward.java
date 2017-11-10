@@ -12,38 +12,38 @@ public class SpeedTestForBackward extends ImperativeWorkshopAPI{
     public void run() {
         forward(0);
         delay(2000);
-        flt();
+        enableFloatMode();
         backward(0);
         delay(2000);
-        flt();
+        enableFloatMode();
 
 
         forward(250);
         delay(2000);
-        flt();
+        enableFloatMode();
         backward(250);
         delay(2000);
-        flt();
+        enableFloatMode();
 
         forward(500);
         delay(2000);
-        flt();
+        enableFloatMode();
         backward(500);
         delay(2000);
-        flt();
+        enableFloatMode();
 
         forward(750);
         delay(2000);
-        flt();
+        enableFloatMode();
         backward(750);
         delay(2000);
-        flt();
+        enableFloatMode();
 
         forward(1000);
         delay(2000);
-        flt();
+        enableFloatMode();
         backward(1000);
         delay(2000);
-        flt();
+        enableFloatMode();
     }
 }

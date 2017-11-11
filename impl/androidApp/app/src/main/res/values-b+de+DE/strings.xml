@@ -26,6 +26,7 @@
     <string name="txt_btn_DisConnect_disconnect">trennen</string>
 
     <!-- Settings Fragment -->
+    <string name="txtView_note_msg_disconnect_messenger">Trenne die Verbindung zum MessageServer, um RobotID und GroupID zu ändern!</string>
     <string name="btn_text_save_settings">Einstellungen speichern</string>
     <string name="txtView_language_text">Sprache</string>
     <string name="msg_toast_settings_invalid_input">Ungueltige Eingabe!</string>

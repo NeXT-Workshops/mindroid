@@ -220,6 +220,10 @@ public final class RobotFactory implements IRobotFactory {
     @Override
     public void setRobotID(String robotID) {
         Robot.getInstance().setRobotID(robotID);
+
+        if(Robot.getInstance().getMessenger() != null) {
+            Robot.getInstance().getMessenger().setRobotID(robotID);
+        }
     }
 
     @Override

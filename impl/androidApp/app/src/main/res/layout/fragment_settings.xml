@@ -11,6 +11,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/txtView_note" android:layout_weight="1"
+                android:textColor="@android:color/holo_red_dark"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

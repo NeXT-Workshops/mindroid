@@ -3,6 +3,7 @@ package org.mindroid.android.app.robodancer;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import org.mindroid.android.app.R;
+import org.mindroid.android.app.fragments.home.HomeFragment;
 import org.mindroid.android.app.fragments.myrobot.HardwareMapping;
 import org.mindroid.common.messages.hardware.Motors;
 import org.mindroid.common.messages.hardware.Sensors;
@@ -117,11 +118,13 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     public void loadConnectionProperties(){
         if (connectionProperties != null) {
             String savedVal;
-            savedVal = connectionProperties.getString(resources.getString(R.string.KEY_ROBOT_ID),resources.getString(R.string.DEFAULT_ROBOT_ID));
-            SettingsProvider.getInstance().robotID = ( (savedVal.isEmpty()) ? resources.getString(R.string.KEY_ROBOT_ID) : savedVal);
+            if(!HomeFragment.robot.isMessengerConnected()) {
+                savedVal = connectionProperties.getString(resources.getString(R.string.KEY_ROBOT_ID), resources.getString(R.string.DEFAULT_ROBOT_ID));
+                SettingsProvider.getInstance().robotID = ((savedVal.isEmpty()) ? SettingsProvider.getInstance().generateUniqueRobotName() : savedVal);
 
-            savedVal = connectionProperties.getString(resources.getString(R.string.KEY_GROUP_ID),resources.getString(R.string.DEFAULT_GROUP_ID));
-            SettingsProvider.getInstance().groupID = ( (savedVal.isEmpty()) ? resources.getString(R.string.KEY_GROUP_ID) : savedVal);
+                savedVal = connectionProperties.getString(resources.getString(R.string.KEY_GROUP_ID), resources.getString(R.string.DEFAULT_GROUP_ID));
+                SettingsProvider.getInstance().groupID = ((savedVal.isEmpty()) ? resources.getString(R.string.KEY_GROUP_ID) : savedVal);
+            }
 
             savedVal = connectionProperties.getString(resources.getString(R.string.KEY_EV3_IP), resources.getString(R.string.DEFAULT_EV3_BRICK_IP));
             SettingsProvider.getInstance().ev3IP = ( (savedVal.isEmpty()) ? resources.getString(R.string.DEFAULT_EV3_BRICK_IP) : savedVal);

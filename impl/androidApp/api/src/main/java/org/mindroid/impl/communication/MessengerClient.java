@@ -234,4 +234,8 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
             in.addMessageListener(listener);
         }
     }
+
+    public void setRobotID(String robotID) {
+        this.robotID = robotID;
+    }
 }

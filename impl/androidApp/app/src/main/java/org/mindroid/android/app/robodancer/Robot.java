@@ -122,6 +122,7 @@ public class Robot {
      * Connects the messenger client to the message server
      */
     public boolean connectMessenger(String msgServerIP, int msgServerPort){
+        roFactory.setRobotID(SettingsProvider.getInstance().getRobotID());
         return roFactory.getRobotCommandCenter().connectMessenger(msgServerIP,msgServerPort);
     }
 

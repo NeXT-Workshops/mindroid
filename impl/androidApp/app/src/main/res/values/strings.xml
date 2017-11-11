@@ -49,6 +49,7 @@
     <string name="txt_sensor_description_mode_seek_slot3">pair:</string>
     <string name="txt_sensor_description_mode_seek_slot4">pair:</string>
     <!-- Settings Fragment -->
+    <string name="txtView_note_msg_disconnect_messenger">Disconnect from the message server to change RobotID and GroupID !</string>
     <string name="btn_text_save_settings">save Settings</string>
     <string name="txtView_language_text">Language</string>
     <string name="msg_toast_settings_invalid_input">Invalid Input</string>

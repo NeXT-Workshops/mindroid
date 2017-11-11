@@ -13,9 +13,11 @@ import android.widget.*;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.MainActivity;
+import org.mindroid.android.app.fragments.home.HomeFragment;
 import org.mindroid.android.app.robodancer.ConnectionPropertiesChangedListener;
 import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
+import org.mindroid.impl.robot.Robot;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -54,6 +56,7 @@ public class SettingsFragment extends Fragment {
 
     //UI-Textfield
     private TextView txtView_language;
+    private TextView txtView_note;
 
     public EditText txt_input_robotID;
     public EditText txt_input_groupID;
@@ -74,6 +77,8 @@ public class SettingsFragment extends Fragment {
     private Spinner spinner_language;
     private Switch switch_chargePhone;
 
+    //Msg showing that the messenger needs to be disconnected
+    private String noteMessage;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -119,12 +124,26 @@ public class SettingsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        /** INIT TextView **/
+        txtView_note = (TextView) view.findViewById(R.id.txtView_note);
+        noteMessage = getResources().getString(R.string.txtView_note_msg_disconnect_messenger);
+
         /** INIT Buttons **/
         btn_saveSettings = (Button) view.findViewById(R.id.btn_saveSettings);
 
         /** INIT TextEdit fields **/
         txt_input_robotID = (EditText) view.findViewById(R.id.txt_input_robotID);
         txt_input_groupID = (EditText) view.findViewById(R.id.txt_input_groupID);
+        if(HomeFragment.robot.isMessengerConnected()){
+            txt_input_robotID.setEnabled(false);
+            txt_input_groupID.setEnabled(false);
+            txtView_note.setText(noteMessage);
+            txtView_note.setVisibility(View.VISIBLE);
+        }else{
+            txt_input_robotID.setEnabled(true);
+            txt_input_groupID.setEnabled(true);
+            txtView_note.setVisibility(View.GONE);
+        }
 
         txt_input_ev3ip_part1 = (EditText) view.findViewById(R.id.txt_input_ev3ip_part1);
         txt_input_ev3ip_part2 = (EditText) view.findViewById(R.id.txt_input_ev3ip_part2);
@@ -330,11 +349,13 @@ public class SettingsFragment extends Fragment {
         e.putString(getResources().getString(R.string.KEY_SERVER_IP),getInputServerIP());
         e.putString(getResources().getString(R.string.KEY_SERVER_TCP_PORT),txt_input_ServerTCPPort.getText().toString());
 
-        /** Data to connect to EV3 Brick **/
-        e.putString(getResources().getString(R.string.KEY_ROBOT_ID),txt_input_robotID.getText().toString());
+        if(!HomeFragment.robot.isMessengerConnected()) {
+            /** Data to connect to EV3 Brick **/
+            e.putString(getResources().getString(R.string.KEY_ROBOT_ID), txt_input_robotID.getText().toString());
 
-        /** Data to connect to Server **/
-        e.putString(getResources().getString(R.string.KEY_GROUP_ID),txt_input_groupID.getText().toString());
+            /** Data to connect to Server **/
+            e.putString(getResources().getString(R.string.KEY_GROUP_ID), txt_input_groupID.getText().toString());
+        }
 
         e.commit();
 

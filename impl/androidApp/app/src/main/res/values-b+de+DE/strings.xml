@@ -46,6 +46,7 @@
     <!-- Shared Preferences -->
     <string name="shared_pref_connection_Data">ConnectionData.xml</string>
     <string name="shared_pref_portConfiguration">PortConfiguration.xml</string>
+    <string name="shared_pref_app_config_data">AppConfigData.xml</string>
 
     <!-- Shared Preferences: DEFAULT VALUES -->
     <string name="DEFAULT_EV3_BRICK_IP">192.168.42.253</string>
@@ -78,6 +79,8 @@
     <string name="KEY_MOTOR_C">motorC</string>
     <string name="KEY_MOTOR_D">motorD</string>
 
+    <!-- Shared Preferences: KEYS for Shared Preferences - AppConfigData.xml -->
+    <string name="KEY_SELECTED_IMPLEMENTATION">selected_implementation_id</string>
 
     <!-- ErrorDialog -->
     <string name="text_ok_button">OK</string>
@@ -92,5 +95,31 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- Sensormonitoring -->
+    <string name="title_sensor_monitoring">Sensorüberwachung</string>
+    <string name="txt_sensor_description_mode_ambient_slot1">Intensität</string>
+    <string name="txt_sensor_description_mode_angle_and_rate_slot1">Winkelgeschwindigkeit:</string>
+    <string name="txt_sensor_description_mode_angle_and_rate_slot2">Winkel:</string>
+    <string name="txt_sensor_description_mode_angle_slot1">Winkel:</string>
+    <string name="txt_sensor_description_mode_color_slot1">Farb ID:</string>
+    <string name="txt_sensor_description_mode_distance_slot1">Distanz:</string>
+    <string name="txt_sensor_description_mode_listen_slot1">ist Present:</string>
+    <string name="txt_sensor_description_mode_rate_slot1">Winkelgeschwindigkeit:</string>
+    <string name="txt_sensor_description_mode_red_slot1">Reflektiertes Licht:</string>
+    <string name="txt_sensor_description_mode_rgb_slot1">Rot:</string>
+    <string name="txt_sensor_description_mode_rgb_slot2">Grün:</string>
+    <string name="txt_sensor_description_mode_rgb_slot3">Blau:</string>
+    <string name="txt_sensor_description_mode_seek_slot1">gepaart:</string>
+    <string name="txt_sensor_description_mode_touch_slot1">gedrückt:</string>
+    <string name="txt_sensor_description_mode_seek_slot2">gepaart:</string>
+    <string name="txt_sensor_description_mode_seek_slot3">gepaart:</string>
+    <string name="txt_sensor_description_mode_seek_slot4">gepaart:</string>
+    <string name="dialog_info_message">Es läuft derzeit kein Zustandsautomat! Starte einen Zustandsautomaten, um dieses
+        Feature zu verwenden und die Welt aus den Augen deines Roboters zu betrachten!
+    </string>
+    <string name="errortext_title_initialization">Konfiguration fehlgeschlagen!</string>
+    <string name="errortext_msg_initialization">Die Konfiguration eines Motors/Sensors ist fehlgeschlagen. Überprüfe die
+        Portverbindungen am Brick und die eingestelle Konfig in der App. Versuche es dann nochmal!
+    </string>
 
 </resources>

@@ -70,6 +70,7 @@
     <!-- Shared Preferences -->
     <string name="shared_pref_connection_Data">ConnectionData.xml</string>
     <string name="shared_pref_portConfiguration">PortConfiguration.xml</string>
+    <string name="shared_pref_app_config_data">AppConfigData.xml</string>
 
     <!-- Shared Preferences: DEFAULT VALUES -->
     <string name="DEFAULT_EV3_BRICK_IP">192.168.42.253</string>
@@ -102,6 +103,8 @@
     <string name="KEY_MOTOR_C">motorC</string>
     <string name="KEY_MOTOR_D">motorD</string>
 
+    <!-- Shared Preferences: KEYS for Shared Preferences - AppConfigData.xml -->
+    <string name="KEY_SELECTED_IMPLEMENTATION">selected_implementation_id</string>
 
     <!-- ErrorDialog -->
     <string name="text_ok_button">OK</string>

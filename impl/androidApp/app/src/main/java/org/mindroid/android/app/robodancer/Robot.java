@@ -121,8 +121,13 @@ public class Robot {
     /**
      * Connects the messenger client to the message server
      */
-    public boolean connectMessengerClient(String msgServerIP, int msgServerPort){
+    public boolean connectMessenger(String msgServerIP, int msgServerPort){
         return roFactory.getRobotCommandCenter().connectMessenger(msgServerIP,msgServerPort);
+    }
+
+
+    public void disconnectMessenger(){
+        roFactory.getRobotCommandCenter().disconnectMessenger();
     }
 
     public void connectToBrick() throws IOException {
@@ -219,7 +224,7 @@ public class Robot {
         return robotPortConfig;
     }
 
-    public void disconnect() {
+    public void disconnectFromBrick() {
         roFactory.getRobotCommandCenter().disconnectFromBrick();
     }
 

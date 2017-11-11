@@ -48,12 +48,18 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private OnFragmentInteractionListener mListener;
 
+    //Task
+    private final String MSG_TASK_PARAM_0_CONNECT = "connect";
+    private final String MSG_TASK_PARAM_0_DISCONNECT = "disconnectFromBrick";
+
     //--- Buttons etc --//
+    private Button btn_messengerConnDisconn;
     private Button btn_initConfiguration;
     private Button btn_connect;
     private Button btn_disconnect;
     private Button btn_startRobot;
     private Button btn_stopRobot;
+
 
     //Message client Connection state
     private TextView txtView_msgServerConnectionState;
@@ -83,6 +89,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private String msgStopRobot;
     private String infoUsbNotFound;
     private String infoTetheringNotActiavted;
+    private String txt_btn_DisConnect_connect;
+    private String txt_btn_DisConnect_disconnect;
 
     private HashMap<Integer,Boolean> menuItemAlwaysEnabled = new HashMap<>();
 
@@ -156,6 +164,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         msgStopRobot = getResources().getString(R.string.dialog_msg_stop_robot);
         infoTetheringNotActiavted = getResources().getString(R.string.info_txt_msg_activate_tetherting);
         infoUsbNotFound = getResources().getString(R.string.info_txt_msg_activate_usb_not_found);
+        txt_btn_DisConnect_connect = getResources().getString(R.string.txt_btn_DisConnect_connect);
+        txt_btn_DisConnect_disconnect = getResources().getString(R.string.txt_btn_DisConnect_disconnect);;
     }
 
     @Override
@@ -165,6 +175,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         View view=inflater.inflate(R.layout.fragment_home, container, false);
         /** Instantiate buttons and textviews **/
 
+
+        btn_messengerConnDisconn = (Button) view.findViewById(R.id.btn_messengerConnDisconn);
         btn_initConfiguration = (Button) view.findViewById(R.id.btn_initConfig);
         btn_connect = (Button) view.findViewById(R.id.btn_connect);
         btn_disconnect = (Button) view.findViewById(R.id.btn_disconnect);
@@ -271,7 +283,13 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
                 spinner_selectedImplementation.setEnabled(!robot.isRunning);
 
+                btn_messengerConnDisconn.setEnabled(!robot.isRunning);
 
+                if(!robot.isMessengerConnected()) {
+                    btn_messengerConnDisconn.setText(txt_btn_DisConnect_connect);
+                }else{
+                    btn_messengerConnDisconn.setText(txt_btn_DisConnect_disconnect);
+                }
             }
         };
 
@@ -402,6 +420,20 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private void setButtonListeners() {
 
+        btn_messengerConnDisconn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(robot.isMessengerConnected()){
+                    DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask(parentActivity,"Messenger Client tries to connect");
+                    msgClientTask.execute(MSG_TASK_PARAM_0_DISCONNECT);
+                }else{
+                    DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask(parentActivity,"Messenger Client tries to connect");
+                    msgClientTask.execute(MSG_TASK_PARAM_0_CONNECT);
+                }
+
+            }
+        });
+
         btn_connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -412,8 +444,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 waitForTaskCompletion(createRobotTask,20);
 
                 //Messenger Client Task - messenger connects to messageserver
-                ConnectMessengerTask msgClientTask = new ConnectMessengerTask(parentActivity,"Messenger Client tries to connect");
-                msgClientTask.execute();
+                DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask(parentActivity,"Messenger Client tries to connect");
+                msgClientTask.execute(MSG_TASK_PARAM_0_CONNECT);
 
                 waitForTaskCompletion(msgClientTask,20);
 
@@ -549,7 +581,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         protected Boolean doInBackground(String... params) {
             boolean result = false;
             try {
-                robot.disconnect();
+                robot.disconnectFromBrick();
                 result = robot.isConnected();
             } catch (Exception e){
                 e.printStackTrace();
@@ -621,19 +653,24 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
     }
 
-    private class ConnectMessengerTask extends ProgressTask{
+    private class DisConnectMessengerTask extends ProgressTask{
 
-        public ConnectMessengerTask(Context context,String progressMsg) {
+        public DisConnectMessengerTask(Context context, String progressMsg) {
             super(context,progressMsg);
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
-            if(!robot.isMessengerConnected()) {
-                System.out.println("[HomeFragment:ConnectMessengerTask] Connect to "+SettingsProvider.getInstance().getMsgServerIP()+":"+SettingsProvider.getInstance().getMsgServerPort());
-                boolean isConnected = robot.connectMessengerClient(SettingsProvider.getInstance().getMsgServerIP(),SettingsProvider.getInstance().getMsgServerPort());
-                System.out.println("[HomeFragment:ConnectMessengerTask] Connect to "+SettingsProvider.getInstance().getMsgServerIP()+":"+SettingsProvider.getInstance().getMsgServerPort()+ "was success?"+isConnected);
-
+            if(params.length > 0){
+                if(params[0].equals(MSG_TASK_PARAM_0_CONNECT)){
+                    if(!robot.isMessengerConnected()) {
+                        robot.connectMessenger(SettingsProvider.getInstance().getMsgServerIP(),SettingsProvider.getInstance().getMsgServerPort());
+                    }
+                }else if(params[0].equals(MSG_TASK_PARAM_0_DISCONNECT)){
+                    if(robot.isMessengerConnected()) {
+                        robot.disconnectMessenger();
+                    }
+                }
             }
 
             return robot.isMessengerConnected();

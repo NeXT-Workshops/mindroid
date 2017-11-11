@@ -39,7 +39,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
     private InetAddress serverip;
     private int serverport;
 
-    private final Socket socket;
+    private Socket socket;
     private PrintWriter out;
     private ServerWorker in; //handles incoming messages
 
@@ -88,6 +88,11 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
             IllegalArgumentException e = new IllegalArgumentException("Invalid IP or/and Port");
             ErrorHandlerManager.getInstance().handleError(e,MessengerClient.class,e.getMessage());
             return false;
+        }
+
+        if(socket.isClosed()){
+            //Create a new socket, when the old one got closed/disconnected
+            socket = new Socket();
         }
 
         if(!isConnected()) {

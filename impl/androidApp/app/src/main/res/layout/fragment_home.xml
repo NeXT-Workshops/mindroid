@@ -42,10 +42,21 @@
                     android:weightSum="1"
                     tools:ignore="NotSibling,UselessParent">
 
-                    <TextView
-                            android:text="TextView"
+                    <GridLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" android:id="@+id/txtView_msgServerConnectionState"/>
+                            android:layout_height="match_parent">
+
+                        <TextView
+                                android:text="MessengerState"
+                                android:layout_width="240dp"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/txtView_msgServerConnectionState"/>
+                        <Button
+                                android:text="disconnect"
+                                android:layout_width="wrap_content"
+                                android:layout_height="37dp" android:id="@+id/btn_messengerConnDisconn"
+                                android:elevation="0dp"/>
+                    </GridLayout>
                     <FrameLayout
                         android:id="@+id/layout_infobox"
                         android:layout_width="match_parent"
@@ -54,10 +65,10 @@
                         android:layout_alignParentStart="true">
 
                         <TextView
-                            android:id="@+id/txt_info"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="TextView" />
+                                android:id="@+id/txt_info"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="tethering_text"/>
 
                     </FrameLayout>
 

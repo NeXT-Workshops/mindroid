@@ -188,7 +188,15 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
 
     @Override
     public MindroidMessage getNextMessage() {
-        return getMessages().iterator().next();
+        if(getMessages().size() >= 1){
+            //Get message
+            MindroidMessage msg = getMessages().get(0);
+            //remove message from line
+            getMessages().remove(0);
+            return msg;
+        }else{
+            return null;
+        }
     }
 
     private ArrayList<MindroidMessage> getMessages(){

@@ -290,10 +290,19 @@ public abstract class BasicAPI {
 
     // ------ Messaging ------
 
+    /**
+     * Returns true if the messenger has a message.
+     * @return true if the messenger has a message.
+     */
     public final boolean hasMessage(){
         return getRobotController().getMessenger().hasMessage();
     }
 
+    /**
+     * Returns the next message in line. The message will then be removed from the messenger and cant be retrieved again!
+     * Returns null, when no message is in line. Use {@link #hasMessage()} to check if there is a message in line.
+     * @return the next message in line.
+     */
     public final MindroidMessage getNextMessage(){
         return getRobotController().getMessenger().getNextMessage();
     }

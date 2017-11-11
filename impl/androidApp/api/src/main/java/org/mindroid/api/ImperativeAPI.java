@@ -33,6 +33,7 @@ public abstract class ImperativeAPI extends BasicAPI {
      * Start the execution of the Implementation
      * Executes run method.
      * Stops all motors, when execution finished/got interrupted.
+     * //TODO Try to hide this methods from api user
      */
     public final void start(){
         run();
@@ -43,6 +44,7 @@ public abstract class ImperativeAPI extends BasicAPI {
 
     /**
      * Sets the isInterrupted field to true to stop the execution of this method
+     * //TODO Try to hide this methods from api user
      */
     public final void stopExecution(){
         this.isInterrupted = true;

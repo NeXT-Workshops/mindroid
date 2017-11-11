@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -209,7 +210,14 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         //transaction.addToBackStack(null);
         transaction.commit();
 
-        spinner_selectedImplementation.setAdapter(getImplementationIDAdapter());
+        ArrayAdapter<String> adapter = getImplementationIDAdapter();
+        spinner_selectedImplementation.setAdapter(adapter);
+        String formerSelectedImplementationID = loadSelectedImplementationID();
+        //Set former selected Implementation ID
+        if (!formerSelectedImplementationID.equals(null)) {
+            int spinnerPosition = adapter.getPosition(formerSelectedImplementationID);
+            spinner_selectedImplementation.setSelection(spinnerPosition);
+        }
 
         //mListener.showErrorDialog("Error on create",stateAlreadyExists.getMessage());
 
@@ -503,6 +511,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SettingsProvider.getInstance().selectedImplementationID = (String) parent.getSelectedItem();
+                saveSelectedImplementation((String) parent.getSelectedItem());
             }
 
             @Override
@@ -537,7 +546,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     }
 
-    //TODO Does not work as intended
     public void setEnableMenuItems(boolean enable){
         ListView mDrawerListView;
         if((mDrawerListView = parentActivity.getMenuItemListView()) != null) {
@@ -547,6 +555,25 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 }
             }
         }
+    }
+
+    /**
+     * Saves the selected ImplementationID in preferences to reload the selected one, when restarting the app.
+     * @param selectedItem - implementationID to save
+     */
+    public void saveSelectedImplementation(String selectedItem) {
+        SharedPreferences.Editor e = parentActivity.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_app_config_data), Context.MODE_PRIVATE).edit();
+        e.clear();
+
+        /** Selected Implementation ID **/
+        e.putString(getResources().getString(R.string.KEY_SELECTED_IMPLEMENTATION),selectedItem);
+
+        e.commit();
+    }
+
+    public String loadSelectedImplementationID(){
+        SharedPreferences connectionProperties = parentActivity.getSharedPreferences(getResources().getString(R.string.shared_pref_app_config_data), Context.MODE_PRIVATE);
+        return connectionProperties.getString(getResources().getString(R.string.KEY_SELECTED_IMPLEMENTATION),"-");
     }
 
     //--- Async Tasks
@@ -660,6 +687,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
         protected Boolean doInBackground(String... params) {
             if(params.length > 0){
                 if(params[0].equals(MSG_TASK_PARAM_0_CONNECT)){
@@ -676,6 +708,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             return robot.isMessengerConnected();
         }
 
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+        }
     }
 
     private class CreateRobotTask extends ProgressTask{

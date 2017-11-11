@@ -247,4 +247,9 @@ public class MindroidServerFrame extends JFrame {
     public HashMap<Destination, Socket> getSocketMapping() {
         return socketMapping;
     }
+
+    public void removeRegistration(String connectedRobot) {
+        getIPMapping().remove(connectedRobot);
+        getSocketMapping().remove(getSocketMapping());
+    }
 }

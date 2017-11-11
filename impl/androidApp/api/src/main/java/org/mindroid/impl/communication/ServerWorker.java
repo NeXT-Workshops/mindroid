@@ -56,11 +56,13 @@ public class ServerWorker implements Runnable {
                     if (line.contains("<close>")) {
                         isConnected = false;
                         //Close messenger client
+                        inputStream.close();
                         owner.disconnect();
                     }
                 }else{
                     //Connection closed
                     isConnected = false; //Stop listening
+                    inputStream.close();
                     //Close messenger client
                     owner.disconnect();
                     //Just for testing --> will be shown in app

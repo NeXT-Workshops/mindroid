@@ -23,6 +23,9 @@ public class MindroidServerWorker implements Runnable {
     private MindroidServerFrame mindroidServerFrame;
     private MessageMarshaller messageMarshaller;
 
+    //Robot Connected to this socket - will be set when robot registers himself
+    private String connectedRobot = null;
+
     public MindroidServerWorker(final Socket socket, MindroidServerFrame mindroidServerFrame) {
         this.socket = socket;
         this.mindroidServerFrame = mindroidServerFrame;
@@ -37,28 +40,61 @@ public class MindroidServerWorker implements Runnable {
             StringBuilder sb = new StringBuilder();
             boolean connected = true;
             while(connected) {
-            if(scanner.hasNextLine())
-            {
-                String line = scanner.nextLine();
-                sb.append(line);
-                if(line.endsWith("}")){
-                    MindroidMessage deserializedMsg = messageMarshaller.deserializeMessage(sb.toString());
-                    handleMessage(deserializedMsg);
-                    sb = new StringBuilder();
-                }
-                if (line.contains("<close>")) {
-                    connected = false;
+                if(scanner.hasNextLine())
+                {
+                    String line = scanner.nextLine();
+                    sb.append(line);
+                    if(line.endsWith("}")){
+                        MindroidMessage deserializedMsg = messageMarshaller.deserializeMessage(sb.toString());
+                        handleMessage(deserializedMsg);
+                        sb = new StringBuilder();
+                    }
+                    if (line.contains("<close>")) {
+                        connected = false;
+                        disconnect();
+                        removeRegistration();
+                    }
+                }else {
+                    //Connection closed
+                    connected = false; //Stop listening
+                    //Close Socekt
+                    disconnect();
+                    removeRegistration();
+                    //Just for testing --> will be shown in app
+
                 }
             }
-            //else thread sleep, 5s break TODO
-            }
-
-
         } catch (IOException e) {
             MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
             console.setVisible(true);
             console.appendLine("Error while receiving or forwarding a message.");
             console.appendLine("IOException: "+e.getMessage()+"\n");
+        }
+    }
+
+    private void disconnect() {
+        try {
+            //Close Socket
+            socket.close();
+
+            if(connectedRobot != null) {
+                mindroidServerFrame.addContentLine("Local", "-", "INFO", "Connection to "+connectedRobot+" got closed!");
+            }else{
+                mindroidServerFrame.addContentLine("Local", "-", "INFO", "Connection to unknown Robot got closed!");
+            }
+        } catch (IOException e) {
+            MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
+            console.setVisible(true);
+            console.appendLine("Error while closing a socket");
+            console.appendLine("IOException: "+e.getMessage()+"\n");
+        }
+
+        //TODO add Line to frame
+    }
+
+    private void removeRegistration(){
+        if(connectedRobot != null) {
+            mindroidServerFrame.removeRegistration(connectedRobot);
         }
     }
 
@@ -76,6 +112,7 @@ public class MindroidServerWorker implements Runnable {
                 //the port was sent as content of the registration message
                 int port = Integer.parseInt(deserializedMsg.getContent());
                 mindroidServerFrame.register(deserializedMsg.getSource(), socket, (InetSocketAddress) socketAddress, port);
+                connectedRobot = deserializedMsg.getSource().getValue(); //Save registered robotID
                 mindroidServerFrame.addContentLine("Local", "-", "INFO", deserializedMsg.getSource().getValue()+" was registered.");
             } else {
                 throw new IOException("Registration of "+deserializedMsg.getSource().getValue()+" failed.");

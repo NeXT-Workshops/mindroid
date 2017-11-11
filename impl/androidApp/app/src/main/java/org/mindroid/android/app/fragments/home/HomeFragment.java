@@ -630,7 +630,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         @Override
         protected Boolean doInBackground(String... params) {
             if(!robot.isMessengerConnected()) {
-                robot.connectMessengerClient();
+                System.out.println("[HomeFragment:ConnectMessengerTask] Connect to "+SettingsProvider.getInstance().getMsgServerIP()+":"+SettingsProvider.getInstance().getMsgServerPort());
+                boolean isConnected = robot.connectMessengerClient(SettingsProvider.getInstance().getMsgServerIP(),SettingsProvider.getInstance().getMsgServerPort());
+                System.out.println("[HomeFragment:ConnectMessengerTask] Connect to "+SettingsProvider.getInstance().getMsgServerIP()+":"+SettingsProvider.getInstance().getMsgServerPort()+ "was success?"+isConnected);
+
             }
 
             return robot.isMessengerConnected();

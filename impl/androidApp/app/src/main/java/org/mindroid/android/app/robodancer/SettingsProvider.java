@@ -32,9 +32,10 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     /** public Connection Attributes **/
     private String ev3IP = "-";
     private int ev3TCPPort = -1;
+    //MsgServerIP
     private String serverIP = "-";
+    //MsgServerPort
     private int serverTCPPort = -1;
-    private int robotServerPort = -1;
 
     /** public Configuration Attributes **/
     private String sensorS1 = HardwareMapping.notDefined;
@@ -134,9 +135,6 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
             savedVal = connectionProperties.getString(resources.getString(R.string.KEY_SERVER_TCP_PORT),resources.getString(R.string.DEFAULT_MSG_SERVER_PORT));
             SettingsProvider.getInstance().serverTCPPort = (Integer.parseInt((savedVal.isEmpty()) ? resources.getString(R.string.DEFAULT_MSG_SERVER_PORT) : savedVal));
 
-            savedVal = connectionProperties.getString(resources.getString(R.string.KEY_ROBOT_SERVER_TCP_PORT),resources.getString(R.string.DEFAULT_BRICK_MSG_SERVER_PORT));
-            SettingsProvider.getInstance().robotServerPort = (Integer.parseInt((savedVal.isEmpty()) ? resources.getString(R.string.DEFAULT_BRICK_MSG_SERVER_PORT) : savedVal));
-
         }else{
             /*if(getActivity() instanceof MainActivity){
                 ((MainActivity) getActivity()).showErrorDialog("Couldn't load Connection Properties!","Connection Properties are null! Goto SettingsProvider and save thema again!");
@@ -193,16 +191,12 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
         return ev3TCPPort;
     }
 
-    public String getServerIP() {
+    public String getMsgServerIP() {
         return serverIP;
     }
 
-    public int getServerTCPPort() {
+    public int getMsgServerPort() {
         return serverTCPPort;
-    }
-
-    public int getRobotServerPort() {
-        return robotServerPort;
     }
 
     public Sensors getSensorS1() {
@@ -277,7 +271,6 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
                 ", ev3TCPPort=" + ev3TCPPort +
                 ", serverIP='" + serverIP + '\'' +
                 ", serverTCPPort=" + serverTCPPort +
-                ", robotServerPort=" + robotServerPort +
                 ", sensorS1='" + sensorS1 + '\'' +
                 ", sensorS2='" + sensorS2 + '\'' +
                 ", sensorS3='" + sensorS3 + '\'' +

@@ -244,7 +244,7 @@ public class RobotSetupInfoFragment extends Fragment {
         if(SettingsProvider.getInstance().isInitialized()) {
             txtView_robot_id.setText(SettingsProvider.getInstance().getRobotID());
             txtView_group_id.setText(SettingsProvider.getInstance().getGroupID());
-            txtView_msg_server_ip.setText(SettingsProvider.getInstance().getServerIP());
+            txtView_msg_server_ip.setText(SettingsProvider.getInstance().getMsgServerIP());
             txtView_ev3_brick_ip.setText(SettingsProvider.getInstance().getEv3IP());
         }
     }

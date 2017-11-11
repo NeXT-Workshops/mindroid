@@ -14,20 +14,15 @@ import org.mindroid.impl.statemachine.StatemachineCollection;
 public interface IRobotFactory {
 
     // ------- Robot Characteristics -------
-    public void setRobotConfig(IRobotPortConfig robotConfig);
+    void setRobotConfig(IRobotPortConfig robotConfig);
 
-    public void setBrickIP(String ip);
+    void setBrickIP(String ip);
 
-    public void setBrickTCPPort(int tcpPort);
+    void setBrickTCPPort(int tcpPort);
 
-    public void setRobotID(String robotID);
+    void setRobotID(String robotID);
 
-    // ------- Properties for Messaging -------
-    public void setMSGServerIP(String msgServerIP);
-
-    public void setMSGServerTCPPort(int tcpPort);
-
-    void setRobotServerPort(int robotServerPort);
+    IRobotCommandCenter getRobotCommandCenter();
 
     // ------- Statemachine Enginge Initialization -------
 

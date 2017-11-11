@@ -29,22 +29,28 @@ public class Robot {
 
     public boolean isRunning = false;
 
-
-    IRobotCommandCenter commandCenter;
-
-    IRobotFactory roFactory = new RobotFactory();
+    IRobotFactory roFactory;
     //-------- Robot
-    private RobotPortConfig robotPortConfig = new RobotPortConfig();
+    private RobotPortConfig robotPortConfig;
 
     // The ID of the Implementation currently running - if empty ("") no implementation is running.
     private String runningImplementationID = "";
 
-    private HashMap<EV3PortID,IEV3SensorEventListener> sensorListener = new HashMap<>();
+    private HashMap<EV3PortID,IEV3SensorEventListener> sensorListener;
 
     public Robot() {
+        roFactory = new RobotFactory();
+        robotPortConfig = new RobotPortConfig();
+        sensorListener = new HashMap<>();
+
+        updateRobotPortConfig();
+
         initSensorListener();
     }
 
+    /**
+     * Sensor listener for sensor monitor
+     */
     private void initSensorListener() {
         sensorListener.put(EV3PortIDs.PORT_1,new SensorListener(EV3PortIDs.PORT_1));
         sensorListener.put(EV3PortIDs.PORT_2,new SensorListener(EV3PortIDs.PORT_2));
@@ -63,9 +69,6 @@ public class Robot {
         roFactory.setRobotConfig(robotPortConfig);
         roFactory.setBrickIP(SettingsProvider.getInstance().getEv3IP());
         roFactory.setBrickTCPPort(SettingsProvider.getInstance().getEv3TCPPort());
-        roFactory.setMSGServerIP(SettingsProvider.getInstance().getServerIP());
-        roFactory.setMSGServerTCPPort(SettingsProvider.getInstance().getServerTCPPort());
-        roFactory.setRobotServerPort(SettingsProvider.getInstance().getRobotServerPort());
         roFactory.setRobotID(SettingsProvider.getInstance().getRobotID());
         for(EV3PortID port : sensorListener.keySet()){ //TODO maybe leads to an error that sensor listener gets registered multiple times crashing the app. -> move somewhere else
             roFactory.registerSensorListener(port,sensorListener.get(port));
@@ -82,9 +85,7 @@ public class Robot {
         }
 
         //Create the Robot
-        commandCenter = roFactory.createRobot();
-
-
+        roFactory.createRobot();
     }
 
     private void updateRobotPortConfig() {
@@ -110,8 +111,8 @@ public class Robot {
      * @return true if the messenger client is connected to the message server
      */
     public boolean isMessengerConnected(){
-        if(commandCenter != null) {
-            return commandCenter.isMessengerConnected();
+        if(roFactory.getRobotCommandCenter() != null) {
+            return roFactory.getRobotCommandCenter().isMessengerConnected();
         }else{
             return false;
         }
@@ -120,29 +121,29 @@ public class Robot {
     /**
      * Connects the messenger client to the message server
      */
-    public boolean connectMessengerClient(){
-        return commandCenter.connectMessenger();
+    public boolean connectMessengerClient(String msgServerIP, int msgServerPort){
+        return roFactory.getRobotCommandCenter().connectMessenger(msgServerIP,msgServerPort);
     }
 
     public void connectToBrick() throws IOException {
-        commandCenter.connectToBrick();
+        roFactory.getRobotCommandCenter().connectToBrick();
     }
 
     public boolean isConnected() {
-        if(commandCenter != null) {
-            return commandCenter.isConnectedToBrick();
+        if(roFactory.getRobotCommandCenter() != null) {
+            return roFactory.getRobotCommandCenter().isConnectedToBrick();
         }else{
             return false;
         }
     }
 
     public boolean initializeConfiguration() throws BrickIsNotReadyException, PortIsAlreadyInUseException {
-        return commandCenter.initializeConfiguration();
+        return roFactory.getRobotCommandCenter().initializeConfiguration();
     }
 
     public boolean isConfigurated(){
-        if(commandCenter != null) {
-            return commandCenter.isConfigurated();
+        if(roFactory.getRobotCommandCenter() != null) {
+            return roFactory.getRobotCommandCenter().isConfigurated();
         }else{
             return false;
         }
@@ -182,7 +183,7 @@ public class Robot {
      */
     private void startImperativeImpl(String id) {
         runningImplementationID = id;
-        commandCenter.startImperativeImplemenatation(id);
+        roFactory.getRobotCommandCenter().startImperativeImplemenatation(id);
     }
 
     /**
@@ -191,7 +192,7 @@ public class Robot {
      */
     private void stopImperativeImpl(String id) {
         runningImplementationID = "";
-        commandCenter.stopImperativeImplementation(id);
+        roFactory.getRobotCommandCenter().stopImperativeImplementation(id);
     }
 
     /**
@@ -200,7 +201,7 @@ public class Robot {
      */
     private void startStatemachine(String id) {
         runningImplementationID = id;
-        commandCenter.startStatemachine(id);
+        roFactory.getRobotCommandCenter().startStatemachine(id);
     }
 
     /**
@@ -209,7 +210,7 @@ public class Robot {
      */
     private void stopStatemachine(String id) {
         runningImplementationID = "";
-        commandCenter.stopStatemachine(id);
+        roFactory.getRobotCommandCenter().stopStatemachine(id);
     }
 
 
@@ -219,7 +220,7 @@ public class Robot {
     }
 
     public void disconnect() {
-        commandCenter.disconnectFromBrick();
+        roFactory.getRobotCommandCenter().disconnectFromBrick();
     }
 
     public void registerErrorHandler(AbstractErrorHandler errorHandler){

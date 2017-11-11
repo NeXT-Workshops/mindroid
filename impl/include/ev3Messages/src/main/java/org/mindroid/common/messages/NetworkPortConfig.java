@@ -13,6 +13,4 @@ public class NetworkPortConfig {
     public static final int SYNCED_MOTOR_GROUP = 33699;
     public static final int UDP_OFFSET = 100;
     public static final int SERVER_PORT = 33044;
-    public static final int ROBOT_SERVER_PORT = 33045;
-    public static final int DISPLAY_PORT = 33700;
 }

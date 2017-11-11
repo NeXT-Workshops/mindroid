@@ -6,6 +6,7 @@ import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 /**
  *
@@ -18,7 +19,7 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     /**
      * The Robot Object this RommandCenter is observing
      */
-    protected Robot robot;
+    protected final Robot robot;
 
     /**
      * True if the Configuration (sensors/motors) succeed.
@@ -113,10 +114,11 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     }
 
     @Override
-    public synchronized boolean connectMessenger() {
-        if(robot.getMessenger() != null) {
-            return robot.getMessenger().connect();
+    public synchronized boolean connectMessenger(String msgServerIP, int msgServerTCPPort) {
+        if(this.robot.getMessenger() != null) {
+            return this.robot.getMessenger().connect(msgServerIP,msgServerTCPPort);
         }else{
+            ErrorHandlerManager.getInstance().handleError(new Exception("[RobotCommandCenter:connectMessenger] Robot is null"),RobotCommandCenter.class,"[RobotCommandCenter:connectMessenger]  Robot is null");
             return false;
         }
     }

@@ -38,12 +38,7 @@ public class RobotController {
     }
 
     public MessengerClient getMessenger() {
-        if(this.robot.isMessageingEnabled()){
-            return robot.getMessenger();
-        }else{
-            return null;
-        }
-
+        return robot.getMessenger();
     }
 
     public String getRobotID() {

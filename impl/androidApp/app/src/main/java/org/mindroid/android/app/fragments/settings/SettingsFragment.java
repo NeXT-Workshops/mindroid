@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +60,6 @@ public class SettingsFragment extends Fragment {
 
     public EditText txt_input_EV3TCPPort;
     public EditText txt_input_ServerTCPPort;
-    public EditText txt_input_robotServerPort;
 
     private EditText txt_input_ev3ip_part1;
     private EditText txt_input_ev3ip_part2;
@@ -139,7 +137,6 @@ public class SettingsFragment extends Fragment {
         txt_input_serverip_part3 = (EditText) view.findViewById(R.id.txt_input_msg_serverip_part3);
         txt_input_serverip_part4 = (EditText) view.findViewById(R.id.txt_input_msg_serverip_part4);
         txt_input_ServerTCPPort = (EditText) view.findViewById(R.id.txt_input_ServerTCPPort);
-        txt_input_robotServerPort = (EditText) view.findViewById(R.id.txt_input_robotServerPort);
         txtView_language = (TextView) view.findViewById(R.id.txtView_language);
 
         /** Set ports **/
@@ -157,7 +154,6 @@ public class SettingsFragment extends Fragment {
         txt_input_serverip_part4.setText(dev_serverip[3]);
 
         txt_input_ServerTCPPort.setText(R.string.DEFAULT_MSG_SERVER_PORT);
-        txt_input_robotServerPort.setText(R.string.DEFAULT_BRICK_MSG_SERVER_PORT);
 
         //Charging phone switch
         initChargePhoneSwitch(view);
@@ -297,7 +293,7 @@ public class SettingsFragment extends Fragment {
             savedVal = ""+SettingsProvider.getInstance().getEv3TCPPort();
             txt_input_EV3TCPPort.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_EV3_BRICK_PORT) : savedVal);
 
-            savedVal = SettingsProvider.getInstance().getServerIP();
+            savedVal = SettingsProvider.getInstance().getMsgServerIP();
             if(!savedVal.isEmpty()){
                 String[] val = savedVal.split("\\.");
                 txt_input_serverip_part1.setText(val[0]);
@@ -306,7 +302,7 @@ public class SettingsFragment extends Fragment {
                 txt_input_serverip_part4.setText(val[3]);
             }
 
-            savedVal = ""+SettingsProvider.getInstance().getServerTCPPort();
+            savedVal = ""+SettingsProvider.getInstance().getMsgServerPort();
             txt_input_ServerTCPPort.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_MSG_SERVER_PORT) : savedVal);
 
             savedVal = SettingsProvider.getInstance().getRobotID();
@@ -314,9 +310,6 @@ public class SettingsFragment extends Fragment {
 
             savedVal = SettingsProvider.getInstance().getGroupID();
             txt_input_groupID.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_GROUP_ID) : savedVal);
-
-            savedVal = ""+SettingsProvider.getInstance().getRobotServerPort();
-            txt_input_robotServerPort.setText((savedVal.isEmpty()) ? getResources().getString(R.string.DEFAULT_BRICK_MSG_SERVER_PORT) : savedVal);
     }
 
     private void saveSettings(){
@@ -342,8 +335,6 @@ public class SettingsFragment extends Fragment {
 
         /** Data to connect to Server **/
         e.putString(getResources().getString(R.string.KEY_GROUP_ID),txt_input_groupID.getText().toString());
-
-        e.putString(getResources().getString(R.string.KEY_ROBOT_SERVER_TCP_PORT),txt_input_robotServerPort.getText().toString());
 
         e.commit();
 

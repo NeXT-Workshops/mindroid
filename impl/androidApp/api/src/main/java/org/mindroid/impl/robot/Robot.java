@@ -38,7 +38,6 @@ public final class Robot {
     private StatemachineManager statemachineManager;
     private ImperativeImplManager imperativeImplManager;
 
-    protected boolean messageingEnabled = false;
     protected MessengerClient messenger = null;
 
     private static Robot robot = new Robot();
@@ -158,11 +157,7 @@ public final class Robot {
         this.robotID = robotID;
     }
 
-    public boolean isMessageingEnabled() {
-        return messageingEnabled;
-    }
-
-    protected MessengerClient getMessenger() {
+    public MessengerClient getMessenger() {
         return messenger;
     }
 

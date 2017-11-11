@@ -22,6 +22,7 @@ import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.robot.context.RobotContextStateEvaluator;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
 import org.mindroid.impl.statemachine.StatemachineCollection;
+import org.mindroid.impl.util.Messaging;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -61,7 +62,6 @@ public final class RobotFactory implements IRobotFactory {
 
     private String brickIP = null;
     private int brickTCPport = -1;
-    private int robotServerPort = -1;
 
     private String msgServerIP = null;
     private int msgServerTCPPort = -1;
@@ -69,19 +69,15 @@ public final class RobotFactory implements IRobotFactory {
     IRobotPortConfig robotConfig;
 
 
-
-    // ----------------------- Verwendete Variablen ------------------------------
-
-    private final String regexIP = "((((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)[.]){3})(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?){1}){1}";
-
-    // --------------------------------------------------------------------------
-
     private Robot myRobot;
     private RobotCommandCenter myRobotCommandCenter;
 
     public RobotFactory(){
         myRobot = Robot.getInstance();
         myRobotCommandCenter = new RobotCommandCenter(myRobot);
+
+        //Create Messenger with specified properties
+        createNetworkCommunicationInterfaces();
 
         sensorListenerToRegister.put(EV3PortIDs.PORT_1,new ArrayList<IEV3SensorEventListener>());
         sensorListenerToRegister.put(EV3PortIDs.PORT_2,new ArrayList<IEV3SensorEventListener>());
@@ -101,7 +97,6 @@ public final class RobotFactory implements IRobotFactory {
 
     @Override
     public IRobotCommandCenter createRobot() {
-        RobotCommandCenter robotCommandCenter = new RobotCommandCenter(myRobot);
         Robot.getRobotController().setRobotID(Robot.getInstance().robotID);
 
         if(robotConfig != null) {
@@ -127,7 +122,7 @@ public final class RobotFactory implements IRobotFactory {
             throw new NullPointerException("No RobotConfig set!");
         }
 
-        if(isValidIP(brickIP) && isValidTCPPort(brickTCPport)) {
+        if(Messaging.isValidIP(brickIP) && Messaging.isValidTCPPort(brickTCPport)) {
             // Configuration of the robot
             RobotConfigurator robotConfigurator = new RobotConfigurator(brickIP, brickTCPport);
             myRobot.setRobotConfigurator(robotConfigurator);
@@ -183,22 +178,12 @@ public final class RobotFactory implements IRobotFactory {
             // Connect statemachines RobotContextStateEvaluator etc with state machine
             setupStatemachineEngine();
 
-            //---------------- CREATE MESSENGER and ROBOTSERVER
-            //Disconnect and Remove old messenger from the former created robot. (The new messenger may connect to another ServerIP etc.)
-            if(Robot.getInstance().messenger != null){
-                Robot.getInstance().messenger.disconnect();
-                Robot.getInstance().messenger = null;
-            }
-            //Create Messenger with specified properties
-            createNetworkCommunicationInterfaces();
-
-
         }else{
             ErrorHandlerManager.getInstance().handleError(new Exception("Could not create Robot"),this.getClass(),"RobotFactory.createRobot(): Error appeard while creating robot!");
-            robotCommandCenter = null;
+            myRobotCommandCenter = null;
         }
         System.out.println("[RobotFactory:createRobot] The RobotFactory created a Robot with the following setup:\n"+toString());
-        return robotCommandCenter;
+        return myRobotCommandCenter;
     }
 
     /**
@@ -217,27 +202,9 @@ public final class RobotFactory implements IRobotFactory {
      *
      */
     private void createNetworkCommunicationInterfaces() {
-        if(isValidIP(msgServerIP) && isValidTCPPort(msgServerTCPPort)){
-            Runnable run = new Runnable(){
-                @Override
-                public void run(){
-                    try {
-                        //Initialize MessengerClient
-                        Robot.getInstance().messenger = new MessengerClient(myRobot.getRobotID(), InetAddress.getByName(msgServerIP),msgServerTCPPort);
-                        Robot.getRobotController().setMessenger(Robot.getInstance().messenger);
-                        Robot.getInstance().messageingEnabled = true; //TODO maybe remove this field, as it does not fulfil its original purpose anymore (replaced by messenger.isConnected())
-
-                    } catch (UnknownHostException e) {
-                        ErrorHandlerManager.getInstance().handleError(e,RobotFactory.class,e.getMessage());
-                    }
-                }
-            };
-            new Thread(run).start();
-        }else{
-            myRobot.messenger = null;
-            myRobot.messageingEnabled = false;
-            ErrorHandlerManager.getInstance().handleError(new IllegalArgumentException("Invalid Server IP/Port"),RobotFactory.class,"Illegal ServerIP or/and Port. Therefore messaging will not work!");
-        }
+        //Initialize MessengerClient
+        myRobot.messenger = new MessengerClient(myRobot.getRobotID());
+        Robot.getRobotController().setMessenger(myRobot.messenger);
     }
 
     @Override
@@ -247,23 +214,7 @@ public final class RobotFactory implements IRobotFactory {
 
     @Override
     public void setBrickTCPPort(int tcpPort) {
-        //TODO check if valid tcpport
         brickTCPport = tcpPort;
-    }
-
-    @Override
-    public void setMSGServerIP(String msgServerIP) {
-        this.msgServerIP = msgServerIP;
-    }
-
-    @Override
-    public void setMSGServerTCPPort(int tcpPort) {
-        this.msgServerTCPPort = tcpPort;
-    }
-
-    @Override
-    public void setRobotServerPort(int robotServerPort){
-        this.robotServerPort = robotServerPort;
     }
 
     @Override
@@ -323,19 +274,10 @@ public final class RobotFactory implements IRobotFactory {
 
         this.msgServerIP = null;
         this.msgServerTCPPort = -1;
-        this.robotServerPort = -1;
     }
 
-    private boolean isValidTCPPort(int brickTCPport) {
-        return (brickTCPport >= 0 && brickTCPport <= 65535);
-    }
-
-    private boolean isValidIP(String brickIP) {
-        if(brickIP == null){
-            System.err.println("RobotFactory: BrickIP is null");
-            return false;
-        }
-        return brickIP.matches(regexIP);
+    public RobotCommandCenter getRobotCommandCenter() {
+        return myRobotCommandCenter;
     }
 
     @Override

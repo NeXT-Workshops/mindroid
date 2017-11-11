@@ -28,6 +28,8 @@ import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
 
 import java.io.IOException;
 
+import static org.mindroid.common.messages.NetworkPortConfig.SERVER_PORT;
+
 public class TestPCClient{
 
     public static String brickIP = "10.0.1.1";
@@ -93,9 +95,6 @@ public class TestPCClient{
             roFactory.setRobotConfig(new RobotTestConfig());
             roFactory.setBrickIP(brickIP);
             roFactory.setBrickTCPPort(NetworkPortConfig.BRICK_PORT);
-            roFactory.setMSGServerIP(msgServerIP);
-            roFactory.setMSGServerTCPPort(NetworkPortConfig.SERVER_PORT);
-            roFactory.setRobotServerPort(NetworkPortConfig.ROBOT_SERVER_PORT);
             roFactory.setRobotID(robotID);
             roFactory.addImperativeImplementation(new TestImperativeImpl());
 
@@ -104,6 +103,9 @@ public class TestPCClient{
 
             //Create Robot
             commandCenter = roFactory.createRobot();
+
+            //connnect messenger
+            commandCenter.connectMessenger(msgServerIP,SERVER_PORT);
         }
 
 

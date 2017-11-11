@@ -10,6 +10,7 @@ import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
+import org.mindroid.impl.util.Messaging;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -45,10 +46,8 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
     private final MessageMarshaller serverMessageMarshaller = new MessageMarshaller();
     private final ArrayList<MindroidMessage> messages = new ArrayList<MindroidMessage>();
 
-    public MessengerClient(String ownName, InetAddress serverip, int serverport){
-        this.robotID = ownName;
-        this.serverip = serverip;
-        this.serverport = serverport;
+    public MessengerClient(String robotID){
+        this.robotID = robotID;
         this.socket = new Socket();
         setSocketProperties();
     }
@@ -71,13 +70,34 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
     }
 
     /**
+     *
      * Connects the messenger with the MessageServer.
      * The Connection will be keeped alive.
      * Only connects if the connection is not established yet.
+     *
+     * Note: This client can only connect to one server at the time.
+     *
+     * @param msgServerIP - ip of message server
+     * @param msgServerTCPPort - port of message server
+     * @return true, if connection was successful
      */
-    public synchronized boolean connect(){
+    public synchronized boolean connect(String msgServerIP, int msgServerTCPPort){
+        //Check for valid ip and port
+        if(!(Messaging.isValidIP(msgServerIP) && Messaging.isValidTCPPort(msgServerTCPPort))){
+            //Port or IP are invalid, return.
+            IllegalArgumentException e = new IllegalArgumentException("Invalid IP or/and Port");
+            ErrorHandlerManager.getInstance().handleError(e,MessengerClient.class,e.getMessage());
+            return false;
+        }
+
         if(!isConnected()) {
             try {
+
+
+                //set vars
+                this.serverip = InetAddress.getByName(msgServerIP);
+                this.serverport = msgServerTCPPort;
+
                 //Socket
                 socket.connect(new InetSocketAddress(serverip, serverport), 5000);
 

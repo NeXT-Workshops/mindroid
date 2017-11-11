@@ -91,7 +91,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                 RobotContextStateManager.getInstance().setGyroSensorStartCondition();
 
 
-                if(Robot.getInstance().isMessageingEnabled() && runningStatemachines.get(ID).isMessageingAllowed()){
+                if(Robot.getInstance().getMessenger().isConnected() && runningStatemachines.get(ID).isMessageingAllowed()){
                     Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Changed State to --> "+currentStates.get(ID).getName());
                 }
 
@@ -231,7 +231,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                 @Override
                 public void run() {
                     // System.out.println("## Starting statemachine in Thread --> "+sm.getID()+" ##");
-                    if (Robot.getInstance().isMessageingEnabled()) {
+                    if (Robot.getInstance().getMessenger().isConnected()) {
                         Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Start Statemachine: " + sm.getID());
                         Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Current State: " + sm.getStartState().getName());
                     }
@@ -308,7 +308,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
 
         //Stop statemachine
         if(sm instanceof ImperativeStatemachine){
-            if(Robot.getInstance().isMessageingEnabled()){
+            if(Robot.getInstance().getMessenger().isConnected()){
                 Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Interrupted Statemachine: "+sm.getID());
             }
             ((ImperativeStatemachine)sm).setInterrupted(true);
@@ -317,7 +317,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         //stop statemachine
         sm.stop();
 
-        if(Robot.getInstance().isMessageingEnabled()){
+        if(Robot.getInstance().getMessenger().isConnected()){
             Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+sm.getID());
         }
         unsubscribeFromEvaluators(sm.getID());

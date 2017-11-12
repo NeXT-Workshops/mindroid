@@ -21,6 +21,7 @@ public class APIErrorHandler extends AbstractErrorHandler{
 
     private MainActivity mainActivity;
 
+
     public APIErrorHandler(MainActivity mainActivity){
         this.mainActivity = mainActivity;
     }

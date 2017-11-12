@@ -220,7 +220,7 @@ public class SettingsFragment extends Fragment {
     }
 
     /**
-     * Initializes the switch to enable/disable phone chargin
+     * Initializes the switch to enable/disable phone chargin //TODO does not work, and seems to be impossible to make it work
      * @param view view
      */
     private void initChargePhoneSwitch(View view) {

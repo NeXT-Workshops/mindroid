@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -77,7 +78,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private final String START_ROBOT = "start";
     private final String STOP_ROBOT ="stop";
 
-    public static Robot robot = new Robot();
+    public static Robot robot;
 
     MainActivity parentActivity;
 
@@ -95,7 +96,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private HashMap<Integer,Boolean> menuItemAlwaysEnabled = new HashMap<>();
 
-    public HomeFragment() {
+    public HomeFragment() { //Called by newInstance(..)
         // Required empty public constructor
 
     }
@@ -115,6 +116,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+
+
+
+
         return fragment;
     }
 
@@ -126,11 +131,14 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        robot = MainActivity.robot;
         parentActivity = (MainActivity) getActivity();
+
 
         if(parentActivity instanceof IErrorHandler){
             robot.registerErrorHandler(((IErrorHandler) parentActivity).getErrorHandler());
         }
+
         getMenuEnabledSettings();
     }
 
@@ -713,6 +721,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             super.onPostExecute(result);
         }
     }
+
 
     private class CreateRobotTask extends ProgressTask{
 

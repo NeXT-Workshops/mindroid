@@ -3,6 +3,7 @@ package org.mindroid.android.app.robodancer;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import org.mindroid.android.app.R;
+import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.android.app.fragments.home.HomeFragment;
 import org.mindroid.android.app.fragments.myrobot.HardwareMapping;
 import org.mindroid.common.messages.hardware.Motors;
@@ -118,7 +119,7 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     public void loadConnectionProperties(){
         if (connectionProperties != null) {
             String savedVal;
-            if(!HomeFragment.robot.isMessengerConnected()) {
+            if(!MainActivity.robot.isMessengerConnected()) {
                 savedVal = connectionProperties.getString(resources.getString(R.string.KEY_ROBOT_ID), resources.getString(R.string.DEFAULT_ROBOT_ID));
                 SettingsProvider.getInstance().robotID = ((savedVal.isEmpty()) ? SettingsProvider.getInstance().generateUniqueRobotName() : savedVal);
 

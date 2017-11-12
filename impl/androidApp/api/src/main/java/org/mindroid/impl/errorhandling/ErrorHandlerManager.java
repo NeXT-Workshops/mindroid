@@ -24,8 +24,15 @@ public class ErrorHandlerManager {
     private ErrorHandlerManager() {
     }
 
+    /**
+     * Adds the error handler as listener.
+     * If the Error Handler is already added, it won't be added again.
+     * @param errorHandler - error handler to add
+     */
     public void registerErrorHandler(AbstractErrorHandler errorHandler){
-        listeners.add(errorHandler);
+        if(!listeners.contains(errorHandler)) {
+            listeners.add(errorHandler);
+        }
     }
 
     public void handleError(Exception e, Class source, String msg){

@@ -1,11 +1,7 @@
 package org.mindroid.android.app.acitivites;
 
-import android.app.Activity;
+import android.app.*;
 
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,6 +31,7 @@ import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.serviceloader.StatemachineService;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends Activity
@@ -73,6 +70,7 @@ public class MainActivity extends Activity
     private final String TAG_SETTINGS_FRAGMENT = "TAG_SETTINGS_FRAGMENT";
     private final String TAG_SENSOR_MONITOR = "TAG_SENSOR_MONITOR";
 
+    private ArrayList<AlertDialog> shownDialogs = new ArrayList<AlertDialog>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +78,9 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        robot = new Robot();
+        if(robot == null) {
+            robot = new Robot();
+        }
 
         SettingsProvider.getInstance().setAndroidId(Secure.getString(this.getContentResolver(), Secure.ANDROID_ID));
         errorHandler = new APIErrorHandler(this);
@@ -173,6 +173,16 @@ public class MainActivity extends Activity
         super.onConfigurationChanged(newConfig);
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        for (AlertDialog shownDialog : shownDialogs) {
+            if(shownDialog.isShowing()){
+                shownDialog.dismiss();
+            }
+            shownDialogs.clear();
+        }
+    }
 
     public void onSectionAttached(int number) {
         switch (number) {
@@ -216,22 +226,29 @@ public class MainActivity extends Activity
 
     @Override
     public void showErrorDialog(final String title, final String message){
+        //TODO this implementation leads to an error, when a dialog should be shown after minimizing the app!
         final Context context = this;
+
         Runnable showErrorDialog = new Runnable(){
             @Override
             public void run() {
-                ErrorDialog.newInstance(context,title,message).show();
+                AlertDialog dialog = ErrorDialog.newInstance(context,title,message);
+                shownDialogs.add(dialog);
+                dialog.show();
             }
         };
         runOnUiThread(showErrorDialog);
     }
 
     public void showInfoDialog(final String title, final String message){
+        //TODO this implementation leads to an error, when a dialog should be shown after minimizing the app!
         final Context context = this;
         Runnable showErrorDialog = new Runnable(){
             @Override
             public void run() {
-                InfoDialog.newInstance(context,title,message).show();
+                AlertDialog dialog = InfoDialog.newInstance(context,title,message);
+                shownDialogs.add(dialog);
+                dialog.show();
             }
         };
         runOnUiThread(showErrorDialog);

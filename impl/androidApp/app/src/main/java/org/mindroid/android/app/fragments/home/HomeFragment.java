@@ -225,6 +225,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         if (!formerSelectedImplementationID.equals(null)) {
             int spinnerPosition = adapter.getPosition(formerSelectedImplementationID);
             spinner_selectedImplementation.setSelection(spinnerPosition);
+            //TODO set implementation id? to robot?
+
         }
 
         //mListener.showErrorDialog("Error on create",stateAlreadyExists.getMessage());

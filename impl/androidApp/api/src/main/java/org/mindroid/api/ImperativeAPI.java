@@ -11,7 +11,16 @@ public abstract class ImperativeAPI extends BasicAPI {
      * ID will be shown in the Apps dropdown.
      */
     private final String implementationID;
+
+    /** true, when stopExecution is called **/
     private boolean isInterrupted = false;
+
+    /**
+     * Will be true, when the execution is finished, after starting it.
+     * Will be set to false, when an execution got stopped or started.
+     * internal var to set isInterrupted correctly.
+     */
+    private boolean isExecutionFinished = false;
 
     /**
      *
@@ -33,13 +42,20 @@ public abstract class ImperativeAPI extends BasicAPI {
      * Start the execution of the Implementation
      * Executes run method.
      * Stops all motors, when execution finished/got interrupted.
-     * //TODO Try to hide this methods from api user
+     * //TODO Try to hide this methods from api user --> extract interface 'Executable" (start,stop, interrupt) --> introduce ExecutableController, register Implementation, use it to start stop etc --> make methods protected.
      */
     public final void start(){
+        setExecutionFinished(false);
+        isInterrupted = false;
+
         run();
+
+        //Detects, that the implementation is finished
+        setExecutionFinished(true);
+
         //When run is finished (imperative impl got stopped (interrupted) or just code is done) - reset former state
         getMotorProvider().stopAllMotors();
-        this.isInterrupted = false;
+
     }
 
     /**
@@ -47,7 +63,10 @@ public abstract class ImperativeAPI extends BasicAPI {
      * //TODO Try to hide this methods from api user
      */
     public final void stopExecution(){
-        this.isInterrupted = true;
+        //Only set interrupted field, when exection has not finished
+        if(!isExecutionFinished()) {
+            this.isInterrupted = true;
+        }
     }
 
 
@@ -84,4 +103,15 @@ public abstract class ImperativeAPI extends BasicAPI {
         }
     }
 
+    /**
+     * Returns true, if execution has finished otherwise false
+     * @return true, if execution has finished.
+     */
+    public final boolean isExecutionFinished() {
+        return isExecutionFinished;
+    }
+
+    private void setExecutionFinished(boolean executionFinished) {
+        isExecutionFinished = executionFinished;
+    }
 }

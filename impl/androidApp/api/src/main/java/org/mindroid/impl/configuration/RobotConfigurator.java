@@ -225,8 +225,17 @@ public class RobotConfigurator implements IRobotConfigurator {
 		return syncedMotorsEndpoint;
 	}
 
-	// TODO MAY CAN BE REMOVED COMPLETELY, REPLACED BY createMotor; createSensor
-	/** Talks to the Brick - tell him what motor/sensor is connected to its port **/
+	/**
+	 * Talks to the Brick - tells how the motor and sensor port configuration looks like.
+	 * The brick will then start to initialize its motors and sensors and also creates proper endpoints to connect those with the phone.
+	 * Waits until the sensor and motor endpoints are coneected to the brick and the sensors received their first SensorEvent-Msg.
+	 *
+	 * If an error during the initialization process on the brick occurs. All sensor and motor endpoints
+	 * on API-Side will be closed and removed and the process will be aborted and has to be restarted..
+	 *
+	 * @return
+	 * @throws BrickIsNotReadyException
+	 */
 	@Override
 	public boolean initializeConfiguration() throws BrickIsNotReadyException {
 		if(brick.isConnected()) {
@@ -259,9 +268,14 @@ public class RobotConfigurator implements IRobotConfigurator {
 			boolean init_complete = false;
 			boolean hasCreationFailed = false;
 			while(!init_complete){
+				//Get endpoint state
 				String endpointState = getEndpointConnectionState();
+
+				//get bool-val whether a creation on brick has failed
 				hasCreationFailed = hasEndpointCreationFailed(endpointState);
-				init_complete = checkEndpointConnectionState(endpointState);
+
+				//get bool-val whether the initialization is completed
+				init_complete = getEndpointConnectionState(endpointState);
 
 				try {
 					Thread.sleep(100);
@@ -273,6 +287,9 @@ public class RobotConfigurator implements IRobotConfigurator {
 					//Abort initialization, because the creation of a sensor/motor on the brick failed.
 					motorManager.disconnectMotors();
 					sensorManager.disconnectSensors();
+					//Remove all initialized sensor endpoints, as they should be recreated, when trying to retry init-process
+					sensors.clear();
+					motors.clear();
 
 					return false;
 				}
@@ -308,11 +325,11 @@ public class RobotConfigurator implements IRobotConfigurator {
 
 	/**
 	 *
-	 * @param endpntState - contains information about all endpoint connection states (connected/disconnected)
+	 * @param endpntState - contains information about all endpoint connection states (connected/disconnected) and if sensors have received their first sensor-event
 	 * @return true - if all endpoints are connected
 	 * 		   false - if not all endpoints are connected to the brick
      */
-	private boolean checkEndpointConnectionState(String endpntState){
+	private boolean getEndpointConnectionState(String endpntState){
 		if(endpntState.contains("false") /*|| endpntState.contains("null")*/){
 			return false;
 		}else{

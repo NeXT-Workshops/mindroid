@@ -126,7 +126,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 		endpointState.delete(0,endpointState.length());
 
 		for(EV3SensorPort key : sensorConfiguration.keySet()){
-			endpointState.append(key.getValue()).append(DELIMITER).append(sensors.get(key).client.isConnected());
+			endpointState.append(key.getValue()).append(DELIMITER).append(sensors.get(key).client.isConnected() && sensors.get(key).isFirstSensEventReceived());
 			endpointState.append("\n");
 
 			if(sensors.get(key).hasCreationFailed()){

@@ -26,7 +26,8 @@ public class EV3SensorEndpoint extends ClientEndpointImpl {
     private Sensormode currentMode = null;
     private Sensormode modeToWaitFor = null;
 
-    private boolean ready = false;
+    //True, if the first sensor event is received from the brick
+    private boolean isFirstSensEventReceived = false;
 
     private final EV3SensorEndpoint sensor = this;
 
@@ -70,13 +71,13 @@ public class EV3SensorEndpoint extends ClientEndpointImpl {
                     for (IEV3SensorEventListener listener : listeners) {
                         //value = sensorevent.getSample();
                         listener.handleSensorEvent(brick_port,sensorevent);
+                        isFirstSensEventReceived = true;
                     }
                     return;
                 }
 
                 if (object.getClass() == HelloSensorMessage.class) {
                     System.out.println(((HelloSensorMessage) object).toString());
-                    ready = true;
                     return;
                 }
 
@@ -135,12 +136,12 @@ public class EV3SensorEndpoint extends ClientEndpointImpl {
     }
 
     /**
-     * True if the Sensor is ready to Use.
+     * True if the Sensor received its first sensor event
      *
      * @return
      */
-    public boolean isReady() {
-        return ready;
+    public boolean isFirstSensEventReceived() {
+        return isFirstSensEventReceived;
     }
 
 

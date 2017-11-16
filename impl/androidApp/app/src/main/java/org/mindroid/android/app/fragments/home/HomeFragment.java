@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -220,14 +219,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
         ArrayAdapter<String> adapter = getImplementationIDAdapter();
         spinner_selectedImplementation.setAdapter(adapter);
-        String formerSelectedImplementationID = loadSelectedImplementationID();
-        //Set former selected Implementation ID
-        if (!formerSelectedImplementationID.equals(null)) {
-            int spinnerPosition = adapter.getPosition(formerSelectedImplementationID);
-            spinner_selectedImplementation.setSelection(spinnerPosition);
-            //TODO set implementation id? to robot?
 
-        }
 
         //mListener.showErrorDialog("Error on create",stateAlreadyExists.getMessage());
 
@@ -235,7 +227,26 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
         checkCurrentState();
 
+        restoreSelectedImplID(adapter);
+
         return view;
+    }
+
+    /**
+     * If the app gets restarted the former Selected implementation ID gets restored and selected to the spinner adapter.
+     * @param adapter - spinner adapter of implementation ids
+     */
+    private void restoreSelectedImplID(ArrayAdapter<String> adapter) {
+        //Get former selected implementation ID
+        String formerSelectedImplementationID = loadSelectedImplementationID();
+        //Set former selected Implementation ID
+        if (!formerSelectedImplementationID.equals(null)) {
+            int spinnerPosition = adapter.getPosition(formerSelectedImplementationID);
+            spinner_selectedImplementation.setSelection(spinnerPosition);
+            if(spinner_selectedImplementation.getSelectedItem() != null){
+                SettingsProvider.getInstance().selectedImplementationID = (String) spinner_selectedImplementation.getSelectedItem();
+            }
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

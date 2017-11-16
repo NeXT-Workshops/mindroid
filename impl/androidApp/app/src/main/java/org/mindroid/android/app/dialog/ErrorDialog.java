@@ -21,7 +21,7 @@ public class ErrorDialog extends DialogFragment {
     public static ErrorDialog newInstance(String title, String message) {
         ErrorDialog frag = new ErrorDialog();
         Bundle args = new Bundle();
-        args.putString(KEY_TITLE, title+"new dialog");
+        args.putString(KEY_TITLE, title);
         args.putString(KEY_MESSAGE, message);
         frag.setArguments(args);
         return frag;

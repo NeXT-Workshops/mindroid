@@ -98,7 +98,7 @@ public class MainActivity extends Activity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
 
-        //show Home Fragment
+        //display Home Fragment
         if (savedInstanceState == null) {
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
@@ -226,32 +226,14 @@ public class MainActivity extends Activity
 
     @Override
     public void showErrorDialog(final String title, final String message){
-        //TODO this implementation leads to an error, when a dialog should be shown after minimizing the app!
-        final Context context = this;
-
-        Runnable showErrorDialog = new Runnable(){
-            @Override
-            public void run() {
-                AlertDialog dialog = ErrorDialog.newInstance(context,title,message);
-                shownDialogs.add(dialog);
-                dialog.show();
-            }
-        };
-        runOnUiThread(showErrorDialog);
+        DialogFragment errorDialogFragment = ErrorDialog.newInstance(title,message);
+        errorDialogFragment.show(getFragmentManager(), "errorDialog");
     }
 
+
     public void showInfoDialog(final String title, final String message){
-        //TODO this implementation leads to an error, when a dialog should be shown after minimizing the app!
-        final Context context = this;
-        Runnable showErrorDialog = new Runnable(){
-            @Override
-            public void run() {
-                AlertDialog dialog = InfoDialog.newInstance(context,title,message);
-                shownDialogs.add(dialog);
-                dialog.show();
-            }
-        };
-        runOnUiThread(showErrorDialog);
+        DialogFragment infoDialogFragment = InfoDialog.newInstance(title,message);
+        infoDialogFragment.show(getFragmentManager(), "infoDialog");
     }
 
     /**

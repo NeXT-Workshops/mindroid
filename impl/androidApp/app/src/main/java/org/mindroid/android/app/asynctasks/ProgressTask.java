@@ -1,6 +1,7 @@
 package org.mindroid.android.app.asynctasks;
 
-import android.app.ProgressDialog;
+
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -10,27 +11,30 @@ import android.os.AsyncTask;
 
 public abstract class ProgressTask extends AsyncTask<String,Integer,Boolean>{
 
-    ProgressDialog dialog;
+    org.mindroid.android.app.dialog.ProgressDialog dialog;
+    private final FragmentManager fManager;
 
-    Context context;
+    private final String progressMsg;
+    private final String title;
 
-    public ProgressTask(Context context,String progressMsg){
-        this.context = context;
-        dialog = new ProgressDialog(context);
-        this.dialog.setMessage(progressMsg);
-        dialog.setCancelable(false);
+
+    public ProgressTask(FragmentManager fManager,String title,String progressMsg){
+        this.fManager = fManager;
+        this.progressMsg = progressMsg;
+        this.title = title;
+
+        dialog = org.mindroid.android.app.dialog.ProgressDialog.newInstance(title,progressMsg);
+        dialog.show(fManager,"ProgressDialog");
     }
 
     @Override
     protected void onPreExecute() {
-        this.dialog.show();
+
     }
 
     @Override
     protected void onPostExecute(final Boolean success){
-        if (dialog.isShowing()) {
-            dialog.dismiss();
-        }
+        dialog.dismiss();
     }
 
     @Override

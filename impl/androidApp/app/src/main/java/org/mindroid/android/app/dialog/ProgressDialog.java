@@ -3,18 +3,18 @@ package org.mindroid.android.app.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import org.mindroid.android.app.R;
+import android.widget.ProgressBar;
 
-public class InfoDialog extends DialogFragment {
+public class ProgressDialog extends DialogFragment {
+
 
     private static final String KEY_TITLE = "TITLE";
     private static final String KEY_MESSAGE = "MESSAGE";
 
-    public static ErrorDialog newInstance(String title, String message) {
-        ErrorDialog frag = new ErrorDialog();
+    public static ProgressDialog newInstance(String title, String message) {
+        ProgressDialog frag = new ProgressDialog();
         Bundle args = new Bundle();
         args.putString(KEY_TITLE, title);
         args.putString(KEY_MESSAGE, message);
@@ -27,18 +27,17 @@ public class InfoDialog extends DialogFragment {
         String title = getArguments().getString(KEY_TITLE);
         String msg = getArguments().getString(KEY_MESSAGE);
 
-        return new AlertDialog.Builder(getActivity())
-                .setIcon(android.R.drawable.ic_dialog_info)
+
+
+        AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity())
                 .setCancelable(false)
-                .setPositiveButton(android.R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dismiss();
-                            }
-                        }
-                )
                 .setTitle(title)
-                .setMessage(msg)
-                .create();
+                .setMessage(msg);
+
+        ProgressBar pb = new ProgressBar(builder.getContext());
+
+        builder.setView(pb);
+
+        return builder.create();
     }
 }

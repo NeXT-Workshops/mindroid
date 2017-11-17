@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.Settings;
 import android.view.*;
 import android.widget.*;
 
@@ -244,13 +245,13 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             public void run(){
                 boolean positiveUSBState = isUSBConnected(parentActivity) && isTetheringActivated(parentActivity);
 
-                btn_connect.setEnabled(!robot.isConnectedToBrick() && positiveUSBState);
+                btn_connect.setEnabled(!robot.isConnectedToBrick() && (positiveUSBState || SettingsProvider.getInstance().isSimulationEnabled()));
 
-                btn_connect.setVisibility((!robot.isConnectedToBrick() && positiveUSBState) ? View.VISIBLE : View.GONE);
+                btn_connect.setVisibility((!robot.isConnectedToBrick() && (positiveUSBState || SettingsProvider.getInstance().isSimulationEnabled())) ? View.VISIBLE : View.GONE);
 
                 btn_disconnect.setVisibility(robot.isConnectedToBrick() ? View.VISIBLE : View.GONE);
 
-                btn_startRobot.setEnabled(robot.isConnectedToBrick() && robot.isConfigurated() && !robot.isRunning && positiveUSBState && spinner_selectedImplementation.getSelectedItem() != null && !spinner_selectedImplementation.getSelectedItem().toString().isEmpty());
+                btn_startRobot.setEnabled(robot.isConnectedToBrick() && robot.isConfigurated() && !robot.isRunning && (positiveUSBState || SettingsProvider.getInstance().isSimulationEnabled()) && spinner_selectedImplementation.getSelectedItem() != null && !spinner_selectedImplementation.getSelectedItem().toString().isEmpty());
 
                 btn_stopRobot.setEnabled(robot.isRunning);
 
@@ -273,37 +274,46 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         final Runnable taskCheckUSBState = new Runnable() {
             @Override
             public void run() {
-                StringBuffer sb = new StringBuffer();
+            StringBuffer sb = new StringBuffer();
 
-                boolean isUSBConnected = false;
-                boolean isTetheringActive = false;
+            boolean isUSBConnected = false;
+            boolean isTetheringActive = false;
 
-                if(!(isUSBConnected = isUSBConnected(parentActivity))){
-                    sb.append(infoUsbNotFound);
-                }
 
-                if(isUSBConnected && !(isTetheringActive = isTetheringActivated(parentActivity))){
-                    sb.append(infoTetheringNotActiavted);
-                    btn_activateTethering.setVisibility(Button.VISIBLE);
+            if(!(isUSBConnected = isUSBConnected(parentActivity))){
+                sb.append(infoUsbNotFound);
+            }
+
+            if( (isUSBConnected && !(isTetheringActive = isTetheringActivated(parentActivity)))){
+                sb.append(infoTetheringNotActiavted);
+                btn_activateTethering.setVisibility(Button.VISIBLE);
+            }else{
+                btn_activateTethering.setVisibility(Button.GONE);
+            }
+
+            if(!isUSBConnected || !isTetheringActive){
+                txt_info.setText(sb.toString());
+                if(!SettingsProvider.getInstance().isSimulationEnabled()) {
+                    layout_info.setVisibility(View.VISIBLE);
                 }else{
-                    btn_activateTethering.setVisibility(Button.GONE);
+                    layout_info.setVisibility(View.GONE);
                 }
 
-                if(!isUSBConnected || !isTetheringActive){
-                    txt_info.setText(sb.toString());
-                    layout_info.setVisibility(FrameLayout.VISIBLE);
+                //Stop robot
+                if(robot.isRunning){
+                    StartStopRobotTask task_stopRobot = new StartStopRobotTask("Robot",msgStartRobot);
+                    task_stopRobot.execute(STOP_ROBOT);
 
-                    //Stop robot
-                    if(robot.isRunning){
-                        StartStopRobotTask task_stopRobot = new StartStopRobotTask("Robot",msgStartRobot);
-                        task_stopRobot.execute(STOP_ROBOT);
-
-                        DisconnectFromBrickTask task_disconnect = new DisconnectFromBrickTask("Robot",msgDisconnectFromRobot);
-                        task_disconnect.execute();
-                    }
-                }else{
-                    layout_info.setVisibility(FrameLayout.GONE);
+                    DisconnectFromBrickTask task_disconnect = new DisconnectFromBrickTask("Robot",msgDisconnectFromRobot);
+                    task_disconnect.execute();
                 }
+            }else{
+                layout_info.setVisibility(FrameLayout.GONE);
+            }
+
+            if(SettingsProvider.getInstance().isSimulationEnabled()){
+                btn_activateTethering.setVisibility(View.GONE);
+            }
             }
         };
 

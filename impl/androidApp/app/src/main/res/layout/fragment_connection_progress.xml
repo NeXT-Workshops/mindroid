@@ -1,0 +1,55 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="org.mindroid.android.app.fragments.home.ConnectionProgressFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+                android:text="@string/title_messenger"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/txtView_msgrTitle" android:layout_weight="1"
+                android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/container_msger">
+        </LinearLayout>
+        <TextView
+                android:text="@string/title_brick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/txtView_brickTitle" android:layout_weight="1"
+                android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/container_brick">
+        </LinearLayout>
+        <TextView
+                android:text="@string/title_sensors"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/txtView_sensorsTitle"
+                android:layout_weight="1"
+                android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/container_sensors">
+        </LinearLayout>
+        <TextView
+                android:text="@string/title_motors"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/txtView_motorsTitle" android:layout_weight="1"
+                android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/container_motors">
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

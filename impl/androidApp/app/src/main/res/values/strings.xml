@@ -30,7 +30,9 @@
     <string name="txt_btn_DisConnect_disconnect">disconnect</string>
 
     <!-- Sensor Monitoring Fragment -->
-    <string name="dialog_info_message">No Statemachine is running! Start a Statemachine to use this feature and then come back to see the world from your robots eyes!</string>
+    <string name="dialog_info_message">No Statemachine is running! Start a Statemachine to use this feature and then
+        come back to see the world from your robots eyes!
+    </string>
     <string name="txt_sensor_description_mode_rgb_slot1">Red:</string>
     <string name="txt_sensor_description_mode_rgb_slot2">Green:</string>
     <string name="txt_sensor_description_mode_rgb_slot3">Blue:</string>
@@ -49,7 +51,9 @@
     <string name="txt_sensor_description_mode_seek_slot3">pair:</string>
     <string name="txt_sensor_description_mode_seek_slot4">pair:</string>
     <!-- Settings Fragment -->
-    <string name="txtView_note_msg_disconnect_messenger">Disconnect from the message server to change RobotID and GroupID !</string>
+    <string name="txtView_note_msg_disconnect_messenger">Disconnect from the message server to change RobotID and
+        GroupID !
+    </string>
     <string name="btn_text_save_settings">save Settings</string>
     <string name="txtView_language_text">Language</string>
     <string name="msg_toast_settings_invalid_input">Invalid Input</string>
@@ -124,6 +128,10 @@
     <string name="errortext_msg_initialization">The Configuration of at least one Sensor/Motor failed. Check port
         connections on the brick and your configuration in the App.
     </string>
+    <string name="title_messenger">Messenger</string>
+    <string name="title_brick">Brick</string>
+    <string name="title_sensors">Sensors</string>
+    <string name="title_motors">Motors</string>
 
 
 </resources>

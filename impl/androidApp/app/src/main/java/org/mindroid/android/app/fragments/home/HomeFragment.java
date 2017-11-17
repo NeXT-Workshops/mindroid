@@ -347,10 +347,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
                     //Stop robot
                     if(robot.isRunning){
-                        StartStopRobotTask task_stopRobot = new StartStopRobotTask(parentActivity,msgStartRobot);
+                        StartStopRobotTask task_stopRobot = new StartStopRobotTask("Robot",msgStartRobot);
                         task_stopRobot.execute(STOP_ROBOT);
 
-                        DisconnectFromBrickTask task_disconnect = new DisconnectFromBrickTask(parentActivity,msgDisconnectFromRobot);
+                        DisconnectFromBrickTask task_disconnect = new DisconnectFromBrickTask("Robot",msgDisconnectFromRobot);
                         task_disconnect.execute();
                     }
                 }else{
@@ -453,10 +453,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             @Override
             public void onClick(View v) {
                 if(robot.isMessengerConnected()){
-                    DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask(parentActivity,"Messenger Client tries to connect");
+                    DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask("Messenger","Messenger Client tries to connect");
                     msgClientTask.execute(MSG_TASK_PARAM_0_DISCONNECT);
                 }else{
-                    DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask(parentActivity,"Messenger Client tries to connect");
+                    DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask("Messenger","Messenger Client tries to connect");
                     msgClientTask.execute(MSG_TASK_PARAM_0_CONNECT);
                 }
 
@@ -467,19 +467,19 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             @Override
             public void onClick(View v) {
                 //Creates the Robot
-                CreateRobotTask createRobotTask = new CreateRobotTask(parentActivity,"Creating your Robot");
+                CreateRobotTask createRobotTask = new CreateRobotTask("Creating Robot","Creating your Robot");
                 createRobotTask.execute();
 
                 waitForTaskCompletion(createRobotTask,20);
 
                 //Messenger Client Task - messenger connects to messageserver
-                DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask(parentActivity,"Messenger Client tries to connect");
+                DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask("Disconnect from Brick","Messenger Client tries to connect");
                 msgClientTask.execute(MSG_TASK_PARAM_0_CONNECT);
 
                 waitForTaskCompletion(msgClientTask,20);
 
                 //Creates and executes the Task to connect to the Brick
-                ConnectToBrickTask task = new ConnectToBrickTask(parentActivity,msgConnectToRobot);
+                ConnectToBrickTask task = new ConnectToBrickTask("Connecting to Brick",msgConnectToRobot);
                 task.execute(); //String is not important
             }
         });
@@ -488,11 +488,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             @Override
             public void onClick(View v) {
                 if(robot.isRunning){
-                    StartStopRobotTask task = new StartStopRobotTask(parentActivity,msgStopRobot);
+                    StartStopRobotTask task = new StartStopRobotTask("Start/Stop robot",msgStopRobot);
                     task.execute(STOP_ROBOT);
                 }
 
-                DisconnectFromBrickTask task = new DisconnectFromBrickTask(parentActivity,msgDisconnectFromRobot);
+                DisconnectFromBrickTask task = new DisconnectFromBrickTask("Disconnecting robot",msgDisconnectFromRobot);
                 task.execute();
             }
         });
@@ -500,7 +500,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_initConfiguration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InitConfiguration task = new InitConfiguration(parentActivity,msgInitConfiguration);
+                InitConfiguration task = new InitConfiguration("Init Configuration",msgInitConfiguration);
                 task.execute();
             }
         });
@@ -508,7 +508,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_startRobot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartStopRobotTask task = new StartStopRobotTask(parentActivity,msgStartRobot);
+                StartStopRobotTask task = new StartStopRobotTask("Starting robot",msgStartRobot);
                 task.execute(START_ROBOT);
             }
         });
@@ -516,7 +516,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_stopRobot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartStopRobotTask task = new StartStopRobotTask(parentActivity,msgStopRobot);
+                StartStopRobotTask task = new StartStopRobotTask("Stopping robot",msgStopRobot);
                 task.execute(STOP_ROBOT);
             }
         });
@@ -601,8 +601,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private class ConnectToBrickTask extends ProgressTask{
 
-        public ConnectToBrickTask(Context context,String progressMsg) {
-            super(context,progressMsg);
+        public ConnectToBrickTask(String title,String progressMsg) {
+            super(getFragmentManager(),title,progressMsg);
         }
 
         @Override
@@ -621,8 +621,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private class DisconnectFromBrickTask extends ProgressTask{
 
-        public DisconnectFromBrickTask(Context context,String progressMsg) {
-            super(context,progressMsg);
+        public DisconnectFromBrickTask(String title,String progressMsg) {
+            super(getFragmentManager(),title,progressMsg);
         }
 
         @Override
@@ -641,8 +641,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private class InitConfiguration extends ProgressTask{
 
-        public InitConfiguration(Context context,String progressMsg) {
-            super(context,progressMsg);
+        public InitConfiguration(String title,String progressMsg) {
+            super(getFragmentManager(),title,progressMsg);
         }
 
         @Override
@@ -663,8 +663,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private class StartStopRobotTask extends ProgressTask{
 
-        public StartStopRobotTask(Context context,String progressMsg) {
-            super(context,progressMsg);
+        public StartStopRobotTask(String title,String progressMsg) {
+
+            super(getFragmentManager(),title,progressMsg);
+
         }
 
         @Override
@@ -673,6 +675,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 if (params[0].equals(START_ROBOT)) { //True => Start robot, else it should stop the Robot
                     try {
                         robot.startExecuteImplementation(SettingsProvider.getInstance().selectedImplementationID);
+
                         return true;
                     }catch(Exception e){
                         System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
@@ -703,8 +706,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private class DisConnectMessengerTask extends ProgressTask{
 
-        public DisConnectMessengerTask(Context context, String progressMsg) {
-            super(context,progressMsg);
+        public DisConnectMessengerTask(String title, String progressMsg) {
+            super(getFragmentManager(),title,progressMsg);
         }
 
         @Override
@@ -738,8 +741,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private class CreateRobotTask extends ProgressTask{
 
-        public CreateRobotTask(Context context,String progressMsg) {
-            super(context,progressMsg);
+        public CreateRobotTask(String title,String progressMsg) {
+            super(getFragmentManager(),title,progressMsg);
         }
 
         @Override
@@ -750,5 +753,22 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             return true;
         }
 
+    }
+
+    private class ConnectInitBrickTask extends ConnectionProgressTask{
+
+        public ConnectInitBrickTask(String title, Bundle args, FragmentManager fManager) {
+            super(title, args, fManager);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            //TODO connect to brick
+            //TODO init messenger
+            //TODO init sensors
+            //TODO init motors
+            //TODO always update UI
+            return null;
+        }
     }
 }

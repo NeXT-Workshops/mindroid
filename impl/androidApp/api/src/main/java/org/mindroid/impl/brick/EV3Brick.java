@@ -24,7 +24,10 @@ import com.esotericsoftware.kryonet.Listener;
 /**
  * Brick Endpoint Classes. Used to send proper messages to the Brick.
  */
-public class EV3Brick extends Listener implements IBrickControl{ //TODO Extends ClientEndpointImpl
+public class EV3Brick extends Listener implements IBrickControl{
+	//TODO Extends ClientEndpointImpl
+	//TODO Refactor and split into interfaces
+	//TODO Split into BrickEndpoint and BrickController
 
     public final static int BRICK_TIMEOUT = 50000;
     private final Client client;

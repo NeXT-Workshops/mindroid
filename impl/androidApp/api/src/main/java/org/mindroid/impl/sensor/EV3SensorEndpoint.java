@@ -16,7 +16,7 @@ import org.mindroid.impl.ev3.EV3PortID;
 
 
 //TODO Extend Listener Functionality: adding mode; value; and more?
-public class EV3SensorEndpoint extends ClientEndpointImpl {
+public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorEndpoint {
 
 
     private List<IEV3SensorEventListener> listeners = new ArrayList<>(2);
@@ -49,13 +49,6 @@ public class EV3SensorEndpoint extends ClientEndpointImpl {
         this.brick_port = brick_port;
         this.initialMode = mode;
     }
-/*
-    @Override
-	protected void registerMessages(Client client){
-        SensorMessages.register(client);
-        BrickMessages.register(client);      
-	}
-*/
 
     @Override
     public void received(Connection connection, final Object object) {
@@ -68,11 +61,7 @@ public class EV3SensorEndpoint extends ClientEndpointImpl {
                     SensorEventMessage eventMsg = (SensorEventMessage) object;
                     EV3SensorEvent sensorevent = new EV3SensorEvent(sensor, eventMsg.getSample(), eventMsg.getTimestamp(), eventMsg.getSensormode());
 
-                    for (IEV3SensorEventListener listener : listeners) {
-                        //value = sensorevent.getSample();
-                        listener.handleSensorEvent(brick_port,sensorevent);
-                        isFirstSensEventReceived = true;
-                    }
+                    handleSensorEvent(sensorevent);
                     return;
                 }
 
@@ -106,12 +95,19 @@ public class EV3SensorEndpoint extends ClientEndpointImpl {
     }
 
     @Override
+    public void handleSensorEvent(EV3SensorEvent sensorevent) {
+        for (IEV3SensorEventListener listener : listeners) {
+            //value = sensorevent.getSample();
+            listener.handleSensorEvent(brick_port,sensorevent);
+            isFirstSensEventReceived = true;
+        }
+    }
+
+    @Override
     public void disconnected(Connection connection) {
         super.disconnected(connection);
         client.stop();
     }
-
-
 
     public void registerListener(IEV3SensorEventListener listener) {
         if(!listeners.contains(listener)){

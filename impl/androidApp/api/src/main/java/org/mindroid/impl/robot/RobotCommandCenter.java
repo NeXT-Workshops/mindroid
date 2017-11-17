@@ -66,9 +66,12 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     @Override
     public void connectToBrick() throws IOException {
         long timeout = 30000;
-        robot.getRobotConfigurator().getBrick().connect();
+        robot.getBrick().connect();
+
+
         long start_timer = System.currentTimeMillis();
-        while(!robot.getRobotConfigurator().getBrick().isBrickReady()){
+
+        while(!robot.getBrick().isBrickReady()){
             if(timeout < System.currentTimeMillis() - start_timer){
                 Exception e = new IOException("RobotCommandCenter: Connection timed out!");
                 ErrorHandlerManager.getInstance().handleError(e,RobotCommandCenter.class,e.toString());
@@ -92,10 +95,16 @@ public class RobotCommandCenter implements IRobotCommandCenter {
 
     @Override
     public boolean initializeConfiguration() throws BrickIsNotReadyException {
-        isConfigurated = robot.getRobotConfigurator().initializeConfiguration();
-        if(!isConfigurated) {
-            ErrorHandlerManager.getInstance().handleError(new Exception("Initialization of a Sensor/motor Failed"), this.getClass(), ERROR_INITIALIZATION);
+        if(robot.isSimulated()){
+            //Simulation is enabled - no connection to brick or sensors
+            isConfigurated = true;
+        }else{
+            isConfigurated = robot.getRobotConfigurator().initializeConfiguration();
+            if(!isConfigurated) {
+                ErrorHandlerManager.getInstance().handleError(new Exception("Initialization of a Sensor/motor Failed"), this.getClass(), ERROR_INITIALIZATION);
+            }
         }
+
         return isConfigurated ;
     }
 

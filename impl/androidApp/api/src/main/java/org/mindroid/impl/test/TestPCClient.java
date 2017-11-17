@@ -102,7 +102,7 @@ public class TestPCClient{
             roFactory.addStatemachine(statemachineCollection);
 
             //Create Robot
-            commandCenter = roFactory.createRobot();
+            commandCenter = roFactory.createRobot(false);
 
             //connnect messenger
             commandCenter.connectMessenger(msgServerIP,SERVER_PORT);

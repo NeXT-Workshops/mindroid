@@ -85,7 +85,7 @@ public class Robot {
         }
 
         //Create the Robot
-        roFactory.createRobot();
+        roFactory.createRobot(SettingsProvider.getInstance().isSimulationEnabled());
     }
 
     private void updateRobotPortConfig() {

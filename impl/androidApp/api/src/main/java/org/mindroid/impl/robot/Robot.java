@@ -7,6 +7,7 @@ import org.mindroid.impl.imperative.ImperativeImplManager;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
 import org.mindroid.impl.motor.SynchronizedMotorsEndpoint;
 import org.mindroid.impl.sensor.EV3SensorEndpoint;
+import org.mindroid.impl.sensor.IEV3SensorEndpoint;
 import org.mindroid.impl.statemachine.StatemachineManager;
 
 /**
@@ -21,10 +22,10 @@ public final class Robot {
     EV3Brick brick;
 
     //Sensor Endpoints
-    private EV3SensorEndpoint sensor_S1 = null;
-    private EV3SensorEndpoint sensor_S2 = null;
-    private EV3SensorEndpoint sensor_S3 = null;
-    private EV3SensorEndpoint sensor_S4 = null;
+    private IEV3SensorEndpoint sensor_S1 = null;
+    private IEV3SensorEndpoint sensor_S2 = null;
+    private IEV3SensorEndpoint sensor_S3 = null;
+    private IEV3SensorEndpoint sensor_S4 = null;
 
     //Motor Endpoints
     private EV3RegulatedMotorEndpoint IMotor_A = null;
@@ -34,6 +35,8 @@ public final class Robot {
 
     //Synchronized Motors Endpoint
     private SynchronizedMotorsEndpoint syncedMotors;
+
+    private boolean isSimulated = false;
 
     private StatemachineManager statemachineManager;
     private ImperativeImplManager imperativeImplManager;
@@ -53,7 +56,7 @@ public final class Robot {
         imperativeImplManager = ImperativeImplManager.getInstance();
     }
 
-    public EV3SensorEndpoint getSensorS1() {
+    public IEV3SensorEndpoint getSensorS1() {
         return sensor_S1;
     }
 
@@ -65,31 +68,31 @@ public final class Robot {
         this.robotConfigurator = robotConfigurator;
     }
 
-    protected void setSensorS1(EV3SensorEndpoint sensor_S1) {
+    protected void setSensorS1(IEV3SensorEndpoint sensor_S1) {
         this.sensor_S1 = sensor_S1;
     }
 
-    protected EV3SensorEndpoint getSensorS2() {
+    protected IEV3SensorEndpoint getSensorS2() {
         return sensor_S2;
     }
 
-    protected void setSensorS2(EV3SensorEndpoint sensor_S2) {
+    protected void setSensorS2(IEV3SensorEndpoint sensor_S2) {
         this.sensor_S2 = sensor_S2;
     }
 
-    protected EV3SensorEndpoint getSensorS3() {
+    protected IEV3SensorEndpoint getSensorS3() {
         return sensor_S3;
     }
 
-    protected void setSensorS3(EV3SensorEndpoint sensor_S3) {
+    protected void setSensorS3(IEV3SensorEndpoint sensor_S3) {
         this.sensor_S3 = sensor_S3;
     }
 
-    protected EV3SensorEndpoint getSensorS4() {
+    protected IEV3SensorEndpoint getSensorS4() {
         return sensor_S4;
     }
 
-    protected void setSensorS4(EV3SensorEndpoint sensor_S4) {
+    protected void setSensorS4(IEV3SensorEndpoint sensor_S4) {
         this.sensor_S4 = sensor_S4;
     }
 
@@ -163,5 +166,13 @@ public final class Robot {
 
     public ImperativeImplManager getImperativeImplManager() {
         return ImperativeImplManager.getInstance();
+    }
+
+    public boolean isSimulated() {
+        return isSimulated;
+    }
+
+    public void setSimulated(boolean simulated) {
+        isSimulated = simulated;
     }
 }

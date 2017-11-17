@@ -38,9 +38,11 @@ public interface IRobotFactory {
 
     void addErrorHandler(AbstractErrorHandler errorHandler);
 
+    IRobotCommandCenter createRobot(boolean enableSimulation);
+
     /** Clears all properties **/
      void clearConfiguration();
 
-    IRobotCommandCenter createRobot();
+
 
 }

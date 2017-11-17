@@ -102,10 +102,6 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
             subscribeConstraints(ID);
         }
         System.out.println("StateMachine.handleSatisfiedConstraint() => "+satConstraint);
-
-
-
-
     }
 
     /**

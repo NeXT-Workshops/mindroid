@@ -12,6 +12,7 @@ import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.common.messages.hardware.Motors;
 import org.mindroid.common.messages.hardware.Sensors;
 import org.mindroid.common.messages.hardware.Sensormode;
+import org.mindroid.impl.brick.mock.MockBrick;
 import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.configuration.RobotConfigurator;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
@@ -21,6 +22,7 @@ import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.robot.context.RobotContextStateEvaluator;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
+import org.mindroid.impl.sensor.mock.MockSensorEndpoint;
 import org.mindroid.impl.statemachine.StatemachineCollection;
 import org.mindroid.impl.util.Messaging;
 
@@ -51,6 +53,9 @@ public final class RobotFactory implements IRobotFactory {
     private Motors motor_B = null;
     private Motors motor_C = null;
     private Motors motor_D = null;
+
+    //simulation
+    private boolean isSimulationEnabled = false;
 
     //Further to register SensorListeners
     private HashMap<EV3PortID,ArrayList<IEV3SensorEventListener>> sensorListenerToRegister = new HashMap<>();
@@ -96,89 +101,109 @@ public final class RobotFactory implements IRobotFactory {
     }
 
     @Override
-    public IRobotCommandCenter createRobot() {
+    public IRobotCommandCenter createRobot(boolean enableSimulation) {
         Robot.getRobotController().setRobotID(Robot.getInstance().robotID);
 
-        if(robotConfig != null) {
-            //Sensors
-            sensor_S1 = robotConfig.getSensorS1();
-            sensor_S2 = robotConfig.getSensorS2();
-            sensor_S3 = robotConfig.getSensorS3();
-            sensor_S4 = robotConfig.getSensorS4();
+        this.isSimulationEnabled = enableSimulation;
+        Robot.getInstance().setSimulated(isSimulationEnabled);
 
-            //Sensormodes
-            mode_S1 = robotConfig.getSensormodeS1();
-            mode_S2 = robotConfig.getSensormodeS2();
-            mode_S3 = robotConfig.getSensormodeS3();
-            mode_S4 = robotConfig.getSensormodeS4();
+        if(enableSimulation){
+            myRobot.setSensorS1(new MockSensorEndpoint(EV3PortIDs.PORT_1,robotConfig.getSensorS1(),robotConfig.getSensormodeS1()));
+            myRobot.setSensorS2(new MockSensorEndpoint(EV3PortIDs.PORT_2,robotConfig.getSensorS2(),robotConfig.getSensormodeS2()));
+            myRobot.setSensorS3(new MockSensorEndpoint(EV3PortIDs.PORT_3,robotConfig.getSensorS3(),robotConfig.getSensormodeS3()));
+            myRobot.setSensorS4(new MockSensorEndpoint(EV3PortIDs.PORT_4,robotConfig.getSensorS4(),robotConfig.getSensormodeS4()));
+            //TODO add simulated motors
+            /*
+            myRobot.setMotorA(robotConfigurator.createMotor(EV3PortIDs.PORT_A));
+            myRobot.setMotorB(robotConfigurator.createMotor(EV3PortIDs.PORT_B));
+            myRobot.setMotorC(robotConfigurator.createMotor(EV3PortIDs.PORT_C));
+            myRobot.setMotorD(robotConfigurator.createMotor(EV3PortIDs.PORT_D));
+            */
 
-            //Motors
-            motor_A = robotConfig.getMotorA();
-            motor_B = robotConfig.getMotorB();
-            motor_C = robotConfig.getMotorC();
-            motor_D = robotConfig.getMotorD();
-
+            //TODO fix this: myRobot.setBrick(new MockBrick());
         }else{
-            throw new NullPointerException("No RobotConfig set!");
-        }
+            if(robotConfig != null) {
+                //Sensors
+                sensor_S1 = robotConfig.getSensorS1();
+                sensor_S2 = robotConfig.getSensorS2();
+                sensor_S3 = robotConfig.getSensorS3();
+                sensor_S4 = robotConfig.getSensorS4();
 
-        if(Messaging.isValidIP(brickIP) && Messaging.isValidTCPPort(brickTCPport)) {
-            // Configuration of the robot
-            RobotConfigurator robotConfigurator = new RobotConfigurator(brickIP, brickTCPport);
-            myRobot.setRobotConfigurator(robotConfigurator);
+                //Sensormodes
+                mode_S1 = robotConfig.getSensormodeS1();
+                mode_S2 = robotConfig.getSensormodeS2();
+                mode_S3 = robotConfig.getSensormodeS3();
+                mode_S4 = robotConfig.getSensormodeS4();
 
-            robotConfigurator.addSensorConfigurationSet(sensor_S1,sensor_S2,sensor_S3,sensor_S4);
-            robotConfigurator.setSensorModeSet(mode_S1,mode_S2,mode_S3,mode_S4);
-            robotConfigurator.addMotorConfigurationSet(motor_A,motor_B,motor_C,motor_D);
-
-            try {
-                myRobot.setSensorS1(robotConfigurator.createSensor(EV3PortIDs.PORT_1));
-                myRobot.setSensorS2(robotConfigurator.createSensor(EV3PortIDs.PORT_2));
-                myRobot.setSensorS3(robotConfigurator.createSensor(EV3PortIDs.PORT_3));
-                myRobot.setSensorS4(robotConfigurator.createSensor(EV3PortIDs.PORT_4));
-
-                myRobot.setMotorA(robotConfigurator.createMotor(EV3PortIDs.PORT_A));
-                myRobot.setMotorB(robotConfigurator.createMotor(EV3PortIDs.PORT_B));
-                myRobot.setMotorC(robotConfigurator.createMotor(EV3PortIDs.PORT_C));
-                myRobot.setMotorD(robotConfigurator.createMotor(EV3PortIDs.PORT_D));
-
-                myRobot.setSyncedMotors(robotConfigurator.createSynchronizedMotorsEndpoint());
-
-            } catch (PortIsAlreadyInUseException e) {
-                ErrorHandlerManager.getInstance().handleError(e,RobotFactory.class,e.getMessage());
+                //Motors
+                motor_A = robotConfig.getMotorA();
+                motor_B = robotConfig.getMotorB();
+                motor_C = robotConfig.getMotorC();
+                motor_D = robotConfig.getMotorD();
+            }else{
+                throw new NullPointerException("No RobotConfig set!");
             }
 
-            // --- Connect Sensorobject --> with RobotContextState
-            for(EV3PortID port : sensorListenerToRegister.keySet()){
-                if(port.equals(EV3PortIDs.PORT_1) && myRobot.getSensorS1() != null){
-                    for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
-                        myRobot.getSensorS1().registerListener(iev3SensorEventListener);
-                    }
-                }else if(port.equals(EV3PortIDs.PORT_2) && myRobot.getSensorS2() != null){
-                    for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
-                        myRobot.getSensorS2().registerListener(iev3SensorEventListener);
-                    }
-                }else if(port.equals(EV3PortIDs.PORT_3) && myRobot.getSensorS3() != null){
-                    for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
-                        myRobot.getSensorS3().registerListener(iev3SensorEventListener);
-                    }
-                }else if(port.equals(EV3PortIDs.PORT_4) && myRobot.getSensorS4() != null){
-                    for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
-                        myRobot.getSensorS4().registerListener(iev3SensorEventListener);
+            if(Messaging.isValidIP(brickIP) && Messaging.isValidTCPPort(brickTCPport)) {
+                // Configuration of the robot
+                RobotConfigurator robotConfigurator = new RobotConfigurator(brickIP, brickTCPport);
+                myRobot.setRobotConfigurator(robotConfigurator);
+
+                robotConfigurator.addSensorConfigurationSet(sensor_S1, sensor_S2, sensor_S3, sensor_S4);
+                robotConfigurator.setSensorModeSet(mode_S1, mode_S2, mode_S3, mode_S4);
+                robotConfigurator.addMotorConfigurationSet(motor_A, motor_B, motor_C, motor_D);
+
+                try {
+                    myRobot.setSensorS1(robotConfigurator.createSensor(EV3PortIDs.PORT_1));
+                    myRobot.setSensorS2(robotConfigurator.createSensor(EV3PortIDs.PORT_2));
+                    myRobot.setSensorS3(robotConfigurator.createSensor(EV3PortIDs.PORT_3));
+                    myRobot.setSensorS4(robotConfigurator.createSensor(EV3PortIDs.PORT_4));
+
+                    myRobot.setMotorA(robotConfigurator.createMotor(EV3PortIDs.PORT_A));
+                    myRobot.setMotorB(robotConfigurator.createMotor(EV3PortIDs.PORT_B));
+                    myRobot.setMotorC(robotConfigurator.createMotor(EV3PortIDs.PORT_C));
+                    myRobot.setMotorD(robotConfigurator.createMotor(EV3PortIDs.PORT_D));
+
+                    myRobot.setSyncedMotors(robotConfigurator.createSynchronizedMotorsEndpoint());
+
+                } catch (PortIsAlreadyInUseException e) {
+                    ErrorHandlerManager.getInstance().handleError(e, RobotFactory.class, e.getMessage());
+                }
+
+                // --- Connect Sensorobject --> with RobotContextState
+                for (EV3PortID port : sensorListenerToRegister.keySet()) {
+                    if (port.equals(EV3PortIDs.PORT_1) && myRobot.getSensorS1() != null) {
+                        for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
+                            myRobot.getSensorS1().registerListener(iev3SensorEventListener);
+                        }
+                    } else if (port.equals(EV3PortIDs.PORT_2) && myRobot.getSensorS2() != null) {
+                        for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
+                            myRobot.getSensorS2().registerListener(iev3SensorEventListener);
+                        }
+                    } else if (port.equals(EV3PortIDs.PORT_3) && myRobot.getSensorS3() != null) {
+                        for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
+                            myRobot.getSensorS3().registerListener(iev3SensorEventListener);
+                        }
+                    } else if (port.equals(EV3PortIDs.PORT_4) && myRobot.getSensorS4() != null) {
+                        for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
+                            myRobot.getSensorS4().registerListener(iev3SensorEventListener);
+                        }
                     }
                 }
+
+                myRobot.setBrick(robotConfigurator.getBrick());
+
+                // Connect statemachines RobotContextStateEvaluator etc with state machine
+                setupStatemachineEngine();
+
+
+            }else{
+                ErrorHandlerManager.getInstance().handleError(new Exception("Could not create Robot"),this.getClass(),"RobotFactory.createRobot(): Error appeard while creating robot!");
+                myRobotCommandCenter = null;
             }
 
-            myRobot.setBrick(robotConfigurator.getBrick());
-
-            // Connect statemachines RobotContextStateEvaluator etc with state machine
-            setupStatemachineEngine();
-
-        }else{
-            ErrorHandlerManager.getInstance().handleError(new Exception("Could not create Robot"),this.getClass(),"RobotFactory.createRobot(): Error appeard while creating robot!");
-            myRobotCommandCenter = null;
+            System.out.println("[RobotFactory:createRobot] The RobotFactory created a Robot with the following setup:\n"+toString());
         }
-        System.out.println("[RobotFactory:createRobot] The RobotFactory created a Robot with the following setup:\n"+toString());
         return myRobotCommandCenter;
     }
 
@@ -283,6 +308,7 @@ public final class RobotFactory implements IRobotFactory {
     @Override
     public String toString() {
         return "RobotFactory{" +
+                "\nisSimulated="+isSimulationEnabled+
                 "\nsensor_S1=" + sensor_S1 +
                 ",\n sensor_S2=" + sensor_S2 +
                 ",\n sensor_S3=" + sensor_S3 +

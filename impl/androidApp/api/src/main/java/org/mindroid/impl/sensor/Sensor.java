@@ -9,13 +9,13 @@ import org.mindroid.impl.ev3.EV3PortID;
 
 public class Sensor implements ISensorControl,IEV3SensorEventListener {
 
-    private EV3SensorEndpoint sEndpoint;
+    private IEV3SensorEndpoint sEndpoint;
     private EV3PortID port;
 
     private float[] value;
     private Sensormode mode;
 
-    public Sensor(EV3SensorEndpoint sEndpoint, EV3PortID port){
+    public Sensor(IEV3SensorEndpoint sEndpoint, EV3PortID port){
         this.sEndpoint = sEndpoint;
         this.port = port;
         this.sEndpoint.registerListener(this);

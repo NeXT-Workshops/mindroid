@@ -54,12 +54,16 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private final String MSG_TASK_PARAM_0_DISCONNECT = "disconnectFromBrick";
 
     //--- Buttons etc --//
+
+    private FrameLayout layout_info;
     private Button btn_messengerConnDisconn;
+    private Switch switch_enableSimulation;
+    private Button btn_activateTethering;
     private Button btn_connect;
     private Button btn_disconnect;
     private Button btn_startRobot;
     private Button btn_stopRobot;
-
+    private TextView txt_info;
 
     //Message client Connection state
     private TextView txtView_msgServerConnectionState;
@@ -67,10 +71,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private Spinner spinner_selectedImplementation;
 
-    /** Information Box **/
-    private FrameLayout layout_info;
-    private TextView txt_info;
-    private Button btn_activateTethering;
+
 
     /** StartStop-Robot-Task cmd **/
     private final String START_ROBOT = "start";
@@ -184,6 +185,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
 
         btn_messengerConnDisconn = (Button) view.findViewById(R.id.btn_messengerConnDisconn);
+        switch_enableSimulation = (Switch) view.findViewById(R.id.switch_enable_simulation);
         btn_connect = (Button) view.findViewById(R.id.btn_connect);
         btn_disconnect = (Button) view.findViewById(R.id.btn_disconnect);
         spinner_selectedImplementation = (Spinner) view.findViewById(R.id.spinner_selectedStatemachine);
@@ -197,6 +199,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
         //Radio Button displaying connection state to the message server
         txtView_msgServerConnectionState = (TextView) view.findViewById(R.id.txtView_msgServerConnectionState);
+
 
 
         btn_activateTethering.setText(getResources().getString(R.string.btn_text_activate_tethering));
@@ -308,6 +311,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 spinner_selectedImplementation.setEnabled(!robot.isRunning);
 
                 btn_messengerConnDisconn.setEnabled(!robot.isRunning);
+
+                switch_enableSimulation.setEnabled(!robot.isConnectedToBrick());
 
                 if(!robot.isMessengerConnected()) {
                     btn_messengerConnDisconn.setText(txt_btn_DisConnect_connect);
@@ -443,6 +448,13 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     }
 
     private void setButtonListeners() {
+        switch_enableSimulation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SettingsProvider.getInstance().setSimulationEnabled(isChecked);
+            }
+        });
+
 
         btn_messengerConnDisconn.setOnClickListener(new View.OnClickListener() {
             @Override

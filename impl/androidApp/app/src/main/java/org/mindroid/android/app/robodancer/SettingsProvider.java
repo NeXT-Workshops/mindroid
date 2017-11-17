@@ -61,7 +61,9 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     private Resources resources;
     private SharedPreferences connectionProperties;
     private SharedPreferences portConfigProperties;
+
     private boolean isInitialized = false;
+    private boolean isSimulationEnabled = false;
 
     private String androidId = "Android ID not set";
 
@@ -282,6 +284,14 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
         return isInitialized;
     }
 
+    public boolean isSimulationEnabled() {
+        return isSimulationEnabled;
+    }
+
+    public void setSimulationEnabled(boolean simulationEnabled) {
+        isSimulationEnabled = simulationEnabled;
+    }
+
     @Override
     public String toString() {
         return "SettingsProvider{" +
@@ -306,6 +316,8 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
                 ", motorD='" + motorD + '\'' +
                 '}';
     }
+
+
 
 
 }

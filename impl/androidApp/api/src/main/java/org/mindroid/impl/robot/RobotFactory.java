@@ -153,22 +153,18 @@ public final class RobotFactory implements IRobotFactory {
                 if(port.equals(EV3PortIDs.PORT_1) && myRobot.getSensorS1() != null){
                     for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
                         myRobot.getSensorS1().registerListener(iev3SensorEventListener);
-                        //System.out.println("[RobotFactory:createRobot] registered Sensor Listener "+iev3SensorEventListener);
                     }
                 }else if(port.equals(EV3PortIDs.PORT_2) && myRobot.getSensorS2() != null){
                     for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
                         myRobot.getSensorS2().registerListener(iev3SensorEventListener);
-                        //System.out.println("[RobotFactory:createRobot] registered Sensor Listener "+iev3SensorEventListener);
                     }
                 }else if(port.equals(EV3PortIDs.PORT_3) && myRobot.getSensorS3() != null){
                     for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
                         myRobot.getSensorS3().registerListener(iev3SensorEventListener);
-                        //System.out.println("[RobotFactory:createRobot] registered Sensor Listener "+iev3SensorEventListener);
                     }
                 }else if(port.equals(EV3PortIDs.PORT_4) && myRobot.getSensorS4() != null){
                     for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {
                         myRobot.getSensorS4().registerListener(iev3SensorEventListener);
-                        //System.out.println("[RobotFactory:createRobot] registered Sensor Listener "+iev3SensorEventListener);
                     }
                 }
             }

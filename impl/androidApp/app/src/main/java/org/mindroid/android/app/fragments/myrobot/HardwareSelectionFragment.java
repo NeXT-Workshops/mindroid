@@ -33,14 +33,12 @@ import static org.mindroid.common.messages.hardware.Sensors.EV3UltrasonicSensor;
  *
  */
 public class HardwareSelectionFragment extends Fragment implements MyRobotFragment.OnFragmentInteractionListener {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String KEY_HARDWARE_SELECTION_MODE = "org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment.hardwaretype";
     private static final String KEY_HARDWARE_PORT = "org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment.hardwareport";
 
     private RobotConfigurationChangedListener robotConfigurationChangedListener = SettingsProvider.getInstance();
 
-    // TODO: Rename and change types of parameters
     private int hardware_selection_mode;
     private String hardwarePort;
 

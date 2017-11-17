@@ -38,16 +38,6 @@ import java.util.HashMap;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment implements SettingsFragment.OnSettingsChanged {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
 
     //Task
     private final String MSG_TASK_PARAM_0_CONNECT = "connect";
@@ -70,8 +60,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
 
     private Spinner spinner_selectedImplementation;
-
-
 
     /** StartStop-Robot-Task cmd **/
     private final String START_ROBOT = "start";
@@ -104,31 +92,16 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment HomeFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-
-
-
-
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         robot = MainActivity.robot;
         parentActivity = (MainActivity) getActivity();
@@ -156,13 +129,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-
         //Get Resources
         msgConnectToRobot = getResources().getString(R.string.dialog_msg_connect_to_robot);
         msgConnectToRobotError = getResources().getString(R.string.dialog_msg_connect_to_robot_error);
@@ -200,15 +166,12 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         //Radio Button displaying connection state to the message server
         txtView_msgServerConnectionState = (TextView) view.findViewById(R.id.txtView_msgServerConnectionState);
 
-
-
         btn_activateTethering.setText(getResources().getString(R.string.btn_text_activate_tethering));
         btn_connect.setText(getResources().getString(R.string.btn_text_connect));
         btn_disconnect.setText(getResources().getString(R.string.btn_text_disconnect));
         btn_disconnect.setVisibility(View.GONE);
         btn_startRobot.setText(getResources().getString(R.string.btn_text_start_robot));
         btn_stopRobot.setText(getResources().getString(R.string.btn_text_stop_robot));
-
 
         //Add RobotSetupInfo Fragment
         FragmentManager fragmentManager = getFragmentManager();
@@ -249,23 +212,9 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
     @Override
     public void onSettingsChanged(boolean settingsChanged) {
         //nothing todo here
-
     }
 
     /**
@@ -279,7 +228,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void showErrorDialog(String title,String message);
     }
 
@@ -601,8 +549,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     //--- Async Tasks
 
-
-
     private class DisconnectFromBrickTask extends ProgressTask{
 
         public DisconnectFromBrickTask(String title,String progressMsg) {
@@ -617,7 +563,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 result = robot.isConnectedToBrick();
             } catch (Exception e){
                 e.printStackTrace();
-                mListener.showErrorDialog("Exception",e.getMessage());
+                parentActivity.showErrorDialog("Exception",e.getMessage());
             }
             return result;
         }
@@ -638,8 +584,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
                         return true;
                     }catch(Exception e){
-                        System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
-                        mListener.showErrorDialog("Exception",e.getMessage());
+                        parentActivity.showErrorDialog("Exception",e.getMessage());
                         e.printStackTrace();
                     }
                 } else if(params[0].equals(STOP_ROBOT)) {
@@ -647,8 +592,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                         robot.stopRunningImplmentation();
                         return false;
                     }catch(Exception e){
-                        System.out.println("## AsyncTask StartStopRobot. Exception: "+e);
-                        mListener.showErrorDialog("Exception",e.getMessage());
+                        parentActivity.showErrorDialog("Exception",e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -769,7 +713,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                     result = robot.isConnectedToBrick();
                 } catch (IOException e){
                     e.printStackTrace();
-                    mListener.showErrorDialog("Exception",msgConnectToRobotError);
+                    parentActivity.showErrorDialog("Exception",msgConnectToRobotError);
                 }
                 return result;
             }
@@ -788,7 +732,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                     result = robot.initializeConfiguration();;
                 }catch(Exception e){
                     System.out.println("## AsyncTask initRobotConfig. Exception: "+e);
-                    mListener.showErrorDialog("Exception",e.getMessage());
+                    parentActivity.showErrorDialog("Exception",e.getMessage());
                     e.printStackTrace();
                 }
                 return result;

@@ -60,9 +60,9 @@ public class MainActivity extends Activity
     private APIErrorHandler errorHandler;
 
     /** Used Fragments **/ //TODO remove parameters, which are not used
-    private Fragment HOME_FRAGMENT = HomeFragment.newInstance("","");
-    private Fragment CONFIG_FRAGMENT = MyRobotFragment.newInstance("","");
-    private Fragment SETTINGS_FRAGMENT = SettingsFragment.newInstance("","");
+    private Fragment HOME_FRAGMENT = HomeFragment.newInstance();
+    private Fragment CONFIG_FRAGMENT = MyRobotFragment.newInstance();
+    private Fragment SETTINGS_FRAGMENT = SettingsFragment.newInstance();
     private Fragment SENSOR_MONITOR_FRAGMENT = SensorMonitoringFragment.newInstance();
 
     private final String TAG_HOME_FRAGMENT = "TAG_HOME_FRAGMENT";
@@ -234,24 +234,6 @@ public class MainActivity extends Activity
     public void showInfoDialog(final String title, final String message){
         DialogFragment infoDialogFragment = InfoDialog.newInstance(title,message);
         infoDialogFragment.show(getFragmentManager(), "infoDialog");
-    }
-
-    /**
-     * Changes the app language
-     * @param localLang
-     */
-    public void setLocale(Locale localLang) {
-        //TODO Does not work properly
-        Locale myLocale = localLang;
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-        Intent refresh = new Intent(this, MainActivity.class);
-        finish();
-        startActivity(refresh);
-
     }
 
     public ListView getMenuItemListView(){

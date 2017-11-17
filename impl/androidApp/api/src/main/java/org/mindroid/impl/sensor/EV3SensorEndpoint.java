@@ -114,7 +114,9 @@ public class EV3SensorEndpoint extends ClientEndpointImpl {
 
 
     public void registerListener(IEV3SensorEventListener listener) {
-        listeners.add(listener);
+        if(!listeners.contains(listener)){
+            listeners.add(listener);
+        }
     }
 
     public void unregisterListener(IEV3SensorEventListener listener) {

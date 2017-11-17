@@ -55,7 +55,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     //--- Buttons etc --//
     private Button btn_messengerConnDisconn;
-    private Button btn_initConfiguration;
     private Button btn_connect;
     private Button btn_disconnect;
     private Button btn_startRobot;
@@ -185,7 +184,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
 
         btn_messengerConnDisconn = (Button) view.findViewById(R.id.btn_messengerConnDisconn);
-        btn_initConfiguration = (Button) view.findViewById(R.id.btn_initConfig);
         btn_connect = (Button) view.findViewById(R.id.btn_connect);
         btn_disconnect = (Button) view.findViewById(R.id.btn_disconnect);
         spinner_selectedImplementation = (Spinner) view.findViewById(R.id.spinner_selectedStatemachine);
@@ -205,7 +203,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_connect.setText(getResources().getString(R.string.btn_text_connect));
         btn_disconnect.setText(getResources().getString(R.string.btn_text_disconnect));
         btn_disconnect.setVisibility(View.GONE);
-        btn_initConfiguration.setText(getResources().getString(R.string.btn_text_init_config));
         btn_startRobot.setText(getResources().getString(R.string.btn_text_start_robot));
         btn_stopRobot.setText(getResources().getString(R.string.btn_text_stop_robot));
 
@@ -296,19 +293,17 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             public void run(){
                 boolean positiveUSBState = isUSBConnected(parentActivity) && isTetheringActivated(parentActivity);
 
-                btn_connect.setEnabled(!robot.isConnected() && positiveUSBState);
+                btn_connect.setEnabled(!robot.isConnectedToBrick() && positiveUSBState);
 
-                btn_connect.setVisibility((!robot.isConnected() && positiveUSBState) ? View.VISIBLE : View.GONE);
+                btn_connect.setVisibility((!robot.isConnectedToBrick() && positiveUSBState) ? View.VISIBLE : View.GONE);
 
-                btn_disconnect.setVisibility(robot.isConnected() ? View.VISIBLE : View.GONE);
+                btn_disconnect.setVisibility(robot.isConnectedToBrick() ? View.VISIBLE : View.GONE);
 
-                btn_initConfiguration.setEnabled(robot.isConnected() && !robot.isConfigurated() && positiveUSBState);
-
-                btn_startRobot.setEnabled(robot.isConnected() && robot.isConfigurated() && !robot.isRunning && positiveUSBState && spinner_selectedImplementation.getSelectedItem() != null && !spinner_selectedImplementation.getSelectedItem().toString().isEmpty());
+                btn_startRobot.setEnabled(robot.isConnectedToBrick() && robot.isConfigurated() && !robot.isRunning && positiveUSBState && spinner_selectedImplementation.getSelectedItem() != null && !spinner_selectedImplementation.getSelectedItem().toString().isEmpty());
 
                 btn_stopRobot.setEnabled(robot.isRunning);
 
-                setEnableMenuItems(!robot.isConnected());
+                setEnableMenuItems(!robot.isConnectedToBrick());
 
                 spinner_selectedImplementation.setEnabled(!robot.isRunning);
 
@@ -467,7 +462,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             @Override
             public void onClick(View v) {
                 //Creates the Robot
-                CreateRobotTask createRobotTask = new CreateRobotTask("Creating Robot","Creating your Robot");
+                /*CreateRobotTask createRobotTask = new CreateRobotTask("Creating Robot","Creating your Robot");
                 createRobotTask.execute();
 
                 waitForTaskCompletion(createRobotTask,20);
@@ -481,6 +476,9 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 //Creates and executes the Task to connect to the Brick
                 ConnectToBrickTask task = new ConnectToBrickTask("Connecting to Brick",msgConnectToRobot);
                 task.execute(); //String is not important
+                */
+                ConnectInitBrickTask task = new ConnectInitBrickTask("Initializing",SettingsProvider.getInstance().getRobotConfigBundle(),getFragmentManager());
+                task.execute();
             }
         });
 
@@ -493,14 +491,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 }
 
                 DisconnectFromBrickTask task = new DisconnectFromBrickTask("Disconnecting robot",msgDisconnectFromRobot);
-                task.execute();
-            }
-        });
-
-        btn_initConfiguration.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InitConfiguration task = new InitConfiguration("Init Configuration",msgInitConfiguration);
                 task.execute();
             }
         });
@@ -599,25 +589,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     //--- Async Tasks
 
-    private class ConnectToBrickTask extends ProgressTask{
 
-        public ConnectToBrickTask(String title,String progressMsg) {
-            super(getFragmentManager(),title,progressMsg);
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            boolean result = false;
-            try {
-                robot.connectToBrick();
-                result = robot.isConnected();
-            } catch (IOException e){
-                e.printStackTrace();
-                mListener.showErrorDialog("Exception",msgConnectToRobotError);
-            }
-            return result;
-        }
-    }
 
     private class DisconnectFromBrickTask extends ProgressTask{
 
@@ -630,7 +602,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             boolean result = false;
             try {
                 robot.disconnectFromBrick();
-                result = robot.isConnected();
+                result = robot.isConnectedToBrick();
             } catch (Exception e){
                 e.printStackTrace();
                 mListener.showErrorDialog("Exception",e.getMessage());
@@ -639,34 +611,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
     }
 
-    private class InitConfiguration extends ProgressTask{
-
-        public InitConfiguration(String title,String progressMsg) {
-            super(getFragmentManager(),title,progressMsg);
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            boolean result = false;
-
-            try{
-                result = robot.initializeConfiguration();;
-            }catch(Exception e){
-                System.out.println("## AsyncTask initRobotConfig. Exception: "+e);
-                mListener.showErrorDialog("Exception",e.getMessage());
-                e.printStackTrace();
-            }
-            return result;
-        }
-    }
-
-
     private class StartStopRobotTask extends ProgressTask{
 
         public StartStopRobotTask(String title,String progressMsg) {
-
             super(getFragmentManager(),title,progressMsg);
-
         }
 
         @Override
@@ -739,22 +687,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     }
 
 
-    private class CreateRobotTask extends ProgressTask{
-
-        public CreateRobotTask(String title,String progressMsg) {
-            super(getFragmentManager(),title,progressMsg);
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            //Create Robot
-            robot.create();
-
-            return true;
-        }
-
-    }
-
     private class ConnectInitBrickTask extends ConnectionProgressTask{
 
         public ConnectInitBrickTask(String title, Bundle args, FragmentManager fManager) {
@@ -763,12 +695,92 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
         @Override
         protected Boolean doInBackground(String... params) {
-            //TODO connect to brick
-            //TODO init messenger
-            //TODO init sensors
-            //TODO init motors
-            //TODO always update UI
-            return null;
+            //Creates the Robot
+            CreateRobotTask createRobotTask = new CreateRobotTask(); //TODO Todo set text somewhere else: "Creating Robot","Creating your Robot"
+            createRobotTask.execute();
+            waitForTaskCompletion(createRobotTask,20);
+
+            //Messenger Client Task - messenger connects to messageserver
+            DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask("Disconnect from Brick","Messenger Client tries to connect");
+            msgClientTask.execute(MSG_TASK_PARAM_0_CONNECT);
+            waitForTaskCompletion(msgClientTask,20);
+            setProgressState(ConnectionProgressFragment.KEY_PARAM_MESSENGER,robot.isMessengerConnected());
+
+
+            //Creates and executes the Task to connect to the Brick
+            ConnectToBrickTask connectToBrickTask = new ConnectToBrickTask(); //Todo set text somewhere else: "Connecting to Brick",msgConnectToRobot
+            connectToBrickTask.execute(); //String is not important
+            waitForTaskCompletion(connectToBrickTask,20);
+            setProgressState(ConnectionProgressFragment.KEY_PARAM_BRICK,robot.isConnectedToBrick());
+
+            if(robot.isConnectedToBrick()) {
+                InitConfiguration initConfigTask = new InitConfiguration(); //Todo set text somewhere else: "Init Configuration", msgInitConfiguration
+                initConfigTask.execute();
+                waitForTaskCompletion(initConfigTask, 20);
+                //TODO set sensor/motor progress states
+            }else{
+                setProgressState(ConnectionProgressFragment.KEY_PARAM_SEN_P1, false);
+                setProgressState(ConnectionProgressFragment.KEY_PARAM_SEN_P2, false);
+                setProgressState(ConnectionProgressFragment.KEY_PARAM_SEN_P3, false);
+                setProgressState(ConnectionProgressFragment.KEY_PARAM_SEN_P4, false);
+                setProgressState(ConnectionProgressFragment.KEY_PARAM_MOT_A, false);
+                setProgressState(ConnectionProgressFragment.KEY_PARAM_MOT_B, false);
+                setProgressState(ConnectionProgressFragment.KEY_PARAM_MOT_C, false);
+                setProgressState(ConnectionProgressFragment.KEY_PARAM_MOT_D, false);
+            }
+
+            return true;
+        }
+
+        private class CreateRobotTask extends AsyncTask<String,Integer,Boolean>{
+            public CreateRobotTask() {
+                super();
+            }
+            @Override
+            protected Boolean doInBackground(String... params) {
+                //Create Robot
+                robot.create();
+                return true;
+            }
+        }
+
+        private class ConnectToBrickTask extends AsyncTask<String,Integer,Boolean>{
+            public ConnectToBrickTask() {
+                super();
+            }
+
+            @Override
+            protected Boolean doInBackground(String... params) {
+                boolean result = false;
+                try {
+                    robot.connectToBrick();
+                    result = robot.isConnectedToBrick();
+                } catch (IOException e){
+                    e.printStackTrace();
+                    mListener.showErrorDialog("Exception",msgConnectToRobotError);
+                }
+                return result;
+            }
+        }
+
+        private class InitConfiguration extends AsyncTask<String,Integer,Boolean>{
+            public InitConfiguration() {
+                super();
+            }
+
+            @Override
+            protected Boolean doInBackground(String... params) {
+                boolean result = false;
+
+                try{
+                    result = robot.initializeConfiguration();;
+                }catch(Exception e){
+                    System.out.println("## AsyncTask initRobotConfig. Exception: "+e);
+                    mListener.showErrorDialog("Exception",e.getMessage());
+                    e.printStackTrace();
+                }
+                return result;
+            }
         }
     }
 }

@@ -135,7 +135,7 @@ public class Robot {
         roFactory.getRobotCommandCenter().connectToBrick();
     }
 
-    public boolean isConnected() {
+    public boolean isConnectedToBrick() {
         if(roFactory.getRobotCommandCenter() != null) {
             return roFactory.getRobotCommandCenter().isConnectedToBrick();
         }else{

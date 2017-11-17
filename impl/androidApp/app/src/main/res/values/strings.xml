@@ -128,6 +128,8 @@
     <string name="errortext_msg_initialization">The Configuration of at least one Sensor/Motor failed. Check port
         connections on the brick and your configuration in the App.
     </string>
+
+    <!-- ConnectionProgressFragment -->
     <string name="title_messenger">Messenger</string>
     <string name="title_brick">Brick</string>
     <string name="title_sensors">Sensors</string>

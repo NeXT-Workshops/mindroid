@@ -14,18 +14,18 @@ import org.mindroid.impl.ev3.EV3PortIDs;
 
 public class ConnectionProgressFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String KEY_PARAM_SEN_P1 = "sen_port1";
-    private static final String KEY_PARAM_SEN_P2 = "sen_port2";
-    private static final String KEY_PARAM_SEN_P3 = "sen_port3";
-    private static final String KEY_PARAM_SEN_P4 = "sen_port4";
+    public static final String KEY_PARAM_SEN_P1 = "sen_port1";
+    public static final String KEY_PARAM_SEN_P2 = "sen_port2";
+    public static final String KEY_PARAM_SEN_P3 = "sen_port3";
+    public static final String KEY_PARAM_SEN_P4 = "sen_port4";
 
-    private static final String KEY_PARAM_MOT_A = "mot_port1";
-    private static final String KEY_PARAM_MOT_B = "mot_port2";
-    private static final String KEY_PARAM_MOT_C = "mot_port3";
-    private static final String KEY_PARAM_MOT_D = "mot_port4";
+    public static final String KEY_PARAM_MOT_A = "mot_port1";
+    public static final String KEY_PARAM_MOT_B = "mot_port2";
+    public static final String KEY_PARAM_MOT_C = "mot_port3";
+    public static final String KEY_PARAM_MOT_D = "mot_port4";
 
-    private static final String KEY_PARAM_BRICK = "Brick";
-    private static final String KEY_PARAM_MESSENGER = "Messenger";
+    public static final String KEY_PARAM_BRICK = "Brick";
+    public static final String KEY_PARAM_MESSENGER = "Messenger";
 
     private String sen_p1;
     private String sen_p2;

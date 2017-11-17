@@ -36,4 +36,6 @@ public class ConnectionProgressDialog extends DialogFragment {
 
         return builder.create();
     }
+
+
 }

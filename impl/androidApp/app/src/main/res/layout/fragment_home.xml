@@ -92,13 +92,6 @@
                         android:layout_height="wrap_content"
                         android:text="disconnect" />
 
-                    <Button
-                        android:id="@+id/btn_initConfig"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:text="@string/btn_text_init_config" />
-
                     <Spinner
                         android:id="@+id/spinner_selectedStatemachine"
                         android:layout_width="match_parent"

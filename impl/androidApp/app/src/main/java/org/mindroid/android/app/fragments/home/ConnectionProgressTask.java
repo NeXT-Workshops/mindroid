@@ -29,4 +29,13 @@ public abstract class ConnectionProgressTask extends AsyncTask<String,Integer,Bo
 
     @Override
     protected abstract Boolean doInBackground(String... params);
+
+    /**
+     *
+     * @param key - {@link ConnectionProgressFragment} keys
+     * @param success - true if success
+     */
+    public void setProgressState(String key, boolean success){
+        dFragment.setProgressState(key,success);
+    }
 }

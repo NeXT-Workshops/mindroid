@@ -261,7 +261,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
                 btn_messengerConnDisconn.setEnabled(!robot.isRunning);
 
-                switch_enableSimulation.setEnabled(!robot.isConnectedToBrick());
+                //TODO readd switch_enableSimulation.setEnabled(!robot.isConnectedToBrick());
+                switch_enableSimulation.setEnabled(false);
 
                 if(!robot.isMessengerConnected()) {
                     btn_messengerConnDisconn.setText(txt_btn_DisConnect_connect);

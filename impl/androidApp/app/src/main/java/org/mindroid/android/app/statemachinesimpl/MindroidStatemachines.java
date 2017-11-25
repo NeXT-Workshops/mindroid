@@ -22,6 +22,8 @@ import org.mindroid.impl.statemachine.properties.sensorproperties.Angle;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Distance;
 
+import java.util.Random;
+
 import static org.mindroid.api.communication.IMessenger.SERVER_LOG;
 
 /**
@@ -64,7 +66,8 @@ public class MindroidStatemachines extends StatemachineAPI {
         //Statemachine test Display Drawings
         tmpStatemachine = displayDrawingTestStatemachine();
         statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
-
+        tmpStatemachine = messaging4Robots();
+        statemachineCollection.addStatemachine(tmpStatemachine.getID(),tmpStatemachine);
 
     }
 
@@ -161,6 +164,72 @@ public class MindroidStatemachines extends StatemachineAPI {
         sm.addTransition(t_two_sec,state_buzz,state_sequenceDown);
         sm.addTransition(t_two_sec,state_sequenceDown,state_sequenceUp);
         sm.addTransition(t_two_sec,state_sequenceUp,state_beep);
+
+        return sm;
+    }
+
+    /**
+     * This statemachine should run on 4 robots at the same time to test the messaging feature.
+     * NOTE: Robot "A" should receive "sendInitialMsg" as start state, you might need to ensure this manually
+     * @return the statemachine
+     */
+    public IStatemachine messaging4Robots()  {
+        IStatemachine sm = new Statemachine("TestMessagingWith4");
+
+        final String player_1 = "A";
+        final String player_2 = "B";
+        final String player_3 = "C";
+        final String player_4 = "D";
+
+        IConstraint cnstr_MsgReceived1 = new MsgReceived(new MessageProperty("MSG", player_1));
+        IConstraint cnstr_MsgReceived2 = new MsgReceived(new MessageProperty("MSG", player_2));
+        IConstraint cnstr_MsgReceived3 = new MsgReceived(new MessageProperty("MSG", player_3));
+        IConstraint cnstr_MsgReceived4 = new MsgReceived(new MessageProperty("MSG", player_4));
+        ITransition t_msgReceived = new Transition(new OR(new OR(cnstr_MsgReceived1, cnstr_MsgReceived2), new OR(cnstr_MsgReceived3, cnstr_MsgReceived4)));
+
+        IState state_sendMsg = new State("sendMsg") {
+            public void run() {
+                Random rand = new Random();
+                int randomNum = rand.nextInt(4) + 1;
+                switch (randomNum) {
+                    case 1: sendMessage(player_1, "MSG");
+                            break;
+                    case 2: sendMessage(player_2, "MSG");
+                            break;
+                    case 3: sendMessage(player_3, "MSG");
+                            break;
+                    case 4: sendMessage(player_4, "MSG");
+                            break;
+                }
+
+            }
+        };
+        sm.addState(state_sendMsg);
+
+        if(getRobotID().equals("A")) {
+            IState state_initialMsg = new State("sendInitialMsg") {
+                public void run() {
+                    sendMessage(player_2, "MSG");
+                    sendMessage(player_3, "MSG");
+                }
+            };
+            sm.addState(state_initialMsg);
+            sm.setStartState(state_initialMsg);
+            sm.addTransition(t_msgReceived, state_initialMsg, state_sendMsg);
+        } else {
+            IState state_waiting = new State("waitingForMessage") {
+                public void run() {
+
+                }
+            };
+            sm.addState(state_waiting);
+            sm.setStartState(state_waiting);
+            sm.addTransition(t_msgReceived, state_waiting, state_sendMsg);
+        }
+            sm.addTransition(t_msgReceived, state_sendMsg, state_sendMsg);
+
+
+
 
         return sm;
     }

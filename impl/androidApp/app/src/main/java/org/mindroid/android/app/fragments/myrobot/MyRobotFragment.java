@@ -64,15 +64,13 @@ public class MyRobotFragment extends Fragment {
         TabHost host = (TabHost)view.findViewById(R.id.tab_container);
         host.setup();
 
-        FragmentManager fragmentManager = getFragmentManager();
-
         //Init sensor Configuration Tab
         TabHost.TabSpec tab_sensors_spec = host.newTabSpec("Sensors");//getResources().getString(R.string.tab_sensors_tag)
         tab_sensors_spec.setIndicator(getResources().getString(R.string.tab_sensors_tag));
         tab_sensors_spec.setContent(R.id.tab_sensors);
         host.addTab(tab_sensors_spec);
 
-        createSensorFragments(view, fragmentManager);
+        createSensorFragments(view);
 
         //Init motor configuration Tab
         TabHost.TabSpec tab_motors_spec = host.newTabSpec(getResources().getString(R.string.tab_motors_tag));
@@ -80,7 +78,7 @@ public class MyRobotFragment extends Fragment {
         tab_motors_spec.setContent(R.id.tab_motors);
         host.addTab(tab_motors_spec);
 
-        createMotorFragments(view, fragmentManager);
+        createMotorFragments(view);
 
         return view;
     }
@@ -89,9 +87,8 @@ public class MyRobotFragment extends Fragment {
      * Creats HardwareSelectionFragments for the Sensor tab and adds them to the UI
      *
      * @param view
-     * @param fragmentManager
      */
-    private void createSensorFragments(View view, FragmentManager fragmentManager) {
+    private void createSensorFragments(View view) {
         LinearLayout sensor_container = (LinearLayout) view.findViewById(R.id.sensor_container);
         sensor_container.setOrientation(LinearLayout.VERTICAL);
 
@@ -103,27 +100,26 @@ public class MyRobotFragment extends Fragment {
         View seperator3 = (View) inflater.inflate(R.layout.seperator ,null);
 
         //---------- first fragment ---------
-        createSensorSelectionFragment(fragmentManager, sensor_container,getResources().getString(R.string.KEY_SENSOR_S1));
+        createSensorSelectionFragment(sensor_container,getResources().getString(R.string.KEY_SENSOR_S1));
 
         //---------- second fragment ---------
-        createSensorSelectionFragment(fragmentManager, sensor_container,getResources().getString(R.string.KEY_SENSOR_S2));
+        createSensorSelectionFragment(sensor_container,getResources().getString(R.string.KEY_SENSOR_S2));
 
         //---------- third fragment ---------
-        createSensorSelectionFragment(fragmentManager, sensor_container,getResources().getString(R.string.KEY_SENSOR_S3));
+        createSensorSelectionFragment(sensor_container,getResources().getString(R.string.KEY_SENSOR_S3));
 
         //---------- fourth fragment ---------
-        createSensorSelectionFragment(fragmentManager, sensor_container,getResources().getString(R.string.KEY_SENSOR_S4));
+        createSensorSelectionFragment(sensor_container,getResources().getString(R.string.KEY_SENSOR_S4));
     }
 
     /**
      * adds a single Sensor Selection Fragment to the layout
-     * @param fragmentManager
      * @param sensor_container
      * @param sensorPort
      */
-    private void createSensorSelectionFragment(FragmentManager fragmentManager, LinearLayout sensor_container, String sensorPort) {
+    private void createSensorSelectionFragment(LinearLayout sensor_container, String sensorPort) {
         HardwareSelectionFragment fragment = HardwareSelectionFragment.newInstance(HardwareSelectionFragment.HARDWARE_SELECTION_MODE_SENSOR,sensorPort);
-        fragmentManager.beginTransaction()
+        getFragmentManager().beginTransaction()
                 .add(sensor_container.getId(), fragment)
                 .commit();
     }
@@ -134,24 +130,23 @@ public class MyRobotFragment extends Fragment {
      * @param view
      * @param fragmentManager
      */
-    private void createMotorFragments(View view, FragmentManager fragmentManager) {
+    private void createMotorFragments(View view) {
         LinearLayout motor_container = (LinearLayout) view.findViewById(R.id.motor_container);
         motor_container.setOrientation(LinearLayout.VERTICAL);
 
-        createMotorSelectionFragment(fragmentManager, motor_container,getResources().getString(R.string.KEY_MOTOR_A));
-        createMotorSelectionFragment(fragmentManager, motor_container,getResources().getString(R.string.KEY_MOTOR_B));
-        createMotorSelectionFragment(fragmentManager, motor_container,getResources().getString(R.string.KEY_MOTOR_C));
-        createMotorSelectionFragment(fragmentManager, motor_container,getResources().getString(R.string.KEY_MOTOR_D));
+        createMotorSelectionFragment(motor_container,getResources().getString(R.string.KEY_MOTOR_A));
+        createMotorSelectionFragment(motor_container,getResources().getString(R.string.KEY_MOTOR_B));
+        createMotorSelectionFragment(motor_container,getResources().getString(R.string.KEY_MOTOR_C));
+        createMotorSelectionFragment(motor_container,getResources().getString(R.string.KEY_MOTOR_D));
     }
 
     /**
      *  Adds a single motor selection fragment to the layout
-     * @param fragmentManager
      * @param motor_container
      * @param motorPort
      */
-    private void createMotorSelectionFragment(FragmentManager fragmentManager, LinearLayout motor_container,String motorPort) {
-        fragmentManager.beginTransaction()
+    private void createMotorSelectionFragment(LinearLayout motor_container,String motorPort) {
+        getFragmentManager().beginTransaction()
                 .add(motor_container.getId(), HardwareSelectionFragment.newInstance(HardwareSelectionFragment.HARDWARE_SELECTION_MODE_MOTOR,motorPort))
                 .commit();
     }

@@ -29,7 +29,7 @@ public class ProgressDialog extends DialogFragment {
 
 
 
-        AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity())
+        android.app.ProgressDialog.Builder builder = new android.app.ProgressDialog.Builder(getActivity())
                 .setCancelable(false)
                 .setTitle(title)
                 .setMessage(msg);

@@ -2,7 +2,9 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="org.mindroid.android.app.fragments.home.ConnectionProgressFragment">
+             tools:context="org.mindroid.android.app.fragments.home.ConnectionProgressDialogFragment"
+             android:paddingTop="10dp" android:paddingLeft="10dp" android:paddingRight="10dp"
+             android:paddingBottom="10dp">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -14,42 +16,50 @@
                 android:text="@string/title_messenger"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/txtView_msgrTitle" android:layout_weight="1"
-                android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
+                android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"
+                android:paddingBottom="5dp"/>
         <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/container_msger">
+                android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/container_msger"
+                android:paddingBottom="5dp">
         </LinearLayout>
         <TextView
                 android:text="@string/title_brick"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/txtView_brickTitle" android:layout_weight="1"
-                android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
+                android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"
+                android:paddingBottom="5dp"/>
         <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/container_brick">
+                android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/container_brick"
+                android:paddingBottom="5dp">
         </LinearLayout>
         <TextView
                 android:text="@string/title_sensors"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/txtView_sensorsTitle"
                 android:layout_weight="1"
-                android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
+                android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"
+                android:paddingBottom="5dp"/>
         <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/container_sensors">
+                android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/container_sensors"
+                android:paddingBottom="5dp">
         </LinearLayout>
         <TextView
                 android:text="@string/title_motors"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/txtView_motorsTitle" android:layout_weight="1"
-                android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
+                android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"
+                android:paddingBottom="5dp"/>
         <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/container_motors">
+                android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/container_motors"
+                android:paddingBottom="5dp">
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.provider.Settings;
 import android.view.*;
 import android.widget.*;
 
@@ -393,7 +391,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
      * @param millis - sleeptime should be >0
      */
     private void waitForTaskCompletion(AsyncTask task, long millis){
-        while(task.getStatus() == AsyncTask.Status.FINISHED){
+        while(task.getStatus() != AsyncTask.Status.FINISHED){
             sleep(millis);
         }
     }
@@ -448,7 +446,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 ConnectToBrickTask task = new ConnectToBrickTask("Connecting to Brick",msgConnectToRobot);
                 task.execute(); //String is not important
                 */
-                ConnectInitBrickTask task = new ConnectInitBrickTask("Initializing",SettingsProvider.getInstance().getRobotConfigBundle(),getFragmentManager());
+                //TODO add internationalization to title
+                ConnectInitBrickTask task = new ConnectInitBrickTask("Connecting",SettingsProvider.getInstance().getRobotConfigBundle(),getFragmentManager());
                 task.execute();
             }
         });
@@ -643,7 +642,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                     }
                 }
             }
-
             return robot.isMessengerConnected();
         }
 
@@ -656,8 +654,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private class ConnectInitBrickTask extends ConnectionProgressTask{
 
-        public ConnectInitBrickTask(String title, Bundle args, FragmentManager fManager) {
-            super(title, args, fManager);
+        public ConnectInitBrickTask(String title, Bundle configBundle, FragmentManager fManager) {
+            super(title, configBundle, fManager);
         }
 
         @Override
@@ -671,14 +669,14 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask("Disconnect from Brick","Messenger Client tries to connect");
             msgClientTask.execute(MSG_TASK_PARAM_0_CONNECT);
             waitForTaskCompletion(msgClientTask,20);
-            setProgressState(ConnectionProgressFragment.KEY_PARAM_MESSENGER,robot.isMessengerConnected());
+            setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MESSENGER,robot.isMessengerConnected());
 
 
             //Creates and executes the Task to connect to the Brick
             ConnectToBrickTask connectToBrickTask = new ConnectToBrickTask(); //Todo set text somewhere else: "Connecting to Brick",msgConnectToRobot
             connectToBrickTask.execute(); //String is not important
             waitForTaskCompletion(connectToBrickTask,20);
-            setProgressState(ConnectionProgressFragment.KEY_PARAM_BRICK,robot.isConnectedToBrick());
+            setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_BRICK,robot.isConnectedToBrick());
 
             if(robot.isConnectedToBrick()) {
                 InitConfiguration initConfigTask = new InitConfiguration(); //Todo set text somewhere else: "Init Configuration", msgInitConfiguration
@@ -686,14 +684,14 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 waitForTaskCompletion(initConfigTask, 20);
                 //TODO set sensor/motor progress states
             }else{
-                setProgressState(ConnectionProgressFragment.KEY_PARAM_SEN_P1, false);
-                setProgressState(ConnectionProgressFragment.KEY_PARAM_SEN_P2, false);
-                setProgressState(ConnectionProgressFragment.KEY_PARAM_SEN_P3, false);
-                setProgressState(ConnectionProgressFragment.KEY_PARAM_SEN_P4, false);
-                setProgressState(ConnectionProgressFragment.KEY_PARAM_MOT_A, false);
-                setProgressState(ConnectionProgressFragment.KEY_PARAM_MOT_B, false);
-                setProgressState(ConnectionProgressFragment.KEY_PARAM_MOT_C, false);
-                setProgressState(ConnectionProgressFragment.KEY_PARAM_MOT_D, false);
+                setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P1, false);
+                setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P2, false);
+                setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P3, false);
+                setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P4, false);
+                setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_A, false);
+                setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_B, false);
+                setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_C, false);
+                setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_D, false);
             }
 
             return true;

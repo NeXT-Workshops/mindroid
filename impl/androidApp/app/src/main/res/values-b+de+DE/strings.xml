@@ -124,7 +124,7 @@
         Portverbindungen am Brick und die eingestelle Konfig in der App. Versuche es dann nochmal!
     </string>
 
-    <!-- ConnectionProgressFragment -->
+    <!-- ConnectionProgressDialogFragment -->
     <string name="title_messenger">Messenger</string>
     <string name="title_brick">Brick</string>
     <string name="title_sensors">Sensoren</string>

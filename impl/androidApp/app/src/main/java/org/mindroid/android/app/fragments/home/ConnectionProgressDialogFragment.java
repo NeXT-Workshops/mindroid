@@ -1,8 +1,11 @@
 package org.mindroid.android.app.fragments.home;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,11 @@ import org.mindroid.android.app.R;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 
-public class ConnectionProgressFragment extends Fragment {
+/**
+ * Fragment displaying the progress state when connecting to the brick and initialization configuration.
+ *
+ */
+public class ConnectionProgressDialogFragment extends DialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String KEY_PARAM_SEN_P1 = "sen_port1";
     public static final String KEY_PARAM_SEN_P2 = "sen_port2";
@@ -26,6 +33,9 @@ public class ConnectionProgressFragment extends Fragment {
 
     public static final String KEY_PARAM_BRICK = "Brick";
     public static final String KEY_PARAM_MESSENGER = "Messenger";
+
+    private static final String KEY_TITLE = "TITLE";
+    private static final String KEY_BUNDLE = "BUNDLE";
 
     private String sen_p1;
     private String sen_p2;
@@ -53,7 +63,9 @@ public class ConnectionProgressFragment extends Fragment {
     private ProgressFragment pfMotor3;
     private ProgressFragment pfMotor4;
 
-    public ConnectionProgressFragment() {
+    private AlertDialog dialog;
+
+    public ConnectionProgressDialogFragment() {
         // Required empty public constructor
     }
 
@@ -61,12 +73,13 @@ public class ConnectionProgressFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param args Bundle of parameters
-     * @return A new instance of fragment ConnectionProgressFragment.
+     * @param configBundle Bundle of parameters (config of robot)
+     * @return A new instance of fragment ConnectionProgressDialogFragment.
      */
-    public static ConnectionProgressFragment newInstance(Bundle args) {
-        ConnectionProgressFragment fragment = new ConnectionProgressFragment();
-        fragment.setArguments(args);
+    public static ConnectionProgressDialogFragment newInstance(String title, Bundle configBundle) {
+        ConnectionProgressDialogFragment fragment = new ConnectionProgressDialogFragment();
+        configBundle.putString(KEY_TITLE,title);
+        fragment.setArguments(configBundle);
         return fragment;
     }
 
@@ -87,6 +100,23 @@ public class ConnectionProgressFragment extends Fragment {
     }
 
     @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        String title = getArguments().getString(KEY_TITLE);
+        Bundle bundle = getArguments().getBundle(KEY_BUNDLE);
+
+        //Create Dialog, set Fragment (ConnectionProgressDialogFragment) to its view.
+        dialog = new android.app.AlertDialog.Builder(getActivity()).create();
+        dialog.setCancelable(false);
+        dialog.setTitle(title);
+
+
+        System.out.println("[ConnectionProgressDialog:onCreateDialog] properties set");
+
+        return dialog;
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_connection_progress, container, false);
@@ -97,10 +127,13 @@ public class ConnectionProgressFragment extends Fragment {
         container_motors = (LinearLayout) view.findViewById(R.id.container_motors);
 
         pfMessenger = ProgressFragment.newInstance("Connecting to Message Server");
-        container_messenger.addView(pfMessenger.getView());
+        //Add Messenger Fragment
+        addFragmentToContainer(R.id.container_msger,pfMessenger);
 
         pfBrick = ProgressFragment.newInstance("Connecting to Brick");
-        container_brick.addView(pfBrick.getView());
+        //Add Brick Fragment
+        addFragmentToContainer(R.id.container_brick,pfBrick);
+
 
         createSensorProgressFragment(EV3PortIDs.PORT_1);
         createSensorProgressFragment(EV3PortIDs.PORT_2);
@@ -112,6 +145,7 @@ public class ConnectionProgressFragment extends Fragment {
         createMotorProgressFragment(EV3PortIDs.PORT_C);
         createMotorProgressFragment(EV3PortIDs.PORT_D);
 
+        dialog.setView(view);
 
         // Inflate the layout for this fragment
         return view;
@@ -125,18 +159,19 @@ public class ConnectionProgressFragment extends Fragment {
     private void createSensorProgressFragment(EV3PortID senPort){
         if(senPort.equals(EV3PortIDs.PORT_1) && sen_p1 != null){
             pfSensor1 = ProgressFragment.newInstance(sen_p1);
-            container_sensors.addView(pfSensor1.getView());
+            addFragmentToContainer(container_sensors.getId(),pfSensor1);
         }else if(senPort.equals(EV3PortIDs.PORT_2) && sen_p2 != null){
             pfSensor2 = ProgressFragment.newInstance(sen_p2);
-            container_sensors.addView(pfSensor2.getView());
+            addFragmentToContainer(container_sensors.getId(),pfSensor2);
         }else if(senPort.equals(EV3PortIDs.PORT_3) && sen_p3 != null) {
             pfSensor3 = ProgressFragment.newInstance(sen_p3);
-            container_sensors.addView(pfSensor3.getView());
+            addFragmentToContainer(container_sensors.getId(),pfSensor3);
         }else if(senPort.equals(EV3PortIDs.PORT_4) && sen_p4 != null){
             pfSensor4 = ProgressFragment.newInstance(sen_p4);
-            container_sensors.addView(pfSensor4.getView());
+            addFragmentToContainer(container_sensors.getId(),pfSensor4);
         }
     }
+
 
     /**
      * Creates a proper motor progress fragment, if the argument found for the given port is not null.
@@ -146,17 +181,21 @@ public class ConnectionProgressFragment extends Fragment {
     private void createMotorProgressFragment(EV3PortID motorPort){
         if(motorPort.equals(EV3PortIDs.PORT_A) && mot_p1 != null){
             pfMotor1 = ProgressFragment.newInstance(mot_p1);
-            container_motors.addView(pfMotor1.getView());
+            addFragmentToContainer(container_motors.getId(),pfMotor1);
         }else if(motorPort.equals(EV3PortIDs.PORT_B) && mot_p2 != null){
             pfMotor2 = ProgressFragment.newInstance(mot_p2);
-            container_motors.addView(pfMotor2.getView());
+            addFragmentToContainer(container_motors.getId(),pfMotor2);
         }else if(motorPort.equals(EV3PortIDs.PORT_C) && mot_p3 != null) {
             pfMotor3 = ProgressFragment.newInstance(mot_p3);
-            container_motors.addView(pfMotor3.getView());
+            addFragmentToContainer(container_motors.getId(),pfMotor3);
         }else if(motorPort.equals(EV3PortIDs.PORT_D) && mot_p4 != null){
             pfMotor4 = ProgressFragment.newInstance(mot_p4);
-            container_motors.addView(pfMotor4.getView());
+            addFragmentToContainer(container_motors.getId(),pfMotor4);
         }
+    }
+
+    private void addFragmentToContainer(int containerID, Fragment fragment){
+        getChildFragmentManager().beginTransaction().add(containerID, fragment).commit();
     }
 
     public void setProgressState(String key, boolean success){

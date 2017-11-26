@@ -24,12 +24,11 @@ public abstract class ProgressTask extends AsyncTask<String,Integer,Boolean>{
         this.title = title;
 
         dialog = org.mindroid.android.app.dialog.ProgressDialog.newInstance(title,progressMsg);
-        dialog.show(fManager,"ProgressDialog");
     }
 
     @Override
     protected void onPreExecute() {
-
+        dialog.show(fManager,"ProgressDialog");
     }
 
     @Override

@@ -5,8 +5,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.MainActivity;
-import org.mindroid.android.app.fragments.home.ConnectionProgressFragment;
-import org.mindroid.android.app.fragments.home.HomeFragment;
+import org.mindroid.android.app.fragments.home.ConnectionProgressDialogFragment;
 import org.mindroid.android.app.fragments.myrobot.HardwareMapping;
 import org.mindroid.common.messages.hardware.Motors;
 import org.mindroid.common.messages.hardware.Sensors;
@@ -185,15 +184,15 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     public Bundle getRobotConfigBundle() {
         loadRobotPortConfiguration();
         Bundle bundle = new Bundle();
-        bundle.putString(ConnectionProgressFragment.KEY_PARAM_SEN_P1,getSensorS1() == null ? null : getSensorS1().getName()+":"+getSensorModeS1());
-        bundle.putString(ConnectionProgressFragment.KEY_PARAM_SEN_P2,getSensorS2() == null ? null : getSensorS2().getName()+":"+getSensorModeS2());
-        bundle.putString(ConnectionProgressFragment.KEY_PARAM_SEN_P3,getSensorS3() == null ? null : getSensorS3().getName()+":"+getSensorModeS3());
-        bundle.putString(ConnectionProgressFragment.KEY_PARAM_SEN_P4,getSensorS4() == null ? null : getSensorS4().getName()+":"+getSensorModeS4());
+        bundle.putString(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P1,getSensorS1() == null ? null : getSensorS1().getName()+":"+getSensorModeS1());
+        bundle.putString(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P2,getSensorS2() == null ? null : getSensorS2().getName()+":"+getSensorModeS2());
+        bundle.putString(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P3,getSensorS3() == null ? null : getSensorS3().getName()+":"+getSensorModeS3());
+        bundle.putString(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P4,getSensorS4() == null ? null : getSensorS4().getName()+":"+getSensorModeS4());
 
-        bundle.putString(ConnectionProgressFragment.KEY_PARAM_MOT_A,getMotorA() == null ? null : getMotorA().getName());
-        bundle.putString(ConnectionProgressFragment.KEY_PARAM_MOT_B,getMotorB() == null ? null : getMotorB().getName());
-        bundle.putString(ConnectionProgressFragment.KEY_PARAM_MOT_C,getMotorC() == null ? null : getMotorC().getName());
-        bundle.putString(ConnectionProgressFragment.KEY_PARAM_MOT_D,getMotorD() == null ? null : getMotorD().getName());
+        bundle.putString(ConnectionProgressDialogFragment.KEY_PARAM_MOT_A,getMotorA() == null ? null : getMotorA().getName());
+        bundle.putString(ConnectionProgressDialogFragment.KEY_PARAM_MOT_B,getMotorB() == null ? null : getMotorB().getName());
+        bundle.putString(ConnectionProgressDialogFragment.KEY_PARAM_MOT_C,getMotorC() == null ? null : getMotorC().getName());
+        bundle.putString(ConnectionProgressDialogFragment.KEY_PARAM_MOT_D,getMotorD() == null ? null : getMotorD().getName());
 
         return bundle;
     }

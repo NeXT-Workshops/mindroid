@@ -4,27 +4,33 @@ import android.app.FragmentManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+/**
+ * Async Task showing a customized fragmentDialog during progress.
+ *
+ */
 public abstract class ConnectionProgressTask extends AsyncTask<String,Integer,Boolean> {
 
-    org.mindroid.android.app.dialog.ProgressDialog dialog;
-    ConnectionProgressFragment dFragment;
+    ConnectionProgressDialog dialog;
+    ConnectionProgressDialogFragment dFragment;
+    FragmentManager fManager;
 
-    public ConnectionProgressTask(String title,Bundle args,FragmentManager fManager){
+    public ConnectionProgressTask(String title,Bundle configBundle,FragmentManager fManager){
+        this.fManager = fManager;
+        this.dFragment = ConnectionProgressDialogFragment.newInstance(title,configBundle);
+        //this.dialog = ConnectionProgressDialog.newInstance(title,dFragment);
 
-        dFragment = ConnectionProgressFragment.newInstance(args);
-
-        dialog = ConnectionProgressDialog.newInstance(title,dFragment);
-        dialog.show(fManager,"ProgressDialog");
     }
 
     @Override
     protected void onPreExecute() {
+        System.out.println("[ConnectionProgressTask:onPreExecute] showing dialog");
+        dFragment.show(fManager,"ProgressDialog");
 
     }
 
     @Override
     protected void onPostExecute(final Boolean success){
-        dialog.dismiss();
+        dFragment.dismiss();
     }
 
     @Override
@@ -32,7 +38,7 @@ public abstract class ConnectionProgressTask extends AsyncTask<String,Integer,Bo
 
     /**
      *
-     * @param key - {@link ConnectionProgressFragment} keys
+     * @param key - {@link ConnectionProgressDialogFragment} keys
      * @param success - true if success
      */
     public void setProgressState(String key, boolean success){

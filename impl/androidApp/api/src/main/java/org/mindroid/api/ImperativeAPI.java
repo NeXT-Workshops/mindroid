@@ -1,5 +1,8 @@
 package org.mindroid.api;
 
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
+import org.mindroid.impl.imperative.ImperativeImplManager;
+
 /**
  * This Class defines the basic Imperative Implementation API.
  */
@@ -47,14 +50,27 @@ public abstract class ImperativeAPI extends BasicAPI {
     public final void start(){
         setExecutionFinished(false);
         isInterrupted = false;
+        try{
+            run();
 
-        run();
+            //Detects, that the implementation is finished
+            setExecutionFinished(true);
 
-        //Detects, that the implementation is finished
-        setExecutionFinished(true);
+            //When run is finished (imperative impl got stopped (interrupted) or just code is done) - reset former state
+            getMotorProvider().stopAllMotors();
 
-        //When run is finished (imperative impl got stopped (interrupted) or just code is done) - reset former state
-        getMotorProvider().stopAllMotors();
+        }catch(Exception e){
+            //End execution
+            setExecutionFinished(true);
+            //Stop motors
+            getMotorProvider().stopAllMotors();
+
+            //Throw error
+            Exception execException = new IIExectuionException(getExecutionErrorMsg(getImplementationID(),e));
+            ErrorHandlerManager.getInstance().handleError(execException,ImperativeAPI.class,execException.getMessage());
+        }
+
+
 
     }
 
@@ -113,5 +129,15 @@ public abstract class ImperativeAPI extends BasicAPI {
 
     private void setExecutionFinished(boolean executionFinished) {
         isExecutionFinished = executionFinished;
+    }
+
+    final String getExecutionErrorMsg(String id, Exception e){
+        return "An Error occured while trying to execute the Imperative Implementation with the ID "+id+". \n The given errormessage is: "+e.getMessage();
+    }
+
+    final class IIExectuionException extends Exception {
+        public IIExectuionException(String msg){
+            super(msg);
+        }
     }
 }

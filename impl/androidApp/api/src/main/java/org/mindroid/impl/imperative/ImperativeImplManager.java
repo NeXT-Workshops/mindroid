@@ -1,6 +1,7 @@
 package org.mindroid.impl.imperative;
 
 import org.mindroid.api.ImperativeAPI;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 
 import java.util.HashMap;
 
@@ -31,15 +32,13 @@ public class ImperativeImplManager {
      */
     public void startImperativeImplementation(String id){
         final ImperativeAPI implementation = imperativeImplementations.get(id);
-
-        Runnable runImpl = new Runnable(){
+            Runnable runImpl = new Runnable(){
             @Override
             public void run() {
                 implementation.start();
             }
         };
-        new Thread(runImpl).start();
-
+            new Thread(runImpl).start();
     }
 
     /**
@@ -54,4 +53,7 @@ public class ImperativeImplManager {
     public String[] getImperativeImplIDs(){
         return imperativeImplementations.keySet().toArray(new String[imperativeImplementations.size()]);
     }
+
+
+
 }

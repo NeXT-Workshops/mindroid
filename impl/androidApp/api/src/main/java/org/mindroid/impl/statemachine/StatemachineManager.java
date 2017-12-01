@@ -223,6 +223,7 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
 
         if(!sm.isActive()) { //If sm is not active already --> start statemachine
             System.out.println ("## The Statemachine is not active already and will be started --> sm-id: "+sm.getID());
+
             final Runnable runSM = new Runnable() {
                 @Override
                 public void run() {
@@ -248,14 +249,18 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                         System.out.print("[Statemachine-Thread][StatemachineID: "+sm.getID()+"] Statemachine started");
                     } catch (NoStartStateException e) {
                         ErrorHandlerManager.getInstance().handleError(e,StatemachineManager.class,sm.getID());
-
-                    }
+                    } catch(Exception e){
+                        Exception execException = new SMExecutionException(getStatemachineErrorMsg(sm.getID(),e));
+                        ErrorHandlerManager.getInstance().handleError(execException,StatemachineManager.class,execException.getMessage());
+                }
                     // System.out.println("## Statemachine "+sm.getID()+" is now running in Thread ##");
                 }
             };
             Thread t = new Thread(runSM);
             runningStatemachineThreads.put(sm.getID(),t);
+
             t.start();
+
             while(!sm.isActive()){
                 try {
                     Thread.sleep(50);
@@ -269,6 +274,10 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         }
 
         //System.out.println("## 'Start Statemachine'-Thread is running! ##");
+    }
+
+    private String getStatemachineErrorMsg(String smID, Exception e){
+        return "An Error occured while executing the Statemachine "+smID+".\n The given Errormessage: "+e.getMessage();
     }
 
     /**
@@ -369,6 +378,12 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
         @Override
         public void run() {
             listener.handleTimeEvent(timeEvent);
+        }
+    }
+
+    public class SMExecutionException extends Exception {
+        public SMExecutionException(String statemachineErrorMsg) {
+            super(statemachineErrorMsg);
         }
     }
 }

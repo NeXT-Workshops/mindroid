@@ -2,6 +2,7 @@ package org.mindroid.impl.robot;
 
 
 import org.mindroid.api.ImperativeAPI;
+import org.mindroid.api.brick.Brick;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.robot.*;
 import org.mindroid.api.robot.context.IConstraintEvaluator;
@@ -26,8 +27,6 @@ import org.mindroid.impl.sensor.mock.MockSensorEndpoint;
 import org.mindroid.impl.statemachine.StatemachineCollection;
 import org.mindroid.impl.util.Messaging;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -120,7 +119,7 @@ public final class RobotFactory implements IRobotFactory {
             myRobot.setMotorD(robotConfigurator.createMotor(EV3PortIDs.PORT_D));
             */
 
-            //TODO fix this: myRobot.setBrick(new MockBrick());
+            myRobot.setBrick(new MockBrick());
         }else{
             if(robotConfig != null) {
                 //Sensors

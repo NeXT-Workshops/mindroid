@@ -1,12 +1,13 @@
 package org.mindroid.impl.robot;
 
+import org.mindroid.api.brick.Brick;
+import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.configuration.RobotConfigurator;
 import org.mindroid.impl.imperative.ImperativeImplManager;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
 import org.mindroid.impl.motor.SynchronizedMotorsEndpoint;
-import org.mindroid.impl.sensor.EV3SensorEndpoint;
 import org.mindroid.impl.sensor.IEV3SensorEndpoint;
 import org.mindroid.impl.statemachine.StatemachineManager;
 
@@ -19,7 +20,7 @@ public final class Robot {
 
     private RobotConfigurator robotConfigurator = null;
 
-    EV3Brick brick;
+    Brick brick;
 
     //Sensor Endpoints
     private IEV3SensorEndpoint sensor_S1 = null;
@@ -140,13 +141,14 @@ public final class Robot {
         this.syncedMotors = syncedMotors;
     }
 
-    protected EV3Brick getBrick() {
+    protected Brick getBrick() {
         return brick;
     }
 
-    protected void setBrick(EV3Brick brick) {
+    protected void setBrick(Brick brick) {
         this.brick = brick;
     }
+
 
     public static RobotController getRobotController(){
         return robotController;

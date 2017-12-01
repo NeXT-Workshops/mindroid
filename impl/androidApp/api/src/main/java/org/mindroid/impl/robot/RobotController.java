@@ -1,5 +1,6 @@
 package org.mindroid.impl.robot;
 
+import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.impl.communication.MessengerClient;
 
 /**
@@ -8,7 +9,7 @@ import org.mindroid.impl.communication.MessengerClient;
 public class RobotController {
 
     private MotorProvider motorProvider;
-    private BrickController brickController;
+    private IBrickControl brickController;
     private SensorProvider sensorProvider;
     private MessengerClient messenger;
     private String robotID = "";
@@ -20,7 +21,6 @@ public class RobotController {
 
         this.motorProvider = new MotorProvider(robot);
         this.sensorProvider = new SensorProvider(robot);
-        this.brickController = new BrickController(robot);
 
         this.robotID = robot.robotID;
     }
@@ -29,8 +29,8 @@ public class RobotController {
         return motorProvider;
     }
 
-    public BrickController getBrickController() {
-        return brickController;
+    public IBrickControl getBrickController() {
+        return robot.getBrick();
     }
 
     public SensorProvider getSensorProvider() {

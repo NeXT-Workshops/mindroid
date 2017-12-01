@@ -1,12 +1,12 @@
 package org.mindroid.impl.brick.mock;
 
+import org.mindroid.api.brick.Brick;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.robot.control.IBrickControl;
-import org.mindroid.impl.brick.BrickButtonProvider;
 import org.mindroid.impl.brick.Textsize;
 
-public class MockBrick implements IBrickControl{
+public class MockBrick extends Brick implements IBrickControl {
 
 
     /**
@@ -77,4 +77,18 @@ public class MockBrick implements IBrickControl{
         return true;
     }
 
+    @Override
+    public boolean isBrickReady() {
+        return false;
+    }
+
+    @Override
+    public boolean connect() {
+        return false;
+    }
+
+    @Override
+    public void disconnect() {
+
+    }
 }

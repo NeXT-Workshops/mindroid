@@ -3,6 +3,7 @@ package org.mindroid.api;
 import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
+import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.brick.BrickButtonProvider;
 import org.mindroid.impl.brick.Button;
@@ -370,7 +371,7 @@ public abstract class BasicAPI {
      * Returns the Brick controller to run brick operations.
      * @return brickcontroller
      */
-    public final BrickController getBrickController(){
+    public final IBrickControl getBrickController(){
         return Robot.getRobotController().getBrickController();
     }
 

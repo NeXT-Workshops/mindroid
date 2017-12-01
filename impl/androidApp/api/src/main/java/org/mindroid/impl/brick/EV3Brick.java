@@ -2,6 +2,7 @@ package org.mindroid.impl.brick;
 
 import java.io.IOException;
 
+import org.mindroid.api.brick.Brick;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.robot.control.IBrickControl;
@@ -18,7 +19,7 @@ import org.mindroid.impl.sensor.EV3SensorManager;
  * Brick controller class.
  * Used to control the brick.
  */
-public class EV3Brick implements IBrickControl{
+public class EV3Brick extends Brick {
     /** Manager classes for endpoints */
     final EV3MotorManager motorManager;
     final EV3SensorManager sensorManager;
@@ -55,9 +56,14 @@ public class EV3Brick implements IBrickControl{
     }
 
 
-    public boolean connect() throws IOException {
-		return brickEndpoint.connect();
-    }
+    public boolean connect() {
+		try {
+			return brickEndpoint.connect();
+		} catch (IOException e) {
+			ErrorHandlerManager.getInstance().handleError(e,this.getClass(),e.getMessage());
+		}
+		return false;
+	}
 
 	/**
 	 * Disconnects all open Connections to the Brick!

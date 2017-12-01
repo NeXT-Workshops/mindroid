@@ -66,7 +66,9 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
      * @param msg - msg to send
      */
     private synchronized void sendMessage(MindroidMessage msg){
-        out.println(getSerializedMessage(msg));
+        if(out != null && socket != null && socket.isConnected()) {
+            out.println(getSerializedMessage(msg));
+        }
     }
 
     /**

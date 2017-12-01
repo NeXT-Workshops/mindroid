@@ -26,7 +26,7 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
     private Sensormode currentMode = null;
     private Sensormode modeToWaitFor = null;
 
-    //True, if the first sensor event is received from the brick
+    //True, if the first sensor event is received from the brick and its sensormode is != null
     private boolean isFirstSensEventReceived = false;
 
     private final EV3SensorEndpoint sensor = this;
@@ -97,9 +97,12 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
     @Override
     public void handleSensorEvent(EV3SensorEvent sensorevent) {
         for (IEV3SensorEventListener listener : listeners) {
-            //value = sensorevent.getSample();
-            listener.handleSensorEvent(brick_port,sensorevent);
-            isFirstSensEventReceived = true;
+            //Only handle events which have a valid (not null) sensor mode
+            if(sensorevent.getSensorMode() != null) {
+                //value = sensorevent.getSample();
+                listener.handleSensorEvent(brick_port, sensorevent);
+                isFirstSensEventReceived = true;
+            }
         }
     }
 
@@ -134,7 +137,7 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
     }
 
     /**
-     * True if the Sensor received its first sensor event
+     * True if the Sensor received its first sensor event and the sensormode of the received event is != null.
      *
      * @return
      */

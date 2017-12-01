@@ -10,22 +10,22 @@ import android.os.Bundle;
  */
 public abstract class ConnectionProgressTask extends AsyncTask<String,Integer,Boolean> {
 
-    ConnectionProgressDialog dialog;
     ConnectionProgressDialogFragment dFragment;
     FragmentManager fManager;
+    String title;
+    Bundle configBundle;
 
     public ConnectionProgressTask(String title,Bundle configBundle,FragmentManager fManager){
         this.fManager = fManager;
-        this.dFragment = ConnectionProgressDialogFragment.newInstance(title,configBundle);
-        //this.dialog = ConnectionProgressDialog.newInstance(title,dFragment);
-
+        this.title = title;
+        this.configBundle = configBundle;
     }
 
     @Override
     protected void onPreExecute() {
-        System.out.println("[ConnectionProgressTask:onPreExecute] showing dialog");
+        this.dFragment = ConnectionProgressDialogFragment.newInstance(title,configBundle);
+        dFragment.setCancelable(false);
         dFragment.show(fManager,"ProgressDialog");
-
     }
 
     @Override

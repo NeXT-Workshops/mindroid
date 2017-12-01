@@ -27,9 +27,10 @@ public class InfoDialog extends DialogFragment {
         String title = getArguments().getString(KEY_TITLE);
         String msg = getArguments().getString(KEY_MESSAGE);
 
+        this.setCancelable(false);
+
         return new AlertDialog.Builder(getActivity())
                 .setIcon(android.R.drawable.ic_dialog_info)
-                .setCancelable(false)
                 .setPositiveButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {

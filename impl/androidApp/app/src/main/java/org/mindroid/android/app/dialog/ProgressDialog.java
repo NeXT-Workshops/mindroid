@@ -27,10 +27,9 @@ public class ProgressDialog extends DialogFragment {
         String title = getArguments().getString(KEY_TITLE);
         String msg = getArguments().getString(KEY_MESSAGE);
 
-
+        this.setCancelable(false);
 
         android.app.ProgressDialog.Builder builder = new android.app.ProgressDialog.Builder(getActivity())
-                .setCancelable(false)
                 .setTitle(title)
                 .setMessage(msg);
 

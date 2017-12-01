@@ -259,8 +259,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
                 btn_messengerConnDisconn.setEnabled(!robot.isRunning);
 
-                //TODO readd switch_enableSimulation.setEnabled(!robot.isConnectedToBrick());
-                switch_enableSimulation.setEnabled(false);
+                switch_enableSimulation.setEnabled(!robot.isConnectedToBrick());
 
                 if(!robot.isMessengerConnected()) {
                     btn_messengerConnDisconn.setText(txt_btn_DisConnect_connect);
@@ -683,7 +682,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 initConfigTask.execute();
                 waitForTaskCompletion(initConfigTask, 20);
                 //TODO set sensor/motor progress states
-            }else{
+            }else{/*
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P1, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P2, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P3, false);
@@ -691,7 +690,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_A, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_B, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_C, false);
-                setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_D, false);
+                setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_D, false);*/
             }
 
             return true;

@@ -3,7 +3,7 @@ package org.mindroid.impl.robot;
 import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
-import org.mindroid.impl.brick.ButtonProvider;
+import org.mindroid.impl.brick.BrickButtonProvider;
 import org.mindroid.impl.brick.Textsize;
 
 /**
@@ -84,12 +84,6 @@ public class BrickController implements IBrickControl {
     }
 
     // ------------- BUTTON PROVIDER -------------
-
-
-    @Override
-    public ButtonProvider getButtonProvider() {
-        return robot.getBrick().getButtonProvider();
-    }
 
     /**
      * Set Volume

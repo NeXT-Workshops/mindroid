@@ -6,11 +6,15 @@ import org.mindroid.common.messages.brick.ButtonMessage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ButtonProvider{
+public class BrickButtonProvider {
 
     Map<Button,EV3Button> buttons;
 
-    public ButtonProvider(){
+    public static BrickButtonProvider instance = new BrickButtonProvider();
+
+    public static BrickButtonProvider getInstance(){ return instance; }
+
+    private BrickButtonProvider(){
         this.buttons = new HashMap<Button,EV3Button>();
     }
 

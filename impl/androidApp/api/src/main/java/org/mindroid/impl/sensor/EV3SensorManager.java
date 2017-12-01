@@ -12,6 +12,7 @@ import org.mindroid.common.messages.hardware.EV3SensorPort;
 import org.mindroid.common.messages.hardware.Sensors;
 import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.brick.EV3Brick;
+import org.mindroid.impl.brick.EV3BrickEndpoint;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
@@ -30,7 +31,7 @@ import com.esotericsoftware.kryonet.Listener;
  */
 public class EV3SensorManager extends Listener{
 
-	EV3Brick ev3Brick;	
+	EV3BrickEndpoint ev3BrickEndpoint;
 	
     private Map<EV3SensorPort, EV3SensorEndpoint> sensorEndpoints;
 
@@ -38,8 +39,8 @@ public class EV3SensorManager extends Listener{
     
     private Client brickClient = null;
     
-    public EV3SensorManager(EV3Brick ev3Brick) {
-        this.ev3Brick = ev3Brick;
+    public EV3SensorManager(EV3BrickEndpoint ev3Brick) {
+        this.ev3BrickEndpoint = ev3Brick;
         
         portToTCPPort = new HashMap<EV3SensorPort,Integer>(4);
         portToTCPPort.put(EV3SensorPort.S1, NetworkPortConfig.SENSOR_PORT_1);
@@ -64,7 +65,7 @@ public class EV3SensorManager extends Listener{
 			if(sensorEndpoints.containsKey(sensorPort)){
 				throw new PortIsAlreadyInUseException(sensorPort.toString());
 			}else{
-				EV3SensorEndpoint ev3SensorEndpoint = new EV3SensorEndpoint(ev3Brick.EV3Brick_IP, portToTCPPort.get(sensorPort), EV3Brick.BRICK_TIMEOUT,sensorType,brick_port, mode);
+				EV3SensorEndpoint ev3SensorEndpoint = new EV3SensorEndpoint(ev3BrickEndpoint.EV3Brick_IP, portToTCPPort.get(sensorPort), EV3BrickEndpoint.BRICK_TIMEOUT,sensorType,brick_port, mode);
 				sensorEndpoints.put(sensorPort, ev3SensorEndpoint);
 				return ev3SensorEndpoint;
 			}
@@ -75,7 +76,7 @@ public class EV3SensorManager extends Listener{
 
 	public void initializeSensor(Sensors sensorType, EV3SensorPort sensorPort) throws BrickIsNotReadyException {
 		System.out.println("Local-EV3SensorManager: initSensor called");
-		if(ev3Brick.isBrickReady()){
+		if(ev3BrickEndpoint.isBrickReady()){
 			if(sensorType != null && sensorPort != null){
 				if(sensorEndpoints.containsKey(sensorPort)){
 					brickClient.sendTCP(BrickMessagesFactory.createSensor(sensorPort.getValue(), sensorType, portToTCPPort.get(sensorPort)));

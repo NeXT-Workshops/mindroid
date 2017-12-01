@@ -4,6 +4,7 @@ import org.mindroid.api.communication.IMessenger;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.impl.brick.BrickButtonProvider;
 import org.mindroid.impl.brick.Button;
 import org.mindroid.impl.brick.EV3Button;
 import org.mindroid.impl.brick.Textsize;
@@ -111,14 +112,14 @@ public abstract class BasicAPI {
      */
     protected EV3Button getButton(Button buttonID){
         EV3Button button;
-        if (getBrickController().getButtonProvider() != null) {
-            if((button = getBrickController().getButtonProvider().getButton(buttonID)) != null){
+        if (BrickButtonProvider.getInstance() != null) {
+            if((button = BrickButtonProvider.getInstance().getButton(buttonID)) != null){
                 return button;
             }else{
                 ErrorHandlerManager.getInstance().handleError(new NullPointerException("Button is null"),BasicAPI.class,"Button is null: "+buttonID);
             }
         }else{
-            ErrorHandlerManager.getInstance().handleError(new NullPointerException("ButtonProvider is null"),BasicAPI.class,"Button provider is null");
+            ErrorHandlerManager.getInstance().handleError(new NullPointerException("BrickButtonProvider is null"),BasicAPI.class,"Button provider is null");
         }
         return null;
     }

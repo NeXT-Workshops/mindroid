@@ -13,6 +13,7 @@ import org.mindroid.common.messages.hardware.Motors;
 import org.mindroid.common.messages.hardware.Sensors;
 import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.brick.EV3Brick;
+import org.mindroid.impl.brick.EV3BrickEndpoint;
 import org.mindroid.impl.endpoint.ClientEndpointImpl;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
@@ -75,17 +76,11 @@ public class RobotConfigurator implements IRobotConfigurator {
 		this.str_config = new StringBuffer();
 
 		//TODO Refactor this part. Remove dependency somehow
-		brick = new EV3Brick(robotIP,robotTCPPort);
+		brick = new EV3Brick(new EV3BrickEndpoint(robotIP,robotTCPPort));
 		sensorManager = brick.getSensorManager();
 		motorManager = brick.getMotorManager();
 	}
 
-	/**
-	 * Disconnectes the Kryo-Connection of the open devices
-	 */
-	public void disconnectDevices(){
-
-	}
 	
 	@Override
 	public void addSensorConfigurationSet(Sensors sensor_S1,Sensors sensor_S2, Sensors sensor_S3,Sensors sensor_S4){

@@ -53,25 +53,17 @@ public abstract class ImperativeAPI extends BasicAPI {
         try{
             run();
 
+        }catch(Exception e){
+            //Throw error
+            Exception execException = new IIExectuionException(getExecutionErrorMsg(getImplementationID(),e));
+            ErrorHandlerManager.getInstance().handleError(execException,ImperativeAPI.class,execException.getMessage());
+        }finally{
             //Detects, that the implementation is finished
             setExecutionFinished(true);
 
             //When run is finished (imperative impl got stopped (interrupted) or just code is done) - reset former state
             getMotorProvider().stopAllMotors();
-
-        }catch(Exception e){
-            //End execution
-            setExecutionFinished(true);
-            //Stop motors
-            getMotorProvider().stopAllMotors();
-
-            //Throw error
-            Exception execException = new IIExectuionException(getExecutionErrorMsg(getImplementationID(),e));
-            ErrorHandlerManager.getInstance().handleError(execException,ImperativeAPI.class,execException.getMessage());
         }
-
-
-
     }
 
     /**

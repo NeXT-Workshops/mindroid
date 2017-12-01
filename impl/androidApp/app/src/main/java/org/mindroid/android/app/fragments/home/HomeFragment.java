@@ -18,6 +18,7 @@ import org.mindroid.android.app.acitivites.IErrorHandler;
 import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.android.app.asynctasks.ProgressTask;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
+import org.mindroid.android.app.robodancer.ConnectionPropertiesChangedListener;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.serviceloader.ImperativeImplService;
@@ -389,7 +390,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
      * @param task - task to wait for completion
      * @param millis - sleeptime should be >0
      */
-    private void waitForTaskCompletion(AsyncTask task, long millis){
+    private void waitForTaskCompletion(final AsyncTask task, long millis){
         while(task.getStatus() != AsyncTask.Status.FINISHED){
             sleep(millis);
         }
@@ -659,30 +660,23 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
         @Override
         protected Boolean doInBackground(String... params) {
+
             //Creates the Robot
-            CreateRobotTask createRobotTask = new CreateRobotTask(); //TODO Todo set text somewhere else: "Creating Robot","Creating your Robot"
-            createRobotTask.execute();
-            waitForTaskCompletion(createRobotTask,20);
+            boolean createRobot = createRobot();
 
             //Messenger Client Task - messenger connects to messageserver
-            DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask("Disconnect from Brick","Messenger Client tries to connect");
-            msgClientTask.execute(MSG_TASK_PARAM_0_CONNECT);
-            waitForTaskCompletion(msgClientTask,20);
-            setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MESSENGER,robot.isMessengerConnected());
-
+            boolean isMessengerConnected = connectMessenger();
+            setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MESSENGER,isMessengerConnected);
 
             //Creates and executes the Task to connect to the Brick
-            ConnectToBrickTask connectToBrickTask = new ConnectToBrickTask(); //Todo set text somewhere else: "Connecting to Brick",msgConnectToRobot
-            connectToBrickTask.execute(); //String is not important
-            waitForTaskCompletion(connectToBrickTask,20);
-            setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_BRICK,robot.isConnectedToBrick());
+            boolean connectedToBrick = connectToBrick();
+            setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_BRICK,connectedToBrick);
 
             if(robot.isConnectedToBrick()) {
-                InitConfiguration initConfigTask = new InitConfiguration(); //Todo set text somewhere else: "Init Configuration", msgInitConfiguration
-                initConfigTask.execute();
-                waitForTaskCompletion(initConfigTask, 20);
-                //TODO set sensor/motor progress states
-            }else{/*
+                boolean isConfigurationInitialized = initConfiguration();
+
+                return createRobot && isMessengerConnected && connectedToBrick && isConfigurationInitialized;
+            }else{
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P1, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P2, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P3, false);
@@ -690,61 +684,69 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_A, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_B, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_C, false);
-                setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_D, false);*/
+                setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_D, false);
+                return false;
             }
+        }
 
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            //How to interpret the values -> [messenger,
+        }
+
+        /**
+         * Creates a robot and will always return true;
+         * @return true
+         */
+        private boolean createRobot(){
+            //Create Robot
+            robot.create();
             return true;
         }
 
-        private class CreateRobotTask extends AsyncTask<String,Integer,Boolean>{
-            public CreateRobotTask() {
-                super();
+        /**
+         * Connects to the messenger, when connection is not established yet
+         * @return connection state
+         */
+        private boolean connectMessenger(){
+            if(!robot.isMessengerConnected()) {
+                robot.connectMessenger(SettingsProvider.getInstance().getMsgServerIP(),SettingsProvider.getInstance().getMsgServerPort());
             }
-            @Override
-            protected Boolean doInBackground(String... params) {
-                //Create Robot
-                robot.create();
-                return true;
-            }
+            return robot.isMessengerConnected();
         }
 
-        private class ConnectToBrickTask extends AsyncTask<String,Integer,Boolean>{
-            public ConnectToBrickTask() {
-                super();
+        /**
+         * Connects to the brick.
+         * @return connection state
+         */
+        private boolean connectToBrick(){
+            boolean result = false;
+            try {
+                robot.connectToBrick();
+                result = robot.isConnectedToBrick();
+            } catch (IOException e){
+                e.printStackTrace();
+                parentActivity.showErrorDialog("Exception",msgConnectToRobotError);
             }
-
-            @Override
-            protected Boolean doInBackground(String... params) {
-                boolean result = false;
-                try {
-                    robot.connectToBrick();
-                    result = robot.isConnectedToBrick();
-                } catch (IOException e){
-                    e.printStackTrace();
-                    parentActivity.showErrorDialog("Exception",msgConnectToRobotError);
-                }
-                return result;
-            }
+            return result;
         }
 
-        private class InitConfiguration extends AsyncTask<String,Integer,Boolean>{
-            public InitConfiguration() {
-                super();
+        /**
+         * Initializes the sensors and motors at the brick.
+         * @return true if initialization was successful
+         */
+        private boolean initConfiguration(){
+            boolean result = false;
+            try{
+                result = robot.initializeConfiguration();
+            }catch(Exception e){
+                System.out.println("## AsyncTask initRobotConfig. Exception: "+e);
+                parentActivity.showErrorDialog("Exception",e.getMessage());
+                e.printStackTrace();
             }
-
-            @Override
-            protected Boolean doInBackground(String... params) {
-                boolean result = false;
-
-                try{
-                    result = robot.initializeConfiguration();;
-                }catch(Exception e){
-                    System.out.println("## AsyncTask initRobotConfig. Exception: "+e);
-                    parentActivity.showErrorDialog("Exception",e.getMessage());
-                    e.printStackTrace();
-                }
-                return result;
-            }
+            return result;
         }
     }
+
 }

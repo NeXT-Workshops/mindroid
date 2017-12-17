@@ -192,11 +192,9 @@ public class DifferentialPilot implements IDifferentialPilot {
 
     @Override
     public void turnRight(int degrees) {
-        System.out.println("[DifferentialPilot:doAngleCorrection] turnRight called; Degrees: "+degrees);
         float targetAngle = -1;
         if(isAngleCorrectionEnabled()){
             targetAngle = calculateTargetAngle(false,degrees);
-            System.out.println("[DifferentialPilot:doAngleCorrection] calculated Target Angle; targetAngle: "+targetAngle);
         }
 
         int rotateDegree = calculateCircularArc(degrees);
@@ -214,7 +212,6 @@ public class DifferentialPilot implements IDifferentialPilot {
 
         if(isAngleCorrectionEnabled()) {
             //Check result
-            System.out.println("[DifferentialPilot:turnRight] do angle correction will be called");
             doAngleCorrection(targetAngle);
 
         }
@@ -314,14 +311,10 @@ public class DifferentialPilot implements IDifferentialPilot {
      * @param targetAngle - targeted angle
      */
     private void doAngleCorrection(float targetAngle) {
-        System.out.println("[DifferentialPilot:doAngleCorrection] targetAngle: "+targetAngle);
-        System.out.println("[DifferentialPilot:doAngleCorrection] getGyroAngleValue(): "+getGyroAngleValue());
         float degreeDiff = (getGyroAngleValue() - targetAngle);
-        System.out.println("[DifferentialPilot:doAngleCorrection] degreeDiff: "+degreeDiff);
 
 
         boolean isNewAngleInBounds = (Math.abs(degreeDiff) <= angleThreshold);
-        System.out.println("[DifferentialPilot:doAngleCorrection] isNewAngleInBounds: "+isNewAngleInBounds);
         if(!isNewAngleInBounds){ //Not in bounds -> correct angle by turn
             if(degreeDiff > 0){
                 turnRight(Math.abs((int)degreeDiff));

@@ -45,16 +45,11 @@ public class RobotConfigurator implements IRobotConfigurator {
 	private HashMap<EV3MotorPort,IRegulatedMotor> motors = new HashMap<EV3MotorPort,IRegulatedMotor>(4);
 	
 	/** Experimental Values - may need a change **/
-	private final int DURATION_DEVICE_INITIALIZATION = 5000;
-	private final int DURATION_TO_CONNECT_TO_BRICK = 3000;
 	private final int DURATION_READY_GREENLIGHT = 4000;
 	
 	private EV3SensorManager sensorManager;
 	private EV3MotorManager motorManager;
-	
-	private String robotIP;
-	private int robotTCPPort;
-	
+
 	private EV3Brick brick;
 
 	final static String DELIMITER = ":";
@@ -73,8 +68,6 @@ public class RobotConfigurator implements IRobotConfigurator {
 	 * @param robotTCPPort
      */
 	public RobotConfigurator(String robotIP, int robotTCPPort){
-		this.robotIP = robotIP;
-		this.robotTCPPort = robotTCPPort;
 		this.endpointState = new StringBuffer();
 		this.str_config = new StringBuffer();
 

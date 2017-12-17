@@ -1,5 +1,6 @@
 package org.mindroid.android.app.fragments.home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -86,7 +87,12 @@ public class ProgressFragment extends Fragment {
         super.onDetach();
     }
 
-    public void setProgressState(final boolean success){
+    /**
+     * Changes the progress state
+     * @param success - true if successful
+     * @param activity - activity as parameter as getActivity can be null
+     */
+    public void setProgressState(final boolean success, Activity activity){
         Runnable updateUI = new Runnable(){
             @Override
             public void run(){
@@ -101,7 +107,8 @@ public class ProgressFragment extends Fragment {
                 }
             }
         };
-        getActivity().runOnUiThread(updateUI);
+
+        activity.runOnUiThread(updateUI);
     }
 
 }

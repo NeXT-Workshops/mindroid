@@ -234,7 +234,7 @@ public class ConnectionProgressDialogFragment extends DialogFragment {
         }
 
         if(frag != null){
-            frag.setProgressState(success);
+            frag.setProgressState(success,getActivity());
         }
     }
 

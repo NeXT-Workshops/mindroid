@@ -15,16 +15,19 @@ import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.brick.EV3BrickEndpoint;
 import org.mindroid.impl.endpoint.ClientEndpointImpl;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 import org.mindroid.impl.motor.EV3MotorManager;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
+import org.mindroid.impl.motor.Motor;
 import org.mindroid.impl.motor.SynchronizedMotorsEndpoint;
+import org.mindroid.impl.robot.Robot;
 import org.mindroid.impl.sensor.EV3SensorEndpoint;
 import org.mindroid.impl.sensor.EV3SensorManager;
-
+import org.mindroid.impl.sensor.Sensor;
 
 
 /**
@@ -313,10 +316,116 @@ public class RobotConfigurator implements IRobotConfigurator {
 			};
 			new Thread(readyLight).start();
 
+			//Validate
+			validateRobot();
+
 			return true;
 		}
 		return false;
 	}
+
+	/**
+	 * Validate the Sensors and motors.
+	 *
+	 * Checks if SensorProvider is correctly initialized
+	 * Checks if the MotorProvider is correctly initialized.
+	 *
+	 * The idea is to protect the API from null-pointer exceptions, if sensors or motors in the provider-classes are null or in a unexpected mode.
+	 */
+	private void validateRobot() {
+		boolean validateionResult = validateSensor(EV3PortIDs.PORT_1);
+		validateionResult &= validateSensor(EV3PortIDs.PORT_2);
+		validateionResult &= validateSensor(EV3PortIDs.PORT_3);
+		validateionResult &= validateSensor(EV3PortIDs.PORT_4);
+
+		validateionResult &= validateMotor(EV3PortIDs.PORT_A);
+		validateionResult &= validateMotor(EV3PortIDs.PORT_B);
+		validateionResult &= validateMotor(EV3PortIDs.PORT_C);
+		validateionResult &= validateMotor(EV3PortIDs.PORT_D);
+
+		if (!validateionResult) {
+			ErrorHandlerManager.getInstance().handleError(new IllegalStateException("Robot validation failed!"), this.getClass(), "The validation of the created Robot failed!");
+		}
+	}
+
+	private boolean validateMotor(EV3PortID port){
+		Motor motor = Robot.getRobotController().getMotorProvider().getMotor(port);
+		Motors expectedMotor = getExpectedMotor(port);
+		if(motor == null && expectedMotor == null){
+			//motor is null, but expected
+			return true;
+		}
+
+		if(motor == null){
+			//motor is null, but unexpected
+			return false;
+		}
+		//motor is initialized as expected
+		return true;
+	}
+
+	private Motors getExpectedMotor(EV3PortID port){
+		if(port.getNumber() == EV3PortIDs.PORT_A.getNumber()){
+			return motorConfiguration.get(EV3MotorPort.A);
+		}else if(port.getNumber() == EV3PortIDs.PORT_B.getNumber()){
+			return motorConfiguration.get(EV3MotorPort.B);
+		}else if(port.getNumber() == EV3PortIDs.PORT_C.getNumber()){
+			return motorConfiguration.get(EV3MotorPort.C);
+		}else if(port.getNumber() == EV3PortIDs.PORT_D.getNumber()){
+			return motorConfiguration.get(EV3MotorPort.D);
+		}
+		return null;
+	}
+
+	private boolean validateSensor(EV3PortID port){
+		Sensor sensor = Robot.getRobotController().getSensorProvider().getSensor(port);
+		Sensors expectedSensor = getExpectedSensor(port);
+		Sensormode expectedMode = getExptectedMode(port);
+		if(sensor == null && expectedSensor == null){
+			//sensor is null as expected
+			return true;
+		}
+
+		if(sensor == null){
+			//sensor is null, but shouldn't be
+			return false;
+		}
+
+		if(sensor.getSensorType().equals(expectedSensor) && sensor.getSensormode().equals(expectedMode)){
+			//sensor is initialized an is running the expected mode
+			return true;
+		}else{
+			//sensor is initialized, but is not running the expected mode is is not the expected sensortype
+			return false;
+		}
+	}
+
+	private Sensors getExpectedSensor(EV3PortID port){
+		if(port.getNumber() == EV3PortIDs.PORT_1.getNumber()){
+			return sensorConfiguration.get(EV3SensorPort.S1);
+		}else if(port.getNumber() == EV3PortIDs.PORT_2.getNumber()){
+			return sensorConfiguration.get(EV3SensorPort.S2);
+		}else if(port.getNumber() == EV3PortIDs.PORT_3.getNumber()){
+			return sensorConfiguration.get(EV3SensorPort.S3);
+		}else if(port.getNumber() == EV3PortIDs.PORT_4.getNumber()){
+			return sensorConfiguration.get(EV3SensorPort.S4);
+		}
+		return null;
+	}
+
+	private Sensormode getExptectedMode(EV3PortID port){
+		if(port.getNumber() == EV3PortIDs.PORT_1.getNumber()){
+			return sensorModeConfiguration.get(EV3SensorPort.S1);
+		}else if(port.getNumber() == EV3PortIDs.PORT_2.getNumber()){
+			return sensorModeConfiguration.get(EV3SensorPort.S2);
+		}else if(port.getNumber() == EV3PortIDs.PORT_3.getNumber()){
+			return sensorModeConfiguration.get(EV3SensorPort.S3);
+		}else if(port.getNumber() == EV3PortIDs.PORT_4.getNumber()){
+			return sensorModeConfiguration.get(EV3SensorPort.S4);
+		}
+		return null;
+	}
+
 
 	/**
 	 *

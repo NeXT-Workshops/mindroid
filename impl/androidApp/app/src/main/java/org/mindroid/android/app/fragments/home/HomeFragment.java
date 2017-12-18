@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.SparseBooleanArray;
 import android.view.*;
 import android.widget.*;
 
@@ -18,16 +19,19 @@ import org.mindroid.android.app.acitivites.IErrorHandler;
 import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.android.app.asynctasks.ProgressTask;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
-import org.mindroid.android.app.robodancer.ConnectionPropertiesChangedListener;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.serviceloader.ImperativeImplService;
 import org.mindroid.android.app.serviceloader.StatemachineService;
+import org.mindroid.common.messages.server.LogLevel;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +42,7 @@ import java.util.HashMap;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment implements SettingsFragment.OnSettingsChanged {
+
 
     //Task
     private final String MSG_TASK_PARAM_0_CONNECT = "connect";
@@ -70,9 +75,9 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     MainActivity parentActivity;
 
     // Resources
-    private String msgConnectToRobot;
     private String msgConnectToRobotError;
     private String msgDisconnectFromRobot;
+    private String msgConnectToRobot;
     private String msgInitConfiguration;
     private String msgStartRobot;
     private String msgStopRobot;
@@ -81,10 +86,14 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private String txt_btn_DisConnect_connect;
     private String txt_btn_DisConnect_disconnect;
 
-    private HashMap<Integer,Boolean> menuItemAlwaysEnabled = new HashMap<>();
+    private SparseBooleanArray menuItemAlwaysEnabled = new SparseBooleanArray();
+
+    private final static Logger LOGGER = Logger.getLogger(HomeFragment.class.getName());
 
     public HomeFragment() { //Called by newInstance(..)
         // Required empty public constructor
+
+
 
     }
 
@@ -96,6 +105,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
      */
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
+        LogManager.getLogManager().addLogger(LOGGER);
+        LOGGER.setLevel(Level.INFO);
         return fragment;
     }
 
@@ -118,11 +129,13 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
      *
      */
     private void getMenuEnabledSettings() {
+        //TODO refactor to a another class to configure menu
         //SettingsProvider menu enable
         menuItemAlwaysEnabled.put(0,true);
         menuItemAlwaysEnabled.put(1,true);
         menuItemAlwaysEnabled.put(2,false);
         menuItemAlwaysEnabled.put(3,false);
+        menuItemAlwaysEnabled.put(4,true);
     }
 
 
@@ -430,22 +443,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Creates the Robot
-                /*CreateRobotTask createRobotTask = new CreateRobotTask("Creating Robot","Creating your Robot");
-                createRobotTask.execute();
-
-                waitForTaskCompletion(createRobotTask,20);
-
-                //Messenger Client Task - messenger connects to messageserver
-                DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask("Disconnect from Brick","Messenger Client tries to connect");
-                msgClientTask.execute(MSG_TASK_PARAM_0_CONNECT);
-
-                waitForTaskCompletion(msgClientTask,20);
-
-                //Creates and executes the Task to connect to the Brick
-                ConnectToBrickTask task = new ConnectToBrickTask("Connecting to Brick",msgConnectToRobot);
-                task.execute(); //String is not important
-                */
                 //TODO add internationalization to title
                 ConnectInitBrickTask task = new ConnectInitBrickTask("Connecting",SettingsProvider.getInstance().getRobotConfigBundle(),getFragmentManager());
                 task.execute();
@@ -634,10 +631,12 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             if(params.length > 0){
                 if(params[0].equals(MSG_TASK_PARAM_0_CONNECT)){
                     if(!robot.isMessengerConnected()) {
+                        LOGGER.log(Level.INFO,"Connecting to Message Server");
                         robot.connectMessenger(SettingsProvider.getInstance().getMsgServerIP(),SettingsProvider.getInstance().getMsgServerPort());
                     }
                 }else if(params[0].equals(MSG_TASK_PARAM_0_DISCONNECT)){
                     if(robot.isMessengerConnected()) {
+                        LOGGER.log(Level.INFO,"Disconnecting to Message Server");
                         robot.disconnectMessenger();
                     }
                 }
@@ -674,7 +673,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
             if(robot.isConnectedToBrick()) {
                 boolean isConfigurationInitialized = initConfiguration();
-
                 return createRobot && isMessengerConnected && connectedToBrick && isConfigurationInitialized;
             }else{
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P1, false);
@@ -723,6 +721,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         private boolean connectToBrick(){
             boolean result = false;
             try {
+                LOGGER.log(Level.INFO,"Connecting to EV3-Brick");
                 robot.connectToBrick();
                 result = robot.isConnectedToBrick();
             } catch (IOException e){
@@ -739,9 +738,9 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         private boolean initConfiguration(){
             boolean result = false;
             try{
+                LOGGER.log(Level.INFO,"Initializing Robot sensors/motors");
                 result = robot.initializeConfiguration();
             }catch(Exception e){
-                System.out.println("## AsyncTask initRobotConfig. Exception: "+e);
                 parentActivity.showErrorDialog("Exception",e.getMessage());
                 e.printStackTrace();
             }

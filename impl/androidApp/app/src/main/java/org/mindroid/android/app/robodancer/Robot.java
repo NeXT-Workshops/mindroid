@@ -3,6 +3,8 @@ package org.mindroid.android.app.robodancer;
 
 
 
+import org.mindroid.android.app.fragments.home.HomeFragment;
+import org.mindroid.android.app.fragments.log.GlobalLogger;
 import org.mindroid.android.app.fragments.sensormonitoring.SensorListener;
 import org.mindroid.android.app.serviceloader.ImperativeImplService;
 import org.mindroid.android.app.serviceloader.StatemachineService;
@@ -15,6 +17,9 @@ import org.mindroid.api.robot.control.IRobotCommandCenter;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
@@ -38,7 +43,13 @@ public class Robot {
 
     private HashMap<EV3PortID,IEV3SensorEventListener> sensorListener;
 
+    private final static Logger LOGGER = Logger.getLogger(Robot.class.getName());
+
+
     public Robot() {
+        LogManager.getLogManager().addLogger(LOGGER);
+        LOGGER.setLevel(Level.INFO);
+
         roFactory = new RobotFactory();
         robotPortConfig = new RobotPortConfig();
         sensorListener = new HashMap<>();
@@ -62,7 +73,6 @@ public class Robot {
      * Configurate the Robot at the RobotFactory and build the Robot.
      */
     public void create()  {
-
         updateRobotPortConfig();
 
         //Config
@@ -86,6 +96,7 @@ public class Robot {
 
         //Create the Robot
         roFactory.createRobot(SettingsProvider.getInstance().isSimulationEnabled());
+        LOGGER.log(Level.INFO,"Robot created!");
     }
 
     private void updateRobotPortConfig() {
@@ -132,6 +143,7 @@ public class Robot {
     }
 
     public void connectToBrick() throws IOException {
+        LOGGER.log(Level.INFO,"Connecting to Brick");
         roFactory.getRobotCommandCenter().connectToBrick();
     }
 
@@ -144,6 +156,7 @@ public class Robot {
     }
 
     public boolean initializeConfiguration() throws BrickIsNotReadyException, PortIsAlreadyInUseException {
+        LOGGER.log(Level.INFO,"Intializing Configuration");
         return roFactory.getRobotCommandCenter().initializeConfiguration();
     }
 
@@ -162,8 +175,10 @@ public class Robot {
      */
     public void startExecuteImplementation(String id){
         if (ImperativeImplService.getInstance().getImperativeImplIDs().contains(id)) {
+            LOGGER.log(Level.INFO,"Start imperative implementation: ".concat(id));
             startImperativeImpl(id);
         }else if(StatemachineService.getInstance().getStatemachineCollectionIDs().contains(id)){
+            LOGGER.log(Level.INFO,"Start statemachine: ".concat(id));
             startStatemachine(id);
         }else{
             //TODO errorhandling?
@@ -174,9 +189,12 @@ public class Robot {
      * Stop the running Implementation.
      */
     public void stopRunningImplmentation(){
+
         if (ImperativeImplService.getInstance().getImperativeImplIDs().contains(runningImplementationID)) {
+            LOGGER.log(Level.INFO,"Stopping imperative implementation: ".concat(runningImplementationID));
             stopImperativeImpl(runningImplementationID);
         }else if(StatemachineService.getInstance().getStatemachineCollectionIDs().contains(runningImplementationID)){
+            LOGGER.log(Level.INFO,"Stopping Statemachine: ".concat(runningImplementationID));
             stopStatemachine(runningImplementationID);
         }else{
             //TODO errorhandling?

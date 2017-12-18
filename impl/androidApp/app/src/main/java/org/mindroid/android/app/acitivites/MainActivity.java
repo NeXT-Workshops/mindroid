@@ -3,22 +3,21 @@ package org.mindroid.android.app.acitivites;
 import android.app.*;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v4.widget.DrawerLayout;
-import android.util.DisplayMetrics;
 
 import android.widget.ListView;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.dialog.ErrorDialog;
 import org.mindroid.android.app.dialog.InfoDialog;
 import org.mindroid.android.app.errorhandling.APIErrorHandler;
+import org.mindroid.android.app.fragments.log.GlobalLogger;
+import org.mindroid.android.app.fragments.log.LoggerFragment;
 import org.mindroid.android.app.fragments.myrobot.MyRobotFragment;
 import org.mindroid.android.app.fragments.home.HomeFragment;
 import org.mindroid.android.app.fragments.NavigationDrawerFragment;
@@ -32,7 +31,8 @@ import org.mindroid.android.app.serviceloader.StatemachineService;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
@@ -64,17 +64,25 @@ public class MainActivity extends Activity
     private Fragment CONFIG_FRAGMENT = MyRobotFragment.newInstance();
     private Fragment SETTINGS_FRAGMENT = SettingsFragment.newInstance();
     private Fragment SENSOR_MONITOR_FRAGMENT = SensorMonitoringFragment.newInstance();
+    private Fragment LOG_FRAGMENT = LoggerFragment.newInstance();
 
     private final String TAG_HOME_FRAGMENT = "TAG_HOME_FRAGMENT";
     private final String TAG_CONFIG_FRAGMENT = "TAG_CONFIG_FRAGMENT";
     private final String TAG_SETTINGS_FRAGMENT = "TAG_SETTINGS_FRAGMENT";
     private final String TAG_SENSOR_MONITOR = "TAG_SENSOR_MONITOR";
+    private final String TAG_LOG_FRAGMENT = "TAG_LOG_FRAGMENT";
 
     private ArrayList<AlertDialog> shownDialogs = new ArrayList<AlertDialog>();
+
+    private static final Logger LOGGER = Logger.getLogger(MainActivity.class.getName());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Setup Logger
+        GlobalLogger.setup();
+
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -146,8 +154,11 @@ public class MainActivity extends Activity
                 replaceFragment(SETTINGS_FRAGMENT,TAG_SETTINGS_FRAGMENT);
                 setTitle(getResources().getString(R.string.title_settings));
                 break;//SettingsProvider
+            case 4:
+                replaceFragment(LOG_FRAGMENT,TAG_LOG_FRAGMENT);
+                setTitle(getResources().getString(R.string.title_log));
+                break;//SettingsProvider
             default:
-                System.out.println("## MainActivity.onNavigationDrawerItemSelected(): No fragment defined for this position");
                 replaceFragment(HOME_FRAGMENT,TAG_HOME_FRAGMENT);
         }
     }
@@ -198,6 +209,9 @@ public class MainActivity extends Activity
             case 3:
                 mTitle = getString(R.string.title_settings);
                 break;
+            case 4:
+                mTitle = getString(R.string.title_log);
+                break;
         }
     }
 
@@ -245,5 +259,9 @@ public class MainActivity extends Activity
         return errorHandler;
     }
 
-
+    @Override
+    public void onDetachedFromWindow() {
+        LOGGER.log(Level.INFO,"App got detached from Window");
+        super.onDetachedFromWindow();
+    }
 }

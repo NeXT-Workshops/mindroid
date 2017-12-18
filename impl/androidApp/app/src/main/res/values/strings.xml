@@ -120,6 +120,7 @@
     <string name="title_myrobot">My Robot</string>
     <string name="title_settings">Settings</string>
     <string name="title_sensor_monitoring">Sensor Monitoring</string>
+    <string name="title_log">Log</string>
 
     <string name="action_example">Example action</string>
 

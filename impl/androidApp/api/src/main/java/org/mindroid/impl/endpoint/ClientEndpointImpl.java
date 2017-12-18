@@ -10,6 +10,7 @@ import com.esotericsoftware.kryonet.Listener;
 
 import org.mindroid.common.messages.MessageRegistrar;
 import org.mindroid.common.messages.NetworkPortConfig;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 
 public abstract class ClientEndpointImpl extends Listener implements ClientEndpoint {
 
@@ -46,10 +47,7 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
         	client.setKeepAliveTCP(10000);
             client.connect(this.brickTimeout, this.ip, this.tcpPort,this.tcpPort-NetworkPortConfig.UDP_OFFSET); 
         } catch (IOException e) {
-            System.err.println("[ClientEndpointImpl:connect()] Connection timed out!");
-            e.printStackTrace();
-            //TODO Properly error handling
-        	//throw new EV3Exception("You must have entered a wrong IP.");
+			ErrorHandlerManager.getInstance().handleError(e,ClientEndpointImpl.class,"Connect(): Connection timed out!");
         }
 
         if(client.isConnected()){

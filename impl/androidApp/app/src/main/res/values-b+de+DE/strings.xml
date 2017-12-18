@@ -91,7 +91,7 @@
     <string name="title_home">Home</string>
     <string name="title_myrobot">Mein Roboter</string>
     <string name="title_settings">Einstellungen</string>
-
+    <string name="title_log">Log</string>
     <string name="action_example">Example action</string>
 
     <!-- TODO: Remove or change this placeholder text -->

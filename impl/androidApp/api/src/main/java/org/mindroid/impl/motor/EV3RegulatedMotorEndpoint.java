@@ -97,9 +97,7 @@ public class EV3RegulatedMotorEndpoint extends ClientEndpointImpl implements IRe
 	@Override
 	public void forward() {
 		if(client.isConnected()){
-			System.out.println("[EV3RegulatedMotorEndpoint:forward()] forward got called!");
 			client.sendTCP(RegulatedMotorMessagesFactory.createForwardMessage());
-			System.out.println("[EV3RegulatedMotorEndpoint:forward()] forward-message sent!");
 		}
 	}
 

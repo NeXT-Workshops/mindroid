@@ -106,11 +106,12 @@ public class NavigationDrawerFragment extends Fragment {
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                new String[]{
+                new String[]{ //TODO get array from another class to change it easily
                         getString(R.string.title_home),
                         getString(R.string.title_sensor_monitoring),
                         getString(R.string.title_myrobot),
                         getString(R.string.title_settings),
+                        getString(R.string.title_log)
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 

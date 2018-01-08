@@ -2,7 +2,6 @@ package org.mindroid.impl.robot;
 
 
 import org.mindroid.api.ImperativeAPI;
-import org.mindroid.api.brick.Brick;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.robot.*;
 import org.mindroid.api.robot.context.IConstraintEvaluator;
@@ -143,7 +142,7 @@ public final class RobotFactory implements IRobotFactory {
                 throw new NullPointerException("No RobotConfig set!");
             }
 
-            if(Messaging.isValidIP(brickIP) && Messaging.isValidTCPPort(brickTCPport)) {
+            if(Messaging.isValidIP(brickIP) && Messaging.isValidPort(brickTCPport)) {
                 // Configuration of the robot
                 RobotConfigurator robotConfigurator = new RobotConfigurator(brickIP, brickTCPport);
                 myRobot.setRobotConfigurator(robotConfigurator);

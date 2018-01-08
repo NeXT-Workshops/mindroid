@@ -16,8 +16,10 @@ import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.android.app.fragments.home.HomeFragment;
 import org.mindroid.android.app.robodancer.ConnectionPropertiesChangedListener;
 import org.mindroid.android.app.robodancer.SettingsProvider;
+import org.mindroid.android.app.util.IPValidator;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.robot.Robot;
+import org.mindroid.impl.util.Messaging;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -282,25 +284,38 @@ public class SettingsFragment extends Fragment {
      * @return
      */
     private boolean validateSettings() {
-        String ipRegex = "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"; //
-        //Validate EV3IP
-        if(! (txt_input_ev3ip_part1.getText().toString().matches(ipRegex) &&
-                txt_input_ev3ip_part2.getText().toString().matches(ipRegex) &&
-                txt_input_ev3ip_part3.getText().toString().matches(ipRegex) &&
-                txt_input_ev3ip_part4.getText().toString().matches(ipRegex))){
+        //Check if robotID field is empty
+        if(txt_input_robotID.getText().toString().isEmpty()){
             return false;
         }
 
-        if(! (txt_input_serverip_part1.getText().toString().matches(ipRegex) &&
-                txt_input_serverip_part2.getText().toString().matches(ipRegex) &&
-                txt_input_serverip_part3.getText().toString().matches(ipRegex) &&
-                txt_input_serverip_part4.getText().toString().matches(ipRegex))){
+        //check if groupID is empty
+        if(txt_input_groupID.getText().toString().isEmpty()){
             return false;
         }
 
-        //TODO complete?
+        String ev3IP = IPValidator.getConcatenatedIPAddress(txt_input_ev3ip_part1.getText().toString(),
+                txt_input_ev3ip_part2.getText().toString(),
+                txt_input_ev3ip_part3.getText().toString(),
+                txt_input_ev3ip_part4.getText().toString());
+
+
+        String msgServerIP = IPValidator.getConcatenatedIPAddress(txt_input_serverip_part1.getText().toString(),
+                txt_input_serverip_part2.getText().toString(),
+                txt_input_serverip_part3.getText().toString(),
+                txt_input_serverip_part4.getText().toString());
+
+        //Check if IPs (ev3, msgServer) are valid, if not return false
+        if(!IPValidator.validateIP(ev3IP) || !IPValidator.validateIP(msgServerIP)) {
+            return false;
+        }
+        System.out.println("SettingsFrag: IPs VALID");
+
+
         return true;
     }
+
+
 
     private void showShortToast(Context context,String msg){
         Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();

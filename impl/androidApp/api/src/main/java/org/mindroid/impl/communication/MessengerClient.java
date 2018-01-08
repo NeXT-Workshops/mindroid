@@ -85,7 +85,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
      */
     public synchronized boolean connect(String msgServerIP, int msgServerTCPPort){
         //Check for valid ip and port
-        if(!(Messaging.isValidIP(msgServerIP) && Messaging.isValidTCPPort(msgServerTCPPort))){
+        if(!(Messaging.isValidIP(msgServerIP) && Messaging.isValidPort(msgServerTCPPort))){
             //Port or IP are invalid, return.
             IllegalArgumentException e = new IllegalArgumentException("Invalid IP or/and Port");
             ErrorHandlerManager.getInstance().handleError(e,MessengerClient.class,e.getMessage());

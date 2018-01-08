@@ -75,7 +75,8 @@
                     <Switch
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" android:id="@+id/switch_enable_simulation"
-                            android:text="@string/switch_sim_txt"/>
+                            android:text="@string/switch_sim_txt"
+                            android:visibility="gone"/>
                     <Button
                         android:id="@+id/btn_activateTethering"
                         android:layout_width="match_parent"

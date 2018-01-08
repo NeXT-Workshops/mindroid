@@ -65,21 +65,23 @@ public class RobotCommandCenter implements IRobotCommandCenter {
 
     @Override
     public void connectToBrick() throws IOException {
-        long timeout = 30000;
-        robot.getBrick().connect();
+        long timeout = 20000;
+        boolean isConnected = robot.getBrick().connect();
 
+        if(isConnected) {
+            //TODO check if this is still necessary:
+            long start_timer = System.currentTimeMillis();
 
-        long start_timer = System.currentTimeMillis();
-
-        while(!robot.getBrick().isBrickReady()){
-            if(timeout < System.currentTimeMillis() - start_timer){
-                Exception e = new IOException("RobotCommandCenter: Connection timed out!");
-                ErrorHandlerManager.getInstance().handleError(e,RobotCommandCenter.class,e.toString());
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                ErrorHandlerManager.getInstance().handleError(e,RobotCommandCenter.class,e.toString());
+            while (!robot.getBrick().isBrickReady()) {
+                if (timeout < System.currentTimeMillis() - start_timer) {
+                    Exception e = new IOException("RobotCommandCenter: Brick is not ready (timeout)!");
+                    ErrorHandlerManager.getInstance().handleError(e, RobotCommandCenter.class, e.toString());
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    ErrorHandlerManager.getInstance().handleError(e, RobotCommandCenter.class, e.toString());
+                }
             }
         }
     }

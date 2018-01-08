@@ -32,7 +32,7 @@ public class Testbench {
         rf.setBrickIP(brickIP);
         rf.setBrickTCPPort(NetworkPortConfig.BRICK_PORT);
 
-        robotControl = rf.createRobot();
+        robotControl = rf.createRobot(false);
 
         try {
             robotControl.connectToBrick();

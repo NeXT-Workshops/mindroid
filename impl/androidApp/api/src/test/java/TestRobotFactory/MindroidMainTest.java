@@ -1,5 +1,6 @@
 package TestRobotFactory;
 
+import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.api.statemachine.IMindroidMain;
 import org.mindroid.api.statemachine.IState;
 import org.mindroid.api.statemachine.IStatemachine;
@@ -20,7 +21,7 @@ public class MindroidMainTest implements IMindroidMain {
     IStatemachine sm = new Statemachine("main");
     RobotController robotController = Robot.getRobotController();
     MotorProvider motorProvider = robotController.getMotorProvider();
-    BrickController brickController = robotController.getBrickController();
+    IBrickControl brickController = robotController.getBrickController();
     SensorProvider sensorProvider = robotController.getSensorProvider();
 
     //RobotEvent collision = RuleFactory.createCollisionRule(EV3PortIds.S1,"<",20);

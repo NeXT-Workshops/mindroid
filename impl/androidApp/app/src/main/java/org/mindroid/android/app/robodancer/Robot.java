@@ -137,7 +137,6 @@ public class Robot {
         return roFactory.getRobotCommandCenter().connectMessenger(msgServerIP,msgServerPort);
     }
 
-
     public void disconnectMessenger(){
         roFactory.getRobotCommandCenter().disconnectMessenger();
     }
@@ -158,6 +157,14 @@ public class Robot {
     public boolean initializeConfiguration() throws BrickIsNotReadyException, PortIsAlreadyInUseException {
         LOGGER.log(Level.INFO,"Intializing Configuration");
         return roFactory.getRobotCommandCenter().initializeConfiguration();
+    }
+
+    /**
+     * Aborts a running initialization.
+     * There will be no check if a initialization process is actually running.
+     */
+    public void abortInitializationProcess(){
+        roFactory.getRobotCommandCenter().abortConfiguration();
     }
 
     public boolean isConfigurated(){

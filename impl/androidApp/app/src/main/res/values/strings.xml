@@ -7,6 +7,9 @@
     <!-- Activity titles -->
     <string name="title_activity_main">Mindroid</string>
 
+    <!-- util -->
+    <string name="txt_abort">Abort</string>
+
     <!-- Home Fragment -->
     <string name="btn_text_activate_tethering">Activate Tethering</string>
     <string name="btn_text_init_config">Initialize Configuration</string>

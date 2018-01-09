@@ -42,6 +42,8 @@ public abstract class ConnectionProgressTask extends AsyncTask<String,Integer,Bo
      * @param success - true if success
      */
     public void setProgressState(String key, boolean success){
-        dFragment.setProgressState(key,success);
+        if(dFragment.isVisible()) { //To prevent app from crashing when progress gets aborted
+            dFragment.setProgressState(key, success);
+        }
     }
 }

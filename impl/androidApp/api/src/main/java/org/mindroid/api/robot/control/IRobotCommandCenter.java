@@ -40,6 +40,11 @@ public interface IRobotCommandCenter {
     boolean initializeConfiguration() throws BrickIsNotReadyException, PortIsAlreadyInUseException; //TODO initializeConfiguration()
 
     /**
+     * Aborts the configuration process
+     */
+    void abortConfiguration();
+
+    /**
      * Returns if the Configuration is complete
      * @return true - if Configuration has finished and is complete.
      */

@@ -6,7 +6,6 @@ import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 
 import java.io.IOException;
-import java.net.InetAddress;
 
 /**
  *
@@ -108,6 +107,11 @@ public class RobotCommandCenter implements IRobotCommandCenter {
         }
 
         return isConfigurated ;
+    }
+
+    @Override
+    public void abortConfiguration() {
+        robot.getRobotConfigurator().interruptConfigurationProcess();
     }
 
     @Override

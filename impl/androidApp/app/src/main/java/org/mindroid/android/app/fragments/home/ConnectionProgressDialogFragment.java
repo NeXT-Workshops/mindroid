@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +14,11 @@ import android.view.ViewGroup;
 
 import android.widget.LinearLayout;
 import org.mindroid.android.app.R;
+import org.mindroid.android.app.acitivites.MainActivity;
+import org.mindroid.android.app.dialog.ProgressDialog;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
+import org.mindroid.impl.robot.Robot;
 
 /**
  * Fragment displaying the progress state when connecting to the brick and initialization configuration.
@@ -104,11 +109,26 @@ public class ConnectionProgressDialogFragment extends DialogFragment {
         String title = getArguments().getString(KEY_TITLE);
         Bundle bundle = getArguments().getBundle(KEY_BUNDLE);
 
-        //Create Dialog, set Fragment (ConnectionProgressDialogFragment) to its view.
-        dialog = new android.app.AlertDialog.Builder(getActivity()).create();
-        dialog.setCancelable(false);
-        dialog.setTitle(title);
+        final AsyncTask abortionTask = AbortInitializationTask.create(getFragmentManager(),"ABORT_CONFIGURATION_TASK");
 
+
+        //Create Dialog, set Fragment (ConnectionProgressDialogFragment) to its view.
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(false);
+        builder.setTitle(title);
+        builder.setNegativeButton(R.string.txt_abort,
+                new DialogInterface.OnClickListener() {
+                    boolean isAbortionTaskRunning = false;
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        if(!isAbortionTaskRunning) {
+                            abortionTask.execute();
+                            isAbortionTaskRunning = true;
+                        }
+                        dialog.dismiss();
+                    }
+                }
+        );
+        dialog = builder.create();
 
         System.out.println("[ConnectionProgressDialog:onCreateDialog] properties set");
 
@@ -247,5 +267,7 @@ public class ConnectionProgressDialogFragment extends DialogFragment {
     public void onDetach() {
         super.onDetach();
     }
+
+
 
 }

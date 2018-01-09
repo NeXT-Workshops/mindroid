@@ -62,6 +62,11 @@ public class RobotConfigurator implements IRobotConfigurator {
 	private EV3PortID[] syncedMotorPorts;
 	private SynchronizedMotorsEndpoint syncedMotorsEndpoint;
 
+	/** If this var is true, the configurationprocess should be interrupted
+	 * 	only use the synchronized get- and set-method to check its state
+	 **/
+	private boolean isConfigurationInterrupted = false;
+
 	/**
 	 *
 	 * @param robotIP
@@ -230,27 +235,19 @@ public class RobotConfigurator implements IRobotConfigurator {
 	@Override
 	public boolean initializeConfiguration() throws BrickIsNotReadyException {
 		if(brick.isConnected()) {
-			//sensorManager = brick.getSensorManager();
-			//motorManager = brick.getMotorManager();
+			//Reset Interruption-state to not_interrupted
+			setConfigurationInterrupted(false);
 
 			for (EV3SensorPort senPort : sensorConfiguration.keySet()) {
 				Sensors type = getSensorType(senPort);
-				if (type != null) {
-					if(!sensors.containsKey(senPort)) {
-						//sensors.put(senPort, sensorManager.createSensor(type, senPort));
-						//TODO Throw Exception: Sensor that should be there wasn't created!
-					}
-					sensorManager.initializeSensor(type,senPort);
+				if (type != null && !isConfigurationInterrupted()) {
+					sensorManager.initializeSensor(type, senPort);
 				}
 			}
 
 			for (EV3MotorPort motorPort : motorConfiguration.keySet()) {
 				Motors type = getMotorType(motorPort);
-				if (type != null) {
-					if(!motors.containsKey(motorPort)){
-						//motors.put(motorPort, motorManager.createMotor(type, motorPort));
-						//TODO Throw Exception: Motor that should be there wasn't created!
-					}
+				if (type != null && !isConfigurationInterrupted()) {
 					motorManager.initializeMotor(type,motorPort);
 				}
 			}
@@ -274,13 +271,16 @@ public class RobotConfigurator implements IRobotConfigurator {
 					e.printStackTrace();
 				}
 
-				if(hasCreationFailed){
-					//Abort initialization, because the creation of a sensor/motor on the brick failed.
+				if(hasCreationFailed || isConfigurationInterrupted()){
+					//Abort initialization, because the creation of a sensor/motor on the brick failed or the process got interrupted
 					motorManager.disconnectMotors();
 					sensorManager.disconnectSensors();
 					//Remove all initialized sensor endpoints, as they should be recreated, when trying to retry init-process
 					sensors.clear();
 					motors.clear();
+
+					//Reset interruption state to not_interrupted
+					setConfigurationInterrupted(false);
 
 					return false;
 				}
@@ -315,6 +315,11 @@ public class RobotConfigurator implements IRobotConfigurator {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void interruptConfigurationProcess() {
+		setConfigurationInterrupted(true);
 	}
 
 	/**
@@ -482,5 +487,11 @@ public class RobotConfigurator implements IRobotConfigurator {
 	}
 
 
+	private synchronized void setConfigurationInterrupted(boolean configurationInterrupted) {
+		isConfigurationInterrupted = configurationInterrupted;
+	}
 
+	public synchronized boolean isConfigurationInterrupted() {
+		return isConfigurationInterrupted;
+	}
 }

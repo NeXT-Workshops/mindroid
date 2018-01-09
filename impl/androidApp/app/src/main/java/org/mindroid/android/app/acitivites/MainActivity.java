@@ -72,8 +72,6 @@ public class MainActivity extends Activity
     private final String TAG_SENSOR_MONITOR = "TAG_SENSOR_MONITOR";
     private final String TAG_LOG_FRAGMENT = "TAG_LOG_FRAGMENT";
 
-    private ArrayList<AlertDialog> shownDialogs = new ArrayList<AlertDialog>();
-
     private static final Logger LOGGER = Logger.getLogger(MainActivity.class.getName());
 
     @Override
@@ -187,12 +185,6 @@ public class MainActivity extends Activity
     @Override
     public void onPause(){
         super.onPause();
-        for (AlertDialog shownDialog : shownDialogs) {
-            if(shownDialog.isShowing()){
-                shownDialog.dismiss();
-            }
-            shownDialogs.clear();
-        }
     }
 
     public void onSectionAttached(int number) {

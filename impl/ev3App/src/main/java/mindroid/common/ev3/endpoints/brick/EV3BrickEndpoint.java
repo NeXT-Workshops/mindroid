@@ -10,6 +10,7 @@ import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.LCD;
 import mindroid.common.ev3.app.Display;
+import org.mindroid.common.messages.brick.ResetBrickMessage;
 import org.mindroid.common.messages.display.ClearDisplayMessage;
 import org.mindroid.common.messages.display.DisplayMessageFactory;
 import org.mindroid.common.messages.display.DrawStringMessage;
@@ -47,6 +48,7 @@ public class EV3BrickEndpoint extends Listener {
 		handleDisplayMessages(object);
 		handleStatusLightMessages(object);
 		handleSoundMessages(object);
+		handleResetMessage(object);
 	}
 
 	/**
@@ -57,7 +59,6 @@ public class EV3BrickEndpoint extends Listener {
 		if(object.getClass() == SetStatusLightMessage.class){
 			SetStatusLightMessage msg = (SetStatusLightMessage) object;
 			LocalEV3.get().getLED().setPattern(msg.getVal());
-
 		}
 	}
 
@@ -110,6 +111,14 @@ public class EV3BrickEndpoint extends Listener {
 		if(object.getClass() ==  SoundVolumeMessage.class){
 			Sound.setVolume(((SoundVolumeMessage)object).getVolume());
 			return;
+		}
+	}
+
+	private void handleResetMessage(Object object){
+		if(object.getClass()== ResetBrickMessage.class){
+			LocalEV3.get().getLED().setPattern(0);
+			Display.showSystemIsReadyAndConnected();
+			Sound.setVolume(50); //0-100
 		}
 	}
 

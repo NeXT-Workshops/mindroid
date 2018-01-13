@@ -11,6 +11,9 @@ import org.mindroid.common.messages.hardware.Sensors;
  */
 public class BrickMessagesFactory {
 
+
+	private static final ResetBrickMessage resetBrickMessage = new ResetBrickMessage();
+
 	@Deprecated
 	public static HelloMessage newHelloThereMessage(String msg){
 		return new HelloMessage(msg);
@@ -56,7 +59,9 @@ public class BrickMessagesFactory {
 		return cmm;
 	}
 	
-
+	public static ResetBrickMessage createResetBrickMsg(){
+		return resetBrickMessage;
+	}
 
 
 	

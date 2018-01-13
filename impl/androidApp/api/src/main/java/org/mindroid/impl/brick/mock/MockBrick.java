@@ -83,6 +83,11 @@ public class MockBrick extends Brick implements IBrickControl {
     }
 
     @Override
+    public void resetBrickState() {
+
+    }
+
+    @Override
     public boolean connect() {
         return false;
     }

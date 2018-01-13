@@ -6,6 +6,7 @@ import org.mindroid.api.brick.Brick;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.robot.control.IBrickControl;
+import org.mindroid.common.messages.brick.BrickMessagesFactory;
 import org.mindroid.common.messages.led.StatusLightMessageFactory;
 import org.mindroid.common.messages.sound.BeepMessage;
 import org.mindroid.common.messages.sound.SoundMessageFactory;
@@ -89,6 +90,12 @@ public class EV3Brick extends Brick {
     public boolean isBrickReady(){
     	return brickEndpoint.isBrickReady();
     }
+
+	@Override
+	public void resetBrickState() {
+    	//Resets the Bricks Display,LED,SoundVolume
+		brickEndpoint.sendTCPMessage(BrickMessagesFactory.createResetBrickMsg());
+	}
 
 	public EV3MotorManager getMotorManager() {
 		return motorManager;

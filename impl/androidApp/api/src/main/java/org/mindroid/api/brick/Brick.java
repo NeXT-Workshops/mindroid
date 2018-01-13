@@ -6,6 +6,8 @@ public abstract class Brick implements IBrickControl {
 
     public abstract boolean isBrickReady();
 
+    public abstract void resetBrickState();
+
     public abstract boolean connect();
 
     public abstract void disconnect();

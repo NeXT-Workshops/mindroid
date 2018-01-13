@@ -32,6 +32,7 @@ public class MessageRegistrar {
 		kryo.register(CreateDisplayMessage.class);
 		kryo.register(HelloMessage.class);
 		kryo.register(EndpointCreatedMessage.class);
+		kryo.register(ResetBrickMessage.class);
 
 		//Display Message
 		kryo.register(DrawStringMessage.class);

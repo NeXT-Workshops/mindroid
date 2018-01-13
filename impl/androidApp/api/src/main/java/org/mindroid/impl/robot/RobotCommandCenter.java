@@ -39,6 +39,7 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     @Override
     public void stopStatemachine(String id) {
         robot.getStatemachineManager().stopStatemachines(id);
+        robot.getBrick().resetBrickState();
     }
 
     @Override
@@ -55,6 +56,7 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     @Override
     public void stopImperativeImplementation(String id) {
         robot.getImperativeImplManager().stopImperativeImplementation(id);
+        robot.getBrick().resetBrickState();
     }
 
     @Override

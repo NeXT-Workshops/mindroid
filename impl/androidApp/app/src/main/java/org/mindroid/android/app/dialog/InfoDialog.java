@@ -6,6 +6,9 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import org.mindroid.android.app.R;
 
 public class InfoDialog extends DialogFragment {
@@ -29,7 +32,7 @@ public class InfoDialog extends DialogFragment {
 
         this.setCancelable(false);
 
-        return new AlertDialog.Builder(getActivity())
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setPositiveButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {
@@ -39,7 +42,10 @@ public class InfoDialog extends DialogFragment {
                         }
                 )
                 .setTitle(title)
-                .setMessage(msg)
-                .create();
+                .setMessage(msg);
+
+        return builder.create();
     }
+
+
 }

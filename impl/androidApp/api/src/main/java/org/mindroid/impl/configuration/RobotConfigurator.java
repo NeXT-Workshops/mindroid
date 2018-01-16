@@ -63,7 +63,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 	private SynchronizedMotorsEndpoint syncedMotorsEndpoint;
 
 	/** If this var is true, the configurationprocess should be interrupted
-	 * 	only use the synchronized get- and set-method to check its state
+	 *
 	 **/
 	private boolean isConfigurationInterrupted = false;
 
@@ -487,11 +487,11 @@ public class RobotConfigurator implements IRobotConfigurator {
 	}
 
 
-	private synchronized void setConfigurationInterrupted(boolean configurationInterrupted) {
+	private void setConfigurationInterrupted(boolean configurationInterrupted) {
 		isConfigurationInterrupted = configurationInterrupted;
 	}
 
-	public synchronized boolean isConfigurationInterrupted() {
+	public boolean isConfigurationInterrupted() {
 		return isConfigurationInterrupted;
 	}
 }

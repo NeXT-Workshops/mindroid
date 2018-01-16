@@ -15,6 +15,10 @@ import android.widget.TextView;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.MainActivity;
 
+/**
+ * A Fragment showing the progress of a task.
+ * Used in Dialogs ( e.g. when connecting to the brick and intializing it)
+ */
 public class ProgressFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,7 +43,6 @@ public class ProgressFragment extends Fragment {
      * @param stateText shown information text
      * @return A new instance of fragment ProgressFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ProgressFragment newInstance(String stateText) {
         ProgressFragment fragment = new ProgressFragment();
         Bundle args = new Bundle();

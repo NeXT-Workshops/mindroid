@@ -68,7 +68,7 @@ public class ConnectionProgressDialogFragment extends DialogFragment {
     private ProgressFragment pfMotor3;
     private ProgressFragment pfMotor4;
 
-    private AlertDialog dialog;
+    private Dialog dialog;
 
     public ConnectionProgressDialogFragment() {
         // Required empty public constructor
@@ -91,6 +91,8 @@ public class ConnectionProgressDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         if (getArguments() != null) {
             sen_p1 = getArguments().getString(KEY_PARAM_SEN_P1);
             sen_p2 = getArguments().getString(KEY_PARAM_SEN_P2);
@@ -106,54 +108,42 @@ public class ConnectionProgressDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String title = getArguments().getString(KEY_TITLE);
-        Bundle bundle = getArguments().getBundle(KEY_BUNDLE);
-
-        final AsyncTask abortionTask = AbortInitializationTask.create(getFragmentManager(),"ABORT_CONFIGURATION_TASK");
-
-
-        //Create Dialog, set Fragment (ConnectionProgressDialogFragment) to its view.
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setCancelable(false);
-        builder.setTitle(title);
-        builder.setNegativeButton(R.string.txt_abort,
-                new DialogInterface.OnClickListener() {
-                    boolean isAbortionTaskRunning = false;
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        if(!isAbortionTaskRunning) {
-                            abortionTask.execute();
-                            isAbortionTaskRunning = true;
-                        }
-                        dialog.dismiss();
-                    }
-                }
-        );
-        dialog = builder.create();
-
-        System.out.println("[ConnectionProgressDialog:onCreateDialog] properties set");
-
+        dialog = super.onCreateDialog(savedInstanceState);
         return dialog;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_connection_progress, container, false);
+        return getCustomView();
+    }
+
+
+    /**
+     * Creates the Custom View for the Dialog.
+     * The view contains the states of the:
+     * Message-server connection
+     * Brick connection
+     * Sensor and motor conenction states
+     *
+     * @return view of the Dialog shown by this fragment
+     */
+    public View getCustomView(){
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.fragment_connection_progress, null);
 
         container_messenger = (LinearLayout) view.findViewById(R.id.container_msger);
         container_brick = (LinearLayout) view.findViewById(R.id.container_brick);
         container_sensors = (LinearLayout) view.findViewById(R.id.container_sensors);
         container_motors = (LinearLayout) view.findViewById(R.id.container_motors);
 
-        pfMessenger = ProgressFragment.newInstance("Connecting to Message Server");
+
         //Add Messenger Fragment
         addFragmentToContainer(R.id.container_msger,pfMessenger);
 
-        pfBrick = ProgressFragment.newInstance("Connecting to Brick");
+
         //Add Brick Fragment
         addFragmentToContainer(R.id.container_brick,pfBrick);
-
 
         createSensorProgressFragment(EV3PortIDs.PORT_1);
         createSensorProgressFragment(EV3PortIDs.PORT_2);
@@ -165,7 +155,6 @@ public class ConnectionProgressDialogFragment extends DialogFragment {
         createMotorProgressFragment(EV3PortIDs.PORT_C);
         createMotorProgressFragment(EV3PortIDs.PORT_D);
 
-        dialog.setView(view);
 
         // Inflate the layout for this fragment
         return view;

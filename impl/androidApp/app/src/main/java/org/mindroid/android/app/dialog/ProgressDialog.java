@@ -28,14 +28,11 @@ public class ProgressDialog extends DialogFragment {
         String msg = getArguments().getString(KEY_MESSAGE);
 
         this.setCancelable(false);
-
-        android.app.ProgressDialog.Builder builder = new android.app.ProgressDialog.Builder(getActivity())
-                .setTitle(title)
-                .setMessage(msg);
-
+        android.app.ProgressDialog.Builder builder = new android.app.ProgressDialog.Builder(getActivity());
         ProgressBar pb = new ProgressBar(builder.getContext());
-
         builder.setView(pb);
+        builder.setTitle(title);
+        builder.setMessage(msg);
 
         return builder.create();
     }

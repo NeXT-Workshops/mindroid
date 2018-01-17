@@ -131,7 +131,7 @@ public class ConnectionProgressDialogFragment extends DialogFragment {
     public View getCustomView(){
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_connection_progress, null);
-
+        
         container_messenger = (LinearLayout) view.findViewById(R.id.container_msger);
         container_brick = (LinearLayout) view.findViewById(R.id.container_brick);
         container_sensors = (LinearLayout) view.findViewById(R.id.container_sensors);

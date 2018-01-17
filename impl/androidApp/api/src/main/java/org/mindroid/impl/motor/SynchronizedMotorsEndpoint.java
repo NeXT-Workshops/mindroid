@@ -23,7 +23,7 @@ public class SynchronizedMotorsEndpoint extends ClientEndpointImpl implements IS
     }
 
     @Override
-    public void executeSynchronizedOperation(SynchronizedMotorOperation operationPortA, SynchronizedMotorOperation operationPortB, SynchronizedMotorOperation operationPortC, SynchronizedMotorOperation operationPortD,boolean isBlocked) {
+    public boolean executeSynchronizedOperation(SynchronizedMotorOperation operationPortA, SynchronizedMotorOperation operationPortB, SynchronizedMotorOperation operationPortC, SynchronizedMotorOperation operationPortD, boolean isBlocked) {
         if(isClientReady()){
             if(isBlocked){ //TODO how to interuppt if i want to stop statemachine/impImpl by App?
                 System.out.println("[SynchronizedMotorsEndpoint:execute] is blocked is true");
@@ -45,10 +45,12 @@ public class SynchronizedMotorsEndpoint extends ClientEndpointImpl implements IS
                 client.sendTCP(SynchronizedMotorMessageFactory.createSynchronizedMotorOperationMessage(operationPortA,operationPortB,operationPortC,operationPortD,isBlocked));
             }
 
-            System.out.println("[SynchronizedMotorEndpoint:executeSynchronizedOperation] operation message sent"); //TODO remove outputs
+            //Message sent
+            return true;
 
         }else{
-            System.out.println("[SynchronizedMotorEndpoint:executeSynchronizedOperation] operation message NOT sent");
+            //Message NOT sent
+            return false;
         }
     }
 
@@ -59,7 +61,7 @@ public class SynchronizedMotorsEndpoint extends ClientEndpointImpl implements IS
     }
 
     @Override
-    public void executeSynchronizedOperation(SynchronizedMotorOperation[] operations,boolean isBlocked) {
+    public boolean executeSynchronizedOperation(SynchronizedMotorOperation[] operations, boolean isBlocked) {
         if(operations.length == 4) {
             executeSynchronizedOperation(operations[0], operations[1], operations[2], operations[3],isBlocked);
         }

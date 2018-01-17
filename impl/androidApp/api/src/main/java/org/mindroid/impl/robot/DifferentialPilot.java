@@ -4,10 +4,9 @@ import org.mindroid.api.robot.IDifferentialPilot;
 import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.common.messages.motor.synchronization.SyncedMotorOpFactory;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperation;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
-import org.mindroid.impl.motor.SynchronizedMotorsEndpoint;
-import org.mindroid.impl.sensor.Sensor;
 
 /**
  * The Differential pilot is used to execute synchronized motor operations and precise robot drive control.
@@ -158,9 +157,8 @@ public class DifferentialPilot implements IDifferentialPilot {
     @Override
     public void turnLeft(int degrees) {
         float targetAngle = -1;
-        if(isAngleCorrectionEnabled()){
+        if(isGyroSensorAvailable()){
             targetAngle = calculateTargetAngle(true,degrees);
-
         }
 
         int rotateDegree = calculateCircularArc(degrees);
@@ -174,12 +172,10 @@ public class DifferentialPilot implements IDifferentialPilot {
             return;
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations, true);
+        boolean executed = motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations, true);
 
-        if(isAngleCorrectionEnabled()) {
-            //Check result
-            doAngleCorrection(targetAngle);
-        }
+        //Checks if angle correction is possible and executes it
+        executeAngleCorrection(targetAngle, executed);
     }
 
     @Override
@@ -193,7 +189,7 @@ public class DifferentialPilot implements IDifferentialPilot {
     @Override
     public void turnRight(int degrees) {
         float targetAngle = -1;
-        if(isAngleCorrectionEnabled()){
+        if(isGyroSensorAvailable()){
             targetAngle = calculateTargetAngle(false,degrees);
         }
 
@@ -208,12 +204,28 @@ public class DifferentialPilot implements IDifferentialPilot {
             return;
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true);
+        boolean executed = motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true);
 
-        if(isAngleCorrectionEnabled()) {
+        //Checks if angle correction is possible and executes it
+        executeAngleCorrection(targetAngle, executed);
+    }
+
+    /**
+     * Checks if the gyro sensor is available and the former synced motor operation got executed. If it was it initiates an angle correction.
+     * Sends an error using the ErrorHandlerManager, when the former execution failed. Then the angle correction will not be initiated.
+     * @param targetAngle - target angle of the turn
+     * @param executed - if the former synced motor operation was successful (Message sent)
+     */
+    private void executeAngleCorrection(float targetAngle, boolean executed) {
+        if(isGyroSensorAvailable() && executed) {
             //Check result
             doAngleCorrection(targetAngle);
-
+        }else{
+            //No Gyro or execution failed
+            if(!executed){
+                Exception e = new IllegalStateException("The Angle correction couldn't be executed as the synchronized motor operation couldn't be executed (Message not sent/Brick not ready/Wron operation length)");
+                ErrorHandlerManager.getInstance().handleError(e,DifferentialPilot.class,e.getMessage());
+            }
         }
     }
 
@@ -292,10 +304,10 @@ public class DifferentialPilot implements IDifferentialPilot {
     }
 
     /**
-     * returns true if angle correction is possible
+     * returns true if angle correction is possible -> gyrosensor is available
      * @return boolean
      */
-    private boolean isAngleCorrectionEnabled() {
+    private boolean isGyroSensorAvailable() {
         boolean validSensorMode = false;
         if(sensorProvider != null && gyroPort != null){
             validSensorMode = sensorProvider.getSensor(gyroPort) != null && sensorProvider.getSensor(gyroPort).getSensormode() != null;

@@ -139,10 +139,12 @@ public class ConnectionProgressDialogFragment extends DialogFragment {
 
 
         //Add Messenger Fragment
+        pfMessenger = ProgressFragment.newInstance("Connecting to Message Server");
         addFragmentToContainer(R.id.container_msger,pfMessenger);
 
 
         //Add Brick Fragment
+        pfBrick = ProgressFragment.newInstance("Connecting to Brick");
         addFragmentToContainer(R.id.container_brick,pfBrick);
 
         createSensorProgressFragment(EV3PortIDs.PORT_1);

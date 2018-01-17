@@ -63,8 +63,9 @@ public class SynchronizedMotorsEndpoint extends ClientEndpointImpl implements IS
     @Override
     public boolean executeSynchronizedOperation(SynchronizedMotorOperation[] operations, boolean isBlocked) {
         if(operations.length == 4) {
-            executeSynchronizedOperation(operations[0], operations[1], operations[2], operations[3],isBlocked);
+            return executeSynchronizedOperation(operations[0], operations[1], operations[2], operations[3],isBlocked);
         }
+        return false;
     }
 
     private void sleep(long delay){

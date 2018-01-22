@@ -142,7 +142,7 @@
             android:ems="10"
             android:id="@+id/txt_value_description" android:layout_marginTop="45dp" android:layout_marginLeft="230dp"
             android:editable="false" android:textSize="12sp" android:gravity="top|left" android:singleLine="false"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
 
 </FrameLayout>

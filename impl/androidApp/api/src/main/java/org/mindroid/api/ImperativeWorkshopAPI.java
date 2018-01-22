@@ -35,6 +35,21 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
         this.diffPilot = new DifferentialPilot(getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),getSensorProvider(),getGyroSensorPort(),5.6f,12.5f);
     }
 
+    /**
+     * This method waits until the given amount of time has passed.
+     * This method is blocking.
+     *
+     * @param milliseconds the time in milliseconds
+     */
+    public final void delay(long milliseconds) {
+        if (!isInterrupted()) {
+            try {
+                Thread.sleep(milliseconds);
+            } catch (final InterruptedException e) {
+                // Ignore
+            }
+        }
+    }
 
     // --------------------- SENSOR EVALUATING METHODS: Display, LED ---------------------
 

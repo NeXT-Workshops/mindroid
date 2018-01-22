@@ -15,7 +15,7 @@ public class ImperativeImplService {
 
     // Array with Implementations to load
     private String[] foundClasses = {
-            "org.mindroid.android.app.imperativeimpl.RectangleDriver",
+            /*"org.mindroid.android.app.imperativeimpl.RectangleDriver",
             "org.mindroid.android.app.imperativeimpl.RectangleDriver3",
             "org.mindroid.android.app.imperativeimpl.RectangleDriver2",
             "org.mindroid.android.app.imperativeimpl.ImpSingleWallPingPong",
@@ -25,7 +25,13 @@ public class ImperativeImplService {
             "org.mindroid.android.app.imperativeimpl.ButtonTest",
             "org.mindroid.android.app.imperativeimpl.ImpSingleWallPingPong",
             "org.mindroid.android.app.imperativeimpl.TestMessageAccess",
-            "org.mindroid.android.app.imperativeimpl.MessageTest"
+            "org.mindroid.android.app.imperativeimpl.MessageTest"*/
+            "org.mindroid.android.app.workshopimpl.MeinProgramm_1",
+            "org.mindroid.android.app.workshopimpl.MeinProgramm_2",
+            "org.mindroid.android.app.workshopimpl.MeinProgramm_3",
+            "org.mindroid.android.app.workshopimpl.MeinProgramm_4",
+            "org.mindroid.android.app.workshopimpl.MeinProgramm_5",
+            "org.mindroid.android.app.workshopimpl.MeinProgramm_6"
     };
 
     private ImperativeImplService() {

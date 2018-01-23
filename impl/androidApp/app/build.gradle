@@ -19,6 +19,12 @@ android {
         versionName mindroidVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+	signingConfigs {
+        debug {
+           storeFile file("key/debug.keystore")
+       }
+   }
+
     buildTypes {
         release {
             minifyEnabled false

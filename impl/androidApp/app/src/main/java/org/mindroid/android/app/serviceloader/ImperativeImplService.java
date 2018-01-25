@@ -15,7 +15,9 @@ public class ImperativeImplService {
 
     // Array with Implementations to load
     private String[] foundClasses = {
-            /*"org.mindroid.android.app.imperativeimpl.RectangleDriver",
+            // Dev
+            /*
+            "org.mindroid.android.app.imperativeimpl.RectangleDriver",
             "org.mindroid.android.app.imperativeimpl.RectangleDriver3",
             "org.mindroid.android.app.imperativeimpl.RectangleDriver2",
             "org.mindroid.android.app.imperativeimpl.ImpSingleWallPingPong",
@@ -25,13 +27,40 @@ public class ImperativeImplService {
             "org.mindroid.android.app.imperativeimpl.ButtonTest",
             "org.mindroid.android.app.imperativeimpl.ImpSingleWallPingPong",
             "org.mindroid.android.app.imperativeimpl.TestMessageAccess",
-            "org.mindroid.android.app.imperativeimpl.MessageTest"*/
-            "org.mindroid.android.app.workshopimpl.MeinProgramm_1",
-            "org.mindroid.android.app.workshopimpl.MeinProgramm_2",
-            "org.mindroid.android.app.workshopimpl.MeinProgramm_3",
-            "org.mindroid.android.app.workshopimpl.MeinProgramm_4",
-            "org.mindroid.android.app.workshopimpl.MeinProgramm_5",
-            "org.mindroid.android.app.workshopimpl.MeinProgramm_6"
+            "org.mindroid.android.app.imperativeimpl.MessageTest"
+            */
+
+            
+            // Stubs for Workshop
+            "org.mindroid.android.app.workshopimpl.HelloWorld",
+            "org.mindroid.android.app.workshopimpl.HelloDate",
+            "org.mindroid.android.app.workshopimpl.DriveSquare",
+            "org.mindroid.android.app.workshopimpl.ParkingSensor",
+            "org.mindroid.android.app.workshopimpl.ColourTest",
+            "org.mindroid.android.app.workshopimpl.HelloWorldPingR",
+            "org.mindroid.android.app.workshopimpl.HelloWorldPingB",
+            "org.mindroid.android.app.workshopimpl.ImpSingleWallPingPong",
+            "org.mindroid.android.app.workshopimpl.ImpCoordWallPingPong",
+            "org.mindroid.android.app.workshopimpl.LawnMower",
+            "org.mindroid.android.app.workshopimpl.Platooning",
+            "org.mindroid.android.app.workshopimpl.Follow"                                                                          
+
+            // Solutions for Workshop
+            /*
+            "org.mindroid.android.app.workshopSolutions.HelloWorld",
+            "org.mindroid.android.app.workshopSolutions.HelloDate",
+            "org.mindroid.android.app.workshopSolutions.DriveSquare",
+            "org.mindroid.android.app.workshopSolutions.ParkingSensor",
+            "org.mindroid.android.app.workshopSolutions.ColourTest",
+            "org.mindroid.android.app.workshopSolutions.HelloWorldPingR",
+            "org.mindroid.android.app.workshopSolutions.HelloWorldPingB",
+            "org.mindroid.android.app.workshopSolutions.ImpSingleWallPingPong",
+            "org.mindroid.android.app.workshopSolutions.ImpCoordWallPingPong",
+            "org.mindroid.android.app.workshopSolutions.LawnMower",
+            "org.mindroid.android.app.workshopSolutions.Platooning",
+            "org.mindroid.android.app.workshopSolutions.Follow"
+                 */
+
     };
 
     private ImperativeImplService() {

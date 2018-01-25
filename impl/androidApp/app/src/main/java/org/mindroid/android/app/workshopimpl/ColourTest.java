@@ -5,15 +5,17 @@ import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.impl.brick.Textsize;
+import org.mindroid.impl.statemachine.properties.Colors;
 
-public class MeinProgramm_1 extends ImperativeWorkshopAPI {
+public class ColourTest extends ImperativeWorkshopAPI {
 
-    public MeinProgramm_1() {
-        super("MeinProgramm_1");
+    public ColourTest() {
+        super("Colour Test");
     }
 
-    @Override
+     @Override
     public void run() {
-
     }
+
+
 }

@@ -2,13 +2,13 @@ package org.mindroid.android.app.workshopimpl;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
 
-public class MeinProgramm_4 extends ImperativeWorkshopAPI {
+public class Platooning extends ImperativeWorkshopAPI {
 
-    public MeinProgramm_4() {
-        super("MeinProgramm_4");
+    public Platooning() {
+        super("Parking Sensor");
     }
 
-    @Override
+  @Override
     public void run() {
 
     }

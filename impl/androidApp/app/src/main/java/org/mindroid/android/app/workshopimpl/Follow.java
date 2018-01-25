@@ -5,7 +5,7 @@ import org.mindroid.api.ImperativeWorkshopAPI;
 public class Follow extends ImperativeWorkshopAPI {
 
     public Follow() {
-        super("Parking Sensor");
+        super("Follow");
     }
 
   @Override

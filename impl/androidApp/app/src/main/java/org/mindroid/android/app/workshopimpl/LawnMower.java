@@ -5,7 +5,7 @@ import org.mindroid.api.ImperativeWorkshopAPI;
 public class LawnMower extends ImperativeWorkshopAPI {
 
     public LawnMower() {
-        super("Parking Sensor");
+        super("Lawn Mower");
     }
 
   @Override

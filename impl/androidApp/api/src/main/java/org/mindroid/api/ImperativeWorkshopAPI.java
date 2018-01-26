@@ -90,19 +90,19 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      * @return the color fitting the given value
      */
     private Colors getColor(float value){
-        if(getLeftColorSensor().getValue()[0] == Colors.BLACK.getValue()) {
+        if(value == Colors.BLACK.getValue()) {
             return Colors.BLACK;
-        }else if(getLeftColorSensor().getValue()[0] == Colors.BLUE.getValue()) {
+        }else if(value == Colors.BLUE.getValue()) {
             return Colors.BLUE;
-        }else if(getLeftColorSensor().getValue()[0] == Colors.GREEN.getValue()) {
+        }else if(value == Colors.GREEN.getValue()) {
             return Colors.GREEN;
-        }else if(getLeftColorSensor().getValue()[0] == Colors.YELLOW.getValue()) {
+        }else if(value == Colors.YELLOW.getValue()) {
             return Colors.YELLOW;
-        }else if(getLeftColorSensor().getValue()[0] == Colors.RED.getValue()) {
+        }else if(value == Colors.RED.getValue()) {
             return Colors.RED;
-        }else if(getLeftColorSensor().getValue()[0] == Colors.WHITE.getValue()) {
+        }else if(value == Colors.WHITE.getValue()) {
             return Colors.WHITE;
-        }else if(getLeftColorSensor().getValue()[0] == Colors.BROWN.getValue()) {
+        }else if(value == Colors.BROWN.getValue()) {
             return Colors.BROWN;
         }else{
             return Colors.NONE;

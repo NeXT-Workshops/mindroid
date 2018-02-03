@@ -63,7 +63,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      */
     public final Colors getLeftColor() {
         if(getLeftColorSensor().getSensormode().equals(Sensormode.COLOR_ID)){
-            return Colors.Mapping.getColorByValue(getLeftColorSensor().getValue()[0]);
+            return Colors.getColorByValue(getLeftColorSensor().getValue()[0]);
         }else{
             return Colors.NONE;
         }
@@ -78,7 +78,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      */
     public Colors getRightColor() {
         if(getRightColorSensor().getSensormode().equals(Sensormode.COLOR_ID)){
-            return Colors.Mapping.getColorByValue(getRightColorSensor().getValue()[0]);
+            return Colors.getColorByValue(getRightColorSensor().getValue()[0]);
         }else{
             return Colors.NONE;
         }

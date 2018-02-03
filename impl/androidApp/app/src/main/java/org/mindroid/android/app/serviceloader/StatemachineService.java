@@ -30,7 +30,7 @@ public class StatemachineService {
 
     private String[] foundClasses = {
             "org.mindroid.android.app.statemachinesimpl.SensorMonitoring",
-            "org.mindroid.android.app.statemachinesimpl.MindroidStatemachines"
+            /*"org.mindroid.android.app.statemachinesimpl.MindroidStatemachines"*/
     };
 
     private final String apkPath = "/data/app/";

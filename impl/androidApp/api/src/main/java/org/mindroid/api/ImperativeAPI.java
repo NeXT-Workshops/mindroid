@@ -98,21 +98,6 @@ public abstract class ImperativeAPI extends BasicAPI {
 
     // ------ Methods to add some code sugar ------
 
-    /**
-     * This method waits until the given amount of time has passed.
-     * This method is blocking.
-     *
-     * @param milliseconds the time in milliseconds
-     */
-    public final void delay(long milliseconds) {
-        if (!isInterrupted()) {
-            try {
-                Thread.sleep(milliseconds);
-            } catch (final InterruptedException e) {
-                // Ignore
-            }
-        }
-    }
 
     /**
      * Returns true, if execution has finished otherwise false

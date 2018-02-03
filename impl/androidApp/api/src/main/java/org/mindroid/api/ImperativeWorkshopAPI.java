@@ -174,6 +174,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
 
     /**
      * Stops the Motor at the given Port.
+     * @param motorport - port of the motor to stop
      */
     public void stop(EV3PortID motorport) {
         getMotorProvider().getMotor(motorport).stop();
@@ -330,6 +331,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     // ------ Getter-Method Hardware Ports ------
     /**
      * Returns the {@link EV3PortID} of the left unregulated motor
+     * @return port of the left motor
      */
     protected EV3PortID getLeftMotorPort() {
         return EV3PortIDs.PORT_A;
@@ -337,6 +339,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
 
     /**
      * Returns the {@link EV3PortID} of the right unregulated motor
+     * @return  port of the right motor
      */
     protected EV3PortID getRightMotorPort() {
         return EV3PortIDs.PORT_D;
@@ -344,6 +347,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
 
     /**
      * Returns the {@link EV3PortID} of the left color sensor
+     * @return port of the left color sensor
      */
     protected EV3PortID getLeftColorSensorPort() {
         return EV3PortIDs.PORT_1;
@@ -351,6 +355,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
 
     /**
      * Returns the {@link EV3PortID} of the ultrasonic sensor
+     * @return port of the ultrasonic sensor
      */
     protected EV3PortID getUltrasonicSensorPort() {
         return EV3PortIDs.PORT_2;
@@ -367,6 +372,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
 
     /**
      * Returns the {@link EV3PortID} of the left color sensor
+     * @return right color sensor port
      */
     protected EV3PortID getRightColorSensorPort() {
         return EV3PortIDs.PORT_4;

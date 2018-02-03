@@ -45,9 +45,11 @@ public abstract class ImperativeAPI extends BasicAPI {
      * Start the execution of the Implementation
      * Executes run method.
      * Stops all motors, when execution finished/got interrupted.
-     * //TODO Try to hide this methods from api user --> extract interface 'Executable" (start,stop, interrupt) --> introduce ExecutableController, register Implementation, use it to start stop etc --> make methods protected.
+     *
      */
     public final void start(){
+        //TODO Try to hide this methods from api user --> extract interface 'Executable" (start,stop, interrupt) --> introduce ExecutableController, register Implementation, use it to start stop etc --> make methods protected.
+        //TODO BUILD EXecutor capsulateing implementation and implement this method
         setExecutionFinished(false);
         isInterrupted = false;
         try{
@@ -68,9 +70,10 @@ public abstract class ImperativeAPI extends BasicAPI {
 
     /**
      * Sets the isInterrupted field to true to stop the execution of this method
-     * //TODO Try to hide this methods from api user
+     *
      */
     public final void stopExecution(){
+        //TODO Try to hide this methods from api user
         //Only set interrupted field, when exection has not finished
         if(!isExecutionFinished()) {
             this.isInterrupted = true;

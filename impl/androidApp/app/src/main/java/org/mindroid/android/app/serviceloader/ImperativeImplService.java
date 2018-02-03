@@ -25,7 +25,8 @@ public class ImperativeImplService {
             "org.mindroid.android.app.imperativeimpl.ButtonTest",
             "org.mindroid.android.app.imperativeimpl.ImpSingleWallPingPong",
             "org.mindroid.android.app.imperativeimpl.TestMessageAccess",
-            "org.mindroid.android.app.imperativeimpl.MessageTest"
+            "org.mindroid.android.app.imperativeimpl.MessageTest",
+            "org.mindroid.android.app.imperativeimpl.Testprogramm"
     };
 
     private ImperativeImplService() {

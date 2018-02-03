@@ -108,8 +108,8 @@ public abstract class BasicAPI {
 
     /**
      * Returns the button with the given id;
-     * @param buttonID
-     * @return
+     * @param buttonID buttonID
+     * @return button
      */
     protected EV3Button getButton(Button buttonID){
         EV3Button button;

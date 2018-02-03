@@ -85,31 +85,6 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     }
 
     /**
-     * Returns the Color {@link Colors} fitting to the given value
-     * @param value - float value meassured by the color sensor
-     * @return the color fitting the given value
-     */
-    private Colors getColor(float value){
-        if(value == Colors.BLACK.getValue()) {
-            return Colors.BLACK;
-        }else if(value == Colors.BLUE.getValue()) {
-            return Colors.BLUE;
-        }else if(value == Colors.GREEN.getValue()) {
-            return Colors.GREEN;
-        }else if(value == Colors.YELLOW.getValue()) {
-            return Colors.YELLOW;
-        }else if(value == Colors.RED.getValue()) {
-            return Colors.RED;
-        }else if(value == Colors.WHITE.getValue()) {
-            return Colors.WHITE;
-        }else if(value == Colors.BROWN.getValue()) {
-            return Colors.BROWN;
-        }else{
-            return Colors.NONE;
-        }
-    }
-
-    /**
      * Returns the Distance measured by the Distance Sensor
      *
      * @return distance value in meter

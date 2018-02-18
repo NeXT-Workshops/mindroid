@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import org.mindroid.android.app.R;
 import org.mindroid.common.messages.hardware.Sensormode;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -60,31 +63,7 @@ public class SensorObservationFragment extends Fragment implements Observer {
     private final String descr_nothing = "";
 
     //mode descrition strings
-    private String descr_rgb_slot1;
-    private String descr_rgb_slot2;
-    private String descr_rgb_slot3;
-    private String descr_ambient_slot1;
-    private String descr_red_slot1;
-    private String descr_color_slot1;
-    private String descr_angle_slot1;
-    private String descr_rate_slot1;
-    private String descr_rateAndAngle_slot1;
-    private String descr_rateAndAngle_slot2;
-    private String descr_listen_slot1;
-    private String descr_distance_slot1;
-    private String descr_touch_slot1;
-    private String descr_seek_slot1;
-    private String descr_seek_slot2;
-    private String descr_seek_slot3;
-    private String descr_seek_slot4;
-
-    //value description string //TODO mode value description
-    private String descr_mode_rgb;
-    private String descr_mode_ambient;
-    private String descr_mode_red;
-    private String descr_mode_color;
-
-
+    private SparseArray<String> sensorValueDescriptions = new SparseArray<String>(17);
 
     private OnFragmentInteractionListener mListener;
 
@@ -129,31 +108,55 @@ public class SensorObservationFragment extends Fragment implements Observer {
             sensormode = getArguments().getString(ARG_MODE);
         }
 
-        //Get Resources
-        descr_rgb_slot1 = getResources().getString(R.string.txt_sensor_description_mode_rgb_slot1);
-        descr_rgb_slot2 = getResources().getString(R.string.txt_sensor_description_mode_rgb_slot2);
-        descr_rgb_slot3 = getResources().getString(R.string.txt_sensor_description_mode_rgb_slot3);
+        //RGB MODE descriptions
+        sensorValueDescriptions.append(createKey(Sensormode.RGB,1),getResources().getString(R.string.txt_sensor_description_mode_rgb_slot1));
+        sensorValueDescriptions.append(createKey(Sensormode.RGB,2),getResources().getString(R.string.txt_sensor_description_mode_rgb_slot2));
+        sensorValueDescriptions.append(createKey(Sensormode.RGB,3),getResources().getString(R.string.txt_sensor_description_mode_rgb_slot3));
 
-        descr_ambient_slot1 = getResources().getString(R.string.txt_sensor_description_mode_ambient_slot1);
+        //AMBIENT MODE descriptions
+        sensorValueDescriptions.append(createKey(Sensormode.AMBIENT,1),getResources().getString(R.string.txt_sensor_description_mode_ambient_slot1));
 
-        descr_red_slot1 = getResources().getString(R.string.txt_sensor_description_mode_red_slot1);
+        //RED SENSORMODE Descriptions
+        sensorValueDescriptions.append(createKey(Sensormode.RED,1), getResources().getString(R.string.txt_sensor_description_mode_red_slot1));
 
-        descr_color_slot1 = getResources().getString(R.string.txt_sensor_description_mode_color_slot1);
-        descr_angle_slot1 = getResources().getString(R.string.txt_sensor_description_mode_angle_slot1);
-        descr_rate_slot1 = getResources().getString(R.string.txt_sensor_description_mode_rate_slot1);
+        //COLORID SENSORMODE Descriptions
+        sensorValueDescriptions.append(createKey(Sensormode.COLOR_ID,1), getResources().getString(R.string.txt_sensor_description_mode_color_slot1));
 
-        descr_rateAndAngle_slot1 = getResources().getString(R.string.txt_sensor_description_mode_angle_and_rate_slot1);
-        descr_rateAndAngle_slot2 = getResources().getString(R.string.txt_sensor_description_mode_angle_and_rate_slot2);
+        //ANGLE SENSORMODE Descriptions
+        sensorValueDescriptions.append(createKey(Sensormode.ANGLE,1), getResources().getString(R.string.txt_sensor_description_mode_angle_slot1));
 
-        descr_listen_slot1 = getResources().getString(R.string.txt_sensor_description_mode_listen_slot1);
-        descr_distance_slot1 = getResources().getString(R.string.txt_sensor_description_mode_distance_slot1);
-        descr_touch_slot1 = getResources().getString(R.string.txt_sensor_description_mode_touch_slot1);
+        //RATE SENSORMODE Descriptions
+        sensorValueDescriptions.append(createKey(Sensormode.RATE,1), getResources().getString(R.string.txt_sensor_description_mode_rate_slot1));
 
-        descr_seek_slot1 = getResources().getString(R.string.txt_sensor_description_mode_seek_slot1);
-        descr_seek_slot2 = getResources().getString(R.string.txt_sensor_description_mode_seek_slot2);
-        descr_seek_slot3 = getResources().getString(R.string.txt_sensor_description_mode_seek_slot3);
-        descr_seek_slot4 = getResources().getString(R.string.txt_sensor_description_mode_seek_slot4);
+        //RATEANDANGLE SENSORMODE Descriptions
+        sensorValueDescriptions.append(createKey(Sensormode.RATEANDANGLE,1), getResources().getString(R.string.txt_sensor_description_mode_angle_and_rate_slot1));
+        sensorValueDescriptions.append(createKey(Sensormode.RATEANDANGLE,2), getResources().getString(R.string.txt_sensor_description_mode_angle_and_rate_slot2));
 
+        //LISTEN SENSORMODE Descriptions
+        sensorValueDescriptions.append(createKey(Sensormode.LISTEN,1),getResources().getString(R.string.txt_sensor_description_mode_listen_slot1));
+
+        //DISTANCE SENSORMODE Descriptions
+        sensorValueDescriptions.append(createKey(Sensormode.DISTANCE,1), getResources().getString(R.string.txt_sensor_description_mode_distance_slot1));
+
+        //TOUCH SENSORMODE Descriptions
+        sensorValueDescriptions.append(createKey(Sensormode.TOUCH,1),getResources().getString(R.string.txt_sensor_description_mode_touch_slot1));
+
+        //SEEK SENSORMODE Descriptions
+        sensorValueDescriptions.append(createKey(Sensormode.SEEK,1), getResources().getString(R.string.txt_sensor_description_mode_seek_slot1));
+        sensorValueDescriptions.append(createKey(Sensormode.SEEK,2), getResources().getString(R.string.txt_sensor_description_mode_seek_slot2));
+        sensorValueDescriptions.append(createKey(Sensormode.SEEK,3), getResources().getString(R.string.txt_sensor_description_mode_seek_slot3));
+        sensorValueDescriptions.append(createKey(Sensormode.SEEK,4), getResources().getString(R.string.txt_sensor_description_mode_seek_slot4));
+    }
+
+    /**
+     * Creates an Hashcode for the Sensormode and a given Slot.
+     * Key is used to identify the proper description using the {@link #sensorValueDescriptions}
+     * @param mode - sensor mode
+     * @param slot - slot
+     * @return hashcode of mode concatenated with the slot
+     */
+    private int createKey(Sensormode mode, int slot){
+        return new StringBuffer().append(mode.getValue()).append(slot).toString().hashCode();
     }
 
     @Override
@@ -284,149 +287,8 @@ public class SensorObservationFragment extends Fragment implements Observer {
     }
 
     private String getDescriptionText(int slot) {
-        //TODO refactor this method somehow
-        Sensormode mode = sensorListener.getMode();
-
-        if(mode != null) {
-            if (mode.equals(Sensormode.RGB)) {
-                return getRGBDescription(slot);
-            } else if (mode.equals(Sensormode.AMBIENT)) {
-                return getAmbientDescription(slot);
-            } else if (mode.equals(Sensormode.RED)) {
-                return getRedDescription(slot);
-            } else if (mode.equals(Sensormode.COLOR_ID)) {
-                return getColorIdDescription(slot);
-            } else if (mode.equals(Sensormode.ANGLE)) {
-                return getAngleDescription(slot);
-            } else if (mode.equals(Sensormode.RATE)) {
-                return getRateDescription(slot);
-            } else if (mode.equals(Sensormode.RATEANDANGLE)) {
-                return getRateAndAngleDescription(slot);
-            } else if (mode.equals(Sensormode.LISTEN)) {
-                return getListenDescription(slot);
-            } else if (mode.equals(Sensormode.DISTANCE)) {
-                return getDistanceDescription(slot);
-            } else if (mode.equals(Sensormode.TOUCH)) {
-                return getTouchDescription(slot);
-            } else if (mode.equals(Sensormode.SEEK)) {
-                return getSeekDescription(slot);
-            }
-        }
-        return descr_nothing;
+        return sensorValueDescriptions.get(createKey(sensorListener.getMode(), slot));
     }
-
-
-    private String getRGBDescription(int slot) {
-        switch (slot) {
-            case 1:
-                return descr_rgb_slot1;
-            case 2:
-                return descr_rgb_slot2;
-            case 3:
-                return descr_rgb_slot3;
-            default:
-                return descr_nothing;
-        }
-    }
-
-    private String getAmbientDescription(int slot) {
-        switch (slot) {
-            case 1:
-                return descr_ambient_slot1;
-            default:
-                return descr_nothing;
-        }
-    }
-
-    private String getRedDescription(int slot) {
-        switch (slot) {
-            case 1:
-                return descr_red_slot1;
-            default:
-                return descr_nothing;
-        }
-    }
-
-    private String getColorIdDescription(int slot) {
-        switch (slot) {
-            case 1:
-                return descr_color_slot1;
-            default:
-                return descr_nothing;
-        }
-    }
-
-    private String getAngleDescription(int slot) {
-        switch (slot) {
-            case 1:
-                return descr_angle_slot1;
-            default:
-                return descr_nothing;
-        }
-    }
-
-    private String getRateDescription(int slot) {
-        switch (slot) {
-            case 1:
-                return descr_rate_slot1;
-            default:
-                return descr_nothing;
-        }
-    }
-
-    private String getRateAndAngleDescription(int slot) {
-        switch (slot) {
-            case 1:
-                return descr_rateAndAngle_slot1;
-            case 2:
-                return descr_rateAndAngle_slot2;
-            default:
-                return descr_nothing;
-        }
-    }
-
-    private String getListenDescription(int slot) {
-        switch (slot) {
-            case 1:
-                return descr_listen_slot1;
-            default:
-                return descr_nothing;
-        }
-    }
-
-    private String getDistanceDescription(int slot) {
-        switch (slot) {
-            case 1:
-                return descr_distance_slot1;
-            default:
-                return descr_nothing;
-        }
-    }
-
-    private String getTouchDescription(int slot) {
-        switch (slot) {
-            case 1:
-                return descr_touch_slot1;
-            default:
-                return descr_nothing;
-        }
-    }
-
-    private String getSeekDescription(int slot) {
-        switch (slot) {
-            case 1:
-                return descr_seek_slot1;
-            case 2:
-                return descr_seek_slot2;
-            case 3:
-                return descr_seek_slot3;
-            case 4:
-                return descr_seek_slot4;
-            default:
-                return descr_nothing;
-        }
-    }
-
 
     private void setTextViewVisibility(int size){
         switch(size){

@@ -250,7 +250,6 @@ public class SensorObservationFragment extends Fragment implements Observer {
     }
 
     private void updateTextViewsText(int size){
-
         if(size >= 1) {
             txt_view_slot1_description.setText(getDescriptionText(1));
             txt_view_slot1_value.setText(String.format("%1$g",sensorListener.getValue(0)));
@@ -279,14 +278,15 @@ public class SensorObservationFragment extends Fragment implements Observer {
             txt_view_slot4_description.setText(getDescriptionText(4));
             txt_view_slot4_value.setText(String.format("%1$g",sensorListener.getValue(3)));
         }else{
-            txt_view_slot3_description.setText(descr_nothing);
-            txt_view_slot3_value.setText(descr_nothing);
+            txt_view_slot4_description.setText(descr_nothing);
+            txt_view_slot4_value.setText(descr_nothing);
         }
     }
 
     private String getDescriptionText(int slot) {
         //TODO refactor this method somehow
         Sensormode mode = sensorListener.getMode();
+
         if(mode != null) {
             if (mode.equals(Sensormode.RGB)) {
                 return getRGBDescription(slot);
@@ -314,6 +314,7 @@ public class SensorObservationFragment extends Fragment implements Observer {
         }
         return descr_nothing;
     }
+
 
     private String getRGBDescription(int slot) {
         switch (slot) {

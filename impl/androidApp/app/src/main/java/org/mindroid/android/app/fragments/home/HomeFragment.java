@@ -152,7 +152,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         infoTetheringNotActiavted = getResources().getString(R.string.info_txt_msg_activate_tetherting);
         infoUsbNotFound = getResources().getString(R.string.info_txt_msg_activate_usb_not_found);
         txt_btn_DisConnect_connect = getResources().getString(R.string.txt_btn_DisConnect_connect);
-        txt_btn_DisConnect_disconnect = getResources().getString(R.string.txt_btn_DisConnect_disconnect);;
+        txt_btn_DisConnect_disconnect = getResources().getString(R.string.txt_btn_DisConnect_disconnect);
+
     }
 
     @Override

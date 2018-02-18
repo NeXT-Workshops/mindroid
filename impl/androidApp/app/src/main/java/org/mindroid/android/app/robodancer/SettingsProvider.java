@@ -153,28 +153,30 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
 
     /**
      * Loads the Hardware Port Configuration of the Robot and sets it.
+     * Config is stored in the SharedPreferences, if element is not there it will be set to notDefined ("-")
+     * Therefore also sets the Default setup at the first start of the app
      */
     public void loadRobotPortConfiguration() {
         if(portConfigProperties != null) {
             //--SENSORS--
             //Sensor - S1
-            sensorS1 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSOR_S1), HardwareMapping.notDefined);
-            sensorModeS1 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSORMODE_S1), HardwareMapping.notDefined);
+            sensorS1 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSOR_S1), DefaultRobotPortConfig.SENSOR_S1);
+            sensorModeS1 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSORMODE_S1), DefaultRobotPortConfig.SENSORMODE_S1);
             //Sensor - S2
-            sensorS2 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSOR_S2), HardwareMapping.notDefined);
-            sensorModeS2 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSORMODE_S2), HardwareMapping.notDefined);
+            sensorS2 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSOR_S2), DefaultRobotPortConfig.SENSOR_S2);
+            sensorModeS2 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSORMODE_S2), DefaultRobotPortConfig.SENSORMODE_S2);
             //Sensor - S3
-            sensorS3 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSOR_S3), HardwareMapping.notDefined);
-            sensorModeS3 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSORMODE_S3), HardwareMapping.notDefined);
+            sensorS3 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSOR_S3), DefaultRobotPortConfig.SENSOR_S3);
+            sensorModeS3 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSORMODE_S3), DefaultRobotPortConfig.SENSORMODE_S3);
             //Sensor - S4
-            sensorS4 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSOR_S4), HardwareMapping.notDefined);
-            sensorModeS4 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSORMODE_S4), HardwareMapping.notDefined);
+            sensorS4 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSOR_S4), DefaultRobotPortConfig.SENSOR_S4);
+            sensorModeS4 = portConfigProperties.getString(resources.getString(R.string.KEY_SENSORMODE_S4), DefaultRobotPortConfig.SENSORMODE_S4);
 
             //--MOTORS--
-            motorA = portConfigProperties.getString(resources.getString(R.string.KEY_MOTOR_A), HardwareMapping.notDefined);
-            motorB = portConfigProperties.getString(resources.getString(R.string.KEY_MOTOR_B), HardwareMapping.notDefined);
-            motorC = portConfigProperties.getString(resources.getString(R.string.KEY_MOTOR_C), HardwareMapping.notDefined);
-            motorD = portConfigProperties.getString(resources.getString(R.string.KEY_MOTOR_D), HardwareMapping.notDefined);
+            motorA = portConfigProperties.getString(resources.getString(R.string.KEY_MOTOR_A), DefaultRobotPortConfig.MOTOR_A);
+            motorB = portConfigProperties.getString(resources.getString(R.string.KEY_MOTOR_B), DefaultRobotPortConfig.MOTOR_B);
+            motorC = portConfigProperties.getString(resources.getString(R.string.KEY_MOTOR_C), DefaultRobotPortConfig.MOTOR_C);
+            motorD = portConfigProperties.getString(resources.getString(R.string.KEY_MOTOR_D), DefaultRobotPortConfig.MOTOR_D);
 
         }else{
             //TODO errorhandling

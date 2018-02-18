@@ -12,47 +12,44 @@ import static org.mindroid.common.messages.hardware.Sensors.*;
 
 public class HardwareMapping {
 
-    private static boolean isMappingInitialized = false;
     private static HashMap<String,Motors> motorMapping;
     private static HashMap<String,Sensors> sensorMapping;
     private static HashMap<String,Sensormode> modeMapping;
 
     public static String notDefined = "-";
 
-    private static void initMapping() {
-        if(!isMappingInitialized){
-            //Motors
-            motorMapping = new HashMap(3);
-            motorMapping.put(notDefined,null);
-            motorMapping.put(Motors.LargeRegulatedMotor.getName(),Motors.LargeRegulatedMotor);
-            motorMapping.put(Motors.MediumRegulatedMotor.getName(),Motors.MediumRegulatedMotor);
+    //TODO Refactor -> put code of initMapping in a static{} block - remove boolean 'isMappingInitialized' and method
 
-            //Sensors
-            sensorMapping = new HashMap(6);
-            sensorMapping.put(notDefined,null);
-            sensorMapping.put(EV3ColorSensor.getName(),EV3ColorSensor);
-            sensorMapping.put(EV3UltrasonicSensor.getName(),EV3UltrasonicSensor);
-            sensorMapping.put(EV3TouchSensor.getName(),EV3TouchSensor);
-            sensorMapping.put(EV3GyroSensor.getName(),EV3GyroSensor);
-            sensorMapping.put(EV3IRSensor.getName(),EV3IRSensor);
+    static {
+        //Motors
+        motorMapping = new HashMap(3);
+        motorMapping.put(notDefined,null);
+        motorMapping.put(Motors.LargeRegulatedMotor.getName(),Motors.LargeRegulatedMotor);
+        motorMapping.put(Motors.MediumRegulatedMotor.getName(),Motors.MediumRegulatedMotor);
 
-            //Sensormodes
-            modeMapping = new HashMap(12);
-            modeMapping.put(notDefined,null);
-            modeMapping.put(Sensormode.RED.getValue(), Sensormode.RED);
-            modeMapping.put(Sensormode.AMBIENT.getValue(),Sensormode.AMBIENT);
-            modeMapping.put(Sensormode.COLOR_ID.getValue(),Sensormode.COLOR_ID);
-            modeMapping.put(Sensormode.RGB.getValue(),Sensormode.RGB);
-            modeMapping.put(Sensormode.DISTANCE.getValue(),Sensormode.DISTANCE);
-            modeMapping.put(Sensormode.LISTEN.getValue(),Sensormode.LISTEN);
-            modeMapping.put(Sensormode.SEEK.getValue(),Sensormode.SEEK);
-            modeMapping.put(Sensormode.ANGLE.getValue(),Sensormode.ANGLE);
-            modeMapping.put(Sensormode.RATE.getValue(), Sensormode.RATE);
-            modeMapping.put(Sensormode.RATEANDANGLE.getValue(),Sensormode.RATEANDANGLE);
-            modeMapping.put(Sensormode.TOUCH.getValue(),Sensormode.TOUCH);
+        //Sensors
+        sensorMapping = new HashMap(6);
+        sensorMapping.put(notDefined,null);
+        sensorMapping.put(EV3ColorSensor.getName(),EV3ColorSensor);
+        sensorMapping.put(EV3UltrasonicSensor.getName(),EV3UltrasonicSensor);
+        sensorMapping.put(EV3TouchSensor.getName(),EV3TouchSensor);
+        sensorMapping.put(EV3GyroSensor.getName(),EV3GyroSensor);
+        sensorMapping.put(EV3IRSensor.getName(),EV3IRSensor);
 
-            isMappingInitialized = true;
-        }
+        //Sensormodes
+        modeMapping = new HashMap(12);
+        modeMapping.put(notDefined,null);
+        modeMapping.put(Sensormode.RED.getValue(), Sensormode.RED);
+        modeMapping.put(Sensormode.AMBIENT.getValue(),Sensormode.AMBIENT);
+        modeMapping.put(Sensormode.COLOR_ID.getValue(),Sensormode.COLOR_ID);
+        modeMapping.put(Sensormode.RGB.getValue(),Sensormode.RGB);
+        modeMapping.put(Sensormode.DISTANCE.getValue(),Sensormode.DISTANCE);
+        modeMapping.put(Sensormode.LISTEN.getValue(),Sensormode.LISTEN);
+        modeMapping.put(Sensormode.SEEK.getValue(),Sensormode.SEEK);
+        modeMapping.put(Sensormode.ANGLE.getValue(),Sensormode.ANGLE);
+        modeMapping.put(Sensormode.RATE.getValue(), Sensormode.RATE);
+        modeMapping.put(Sensormode.RATEANDANGLE.getValue(),Sensormode.RATEANDANGLE);
+        modeMapping.put(Sensormode.TOUCH.getValue(),Sensormode.TOUCH);
     }
 
     /**
@@ -61,7 +58,6 @@ public class HardwareMapping {
      * @return Enum of mapped Sensormode
      */
     public static Sensormode getSensorMode(String key_mode){
-        initMapping();
         return modeMapping.get(key_mode);
     }
 
@@ -71,7 +67,6 @@ public class HardwareMapping {
      * @return Enum of mapped Sensor
      */
     public static Sensors getSensorType(String key_type){
-        initMapping();
         return sensorMapping.get(key_type);
     }
 
@@ -81,7 +76,6 @@ public class HardwareMapping {
      * @return Enum of mapped Motor
      */
     public static Motors getMotorType(String key_type){
-        initMapping();
         return motorMapping.get(key_type);
     }
 

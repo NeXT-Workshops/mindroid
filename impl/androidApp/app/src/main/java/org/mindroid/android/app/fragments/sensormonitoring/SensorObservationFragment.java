@@ -285,7 +285,7 @@ public class SensorObservationFragment extends Fragment implements Observer {
     }
 
     private String getDescriptionText(int slot) {
-        System.out.println("Descriptionsize slot "+slot);
+        //TODO refactor this method somehow
         Sensormode mode = sensorListener.getMode();
         if(mode != null) {
             if (mode.equals(Sensormode.RGB)) {

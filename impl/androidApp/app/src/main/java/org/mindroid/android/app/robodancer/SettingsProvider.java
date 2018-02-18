@@ -82,6 +82,11 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
             "Max", "Henry", "Oskar", "Emil", "Liam"
     );
 
+    private static final List<String> DEFAULT_GROUP_NAMES = Arrays.asList(
+            "Red", "Green", "Blue", "Yellow", "Pink",
+            "Purple", "Orange"
+    );
+
 
     private SettingsProvider() {
 
@@ -113,9 +118,14 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     }
 
     public String generateUniqueRobotName() {
-        // getResources().getString(R.string.DEFAULT_ROBOT_ID);
         final int seed = androidId.hashCode();
         final String selectedName = DEFAULT_NAMES.get(new Random(seed).nextInt(DEFAULT_NAMES.size()));
+        return selectedName;
+    }
+
+    public String generateUniqueGroupName() {
+        final int seed = androidId.hashCode();
+        final String selectedName = DEFAULT_GROUP_NAMES.get(new Random(seed).nextInt(DEFAULT_GROUP_NAMES.size()));
         return selectedName;
     }
 
@@ -124,11 +134,11 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
         if (connectionProperties != null) {
             String savedVal;
             if(!MainActivity.robot.isMessengerConnected()) {
-                savedVal = connectionProperties.getString(resources.getString(R.string.KEY_ROBOT_ID), resources.getString(R.string.DEFAULT_ROBOT_ID));
-                SettingsProvider.getInstance().robotID = ((savedVal.isEmpty()) ? SettingsProvider.getInstance().generateUniqueRobotName() : savedVal);
+                savedVal = connectionProperties.getString(resources.getString(R.string.KEY_ROBOT_ID), SettingsProvider.getInstance().generateUniqueRobotName());
+                SettingsProvider.getInstance().robotID = savedVal;
 
-                savedVal = connectionProperties.getString(resources.getString(R.string.KEY_GROUP_ID), resources.getString(R.string.DEFAULT_GROUP_ID));
-                SettingsProvider.getInstance().groupID = ((savedVal.isEmpty()) ? resources.getString(R.string.KEY_GROUP_ID) : savedVal);
+                savedVal = connectionProperties.getString(resources.getString(R.string.KEY_GROUP_ID), generateUniqueGroupName());
+                SettingsProvider.getInstance().groupID = savedVal;
             }
 
             savedVal = connectionProperties.getString(resources.getString(R.string.KEY_EV3_IP), resources.getString(R.string.DEFAULT_EV3_BRICK_IP));

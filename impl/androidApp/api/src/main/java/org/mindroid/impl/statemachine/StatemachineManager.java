@@ -214,16 +214,11 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
      * @param sm - The Statemachine which should be executed
      */
     private synchronized void startStatemachine(final IStatemachine sm){
-        System.out.println ("## startStatemachines(IStatemachine sm) called with --> sm-id: "+sm.getID());
-        System.out.println("isAtive:"+sm.isActive());
-        System.out.println("SM.ToString"+ sm.toString());
         if(sm instanceof ImperativeStatemachine){
             ((ImperativeStatemachine)sm).setInterrupted(false);
         }
 
         if(!sm.isActive()) { //If sm is not active already --> start statemachine
-            System.out.println ("## The Statemachine is not active already and will be started --> sm-id: "+sm.getID());
-
             final Runnable runSM = new Runnable() {
                 @Override
                 public void run() {
@@ -232,21 +227,16 @@ public class StatemachineManager implements ISatisfiedConstraintHandler {
                         Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Start Statemachine: " + sm.getID());
                         Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Current State: " + sm.getStartState().getName());
                     }
-                    System.out.print("[Statemachine-Thread][StatemachineID: "+sm.getID()+"] Step 1");
                     currentStates.put(sm.getID(), sm.getStartState());
                     RobotContextStateManager.getInstance().cleanContextState();
                     subscribeConstraints(sm.getID());
                     handleTimeEventScheduling(sm.getID());
-                    System.out.print("[Statemachine-Thread][StatemachineID: "+sm.getID()+"] Step 2");
                     //Set Start Conditions
                     StartCondition.getInstance().setStateActiveTime(System.currentTimeMillis());
                     RobotContextStateManager.getInstance().setGyroSensorStartCondition();
-
                     runningStatemachines.put(sm.getID(), sm);
-                    System.out.print("[Statemachine-Thread][StatemachineID: "+sm.getID()+"] Step 3");
                     try {
                         sm.start();
-                        System.out.print("[Statemachine-Thread][StatemachineID: "+sm.getID()+"] Statemachine started");
                     } catch (NoStartStateException e) {
                         ErrorHandlerManager.getInstance().handleError(e,StatemachineManager.class,sm.getID());
                     } catch(Exception e){

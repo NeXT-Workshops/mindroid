@@ -6,6 +6,9 @@ import org.mindroid.impl.statemachine.StatemachineCollection;
 
 /**
  * Created by Torbe on 03.05.2017.
+ *
+ * Can contain multiple Parallel or single running Statemachines in its StatemachineCollection.
+ * Parallel groups or single Statemachines can be identified using their GroupID.
  */
 public abstract class StatemachineAPI extends BasicAPI implements IMindroidMain {
 
@@ -39,7 +42,6 @@ public abstract class StatemachineAPI extends BasicAPI implements IMindroidMain 
         getMotorProvider().getMotor(EV3PortIDs.PORT_D).forward();
         getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(50);
         getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(50);
-
     }
 
     /**

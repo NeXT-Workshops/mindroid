@@ -8,7 +8,7 @@ import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 /**
  * Created by Felicia Ruppel on 09.05.17.
  */
-
+@Deprecated //Not in use anymore as this got replaced by ImperativeAPI
 public class BooleanStatemachine extends Statemachine {
 
     private boolean result;

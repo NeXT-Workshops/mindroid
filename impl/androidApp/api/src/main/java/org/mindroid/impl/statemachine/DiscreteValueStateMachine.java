@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by Felicia Ruppel on 09.05.17.
  */
-
+@Deprecated //Not in use anymore as this got replaced by ImperativeAPI
 public class DiscreteValueStateMachine extends Statemachine {
     private float result;
     public DiscreteValueStateMachine(String ID, SimpleEV3SensorProperty property, final float[] values) {

@@ -150,7 +150,7 @@ public class DifferentialPilot implements IDifferentialPilot {
             return;
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true);
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,false);
     }
 
 

@@ -66,7 +66,7 @@ public interface IDifferentialPilot {
 
     /**
      * Both motors will be set in flt mode.
-     * Motors are synchronized and method is blocking
+     * Motors are synchronized and method is unblocking
      */
     void flt();
 

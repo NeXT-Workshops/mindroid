@@ -5,14 +5,14 @@ import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.statemachine.StatemachineCollection;
 
 /**
- * Created by Torbe on 03.05.2017.
+ * Created by Torben on 03.05.2017.
  *
  * Can contain multiple Parallel or single running Statemachines in its StatemachineCollection.
  * Parallel groups or single Statemachines can be identified using their GroupID.
  */
-public abstract class StatemachineAPI extends BasicAPI implements IMindroidMain {
+public class StatemachineAPI extends BasicAPI implements IMindroidMain {
 
-    /*
+/*
  * TODO@revise: Required improvements
  *   Could we create a new subtype of "IMotor"?
  * * Consistency: There is forward(); delay(...); but turnRight() and turnRight(time);
@@ -27,6 +27,10 @@ public abstract class StatemachineAPI extends BasicAPI implements IMindroidMain 
 
     public final StatemachineCollection statemachineCollection = new StatemachineCollection();
 
+    @Override
+    protected void accept(AbstractImplVisitor visitor) {
+        visitor.visit(this);
+    }
 
     @Override
     public final StatemachineCollection getStatemachineCollection() {

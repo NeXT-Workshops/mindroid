@@ -165,7 +165,7 @@ public class SensorObservationFragment extends Fragment implements Observer {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sensor_observation, container, false);
 
-        //reset sensor listener
+        //stopAllMotors sensor listener
         sensorListener.reset();
 
         //Get UI

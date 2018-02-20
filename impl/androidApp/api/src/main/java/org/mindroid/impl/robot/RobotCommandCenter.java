@@ -1,7 +1,11 @@
 package org.mindroid.impl.robot;
 
 
+import org.mindroid.api.BasicAPI;
+import org.mindroid.api.ExecutorProvider;
+import org.mindroid.api.IExecutor;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
+import org.mindroid.impl.ImplementationDB;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 
@@ -14,6 +18,16 @@ import java.io.IOException;
  * Created by torben on 02.03.2017.
  */
 public class RobotCommandCenter implements IRobotCommandCenter {
+
+    //Contains all Implementations, which can be executed
+    private ImplementationDB db;
+
+    //Provides the Executor for both API styles (Statemachines, Imperative) to execute an implementation
+    private ExecutorProvider execProv;
+
+    //Field for the ImperativeExecutor
+    private IExecutor executor;
+
 
     /**
      * The Robot Object this RommandCenter is observing
@@ -29,39 +43,37 @@ public class RobotCommandCenter implements IRobotCommandCenter {
 
     public RobotCommandCenter(Robot robot){
         this.robot = robot;
+        this.execProv = new ExecutorProvider();
+        this.db = new ImplementationDB();
+    }
+
+    /**
+     * Adds an Implementation to the Database of this RobotCommandCenter
+     *
+     * @param implementation - an implementation
+     */
+    @Override
+    public void addImplementation(BasicAPI implementation){
+        db.addImplementation(implementation);
     }
 
     @Override
-    public void startStatemachine(String id) {
-        robot.getStatemachineManager().startStatemachines(id);
+    public void startImplementation(String id) {
+        //TODO make sure that currently no statemachine is running
+        if(executor == null || db.contains(id) && !executor.isRunning()) {
+            executor = execProv.getExecutor(db.getImplementation(id));
+            executor.start();
+        }else{
+            Exception e = new IllegalArgumentException("[RobotCommandCenter] The DB does not contain an Statemachine with the ID "+id);
+            ErrorHandlerManager.getInstance().handleError(e,RobotCommandCenter.class,e.getMessage());
+        }
     }
 
     @Override
-    public void stopStatemachine(String id) {
-        robot.getStatemachineManager().stopStatemachines(id);
-        robot.getBrick().resetBrickState();
-    }
-
-    @Override
-    public String[] getStatemachines() {
-        String[] IDsOfStatemachines = (String[]) robot.getStatemachineManager().getStatemachineIDs().toArray();
-        return IDsOfStatemachines;
-    }
-
-    @Override
-    public void startImperativeImplemenatation(String id) {
-        robot.getImperativeImplManager().startImperativeImplementation(id);
-    }
-
-    @Override
-    public void stopImperativeImplementation(String id) {
-        robot.getImperativeImplManager().stopImperativeImplementation(id);
-        robot.getBrick().resetBrickState();
-    }
-
-    @Override
-    public String[] getImperativeImplementations() {
-        return robot.getImperativeImplManager().getImperativeImplIDs();
+    public void stopImplementation() {
+        if(executor != null && executor.isRunning()){
+            executor.stop();
+        }
     }
 
     @Override
@@ -89,11 +101,7 @@ public class RobotCommandCenter implements IRobotCommandCenter {
 
     @Override
     public boolean isConnectedToBrick() {
-        if(robot.getRobotConfigurator() != null && robot.getRobotConfigurator().getBrick() != null) {
-            return robot.getRobotConfigurator().getBrick().isConnected();
-        }else{
-            return false;
-        }
+        return robot.getRobotConfigurator() != null && robot.getRobotConfigurator().getBrick() != null && robot.getRobotConfigurator().getBrick().isConnected();
     }
 
     @Override

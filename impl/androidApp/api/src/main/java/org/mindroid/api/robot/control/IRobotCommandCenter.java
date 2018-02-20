@@ -1,5 +1,6 @@
 package org.mindroid.api.robot.control;
 
+import org.mindroid.api.BasicAPI;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 
@@ -68,46 +69,22 @@ public interface IRobotCommandCenter {
      */
     void disconnectMessenger();
 
-
-    //public IRobotState getRobotState(); TODO: May return the current State of the robot
-
-    // ------ Controlling of the Statemachine Engine ------
     /**
-     * Start a statemachine with the given ID.
-     * @param id - unique id identifiying the statemachine to run
+     * Add an implementation to the CommandCenter
+     *
+     * @param implementation - an implementation
      */
-    void startStatemachine(String id);
+    void addImplementation(BasicAPI implementation);
 
     /**
-     * Stop a statemachine with the given ID.
-     * @param id - unique id identifiying the statemachine to stop
+     * Starts an Implementation Imperative/Statemachine identified by the given ID.
+     *
+     * @param id -
      */
-    void stopStatemachine(String id);
+    void startImplementation(String id);
 
     /**
-     * Get all registered Statemachines by ther IDs
-     * @return String of the Statemachine IDs
+     * Stops the currently Running implementation
      */
-    String[] getStatemachines();
-
-    // ------ Controlling the Imperative Engine ------
-
-    /**
-     * Starts executing the Implementation with the given ID
-     * @param id - unique id identifiying the imperative implementation to start
-     */
-    void startImperativeImplemenatation(String id);
-
-    /**
-     * Stops executing the Implementation with the given ID
-     * @param id - unique id identifiying the imperative implementation to stop
-     */
-    void stopImperativeImplementation(String id);
-
-    /**
-     * Returns all registered Imperative Implementations IDs
-     * @return Array of IDs of registered Imperative Implementations
-     */
-    String[] getImperativeImplementations();
-
+    void stopImplementation();
 }

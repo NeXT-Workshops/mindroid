@@ -1,39 +1,26 @@
 package org.mindroid.android.app.serviceloader;
 
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import dalvik.system.DexClassLoader;
-import dalvik.system.DexFile;
-import dalvik.system.PathClassLoader;
+import org.mindroid.api.StatemachineAPI;
 import org.mindroid.api.statemachine.IMindroidMain;
 import org.mindroid.impl.statemachine.StatemachineCollection;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.*;
 
 /**
  * Created by torben on 14.08.2017.
  */
+//TODO Merge StatemachineIimpl and ImperativeImpl service class, only look for BasicAPI, the rest will be done in the background
 public class StatemachineService {
     private static StatemachineService ourInstance = new StatemachineService();
 
-    //ServiceLoader loads all classed containing and returning Statemachine Implementations.
-    private ServiceLoader<IMindroidMain> statemachineLoader;
-
-    private ArrayList<StatemachineCollection> scs = new ArrayList<>();
-
-    private final String statemachineSourcePath = "org.mindroid.android.app.statemachinesimpl";
+    private ArrayList<StatemachineAPI> statemachineAPIs = new ArrayList<>();
 
     private String[] foundClasses = {
             "org.mindroid.android.app.statemachinesimpl.SensorMonitoring",
-            /*"org.mindroid.android.app.statemachinesimpl.MindroidStatemachines"*/
+            "org.mindroid.android.app.statemachinesimpl.MindroidStatemachines"
     };
 
-    private final String apkPath = "/data/app/";
 
     /** Has to be set by activity **/
     public static PackageManager packageManager;
@@ -43,17 +30,12 @@ public class StatemachineService {
     }
 
     private void findStatemachineImplementations(){
-        //getClassURLs();
-        //System.out.println("#########################################################");
-        //Package aPackage = Package.getPackage(statemachineSourcePath);
-        //System.out.println("Packagename: "+aPackage.getName());
-        //TODO find classes dynamicially
-
+        //TODO find classes dynamicially and by itsself without defining them in a foundClasses array?!
 
         for (String classname : foundClasses) {
-            IMindroidMain mindroid = loadMindroidMainClass(classname);
-            if(mindroid != null) {
-                addStatemachineCollection(mindroid.getStatemachineCollection());
+            StatemachineAPI smAPI = loadMindroidMainClass(classname);
+            if(smAPI != null) {
+                addStatemachineAPI(smAPI);
             }
         }
 
@@ -64,21 +46,21 @@ public class StatemachineService {
      * @param classname e.g. "android.app.NotificationManager"
      * @return class implementing the interface IMindroidMain
      */
-    private IMindroidMain loadMindroidMainClass(String classname){
+    private StatemachineAPI loadMindroidMainClass(String classname){
         try {
-            IMindroidMain mindroidMain = null;
+            StatemachineAPI smAPI = null;
             Class cls = Class.forName(classname);
             try {
-                if(cls.newInstance() instanceof IMindroidMain){
-                    mindroidMain = (IMindroidMain) cls.newInstance();
+                if(cls.newInstance() instanceof StatemachineAPI){
+                    smAPI = (StatemachineAPI) cls.newInstance();
                 }
             }catch(ClassCastException cce){
                 //Not the class i was looking for
                 return null;
             }
 
-            if(mindroidMain != null){
-                return mindroidMain;
+            if(smAPI != null){
+                return smAPI;
             }
 
         } catch (ClassNotFoundException e) {
@@ -91,33 +73,20 @@ public class StatemachineService {
         return null;
     }
 
-    private void addStatemachineCollection(StatemachineCollection sc){
-        scs.add(sc);
-    }
-
-    private void extractStatemachinesFromCollections(){
-        if(statemachineLoader.iterator() != null) {
-            Iterator<IMindroidMain> it = statemachineLoader.iterator();
-            StatemachineCollection sc;
-
-            while (it.hasNext()) {
-                sc = it.next().getStatemachineCollection();
-                scs.add(sc);
-            }
-        }
+    private void addStatemachineAPI(StatemachineAPI smAPI){
+        statemachineAPIs.add(smAPI);
     }
 
 
-
-    public ArrayList<StatemachineCollection> getStatemachineCollections() {
-        return scs;
+    public ArrayList<StatemachineAPI> getStatemachineAPIs() {
+        return statemachineAPIs;
     }
 
     public ArrayList<String> getStatemachineCollectionIDs(){
         ArrayList<String> ids = new ArrayList<String>();
 
-        for (int i = 0; i < scs.size(); i++) {
-            for(String id : scs.get(i).getStatemachineKeySet()){
+        for (int i = 0; i < statemachineAPIs.size(); i++) {
+            for(String id : statemachineAPIs.get(i).getStatemachineCollection().getStatemachines().keySet()){
                 ids.add(id);
             }
         }
@@ -129,14 +98,4 @@ public class StatemachineService {
         return ourInstance;
     }
 
-    public String getStatemachineSourcePath(){
-        /*URL main = StatemachineService.class.getResource(StatemachineService.class.getCanonicalName());
-        String path = main.getPath();
-        System.out.println("PATH: "+path);*/
-        return "org.mindroid.android.app.statemachinesimpl.";
-    }
-
-    private class StatemachineClassLoader extends ClassLoader{
-
-    }
 }

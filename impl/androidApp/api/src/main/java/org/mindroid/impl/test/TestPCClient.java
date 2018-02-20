@@ -1,5 +1,7 @@
 package org.mindroid.impl.test;
 
+import org.mindroid.api.ExecutorProvider;
+import org.mindroid.api.IExecutor;
 import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.api.StatemachineAPI;
 import org.mindroid.api.ev3.EV3StatusLightColor;
@@ -65,11 +67,11 @@ public class TestPCClient{
                 Thread.sleep(10000);
                 System.out.println("[TestRobot:PC-Client] initialized!");
 
-                commandCenter.startImperativeImplemenatation(impID);
+                commandCenter.startImplementation(impID);
 
                 Thread.sleep(20000);
 
-                commandCenter.stopStatemachine(TestPCClient.sm.getID());
+                commandCenter.stopImplementation();
 
             } catch (StateAlreadyExistsException stateAlreadyExists) {
                 stateAlreadyExists.printStackTrace();
@@ -96,13 +98,13 @@ public class TestPCClient{
             roFactory.setBrickIP(brickIP);
             roFactory.setBrickTCPPort(NetworkPortConfig.BRICK_PORT);
             roFactory.setRobotID(robotID);
-            roFactory.addImperativeImplementation(new TestImperativeImpl());
-
-            //Add Statemachines
-            roFactory.addStatemachine(statemachineCollection);
 
             //Create Robot
             commandCenter = roFactory.createRobot(false);
+
+            commandCenter.addImplementation(new TestImperativeImpl());
+
+            //commandCenter.addImplementation(statemachineCollection); Needs to be an StatemachineAPI containing the Collection
 
             //connnect messenger
             commandCenter.connectMessenger(msgServerIP,SERVER_PORT);
@@ -226,6 +228,7 @@ public class TestPCClient{
 
             return sm;
         }
+
 
     }
 

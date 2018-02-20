@@ -175,7 +175,7 @@ public class SettingsFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        //reset
+        //stopAllMotors
         hasChanged = false;
 
         if (context instanceof OnFragmentInteractionListener) {

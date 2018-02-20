@@ -4,6 +4,7 @@ import org.mindroid.api.ImperativeAPI;
 
 import java.util.ArrayList;
 
+//TODO Merge StatemachineImpl- and ImperativeImpl- service class, only look for BasicAPI, the rest will be done in the background
 public class ImperativeImplService {
     private static ImperativeImplService ourInstance = new ImperativeImplService();
 
@@ -16,7 +17,7 @@ public class ImperativeImplService {
     // Array with Implementations to load
     private String[] foundClasses = {
             // Dev
-            /*
+
             "org.mindroid.android.app.imperativeimpl.RectangleDriver",
             "org.mindroid.android.app.imperativeimpl.RectangleDriver3",
             "org.mindroid.android.app.imperativeimpl.RectangleDriver2",
@@ -28,10 +29,11 @@ public class ImperativeImplService {
             "org.mindroid.android.app.imperativeimpl.ImpSingleWallPingPong",
             "org.mindroid.android.app.imperativeimpl.TestMessageAccess",
             "org.mindroid.android.app.imperativeimpl.MessageTest"
-            */
+
 
             
             // Stubs for Workshop
+            /*
             "org.mindroid.android.app.workshopimpl.HelloWorld",
             "org.mindroid.android.app.workshopimpl.HelloDate",
             "org.mindroid.android.app.workshopimpl.DriveSquare",
@@ -44,7 +46,7 @@ public class ImperativeImplService {
             "org.mindroid.android.app.workshopimpl.LawnMower",
             "org.mindroid.android.app.workshopimpl.Platooning",
             "org.mindroid.android.app.workshopimpl.Follow"                                                                          
-
+            */
             // Solutions for Workshop
             /*
             "org.mindroid.android.app.workshopSolutions.HelloWorld",

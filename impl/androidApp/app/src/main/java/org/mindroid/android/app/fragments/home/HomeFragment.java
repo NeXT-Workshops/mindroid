@@ -501,6 +501,9 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     }
 
     public ArrayAdapter<String> getImplementationIDAdapter() {
+        //TODO refactor as the ImplementationIDs can be accessed another way using the RobotCommandCenter
+
+
         //Add Statemachine ids to Dropdown-ui
         ArrayList<String> imperativeImplIDs = ImperativeImplService.getInstance().getImperativeImplIDs();
         ArrayList<String>  statemachineIDs = StatemachineService.getInstance().getStatemachineCollectionIDs();
@@ -662,6 +665,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         protected Boolean doInBackground(String... params) {
 
             //Creates the Robot
+            //TODO Try to call the createRobot method somewhere else, and only create a Robot if the Configuration/Settings have changed.
             boolean createRobot = createRobot();
 
             //Messenger Client Task - messenger connects to messageserver

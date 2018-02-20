@@ -682,7 +682,7 @@ public class MindroidStatemachines extends StatemachineAPI {
     }
 
     public IStatemachine wallPingPong() {
-        IStatemachine sm = new Statemachine("SingleWallPingPong");
+        IStatemachine sm = new Statemachine("SingleWallPingPongSM");
 
         IState state_forward = new State("Forward") {
             @Override
@@ -697,9 +697,6 @@ public class MindroidStatemachines extends StatemachineAPI {
                 getMotorProvider().getSynchronizedMotors().executeSynchronizedOperation(forwardOp, noOp,noOp,forwardOp,false);
 
                 setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
-
-
-
             }
         };
 

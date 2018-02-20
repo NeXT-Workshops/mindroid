@@ -24,14 +24,6 @@ public interface IRobotFactory {
 
     IRobotCommandCenter getRobotCommandCenter();
 
-    // ------- Statemachine Enginge Initialization -------
-
-    void addStatemachine(StatemachineCollection statemachines);
-
-    // ------- Imperative Engine Initialization -------
-
-    void addImperativeImplementation(ImperativeAPI imperativeImplementation);
-
     // ------- Controlling ------- //TODO Maybe move some of them to the RobotCommandCenter
 
     void registerSensorListener(EV3PortID port, IEV3SensorEventListener listener);

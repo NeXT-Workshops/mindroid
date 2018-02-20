@@ -3,17 +3,15 @@ package org.mindroid.android.app.robodancer;
 
 
 
-import org.mindroid.android.app.fragments.home.HomeFragment;
-import org.mindroid.android.app.fragments.log.GlobalLogger;
 import org.mindroid.android.app.fragments.sensormonitoring.SensorListener;
 import org.mindroid.android.app.serviceloader.ImperativeImplService;
 import org.mindroid.android.app.serviceloader.StatemachineService;
+import org.mindroid.api.BasicAPI;
 import org.mindroid.api.ImperativeAPI;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.impl.configuration.RobotPortConfig;
 import org.mindroid.api.robot.IRobotFactory;
-import org.mindroid.api.robot.control.IRobotCommandCenter;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -34,7 +32,7 @@ public class Robot {
 
     public boolean isRunning = false;
 
-    IRobotFactory roFactory;
+    private IRobotFactory roFactory;
     //-------- Robot
     private RobotPortConfig robotPortConfig;
 
@@ -84,19 +82,38 @@ public class Robot {
             roFactory.registerSensorListener(port,sensorListener.get(port));
         }
 
+        //Create the Robot - with it the RobotCommandCenter for this robot is created and can be accessed after this call.
+        roFactory.createRobot(SettingsProvider.getInstance().isSimulationEnabled());
+
         //Add StatemachineCollections
-        for (int i = 0; i < StatemachineService.getInstance().getStatemachineCollections().size(); i++) {
-            roFactory.addStatemachine(StatemachineService.getInstance().getStatemachineCollections().get(i));
-        }
+        addStatemachineImpls();
 
         //Add Imperative Implementations
-        for (ImperativeAPI imperativeImpl : ImperativeImplService.getInstance().getImperativeImplCollection()) {
-            roFactory.addImperativeImplementation(imperativeImpl);
-        }
+        addImperativeImpls();
 
-        //Create the Robot
-        roFactory.createRobot(SettingsProvider.getInstance().isSimulationEnabled());
         LOGGER.log(Level.INFO,"Robot created!");
+    }
+
+    /**
+     * Adds the StatemachineAPI Implementations to the RobotCommandCenters' db
+     */
+    private void addStatemachineImpls(){
+        for (int i = 0; i < StatemachineService.getInstance().getStatemachineAPIs().size(); i++) {
+            addImplemenation(StatemachineService.getInstance().getStatemachineAPIs().get(i));
+        }
+    }
+
+    /**
+     * Adds the ImperativeAPI Implementations to the RobotCommandCenters' db
+     */
+    private void addImperativeImpls(){
+        for (ImperativeAPI imperativeImpl : ImperativeImplService.getInstance().getImperativeImplCollection()) {
+            addImplemenation(imperativeImpl);
+        }
+    }
+
+    private void addImplemenation(BasicAPI api){
+        roFactory.getRobotCommandCenter().addImplementation(api);
     }
 
     private void updateRobotPortConfig() {
@@ -181,70 +198,17 @@ public class Robot {
      * @param id - of the implementation
      */
     public void startExecuteImplementation(String id){
-        if (ImperativeImplService.getInstance().getImperativeImplIDs().contains(id)) {
-            LOGGER.log(Level.INFO,"Start imperative implementation: ".concat(id));
-            startImperativeImpl(id);
-        }else if(StatemachineService.getInstance().getStatemachineCollectionIDs().contains(id)){
-            LOGGER.log(Level.INFO,"Start statemachine: ".concat(id));
-            startStatemachine(id);
-        }else{
-            //TODO errorhandling?
-        }
+        runningImplementationID = id;
+        roFactory.getRobotCommandCenter().startImplementation(id);
     }
 
     /**
      * Stop the running Implementation.
      */
     public void stopRunningImplmentation(){
-
-        if (ImperativeImplService.getInstance().getImperativeImplIDs().contains(runningImplementationID)) {
-            LOGGER.log(Level.INFO,"Stopping imperative implementation: ".concat(runningImplementationID));
-            stopImperativeImpl(runningImplementationID);
-        }else if(StatemachineService.getInstance().getStatemachineCollectionIDs().contains(runningImplementationID)){
-            LOGGER.log(Level.INFO,"Stopping Statemachine: ".concat(runningImplementationID));
-            stopStatemachine(runningImplementationID);
-        }else{
-            //TODO errorhandling?
-        }
-    }
-
-    /**
-     * Start an Imperative Implementation
-     * @param id
-     */
-    private void startImperativeImpl(String id) {
-        runningImplementationID = id;
-        roFactory.getRobotCommandCenter().startImperativeImplemenatation(id);
-    }
-
-    /**
-     * Stop an Imperative Implementation
-     * @param id
-     */
-    private void stopImperativeImpl(String id) {
         runningImplementationID = "";
-        roFactory.getRobotCommandCenter().stopImperativeImplementation(id);
+        roFactory.getRobotCommandCenter().stopImplementation();
     }
-
-    /**
-     * Start Group of-/Statemachine with id
-     * @param id
-     */
-    private void startStatemachine(String id) {
-        runningImplementationID = id;
-        roFactory.getRobotCommandCenter().startStatemachine(id);
-    }
-
-    /**
-     * Stop the Group of-/Statemachine with id
-     * @param id
-     */
-    private void stopStatemachine(String id) {
-        runningImplementationID = "";
-        roFactory.getRobotCommandCenter().stopStatemachine(id);
-    }
-
-
 
     public RobotPortConfig getRobotPortConfig() {
         return robotPortConfig;

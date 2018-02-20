@@ -1,15 +1,11 @@
 package org.mindroid.impl.robot;
 
 import org.mindroid.api.brick.Brick;
-import org.mindroid.api.robot.control.IBrickControl;
-import org.mindroid.impl.brick.EV3Brick;
 import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.configuration.RobotConfigurator;
-import org.mindroid.impl.imperative.ImperativeImplManager;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
 import org.mindroid.impl.motor.SynchronizedMotorsEndpoint;
 import org.mindroid.impl.sensor.IEV3SensorEndpoint;
-import org.mindroid.impl.statemachine.StatemachineManager;
 
 /**
  * Created by Torben on 01.03.2017.
@@ -39,9 +35,6 @@ public final class Robot {
 
     private boolean isSimulated = false;
 
-    private StatemachineManager statemachineManager;
-    private ImperativeImplManager imperativeImplManager;
-
     protected MessengerClient messenger = null;
 
     private static Robot robot = new Robot();
@@ -53,8 +46,7 @@ public final class Robot {
     }
 
     private Robot(){
-        statemachineManager = StatemachineManager.getInstance();
-        imperativeImplManager = ImperativeImplManager.getInstance();
+
     }
 
     public IEV3SensorEndpoint getSensorS1() {
@@ -129,10 +121,6 @@ public final class Robot {
         this.IMotor_D = IMotor_D;
     }
 
-    protected StatemachineManager getStatemachineManager() {
-        return statemachineManager;
-    }
-
     public SynchronizedMotorsEndpoint getSyncedMotors() {
         return syncedMotors;
     }
@@ -149,7 +137,6 @@ public final class Robot {
         this.brick = brick;
     }
 
-
     public static RobotController getRobotController(){
         return robotController;
     }
@@ -164,10 +151,6 @@ public final class Robot {
 
     public MessengerClient getMessenger() {
         return messenger;
-    }
-
-    public ImperativeImplManager getImperativeImplManager() {
-        return ImperativeImplManager.getInstance();
     }
 
     public boolean isSimulated() {

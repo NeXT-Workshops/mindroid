@@ -29,7 +29,7 @@ public class TestStateMachineManger {
 	IState start;
 	IState end;
 	
-	StatemachineManager smm = StatemachineManager.getInstance();
+	StatemachineExecutor smm = StatemachineExecutor.getInstance();
 	String statemachineID = "main";
 
 	IConstraint color_red;

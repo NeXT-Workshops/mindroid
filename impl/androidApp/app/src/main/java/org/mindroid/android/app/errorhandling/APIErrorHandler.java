@@ -1,6 +1,5 @@
 package org.mindroid.android.app.errorhandling;
 
-import android.app.Activity;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
@@ -11,7 +10,7 @@ import org.mindroid.api.statemachine.exception.NoSuchStateException;
 import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
 import org.mindroid.impl.robot.RobotCommandCenter;
 import org.mindroid.impl.statemachine.Statemachine;
-import org.mindroid.impl.statemachine.StatemachineManager;
+import org.mindroid.impl.statemachine.StatemachineExecutor;
 
 /**
  * Created by torben on 08.08.2017.
@@ -32,7 +31,7 @@ public class APIErrorHandler extends AbstractErrorHandler{
         if(source == Statemachine.class){
             handleStatemachineErrors(e,msg);
 
-        }else if(source == StatemachineManager.class){
+        }else if(source == StatemachineExecutor.class){
             handleStatemachineManagerErrors(e,msg);
         }else if(source == RobotCommandCenter.class){
             handleRobotCommandCenterErrors(e,msg);
@@ -85,7 +84,7 @@ public class APIErrorHandler extends AbstractErrorHandler{
         if(e instanceof NoStartStateException) {
             mainActivity.showErrorDialog("No Start State set","The Statemachine '"+msg+"' does not have a State to start with! Specify the Start-State to execute your Statemachine.");
         }else{
-            mainActivity.showErrorDialog("Error","StatemachineManager:  Error appeared: \n" +  e.getMessage());
+            mainActivity.showErrorDialog("Error","StatemachineExecutor:  Error appeared: \n" +  e.getMessage());
         }
     }
 }

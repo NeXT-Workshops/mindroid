@@ -191,10 +191,6 @@ public final class RobotFactory implements IRobotFactory {
 
                 myRobot.setBrick(robotConfigurator.getBrick());
 
-                // Connect statemachines RobotContextStateEvaluator etc with state machine
-                setupStatemachineEngine();
-
-
             }else{
                 ErrorHandlerManager.getInstance().handleError(new Exception("Could not create Robot"),this.getClass(),"RobotFactory.createRobot(): Error appeard while creating robot!");
                 myRobotCommandCenter = null;
@@ -203,16 +199,6 @@ public final class RobotFactory implements IRobotFactory {
             System.out.println("[RobotFactory:createRobot] The RobotFactory created a Robot with the following setup:\n"+toString());
         }
         return myRobotCommandCenter;
-    }
-
-    /**
-     * Setups the Statemachine Engine.
-     *
-     */
-    private void setupStatemachineEngine() {
-        IConstraintEvaluator evaluator = new RobotContextStateEvaluator();
-        myRobot.getStatemachineManager().addConstraintEvaluator(evaluator);
-        RobotContextStateManager.getInstance().registerRobotContextStateListener(evaluator);
     }
 
     /**
@@ -245,15 +231,6 @@ public final class RobotFactory implements IRobotFactory {
         }
     }
 
-    @Override
-    public void addStatemachine(StatemachineCollection statemachines) {
-        myRobot.getStatemachineManager().addStatemachines(statemachines);
-    }
-
-    @Override
-    public void addImperativeImplementation(ImperativeAPI imperativeImplementation) {
-        myRobot.getImperativeImplManager().addImperativeImplementation(imperativeImplementation);
-    }
 
     /**
      * Needs to be added before creating the robot

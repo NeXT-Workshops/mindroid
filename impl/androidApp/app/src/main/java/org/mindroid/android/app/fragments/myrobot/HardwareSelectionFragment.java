@@ -114,7 +114,7 @@ public class HardwareSelectionFragment extends Fragment implements MyRobotFragme
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedSensorType = (String) parent.getSelectedItem();
                 selectedMotorType = (String) parent.getSelectedItem();
-                if(hardware_selection_mode == HARDWARE_SELECTION_MODE_SENSOR && count >= 1) { // count >= 1: So the (loaded)Mode wont be reset on start
+                if(hardware_selection_mode == HARDWARE_SELECTION_MODE_SENSOR && count >= 1) { // count >= 1: So the (loaded)Mode wont be stopAllMotors on start
                     System.out.println("** sensormode adapter set");
                     spinner_select_mode.setAdapter(getSensorModeAdapter(selectedSensorType));
                 }else {

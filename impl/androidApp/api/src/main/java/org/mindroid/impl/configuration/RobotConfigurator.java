@@ -128,7 +128,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 			if(sensors.get(key).hasCreationFailed()){
 				endpointState.append(DELIMITER).append(CREATION_FAILED);
 
-				//With the error string added the initialization process will stop and has to be started again by the user. Therefore reset the value for the next iteration
+				//With the error string added the initialization process will stop and has to be started again by the user. Therefore stopAllMotors the value for the next iteration
 				(sensors.get(key)).setHasCreationFailed(false);
 			}
 		}
@@ -139,7 +139,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 				if(((EV3RegulatedMotorEndpoint)motors.get(key)).hasCreationFailed()){
 					endpointState.append(DELIMITER).append(CREATION_FAILED);
 
-					//With the error string added the initialization process will stop and has to be started again by the user. Therefore reset the value for the next iteration
+					//With the error string added the initialization process will stop and has to be started again by the user. Therefore stopAllMotors the value for the next iteration
 					((EV3RegulatedMotorEndpoint)motors.get(key)).setHasCreationFailed(false);
 				}
 			}

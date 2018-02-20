@@ -1,23 +1,31 @@
 package org.mindroid.android.app.serviceloader;
 
-import org.mindroid.api.ImperativeAPI;
+import org.mindroid.api.BasicAPI;
+import org.mindroid.api.ImplementationIDCrawlerVisitor;
 
 import java.util.ArrayList;
+import java.util.List;
 
-//TODO Merge StatemachineImpl- and ImperativeImpl- service class, only look for BasicAPI, the rest will be done in the background
-public class ImperativeImplService {
-    private static ImperativeImplService ourInstance = new ImperativeImplService();
+public class ImplementationService {
 
-    public static ImperativeImplService getInstance() {
+    //Collected implementations
+    private List<BasicAPI> implementations = new ArrayList<>();
+
+    /** Collects the IDs of the APIs **/
+    private ImplementationIDCrawlerVisitor idCollector = new ImplementationIDCrawlerVisitor();
+
+    private static ImplementationService ourInstance = new ImplementationService();
+
+    public static ImplementationService getInstance() {
         return ourInstance;
     }
 
-    private ArrayList<ImperativeAPI> imperativeImplCollection = new ArrayList<>();
+    private ImplementationService(){
+        findImplementations();
+    }
 
-    // Array with Implementations to load
     private String[] foundClasses = {
             // Dev
-
             "org.mindroid.android.app.imperativeimpl.RectangleDriver",
             "org.mindroid.android.app.imperativeimpl.RectangleDriver3",
             "org.mindroid.android.app.imperativeimpl.RectangleDriver2",
@@ -28,10 +36,13 @@ public class ImperativeImplService {
             "org.mindroid.android.app.imperativeimpl.ButtonTest",
             "org.mindroid.android.app.imperativeimpl.ImpSingleWallPingPong",
             "org.mindroid.android.app.imperativeimpl.TestMessageAccess",
-            "org.mindroid.android.app.imperativeimpl.MessageTest"
+            "org.mindroid.android.app.imperativeimpl.MessageTest",
+
+            //DEV Statemachines
+            "org.mindroid.android.app.statemachinesimpl.SensorMonitoring",
+            "org.mindroid.android.app.statemachinesimpl.MindroidStatemachines"
 
 
-            
             // Stubs for Workshop
             /*
             "org.mindroid.android.app.workshopimpl.HelloWorld",
@@ -45,7 +56,7 @@ public class ImperativeImplService {
             "org.mindroid.android.app.workshopimpl.ImpCoordWallPingPong",
             "org.mindroid.android.app.workshopimpl.LawnMower",
             "org.mindroid.android.app.workshopimpl.Platooning",
-            "org.mindroid.android.app.workshopimpl.Follow"                                                                          
+            "org.mindroid.android.app.workshopimpl.Follow"
             */
             // Solutions for Workshop
             /*
@@ -62,52 +73,39 @@ public class ImperativeImplService {
             "org.mindroid.android.app.workshopSolutions.Platooning",
             "org.mindroid.android.app.workshopSolutions.Follow"
                  */
-
     };
 
-    private ImperativeImplService() {
-        findStatemachineImplementations();
-    }
-
-
-    private void findStatemachineImplementations(){
-        //getClassURLs();
-        //System.out.println("#########################################################");
-        //Package aPackage = Package.getPackage(statemachineSourcePath);
-        //System.out.println("Packagename: "+aPackage.getName());
-        //TODO find classes dynamicially and add to foundClasses-array
-
+    private void findImplementations(){
         for (String classname : foundClasses) {
-            ImperativeAPI imperativeImpl = loadImperativeAPIClass(classname);
-            if(imperativeImpl != null) {
-                addImperativeImpl(imperativeImpl);
+            BasicAPI implementation = loadBasicAPIClasses(classname);
+            if(implementation != null) {
+                addImplementation(implementation);
+                collectID(implementation);
             }
         }
 
     }
-
-
 
     /**
      *
      * @param classname e.g. "android.app.NotificationManager"
      * @return class implementing the ImperativeAPI
      */
-    private ImperativeAPI loadImperativeAPIClass(String classname){
+    private BasicAPI loadBasicAPIClasses(String classname){
         try {
-            ImperativeAPI imperativeImpl = null;
+            BasicAPI implementation = null;
             Class cls = Class.forName(classname);
             try {
-                if(cls.newInstance() instanceof ImperativeAPI){
-                    imperativeImpl = (ImperativeAPI) cls.newInstance();
+                if(cls.newInstance() instanceof BasicAPI){
+                    implementation = (BasicAPI) cls.newInstance();
                 }
             }catch(ClassCastException cce){
                 //Not the class i was looking for
                 return null;
             }
 
-            if(imperativeImpl != null){
-                return imperativeImpl;
+            if(implementation != null){
+                return implementation;
             }
 
         } catch (ClassNotFoundException e) {
@@ -122,27 +120,33 @@ public class ImperativeImplService {
 
     /**
      * Add a Imperative Implementation to the collection.
-     * @param imperativeImplID - ID of an imperative Implementation
+     * @param implementation - ID of an imperative Implementation
      */
-    private void addImperativeImpl(ImperativeAPI imperativeImplID){
-        imperativeImplCollection.add(imperativeImplID);
+    private void addImplementation(BasicAPI implementation){
+        implementations.add(implementation);
+    }
+
+    /**
+     * Collects the ID of the Implementation
+     * @param implementation - to collect the ID(s) from
+     */
+    private void collectID(BasicAPI implementation){
+        idCollector.collectID(implementation);
     }
 
     /**
      * Returns the list of found Imperative implementation IDs
      * @return ArrayList of IDs
      */
-    public ArrayList<ImperativeAPI> getImperativeImplCollection() {
-        return imperativeImplCollection;
+    public List<BasicAPI> getImplementations() {
+        return implementations;
     }
 
-    public ArrayList<String> getImperativeImplIDs(){
-        ArrayList<String> imperativeIDs = new ArrayList<String>(getImperativeImplCollection().size());
-        for (int i = 0; i < getImperativeImplCollection().size(); i++) {
-            if(getImperativeImplCollection().get(i).getImplementationID() != null) {
-                imperativeIDs.add(getImperativeImplCollection().get(i).getImplementationID());
-            }
-        }
-        return imperativeIDs;
+    /**
+     * Returns the IDs of the collected implementations
+     * @return String[] of collected IDs
+     */
+    public String[] getImplementationIDs(){
+        return idCollector.getCollectedIDs().toArray(new String[idCollector.getCollectedIDs().size()]);
     }
 }

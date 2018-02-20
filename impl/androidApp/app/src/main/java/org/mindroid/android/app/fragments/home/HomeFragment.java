@@ -21,14 +21,10 @@ import org.mindroid.android.app.asynctasks.ProgressTask;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
-import org.mindroid.android.app.serviceloader.ImperativeImplService;
-import org.mindroid.android.app.serviceloader.StatemachineService;
-import org.mindroid.common.messages.server.LogLevel;
+import org.mindroid.android.app.serviceloader.ImplementationService;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -501,30 +497,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     }
 
     public ArrayAdapter<String> getImplementationIDAdapter() {
-        //TODO refactor as the ImplementationIDs can be accessed another way using the RobotCommandCenter
-
-
-        //Add Statemachine ids to Dropdown-ui
-        ArrayList<String> imperativeImplIDs = ImperativeImplService.getInstance().getImperativeImplIDs();
-        ArrayList<String>  statemachineIDs = StatemachineService.getInstance().getStatemachineCollectionIDs();
-
-        ArrayList<String> collectedIDs = new ArrayList<String>(imperativeImplIDs.size()+statemachineIDs.size());
-
-        for (String imperativeImplID : imperativeImplIDs) {
-            if(imperativeImplID!= null){
-                collectedIDs.add(imperativeImplID);
-            }
-        }
-
-        for (String statemachineID : statemachineIDs) {
-            if(statemachineID != null){
-                collectedIDs.add(statemachineID);
-            }
-        }
-
-        String[] allIDs = collectedIDs.toArray(new String[collectedIDs.size()]);
-
-        return new ArrayAdapter<String>(parentActivity, android.R.layout.simple_spinner_dropdown_item, allIDs);
+        return new ArrayAdapter<String>(parentActivity, android.R.layout.simple_spinner_dropdown_item, ImplementationService.getInstance().getImplementationIDs());
 
     }
 

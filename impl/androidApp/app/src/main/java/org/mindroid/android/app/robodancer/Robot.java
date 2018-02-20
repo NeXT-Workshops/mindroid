@@ -4,10 +4,8 @@ package org.mindroid.android.app.robodancer;
 
 
 import org.mindroid.android.app.fragments.sensormonitoring.SensorListener;
-import org.mindroid.android.app.serviceloader.ImperativeImplService;
-import org.mindroid.android.app.serviceloader.StatemachineService;
+import org.mindroid.android.app.serviceloader.ImplementationService;
 import org.mindroid.api.BasicAPI;
-import org.mindroid.api.ImperativeAPI;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.impl.configuration.RobotPortConfig;
@@ -15,6 +13,7 @@ import org.mindroid.api.robot.IRobotFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -85,11 +84,8 @@ public class Robot {
         //Create the Robot - with it the RobotCommandCenter for this robot is created and can be accessed after this call.
         roFactory.createRobot(SettingsProvider.getInstance().isSimulationEnabled());
 
-        //Add StatemachineCollections
-        addStatemachineImpls();
-
-        //Add Imperative Implementations
-        addImperativeImpls();
+        //Adds the collected Implementations to execute
+        addImplementations(ImplementationService.getInstance().getImplementations());
 
         LOGGER.log(Level.INFO,"Robot created!");
     }
@@ -97,18 +93,9 @@ public class Robot {
     /**
      * Adds the StatemachineAPI Implementations to the RobotCommandCenters' db
      */
-    private void addStatemachineImpls(){
-        for (int i = 0; i < StatemachineService.getInstance().getStatemachineAPIs().size(); i++) {
-            addImplemenation(StatemachineService.getInstance().getStatemachineAPIs().get(i));
-        }
-    }
-
-    /**
-     * Adds the ImperativeAPI Implementations to the RobotCommandCenters' db
-     */
-    private void addImperativeImpls(){
-        for (ImperativeAPI imperativeImpl : ImperativeImplService.getInstance().getImperativeImplCollection()) {
-            addImplemenation(imperativeImpl);
+    private void addImplementations(List<BasicAPI> implementations){
+        for (BasicAPI implementation : implementations) {
+            addImplemenation(implementation);
         }
     }
 

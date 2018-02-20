@@ -27,10 +27,8 @@ import org.mindroid.android.app.fragments.sensormonitoring.SensorObservationFrag
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
-import org.mindroid.android.app.serviceloader.StatemachineService;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -91,9 +89,6 @@ public class MainActivity extends Activity
         SettingsProvider.getInstance().setAndroidId(Secure.getString(this.getContentResolver(), Secure.ANDROID_ID));
         errorHandler = new APIErrorHandler(this);
 
-        /** init Statemachine Service**/
-        initStatemachineService();
-
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -124,11 +119,6 @@ public class MainActivity extends Activity
         SharedPreferences portConfigProperties = this.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_portConfiguration),Context.MODE_PRIVATE);
 
         SettingsProvider.getInstance().initialize(getResources(),connectionProperties,portConfigProperties);
-    }
-
-    private void initStatemachineService(){
-        StatemachineService.getInstance();
-        StatemachineService.packageManager = getPackageManager();
     }
 
     @Override

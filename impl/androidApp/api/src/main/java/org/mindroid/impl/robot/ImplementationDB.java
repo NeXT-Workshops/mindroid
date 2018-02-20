@@ -1,4 +1,4 @@
-package org.mindroid.impl;
+package org.mindroid.impl.robot;
 
 import org.mindroid.api.AbstractImplDBVisitor;
 import org.mindroid.api.BasicAPI;

@@ -90,7 +90,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         // Required empty public constructor
 
 
-
     }
 
     /**

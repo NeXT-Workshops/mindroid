@@ -14,17 +14,17 @@ public class GlobalLogger {
     static private FileHandler fileTxt;
     static private SimpleFormatter formatterTxt;
 
-    private static LogHandler logHandler = new LogHandler();
+    private final static LogHandler LOG_HANDLER = new LogHandler();
     public static ArrayList<LogRecord> logs = LogHandler.logs;
 
-    static public void setup() {
+    static {
         // get the global logger to configure it
         Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
         logger.setLevel(Level.INFO);
 
         //Register private LogHandler
-        registerLogHandler(GlobalLogger.logHandler);
+        registerLogHandler(GlobalLogger.LOG_HANDLER);
 
         /*
         try {

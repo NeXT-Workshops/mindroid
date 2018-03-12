@@ -27,6 +27,7 @@ import org.mindroid.android.app.fragments.sensormonitoring.SensorObservationFrag
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
+import org.mindroid.android.app.util.ADBService;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 
 import java.util.logging.Level;
@@ -109,6 +110,8 @@ public class MainActivity extends Activity
 
         initialiseSettings();
 
+        //RUN ADB
+        ADBService.start(ADBService.ADB_DEFAULT_PORT);
     }
 
     /**

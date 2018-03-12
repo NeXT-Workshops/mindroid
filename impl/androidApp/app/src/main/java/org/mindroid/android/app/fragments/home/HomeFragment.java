@@ -10,10 +10,12 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Environment;
 import android.util.SparseBooleanArray;
 import android.view.*;
 import android.widget.*;
 
+import eu.chainfire.libsuperuser.Shell;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.IErrorHandler;
 import org.mindroid.android.app.acitivites.MainActivity;
@@ -22,9 +24,16 @@ import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.serviceloader.ImplementationService;
+import org.mindroid.android.app.util.ADBService;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.ErrorManager;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -481,14 +490,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_activateTethering.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), 0);
-                try {
-                   // shellProcess = Runtime.getRuntime().exec("input keyevent 24");
-                    shellProcess = Runtime.getRuntime().exec("dumpsys battery set usb 1");
-                    //shellProcess = Runtime.getRuntime().exec(new String[]{"su", "setprop service.adb.tcp.port 55555", "stop adbd", "start adbd"});
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), 0);
             }
         });
 

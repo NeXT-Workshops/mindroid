@@ -86,6 +86,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private final static Logger LOGGER = Logger.getLogger(HomeFragment.class.getName());
 
+    private Process shellProcess;
+
     public HomeFragment() { //Called by newInstance(..)
         // Required empty public constructor
 
@@ -464,6 +466,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             public void onClick(View v) {
                 StartStopRobotTask task = new StartStopRobotTask("Starting robot",msgStartRobot);
                 task.execute(START_ROBOT);
+
             }
         });
 
@@ -478,7 +481,14 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_activateTethering.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), 0);
+                //startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), 0);
+                try {
+                   // shellProcess = Runtime.getRuntime().exec("input keyevent 24");
+                    shellProcess = Runtime.getRuntime().exec("dumpsys battery set usb 1");
+                    //shellProcess = Runtime.getRuntime().exec(new String[]{"su", "setprop service.adb.tcp.port 55555", "stop adbd", "start adbd"});
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

@@ -1,9 +1,12 @@
 package org.mindroid.server.app;
 
+import bla.blup.Babb;
 import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.MessageMarshaller;
+import se.vidstige.jadb.JadbConnection;
+import se.vidstige.jadb.JadbException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,8 +15,11 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+
+import se.vidstige.jadb.*;
 
 /**
  * @author Roland Kluge - Initial implementation
@@ -22,6 +28,8 @@ public class MindroidServerWorker implements Runnable {
     private Socket socket;
     private MindroidServerFrame mindroidServerFrame;
     private MessageMarshaller messageMarshaller;
+
+    List<JadbDevice> devices;
 
     //Robot Connected to this socket - will be set when robot registers himself
     private String connectedRobot = null;
@@ -69,6 +77,10 @@ public class MindroidServerWorker implements Runnable {
             console.setVisible(true);
             console.appendLine("Error while receiving or forwarding a message.");
             console.appendLine("IOException: "+e.getMessage()+"\n");
+        } catch (ConnectionToRemoteDeviceException e) {
+            e.printStackTrace();
+        } catch (JadbException e) {
+            e.printStackTrace();
         }
     }
 
@@ -98,7 +110,7 @@ public class MindroidServerWorker implements Runnable {
         }
     }
 
-    private void handleMessage(MindroidMessage deserializedMsg) throws IOException{
+    private void handleMessage(MindroidMessage deserializedMsg) throws IOException, ConnectionToRemoteDeviceException, JadbException {
         //view log message
         if (deserializedMsg.isLogMessage()) {
             mindroidServerFrame.addContentLine(deserializedMsg);
@@ -114,6 +126,26 @@ public class MindroidServerWorker implements Runnable {
                 mindroidServerFrame.register(deserializedMsg.getSource(), socket, (InetSocketAddress) socketAddress, port);
                 connectedRobot = deserializedMsg.getSource().getValue(); //Save registered robotID
                 mindroidServerFrame.addContentLine("Local", "-", "INFO", deserializedMsg.getSource().getValue()+" was registered.");
+
+                JadbConnection jadb = new JadbConnection();
+                List<JadbDevice> devices = jadb.getDevices();
+                JadbDevice myDev;
+                if (!devices.isEmpty()) {
+                    MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
+                    console.setVisible(true);
+                    console.appendLine(devices.toString());
+                    //-myDev = devices.get(0);
+                }
+
+                jadb.connectToTcpDevice(new InetSocketAddress(((InetSocketAddress) socketAddress).getAddress(), 5555));
+
+                devices = jadb.getDevices();
+                if (!devices.isEmpty()) {
+                    MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
+                    console.setVisible(true);
+                    console.appendLine(devices.toString());
+                }
+
             } else {
                 throw new IOException("Registration of "+deserializedMsg.getSource().getValue()+" failed.");
             }

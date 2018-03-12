@@ -14,47 +14,54 @@ cd "%ANDROID_HOME%\platform-tools\"
 
 :welcome
 echo off
-set /p input= Connect Nexus 5 
-echo Listing ADB-Devices
+set /p input= Connect Nexus 5, wait for all Drivers to be installed
+echo ... Listing ADB-Devices
 adb devices
-echo
+echo.
 
-set /p input = If Device was found, hit enter!
+set /p input = If Device was found, hit enter
 echo reboot to bootloader
 adb reboot bootloader
-echo
+echo.
 
-set /p input = when in fastboot, hit enter!
+echo Is bootloader unlocked^? (y/n)
+set /p choice= 
+if '%choice%' == 'y' goto bootloader_unlocked
+
+
+set /p input = when in fastboot, hit enter but wait for drivers
 echo Listing fastboot devices
 fastboot devices
-echo
+echo.
 
-set /p input = If Device was found, hit enter!
+set /p input = If Device was found, hit enter
 echo Unlocking Bootloader...
 fastboot oem unlock 
-echo
+echo.
 
-echo reboot phone do standard settings, activate UBS-debug!
+
+echo reboot phone do standard settings, activate UBS-debug
 set /p input=Hit enter when reactivated
 echo reboot to bootloader
 adb reboot bootloader
-echo
+echo.
 
-set /p input = when in fastboot, hit enter!
+:bootloader_unlocked
+set /p input = when in fastboot hit enter
 echo Listing fastboot devices
 fastboot devices
-echo
+echo.
 
-set /p input = If Device was found, hit enter!
+set /p input = If Device was found hit enter
 echo flashing custom Recovery
 fastboot flash recovery twrp-3.2.1-1-hammerhead.img
-echo
+echo.
 
 
-set /p input = when done, start recovery and hit enter
+set /p input = start recovery and hit enter
 echo Copy Lineage zip-file
 adb push lineage-14.1-20180301-nightly-hammerhead-signed.zip /sdcard/
-echo
+echo.
 
 echo On Screen goto Wipe - Advanced Wipe 
 echo Select Cache, System and Data partitions to be wiped and then Swipe to Wipe.

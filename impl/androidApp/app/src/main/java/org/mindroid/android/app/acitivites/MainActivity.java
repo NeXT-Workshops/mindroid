@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v4.widget.DrawerLayout;
 
+import android.view.WindowManager;
 import android.widget.ListView;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.dialog.ErrorDialog;
@@ -76,6 +77,9 @@ public class MainActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //If the app is running the display will be set to always on and the device will not go into sleep mode.
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         //Setup Logger
         GlobalLogger.setup();

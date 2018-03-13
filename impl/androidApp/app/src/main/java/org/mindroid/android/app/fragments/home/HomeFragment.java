@@ -14,6 +14,7 @@ import android.util.SparseBooleanArray;
 import android.view.*;
 import android.widget.*;
 
+import eu.chainfire.libsuperuser.Shell;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.IErrorHandler;
 import org.mindroid.android.app.acitivites.MainActivity;
@@ -393,7 +394,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
      */
     public boolean isTetheringActivated(Context context){
         Intent intent = context.registerReceiver(null, new IntentFilter("android.hardware.usb.action.USB_STATE"));
-
         return (intent.getExtras().getBoolean("rndis"));
     }
 

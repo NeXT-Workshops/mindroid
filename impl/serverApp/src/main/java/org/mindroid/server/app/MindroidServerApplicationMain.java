@@ -10,8 +10,8 @@ import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Enumeration;
+import java.util.List;
 
 /**
  * The main application of the Mindroid server

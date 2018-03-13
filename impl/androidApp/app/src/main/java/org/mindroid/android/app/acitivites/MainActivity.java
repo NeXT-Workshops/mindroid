@@ -3,6 +3,7 @@ package org.mindroid.android.app.acitivites;
 import android.app.*;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -131,7 +132,14 @@ public class MainActivity extends Activity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+        switchFragment(position);
+    }
 
+    /**
+     * Changes the main fragment dependent on the given position parameter
+     * @param position - id of the fragment
+     */
+    private void switchFragment(int position) {
         switch(position){
             case 0:
                 replaceFragment(HOME_FRAGMENT,TAG_HOME_FRAGMENT);
@@ -204,6 +212,10 @@ public class MainActivity extends Activity
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        switchFragment(0);
+    }
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();

@@ -294,6 +294,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="MSG-Server-IP" />
+                            <TextView
+                                    android:text="@String/"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" android:id="@+id/txt_title_dev_ip"/>
 
                         </LinearLayout>
 
@@ -325,6 +329,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="192.168.42:20194" />
+                            <TextView
+                                    android:text="TextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" android:id="@+id/txt_dev_ip"/>
 
                         </LinearLayout>
 

@@ -1,8 +1,13 @@
 package org.mindroid.android.app.util;
 
+import android.content.Context;
+import android.net.wifi.WifiManager;
+import android.text.format.Formatter;
 import org.mindroid.impl.util.Messaging;
 
-public class IPValidator {
+import static android.content.Context.WIFI_SERVICE;
+
+public class IPUtils {
 
     /**
      * Concatenates the for parts of an IP:
@@ -28,5 +33,10 @@ public class IPValidator {
 
     public static boolean validateIP(String IP){
         return Messaging.isValidIP(IP);
+    }
+
+    public static String getDevIP(Context context){
+        WifiManager wm = (WifiManager) context.getSystemService(WIFI_SERVICE);
+        return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
     }
 }

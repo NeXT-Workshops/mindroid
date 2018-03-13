@@ -13,6 +13,7 @@ import android.widget.TextView;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.fragments.myrobot.HardwareMapping;
 import org.mindroid.android.app.robodancer.SettingsProvider;
+import org.mindroid.android.app.util.IPUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +36,7 @@ public class RobotSetupInfoFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     /** textviews **/
+    // Sensors Tab
     private TextView txtView_sensortype_s1;
     private TextView txtView_sensortype_s2;
     private TextView txtView_sensortype_s3;
@@ -45,16 +47,18 @@ public class RobotSetupInfoFragment extends Fragment {
     private TextView txtView_sensormode_s3;
     private TextView txtView_sensormode_s4;
 
+    // Motors Tab
     private TextView txtView_motor_a;
     private TextView txtView_motor_b;
     private TextView txtView_motor_c;
     private TextView txtView_motor_d;
 
+    // Info Tab
     private TextView txtView_robot_id;
     private TextView txtView_group_id;
     private TextView txtView_msg_server_ip;
     private TextView txtView_ev3_brick_ip;
-
+    private TextView txtView_dev_ip;
     public RobotSetupInfoFragment() {
         // Required empty public constructor
     }
@@ -150,6 +154,7 @@ public class RobotSetupInfoFragment extends Fragment {
         txtView_group_id = (TextView)view.findViewById(R.id.txt_group_id);
         txtView_msg_server_ip = (TextView)view.findViewById(R.id.txt_conn_msgServer);
         txtView_ev3_brick_ip = (TextView)view.findViewById(R.id.txt_conn_brick);
+        txtView_dev_ip = (TextView) view.findViewById(R.id.txt_dev_ip);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -246,6 +251,7 @@ public class RobotSetupInfoFragment extends Fragment {
             txtView_group_id.setText(SettingsProvider.getInstance().getGroupID());
             txtView_msg_server_ip.setText(SettingsProvider.getInstance().getMsgServerIP());
             txtView_ev3_brick_ip.setText(SettingsProvider.getInstance().getEv3IP());
+            txtView_dev_ip.setText(IPUtils.getDevIP(getContext()));
         }
     }
 }

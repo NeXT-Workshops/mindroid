@@ -295,7 +295,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="MSG-Server-IP" />
                             <TextView
-                                    android:text="@String/"
+                                    android:text="Device-IP"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content" android:id="@+id/txt_title_dev_ip"/>
 

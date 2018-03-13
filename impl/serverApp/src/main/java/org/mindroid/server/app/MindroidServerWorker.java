@@ -126,24 +126,7 @@ public class MindroidServerWorker implements Runnable {
                 connectedRobot = deserializedMsg.getSource().getValue(); //Save registered robotID
                 mindroidServerFrame.addContentLine("Local", "-", "INFO", deserializedMsg.getSource().getValue()+" was registered.");
 
-                JadbConnection jadb = new JadbConnection();
-                List<JadbDevice> devices = jadb.getDevices();
-                JadbDevice myDev;
-                if (!devices.isEmpty()) {
-                    MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
-                    console.setVisible(true);
-                    console.appendLine(devices.toString());
-                    //-myDev = devices.get(0);
-                }
-
-                jadb.connectToTcpDevice(new InetSocketAddress(((InetSocketAddress) socketAddress).getAddress(), 5555));
-
-                devices = jadb.getDevices();
-                if (!devices.isEmpty()) {
-                    MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
-                    console.setVisible(true);
-                    console.appendLine(devices.toString());
-                }
+                connectADB((InetSocketAddress) socketAddress,12345);
 
             } else {
                 throw new IOException("Registration of "+deserializedMsg.getSource().getValue()+" failed.");
@@ -170,6 +153,34 @@ public class MindroidServerWorker implements Runnable {
             }
         }
 
+    }
+
+    /**
+     * Connects via ADB to the given address.
+     * @param socketAddress
+     * @throws IOException
+     * @throws JadbException
+     * @throws ConnectionToRemoteDeviceException
+     */
+    private void connectADB(InetSocketAddress socketAddress, int port) throws IOException, JadbException, ConnectionToRemoteDeviceException {
+        JadbConnection jadb = new JadbConnection();
+        List<JadbDevice> devices = jadb.getDevices();
+        JadbDevice myDev;
+        if (!devices.isEmpty()) {
+            MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
+            console.setVisible(true);
+            console.appendLine(devices.toString());
+            //-myDev = devices.get(0);
+        }
+
+        jadb.connectToTcpDevice(new InetSocketAddress(socketAddress.getAddress(), port));
+
+        devices = jadb.getDevices();
+        if (!devices.isEmpty()) {
+            MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
+            console.setVisible(true);
+            console.appendLine(devices.toString());
+        }
     }
 
     private void sendMessage(MindroidMessage deserializedMsg, Socket socket) throws IOException{

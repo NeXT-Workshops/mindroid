@@ -200,7 +200,7 @@ public class JadbDevice {
 
     @Override
     public String toString() {
-        return "Android Device with serial " + serial;
+        return "Device: " + serial;
     }
 
     @Override

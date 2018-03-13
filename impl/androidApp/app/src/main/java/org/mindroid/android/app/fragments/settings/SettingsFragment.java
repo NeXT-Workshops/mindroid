@@ -17,6 +17,7 @@ import org.mindroid.android.app.fragments.home.HomeFragment;
 import org.mindroid.android.app.robodancer.ConnectionPropertiesChangedListener;
 import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.util.IPValidator;
+import org.mindroid.android.app.util.ShellService;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.robot.Robot;
 import org.mindroid.impl.util.Messaging;
@@ -46,6 +47,9 @@ public class SettingsFragment extends Fragment {
 
     //UI-Button
     private Button btn_saveSettings;
+
+    //Switch
+    private Switch usbSwitch;
 
     //UI-Textfield
     private TextView txtView_note;
@@ -112,6 +116,9 @@ public class SettingsFragment extends Fragment {
         /** INIT Buttons **/
         btn_saveSettings = (Button) view.findViewById(R.id.btn_saveSettings);
 
+        /** INIT SWITCH */
+        usbSwitch = (Switch) view.findViewById(R.id.switchUSB);
+
         /** INIT TextEdit fields **/
         txt_input_robotID = (EditText) view.findViewById(R.id.txt_input_robotID);
         txt_input_groupID = (EditText) view.findViewById(R.id.txt_input_groupID);
@@ -165,6 +172,12 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        usbSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean checked){
+                ShellService.usbChargingControl(checked);
+            }
+        });
         //Load saved SettingsProvider
         loadSettings();
 

@@ -138,6 +138,7 @@
     <string name="title_brick">Brick</string>
     <string name="title_sensors">Sensors</string>
     <string name="title_motors">Motors</string>
+    <string name="usb_charging">Enable USB Charging</string>
 
 
 </resources>

@@ -301,6 +301,10 @@
 
         </LinearLayout>
 
+        <Switch
+                android:text="Enable USB Charging"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/switchUSB" android:layout_weight="1"/>
         <Button
             android:id="@+id/btn_saveSettings"
             android:layout_width="match_parent"

@@ -10,12 +10,10 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.os.Environment;
 import android.util.SparseBooleanArray;
 import android.view.*;
 import android.widget.*;
 
-import eu.chainfire.libsuperuser.Shell;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.IErrorHandler;
 import org.mindroid.android.app.acitivites.MainActivity;
@@ -24,16 +22,9 @@ import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.serviceloader.ImplementationService;
-import org.mindroid.android.app.util.ADBService;
-import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.ErrorManager;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;

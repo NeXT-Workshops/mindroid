@@ -35,6 +35,7 @@
     <string name="txtView_language_text">Sprache</string>
     <string name="msg_toast_settings_invalid_input">Ungueltige Eingabe!</string>
     <string name="msg_taost_settings_saved">Einstellungen gespeichert!</string>
+    <string name="switch_txt_usb_charging">Laden über USB</string>
 
     <!-- Hardware Selection Fragment -->
     <string name="view_sensortype">Sensor</string>

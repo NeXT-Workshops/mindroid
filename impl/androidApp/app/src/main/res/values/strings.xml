@@ -62,6 +62,7 @@
     <string name="txtView_language_text">Language</string>
     <string name="msg_toast_settings_invalid_input">Invalid Input</string>
     <string name="msg_taost_settings_saved">saved</string>
+    <string name="switch_txt_usb_charging">Enable USB Charging</string>
 
 
     <!-- Hardware Selection Fragment -->
@@ -138,7 +139,7 @@
     <string name="title_brick">Brick</string>
     <string name="title_sensors">Sensors</string>
     <string name="title_motors">Motors</string>
-    <string name="usb_charging">Enable USB Charging</string>
+
 
 
 </resources>

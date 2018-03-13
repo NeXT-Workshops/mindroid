@@ -2,6 +2,7 @@ package org.mindroid.server.app;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mindroid.server.app.util.ShellService;
 
 import java.awt.*;
 import java.io.IOException;
@@ -30,6 +31,7 @@ public class MindroidServerApplicationMain {
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         mindroidServerFrame = new MindroidServerFrame();
         try {
+            ShellService.startADBServer();
             runServer();
         } catch (Exception e) {
             MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();

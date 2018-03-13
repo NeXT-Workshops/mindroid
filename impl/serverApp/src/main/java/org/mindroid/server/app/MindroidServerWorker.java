@@ -164,22 +164,17 @@ public class MindroidServerWorker implements Runnable {
      */
     private void connectADB(InetSocketAddress socketAddress, int port) throws IOException, JadbException, ConnectionToRemoteDeviceException {
         JadbConnection jadb = new JadbConnection();
-        List<JadbDevice> devices = jadb.getDevices();
-        JadbDevice myDev;
-        if (!devices.isEmpty()) {
-            MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
-            console.setVisible(true);
-            console.appendLine(devices.toString());
-            //-myDev = devices.get(0);
-        }
-
         jadb.connectToTcpDevice(new InetSocketAddress(socketAddress.getAddress(), port));
 
-        devices = jadb.getDevices();
+        List<JadbDevice> devices = jadb.getDevices();
         if (!devices.isEmpty()) {
             MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
             console.setVisible(true);
-            console.appendLine(devices.toString());
+            console.appendLine("Connected devices:");
+            for (JadbDevice device : devices) {
+                console.appendLine(device.toString());
+            }
+            //console.appendLine(devices.toString());
         }
     }
 

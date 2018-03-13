@@ -32,6 +32,8 @@ import java.util.ArrayList;
  */
 public class MessengerClient implements IMessenger, IMessageListener,IMessageServer {
 
+    private static final int CONNECT_TIMEOUT = 1000;
+
     public static final String SERVER_LOG = Destination.SERVER_LOG.getValue();
     public static final String BROADCAST = Destination.BROADCAST.getValue();
 
@@ -106,7 +108,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
                 this.serverport = msgServerTCPPort;
 
                 //Socket
-                socket.connect(new InetSocketAddress(serverip, serverport), 5000);
+                socket.connect(new InetSocketAddress(serverip, serverport), CONNECT_TIMEOUT);
 
                 //OutputStream
                 out = new PrintWriter(socket.getOutputStream(),

@@ -22,6 +22,7 @@ import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.serviceloader.ImplementationService;
+import org.mindroid.android.app.util.ShellService;
 
 
 import java.io.IOException;
@@ -481,7 +482,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_activateTethering.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), 0);
+                ShellService.activateTethering(true);
             }
         });
 

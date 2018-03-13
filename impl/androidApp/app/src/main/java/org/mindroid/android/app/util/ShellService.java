@@ -37,5 +37,10 @@ public class ShellService {
 
         // sets the charging Symbol to curernt function
         cmds.add("dumpsys battery set usb " + value);
-        Shell.SU.run(cmds);    }
+        Shell.SU.run(cmds);
+    }
+    public static void activateTethering(boolean on){
+        Shell.SU.run("service call connectivity 33 i32 " + (on ? "1" : "0") );
+
+    }
 }

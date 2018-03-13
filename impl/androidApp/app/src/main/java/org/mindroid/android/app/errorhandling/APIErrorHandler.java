@@ -8,6 +8,8 @@ import org.mindroid.api.statemachine.exception.DuplicateTransitionException;
 import org.mindroid.api.statemachine.exception.NoCurrentStateSetException;
 import org.mindroid.api.statemachine.exception.NoSuchStateException;
 import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
+import org.mindroid.impl.communication.MessengerClient;
+import org.mindroid.impl.communication.ServerWorker;
 import org.mindroid.impl.robot.RobotCommandCenter;
 import org.mindroid.impl.statemachine.Statemachine;
 import org.mindroid.impl.statemachine.StatemachineExecutor;
@@ -35,7 +37,9 @@ public class APIErrorHandler extends AbstractErrorHandler{
             handleStatemachineManagerErrors(e,msg);
         }else if(source == RobotCommandCenter.class){
             handleRobotCommandCenterErrors(e,msg);
-        }else {
+        }else if(source == ServerWorker.class){
+            // do nothing on Error Connection closed
+        }else{
             //Anything else
             mainActivity.showErrorDialog("Error", source.toString()+":\n"+e.getMessage());
         }

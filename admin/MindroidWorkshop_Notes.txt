@@ -1,0 +1,55 @@
+﻿Dokumentation und Aufgabenstellung:
+- Tehthering im HandyVerbinden Skript richtig schreiben
+- Anleitung für VMs anpassen
+	- was machen, wenn das Handy nicht mehr gefunden wird
+- disable usb charging mit in die anleitung aufnehmen
+- getmessage etc in anleitung
+- Aufgabe 2.2 die imports in den source code ziehen
+- belegung von sensoren mit in anleiten / default werte in app
+- falls WLan nicht funktioniert dann bitte USB zum deployen nehmen (Anleitung)
+- Doku updaten: einheiten für driveDistanceBackward etc. - mit angeben
+- JavaDOC für Framework erstellen
+- Basic Java Sachen in die Beschreibung schreiben ala "equals" benutzen
+- Kabel überprüfen ob rausgerutscht und richtig montiert
+- kurze Anmerkung darüber was der Konstruktor genau macht
+- Server IP muss auch in der App gesetzt werden!
+- import auf colors in der Aufgabenbeschreibung falsch
+
+Aufgabenimplementierung:
+- helloworld lösungssourcecode direkt an die schüler, den sourcecode nicht selbst tippen	
+- für jede Aufgabe eine Klasse bereitstellen, die implementiert werden kann 
+- über dem Konstruktor einen Kommentar, dass dieser nicht geändert werden darf
+
+Framework:
+- DONE- belegung von sensoren mit in anleiten / default werte in app
+- Skripte auf dem Server ausführen? (adb bridge)
+- Server IP Belegung automatisch updaten
+- Broadcast für den Server implementieren (eine Nachricht an alle Roboter im Netz)
+
+bugs & improvements:
+- App schmiert ab, wenn man wild herumklickt
+- wenn man zurück klickt sollte man im Hauptmenü landen
+- Device unauthorized -> Handy mit zettel makiert
+- Deployment ging nicht mit einem Handy (hinten ist ein Zettel)
+- Handy wechselt in den Standby wenn es an den Brick angeschlossen ist
+- Unterlage mit viel Grip für den nächsten Workshop
+- next step -- überall gleiches OS
+- usb tethering aktiv halten (über adb möglich?)
+- wand-ping-pong + color sensor führt zu herben bugs
+- kommunikation zwischen handy und brick verbessern (kill switch)
+- log für kommunikation zum brick
+- dreh-korrektur nochmal überprüfen (endlosschleife - er versucht sich minimal in die falsche Richtung zu korrigieren)
+- einstellungsmenü tastatur überlagert button
+- wenn man disconnect drückt kommt ein "error connection closed"
+- nach deployment sollte die app immer noch mit dem server verbunden sein
+
+sonstiges:
+- DONE - andy fragen wegen vm lizenz
+- vor girlsday (ende april) nochmal email an marelene wegen flyern
+- email mit code + aufgabenstellung + doku an marlene
+- mindroid film 
+	
+Bugs:
+- DONE - colorsensor zeigt immmer die farbe unter dem linken an (sowohl bei rechts als auch links im display)
+- HelloWorld beispiel funktionierte nicht nach deployment -> Brick neustart notwendig, warum?
+- ständig wlan disconnects

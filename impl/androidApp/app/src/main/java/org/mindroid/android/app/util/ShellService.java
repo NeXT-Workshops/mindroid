@@ -23,11 +23,19 @@ public class ShellService {
     }
 
     /**
-     * Enables/Disables USB-Charging
+     * Enables/Disables USB-Charging, and sets Symbol in Status Bar correspondingly
      * @param on
      */
 
     public static void usbChargingControl(boolean on){
-        Shell.SU.run("dumpsys battery set usb " + (on ? "1" : "0") );
-    }
+        String value = on ? "1" : "0";
+        List<String> cmds = new ArrayList<String>();
+
+        // En-/Disbales Charging
+        cmds.add("chmod +w /sys/class/power_supply/ac/charging_enabled");
+        cmds.add("echo " + value + " > /sys/class/power_supply/ac/charging_enabled");
+
+        // sets the charging Symbol to curernt function
+        cmds.add("dumpsys battery set usb " + value);
+        Shell.SU.run(cmds);    }
 }

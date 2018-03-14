@@ -37,8 +37,6 @@ bugs & improvements:
 - DONE wenn man zurück klickt sollte man im Hauptmenü landen
 - DONE Device unauthorized -> Handy mit zettel makiert
 	- Vermutlich ADB Problem
-- DONE usb tethering aktiv halten (über adb möglich?)
-	- Shell Command aktiviert Tethering
 - DONE Deployment ging nicht mit einem Handy (hinten ist ein Zettel)
 	- geht auf allen Handys, war vermutlich ADB Problem
 - DONE überall gleiches OS
@@ -46,18 +44,25 @@ bugs & improvements:
 - DONE einstellungsmenü tastatur überlagert button
 	- Anzeigegröße verringert 
 - DONE wenn man disconnect drückt kommt ein "error connection closed"
-	- Fehlermeldung wird nicht mehr gezeigt
+	- Fehlermeldung wird nicht mehr gezeigt	
+- DONE Handy wechselt in den Standby wenn es an den Brick angeschlossen ist
+	- Display bleibt aktiv wenn App geöffnet
+- nach deployment sollte die app immer noch mit dem server verbunden sein
+	- meh	
 	
-- Handy wechselt in den Standby wenn es an den Brick angeschlossen ist
+- usb tethering aktiv halten (über adb möglich?)
+	- Shell Command aktiviert Tethering
+	- nach deployen kein tethering möglich
+		
 - App schmiert ab, wenn man wild herumklickt
 - wand-ping-pong + color sensor führt zu herben bugs
 - kommunikation zwischen handy und brick verbessern (kill switch)
 - log für kommunikation zum brick
 - dreh-korrektur nochmal überprüfen (endlosschleife - er versucht sich minimal in die falsche Richtung zu korrigieren)
-- nach deployment sollte die app immer noch mit dem server verbunden sein
-- Unterlage mit viel Grip für den nächsten Workshop
 
 sonstiges:
+- Aufkleber "Energy Demo" auf Handy?
+- Unterlage mit viel Grip für den nächsten Workshop
 - DONE - andy fragen wegen vm lizenz
 - vor girlsday (ende april) nochmal email an marelene wegen flyern
 - email mit code + aufgabenstellung + doku an marlene

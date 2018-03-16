@@ -37,12 +37,7 @@ public class ADBService {
         devices = jadb.getDevices();
         if (!devices.isEmpty()) {
             MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
-            console.setVisible(true);
-            console.appendLine("Connected devices:");
-            for (JadbDevice device : devices) {
-                console.appendLine(device.toString());
-            }
-            //console.appendLine(devices.toString());
+
         }
     }
     public static void runDmesg() {
@@ -85,6 +80,8 @@ public class ADBService {
 
             boolean state = inetSocketAddress.getHostString().concat( ":" + String.valueOf(ADB_TCP_PORT)).equals(device.getSerial());
             console.appendLine(String.valueOf(state));
+
+            return device;
         }
         return null;
     }
@@ -97,5 +94,17 @@ public class ADBService {
         } catch (JadbException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void activateTethering(JadbDevice device){
+        try {
+            device.execute("su");
+            device.execute("service call connectivity 33 i32 1");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JadbException e) {
+            e.printStackTrace();
+        }
+
     }
 }

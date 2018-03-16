@@ -6,6 +6,7 @@ import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.server.app.util.ADBService;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
+import se.vidstige.jadb.JadbDevice;
 import se.vidstige.jadb.JadbException;
 
 import java.io.*;
@@ -24,6 +25,7 @@ public class MindroidServerWorker implements Runnable {
     private Socket socket;
     private MindroidServerFrame mindroidServerFrame;
     private MessageMarshaller messageMarshaller;
+    static MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
 
 
 
@@ -124,11 +126,14 @@ public class MindroidServerWorker implements Runnable {
                 mindroidServerFrame.addContentLine("Local", "-", "INFO", deserializedMsg.getSource().getValue()+" was registered.");
 
                 // When device connects, connect adb to device
+                System.out.println("Device connected, establish adb_tcp");
                 ADBService.connectADB((InetSocketAddress) socketAddress);
-                List<String> cmd = null;
-                cmd.add("bla");
-                ADBService.getDeviceByIP((InetSocketAddress) socketAddress).execute("su", "service call connectivity 33 i32 1");
-
+                // activate Tethering on device that just connected
+                System.out.println("ADb connected, activate tethering on device...");
+                ADBService.activateTethering(ADBService.getDeviceByIP((InetSocketAddress) socketAddress));
+                // connect adb again
+                System.out.println("reconnect adb_tcp");
+                ADBService.connectADB((InetSocketAddress) socketAddress);
 
             } else {
                 throw new IOException("Registration of "+deserializedMsg.getSource().getValue()+" failed.");

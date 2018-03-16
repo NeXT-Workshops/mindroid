@@ -120,7 +120,7 @@ public class MainActivity extends Activity
 
         //Activate tethering - (used to activate tethering automatically after app got started after deployment)
         //Only works if phone is connected to to brick by usb
-        ShellService.activateTethering(true);
+        //ShellService.activateTethering(true);
     }
 
     /**

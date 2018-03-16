@@ -22,7 +22,7 @@ import java.util.List;
 public class MindroidServerApplicationMain {
 
     private static final Logger logger = LogManager.getLogger(MindroidServerApplicationMain.class);
-    private final static int port = 33044;
+    private final static int SERVER_PORT = 33044;
     private static MindroidServerFrame mindroidServerFrame;
     private static ServerSocket server = null;
 
@@ -47,7 +47,7 @@ public class MindroidServerApplicationMain {
 
     public static void runServer() {
         try {
-            server = new ServerSocket(port);
+            server = new ServerSocket(SERVER_PORT);
             invokeDisplayIPAdress();
             mindroidServerFrame.addContentLine("Local", "-", "INFO", "Server started");
         } catch (IOException e) {

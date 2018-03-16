@@ -14,11 +14,15 @@ import java.net.InetSocketAddress;
 import java.util.List;
 
 public class ADBService {
-
+    private final static int ADB_TCP_PORT = 12345;
     static JadbConnection jadb = new JadbConnection();
     static List<JadbDevice> devices;
     static MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
 
+    public static List<JadbDevice> getDevices(){
+        refreshAdbDevices();
+        return devices;
+    }
 
     /**
      * Connects via ADB to the given address.
@@ -27,8 +31,8 @@ public class ADBService {
      * @throws JadbException
      * @throws ConnectionToRemoteDeviceException
      */
-    public static void connectADB(InetSocketAddress socketAddress, int port) throws IOException, JadbException, ConnectionToRemoteDeviceException {
-        jadb.connectToTcpDevice(new InetSocketAddress(socketAddress.getAddress(), port));
+    public static void connectADB(InetSocketAddress socketAddress) throws IOException, JadbException, ConnectionToRemoteDeviceException {
+        jadb.connectToTcpDevice(new InetSocketAddress(socketAddress.getAddress(), ADB_TCP_PORT));
 
         devices = jadb.getDevices();
         if (!devices.isEmpty()) {
@@ -78,6 +82,9 @@ public class ADBService {
         for ( JadbDevice device : devices){
             console.appendLine(device.getSerial());
             console.appendLine(inetSocketAddress.getHostString());
+
+            boolean state = inetSocketAddress.getHostString().concat( ":" + String.valueOf(ADB_TCP_PORT)).equals(device.getSerial());
+            console.appendLine(String.valueOf(state));
         }
         return null;
     }

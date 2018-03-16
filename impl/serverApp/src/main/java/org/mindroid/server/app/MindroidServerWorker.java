@@ -13,6 +13,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -123,8 +124,10 @@ public class MindroidServerWorker implements Runnable {
                 mindroidServerFrame.addContentLine("Local", "-", "INFO", deserializedMsg.getSource().getValue()+" was registered.");
 
                 // When device connects, connect adb to device
-                ADBService.connectADB((InetSocketAddress) socketAddress,12345);
-                ADBService.getDeviceByIP((InetSocketAddress) socketAddress);
+                ADBService.connectADB((InetSocketAddress) socketAddress);
+                List<String> cmd = null;
+                cmd.add("bla");
+                ADBService.getDeviceByIP((InetSocketAddress) socketAddress).execute("su", "service call connectivity 33 i32 1");
 
 
             } else {

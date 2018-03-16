@@ -1,5 +1,6 @@
 package org.mindroid.server.app;
 
+import org.mindroid.server.app.util.ADBService;
 import se.vidstige.jadb.JadbConnection;
 import se.vidstige.jadb.JadbDevice;
 import se.vidstige.jadb.JadbException;
@@ -94,10 +95,9 @@ public class MindroidServerADBInfoFrame extends JFrame {
 
 
     public String[] getDevices() throws IOException, JadbException {
-        JadbConnection jadb = new JadbConnection();
-        String[] devices_arr;
 
-        List<JadbDevice> devices = jadb.getDevices();
+        String[] devices_arr;
+        List<JadbDevice> devices = ADBService.getDevices();
         if (!devices.isEmpty()) {
             devices_arr = new String[devices.size()];
             for (int i = 0; i < devices.size(); i++) {

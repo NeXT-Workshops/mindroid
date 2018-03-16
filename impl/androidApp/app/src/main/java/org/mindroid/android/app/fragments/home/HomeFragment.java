@@ -24,6 +24,7 @@ import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.serviceloader.ImplementationService;
 import org.mindroid.android.app.util.ShellService;
+import org.mindroid.android.app.util.USBService;
 
 
 import java.io.IOException;
@@ -256,7 +257,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         final Runnable taskUpdateButtonEnableState = new Runnable(){
             @Override
             public void run(){
-                boolean positiveUSBState = isUSBConnected(parentActivity) && isTetheringActivated(parentActivity);
+                boolean positiveUSBState = USBService.isUSBConnected(parentActivity) && USBService.isTetheringActivated(parentActivity);
 
                 btn_connect.setEnabled(!robot.isConnectedToBrick() && (positiveUSBState || SettingsProvider.getInstance().isSimulationEnabled()));
 
@@ -293,11 +294,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             boolean isTetheringActive = false;
 
 
-            if(!(isUSBConnected = isUSBConnected(parentActivity))){
+            if(!(isUSBConnected = USBService.isUSBConnected(parentActivity))){
                 sb.append(infoUsbNotFound);
             }
 
-            if( (isUSBConnected && !(isTetheringActive = isTetheringActivated(parentActivity)))){
+            if( (isUSBConnected && !(isTetheringActive = USBService.isTetheringActivated(parentActivity)))){
                 sb.append(infoTetheringNotActiavted);
                 btn_activateTethering.setVisibility(Button.VISIBLE);
             }else{
@@ -376,26 +377,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         new Thread(check).start();
     } //USB_FUNCTION_RNDIS
 
-    /**
-     * Checks if USB is connected
-     * @param context
-     * @return
-     */
-    public boolean isUSBConnected(Context context){
-        Intent intent = context.registerReceiver(null, new IntentFilter("android.hardware.usb.action.USB_STATE"));
 
-        return intent.getExtras().getBoolean("connected");
-    }
-
-    /**
-     * Checks if Tethering is activated.
-     * @param context
-     * @return
-     */
-    public boolean isTetheringActivated(Context context){
-        Intent intent = context.registerReceiver(null, new IntentFilter("android.hardware.usb.action.USB_STATE"));
-        return (intent.getExtras().getBoolean("rndis"));
-    }
 
     /**
      * Blocking Method. Waits until the given task is finished.

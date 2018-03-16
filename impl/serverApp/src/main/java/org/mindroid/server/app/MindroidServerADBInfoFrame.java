@@ -13,27 +13,19 @@ import java.util.List;
 
 public class MindroidServerADBInfoFrame extends JFrame {
 
-    /*
-    JMenuItem adbDevicesMenuItem = new JMenuItem();
-        adbDevicesMenuItem.setAction(new AbstractAction("Show ADB Devices") {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            MindroidServerADBInfoFrame adbDevicesFrame = MindroidServerADBInfoFrame.getMindroidServerADBInfoFrame();
-            adbDevicesFrame.setVisible(true);
-        }
-    });
-        consoleMenuItem.setMnemonic('d');
-     */
-
     private static final MindroidServerADBInfoFrame console = new MindroidServerADBInfoFrame();
 
     public static MindroidServerADBInfoFrame getMindroidServerADBInfoFrame() {
         return console;
     }
 
+    private final String TITLE =  "Connected ADB Devices";
     private JPanel contentPane = new JPanel();
 
     private MindroidServerADBInfoFrame() {
+        setTitle(TITLE);
+        setSize(new Dimension(200,300));
+
         initMenubar();
         initPane();
     }

@@ -81,7 +81,20 @@ public class MindroidServerFrame extends JFrame {
         });
         refreshIP.setMnemonic('r');
 
+
+        JMenuItem adbDevicesMenuItem = new JMenuItem();
+        adbDevicesMenuItem.setAction(new AbstractAction("Show ADB Devices") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MindroidServerADBInfoFrame adbDevicesFrame = MindroidServerADBInfoFrame.getMindroidServerADBInfoFrame();
+                adbDevicesFrame.setVisible(true);
+            }
+        });
+        consoleMenuItem.setMnemonic('d');
+
+
         fileMenu.add(consoleMenuItem);
+        fileMenu.add(adbDevicesMenuItem);
         fileMenu.add(refreshIP);
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
@@ -104,6 +117,7 @@ public class MindroidServerFrame extends JFrame {
                 ADBService.refreshAdbDevices();
             }
         });
+
         menuBar.add(actionMenu);
 
         this.setJMenuBar(menuBar);

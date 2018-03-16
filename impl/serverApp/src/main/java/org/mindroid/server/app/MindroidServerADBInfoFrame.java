@@ -24,7 +24,7 @@ public class MindroidServerADBInfoFrame extends JFrame {
 
     private MindroidServerADBInfoFrame() {
         setTitle(TITLE);
-        setSize(new Dimension(200,300));
+        setSize(new Dimension(300,400));
 
         initMenubar();
         initPane();
@@ -65,12 +65,13 @@ public class MindroidServerADBInfoFrame extends JFrame {
     }
 
     private void initPane(){
-        contentPane.setLayout(new GridLayout());
-        setContentPane(contentPane);
+
+        contentPane.setLayout(new GridLayout(20,1));
+        setContentPane(new JScrollPane(contentPane));
     }
 
 
-    private void updateDevices() {
+    public void updateDevices() {
         try {
             String[] devices = getDevices();
             clearContentPane();
@@ -100,7 +101,10 @@ public class MindroidServerADBInfoFrame extends JFrame {
         if (!devices.isEmpty()) {
             devices_arr = new String[devices.size()];
             for (int i = 0; i < devices.size(); i++) {
-                devices_arr[i] = devices.toString();
+                StringBuffer sb = new StringBuffer();
+                sb.append(devices.get(i).getSerial());
+                devices_arr[i] = devices.get(i).getSerial();
+
             }
             return devices_arr;
         } else {

@@ -44,7 +44,7 @@ public class MindroidServerADBInfoFrame extends JFrame {
         exitMenuItem.setAction(new AbstractAction("Quit") {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                System.exit(0);
+                disposeFrame();
             }
         });
         exitMenuItem.setMnemonic('q');
@@ -63,6 +63,10 @@ public class MindroidServerADBInfoFrame extends JFrame {
         menuBar.add(fileMenu);
 
         this.setJMenuBar(menuBar);
+    }
+
+    private void disposeFrame() {
+        this.dispose();
     }
 
     private void initPane(){

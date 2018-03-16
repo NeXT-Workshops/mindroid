@@ -4,6 +4,7 @@ package org.mindroid.server.app;
 import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
+import org.mindroid.server.app.util.ADBService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -50,6 +51,8 @@ public class MindroidServerFrame extends JFrame {
         fileMenu.setMnemonic('f');
         //JMenu helpMenu = new JMenu("Help");
 
+        JMenu actionMenu = new JMenu("Actions");
+
         JMenuItem exitMenuItem = new JMenuItem();
         exitMenuItem.setAction(new AbstractAction("Quit") {
             @Override
@@ -83,6 +86,25 @@ public class MindroidServerFrame extends JFrame {
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
         //menuBar.add(helpMenu);
+
+        // Configure Action Menu
+        JMenuItem readDmesg = new JMenuItem();
+        readDmesg.setAction(new AbstractAction("run dmesg") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ADBService.runDmesg();
+            }
+        });
+        actionMenu.add(readDmesg);
+
+        JMenuItem refreshDevices = new JMenuItem();
+        refreshDevices.setAction(new AbstractAction("Refresh ADB-Devices") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ADBService.refreshAdbDevices();
+            }
+        });
+        menuBar.add(actionMenu);
 
         this.setJMenuBar(menuBar);
 

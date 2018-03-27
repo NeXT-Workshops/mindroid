@@ -1,8 +1,5 @@
 package org.mindroid.android.app.robodancer;
 
-
-
-
 import org.mindroid.android.app.fragments.sensormonitoring.SensorListener;
 import org.mindroid.android.app.serviceloader.ImplementationService;
 import org.mindroid.api.BasicAPI;
@@ -15,7 +12,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import org.mindroid.impl.ev3.EV3PortID;
@@ -44,7 +40,6 @@ public class Robot {
 
 
     public Robot() {
-        LogManager.getLogManager().addLogger(LOGGER);
         LOGGER.setLevel(Level.INFO);
 
         roFactory = new RobotFactory();
@@ -137,6 +132,7 @@ public class Robot {
      * Connects the messenger client to the message server
      */
     public boolean connectMessenger(String msgServerIP, int msgServerPort){
+        LOGGER.log(Level.INFO,"Connecting to Message-Server: "+msgServerIP+":"+msgServerPort);
         roFactory.setRobotID(SettingsProvider.getInstance().getRobotID());
         return roFactory.getRobotCommandCenter().connectMessenger(msgServerIP,msgServerPort);
     }
@@ -185,6 +181,7 @@ public class Robot {
      * @param id - of the implementation
      */
     public void startExecuteImplementation(String id){
+        LOGGER.log(Level.INFO, "Start to execute: " + id);
         runningImplementationID = id;
         roFactory.getRobotCommandCenter().startImplementation(id);
     }
@@ -193,6 +190,7 @@ public class Robot {
      * Stop the running Implementation.
      */
     public void stopRunningImplmentation(){
+        LOGGER.log(Level.INFO, "Stopped execution: " + runningImplementationID);
         runningImplementationID = "";
         roFactory.getRobotCommandCenter().stopImplementation();
     }

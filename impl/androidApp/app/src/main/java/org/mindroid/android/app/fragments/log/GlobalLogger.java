@@ -23,7 +23,7 @@ public class GlobalLogger {
 
         logger.setLevel(Level.INFO);
 
-        //Register private LogHandler
+        //Register local LogHandler
         registerLogHandler(GlobalLogger.LOG_HANDLER);
 
         /*
@@ -40,7 +40,13 @@ public class GlobalLogger {
         */
     }
 
-    public static void registerLogHandler(Handler logHandler){
+    /**
+     * All used Loggers need to be registered to the given logHandler.
+     * The given logHandler is the local {@link #LOG_HANDLER}
+     *
+     * @param logHandler the local {@link #LOG_HANDLER}
+     */
+    private static void registerLogHandler(Handler logHandler){
         Logger.getLogger(HomeFragment.class.getName()).addHandler(logHandler);
         Logger.getLogger(Robot.class.getName()).addHandler(logHandler);
 

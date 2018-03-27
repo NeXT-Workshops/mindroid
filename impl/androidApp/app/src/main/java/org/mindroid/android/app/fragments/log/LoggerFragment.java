@@ -14,6 +14,7 @@ import org.mindroid.android.app.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.LogRecord;
 
 /**
@@ -37,7 +38,7 @@ public class LoggerFragment extends Fragment {
     }
 
     private String calcDate(long millisecs) {
-        SimpleDateFormat date_format = new SimpleDateFormat("HH:mm:ss.SSS");
+        SimpleDateFormat date_format = new SimpleDateFormat("HH:mm:ss.SSS", Locale.getDefault());
         Date resultdate = new Date(millisecs);
         return date_format.format(resultdate);
     }

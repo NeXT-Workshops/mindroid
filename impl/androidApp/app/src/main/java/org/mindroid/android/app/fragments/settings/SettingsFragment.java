@@ -12,17 +12,11 @@ import android.view.ViewGroup;
 import android.widget.*;
 
 import org.mindroid.android.app.R;
-import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.android.app.fragments.home.HomeFragment;
 import org.mindroid.android.app.robodancer.ConnectionPropertiesChangedListener;
 import org.mindroid.android.app.robodancer.SettingsProvider;
-import org.mindroid.android.app.util.IPValidator;
-import org.mindroid.impl.errorhandling.ErrorHandlerManager;
-import org.mindroid.impl.robot.Robot;
-import org.mindroid.impl.util.Messaging;
-
-import java.io.IOException;
-import java.util.Locale;
+import org.mindroid.android.app.util.IPUtils;
+import org.mindroid.android.app.util.ShellService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,6 +40,9 @@ public class SettingsFragment extends Fragment {
 
     //UI-Button
     private Button btn_saveSettings;
+
+    //Switch
+    private Switch usbSwitch;
 
     //UI-Textfield
     private TextView txtView_note;
@@ -112,6 +109,9 @@ public class SettingsFragment extends Fragment {
         /** INIT Buttons **/
         btn_saveSettings = (Button) view.findViewById(R.id.btn_saveSettings);
 
+        /** INIT SWITCH */
+        usbSwitch = (Switch) view.findViewById(R.id.switchUSB);
+
         /** INIT TextEdit fields **/
         txt_input_robotID = (EditText) view.findViewById(R.id.txt_input_robotID);
         txt_input_groupID = (EditText) view.findViewById(R.id.txt_input_groupID);
@@ -165,6 +165,12 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        usbSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean checked){
+                ShellService.usbChargingControl(checked);
+            }
+        });
         //Load saved SettingsProvider
         loadSettings();
 
@@ -294,19 +300,19 @@ public class SettingsFragment extends Fragment {
             return false;
         }
 
-        String ev3IP = IPValidator.getConcatenatedIPAddress(txt_input_ev3ip_part1.getText().toString(),
+        String ev3IP = IPUtils.getConcatenatedIPAddress(txt_input_ev3ip_part1.getText().toString(),
                 txt_input_ev3ip_part2.getText().toString(),
                 txt_input_ev3ip_part3.getText().toString(),
                 txt_input_ev3ip_part4.getText().toString());
 
 
-        String msgServerIP = IPValidator.getConcatenatedIPAddress(txt_input_serverip_part1.getText().toString(),
+        String msgServerIP = IPUtils.getConcatenatedIPAddress(txt_input_serverip_part1.getText().toString(),
                 txt_input_serverip_part2.getText().toString(),
                 txt_input_serverip_part3.getText().toString(),
                 txt_input_serverip_part4.getText().toString());
 
         //Check if IPs (ev3, msgServer) are valid, if not return false
-        if(!IPValidator.validateIP(ev3IP) || !IPValidator.validateIP(msgServerIP)) {
+        if(!IPUtils.validateIP(ev3IP) || !IPUtils.validateIP(msgServerIP)) {
             return false;
         }
         System.out.println("SettingsFrag: IPs VALID");

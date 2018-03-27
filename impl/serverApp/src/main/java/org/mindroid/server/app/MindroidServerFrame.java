@@ -1,8 +1,10 @@
 package org.mindroid.server.app;
 
+
 import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
+import org.mindroid.server.app.util.ADBService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -13,7 +15,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,6 +51,8 @@ public class MindroidServerFrame extends JFrame {
         fileMenu.setMnemonic('f');
         //JMenu helpMenu = new JMenu("Help");
 
+        JMenu actionMenu = new JMenu("Actions");
+
         JMenuItem exitMenuItem = new JMenuItem();
         exitMenuItem.setAction(new AbstractAction("Quit") {
             @Override
@@ -78,11 +81,44 @@ public class MindroidServerFrame extends JFrame {
         });
         refreshIP.setMnemonic('r');
 
+
+        JMenuItem adbDevicesMenuItem = new JMenuItem();
+        adbDevicesMenuItem.setAction(new AbstractAction("Show ADB Devices") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MindroidServerADBInfoFrame adbDevicesFrame = MindroidServerADBInfoFrame.getMindroidServerADBInfoFrame();
+                adbDevicesFrame.setVisible(true);
+            }
+        });
+        consoleMenuItem.setMnemonic('d');
+
+
         fileMenu.add(consoleMenuItem);
+        fileMenu.add(adbDevicesMenuItem);
         fileMenu.add(refreshIP);
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
         //menuBar.add(helpMenu);
+
+        // Configure Action Menu
+        JMenuItem readDmesg = new JMenuItem();
+        readDmesg.setAction(new AbstractAction("run dmesg") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ADBService.runDmesg();
+            }
+        });
+        actionMenu.add(readDmesg);
+
+        JMenuItem refreshDevices = new JMenuItem();
+        refreshDevices.setAction(new AbstractAction("Refresh ADB-Devices") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ADBService.refreshAdbDevices();
+            }
+        });
+
+        menuBar.add(actionMenu);
 
         this.setJMenuBar(menuBar);
 
@@ -160,6 +196,8 @@ public class MindroidServerFrame extends JFrame {
         this.setVisible(true);
         this.ipMapping = new HashMap<>();
         this.socketMapping = new HashMap<>();
+
+
 
     }
 

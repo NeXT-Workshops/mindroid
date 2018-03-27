@@ -2,6 +2,7 @@ package org.mindroid.server.app;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mindroid.server.app.util.ShellService;
 
 import java.awt.*;
 import java.io.IOException;
@@ -10,8 +11,8 @@ import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Enumeration;
+import java.util.List;
 
 /**
  * The main application of the Mindroid server
@@ -21,7 +22,7 @@ import java.util.Enumeration;
 public class MindroidServerApplicationMain {
 
     private static final Logger logger = LogManager.getLogger(MindroidServerApplicationMain.class);
-    private final static int port = 33044;
+    private final static int SERVER_PORT = 33044;
     private static MindroidServerFrame mindroidServerFrame;
     private static ServerSocket server = null;
 
@@ -30,6 +31,7 @@ public class MindroidServerApplicationMain {
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         mindroidServerFrame = new MindroidServerFrame();
         try {
+            ShellService.startADBServer();
             runServer();
         } catch (Exception e) {
             MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
@@ -45,7 +47,7 @@ public class MindroidServerApplicationMain {
 
     public static void runServer() {
         try {
-            server = new ServerSocket(port);
+            server = new ServerSocket(SERVER_PORT);
             invokeDisplayIPAdress();
             mindroidServerFrame.addContentLine("Local", "-", "INFO", "Server started");
         } catch (IOException e) {

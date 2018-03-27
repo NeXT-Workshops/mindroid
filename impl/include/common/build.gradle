@@ -7,18 +7,19 @@
  * ...
  * version = ext.mindroidVersion
  */
-
 ext {
     javaSourceLevel = '1.7'
     javaTargetLevel = '1.7'
     mindroidVersion = '1.0'
     javaFileEncoding = 'UTF-8'
 }
-
 repositories {
     mavenCentral()
     jcenter()
     maven {
         url "https://maven.google.com"
     }
+}
+
+dependencies {
 }

@@ -1,17 +1,20 @@
 package org.mindroid.server.app;
 
 import org.mindroid.common.messages.server.Destination;
+import org.mindroid.common.messages.server.MessageMarshaller;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
-import org.mindroid.common.messages.server.MessageMarshaller;
+import org.mindroid.server.app.util.ADBService;
+import se.vidstige.jadb.ConnectionToRemoteDeviceException;
+import se.vidstige.jadb.JadbDevice;
+import se.vidstige.jadb.JadbException;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -22,6 +25,9 @@ public class MindroidServerWorker implements Runnable {
     private Socket socket;
     private MindroidServerFrame mindroidServerFrame;
     private MessageMarshaller messageMarshaller;
+    static MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
+
+
 
     //Robot Connected to this socket - will be set when robot registers himself
     private String connectedRobot = null;
@@ -69,6 +75,10 @@ public class MindroidServerWorker implements Runnable {
             console.setVisible(true);
             console.appendLine("Error while receiving or forwarding a message.");
             console.appendLine("IOException: "+e.getMessage()+"\n");
+        } catch (ConnectionToRemoteDeviceException e) {
+            e.printStackTrace();
+        } catch (JadbException e) {
+            e.printStackTrace();
         }
     }
 
@@ -98,7 +108,7 @@ public class MindroidServerWorker implements Runnable {
         }
     }
 
-    private void handleMessage(MindroidMessage deserializedMsg) throws IOException{
+    private void handleMessage(MindroidMessage deserializedMsg) throws IOException, ConnectionToRemoteDeviceException, JadbException {
         //view log message
         if (deserializedMsg.isLogMessage()) {
             mindroidServerFrame.addContentLine(deserializedMsg);
@@ -114,6 +124,17 @@ public class MindroidServerWorker implements Runnable {
                 mindroidServerFrame.register(deserializedMsg.getSource(), socket, (InetSocketAddress) socketAddress, port);
                 connectedRobot = deserializedMsg.getSource().getValue(); //Save registered robotID
                 mindroidServerFrame.addContentLine("Local", "-", "INFO", deserializedMsg.getSource().getValue()+" was registered.");
+
+                // When device connects, connect adb to device
+                System.out.println("Device connected, establish adb_tcp");
+                ADBService.connectADB((InetSocketAddress) socketAddress);
+                // activate Tethering on device that just connected
+                System.out.println("ADb connected, activate tethering on device...");
+                ADBService.activateTethering(ADBService.getDeviceByIP((InetSocketAddress) socketAddress));
+                // connect adb again
+                System.out.println("reconnect adb_tcp");
+                ADBService.connectADB((InetSocketAddress) socketAddress);
+
             } else {
                 throw new IOException("Registration of "+deserializedMsg.getSource().getValue()+" failed.");
             }
@@ -141,6 +162,8 @@ public class MindroidServerWorker implements Runnable {
 
     }
 
+
+
     private void sendMessage(MindroidMessage deserializedMsg, Socket socket) throws IOException{
         if (socket==null) {
             throw new IOException("The message to "+deserializedMsg.getDestination().getValue()+" has not been sent because the address is unknown.");
@@ -160,4 +183,6 @@ public class MindroidServerWorker implements Runnable {
             console.appendLine("IOException: "+e.getMessage()+"\n");
         }
     }
+
+
 }

@@ -3,6 +3,7 @@ package org.mindroid.android.app.acitivites;
 import android.app.*;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v4.widget.DrawerLayout;
 
+import android.view.WindowManager;
 import android.widget.ListView;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.dialog.ErrorDialog;
@@ -27,6 +29,7 @@ import org.mindroid.android.app.fragments.sensormonitoring.SensorObservationFrag
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
+import org.mindroid.android.app.util.ShellService;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 
 import java.util.logging.Level;
@@ -76,6 +79,12 @@ public class MainActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //If the app is running the display will be set to always on and the device will not go into sleep mode.
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        //Setup Logger
+        GlobalLogger.setup();
+
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -106,6 +115,12 @@ public class MainActivity extends Activity
 
         initialiseSettings();
 
+        //RUN ADB
+        ShellService.startADB(ShellService.ADB_DEFAULT_PORT);
+
+        //Activate tethering - (used to activate tethering automatically after app got started after deployment)
+        //Only works if phone is connected to to brick by usb
+        //ShellService.activateTethering(true);
     }
 
     /**
@@ -121,7 +136,14 @@ public class MainActivity extends Activity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+        switchFragment(position);
+    }
 
+    /**
+     * Changes the main fragment dependent on the given position parameter
+     * @param position - id of the fragment
+     */
+    private void switchFragment(int position) {
         switch(position){
             case 0:
                 replaceFragment(HOME_FRAGMENT,TAG_HOME_FRAGMENT);
@@ -194,6 +216,10 @@ public class MainActivity extends Activity
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        switchFragment(0);
+    }
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();

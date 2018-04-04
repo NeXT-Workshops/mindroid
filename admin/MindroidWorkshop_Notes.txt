@@ -67,6 +67,8 @@ sonstiges:
 - vor girlsday (ende april) nochmal email an marelene wegen flyern
 - email mit code + aufgabenstellung + doku an marlene
 - mindroid film 
+- usb strom messer bestellen
+- Hiwi Verträge im Mai verlängern
 	
 Bugs:
 - DONE - colorsensor zeigt immmer die farbe unter dem linken an (sowohl bei rechts als auch links im display)

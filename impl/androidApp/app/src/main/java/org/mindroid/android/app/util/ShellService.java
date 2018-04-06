@@ -9,6 +9,9 @@ public class ShellService {
 
     public static final String ADB_DEFAULT_PORT = "12345";
 
+
+
+
     /**
      * Starts the ADB Service on Port.
      *
@@ -19,6 +22,13 @@ public class ShellService {
         cmds.add("setprop service.adb.tcp.port "+port);
         cmds.add("stop adbd");
         cmds.add("start adbd");
+        Shell.SU.run(cmds);
+    }
+
+    public static void execIfConfig(String pathToOutputFile){
+        List<String> cmds = new ArrayList<String>(2);
+        cmds.add("su");
+        cmds.add("ifconfig >"+ pathToOutputFile);
         Shell.SU.run(cmds);
     }
 
@@ -39,8 +49,14 @@ public class ShellService {
         cmds.add("dumpsys battery set usb " + value);
         Shell.SU.run(cmds);
     }
-    public static void activateTethering(boolean on){
+
+    /**
+     *
+     * @param on
+     */
+    public static void setTethering(boolean on){
         Shell.SU.run("service call connectivity 33 i32 " + (on ? "1" : "0") );
 
     }
+
 }

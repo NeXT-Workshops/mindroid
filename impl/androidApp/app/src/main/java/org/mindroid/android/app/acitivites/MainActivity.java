@@ -9,9 +9,13 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.support.v4.widget.DrawerLayout;
 
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ListView;
 import org.mindroid.android.app.R;
@@ -32,6 +36,7 @@ import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.util.ShellService;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -75,18 +80,22 @@ public class MainActivity extends Activity
 
     private static final Logger LOGGER = Logger.getLogger(MainActivity.class.getName());
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        initialize(savedInstanceState);
+
+    }
+
+    private void initialize(Bundle savedInstanceState) {
         //If the app is running the display will be set to always on and the device will not go into sleep mode.
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        //Setup Logger
-        GlobalLogger.setup();
-
-        setContentView(R.layout.activity_main);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         if(robot == null) {
             robot = new Robot();
@@ -115,12 +124,59 @@ public class MainActivity extends Activity
 
         initialiseSettings();
 
-        //RUN ADB
-        ShellService.startADB(ShellService.ADB_DEFAULT_PORT);
+
+        //READ IF CONFIG
+        /*Runnable run = new Thread(){
+            public void run(){
+                readIFConfig();
+            }
+        };
+        new Thread(run).start();
+        */
 
         //Activate tethering - (used to activate tethering automatically after app got started after deployment)
         //Only works if phone is connected to to brick by usb
-        //ShellService.activateTethering(true);
+        //ShellService.setTethering(true);
+    }
+
+    @Deprecated
+    private void readIFConfig(){
+        try {
+            String dir = Environment.getExternalStorageDirectory()+File.separator+"mindroid";
+            System.out.println("### IFCONFIG OUTPUT: dirpath: "+dir);
+            //create folder
+            File folder = new File(dir); //folder name
+            folder.mkdirs();
+
+            //create file
+            File outputFile = new File(dir, "output_ifconfig.txt");
+            outputFile.createNewFile();
+
+            String filePath = outputFile.getPath();
+
+            System.out.println("### IFCONFIG OUTPUT: outputfile: "+filePath);
+            System.out.println("### IFCONFIG OUTPUT: exec shell cmd ");
+            LOGGER.log(Level.INFO,"Start to execute IFCOnfig");
+            ShellService.execIfConfig(filePath);
+            LOGGER.log(Level.INFO,"IFConfig command executed");
+            LOGGER.log(Level.INFO,"write into file: "+filePath);
+
+            BufferedReader br = new BufferedReader(new FileReader(outputFile));
+            StringBuffer output = new StringBuffer();
+            System.out.println("### IFCONFIG OUTPUT: start reading file ");
+            LOGGER.log(Level.INFO,"IFCONIFG: Start reading output from file");
+            while(br.read() != -1){
+                output.append(br.readLine());
+            }
+
+            LOGGER.log(Level.INFO,"IFCONIFG: End reading output from file");
+
+            LOGGER.log(Level.INFO,output.toString());
+            System.out.println("### IFCONFIG OUTPUT: "+output.toString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -268,5 +324,13 @@ public class MainActivity extends Activity
     public void onDetachedFromWindow() {
         LOGGER.log(Level.INFO,"App got detached from Window");
         super.onDetachedFromWindow();
+    }
+
+    @Override
+    protected void onDestroy() {
+        //deactivate Tethering
+        ShellService.setTethering(false);
+
+        super.onDestroy();
     }
 }

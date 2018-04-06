@@ -6,9 +6,15 @@
 
     <!-- Activity titles -->
     <string name="title_activity_main">Mindroid</string>
+    <string name="title_activity_splash">Mindroid</string>
 
     <!-- util -->
     <string name="txt_abort">Abort</string>
+
+    <!-- Splash Activity -->
+    <string name="txt_starting_adb_service">Starting ADB Service..</string>
+    <string name="txt_checking_usb">Checking USB Connection..</string>
+    <string name="txt_activate_tethering">Activating tethering..</string>
 
     <!-- Home Fragment -->
     <string name="btn_text_activate_tethering">Activate Tethering</string>
@@ -139,7 +145,6 @@
     <string name="title_brick">Brick</string>
     <string name="title_sensors">Sensors</string>
     <string name="title_motors">Motors</string>
-
 
 
 </resources>

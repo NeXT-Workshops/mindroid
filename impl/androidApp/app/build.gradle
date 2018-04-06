@@ -19,11 +19,11 @@ android {
         versionName mindroidVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-	signingConfigs {
+    signingConfigs {
         debug {
-           storeFile file("key/debug.keystore")
-       }
-   }
+            storeFile file("key/debug.keystore")
+        }
+    }
 
     buildTypes {
         release {
@@ -57,9 +57,10 @@ dependencies {
         exclude group: 'org.json'
     }
 
-    compile (project(':ev3Messages'))
+    compile(project(':ev3Messages'))
     compile 'com.esotericsoftware.kryo:kryo:2.24.0'
     compile 'com.esotericsoftware:kryonet:2.22.0-RC1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.test:runner:0.5'

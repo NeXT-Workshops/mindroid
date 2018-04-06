@@ -3,8 +3,6 @@ package org.mindroid.android.app.fragments.home;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -14,7 +12,6 @@ import android.util.SparseBooleanArray;
 import android.view.*;
 import android.widget.*;
 
-import eu.chainfire.libsuperuser.Shell;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.IErrorHandler;
 import org.mindroid.android.app.acitivites.MainActivity;
@@ -463,7 +460,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_activateTethering.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                ShellService.activateTethering(true);
+                ShellService.setTethering(true);
             }
         });
 

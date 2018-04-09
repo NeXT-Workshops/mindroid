@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.util.SparseBooleanArray;
 import android.view.*;
 import android.widget.*;
@@ -16,6 +17,7 @@ import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.IErrorHandler;
 import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.android.app.asynctasks.ProgressTask;
+import org.mindroid.android.app.dialog.ProgressDialog;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
@@ -81,6 +83,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private String infoTetheringNotActiavted;
     private String txt_btn_DisConnect_connect;
     private String txt_btn_DisConnect_disconnect;
+
+    private final int ACTIVATE_TETHERING_TIMEOUT = 4000;
 
     private SparseBooleanArray menuItemAlwaysEnabled = new SparseBooleanArray();
 
@@ -460,7 +464,17 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_activateTethering.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                final ProgressDialog pd = ProgressDialog.newInstance(getResources().getString(R.string.txt_activate_tethering),"");
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        pd.dismiss();
+                    }
+                }, ACTIVATE_TETHERING_TIMEOUT);
                 ShellService.setTethering(true);
+
+                pd.show(getFragmentManager(),"ACTIVATE_TETHERING_DIALOG");
             }
         });
 

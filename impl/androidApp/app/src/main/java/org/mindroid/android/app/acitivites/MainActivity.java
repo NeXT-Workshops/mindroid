@@ -51,7 +51,7 @@ public class MainActivity extends Activity
         RobotSetupInfoFragment.OnFragmentInteractionListener,
         IErrorHandler{
 
-    public static Robot robot;
+    public static Robot robot = new Robot();
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -96,11 +96,6 @@ public class MainActivity extends Activity
         //If the app is running the display will be set to always on and the device will not go into sleep mode.
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-
-        if(robot == null) {
-            robot = new Robot();
-        }
-
         SettingsProvider.getInstance().setAndroidId(Secure.getString(this.getContentResolver(), Secure.ANDROID_ID));
         errorHandler = new APIErrorHandler(this);
 
@@ -121,9 +116,6 @@ public class MainActivity extends Activity
                     .replace(R.id.container, HOME_FRAGMENT)
                     .commit();
         }
-
-        initialiseSettings();
-
 
         //READ IF CONFIG
         /*Runnable run = new Thread(){
@@ -179,15 +171,6 @@ public class MainActivity extends Activity
         }
     }
 
-    /**
-     * Initializes the SettingsProvider Instance
-     */
-    private void initialiseSettings() {
-        SharedPreferences connectionProperties = this.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_connection_Data), Context.MODE_PRIVATE);
-        SharedPreferences portConfigProperties = this.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_portConfiguration),Context.MODE_PRIVATE);
-
-        SettingsProvider.getInstance().initialize(getResources(),connectionProperties,portConfigProperties);
-    }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {

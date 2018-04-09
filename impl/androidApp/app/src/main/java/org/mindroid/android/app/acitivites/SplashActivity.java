@@ -28,11 +28,18 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        boolean isUsbConnected = USBService.isUSBConnected(this);
+        View view = getWindow().getDecorView().findViewById(android.R.id.content);
+        this.txtView_currentAction = (TextView) findViewById(R.id.txtView_currentAction);
+
+        //Initialize SettingsProvider
+        initialiseSettings();
+
+        final boolean isUsbConnected = USBService.isUSBConnected(this);
         int timeout =  WELCOME_SCREEN_NO_USB_TIMEOUT;
         if(isUsbConnected){
             timeout = WELCOME_SCREEN_USB_TIMEOUT;
         }
+
 
         //Splash Intent
         final Handler handler = new Handler();
@@ -42,29 +49,38 @@ public class SplashActivity extends Activity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                txtView_currentAction.setText(getResources().getString(R.string.txt_starting_adb_service));
+                setupADBService();
+
+            }
+        }, 10);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                txtView_currentAction.setText(getResources().getString(R.string.txt_activate_tethering));
+                setupTethering(isUsbConnected);
+            }
+        }, 500);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                txtView_currentAction.setText(getResources().getString(R.string.txt_connecting_to_msg_server));
+                connectToMsgServer();
+
+            }
+        }, timeout-500);
+        
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
                 startActivity(mainIntent);
                 //Distroy activity
                 finish();
             }
         }, timeout);
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                connectToMsgServer();
-            }
-        }, timeout-500);
-
-        //Initialize SettingsProvider
-        initialiseSettings();
-
-        View view = getWindow().getDecorView().findViewById(android.R.id.content);
-        this.txtView_currentAction = (TextView) findViewById(R.id.txtView_currentAction);
-
-        setupADBService();
-        setupTethering(isUsbConnected);
-
     }
 
     /**

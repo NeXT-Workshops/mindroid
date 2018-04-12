@@ -34,8 +34,8 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
 
 		client.addListener(this);
 
-
 		registerMessages(client);
+
 	}
 	
 	/**
@@ -63,6 +63,11 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
     @Override
     public abstract void received (Connection connection, Object object);
 
+	/**
+	 * Register Message types on Kryo connections.
+	 *
+	 * @param client - client
+	 */
 	private void registerMessages(Client client) {
 		if (!areMessagesRegistered){
 			MessageRegistrar.register(client);

@@ -25,7 +25,10 @@ public class MessageRegistrar {
 	
 	public static void register(EndPoint endPoint){
 		Kryo kryo = endPoint.getKryo();
-		
+
+		//Loggable interface
+		kryo.register(ILoggable.class);
+
 		//Brick Messages
 		kryo.register(CreateMotorMessage.class);
 		kryo.register(CreateSensorMessage.class);

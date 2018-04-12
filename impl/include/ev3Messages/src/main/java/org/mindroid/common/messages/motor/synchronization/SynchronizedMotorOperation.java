@@ -1,5 +1,8 @@
 package org.mindroid.common.messages.motor.synchronization;
 
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
+
 public class SynchronizedMotorOperation {
 
     private int value = 0;
@@ -50,5 +53,5 @@ public class SynchronizedMotorOperation {
     public OperationType getOptype() {
         return optype;
     }
+
 }
-//TODO check if it works with forward and backward as well?

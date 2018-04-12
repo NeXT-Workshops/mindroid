@@ -1,16 +1,20 @@
 package org.mindroid.impl.brick;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.mindroid.api.brick.Brick;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.robot.control.IBrickControl;
+import org.mindroid.common.messages.ILoggable;
 import org.mindroid.common.messages.brick.BrickMessagesFactory;
 import org.mindroid.common.messages.led.StatusLightMessageFactory;
 import org.mindroid.common.messages.sound.BeepMessage;
 import org.mindroid.common.messages.sound.SoundMessageFactory;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
+import org.mindroid.impl.logging.APILoggerManager;
+import org.mindroid.impl.logging.EV3MsgLogger;
 import org.mindroid.impl.motor.EV3MotorManager;
 import org.mindroid.impl.sensor.EV3SensorManager;
 
@@ -27,6 +31,10 @@ public class EV3Brick extends Brick {
     private EV3Display display;
 
     private final EV3BrickEndpoint brickEndpoint;
+
+	private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
+	private final EV3MsgLogger msgRcvdLogger;
+	private final EV3MsgLogger msgSendLogger;
 
 	/**
 	 *
@@ -54,6 +62,11 @@ public class EV3Brick extends Brick {
 		//Set Client to IMotor-/Sensormanager
 		sensorManager.setBrickClient(brickEndpoint.client);
 		motorManager.setBrickClient(brickEndpoint.client);
+
+		//Init Loggers
+		APILoggerManager.getInstance().registerLogger(LOGGER);
+		msgRcvdLogger = new EV3MsgLogger(LOGGER,"Received ");
+		msgSendLogger = new EV3MsgLogger(LOGGER,"Send ");
     }
 
 
@@ -93,8 +106,12 @@ public class EV3Brick extends Brick {
 
 	@Override
 	public void resetBrickState() {
+    	//Log msg
+		ILoggable msg = BrickMessagesFactory.createResetBrickMsg();
+		msg.accept(msgSendLogger);
+
     	//Resets the Bricks Display,LED,SoundVolume
-		brickEndpoint.sendTCPMessage(BrickMessagesFactory.createResetBrickMsg());
+		brickEndpoint.sendTCPMessage(msg);
 	}
 
 	public EV3MotorManager getMotorManager() {
@@ -129,7 +146,11 @@ public class EV3Brick extends Brick {
 	@Override
 	public void setEV3StatusLight(EV3StatusLightColor color, EV3StatusLightInterval interval) {
 		if(isBrickReady()){
-			brickEndpoint.sendTCPMessage(StatusLightMessageFactory.createSetStatusLightMessage((color.getValue()+3*interval.getValue())));
+			//Log msg
+			ILoggable msg = StatusLightMessageFactory.createSetStatusLightMessage((color.getValue()+3*interval.getValue()));
+			msg.accept(msgSendLogger);
+
+			brickEndpoint.sendTCPMessage(msg);
 		}else{
 			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
 		}
@@ -138,7 +159,11 @@ public class EV3Brick extends Brick {
 	@Override
 	public void setLEDOff() {
 		if(isBrickReady()){
-			brickEndpoint.sendTCPMessage(StatusLightMessageFactory.createSetStatusLightMessage(0));
+			//Log msg
+			ILoggable msg = StatusLightMessageFactory.createSetStatusLightMessage(0);
+			msg.accept(msgSendLogger);
+
+			brickEndpoint.sendTCPMessage(msg);
 		}else{
 			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
 		}
@@ -151,7 +176,11 @@ public class EV3Brick extends Brick {
 	//-------------- SOUND Operations ----------------
 	public void setVolume(int volume){
 		if(isBrickReady()){
-			brickEndpoint.sendTCPMessage(SoundMessageFactory.createVolumeMessage(volume));
+			//Log msg
+			ILoggable msg = SoundMessageFactory.createVolumeMessage(volume);
+			msg.accept(msgSendLogger);
+
+			brickEndpoint.sendTCPMessage(msg);
 		}else{
 			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
 		}
@@ -159,7 +188,11 @@ public class EV3Brick extends Brick {
 
 	public void singleBeep(){
 		if(isBrickReady()){
-			brickEndpoint.sendTCPMessage(SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.SINGLE_BEEP));
+			//Log msg
+			ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.SINGLE_BEEP);
+			msg.accept(msgSendLogger);
+
+			brickEndpoint.sendTCPMessage(msg);
 		}else{
 			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
 		}
@@ -167,7 +200,11 @@ public class EV3Brick extends Brick {
 
 	public void doubleBeep() {
 		if(isBrickReady()){
-			brickEndpoint.sendTCPMessage(SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.DOUBLE_BEEP));
+			//Log msg
+			ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.DOUBLE_BEEP);
+			msg.accept(msgSendLogger);
+
+			brickEndpoint.sendTCPMessage(msg);
 		}else{
 			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
 		}
@@ -175,7 +212,11 @@ public class EV3Brick extends Brick {
 
 	public void buzz() {
 		if(isBrickReady()){
-			brickEndpoint.sendTCPMessage(SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.LOW_BUZZ));
+			//Log msg
+			ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.LOW_BUZZ);
+			msg.accept(msgSendLogger);
+
+			brickEndpoint.sendTCPMessage(msg);
 		}else{
 			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
 		}
@@ -183,14 +224,22 @@ public class EV3Brick extends Brick {
 
 	public void beepSequenceDown() {
 		if(isBrickReady()){
-			brickEndpoint.sendTCPMessage(SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.BEEP_SEQUENCE_DOWNWARDS));
+			//Log msg
+			ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.BEEP_SEQUENCE_DOWNWARDS);
+			msg.accept(msgSendLogger);
+
+			brickEndpoint.sendTCPMessage(msg);
 		}else{
 			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
 		}
 	}
 	public void beepSequenceUp() {
 		if(isBrickReady()){
-			brickEndpoint.sendTCPMessage(SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.BEEP_SEQUENCE_UPWARDS));
+			//Log msg
+			ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.BEEP_SEQUENCE_UPWARDS);
+			msg.accept(msgSendLogger);
+
+			brickEndpoint.sendTCPMessage(msg);
 		}else{
 			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
 		}

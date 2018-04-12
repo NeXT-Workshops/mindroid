@@ -1,9 +1,12 @@
 package org.mindroid.common.messages.sound;
 
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
+
 /**
  * Message to set the Volume of the Brick
  */
-public class SoundVolumeMessage{
+public class SoundVolumeMessage implements ILoggable {
 
     private int volume = 0;
 
@@ -30,5 +33,10 @@ public class SoundVolumeMessage{
         return "SoundVolumeMessage{" +
                 "volume=" + volume +
                 '}';
+    }
+
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
     }
 }

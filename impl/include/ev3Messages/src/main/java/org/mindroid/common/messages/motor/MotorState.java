@@ -91,4 +91,18 @@ public class MotorState {
     public void setSpeed(int speed) {
         this.speed = speed;
     }
+
+    @Override
+    public String toString() {
+        return "MotorState{" +
+                "rotationSpeed=" + rotationSpeed +
+                ", limitAngle=" + limitAngle +
+                ", acceleration=" + acceleration +
+                ", tachoCount=" + tachoCount +
+                ", speed=" + speed +
+                ", position=" + position +
+                ", maxSpeed=" + maxSpeed +
+                ", isMoving=" + isMoving +
+                '}';
+    }
 }

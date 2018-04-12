@@ -1,6 +1,9 @@
 package org.mindroid.common.messages.motor.synchronization;
 
-public class SynchronizedMotorGroupCreatedMessage {
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
+
+public class SynchronizedMotorGroupCreatedMessage implements ILoggable {
 
     private boolean isSuccess = false;
 
@@ -14,5 +17,10 @@ public class SynchronizedMotorGroupCreatedMessage {
 
     public boolean isSuccess() {
         return isSuccess;
+    }
+
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
     }
 }

@@ -1,5 +1,7 @@
 package org.mindroid.android.app.robodancer;
 
+import android.provider.Settings;
+import org.mindroid.android.app.fragments.log.GlobalLogger;
 import org.mindroid.android.app.fragments.sensormonitoring.SensorListener;
 import org.mindroid.android.app.serviceloader.ImplementationService;
 import org.mindroid.api.BasicAPI;
@@ -41,6 +43,7 @@ public class Robot {
 
     public Robot() {
         LOGGER.setLevel(Level.INFO);
+        GlobalLogger.registerLogger(LOGGER);
 
         roFactory = new RobotFactory();
         robotPortConfig = new RobotPortConfig();

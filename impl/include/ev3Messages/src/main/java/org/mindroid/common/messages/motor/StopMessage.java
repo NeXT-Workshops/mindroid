@@ -1,6 +1,9 @@
 package org.mindroid.common.messages.motor;
 
-public class StopMessage {
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
+
+public class StopMessage implements ILoggable {
 
     boolean immidiateReturn = false;
 
@@ -14,5 +17,10 @@ public class StopMessage {
 
     public boolean isImmidiateReturn() {
         return immidiateReturn;
+    }
+
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
     }
 }

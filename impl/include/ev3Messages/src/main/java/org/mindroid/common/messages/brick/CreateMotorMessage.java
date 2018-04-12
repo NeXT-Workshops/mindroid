@@ -1,9 +1,11 @@
 package org.mindroid.common.messages.brick;
 
 
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
 import org.mindroid.common.messages.hardware.Motors;
 
-public class CreateMotorMessage{
+public class CreateMotorMessage implements ILoggable {
     String port;
     Motors motorType;
     int networkPort;
@@ -43,4 +45,8 @@ public class CreateMotorMessage{
         this.networkPort = networkPort;
     }
 
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
+    }
 }

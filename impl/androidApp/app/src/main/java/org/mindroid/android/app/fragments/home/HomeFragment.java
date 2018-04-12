@@ -18,6 +18,7 @@ import org.mindroid.android.app.acitivites.IErrorHandler;
 import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.android.app.asynctasks.ProgressTask;
 import org.mindroid.android.app.dialog.ProgressDialog;
+import org.mindroid.android.app.fragments.log.GlobalLogger;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
@@ -107,6 +108,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         LogManager.getLogManager().addLogger(LOGGER);
+        GlobalLogger.registerLogger(LOGGER);
         LOGGER.setLevel(Level.INFO);
         return fragment;
     }

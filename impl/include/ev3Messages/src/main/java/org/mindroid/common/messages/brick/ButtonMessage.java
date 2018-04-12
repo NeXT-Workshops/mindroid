@@ -1,6 +1,9 @@
 package org.mindroid.common.messages.brick;
 
-public class ButtonMessage {
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
+
+public class ButtonMessage implements ILoggable {
 
     //public final static int ID_BUTTON_ESCAPE = 0;
     public final static int ID_BUTTON_ENTER = 1;
@@ -32,5 +35,10 @@ public class ButtonMessage {
 
     public int getButtonAction() {
         return buttonAction;
+    }
+
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
     }
 }

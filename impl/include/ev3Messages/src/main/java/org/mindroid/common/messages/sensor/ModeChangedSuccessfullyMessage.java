@@ -1,8 +1,10 @@
 package org.mindroid.common.messages.sensor;
 
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
 import org.mindroid.common.messages.hardware.Sensormode;
 
-public class ModeChangedSuccessfullyMessage {
+public class ModeChangedSuccessfullyMessage implements ILoggable {
     private Sensormode newMode;
 
     public ModeChangedSuccessfullyMessage(){}
@@ -13,5 +15,10 @@ public class ModeChangedSuccessfullyMessage {
 
     public Sensormode getMode(){
         return this.newMode;
+    }
+
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
     }
 }

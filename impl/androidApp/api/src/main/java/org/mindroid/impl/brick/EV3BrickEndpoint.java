@@ -9,6 +9,9 @@ import org.mindroid.common.messages.brick.ButtonMessage;
 import org.mindroid.common.messages.brick.HelloMessage;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 public class EV3BrickEndpoint extends Listener {
 
@@ -23,6 +26,7 @@ public class EV3BrickEndpoint extends Listener {
     /** Brick is ready for commands - will be set true when hello-msg from brick is received!**/
     private boolean readyForCommands = false;
 
+    private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
 
     public EV3BrickEndpoint(final String ev3Brick_IP, int ev3Brick_PORT){
         this.EV3Brick_IP = ev3Brick_IP;
@@ -81,6 +85,9 @@ public class EV3BrickEndpoint extends Listener {
 
     @Override
     public void received(Connection connection, Object object){
+        LOGGER.log(Level.INFO,"Received Message: "+object.toString());
+
+
         /** First answer from the Brick if the Connection is established **/
         if(object.getClass() == HelloMessage.class){
             readyForCommands = true;

@@ -3,6 +3,7 @@ package org.mindroid.impl.sensor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 
 import org.mindroid.common.messages.*;
@@ -20,6 +21,8 @@ import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import org.mindroid.impl.logging.APILoggerManager;
+import org.mindroid.impl.logging.EV3MsgLogger;
 
 /**
  * 
@@ -38,7 +41,11 @@ public class EV3SensorManager extends Listener{
     private HashMap<EV3SensorPort,Integer> portToTCPPort;
     
     private Client brickClient = null;
-    
+
+	private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
+	private final EV3MsgLogger msgRcvdLogger;
+	private final EV3MsgLogger msgSendLogger;
+
     public EV3SensorManager(EV3BrickEndpoint ev3Brick) {
         this.ev3BrickEndpoint = ev3Brick;
         
@@ -50,7 +57,11 @@ public class EV3SensorManager extends Listener{
         
        
         sensorEndpoints = new HashMap<>(4);
-        
+
+		//Init Loggers
+		APILoggerManager.getInstance().registerLogger(LOGGER);
+		msgRcvdLogger = new EV3MsgLogger(LOGGER,"Received ");
+		msgSendLogger = new EV3MsgLogger(LOGGER,"Send ");
     }
     
 
@@ -75,11 +86,14 @@ public class EV3SensorManager extends Listener{
     }
 
 	public void initializeSensor(Sensors sensorType, EV3SensorPort sensorPort) throws BrickIsNotReadyException {
-		System.out.println("Local-EV3SensorManager: initSensor called");
 		if(ev3BrickEndpoint.isBrickReady()){
 			if(sensorType != null && sensorPort != null){
 				if(sensorEndpoints.containsKey(sensorPort)){
-					brickClient.sendTCP(BrickMessagesFactory.createSensor(sensorPort.getValue(), sensorType, portToTCPPort.get(sensorPort)));
+					//Log msg
+					ILoggable msg = BrickMessagesFactory.createSensor(sensorPort.getValue(), sensorType, portToTCPPort.get(sensorPort));
+					msg.accept(msgSendLogger);
+
+					brickClient.sendTCP(msg);
 				}else{
 					//TODO throw SensorPort is not defined Exception
 				}
@@ -93,8 +107,12 @@ public class EV3SensorManager extends Listener{
 
     @Override
     public void received(Connection connection, final Object object){
-		/** Message if the Endpoint-creation was successful or not **/
-    	
+		/** receives Messages if the Endpoint-creation was successful or not **/
+		//Log msg
+		if(object instanceof ILoggable){
+			((ILoggable) object).accept(msgRcvdLogger);
+		}
+
     	Runnable handleMessage = new Runnable(){
 			@Override
 			public void run(){

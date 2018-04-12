@@ -85,7 +85,11 @@ public class LoggerFragment extends Fragment {
      * Creates an Entry of the logs at the UI
      */
     private void createEntry(LogRecord log) {
-        createLogEntry(calcDate(log.getMillis()),log.getLoggerName().substring(log.getLoggerName().lastIndexOf(".")+1),log.getMessage());
+        createLogEntry(calcDate(log.getMillis()),cutLoggerName(log.getLoggerName()),log.getMessage());
+    }
+
+    private String cutLoggerName(String loggerName){
+        return loggerName.substring(loggerName.lastIndexOf(".")+1);
     }
 
     /**

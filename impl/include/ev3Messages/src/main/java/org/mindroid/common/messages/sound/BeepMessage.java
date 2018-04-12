@@ -1,10 +1,18 @@
 package org.mindroid.common.messages.sound;
 
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
+
 /**
  * Message to create a Beep on the Brick
  * @author Torben
  */
-public class BeepMessage{
+public class BeepMessage implements ILoggable {
+
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
+    }
 
     public static class Beeptype{
         public static final int SINGLE_BEEP = 1;

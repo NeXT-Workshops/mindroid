@@ -1,6 +1,9 @@
 package org.mindroid.common.messages.motor;
 
-public class RotateMessage{
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
+
+public class RotateMessage implements ILoggable {
     private int angle;
     private boolean immediateReturn = false;
 
@@ -21,5 +24,10 @@ public class RotateMessage{
 
     public boolean isImmediateReturn() {
         return immediateReturn;
+    }
+
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
     }
 }

@@ -1,10 +1,13 @@
 package org.mindroid.common.messages.display;
 
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
+
 /**
  * Message to draw a String on the Display at a given Position
  * @author Torben
  */
-public class DrawStringMessage {
+public class DrawStringMessage implements ILoggable {
     String str;
     int textsize;
     int x;
@@ -42,5 +45,10 @@ public class DrawStringMessage {
 
     public void setTextsize(int textsize) {
         this.textsize = textsize;
+    }
+
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
     }
 }

@@ -1,6 +1,9 @@
 package org.mindroid.common.messages.sensor;
 
 
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
+
 /**
  * Gets returned from the SensorEndpoint on Bricks-side, when the
  * Phone-side Sensor-Object connects the first time to the Endpoint.
@@ -10,7 +13,7 @@ package org.mindroid.common.messages.sensor;
  * @author Torben
  *
  */
-public class HelloSensorMessage{
+public class HelloSensorMessage implements ILoggable {
         private String msg;
 
         public HelloSensorMessage(){
@@ -29,4 +32,9 @@ public class HelloSensorMessage{
         public String toString() {
             return "HelloSensorMessage [msg=" + msg + "]";
         }
+
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
+    }
 }

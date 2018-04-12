@@ -3,12 +3,18 @@ package org.mindroid.impl.motor;
 
 
 import org.mindroid.api.motor.IRegulatedMotor;
+import org.mindroid.common.messages.ILoggable;
 import org.mindroid.common.messages.motor.MotorState;
 import org.mindroid.common.messages.motor.MotorStateMessage;
 import org.mindroid.common.messages.motor.RegulatedMotorMessagesFactory;
 import org.mindroid.impl.endpoint.ClientEndpointImpl;
 
 import com.esotericsoftware.kryonet.Connection;
+import org.mindroid.impl.logging.APILoggerManager;
+import org.mindroid.impl.logging.EV3MsgLogger;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -27,9 +33,17 @@ public class EV3RegulatedMotorEndpoint extends ClientEndpointImpl implements IRe
 	private float maxSpeed = -1;
 	private boolean isMoving = false;
 
-	
+	private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
+	private final EV3MsgLogger msgRcvdLogger;
+	private final EV3MsgLogger msgSendLogger;
+
 	public EV3RegulatedMotorEndpoint(String ip, int tcpPort, int brickTimeout) {
-		super(ip,tcpPort,brickTimeout); 
+		super(ip,tcpPort,brickTimeout);
+
+		//Init Loggers
+		APILoggerManager.getInstance().registerLogger(LOGGER);
+		msgRcvdLogger = new EV3MsgLogger(LOGGER,"Received ");
+		msgSendLogger = new EV3MsgLogger(LOGGER,"Send ");
 	}
 
 	// Gets set (true) when the creation on Brick site failed.
@@ -39,7 +53,11 @@ public class EV3RegulatedMotorEndpoint extends ClientEndpointImpl implements IRe
 
 	@Override
 	public void received(Connection connection, Object object) {
-		
+		//Log msg
+		if(object instanceof ILoggable){
+			((ILoggable) object).accept(msgRcvdLogger);
+		}
+
 		if(object.getClass() == MotorStateMessage.class){
 			MotorState ms = ((MotorStateMessage) object).getMotorState();
 			acceleration = ms.getAcceleration();
@@ -97,35 +115,50 @@ public class EV3RegulatedMotorEndpoint extends ClientEndpointImpl implements IRe
 	@Override
 	public void forward() {
 		if(client.isConnected()){
-			client.sendTCP(RegulatedMotorMessagesFactory.createForwardMessage());
+			//Log msg
+			ILoggable msg = RegulatedMotorMessagesFactory.createForwardMessage();
+			msg.accept(msgSendLogger);
+			client.sendTCP(msg);
 		}
 	}
 
 	@Override
 	public void backward() {
 		if(isClientReady()){
-			client.sendTCP(RegulatedMotorMessagesFactory.createBackwardMessage());
+			//Log msg
+			ILoggable msg = RegulatedMotorMessagesFactory.createBackwardMessage();
+			msg.accept(msgSendLogger);
+			client.sendTCP(msg);
 		}
 	}
 
 	@Override
 	public void stop() {
 		if(client.isConnected()){
-			client.sendTCP(RegulatedMotorMessagesFactory.createStopMessage());
+			//Log msg
+			ILoggable msg = RegulatedMotorMessagesFactory.createStopMessage();
+			msg.accept(msgSendLogger);
+			client.sendTCP(msg);
 		}
 	}
 
 	@Override
 	public void flt() {
 		if(isClientReady()){
-			client.sendTCP(RegulatedMotorMessagesFactory.createFltMessage());
+			//Log msg
+			ILoggable msg = RegulatedMotorMessagesFactory.createFltMessage();
+			msg.accept(msgSendLogger);
+			client.sendTCP(msg);
 		}
 	}
 
 	@Override
 	public void stop(boolean immediateReturn) {
 		if(isClientReady()){
-			client.sendTCP(RegulatedMotorMessagesFactory.createStopMessage(immediateReturn));
+			//Log msg
+			ILoggable msg = RegulatedMotorMessagesFactory.createStopMessage(immediateReturn);
+			msg.accept(msgSendLogger);
+			client.sendTCP(msg);
 		}
 	}
 
@@ -137,49 +170,70 @@ public class EV3RegulatedMotorEndpoint extends ClientEndpointImpl implements IRe
 			speed = MAX_SPEED;
 		}
 		if(isClientReady()){
-			client.sendTCP(RegulatedMotorMessagesFactory.createSetSpeedMessage(speed));
+			//Log msg
+			ILoggable msg = RegulatedMotorMessagesFactory.createSetSpeedMessage(speed);
+			msg.accept(msgSendLogger);
+			client.sendTCP(msg);
 		}
 	}
 
 	@Override
 	public void rotate(int angle) {
 		if(isClientReady()){
-			client.sendTCP(RegulatedMotorMessagesFactory.createRotateMessage(angle));
+			//Log msg
+			ILoggable msg = RegulatedMotorMessagesFactory.createRotateMessage(angle);
+			msg.accept(msgSendLogger);
+			client.sendTCP(msg);
 		}
 	}
 
 	@Override
 	public void rotateTo(int angle) {
 		if(isClientReady()){
-			client.sendTCP(RegulatedMotorMessagesFactory.createRotateToMessage(angle));
+			//Log msg
+			ILoggable msg = RegulatedMotorMessagesFactory.createRotateToMessage(angle);
+			msg.accept(msgSendLogger);
+			client.sendTCP(msg);
 		}
 	}
 
 	@Override
 	public void flt(boolean immediateReturn) {
 		if(isClientReady()){
-			client.sendTCP(RegulatedMotorMessagesFactory.createFltMessage());
+			//Log msg
+			ILoggable msg = RegulatedMotorMessagesFactory.createFltMessage(immediateReturn);
+			msg.accept(msgSendLogger);
+			client.sendTCP(msg);
 		}
 	}
 
 	@Override
 	public void rotate(int angle, boolean immediateReturn) {
 		if(isClientReady()){
-			client.sendTCP(RegulatedMotorMessagesFactory.createRotateMessage(angle,immediateReturn));
+			//Log msg
+			ILoggable msg = RegulatedMotorMessagesFactory.createRotateMessage(angle,immediateReturn);
+			msg.accept(msgSendLogger);
+			client.sendTCP(msg);
 		}
 	}
 
 	@Override
 	public void rotateTo(int limitAngle, boolean immediateReturn) {
 		if(isClientReady()){
-			client.sendTCP(RegulatedMotorMessagesFactory.createRotateToMessage(limitAngle,immediateReturn));
+			//Log msg
+			ILoggable msg = RegulatedMotorMessagesFactory.createRotateToMessage(limitAngle,immediateReturn);
+			msg.accept(msgSendLogger);
+			client.sendTCP(msg);
 		}
 	}
 
 	@Override
 	public void setAcceleration(int acceleration) {
 		if(isClientReady()){
-			client.sendTCP(RegulatedMotorMessagesFactory.createSetAccelerationMessage(acceleration));
+			//Log msg
+			ILoggable msg = RegulatedMotorMessagesFactory.createSetAccelerationMessage(acceleration);
+			msg.accept(msgSendLogger);
+			client.sendTCP(msg);
 		}
 	}
 

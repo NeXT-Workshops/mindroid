@@ -1,7 +1,10 @@
 package org.mindroid.common.messages.brick;
 
 
-public class EndpointCreatedMessage{
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
+
+public class EndpointCreatedMessage implements ILoggable {
     String msg;
     boolean success = false;
     String port;
@@ -43,5 +46,10 @@ public class EndpointCreatedMessage{
     public String toString() {
         return "EndpointCreatedMessage [msg=" + msg + ", success=" + success + ", port=" + port + ", sensor="
                 + sensor + ", motor=" + motor + "]";
+    }
+
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
     }
 }

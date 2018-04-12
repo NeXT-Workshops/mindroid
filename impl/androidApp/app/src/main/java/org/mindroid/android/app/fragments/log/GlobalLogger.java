@@ -1,12 +1,10 @@
 package org.mindroid.android.app.fragments.log;
 
 
-import android.provider.Settings;
 import org.mindroid.android.app.fragments.home.HomeFragment;
 import org.mindroid.android.app.robodancer.Robot;
-import org.mindroid.impl.errorhandling.ErrorHandlerManager;
+import org.mindroid.impl.logging.APILoggerManager;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.*;
 
@@ -15,45 +13,39 @@ public class GlobalLogger {
     static private SimpleFormatter formatterTxt;
 
     private final static LogHandler LOG_HANDLER = new LogHandler();
+    private final static String GLOBAL_LOGGER_NAME =".GlobalLogger";
     public static ArrayList<LogRecord> logs = LogHandler.logs;
 
-    static {
-        // get the global logger to configure it
-        Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-        logger.setLevel(Level.INFO);
 
-        //Register local LogHandler
-        registerLogHandler(GlobalLogger.LOG_HANDLER);
-
-        /*
-        try {
-            fileTxt = new FileHandler("Logging.txt");
-
-            // create a TXT formatter
-            formatterTxt = new SimpleFormatter();
-            fileTxt.setFormatter(formatterTxt);
-            logger.addHandler(fileTxt);
-        } catch (IOException e) {
-            ErrorHandlerManager.getInstance().handleError(e,GlobalLogger.class,e.getMessage());
-        }
-        */
+    static{
+        //Register API Logger
+        registerLogger(APILoggerManager.getInstance().getLogger());
     }
+
+
+    public GlobalLogger(){
+
+    }
+
+
 
     /**
      * All used Loggers need to be registered to the given logHandler.
-     * The given logHandler is the local {@link #LOG_HANDLER}
      *
-     * @param logHandler the local {@link #LOG_HANDLER}
+     * @param logger The Logger to register
      */
-    private static void registerLogHandler(Handler logHandler){
-        Logger.getLogger(HomeFragment.class.getName()).addHandler(logHandler);
-        Logger.getLogger(Robot.class.getName()).addHandler(logHandler);
+    public static void registerLogger(Logger logger){
+        logger.addHandler(LOG_HANDLER);
+        logs.add(createRegistrationLog(logger));
+    }
 
-        /*while(LogManager.getLogManager().getLoggerNames().hasMoreElements()){
-            Logger logger = LogManager.getLogManager().getLogger(LogManager.getLogManager().getLoggerNames().nextElement());
-            logger.addHandler(logHandler);
-        }*/
+    private static LogRecord createRegistrationLog(Logger logger) {
+        LogRecord regLog = new LogRecord(Level.CONFIG,"Registered Logger: "+logger.getName());
+        if(regLog.getLoggerName() == null) {
+            regLog.setLoggerName(GLOBAL_LOGGER_NAME);
+        }
+        return regLog;
     }
 
 

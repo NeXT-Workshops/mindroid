@@ -1,6 +1,9 @@
 package org.mindroid.common.messages.motor;
 
-public class FltMessage {
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
+
+public class FltMessage implements ILoggable {
 
     private boolean immediateRetrun = false;
 
@@ -14,5 +17,10 @@ public class FltMessage {
 
     public boolean isImmediateRetrun() {
         return immediateRetrun;
+    }
+
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
     }
 }

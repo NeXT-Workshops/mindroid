@@ -2,21 +2,44 @@ package org.mindroid.impl.motor;
 
 import com.esotericsoftware.kryonet.Connection;
 import org.mindroid.api.motor.ISynchronizedMotors;
+import org.mindroid.common.messages.ILoggable;
 import org.mindroid.common.messages.motor.synchronization.SyncedMotorOpCompleteMessage;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorMessageFactory;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperation;
+import org.mindroid.common.messages.motor.synchronization.SynchronizedOperationMessage;
 import org.mindroid.impl.endpoint.ClientEndpointImpl;
+import org.mindroid.impl.logging.APILoggerManager;
+import org.mindroid.impl.logging.EV3MsgLogger;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SynchronizedMotorsEndpoint extends ClientEndpointImpl implements ISynchronizedMotors {
 
+    private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
+    private final EV3MsgLogger msgRcvdLogger;
+    private final EV3MsgLogger msgSendLogger;
+
     public SynchronizedMotorsEndpoint(String ip, int tcpPort, int brickTimeout) {
         super(ip, tcpPort, brickTimeout);
+
+        //Init Loggers
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+        msgRcvdLogger = new EV3MsgLogger(LOGGER,"Received ");
+        msgSendLogger = new EV3MsgLogger(LOGGER,"Send ");
     }
 
     private boolean isBlockedOperationComplete = true;
 
+
+
     @Override
     public void received(Connection connection, Object object) {
+        //Log msg
+        if(object instanceof ILoggable){
+            ((ILoggable) object).accept(msgRcvdLogger);
+        }
+
         if(object instanceof SyncedMotorOpCompleteMessage){
             setBlockedOperationComplete(true);
         }
@@ -26,14 +49,13 @@ public class SynchronizedMotorsEndpoint extends ClientEndpointImpl implements IS
     public boolean executeSynchronizedOperation(SynchronizedMotorOperation operationPortA, SynchronizedMotorOperation operationPortB, SynchronizedMotorOperation operationPortC, SynchronizedMotorOperation operationPortD, boolean isBlocked) {
         if(isClientReady()){
             if(isBlocked){ //TODO how to interuppt if i want to stop statemachine/impImpl by App?
-                System.out.println("[SynchronizedMotorsEndpoint:execute] is blocked is true");
                 //wait iff a blocked operation is currently running
                 waitUntilBlockedOperationIsComplete();
 
-                System.out.println("[SynchronizedMotorsEndpoint:execute] setBlocked operation false");
                 setBlockedOperationComplete(false);
-                System.out.println("[SynchronizedMotorsEndpoint:execute] sending Message");
-                client.sendTCP(SynchronizedMotorMessageFactory.createSynchronizedMotorOperationMessage(operationPortA,operationPortB,operationPortC,operationPortD,isBlocked));
+                ILoggable msg = SynchronizedMotorMessageFactory.createSynchronizedMotorOperationMessage(operationPortA,operationPortB,operationPortC,operationPortD,isBlocked);
+                msg.accept(msgSendLogger);
+                client.sendTCP(msg);
 
                 //Wait until the current operation is complete
                 waitUntilBlockedOperationIsComplete();
@@ -41,8 +63,11 @@ public class SynchronizedMotorsEndpoint extends ClientEndpointImpl implements IS
             }else{
                 //wait iff a blocked operation is currently running
                 waitUntilBlockedOperationIsComplete();
-                
-                client.sendTCP(SynchronizedMotorMessageFactory.createSynchronizedMotorOperationMessage(operationPortA,operationPortB,operationPortC,operationPortD,isBlocked));
+
+                ILoggable msg = SynchronizedMotorMessageFactory.createSynchronizedMotorOperationMessage(operationPortA,operationPortB,operationPortC,operationPortD,isBlocked);
+                msg.accept(msgSendLogger);
+
+                client.sendTCP(msg);
             }
 
             //Message sent

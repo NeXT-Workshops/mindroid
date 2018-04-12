@@ -1,6 +1,9 @@
 package org.mindroid.common.messages.motor;
 
-public class SetMotorSpeedMessage {
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
+
+public class SetMotorSpeedMessage implements ILoggable {
     private int speed;
 
     public SetMotorSpeedMessage(){}
@@ -13,5 +16,8 @@ public class SetMotorSpeedMessage {
         return speed;
     }
 
-
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
+    }
 }

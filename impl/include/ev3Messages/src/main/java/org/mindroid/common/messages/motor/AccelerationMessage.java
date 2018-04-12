@@ -1,6 +1,9 @@
 package org.mindroid.common.messages.motor;
 
-public class AccelerationMessage {
+import org.mindroid.common.messages.IEV3MessageVisitor;
+import org.mindroid.common.messages.ILoggable;
+
+public class AccelerationMessage implements ILoggable {
 
     private int acceleration = -1;
 
@@ -10,5 +13,10 @@ public class AccelerationMessage {
 
     public int getAcceleration() {
         return acceleration;
+    }
+
+    @Override
+    public void accept(IEV3MessageVisitor visitor) {
+        visitor.visit(this);
     }
 }

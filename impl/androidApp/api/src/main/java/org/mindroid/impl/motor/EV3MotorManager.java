@@ -2,13 +2,16 @@ package org.mindroid.impl.motor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.mindroid.api.endpoint.ClientEndpoint;
 import org.mindroid.api.motor.IRegulatedMotor;
+import org.mindroid.common.messages.ILoggable;
 import org.mindroid.common.messages.brick.EndpointCreatedMessage;
 import org.mindroid.common.messages.brick.BrickMessagesFactory;
 import org.mindroid.common.messages.hardware.EV3MotorPort;
 import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.led.StatusLightMessageFactory;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorGroupCreatedMessage;
 import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorMessageFactory;
 import org.mindroid.impl.brick.EV3Brick;
@@ -22,6 +25,8 @@ import com.esotericsoftware.kryonet.Listener;
 
 
 import org.mindroid.common.messages.NetworkPortConfig;
+import org.mindroid.impl.logging.APILoggerManager;
+import org.mindroid.impl.logging.EV3MsgLogger;
 
 
 public class EV3MotorManager extends Listener {
@@ -35,7 +40,11 @@ public class EV3MotorManager extends Listener {
     
     EV3BrickEndpoint ev3BrickEndpoint = null;
     private Client brickClient = null;
-    
+
+	private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
+	private final EV3MsgLogger msgRcvdLogger;
+	private final EV3MsgLogger msgSendLogger;
+
     public EV3MotorManager(EV3BrickEndpoint ev3BrickEndpoint) {
         this.ev3BrickEndpoint = ev3BrickEndpoint;
         
@@ -47,6 +56,11 @@ public class EV3MotorManager extends Listener {
         
         endpoints = new HashMap<>(4);
         motors = new HashMap<>(4);
+
+		//Init Loggers
+		APILoggerManager.getInstance().registerLogger(LOGGER);
+		msgRcvdLogger = new EV3MsgLogger(LOGGER,"Received ");
+		msgSendLogger = new EV3MsgLogger(LOGGER,"Send ");
     }
 
     public EV3RegulatedMotorEndpoint createMotor(Motors motorType, EV3MotorPort motorPort) throws PortIsAlreadyInUseException {
@@ -86,7 +100,11 @@ public class EV3MotorManager extends Listener {
 		if(ev3BrickEndpoint.isBrickReady()){
 			if(motorType != null && motorPort != null) {
 				if (motors.containsKey(motorPort)) {
-					brickClient.sendTCP(BrickMessagesFactory.createMotor(motorPort.getValue(), motorType, portToTCPPort.get(motorPort)));
+					//Log msg
+					ILoggable msg = BrickMessagesFactory.createMotor(motorPort.getValue(), motorType, portToTCPPort.get(motorPort));
+					msg.accept(msgSendLogger);
+
+					brickClient.sendTCP(msg);
 				}else{
 					//TODO throw Exception IMotor wurde noch nicht created!
 				}
@@ -103,7 +121,11 @@ public class EV3MotorManager extends Listener {
 	 *
 	 */
 	public void initializeSyncedMotorGroup(){
-		brickClient.sendTCP(SynchronizedMotorMessageFactory.createCreateSynchronizedMotorsMessage());
+		//Log msg
+		ILoggable msg = SynchronizedMotorMessageFactory.createCreateSynchronizedMotorsMessage();
+		msg.accept(msgSendLogger);
+
+		brickClient.sendTCP(msg);
 	}
 
 	public void disconnectMotors(){
@@ -116,23 +138,23 @@ public class EV3MotorManager extends Listener {
 
     @Override
     public void received(Connection connection, Object object){
-		/** Message if the Endpoint-creation was successful or not **/
-    	System.out.println("Local-EV3MotorManager: received a message!");
+		//Log msg
+		if(object instanceof ILoggable) {
+			((ILoggable)object).accept(msgRcvdLogger);
+		}
+
     	
 		if(object.getClass() == EndpointCreatedMessage.class){
 			EndpointCreatedMessage ecmsg = (EndpointCreatedMessage)object;
-			System.out.println("Local-EV3MotorManager: Received a EndpointCreatedMessage! -> "+ecmsg.toString());
 			if(ecmsg.isMotor()){
 				if(ecmsg.isSuccess()){
-					System.out.println("Local-EV3MotorManager: isSuccess at port "+ecmsg.getPort()+"#");
 					if(motors.containsKey(EV3MotorPort.getPort(ecmsg.getPort()))){
-						System.out.println("Local-EV3MotorManager: Endpoint creation successfull - connect to endpoint!");
 						endpoints.get(EV3MotorPort.getPort(ecmsg.getPort())).connect();
 
 						//Set that creation was a success on brick site. will be evaluated by configurator
 						((EV3RegulatedMotorEndpoint)endpoints.get(EV3MotorPort.getPort(ecmsg.getPort()))).setHasCreationFailed(false);
 					}else{
-						System.out.println("Local-EV3MotorManager: Sensor does not exist");
+						System.out.println("Local-EV3MotorManager: Motor does not exist");
 					}
 				}else{
 					//Set that creation failed on brick site. will be evaluated by configurator

@@ -3,8 +3,11 @@ package org.mindroid.impl.sensor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.mindroid.api.sensor.IEV3SensorEventListener;
+import org.mindroid.common.messages.ILoggable;
 import org.mindroid.common.messages.hardware.Sensors;
 import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.common.messages.sensor.*;
@@ -13,6 +16,8 @@ import org.mindroid.impl.endpoint.ClientEndpointImpl;
 import com.esotericsoftware.kryonet.Connection;
 
 import org.mindroid.impl.ev3.EV3PortID;
+import org.mindroid.impl.logging.APILoggerManager;
+import org.mindroid.impl.logging.EV3MsgLogger;
 
 
 //TODO Extend Listener Functionality: adding mode; value; and more?
@@ -38,6 +43,11 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
     // Gets set (true) when the creation on Brick site failed.
     private boolean hasCreationFailed = false;
 
+    private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
+    private final EV3MsgLogger msgRcvdLogger;
+    private final EV3MsgLogger msgSendLogger;
+
+
     /**
      * @param ip
      * @param tcpPort
@@ -48,11 +58,20 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
         this.sensorType = sensorType;
         this.brick_port = brick_port;
         this.initialMode = mode;
+
+        //Init Loggers
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+        msgRcvdLogger = new EV3MsgLogger(LOGGER,"Received FROM Port "+brick_port.getLabel()+" : ");
+        msgSendLogger = new EV3MsgLogger(LOGGER,"Send TO Port "+brick_port.getLabel()+" : ");
     }
 
     @Override
     public void received(Connection connection, final Object object) {
-        //Sensor data updated
+        //Log msg
+        if(object instanceof ILoggable){
+            ((ILoggable) object).accept(msgRcvdLogger);
+        }
+
 
         Thread t = new Thread() {
             @Override
@@ -129,7 +148,11 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
      * @author Alex
      */
     public void changeSensorToMode(Sensormode newMode) {
-        client.sendTCP(SensorMessageFactory.changeModeTo(newMode));
+        ILoggable msg = SensorMessageFactory.changeModeTo(newMode);
+        //Log msg
+        msg.accept(msgSendLogger);
+
+        client.sendTCP(msg);
     }
 
     public void disconnectFromEndpoint() {

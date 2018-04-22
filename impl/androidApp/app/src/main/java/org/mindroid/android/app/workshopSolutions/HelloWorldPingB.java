@@ -11,8 +11,6 @@ public class HelloWorldPingB extends ImperativeWorkshopAPI {
     @Override
     public void run() {
         clearDisplay();
-
         sendMessage("Robert", "Hallo Robert!");
-
     }
 }

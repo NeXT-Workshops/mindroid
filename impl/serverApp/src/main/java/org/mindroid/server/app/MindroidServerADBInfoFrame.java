@@ -83,6 +83,7 @@ public class MindroidServerADBInfoFrame extends JFrame {
 
             for (int i = 0; i < devices.length; i++) {
                 JTextField txtField = new JTextField(devices[i]);
+                txtField.setEditable(false);
                 contentPane.add(txtField);
             }
 

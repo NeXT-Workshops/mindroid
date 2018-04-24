@@ -11,9 +11,7 @@ public class HelloWorldPingR extends ImperativeWorkshopAPI {
 
     @Override
     public void run() {
-
         clearDisplay();
-
         while(!isInterrupted()){
             if (hasMessage()){
                 String msg = getNextMessage().getContent();
@@ -23,7 +21,6 @@ public class HelloWorldPingR extends ImperativeWorkshopAPI {
             }
             delay(100);
         };
-
     }
   }
   

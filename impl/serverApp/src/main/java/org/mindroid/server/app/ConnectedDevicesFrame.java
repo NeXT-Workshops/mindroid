@@ -1,29 +1,29 @@
 package org.mindroid.server.app;
 
 import org.mindroid.common.messages.server.Destination;
+import org.mindroid.common.messages.server.MindroidLogMessage;
+import org.mindroid.common.messages.server.RobotId;
+import org.mindroid.server.app.log.LogFetcher;
+import org.mindroid.server.app.log.LogHandler;
 import org.mindroid.server.app.util.ADBService;
 import org.mindroid.server.app.util.IPService;
 import se.vidstige.jadb.JadbDevice;
 import se.vidstige.jadb.JadbException;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.net.InetSocketAddress;
 import java.util.List;
 
 public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
     private static final ConnectedDevicesFrame console = new ConnectedDevicesFrame();
 
-    public static ConnectedDevicesFrame getConnectedDeviceFrame() {
+    public static ConnectedDevicesFrame getInstance() {
         return console;
     }
 
@@ -117,13 +117,35 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         return txtField;
     }
 
-    private JButton getFetchLogButton(String IP){
+    private JButton getFetchLogButton(final String userName, final InetSocketAddress socketAddress){
         JButton btn_fetchButton = new JButton("fetch log");
+        btn_fetchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MindroidLogMessage logMsg = LogFetcher.fetchLog(socketAddress);
+                LogHandler.saveToFile(logMsg,LogHandler.getFilename(userName,socketAddress));
+            }
+        });
         return btn_fetchButton;
     }
 
-    private JButton getLogButton(File file){
+
+
+    private JButton getLogButton(final String userName, final InetSocketAddress socketAddress) {
         JButton btn_opLogButton = new JButton("Open Log");
+        btn_opLogButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Desktop desktop = Desktop.getDesktop();
+                    if (LogHandler.isExistent(LogHandler.getFilename(userName,socketAddress))) {
+                        desktop.open(LogHandler.getLogFile(LogHandler.getFilename(userName,socketAddress)));
+                    }
+                } catch (IOException e1) {
+                    MindroidServerConsoleFrame.getMindroidServerConsole().appendLine("Open Log failed: "+e1.getMessage());
+                }
+            }
+        });
         return btn_opLogButton;
     }
 
@@ -154,11 +176,11 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
                 contentPane.add(field_adbState);
                 field_adbState.setBounds(posX[2],posY,120,30);
 
-                JButton btn_fetchLog = getFetchLogButton(""); //TODO
+                JButton btn_fetchLog = getFetchLogButton(destinations[i].getValue(),IPService.findAddress(destinations[i])); //TODO
                 contentPane.add(btn_fetchLog);
                 btn_fetchLog.setBounds(posX[3],posY,100,20);
 
-                JButton btn_opLog = getLogButton(null); //TODO
+                JButton btn_opLog = getLogButton(destinations[i].getValue(),IPService.findAddress(destinations[i])); //TODO
                 contentPane.add(btn_opLog);
                 btn_opLog.setBounds(posX[4],posY,100,20);
             }

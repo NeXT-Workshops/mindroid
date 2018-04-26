@@ -86,7 +86,7 @@ public class MindroidServerFrame extends JFrame {
         adbDevicesMenuItem.setAction(new AbstractAction(ConnectedDevicesFrame.TITLE) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ConnectedDevicesFrame adbDevicesFrame = ConnectedDevicesFrame.getConnectedDeviceFrame();
+                ConnectedDevicesFrame adbDevicesFrame = ConnectedDevicesFrame.getInstance();
                 adbDevicesFrame.setVisible(true);
             }
         });
@@ -205,17 +205,15 @@ public class MindroidServerFrame extends JFrame {
         } catch (ArrayIndexOutOfBoundsException e) {
             //Tries again n times, error was caused by 2 threads accessing the table at the same time
             int n = 10;
-            int i=0;
-            while (!retryAddContentLine(deseriaLogMessage) && i<n) {
+            int i = 0;
+            while (!retryAddContentLine(deseriaLogMessage) && i < n) {
                 i++;
-
             }
-            if (i==n) {
+            if (i == n) {
                 //retrying failed
                 throw e;
             }
-
-             }
+        }
     }
 
     private boolean retryAddContentLine(MindroidMessage deseriaLogMessage) {
@@ -265,6 +263,8 @@ public class MindroidServerFrame extends JFrame {
     public void register(RobotId robotId, Socket socket, InetSocketAddress socketAddress, int port) throws IOException {
         IPService.getIPMapping().put(new Destination(robotId.getValue()), new InetSocketAddress( ((InetSocketAddress)socketAddress).getAddress(), port));
         IPService.getSocketMapping().put(new Destination(robotId.getValue()), socket);
+
+        ConnectedDevicesFrame.getInstance().updateDevices();
     }
 
 
@@ -273,5 +273,7 @@ public class MindroidServerFrame extends JFrame {
 
         IPService.getIPMapping().remove(dest);
         IPService.getSocketMapping().remove(dest);
+
+        ConnectedDevicesFrame.getInstance().updateDevices();
     }
 }

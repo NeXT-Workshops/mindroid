@@ -311,9 +311,6 @@ public class MainActivity extends Activity
 
     @Override
     protected void onDestroy() {
-        //deactivate Tethering
-        ShellService.setTethering(false);
-
         super.onDestroy();
     }
 }

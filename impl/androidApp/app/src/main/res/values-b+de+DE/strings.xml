@@ -135,4 +135,8 @@
     <string name="title_motors">Motoren</string>
     <string name="txt_connecting_to_msg_server">Verbindung zum Message Server wird hergestellt..</string>
 
+    <!-- Log Fragment -->
+    <string name="txt_save_log">LOG SPEICHERN</string>
+    <string name="txt_log_saved">Log gespeichert</string>
+
 </resources>

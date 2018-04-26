@@ -2,17 +2,22 @@ package org.mindroid.android.app.errorhandling;
 
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.MainActivity;
+import org.mindroid.android.app.fragments.log.GlobalLogger;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.statemachine.NoStartStateException;
 import org.mindroid.api.statemachine.exception.DuplicateTransitionException;
 import org.mindroid.api.statemachine.exception.NoCurrentStateSetException;
 import org.mindroid.api.statemachine.exception.NoSuchStateException;
 import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
+import org.mindroid.common.messages.server.LogLevel;
 import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.communication.ServerWorker;
 import org.mindroid.impl.robot.RobotCommandCenter;
 import org.mindroid.impl.statemachine.Statemachine;
 import org.mindroid.impl.statemachine.StatemachineExecutor;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by torben on 08.08.2017.
@@ -22,14 +27,18 @@ public class APIErrorHandler extends AbstractErrorHandler{
 
     private MainActivity mainActivity;
 
+    private final Logger LOGGER = Logger.getLogger(getClass().getName());
 
     public APIErrorHandler(MainActivity mainActivity){
         this.mainActivity = mainActivity;
+        GlobalLogger.getInstance().registerLogger(LOGGER);
     }
 
     @Override
     public void handleError(Exception e, Class source, String msg) {
         ErrorLogMessage logMessage = new ErrorLogMessage(source.getClass(),e,msg);
+        LOGGER.log(Level.WARNING,logMessage.toString());
+
         if(source == Statemachine.class){
             handleStatemachineErrors(e,msg);
 

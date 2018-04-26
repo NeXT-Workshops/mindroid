@@ -5,6 +5,7 @@ import org.mindroid.common.messages.server.MessageMarshaller;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.server.app.util.ADBService;
+import org.mindroid.server.app.util.IPService;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
 import se.vidstige.jadb.JadbDevice;
 import se.vidstige.jadb.JadbException;
@@ -143,14 +144,14 @@ public class MindroidServerWorker implements Runnable {
         //deliver message meant to be sent to another robot
         if(deserializedMsg.getMessageType().equals(MessageType.MESSAGE)&& !deserializedMsg.isLogMessage() && !deserializedMsg.isBroadcastMessage() ) {
             mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "INFO", deserializedMsg.getContent());
-            Socket socket = mindroidServerFrame.findSocket(deserializedMsg.getDestination());
+            Socket socket = IPService.findSocket(deserializedMsg.getDestination());
             sendMessage(deserializedMsg, socket);
             }
 
 
         //deliver broadcast message
         if (deserializedMsg.getDestination().getValue().equals(Destination.BROADCAST.getValue())) {
-            HashMap<Destination, Socket> socketMapping = mindroidServerFrame.getSocketMapping();
+            HashMap<Destination, Socket> socketMapping = IPService.getSocketMapping();
             mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), "everyone", "INFO", deserializedMsg.getContent());
             for(Map.Entry<Destination, Socket> entry : socketMapping.entrySet()) {
                 if(!deserializedMsg.getSource().getValue().equals(entry.getKey().getValue())) {
@@ -161,8 +162,6 @@ public class MindroidServerWorker implements Runnable {
         }
 
     }
-
-
 
     private void sendMessage(MindroidMessage deserializedMsg, Socket socket) throws IOException{
         if (socket==null) {

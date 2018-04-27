@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="org.mindroid.android.app.acitivites.SplashActivity"
-        android:background="#0000ff"
+        android:background="@drawable/splash_screen_selector"
         >
     <ImageView
             android:src="@mipmap/mindroid_with_tango"

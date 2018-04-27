@@ -20,7 +20,7 @@ public class SplashActivity extends Activity {
     private final int WELCOME_SCREEN_USB_TIMEOUT = 5000;
     private final int WELCOME_SCREEN_NO_USB_TIMEOUT = 1000;
     private final int DELAY_ACTIVATE_ADB_SERVICE = 10;
-    private final int DELAY_GRANT_PERMISSIONS = 30;
+    private final int DELAY_GRANT_PERMISSIONS = 2000;
     private final int DELAY_ACTIVATE_TETHERING = 500;
 
     private TextView txtView_currentAction;

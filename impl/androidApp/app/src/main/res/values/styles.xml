@@ -12,9 +12,9 @@
 
     <!-- Customize your theme here. -->
     <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <item name="colorPrimary">#3e52bd</item>
-        <item name="colorPrimaryDark">#3e52bd</item>
-        <item name="colorAccent">#466de1</item>
+        <item name="colorPrimary">#1826B0</item>
+        <item name="colorPrimaryDark">#081272</item>
+        <item name="colorAccent">#4C59D8</item>
         <item name="android:colorAccent">@color/accent_material_light</item>
         <item name="android:colorPrimaryDark">?attr/colorAccent</item>
         <item name="android:colorPrimary">@color/primary_material_light</item>

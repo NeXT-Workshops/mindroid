@@ -2,6 +2,7 @@ package org.mindroid.android.app.fragments.log;
 
 
 import android.os.Environment;
+import org.mindroid.android.app.util.ShellService;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.logging.APILoggerManager;
 
@@ -24,7 +25,7 @@ public class GlobalLogger {
     private final String GLOBAL_LOGGER_NAME =".GlobalLogger";
     public static ArrayList<LogRecord> logs = LogHandler.logs;
 
-    private final File FILE_SD_DIRECTORY = Environment.getDataDirectory(); // getDataDirectory  ## getExternalStorageDirectory
+    private final File FILE_SD_DIRECTORY = Environment.getExternalStorageDirectory(); // getDataDirectory  ## getExternalStorageDirectory
     private final String PATH_TO_LOGFILE = FILE_SD_DIRECTORY.getPath().concat("/Mindroid/Log/");
     private final String NAME_LOGFILE = "Log.txt";
 
@@ -36,6 +37,7 @@ public class GlobalLogger {
         registerLogger(APILoggerManager.getInstance().getLogger());
         LogServer serverLog = new LogServer(this);
         serverLog.openServer();
+        loadLog();
     }
 
     /**
@@ -47,15 +49,12 @@ public class GlobalLogger {
     public void loadLog(){
         File logfile = getLogFile();
         try {
-            BufferedReader br = new BufferedReader(new FileReader(logfile));
-            String logline ="";
-            while((logline = br.readLine()) != null){
-                //LogRecord logRecord = new LogRecord();
-                //TODO
-            }
-
-        } catch (IOException e) {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(logfile));
+            logs = (ArrayList<LogRecord>) ois.readObject();
+            ois.close();
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
+            LOG_HANDLER.publish(createLog(Level.INFO,"Couldn't load log: "+e.getMessage()));
         }
     }
 
@@ -66,26 +65,13 @@ public class GlobalLogger {
      * calls method {@link #getLogFile()} }
      */
     public boolean saveLog(){
-        /*
-            //TODO
-            It is neccessary to grant access to the app manually to write on memory
-            To avoid giving permisson manually on every phone try
-            	adb shell pm grant com.replace.with.your.app.package android.permission.WRITE_EXTERNAL_STORAGE
-                adb shell pm grant com.replace.with.your.app.package android.permission.READ_EXTERNAL_STORAGE
-            using the ShellService
-         */
-
-
         File logfile = getLogFile();
-        System.out.println("## Saveing LOG to "+logfile.getPath());
         try {
-            FileOutputStream fos = new FileOutputStream(logfile,true);
-
-            fos.write(getLog().getBytes());
-            fos.flush();
-            fos.close();
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(logfile));
+            oos.writeObject(logs);
+            oos.flush();
+            oos.close();
             return true;
-
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -93,19 +79,44 @@ public class GlobalLogger {
     }
 
     /**
+     * Deletes the Log File and clears the log cache.
+     */
+    public void deleteLog(){
+        getLogFile().delete();
+        logs.clear();
+        LOG_HANDLER.publish(createLog(Level.INFO,"Log deleted!"));
+    }
+
+    /**
      * Returns the Log file if it exists, or Creates the logfile given by the path {@link #PATH_TO_LOGFILE} and filename {@link #NAME_LOGFILE} if not.
      * @return the created logfile
      */
     private File getLogFile(){
-        File logfile = new File(PATH_TO_LOGFILE.concat(NAME_LOGFILE));//PATH /storage/emulated/0/Mindroid/Log/Log.txt
+        File dir = createDir();
+        File logfile = new File(dir.getPath().concat(NAME_LOGFILE));//PATH /storage/emulated/0/Mindroid/Log/Log.txt
         if(!logfile.exists()){
-            boolean result = logfile.mkdirs();
-            if(!result){
-                Exception e = new Exception("Could not create Logfile");
-                ErrorHandlerManager.getInstance().handleError(e,GlobalLogger.class,e.getMessage());
+            try {
+                boolean result = logfile.createNewFile();
+                if(!result){
+                    Exception e = new Exception("Could not create Logfile");
+                    ErrorHandlerManager.getInstance().handleError(e,GlobalLogger.class,e.getMessage());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         return logfile;
+    }
+
+    private File createDir() {
+        File dir = new File(PATH_TO_LOGFILE);
+        if(!dir.exists()){
+            if(!dir.mkdirs()){
+                Exception e = new Exception("Could not create dir for Logfile. Missing Permissions? Try to activate manually");
+                ErrorHandlerManager.getInstance().handleError(e,GlobalLogger.class,e.getMessage());
+            }
+        }
+        return dir;
     }
 
     /**
@@ -119,7 +130,17 @@ public class GlobalLogger {
     }
 
     private LogRecord createRegistrationLog(Logger logger) {
-        LogRecord regLog = new LogRecord(Level.CONFIG,"Registered Logger: "+logger.getName());
+        return createLog(Level.CONFIG,"Registered Logger: "+logger.getName());
+    }
+
+    /**
+     * Creates a Log Record of the GlobalLogger
+     * @param lvl - loglevel
+     * @param msg - msg
+     * @return LogRecord of the GlobalLogger
+     */
+    private LogRecord createLog(Level lvl, String msg){
+        LogRecord regLog = new LogRecord(lvl,msg);
         if(regLog.getLoggerName() == null) {
             regLog.setLoggerName(GLOBAL_LOGGER_NAME);
         }

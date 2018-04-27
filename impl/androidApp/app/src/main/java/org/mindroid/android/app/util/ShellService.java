@@ -56,7 +56,13 @@ public class ShellService {
      */
     public static void setTethering(boolean on){
         Shell.SU.run("service call connectivity 33 i32 " + (on ? "1" : "0") );
-
     }
 
+    public static void grantWriteExternalSotragePermission(){
+        Shell.SU.run("pm grant org.mindroid.android.app android.permission.WRITE_EXTERNAL_STORAGE" );
+    }
+
+    public static void grantReadExternalSotragePermission(){
+        Shell.SU.run("pm grant org.mindroid.android.app android.permission.READ_EXTERNAL_STORAGE" );
+    }
 }

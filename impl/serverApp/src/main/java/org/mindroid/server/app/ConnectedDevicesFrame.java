@@ -14,7 +14,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -37,6 +36,8 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     private ConnectedDevicesFrame() {
         setTitle(TITLE);
         setSize(new Dimension(620,400));
+
+        setIconImage(MindroidServerSettings.getTitleImage());
 
         initMenubar();
         initPane();

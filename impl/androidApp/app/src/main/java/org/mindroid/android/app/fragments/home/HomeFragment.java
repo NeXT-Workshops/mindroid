@@ -108,7 +108,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         LogManager.getLogManager().addLogger(LOGGER);
-        GlobalLogger.registerLogger(LOGGER);
+        GlobalLogger.getInstance().registerLogger(LOGGER);
         LOGGER.setLevel(Level.INFO);
         return fragment;
     }

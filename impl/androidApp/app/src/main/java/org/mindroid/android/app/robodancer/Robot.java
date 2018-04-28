@@ -43,7 +43,7 @@ public class Robot {
 
     public Robot() {
         LOGGER.setLevel(Level.INFO);
-        GlobalLogger.registerLogger(LOGGER);
+        GlobalLogger.getInstance().registerLogger(LOGGER);
 
         roFactory = new RobotFactory();
         robotPortConfig = new RobotPortConfig();

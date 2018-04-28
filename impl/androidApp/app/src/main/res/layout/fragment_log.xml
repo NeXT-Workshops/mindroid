@@ -6,17 +6,26 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        <HorizontalScrollView
-                android:layout_width="wrap_content" android:layout_height="wrap_content">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <Button
+                android:text="@string/txt_save_log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/btn_saveLog"/>
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <HorizontalScrollView
+                    android:layout_width="wrap_content" android:layout_height="wrap_content">
 
-            <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/linLayout_logContainer">
-            </LinearLayout>
-        </HorizontalScrollView>
-    </ScrollView>
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/linLayout_logContainer">
+                </LinearLayout>
+            </HorizontalScrollView>
+        </ScrollView>
+    </LinearLayout>
 </FrameLayout>

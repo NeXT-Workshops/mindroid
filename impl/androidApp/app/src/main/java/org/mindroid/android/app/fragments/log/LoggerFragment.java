@@ -7,8 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import org.mindroid.android.app.R;
 
 import java.text.SimpleDateFormat;
@@ -24,8 +23,6 @@ import java.util.logging.LogRecord;
  */
 public class LoggerFragment extends Fragment {
 
-
-
     private LinearLayout linLayout_logContainer;
 
     private ArrayList<LogRecord> logs = new ArrayList<LogRecord>();
@@ -33,8 +30,11 @@ public class LoggerFragment extends Fragment {
     private final int WIDTH_SOURCE = 450;
     private final int WIDT_MSG = 1000;
 
+    private Button btnSaveLog;
+
     public LoggerFragment() {
         // Required empty public constructor
+
     }
 
     private String calcDate(long millisecs) {
@@ -66,6 +66,15 @@ public class LoggerFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_log, container, false);
 
         linLayout_logContainer = (LinearLayout) view.findViewById(R.id.linLayout_logContainer);
+        btnSaveLog = (Button) view.findViewById(R.id.btn_saveLog);
+        btnSaveLog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(GlobalLogger.getInstance().saveLog()) {
+                    Toast.makeText(getContext(), getResources().getString(R.string.txt_log_saved), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         createHeadline();
 
@@ -73,6 +82,7 @@ public class LoggerFragment extends Fragment {
         for (LogRecord log : GlobalLogger.logs) {
             createEntry(log);
         }
+
 
         return view;
     }

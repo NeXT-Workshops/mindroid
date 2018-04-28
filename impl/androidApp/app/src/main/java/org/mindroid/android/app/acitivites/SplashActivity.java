@@ -19,6 +19,8 @@ public class SplashActivity extends Activity {
 
     private final int WELCOME_SCREEN_USB_TIMEOUT = 5000;
     private final int WELCOME_SCREEN_NO_USB_TIMEOUT = 1000;
+    private final int DELAY_ACTIVATE_ADB_SERVICE = 10;
+    private final int DELAY_ACTIVATE_TETHERING = 500;
 
     private TextView txtView_currentAction;
 
@@ -53,7 +55,7 @@ public class SplashActivity extends Activity {
                 setupADBService();
 
             }
-        }, 10);
+        }, DELAY_ACTIVATE_ADB_SERVICE);
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -61,7 +63,7 @@ public class SplashActivity extends Activity {
                 txtView_currentAction.setText(getResources().getString(R.string.txt_activate_tethering));
                 setupTethering(isUsbConnected);
             }
-        }, 500);
+        }, DELAY_ACTIVATE_TETHERING);
 
         handler.postDelayed(new Runnable() {
             @Override

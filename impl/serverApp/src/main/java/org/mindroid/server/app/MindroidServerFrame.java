@@ -5,6 +5,7 @@ import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
 import org.mindroid.server.app.util.ADBService;
+import org.mindroid.server.app.util.IPService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+
 /**
  * @author Roland Kluge - Initial implementation
  */
@@ -32,8 +34,6 @@ public class MindroidServerFrame extends JFrame {
     private ArrayList<Color> availableColors;
     private final int SOURCE_COL = 1;  //Column that contains a message's source
     private final int LEVEL_COL = 2;
-    private HashMap<Destination, InetSocketAddress> ipMapping;
-    private HashMap<Destination, Socket> socketMapping;
 
 
     public MindroidServerFrame() {
@@ -83,10 +83,10 @@ public class MindroidServerFrame extends JFrame {
 
 
         JMenuItem adbDevicesMenuItem = new JMenuItem();
-        adbDevicesMenuItem.setAction(new AbstractAction("Show ADB Devices") {
+        adbDevicesMenuItem.setAction(new AbstractAction(ConnectedDevicesFrame.TITLE) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MindroidServerADBInfoFrame adbDevicesFrame = MindroidServerADBInfoFrame.getMindroidServerADBInfoFrame();
+                ConnectedDevicesFrame adbDevicesFrame = ConnectedDevicesFrame.getInstance();
                 adbDevicesFrame.setVisible(true);
             }
         });
@@ -194,11 +194,6 @@ public class MindroidServerFrame extends JFrame {
 
         this.pack();
         this.setVisible(true);
-        this.ipMapping = new HashMap<>();
-        this.socketMapping = new HashMap<>();
-
-
-
     }
 
     public void addContentLine(MindroidMessage deseriaLogMessage) {
@@ -210,17 +205,15 @@ public class MindroidServerFrame extends JFrame {
         } catch (ArrayIndexOutOfBoundsException e) {
             //Tries again n times, error was caused by 2 threads accessing the table at the same time
             int n = 10;
-            int i=0;
-            while (!retryAddContentLine(deseriaLogMessage) && i<n) {
+            int i = 0;
+            while (!retryAddContentLine(deseriaLogMessage) && i < n) {
                 i++;
-
             }
-            if (i==n) {
+            if (i == n) {
                 //retrying failed
                 throw e;
             }
-
-             }
+        }
     }
 
     private boolean retryAddContentLine(MindroidMessage deseriaLogMessage) {
@@ -268,26 +261,19 @@ public class MindroidServerFrame extends JFrame {
     }
 
     public void register(RobotId robotId, Socket socket, InetSocketAddress socketAddress, int port) throws IOException {
-        ipMapping.put(new Destination(robotId.getValue()), new InetSocketAddress( ((InetSocketAddress)socketAddress).getAddress(), port));
-        socketMapping.put(new Destination(robotId.getValue()), socket);
+        IPService.getIPMapping().put(new Destination(robotId.getValue()), new InetSocketAddress( ((InetSocketAddress)socketAddress).getAddress(), port));
+        IPService.getSocketMapping().put(new Destination(robotId.getValue()), socket);
+
+        ConnectedDevicesFrame.getInstance().updateDevices();
     }
 
-    public InetSocketAddress findAddress(Destination destination) {
-        return ipMapping.get(destination);
-    }
 
-    public Socket findSocket(Destination destination){
-        return socketMapping.get(destination);
-    }
+    public void removeRegistration(String robotName) {
+        Destination dest = new Destination(robotName);
 
-    public HashMap<Destination, InetSocketAddress> getIPMapping() {return ipMapping;}
+        IPService.getIPMapping().remove(dest);
+        IPService.getSocketMapping().remove(dest);
 
-    public HashMap<Destination, Socket> getSocketMapping() {
-        return socketMapping;
-    }
-
-    public void removeRegistration(String connectedRobot) {
-        getIPMapping().remove(connectedRobot);
-        getSocketMapping().remove(getSocketMapping());
+        ConnectedDevicesFrame.getInstance().updateDevices();
     }
 }

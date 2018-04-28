@@ -1,0 +1,17 @@
+\babel@toc {ngerman}{}
+\contentsline {section}{\numberline {Aufgabe~1}Hallo Welt}{3}
+\contentsline {subsection}{\numberline {Aufgabe~1.1}Setup}{3}
+\contentsline {subsection}{\numberline {Aufgabe~1.2}Der Quelltext erkl\IeC {\"a}rt}{4}
+\contentsline {subsection}{\numberline {Aufgabe~1.3}Erste eigene \IeC {\"A}nderungen vornehmen}{5}
+\contentsline {section}{\numberline {Aufgabe~2}Den Roboter kennenlernen}{6}
+\contentsline {subsection}{\numberline {Aufgabe~2.1}Fahren - die Antriebsmotoren}{6}
+\contentsline {subsection}{\numberline {Aufgabe~2.2}Der Ultraschallsensor - Abstand Messen}{7}
+\contentsline {subsection}{\numberline {Aufgabe~2.3}Die Farbsensoren - Farbe messen}{9}
+\contentsline {subsection}{\numberline {Aufgabe~2.4}Kommunikation zwischen Robotern - Verteiltes ``Hallo Welt!''}{10}
+\contentsline {subsection}{\numberline {Aufgabe~2.5}N\IeC {\"a}chste Schritte}{11}
+\contentsline {subsection}{\numberline {Aufgabe~2.6}N\IeC {\"u}tzliche Imports}{12}
+\contentsline {section}{\numberline {Aufgabe~3}Wand-Ping-Pong}{13}
+\contentsline {section}{\numberline {Aufgabe~4}Koordiniertes Wand-Ping-Pong}{13}
+\contentsline {section}{\numberline {Aufgabe~5}M\IeC {\"a}hroboter}{14}
+\contentsline {section}{\numberline {Aufgabe~6}Platooning}{15}
+\contentsline {section}{\numberline {Aufgabe~7}Verfolgung}{16}

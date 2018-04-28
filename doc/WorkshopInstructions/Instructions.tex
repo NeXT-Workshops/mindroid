@@ -43,39 +43,54 @@
 	\label{#3}
 	\end{figure}
 }
-\newcommand{\easygcenter}[1]{
+
+\newcommand{\easygcenter}[2]{
 	\begin{figure}[h]
 	\centering 
-	\includegraphics[width=.8\textwidth]{#1}
+	\includegraphics[width=#1]{#2}
 	\end{figure}
 }
+\newcommand{\gcenterone}[1]{
+	\begin{figure}[h]
+	\centering 
+	\includegraphics[width=.9\textwidth]{#1}
+	\end{figure}
+}
+
 
 \newcommand{\td}[1]{
 	\todo[inline]{#1}
 	}
+%relative path to workshop solutions folder
 \newcommand{\solpath}[0]{../../impl/androidApp/app/src/main/java/org/mindroid/android/app/workshopSolutions}
+
+%makes bold code snippets
 \newcommand{\bfcode}[1]{\texttt{\textbf{#1}}}
 
+%fixes enum labels
 \renewcommand{\labelenumi}{\theenumi .}
 \renewcommand{\labelenumii}{\theenumii )}
 
 
-		
+%define colors for listings		
 \definecolor{javared}{rgb}{0.6,0,0} 			% for strings
 \definecolor{javagreen}{rgb}{0.25,0.5,0.35}    	% comments
 \definecolor{javapurple}{rgb}{0.5,0,0.35} 		% keywords
 \definecolor{javadocblue}{rgb}{0.25,0.35,0.75}    % javadoc
- 
+
+%configure listings for Java Code 
 \lstset{
 	language=Java,
 	basicstyle=\ttfamily\footnotesize,
+	%set colors
 	keywordstyle=\color{javapurple}\bfseries,
 	stringstyle=\color{javared},
 	commentstyle=\color{javagreen},
 	morecomment=[s][\color{javadocblue}]{/**}{*/},
+	%set line numbering
 	numbers=left,
 	numberstyle=\tiny\color{black},
-	%stepnumber=2,
+	%stepnumber=2, %is uncommented numers every 2nd line
 	numbersep=10pt,
 	tabsize=4,
 	showspaces=false,
@@ -86,37 +101,72 @@
   \author{}
 	\pagenumbering{arabic}
 	
-	\title{Mindroid Pilotworkshop \\ am xx.06.2018}
+\title{Mindroid Pilotworkshop \\ am xx.06.2018}
 	
-	\subtitle{FG ES / MAKI \\ TU Darmstadt}
-	\subsubtitle{}
+\subtitle{FG ES / MAKI \\ TU Darmstadt}
+\subsubtitle{}
 	
-	\maketitle
+\maketitle
+	
+\newpage
+	
+\tableofcontents 
+
+\newpage
 	
 	
 	
 	\section{Hallo Welt}
-	In der Informatik ist es üblich, ein Hallo-Welt-Programm\footnote{https://de.wikipedia.org/wiki/Hallo-Welt-Programm} zu schreiben, wenn man eine Programmierumgebung kennenlernt. Deshalb fangen wir damit an.
+	In der Informatik ist es üblich, ein Hallo-Welt-Programm\footnote{https://de.wikipedia.org/wiki/Hallo-Welt-Programm} zu schreiben, wenn man eine Programmierumgebung kennenlernt. Deshalb fangen wir damit an. 
 	
-	\subsection{Roboter und Smartphone einrichten}
-	\begin{enumerate}
-		\begin{minipage} {.5\textwidth}
-	\item Als erstes startest du den \textbf{Message-Server}. Er ist später wichtig, damit die Roboter untereinander kommunizieren können. Dazu startest du die \textbf{ServerStarten.bat} auf dem Desktop mit einem Doppelklick. 
-	\item Um eine dauerhafte Verbindung herzustellen, müssen wir nun das Smartphone mit dem Server bekannt machen. Dazu öffnest du auf dem Smartphone die \textbf{Mindroid-App}. 
-	\end{minipage}
-	\begin{minipage} {.5\textwidth}
-	\includegraphics[width=.4\textwidth]{img/serverstartenbat.png}
-	\includegraphics[width=.5\textwidth]{img/MindrobotWithTango}
-	\end{minipage}
-	\item Der Message-Server zeigt dir links unten in der Ecke seine IP an. Diese musst du nun der Mindroid-App mitteilen. Dazu navigierst du über das Menü oben links in den \textbf{Einstellungen-Bildschirm}. \td{Einstellungen Bild} dort trägst du unter \textbf{MSG-Server IP} die IP des Servers ein. Ist dies erledigt, kannst du zurück zum Hauptbildschirm der App und auf \textbf{Verbinden} klicken. Die App verbindet sich nun mit dem Server.
-	\includegraphics[width=.7\textwidth]{img/MessageServer.png}
-	\includegraphics[width=.2\textwidth]{img/screenshots/settings.png}
-	\end{enumerate}
+\subsection{Setup}
+
+\begin{enumerate}
+\item Als erstes verbindest du das Smartphone und den Roboter mit dem USB-Kabel.
+%\begin{minipage}
+\item Um die Verbindung zwischen Roboter und Smartphone herzustellen \td{warten} muss der Roboter konfiguriert werden. Dazu navigierst du durch das Menü des Roboters wie auf den Bildern zu sehen und bestätigst jeweils mit der Auswahltaste: \textbf{PAN - USB-Client - Address - Automatic}
+\end{minipage}
+
+\begin{minipage}{.5\textwidth}
+
+\item Nun startest du den \textbf{Message-Server}. Er ist später wichtig, damit die Roboter untereinander kommunizieren können. Dazu startest du die \textbf{ServerStarten.bat} auf dem Desktop des Computers mit einem Doppelklick.
+ 
+\item Um eine dauerhafte Verbindung herzustellen, müssen wir nun das Smartphone mit dem Server bekannt machen. Dazu öffnest du auf dem Smartphone die \textbf{Mindroid-App}. 
+
+\item Der Message-Server zeigt dir links unten in der Ecke seine IP an. Diese musst du nun der Mindroid-App mitteilen. Dazu navigierst du über das Menü oben links in den \textbf{Einstellungen-Bildschirm}. Dort trägst du unter \textbf{MSG-Server IP} die IP des Servers ein. Ist dies erledigt, kannst du zurück zum Hauptbildschirm der App und auf \textbf{Verbinden} klicken. Die App verbindet sich nun mit dem Server.
+
+\end{minipage}	
+\begin{minipage}{.5\textwidth}
+
+\centering
+\includegraphics[width=.4\textwidth]{img/serverstartenbat.png}
+\includegraphics[width=.2\textwidth]{img/MindrobotWithTango}
+\includegraphics[scale=.2]{img/screenshots/settings.png}
+
+\end{minipage}
 	
-	\subsection{Der Quelltext erklärt}
-	Nachdem du den Roboter erfolgreich eingerichtet und das erste mal getestet hast, gehen wir jetzt daran, uns den Quelltext näher anzusehen.
-	\lstinputlisting{\solpath/HelloWorld.java}
-	Das Verhalten des Roboters befindet sich in der \textbf{run-Methode }(Zeilen 13-16). Wenn ein Mindroid-Programm ausgeführt wird, werden die Befehle in dieser Methode nacheinander abgearbeitet.
+\includegraphics[width=.5\textwidth]{img/MessageServer.png}
+
+\newpage
+	
+\item Nun kannst du den \textbf{Java-Editor} über die Verknüpfung auf dem Desktop starten. Es öffnet sich die Enwicklungsumgebung \textbf{"Java-Editor"}. In der Mitte findest du den Quelltext des aktuellen Programms, hinterlegt mit Farben, die die Orientierung erleichtern sollen.
+
+\gcenterone{img/javaeditor.png}
+Wie das Programm genau funktioniert, sehen wir uns gleich an. Zunächst einmal wollen wir es auf das Smartphone spielen, um zu sehen, was passiert.
+
+\item Um das Programm auf das Smartphone zu spielen, drücke den blauen Play-Button oben links (Der Button ändert seine Farbe nach dem Durchlauf auf Grün). 
+\includegraphics{img/playbutton.png} \\ Dein “Hallo Welt”-Programm wird jetzt an das Handy übertragen.
+
+\item Jetzt sollte in der Konsolenausgabe am unteren Bildrand in etwa folgender Text erscheinen:
+\includegraphics[width=\textwidth]{img/build.png}
+
+
+
+\end{enumerate}	
+\subsection{Der Quelltext erklärt}
+Nachdem du den Roboter erfolgreich eingerichtet und das erste mal getestet hast, gehen wir jetzt daran, uns den Quelltext näher anzusehen.
+\lstinputlisting{\solpath/HelloWorld.java}
+Das Verhalten des Roboters befindet sich in der \textbf{run-Methode }(Zeilen 13-16). Wenn ein Mindroid-Programm ausgeführt wird, werden die Befehle in dieser Methode nacheinander abgearbeitet.
 	\begin{itemize}
 	\item{\bfcode{clearDisplay()}} löscht den Display-Inhalt
 	\item{\bfcode{drawString(text, textsize, xPosition, yPosition)}} schreibt einen gegebenen Text(text) an die gegebenen Koordinaten (\bfcode{xPosition, yPosition}) und verwendet dabei die definierte Schriftgröße (\bfcode{textsize}).
@@ -297,7 +347,7 @@ Bewertungskriterien:
 
 \newpage
 \section{Mähroboter}
-\easygcenter{img/maehroboter.png}
+\easygcenter{.8\textwidth}{img/maehroboter.png}
 Nutze deine Kenntnisse, um den Roboter in einem mit schwarzem (oder weißem) Klebeband abgesperrten Bereich herumfahren zu lassen (so ähnlich wie beispielsweise viele Mähroboter arbeiten).
 \begin{enumerate}
 \item Wie beim Wand Ping-Pong soll der Roboter erstmal geradeaus fahren.
@@ -315,7 +365,7 @@ Bewertungskriterien:
 
 \newpage
 \section{Platooning}
-\easygcenter{img/platooning.png}
+\easygcenter{.8\textwidth}{img/platooning.png}
 In dieser Aufgabe geht es darum, zwei Roboter hintereinander her fahren zu lassen, ohne dass es einen Auffahrunfall gibt. Aktuell forschen zahlreiche Unis und Unternehmen unter dem Schlagwort Platooning an genau dieser Problemstellung bei echten LKWs und PKWs: Die Fahrzeuge fahren dabei so nahe, dass sie den Windschatten des Vorausfahrenden ausnutzen können.
 
 Roboter A und B werden hintereinander platziert, sodass sie in die gleiche Richtung blicken. Ziel ist es zunächst, dass Roboter B den Abstand zu Roboter A in einem bestimmen Toleranzbereich hält. Die Distanzangaben im Folgenden sind nur mögliche Werte - du bestimmst selbst, was geeignete Grenzwerte sind.
@@ -333,7 +383,7 @@ Bewertungskriterien
 
 \newpage
 \section{Verfolgung}
-\easygcenter{img/chachacha.png}
+\easygcenter{.8\textwidth}{img/chachacha.png}
 Beim Cha-Cha-Cha gibt es die Tanzfigur “Verfolgung”. Dabei verfolgt jeweils ein Tanzpartner den anderen, bis beide sich umdrehen und die Rollen wechseln. Diese Figur ist tatsächlich nicht sehr weit vom Platooning-Beispiel aus der vorherigen Aufgabe entfernt.
 Der Ablauf soll dieses Mal wie folgt aussehen:
 \begin{enumerate}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.4.28)  28 APR 2018 20:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.4.28)  29 APR 2018 17:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1821,42 +1821,42 @@ Overfull \hbox (34.67992pt too wide) detected at line 3
  []
 
 
-Package tocbasic Warning: number width of subsection toc entries should be incr
-eased!
-(tocbasic)                Currently used number width = 63.08395pt,
+Package tocbasic Warning: number width of subsubsection toc entries should be i
+ncreased!
+(tocbasic)                Currently used number width = 73.09195pt,
 (tocbasic)                Wanted number separation    = 4.79993pt,
-(tocbasic)                Reserved number width       = 27.60004pt on input lin
+(tocbasic)                Reserved number width       = 38.39996pt on input lin
 e 4.
 
 
-Overfull \hbox (34.67992pt too wide) detected at line 4
-\T1/5ch/m/n/12 Aufgabe 1.2 
+Overfull \hbox (33.88799pt too wide) detected at line 4
+\T1/5ch/m/n/12 Aufgabe 1.1.1 
  []
 
 
-Package tocbasic Warning: number width of subsection toc entries should be incr
-eased!
-(tocbasic)                Currently used number width = 63.08395pt,
+Package tocbasic Warning: number width of subsubsection toc entries should be i
+ncreased!
+(tocbasic)                Currently used number width = 73.09195pt,
 (tocbasic)                Wanted number separation    = 4.79993pt,
-(tocbasic)                Reserved number width       = 27.60004pt on input lin
+(tocbasic)                Reserved number width       = 38.39996pt on input lin
 e 5.
 
 
-Overfull \hbox (34.67992pt too wide) detected at line 5
-\T1/5ch/m/n/12 Aufgabe 1.3 
+Overfull \hbox (33.88799pt too wide) detected at line 5
+\T1/5ch/m/n/12 Aufgabe 1.1.2 
  []
 
 
-Package tocbasic Warning: number width of section toc entries should be increas
-ed!
-(tocbasic)                Currently used number width = 58.26237pt,
-(tocbasic)                Wanted number separation    = 5.03992pt,
-(tocbasic)                Reserved number width       = 18.90001pt on input lin
+Package tocbasic Warning: number width of subsubsection toc entries should be i
+ncreased!
+(tocbasic)                Currently used number width = 73.09195pt,
+(tocbasic)                Wanted number separation    = 4.79993pt,
+(tocbasic)                Reserved number width       = 38.39996pt on input lin
 e 6.
 
 
-Overfull \hbox (39.50638pt too wide) detected at line 6
-\T1/5fp/mb/n/12.6 Aufgabe 2 
+Overfull \hbox (33.88799pt too wide) detected at line 6
+\T1/5ch/m/n/12 Aufgabe 1.1.3 
  []
 
 
@@ -1869,7 +1869,7 @@ e 7.
 
 
 Overfull \hbox (34.67992pt too wide) detected at line 7
-\T1/5ch/m/n/12 Aufgabe 2.1 
+\T1/5ch/m/n/12 Aufgabe 1.2 
  []
 
 
@@ -1882,20 +1882,20 @@ e 8.
 
 
 Overfull \hbox (34.67992pt too wide) detected at line 8
-\T1/5ch/m/n/12 Aufgabe 2.2 
+\T1/5ch/m/n/12 Aufgabe 1.3 
  []
 
 
-Package tocbasic Warning: number width of subsection toc entries should be incr
-eased!
-(tocbasic)                Currently used number width = 63.08395pt,
-(tocbasic)                Wanted number separation    = 4.79993pt,
-(tocbasic)                Reserved number width       = 27.60004pt on input lin
+Package tocbasic Warning: number width of section toc entries should be increas
+ed!
+(tocbasic)                Currently used number width = 58.26237pt,
+(tocbasic)                Wanted number separation    = 5.03992pt,
+(tocbasic)                Reserved number width       = 18.90001pt on input lin
 e 9.
 
 
-Overfull \hbox (34.67992pt too wide) detected at line 9
-\T1/5ch/m/n/12 Aufgabe 2.3 
+Overfull \hbox (39.50638pt too wide) detected at line 9
+\T1/5fp/mb/n/12.6 Aufgabe 2 
  []
 
 
@@ -1908,7 +1908,7 @@ e 10.
 
 
 Overfull \hbox (34.67992pt too wide) detected at line 10
-\T1/5ch/m/n/12 Aufgabe 2.4 
+\T1/5ch/m/n/12 Aufgabe 2.1 
  []
 
 
@@ -1921,7 +1921,7 @@ e 11.
 
 
 Overfull \hbox (34.67992pt too wide) detected at line 11
-\T1/5ch/m/n/12 Aufgabe 2.5 
+\T1/5ch/m/n/12 Aufgabe 2.2 
  []
 
 
@@ -1934,46 +1934,46 @@ e 12.
 
 
 Overfull \hbox (34.67992pt too wide) detected at line 12
-\T1/5ch/m/n/12 Aufgabe 2.6 
+\T1/5ch/m/n/12 Aufgabe 2.3 
  []
 
 
-Package tocbasic Warning: number width of section toc entries should be increas
-ed!
-(tocbasic)                Currently used number width = 58.26237pt,
-(tocbasic)                Wanted number separation    = 5.03992pt,
-(tocbasic)                Reserved number width       = 18.90001pt on input lin
+Package tocbasic Warning: number width of subsection toc entries should be incr
+eased!
+(tocbasic)                Currently used number width = 63.08395pt,
+(tocbasic)                Wanted number separation    = 4.79993pt,
+(tocbasic)                Reserved number width       = 27.60004pt on input lin
 e 13.
 
 
-Overfull \hbox (39.50638pt too wide) detected at line 13
-\T1/5fp/mb/n/12.6 Aufgabe 3 
+Overfull \hbox (34.67992pt too wide) detected at line 13
+\T1/5ch/m/n/12 Aufgabe 2.4 
  []
 
 
-Package tocbasic Warning: number width of section toc entries should be increas
-ed!
-(tocbasic)                Currently used number width = 58.26237pt,
-(tocbasic)                Wanted number separation    = 5.03992pt,
-(tocbasic)                Reserved number width       = 18.90001pt on input lin
+Package tocbasic Warning: number width of subsection toc entries should be incr
+eased!
+(tocbasic)                Currently used number width = 63.08395pt,
+(tocbasic)                Wanted number separation    = 4.79993pt,
+(tocbasic)                Reserved number width       = 27.60004pt on input lin
 e 14.
 
 
-Overfull \hbox (39.50638pt too wide) detected at line 14
-\T1/5fp/mb/n/12.6 Aufgabe 4 
+Overfull \hbox (34.67992pt too wide) detected at line 14
+\T1/5ch/m/n/12 Aufgabe 2.5 
  []
 
 
-Package tocbasic Warning: number width of section toc entries should be increas
-ed!
-(tocbasic)                Currently used number width = 58.26237pt,
-(tocbasic)                Wanted number separation    = 5.03992pt,
-(tocbasic)                Reserved number width       = 18.90001pt on input lin
+Package tocbasic Warning: number width of subsection toc entries should be incr
+eased!
+(tocbasic)                Currently used number width = 63.08395pt,
+(tocbasic)                Wanted number separation    = 4.79993pt,
+(tocbasic)                Reserved number width       = 27.60004pt on input lin
 e 15.
 
 
-Overfull \hbox (39.50638pt too wide) detected at line 15
-\T1/5fp/mb/n/12.6 Aufgabe 5 
+Overfull \hbox (34.67992pt too wide) detected at line 15
+\T1/5ch/m/n/12 Aufgabe 2.6 
  []
 
 
@@ -1986,7 +1986,7 @@ e 16.
 
 
 Overfull \hbox (39.50638pt too wide) detected at line 16
-\T1/5fp/mb/n/12.6 Aufgabe 6 
+\T1/5fp/mb/n/12.6 Aufgabe 3 
  []
 
 
@@ -1999,6 +1999,45 @@ e 17.
 
 
 Overfull \hbox (39.50638pt too wide) detected at line 17
+\T1/5fp/mb/n/12.6 Aufgabe 4 
+ []
+
+
+Package tocbasic Warning: number width of section toc entries should be increas
+ed!
+(tocbasic)                Currently used number width = 58.26237pt,
+(tocbasic)                Wanted number separation    = 5.03992pt,
+(tocbasic)                Reserved number width       = 18.90001pt on input lin
+e 18.
+
+
+Overfull \hbox (39.50638pt too wide) detected at line 18
+\T1/5fp/mb/n/12.6 Aufgabe 5 
+ []
+
+
+Package tocbasic Warning: number width of section toc entries should be increas
+ed!
+(tocbasic)                Currently used number width = 58.26237pt,
+(tocbasic)                Wanted number separation    = 5.03992pt,
+(tocbasic)                Reserved number width       = 18.90001pt on input lin
+e 19.
+
+
+Overfull \hbox (39.50638pt too wide) detected at line 19
+\T1/5fp/mb/n/12.6 Aufgabe 6 
+ []
+
+
+Package tocbasic Warning: number width of section toc entries should be increas
+ed!
+(tocbasic)                Currently used number width = 58.26237pt,
+(tocbasic)                Wanted number separation    = 5.03992pt,
+(tocbasic)                Reserved number width       = 18.90001pt on input lin
+e 20.
+
+
+Overfull \hbox (39.50638pt too wide) detected at line 20
 \T1/5fp/mb/n/12.6 Aufgabe 7 
  []
 
@@ -2055,476 +2094,166 @@ LaTeX Font Info:    Font shape `OML/mdput/m/it' will be
 (Font)              scaled to size 6.86201pt on input line 120.
 LaTeX Font Info:    Font shape `OML/mdput/m/it' will be
 (Font)              scaled to size 5.92201pt on input line 120.
-
-! Too many }'s.
-\endminipage ...pagefalse \color@endgroup \egroup 
-                                                  \expandafter \@iiiparbox \...
-l.128 \end{minipage}
-                    
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
-
-! Undefined control sequence.
-\endminipage ...\expandafter \@iiiparbox \@mpargs 
-                                                  {\unvbox \@tempboxa }
-l.128 \end{minipage}
-                    
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Missing number, treated as zero.
-<to be read again> 
-                   i
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-! Illegal unit of measure (pt inserted).
-<to be read again> 
-                   i
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-
-! Package calc Error: `i' invalid at this point.
-
-See the calc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-I expected to see one of: + - * / )
-
-
-! Package pdftex.def Error: File `\@@par .pdf' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-LaTeX Font Info:    Try loading font information for T1+txtt on input line 143.
-
-(/usr/share/texlive/texmf-dist/tex/latex/txfonts/t1txtt.fd
-File: t1txtt.fd 2000/12/15 v3.1
-)
-Overfull \hbox (5.37996pt too wide) in paragraph at lines 143--143
-[]\T1/5ch/m/n/12 .pdf
- []
-
-
-Overfull \hbox (57.06999pt too wide) in paragraph at lines 143--143
-[] 
- []
-
-Runaway argument?
-{\@checkend {minipage}\expandafter \endgroup \if@endpe \@doendpe \fi \ETC.
-! Paragraph ended before \calc@assign@generic was complete.
-<to be read again> 
-                   \par 
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-I suspect you've forgotten a `}', causing me to apply this
-control sequence to too much text. How can we recover?
-My plan is to forget the whole thing and hope for the best.
-
-
-! LaTeX Error: Lonely \item--perhaps a missing list environment.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-Underfull \hbox (badness 10000) detected at line 143
-[][]
- []
-
-
-! LaTeX Error: Lonely \item--perhaps a missing list environment.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-Underfull \hbox (badness 10000) detected at line 143
-[][]
- []
-
-
-! LaTeX Error: Lonely \item--perhaps a missing list environment.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-Underfull \hbox (badness 10000) detected at line 143
-[][]
- []
-
-! Argument of \Gin@ii has an extra }.
-<inserted text> 
-                \par 
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-I've run across a `}' that doesn't seem to match anything.
-For example, `\def\a#1{...}' and `\a}' would produce
-this error. If you simply proceed now, the `\par' that
-I've just inserted will cause me to report a runaway
-argument that might be the root of the problem. But if
-your `}' was spurious, just type `2' and it will go away.
-
-Runaway argument?
-! Paragraph ended before \Gin@ii was complete.
-<to be read again> 
-                   \par 
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-I suspect you've forgotten a `}', causing me to apply this
-control sequence to too much text. How can we recover?
-My plan is to forget the whole thing and hope for the best.
-
-! Extra }, or forgotten \endgroup.
-<recently read> }
-                 
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-! Missing \endcsname inserted.
-<to be read again> 
-                   \textwidth 
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-The control sequence marked <to be read again> should
-not appear between \csname and \endcsname.
-
-! Missing number, treated as zero.
-<to be read again> 
-                   \endcsname 
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-! Illegal unit of measure (pt inserted).
-<to be read again> 
-                   \endcsname 
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-! Extra \endcsname.
-<recently read> \endcsname 
-                           
-l.143 \includegraphics
-                      [width=.2\textwidth]{img/MindrobotWithTango}
-I'm ignoring this, since I wasn't doing a \csname.
-
-! Missing number, treated as zero.
-<to be read again> 
-                   ]
-l.143 \includegraphics[width=.2\textwidth]
-                                          {img/MindrobotWithTango}
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-! Illegal unit of measure (pt inserted).
-<to be read again> 
-                   ]
-l.143 \includegraphics[width=.2\textwidth]
-                                          {img/MindrobotWithTango}
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-<img/screenshots/settings.png, id=23, 813.0375pt x 1391.1975pt>
+<img/serverstartenbat.png, id=23, 99.37125pt x 65.24374pt>
+File: img/serverstartenbat.png Graphic file (type png)
+<use img/serverstartenbat.png>
+Package pdftex.def Info: img/serverstartenbat.png  used on input line 140.
+(pdftex.def)             Requested size: 99.58313pt x 65.38493pt.
+<img/MindrobotWithTango.png, id=25, 324.2514pt x 324.2514pt>
+File: img/MindrobotWithTango.png Graphic file (type png)
+<use img/MindrobotWithTango.png>
+Package pdftex.def Info: img/MindrobotWithTango.png  used on input line 141.
+(pdftex.def)             Requested size: 49.79156pt x 49.7884pt.
+<img/screenshots/settings.png, id=26, 813.0375pt x 1391.1975pt>
 File: img/screenshots/settings.png Graphic file (type png)
 <use img/screenshots/settings.png>
-Package pdftex.def Info: img/screenshots/settings.png  used on input line 144.
+Package pdftex.def Info: img/screenshots/settings.png  used on input line 142.
 (pdftex.def)             Requested size: 162.60461pt x 278.23457pt.
-! Missing } inserted.
-<inserted text> 
-                }
-l.146 \end{minipage}
-                    
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
 
-! Extra }, or forgotten \endgroup.
-\endminipage ...pagefalse \color@endgroup \egroup 
-                                                  \expandafter \@iiiparbox \...
-l.146 \end{minipage}
-                    
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-! Undefined control sequence.
-\endminipage ...\expandafter \@iiiparbox \@mpargs 
-                                                  {\unvbox \@tempboxa }
-l.146 \end{minipage}
-                    
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Missing number, treated as zero.
-<to be read again> 
-                   i
-l.149 
-      
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-! Illegal unit of measure (pt inserted).
-<to be read again> 
-                   i
-l.149 
-      
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-
-! Package calc Error: `i' invalid at this point.
-
-See the calc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.149 
-      
-I expected to see one of: + - * / )
-
-Runaway argument?
-{\@checkend {minipage}\expandafter \endgroup \if@endpe \@doendpe \fi \ETC.
-! Paragraph ended before \calc@assign@generic was complete.
-<to be read again> 
-                   \par 
-l.149 
-      
-I suspect you've forgotten a `}', causing me to apply this
-control sequence to too much text. How can we recover?
-My plan is to forget the whole thing and hope for the best.
-
-! Argument of \Gin@ii has an extra }.
-<inserted text> 
-                \par 
-l.149 
-      
-I've run across a `}' that doesn't seem to match anything.
-For example, `\def\a#1{...}' and `\a}' would produce
-this error. If you simply proceed now, the `\par' that
-I've just inserted will cause me to report a runaway
-argument that might be the root of the problem. But if
-your `}' was spurious, just type `2' and it will go away.
-
-Runaway argument?
-! Paragraph ended before \Gin@ii was complete.
-<to be read again> 
-                   \par 
-l.149 
-      
-I suspect you've forgotten a `}', causing me to apply this
-control sequence to too much text. How can we recover?
-My plan is to forget the whole thing and hope for the best.
-
-! Extra }, or forgotten \endgroup.
-<recently read> }
-                 
-l.149 
-      
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-! Missing \endcsname inserted.
-<to be read again> 
-                   \textwidth 
-l.149 
-      
-The control sequence marked <to be read again> should
-not appear between \csname and \endcsname.
-
-! Missing number, treated as zero.
-<to be read again> 
-                   \endcsname 
-l.149 
-      
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-! Illegal unit of measure (pt inserted).
-<to be read again> 
-                   \endcsname 
-l.149 
-      
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-! Extra \endcsname.
-<recently read> \endcsname 
-                           
-l.149 
-      
-I'm ignoring this, since I wasn't doing a \csname.
-
-[3]
-
-! LaTeX Error: Lonely \item--perhaps a missing list environment.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.152 \item N
-             un kannst du den \textbf{Java-Editor} Ã¼ber die VerknÃ¼pfung au...
-
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-Underfull \hbox (badness 10000) detected at line 152
-[][]
+Overfull \hbox (29.90706pt too wide) in paragraph at lines 128--145
+[]$[]$ $[]$ 
  []
 
-<img/javaeditor.png, id=29, 1084.05pt x 722.7pt>
+<img/MessageServer.png, id=27, 602.25pt x 376.40625pt>
+File: img/MessageServer.png Graphic file (type png)
+<use img/MessageServer.png>
+Package pdftex.def Info: img/MessageServer.png  used on input line 146.
+(pdftex.def)             Requested size: 248.96162pt x 155.6026pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [3 <./img/serverstartenbat.png> <./img/MindrobotWithTango.png> <./img/screensh
+ots/settings.png>] [4 <./img/MessageServer.png>]
+<img/javaeditor.png, id=38, 1084.05pt x 722.7pt>
 File: img/javaeditor.png Graphic file (type png)
 <use img/javaeditor.png>
-Package pdftex.def Info: img/javaeditor.png  used on input line 154.
+Package pdftex.def Info: img/javaeditor.png  used on input line 160.
 (pdftex.def)             Requested size: 448.12788pt x 298.74599pt.
-
-! LaTeX Error: Lonely \item--perhaps a missing list environment.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.157 \item U
-             m das Programm auf das Smartphone zu spielen, drÃ¼cke den blaue...
-
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-Underfull \hbox (badness 10000) detected at line 157
-[][]
- []
-
-<img/playbutton.png, id=30, 19.57312pt x 21.07875pt>
+<img/playbutton.png, id=39, 19.57312pt x 21.07875pt>
 File: img/playbutton.png Graphic file (type png)
 <use img/playbutton.png>
-Package pdftex.def Info: img/playbutton.png  used on input line 158.
+Package pdftex.def Info: img/playbutton.png  used on input line 165.
 (pdftex.def)             Requested size: 19.57306pt x 21.07867pt.
-
-! LaTeX Error: Lonely \item--perhaps a missing list environment.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.160 \item J
-             etzt sollte in der Konsolenausgabe am unteren Bildrand in etwa ...
-
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-Underfull \hbox (badness 10000) detected at line 160
-[][]
- []
-
-<img/build.png, id=31, 864.98157pt x 141.52875pt>
+<img/build.png, id=40, 864.98157pt x 141.52875pt>
 File: img/build.png Graphic file (type png)
 <use img/build.png>
-Package pdftex.def Info: img/build.png  used on input line 161.
+Package pdftex.def Info: img/build.png  used on input line 168.
 (pdftex.def)             Requested size: 497.92325pt x 81.47125pt.
 
-! LaTeX Error: \begin{document} ended by \end{enumerate}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.165 \end{enumerate}
-                     
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
+Overfull \hbox (27.37506pt too wide) in paragraph at lines 167--170
+[]
+ []
 
 
+Underfull \hbox (badness 1515) in paragraph at lines 178--179
+\T1/5ch/m/n/12 /Rechts-Tasten bis du den Menü-punkt \T1/5ch/b/n/12 PAN
+ []
+
+<img/Pan.png, id=41, 468.92906pt x 283.91786pt>
+File: img/Pan.png Graphic file (type png)
+<use img/Pan.png>
+Package pdftex.def Info: img/Pan.png  used on input line 181.
+(pdftex.def)             Requested size: 199.17004pt x 120.58768pt.
+
+Overfull \hbox (29.90706pt too wide) in paragraph at lines 177--183
+[]$[]$ $[]$ 
+ []
+
+[5 <./img/javaeditor.png> <./img/playbutton.png> <./img/build.png>]
+<img/USB-Client.png, id=48, 379.31425pt x 248.6088pt>
+File: img/USB-Client.png Graphic file (type png)
+<use img/USB-Client.png>
+Package pdftex.def Info: img/USB-Client.png  used on input line 186.
+(pdftex.def)             Requested size: 199.16626pt x 130.53673pt.
+<img/PANusb1.png, id=49, 374.77158pt x 253.97743pt>
+File: img/PANusb1.png Graphic file (type png)
+<use img/PANusb1.png>
+Package pdftex.def Info: img/PANusb1.png  used on input line 188.
+(pdftex.def)             Requested size: 199.16626pt x 134.97168pt.
+<img/PanAuto.png, id=50, 360.11108pt x 234.56776pt>
+File: img/PanAuto.png Graphic file (type png)
+<use img/PanAuto.png>
+Package pdftex.def Info: img/PanAuto.png  used on input line 190.
+(pdftex.def)             Requested size: 199.16626pt x 129.73207pt.
+File: img/PANusb1.png Graphic file (type png)
+<use img/PANusb1.png>
+Package pdftex.def Info: img/PANusb1.png  used on input line 192.
+(pdftex.def)             Requested size: 199.16626pt x 134.97168pt.
+<img/RestartPAN.png, id=51, 393.97475pt x 252.11906pt>
+File: img/RestartPAN.png Graphic file (type png)
+<use img/RestartPAN.png>
+Package pdftex.def Info: img/RestartPAN.png  used on input line 198.
+(pdftex.def)             Requested size: 119.50323pt x 76.47495pt.
+
+Overfull \hbox (29.90704pt too wide) in paragraph at lines 194--200
+[]$[]$ $[]$ 
+ []
+
+<img/IP.png, id=52, 1285.05093pt x 828.84656pt>
+File: img/IP.png Graphic file (type png)
+<use img/IP.png>
+Package pdftex.def Info: img/IP.png  used on input line 203.
+(pdftex.def)             Requested size: 179.25183pt x 115.60771pt.
+
+Underfull \hbox (badness 5607) in paragraph at lines 202--204
+[]\T1/5ch/m/n/12 Zurück im Start-me-nü siehst du nun
+ []
+
+
+Underfull \hbox (badness 2922) in paragraph at lines 202--204
+\T1/5ch/m/n/12 wie auf dem Bild zu se-hen ei-ne \T1/5ch/b/n/12 IP-
+ []
+
+
+Underfull \hbox (badness 1990) in paragraph at lines 202--204
+\T1/5ch/b/n/12 Adresse\T1/5ch/m/n/12 . Um die Ver-bin-dung zwi-schen
+ []
+
+
+Underfull \hbox (badness 3492) in paragraph at lines 202--204
+\T1/5ch/m/n/12 muss die-se Adres-se nun in den Ein-
+ []
+
+
+Underfull \hbox (badness 3000) in paragraph at lines 202--204
+\T1/5ch/m/n/12 stel-lun-gen der App hin-ter-legt wer-den.
+ []
+
+File: img/screenshots/settings.png Graphic file (type png)
+<use img/screenshots/settings.png>
+Package pdftex.def Info: img/screenshots/settings.png  used on input line 207.
+(pdftex.def)             Requested size: 179.25183pt x 306.70123pt.
+
+Overfull \hbox (7.54135pt too wide) in paragraph at lines 201--209
+[]$[]$   $[]$ 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [6 <./img/Pan.png> <./img/USB-Client.png> <./img/PANusb1.png> <./img/PanAuto.p
+ng> <./img/RestartPAN.png>]
+<img/runDefault.png, id=61, 400.99525pt x 254.3904pt>
+File: img/runDefault.png Graphic file (type png)
+<use img/runDefault.png>
+Package pdftex.def Info: img/runDefault.png  used on input line 211.
+(pdftex.def)             Requested size: 199.16626pt x 126.35255pt.
+<img/wait.png, id=62, 192.2382pt x 123.47845pt>
+File: img/wait.png Graphic file (type png)
+<use img/wait.png>
+Package pdftex.def Info: img/wait.png  used on input line 212.
+(pdftex.def)             Requested size: 199.16626pt x 127.93031pt.
+LaTeX Font Info:    Try loading font information for T1+txtt on input line 219.
+
+ (/usr/share/texlive/texmf-dist/tex/latex/txfonts/t1txtt.fd
+File: t1txtt.fd 2000/12/15 v3.1
+)
 (../../impl/androidApp/app/src/main/java/org/mindroid/android/app/workshopSolut
 ions/HelloWorld.java
 LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <10> not available
 (Font)              Font shape `T1/txtt/bx/n' tried instead on input line 1.
- [4 <./img/javaeditor.png> <./img/playbutton.png> <./img/build.png>])
-LaTeX Font Info:    Try loading font information for TS1+5ch on input line 171.
+ [7 <./img/IP.png> <./img/runDefault.png> <./img/wait.png>])
+LaTeX Font Info:    Try loading font information for TS1+5ch on input line 222.
 
 
 (/home/marcel/.texlive2017/texmf-var/tex/latex/tex-tudfonts/softmake/charter/ts
@@ -2532,9 +2261,9 @@ LaTeX Font Info:    Try loading font information for TS1+5ch on input line 171.
 File: ts15ch.fd 2008/06/23 Fontinst v1.927 font definitions for TS1/5ch.
 )
 LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <12> not available
-(Font)              Font shape `T1/txtt/bx/n' tried instead on input line 171.
+(Font)              Font shape `T1/txtt/bx/n' tried instead on input line 222.
 
-Overfull \hbox (20.09503pt too wide) in paragraph at lines 172--173
+Overfull \hbox (20.09503pt too wide) in paragraph at lines 223--224
 []\T1/txtt/bx/n/12 drawString(text, textsize, xPosition, yPosition) \T1/5ch/m/n
 /12 schreibt einen ge-ge-be-nen Text(text)
  []
@@ -2547,23 +2276,23 @@ Overfull \hbox (18.082pt too wide) in paragraph at lines 19--20
 ][][][][] 
  []
 
-) [5]
-Underfull \hbox (badness 10000) in paragraph at lines 196--197
+) [8]
+Underfull \hbox (badness 10000) in paragraph at lines 247--248
 
  []
 
 
 (../../impl/androidApp/app/src/main/java/org/mindroid/android/app/workshopSolut
-ions/DriveSquare.java [6]) [7]
+ions/DriveSquare.java [9]) [10]
 (../../impl/androidApp/app/src/main/java/org/mindroid/android/app/workshopSolut
 ions/ParkingSensor.java)
-Overfull \hbox (75.81111pt too wide) in paragraph at lines 241--242
+Overfull \hbox (75.81111pt too wide) in paragraph at lines 292--293
 []\T1/5ch/m/n/12 Um die LED an-steu-ern zu kön-nen, müs-sen wir die Pa-ke-te \T
 1/txtt/bx/n/12 org.mindroid.api.ev3.EV3StatusLightColor
  []
 
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 248--250
+[11]
+Underfull \hbox (badness 10000) in paragraph at lines 299--301
 
  []
 
@@ -2579,9 +2308,9 @@ Overfull \hbox (24.08206pt too wide) in paragraph at lines 21--22
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-) [9]
+) [12]
 (../../impl/androidApp/app/src/main/java/org/mindroid/android/app/workshopSolut
-ions/HelloWorldPingB.java) [10]
+ions/HelloWorldPingB.java) [13]
 (../../impl/androidApp/app/src/main/java/org/mindroid/android/app/workshopSolut
 ions/HelloWorldPingR.java
 Overfull \hbox (24.08206pt too wide) in paragraph at lines 19--20
@@ -2590,66 +2319,58 @@ Overfull \hbox (24.08206pt too wide) in paragraph at lines 19--20
  []
 
 )
-Overfull \hbox (33.14507pt too wide) in paragraph at lines 296--297
+Overfull \hbox (33.14507pt too wide) in paragraph at lines 347--348
 \T1/5ch/m/n/12 Ih-re Wer-te sind in der Klas-se \T1/5ch/m/it/12 org.mindroid.im
 pl.statemachine.properties.sensorproperties.Color
  []
 
-[11] [12]
-Overfull \hbox (37.269pt too wide) in paragraph at lines 345--346
+[14] [15]
+Overfull \hbox (37.269pt too wide) in paragraph at lines 396--397
 []\T1/5ch/m/n/12 (1P) Ver-gleich: Wie schnell schaf-fen die Ro-bo-ter ei-ne ^^P
 Run-de^^Q (A: Fah-ren $\OMS/mdbch/m/n/12.5 !$ \T1/5ch/m/n/12 Wand+Drehen+Stop;
  []
 
-[13]
-<img/maehroboter.png, id=71, 1003.75pt x 752.8125pt>
+[16]
+<img/maehroboter.png, id=102, 1003.75pt x 752.8125pt>
 File: img/maehroboter.png Graphic file (type png)
 <use img/maehroboter.png>
-Package pdftex.def Info: img/maehroboter.png  used on input line 350.
+Package pdftex.def Info: img/maehroboter.png  used on input line 401.
 (pdftex.def)             Requested size: 398.3401pt x 298.75334pt.
- [14 <./img/maehroboter.png>]
-<img/platooning.png, id=75, 453.0015pt x 291.051pt>
+ [17 <./img/maehroboter.png>]
+<img/platooning.png, id=106, 453.0015pt x 291.051pt>
 File: img/platooning.png Graphic file (type png)
 <use img/platooning.png>
-Package pdftex.def Info: img/platooning.png  used on input line 368.
+Package pdftex.def Info: img/platooning.png  used on input line 419.
 (pdftex.def)             Requested size: 398.3401pt x 255.93025pt.
- [15 <./img/platooning.png>]
-<img/chachacha.png, id=79, 1233.60875pt x 720.6925pt>
+ [18 <./img/platooning.png>]
+<img/chachacha.png, id=110, 1233.60875pt x 720.6925pt>
 File: img/chachacha.png Graphic file (type png)
 <use img/chachacha.png>
-Package pdftex.def Info: img/chachacha.png  used on input line 386.
+Package pdftex.def Info: img/chachacha.png  used on input line 437.
 (pdftex.def)             Requested size: 398.3401pt x 232.71571pt.
- [16 <./img/chachacha.png (PNG copy)>] (./Instructions.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- )
-(\end occurred inside a group at level 2)
-
-### semi simple group (level 2) entered at line 143 (\begingroup)
-### semi simple group (level 1) entered at line 143 (\begingroup)
-### bottom level 
+ [19 <./img/chachacha.png (PNG copy)>] (./Instructions.aux) ) 
 Here is how much of TeX's memory you used:
- 24096 strings out of 492982
- 460698 string characters out of 6134896
+ 24156 strings out of 492982
+ 461934 string characters out of 6134896
  626465 words of memory out of 5000000
- 27084 multiletter control sequences out of 15000+600000
+ 27133 multiletter control sequences out of 15000+600000
  109352 words of font info for 102 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 73i,13n,106p,8824b,1837s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</ho
-me/marcel/.texlive2017/texmf-var/fonts/type1/softmake/charter/5chb8a.pfb></home
-/marcel/.texlive2017/texmf-var/fonts/type1/softmake/charter/5chr8a.pfb></home/m
-arcel/.texlive2017/texmf-var/fonts/type1/softmake/charter/5chri8a.pfb></home/ma
-rcel/.texlive2017/texmf-var/fonts/type1/softmake/frontpage/5fpm8a.pfb></home/ma
-rcel/.texlive2017/texmf-var/fonts/type1/softmake/frontpage/5fpr8a.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/mathdesign/mdbch/md-chr7y.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/txfonts/t1xbtt.pfb></usr/share/texliv
-e/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb>
-Output written on Instructions.pdf (16 pages, 1552868 bytes).
+ 73i,13n,106p,8824b,1782s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texliv
+e/texmf-dist/fonts/enc/dvips/base/8r.enc}</home/marcel/.texlive2017/texmf-var/f
+onts/type1/softmake/charter/5chb8a.pfb></home/marcel/.texlive2017/texmf-var/fon
+ts/type1/softmake/charter/5chr8a.pfb></home/marcel/.texlive2017/texmf-var/fonts
+/type1/softmake/charter/5chri8a.pfb></home/marcel/.texlive2017/texmf-var/fonts/
+type1/softmake/frontpage/5fpm8a.pfb></home/marcel/.texlive2017/texmf-var/fonts/
+type1/softmake/frontpage/5fpr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/mathdesign/mdbch/md-chr7y.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/tx
+fonts/t1xtt.pfb>
+Output written on Instructions.pdf (19 pages, 24285190 bytes).
 PDF statistics:
- 111 PDF objects out of 1000 (max. 8388607)
- 70 compressed objects within 1 object stream
+ 143 PDF objects out of 1000 (max. 8388607)
+ 77 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 71 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 126 words of extra memory for PDF output out of 10000 (max. 10000000)
 

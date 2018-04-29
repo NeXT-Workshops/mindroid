@@ -120,20 +120,18 @@
 	In der Informatik ist es üblich, ein Hallo-Welt-Programm\footnote{https://de.wikipedia.org/wiki/Hallo-Welt-Programm} zu schreiben, wenn man eine Programmierumgebung kennenlernt. Deshalb fangen wir damit an. 
 	
 \subsection{Setup}
-
+Damit alles funktioniert, musst du deine Geräte zuerst einrichten. Dabei lernst du, wie du die einzelnen Komponenten miteinander verbindest und neu erstellte Programme auf das Smartphone überträgst.
+Zuerst musst du dazu das Smartphone und den Roboter mit dem \textbf{USB-Kabel} verbinden.
+\subsubsection{App und PC verbinden}
+Um neue Programme einfach und schnell auf das Smartphone übertragen zu können, muss zuerst das Smartphone mit dem PC verbunden werden. Dazu sind folgende Schritte nötig.
 \begin{enumerate}
-\item Als erstes verbindest du das Smartphone und den Roboter mit dem USB-Kabel.
-%\begin{minipage}
-\item Um die Verbindung zwischen Roboter und Smartphone herzustellen \td{warten} muss der Roboter konfiguriert werden. Dazu navigierst du durch das Menü des Roboters wie auf den Bildern zu sehen und bestätigst jeweils mit der Auswahltaste: \textbf{PAN - USB-Client - Address - Automatic}
-\end{minipage}
-
 \begin{minipage}{.5\textwidth}
 
-\item Nun startest du den \textbf{Message-Server}. Er ist später wichtig, damit die Roboter untereinander kommunizieren können. Dazu startest du die \textbf{ServerStarten.bat} auf dem Desktop des Computers mit einem Doppelklick.
+\item Starte den \textbf{Message-Server}, indem du die \textbf{ServerStarten.bat} auf dem Desktop des Computers mit einem Doppelklick ausführst. Der Server erledigt ein paar Einstellungen. Außerdem ist er später wichtig, damit die Roboter untereinander kommunizieren können.
  
 \item Um eine dauerhafte Verbindung herzustellen, müssen wir nun das Smartphone mit dem Server bekannt machen. Dazu öffnest du auf dem Smartphone die \textbf{Mindroid-App}. 
 
-\item Der Message-Server zeigt dir links unten in der Ecke seine IP an. Diese musst du nun der Mindroid-App mitteilen. Dazu navigierst du über das Menü oben links in den \textbf{Einstellungen-Bildschirm}. Dort trägst du unter \textbf{MSG-Server IP} die IP des Servers ein. Ist dies erledigt, kannst du zurück zum Hauptbildschirm der App und auf \textbf{Verbinden} klicken. Die App verbindet sich nun mit dem Server.
+\item Der Message-Server zeigt dir links unten in der Ecke seine IP-Adresse an. Diese musst du nun der Mindroid-App mitteilen. Dazu navigierst du über das Menü oben links in den \textbf{Einstellungen-Bildschirm}. Dort trägst du unter \textbf{MSG-Server IP} die IP des Servers ein. Ist dies erledigt, kannst du zurück zum Hauptbildschirm der App und auf \textbf{Verbinden} klicken. Die App verbindet sich nun mit dem Server.
 
 \end{minipage}	
 \begin{minipage}{.5\textwidth}
@@ -147,20 +145,73 @@
 	
 \includegraphics[width=.5\textwidth]{img/MessageServer.png}
 
+
+\end{enumerate}
+
 \newpage
-	
-\item Nun kannst du den \textbf{Java-Editor} über die Verknüpfung auf dem Desktop starten. Es öffnet sich die Enwicklungsumgebung \textbf{"Java-Editor"}. In der Mitte findest du den Quelltext des aktuellen Programms, hinterlegt mit Farben, die die Orientierung erleichtern sollen.
+
+
+\subsubsection{Programme übertragen}
+Neue Programme schreiben und übertragen wir in der	Enwicklungsumgebung \textbf{"Java-Editor"}.
+
+\begin{enumerate}
+\item Starte diesen indem du die Verknüpfung auf dem Desktop startest. In der Mitte findest du den Quelltext des aktuellen Programms, hinterlegt mit Farben, die die Orientierung erleichtern sollen.
 
 \gcenterone{img/javaeditor.png}
+
 Wie das Programm genau funktioniert, sehen wir uns gleich an. Zunächst einmal wollen wir es auf das Smartphone spielen, um zu sehen, was passiert.
 
-\item Um das Programm auf das Smartphone zu spielen, drücke den blauen Play-Button oben links (Der Button ändert seine Farbe nach dem Durchlauf auf Grün). 
+\item Dazu klickst du auf den blauen Play-Button oben links (Der Button ändert seine Farbe nach dem Durchlauf auf Grün). 
 \includegraphics{img/playbutton.png} \\ Dein “Hallo Welt”-Programm wird jetzt an das Handy übertragen.
 
-\item Jetzt sollte in der Konsolenausgabe am unteren Bildrand in etwa folgender Text erscheinen:
+\item In der Konsolenausgabe am unteren Bildrand sollte in etwa folgender Text erscheinen:
 \includegraphics[width=\textwidth]{img/build.png}
+Das Programm ist nun übertragen.
+\end{enumerate}
 
+\subsubsection{Roboter und App verbinden}
+Zuletzt müssen nun noch Smartphone und Roboter miteinander verbunden werden. Dazu müssen zunächst ein paar Einstellungen am Roboter vorgenommen werden.
 
+\begin{enumerate}
+
+\begin{minipage}{.5\textwidth}
+\item Dazu musst du zuerst in das \textbf{PAN-Menü} des Roboters navigieren. Wechsle mit den Links-/Rechts-Tasten bis du den Menüpunkt \textbf{PAN} siehst und betätige die \textbf{Auswahltaste}.
+\end{minipage}
+\begin{minipage}{.5\textwidth}
+\includegraphics[width=.8\textwidth]{img/Pan.png}
+\end{minipage}
+
+\item Nun navigierst du durch das Menü des Roboters wie auf den Bildern zu sehen und bestätigst jeweils mit der Auswahltaste: \textbf{PAN - USB-Client - Address - Automatic}
+
+\includegraphics[width=.4\textwidth]{img/USB-Client.png}
+\hspace{.05\textwidth}
+\includegraphics[width=.4\textwidth]{img/PANusb1.png}
+\newline
+\includegraphics[width=.4\textwidth]{img/PanAuto.png}
+\hspace{.05\textwidth}
+\includegraphics[width=.4\textwidth]{img/PANusb1.png}
+
+\begin{minipage}{.7\textwidth}
+\item Mit der \textbf{Zurück}-Taste kommst du zurück in das Hauptmenü und die Einstellungen werden übernommen.
+\end{minipage}
+\begin{minipage}{.3\textwidth}
+\includegraphics[width=.8\textwidth]{img/RestartPAN.png}
+\end{minipage}
+
+\begin{minipage}{.45\textwidth}
+\item Zurück im Startmenü siehst du nun wie auf dem Bild zu sehen eine \textbf{IP-Adresse}. Um die Verbindung zwischen App und Roboter herstellen zu können, muss diese Adresse nun in den Einstellungen der App hinterlegt werden. 
+\includegraphics[width=.8\textwidth]{img/IP.png}
+\end{minipage}
+\hspace{.05\textwidth}
+\begin{minipage}{.45\textwidth}
+\includegraphics[width=.8\textwidth]{img/screenshots/settings.png}
+\end{minipage}
+\item Nun kannst du das \textbf{EV3-Programm }starten. Wähle dazu \textbf{Run Default} im Hauptmenü des Roboters aus und bestätige mit der Auswahltaste.
+
+\includegraphics[width=.4\textwidth]{img/runDefault.png}
+\includegraphics[width=.4\textwidth]{img/wait.png}
+
+\item Um nun das Hello-World-Programm zu starten, wähle es in der Liste der App aus und drücke auf \textbf{Starten}. Es wird ausgeführt, und auf dem Bildschirm des Roboters erscheint \textbf{"Hallo Welt!"}
 
 \end{enumerate}	
 \subsection{Der Quelltext erklärt}

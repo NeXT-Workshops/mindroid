@@ -572,6 +572,9 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 } else if(params[0].equals(STOP_ROBOT)) {
                     try {
                         robot.stopRunningImplmentation();
+
+                        //SAVING LOG AFTER EXECUTION
+                        GlobalLogger.getInstance().saveLog();
                         return false;
                     }catch(Exception e){
                         parentActivity.showErrorDialog("Exception",e.getMessage());

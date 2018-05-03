@@ -31,6 +31,7 @@ public class LoggerFragment extends Fragment {
     private final int WIDT_MSG = 1000;
 
     private Button btnSaveLog;
+    private Button btnDeleteLog;
 
     public LoggerFragment() {
         // Required empty public constructor
@@ -72,6 +73,16 @@ public class LoggerFragment extends Fragment {
             public void onClick(View view) {
                 if(GlobalLogger.getInstance().saveLog()) {
                     Toast.makeText(getContext(), getResources().getString(R.string.txt_log_saved), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        btnDeleteLog = (Button) view.findViewById(R.id.btn_deleteLog);
+        btnDeleteLog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(GlobalLogger.getInstance().deleteLog()) {
+                    Toast.makeText(getContext(), getResources().getString(R.string.txt_log_deleted), Toast.LENGTH_SHORT).show();
                 }
             }
         });

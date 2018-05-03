@@ -150,6 +150,8 @@
     <!-- Log Fragment -->
     <string name="txt_save_log">SAVE LOG</string>
     <string name="txt_log_saved">Log saved</string>
+    <string name="txt_deleteLog">DELETE LOG</string>
+    <string name="txt_log_deleted">Log deleted</string>
 
 
 </resources>

@@ -81,10 +81,16 @@ public class GlobalLogger {
     /**
      * Deletes the Log File and clears the log cache.
      */
-    public void deleteLog(){
-        getLogFile().delete();
+    public boolean deleteLog(){
         logs.clear();
-        LOG_HANDLER.publish(createLog(Level.INFO,"Log deleted!"));
+
+        if(getLogFile().delete()){
+            LOG_HANDLER.publish(createLog(Level.INFO, "Log deleted!"));
+            return true;
+        }else {
+            LOG_HANDLER.publish(createLog(Level.INFO, "Deleting logfile failed!"));
+            return false;
+        }
     }
 
     /**

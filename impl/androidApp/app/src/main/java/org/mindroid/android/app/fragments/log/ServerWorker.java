@@ -31,8 +31,9 @@ public class ServerWorker implements Runnable {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
             String log = GlobalLogger.getInstance().getLog();
-            out.println(new LogMessageMarshaller().serialize(SettingsProvider.getInstance().getRobotID(),log));
-
+            if(log != null && log.length() > 0) { //Only print if there is a log available
+                out.println(new LogMessageMarshaller().serialize(SettingsProvider.getInstance().getRobotID(), log));
+            }
             //Inform other side to close connection and transmission complete
             out.println("<close>");
 

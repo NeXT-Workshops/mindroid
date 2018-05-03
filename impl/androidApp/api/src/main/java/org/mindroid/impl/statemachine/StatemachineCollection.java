@@ -26,11 +26,13 @@ public class StatemachineCollection {
 
 
     /**
+     *
      * Adds a Single running Statemachine to the Collection.
      * Statemachines with the same id will be overwritten.
      * Statemachine will only be added if it is not invalid.
      *
-     * @param statemachine
+     * @param groupID - group id the statemachines belongs to
+     * @param statemachine sattemachine to add
      */
     public void addStatemachine(String groupID, IStatemachine statemachine) {
         //TODO may throw a warning if statemachine/group with the same id already exists and will be overwritten
@@ -46,8 +48,8 @@ public class StatemachineCollection {
      * Adds parallel running Statemachine to the Collection.
      * Calling this method multiple times with the same id will add the given Statemachines to the already existing ones.
      *
-     * @param groupID
-     * @param statemachines
+     * @param groupID group id the statemachines belongs to
+     * @param statemachines statemachines
      */
     public void addParallelStatemachines(String groupID, IStatemachine... statemachines) {
         if (this.statemachines.containsKey(groupID)) {
@@ -69,8 +71,8 @@ public class StatemachineCollection {
      * Adds parallel running Statemachine to the Collection.
      * Calling this method multiple times with the same id will add the given Statemachines to the already existing ones.
      *
-     * @param groupID
-     * @param statemachines
+     * @param groupID group id the statemachines belong to
+     * @param statemachines statemachines to add
      */
     public void addParallelStatemachines(String groupID, List<IStatemachine> statemachines) {
         IStatemachine[] arrayOfStatemachines = new IStatemachine[statemachines.size()];

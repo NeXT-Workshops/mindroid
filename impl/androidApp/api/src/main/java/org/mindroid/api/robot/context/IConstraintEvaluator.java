@@ -11,7 +11,7 @@ import java.util.List;
 public interface IConstraintEvaluator {
 
     /**     *
-     * @param rcs
+     * @param rcs robot context state object to handle
      */
     public void handleRobotContextState(IRobotContextState rcs);
 
@@ -29,7 +29,7 @@ public interface IConstraintEvaluator {
      * Unsubscribes Constraints from the Evaluator.
      * The Constraints wont be evaluated anymore.
      *
-     * @param statemachineId
+     * @param statemachineId statemachine id
      */
     void unsubscribeConstraints(String statemachineId);
 }

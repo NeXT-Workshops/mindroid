@@ -16,7 +16,7 @@ public class IPUtils {
      * @param part2 second '0-255'
      * @param part3 third '0-255'
      * @param part4 fourth '0-255'
-     * @return IP: '<first>.<second>.<third>.<fourth>'
+     * @return IP: '-first-.-first-.-first-.-first-'
      */
     public static String getConcatenatedIPAddress(String part1,String part2,String part3,String part4){
         return getConcatenatedString(part1,".",part2,".",part3,".",part4);

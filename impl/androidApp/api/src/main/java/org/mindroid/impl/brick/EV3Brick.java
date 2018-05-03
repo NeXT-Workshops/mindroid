@@ -90,7 +90,7 @@ public class EV3Brick extends Brick {
 
 	/**
 	 * returns true if connection to Brick is established
-	 * @return
+	 * @return true if the connection is established
 	 */
     public boolean isConnected(){
     	return brickEndpoint.isConnected();
@@ -98,7 +98,7 @@ public class EV3Brick extends Brick {
     
     /**
      * Returns true if connection to Brick is established and also ready to receive Commands
-     * @return
+     * @return true if the brick is ready else false
      */
     public boolean isBrickReady(){
     	return brickEndpoint.isBrickReady();

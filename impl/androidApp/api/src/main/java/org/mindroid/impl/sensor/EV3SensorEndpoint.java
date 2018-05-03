@@ -49,9 +49,13 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
 
 
     /**
-     * @param ip
-     * @param tcpPort
-     * @param brickTimeout
+     *
+     * @param ip ip of the brick
+     * @param tcpPort port of the sensorendpoint at the brick
+     * @param brickTimeout brick timeout
+     * @param sensorType sensor type
+     * @param brick_port port of the sensor at the brick
+     * @param mode sensormode
      */
     public EV3SensorEndpoint(String ip, int tcpPort, int brickTimeout, Sensors sensorType, EV3PortID brick_port, Sensormode mode) {
         super(ip, tcpPort, brickTimeout);
@@ -137,6 +141,11 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
         }
     }
 
+    /**
+     * Unregister the listener
+     *
+     * @param listener to unregister
+     */
     public void unregisterListener(IEV3SensorEventListener listener) {
         listeners.remove(listener);
     }
@@ -144,7 +153,7 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
     /**
      * Changes the mode to the given argument
      *
-     * @param newMode
+     * @param newMode - the new mode of the sensor
      * @author Alex
      */
     public void changeSensorToMode(Sensormode newMode) {
@@ -162,7 +171,7 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
     /**
      * True if the Sensor received its first sensor event and the sensormode of the received event is != null.
      *
-     * @return
+     * @return true if the first sensor data was received else false
      */
     public boolean isFirstSensEventReceived() {
         return isFirstSensEventReceived;

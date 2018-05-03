@@ -1,17 +1,17 @@
 ﻿Dokumentation und Aufgabenstellung:
-- Tehthering im HandyVerbinden Skript richtig schreiben
+- REPLACED - Tehthering im HandyVerbinden Skript richtig schreiben
 - Anleitung anpassen
 	- für VMs
 	- was machen, wenn das Handy nicht mehr gefunden wird
 	- neue Verbindungsmethode
 	
-- disable usb charging mit in die anleitung aufnehmen
+- DISABLE CHARGE WILL NOT WORK - disable usb charging mit in die anleitung aufnehmen
 	- eigentlich nicht nötig, soll automatisch deaktiviert werden, nur bei Bedarf aktiviert
 - belegung von sensoren mit in anleitung
 - getmessage etc in anleitung
 - Aufgabe 2.2 die imports in den source code ziehen
 - belegung von sensoren mit in anleiten
-- DONE default werte in app
+- DONE - default werte in app
 - falls WLan nicht funktioniert dann bitte USB zum deployen nehmen (Anleitung)
 - Doku updaten: einheiten für driveDistanceBackward etc. - mit angeben
 - JavaDOC für Framework erstellen

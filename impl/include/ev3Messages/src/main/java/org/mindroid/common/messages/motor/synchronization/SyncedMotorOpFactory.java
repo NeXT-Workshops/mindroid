@@ -47,7 +47,7 @@ public class SyncedMotorOpFactory {
 
     /**
      * Creates a synchronized operation to rotate the motor to a specified angle
-     * @param value limitAngle - to which the motor will rotate, and then stop (in degrees). Includes any positive or negative int, even values > 360.
+     * @param value limitAngle - to which the motor will rotate, and then stop (in degrees). Includes any positive or negative int, even values bigger 360.
      * @return SynchronizedMotorOperation {@link SynchronizedMotorOperation}
      */
     public static  SynchronizedMotorOperation createRotateToOperation(int value){
@@ -81,6 +81,8 @@ public class SyncedMotorOpFactory {
     /**
      * Creates a message containg the operations which will be run on the motorgroup.
      * @param operations - sorted array (by port) of operations running on each motor in the group
+     * @param isBlocked - true if the operation should be a blocked operation
+     *
      * @return SynchronizedOperationMessage
      */
     public static SynchronizedOperationMessage createSynchronizedOperationMessage(SynchronizedMotorOperation[] operations,boolean isBlocked){

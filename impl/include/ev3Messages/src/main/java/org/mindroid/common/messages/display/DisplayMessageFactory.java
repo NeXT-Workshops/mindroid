@@ -17,6 +17,7 @@ public class DisplayMessageFactory {
 	/**
 	 * Creates a draw String Message with the given parameters
 	 * @param str - String to draw
+	 * @param textsize - size of the text
 	 * @param x - Position x
 	 * @param y - Position y
 	 * @return a Draw String message with the given Parameters

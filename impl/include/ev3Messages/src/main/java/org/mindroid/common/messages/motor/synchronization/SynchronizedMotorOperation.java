@@ -25,7 +25,7 @@ public class SynchronizedMotorOperation {
      * @param optype - type of the operation  {@link OperationType}
      * @param value  - has different meanings depending on OperationType {@link OperationType}
      *  {@link OperationType#ROTATE} ROTATE: angle - through which the motor will rotate
-     *  {@link OperationType#ROTATE_TO} ROTATE TO: limitAngle - to which the motor will rotate, and then stop (in degrees). Includes any positive or negative int, even values > 360.
+     *  {@link OperationType#ROTATE_TO} ROTATE TO: limitAngle - to which the motor will rotate, and then stop (in degrees). Includes any positive or negative int, even values bigger 360.
      *
      */
     public SynchronizedMotorOperation(OperationType optype,int value){
@@ -36,7 +36,7 @@ public class SynchronizedMotorOperation {
     /**
      * Meaning of value:
      *  ROTATE: angle - through which the motor will rotate
-     *  ROTATE TO: limitAngle - to which the motor will rotate, and then stop (in degrees). Includes any positive or negative int, even values > 360.
+     *  ROTATE TO: limitAngle - to which the motor will rotate, and then stop (in degrees). Includes any positive or negative int, even values bigger 360.
      *
      *  NO MEANING IN OTHER OPERATIONS THAN LISTED ABOVE!
      *

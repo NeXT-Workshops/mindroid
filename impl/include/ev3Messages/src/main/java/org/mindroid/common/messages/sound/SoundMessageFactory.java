@@ -9,7 +9,7 @@ public class SoundMessageFactory {
 
     /**
      * Creates a message that instructs the EV3 to beep according to the given type
-     * @param type the type of beep according to {@link Beeptype}
+     * @param type the type of beep according to {@link BeepMessage.Beeptype}
      * @return the prepared message
      */
     public static BeepMessage createBeepMessage(int type){

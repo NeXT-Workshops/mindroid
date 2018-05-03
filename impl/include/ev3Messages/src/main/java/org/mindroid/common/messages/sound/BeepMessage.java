@@ -31,7 +31,7 @@ public class BeepMessage implements ILoggable {
 
     /**
      *
-     * @param beeptype value of {@Link Beeptype}
+     * @param beeptype value of {@link Beeptype}
      */
     public BeepMessage(int beeptype){
         this.beep = beeptype;

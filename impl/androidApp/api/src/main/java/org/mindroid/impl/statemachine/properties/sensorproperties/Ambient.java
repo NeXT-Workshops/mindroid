@@ -14,7 +14,7 @@ public class Ambient extends SimpleEV3SensorProperty {
 
     /**
      *
-     * @param port brickport of the Ambient-mode running sensor
+     * @param port
      */
     public Ambient(EV3PortID port) {
         super(port);

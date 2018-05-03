@@ -17,7 +17,7 @@ public class Listen extends SimpleEV3SensorProperty {
 
     /**
      *
-     * @param port brickport of the Listen-mode running sensor
+     * @param port
      */
     public Listen(EV3PortID port) {
         super(port);

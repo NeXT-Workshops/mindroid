@@ -12,7 +12,7 @@ public class RED extends SimpleEV3SensorProperty {
 
     /**
      *
-     * @param port brickport of the RED-mode running sensor
+     * @param port
      */
     public RED(EV3PortID port) {
         super(port);

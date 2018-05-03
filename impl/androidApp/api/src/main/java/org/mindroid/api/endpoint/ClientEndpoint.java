@@ -11,7 +11,7 @@ public interface ClientEndpoint {
 	/**
 	 * checks if client is ready 
 	 * returns true if connection is established.
-	 * @return true if the client is ready
+	 * @return
 	 */
 	public boolean isClientReady();
 	

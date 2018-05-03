@@ -11,8 +11,6 @@ public interface ISynchronizedMotors {
      * @param operationPortC operation executed on Motor at Port C
      * @param operationPortD operation executed on Motor at Port D
      * @param isBlocked - set true if it is an blocked operation
-     *
-     * @return true if the operation is completed
      */
     boolean executeSynchronizedOperation(SynchronizedMotorOperation operationPortA, SynchronizedMotorOperation operationPortB, SynchronizedMotorOperation operationPortC, SynchronizedMotorOperation operationPortD, boolean isBlocked);
 
@@ -20,8 +18,6 @@ public interface ISynchronizedMotors {
      * The length of operations has to be 4
      * @param operations - operations as array. Has to be 4 sorted by port A to D.
      * @param isBlocked - set true if it is an blocked operation
-     *
-     * @return true if the operation is completed
      */
     boolean executeSynchronizedOperation(SynchronizedMotorOperation[] operations, boolean isBlocked);
 }

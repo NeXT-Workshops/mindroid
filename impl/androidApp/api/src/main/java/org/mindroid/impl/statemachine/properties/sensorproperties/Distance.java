@@ -13,7 +13,7 @@ public class Distance extends SimpleEV3SensorProperty {
 
     /**
      *
-     * @param port brickport of the distance-mode running sensor
+     * @param port
      */
     public Distance(EV3PortID port) {
         super(port);

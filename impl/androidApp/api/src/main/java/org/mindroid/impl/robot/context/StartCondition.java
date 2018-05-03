@@ -27,8 +27,8 @@ public class StartCondition {
      * Checks if the event is a valid GyroSensor-event or null.
      * Events will only be added if its a valid Gyro-Sensor Event.
      *
-     * @param portID port the gyro sensor is connected to
-     * @param pos_event sensor event with pos
+     * @param portID
+     * @param pos_event
      */
     public void addPosition(EV3PortID portID, IEV3SensorEvent pos_event){
         if(pos_event == null || portID == null){

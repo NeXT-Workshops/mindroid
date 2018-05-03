@@ -22,7 +22,7 @@ public interface IRobotConfigurator {
 	 *
 	 * 	Format is: 'Port':'Sensor-/Motortype'
 	 * 'Port' = [A-D] || [S1-S4]
-	 * @return returns information about configuration state as a string
+	 * * @return
      */
 	String getConfiguration();
 
@@ -31,7 +31,7 @@ public interface IRobotConfigurator {
 	 * Format is: 'Port':true/false
 	 * 'Port' = [A-D] || [S1-S4]
 	 *
-	 * @return returns information about the connection state as a string
+	 * @return
      */
 	String getEndpointConnectionState();
 
@@ -62,8 +62,8 @@ public interface IRobotConfigurator {
 	/**
 	 * Add a Sensor Type to the RobotConfigurator.
 	 *
-	 * @param sensorPort - port the sensor is connected to
-	 * @param sensor - Type of the Sensor
+	 * @param sensorPort
+	 * @param sensor
 	 */
 	void addSensorType(EV3SensorPort sensorPort, Sensors sensor);
 
@@ -73,7 +73,7 @@ public interface IRobotConfigurator {
 
 	/**
 	 * Creates a Motor Endpoint
-	 * @param motorPort - port the motor is connected to
+	 * @param motorPort
 	 * @return EV3RegulatedMotorEndpoint
 	 * @throws BrickIsNotReadyException - if brick is not connected or ready
 	 * @throws PortIsAlreadyInUseException - if the port is already in use
@@ -86,8 +86,8 @@ public interface IRobotConfigurator {
 	/**
 	 * Add a motorType to the RobotConfigurator.
 	 *
-	 * @param motorPort - port of the motor it is connected to the brick
-	 * @param motor - motor type
+	 * @param motorPort
+	 * @param motor
 	 */
 	void addMotorType(EV3MotorPort motorPort, Motors motor);
 
@@ -103,12 +103,8 @@ public interface IRobotConfigurator {
 	SynchronizedMotorsEndpoint createSynchronizedMotorsEndpoint();
 
 	//------------- Build the wholoe Configuration
-
 	/**
 	 * Build the Configuration
-	 * @return true if configuration initialization is successful else false
-	 * @throws BrickIsNotReadyException - if the brick is not connected or ready to receive initialization information
-	 * @throws PortIsAlreadyInUseException - if a port already has a sensor/motor specified
 	 */
 	boolean initializeConfiguration() throws BrickIsNotReadyException, PortIsAlreadyInUseException;
 

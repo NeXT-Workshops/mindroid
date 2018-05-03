@@ -16,7 +16,8 @@ public class Touch extends SimpleEV3SensorProperty {
     public static final int HIT = 1;
 
     /**
-     * @param port brickport of the touch-mode running sensor
+     *
+     * @param port
      */
     public Touch(EV3PortID port) {
         super(port);

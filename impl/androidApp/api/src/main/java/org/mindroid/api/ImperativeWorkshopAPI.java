@@ -27,7 +27,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     private final DifferentialPilot diffPilot;
 
     /**
-     * @param implementationID  The ID of your Implementation. Necessary to run your implementation later on.
+     * @param implementationID - The ID of your Implementation. Necessary to run your implementation later on.
      */
     public ImperativeWorkshopAPI(String implementationID) {
         super(implementationID);
@@ -130,7 +130,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      * Returns without action if system got interrupted.
      *
      * @param degrees degrees to turn
-     * @param speed speed of the motors [0 to 1000] deg/sec. Possible MaxSpeed depends on battery power!
+     * @param speed speed 0 - 1000
      */
     public final void turnLeft(int degrees,int speed) {
         if(!isInterrupted()) {
@@ -154,7 +154,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      * Returns without action if system got interrupted.
      *
      * @param degrees  degrees to turn
-     * @param speed speed of the motors [0 to 1000] deg/sec. Possible MaxSpeed depends on battery power!
+     * @param speed speed 0 - 1000
      */
     public final void turnRight(int degrees,int speed) {
         if(!isInterrupted()) {
@@ -164,7 +164,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
 
     /**
      * Stops the Motor at the given Port.
-     * @param motorport  port of the motor to stop
+     * @param motorport - port of the motor to stop
      */
     public void stop(EV3PortID motorport) {
         getMotorProvider().getMotor(motorport).stop();
@@ -196,7 +196,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      * Returns without action if system got interrupted.
      *
      * Use {@link #stop()} to stop driving.
-     * @param speed  speed of the motors [0 to 1000] deg/sec. Possible MaxSpeed depends on battery power!
+     * @param speed - speed of the motors [0-1000] deg/sec. Possible MaxSpeed depends on battery power!
      */
     public void forward(int speed) {
         if(!isInterrupted()) {
@@ -219,7 +219,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      * Synchronized motor operation and blocking method.
      * Returns without action if system got interrupted.
      *
-     * @param distance distance to drive in cm
+     * @param distance - distance to drive in cm
      */
     public void driveDistanceForward(float distance) {
         if(!isInterrupted()) {
@@ -232,8 +232,8 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      * Synchronized motor operation and blocking method.
      * Returns without action if system got interrupted.
      *
-     * @param distance distance to drive in cm
-     * @param speed speed of the motors [0 to 1000] deg/sec. Possible MaxSpeed depends on battery power!
+     * @param distance - distance to drive in cm
+     * @param speed - speed
      */
     public void driveDistanceForward(float distance,int speed) {
         if(!isInterrupted()) {
@@ -245,7 +245,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      * Starts driving backward and returns immediately.
      * Returns without action if system got interrupted.
      * Use {@link #stop()} to stop driving.
-     * @param speed speed of the motors [0 to 1000] deg/sec. Possible MaxSpeed depends on battery power!
+     * @param speed - speed of the motors [0-1000] deg/sec. Possible MaxSpeed depends on battery power!
      */
     public void backward(int speed) {
         if(!isInterrupted()) {
@@ -268,7 +268,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      * Synchronized motor operation and blocking method.
      * Returns without action if system got interrupted.
      *
-     * @param distance distance to drive in cm
+     * @param distance - distance to drive in cm
      */
     public void driveDistanceBackward(float distance) {
         if(!isInterrupted()) {
@@ -281,8 +281,8 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      * Synchronized motor operation and blocking method.
      * Returns without action if system got interrupted.
      *
-     * @param distance distance to drive in cm
-     * @param speed speed of the motors [0 to 1000] deg/sec. Possible MaxSpeed depends on battery power!
+     * @param distance - distance to drive
+     * @param speed - speed
      */
     public void driveDistanceBackward(float distance,int speed) {
         if(!isInterrupted()) {
@@ -293,7 +293,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     /**
      * Sets the motorspeed of the left and right motors
      *
-     * @param speed speed of the motors [0 to 1000] deg/sec. Possible MaxSpeed depends on battery power!
+     * @param speed - motorspeed [0 - 1000]
      */
     public void setMotorSpeed(int speed){
         if(!isInterrupted()){

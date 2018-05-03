@@ -13,8 +13,8 @@ public class MessageProperty implements IMessageProperty {
 
     /**
      *
-     * @param content - content of msg
-     * @param source - source of the msg
+     * @param content
+     * @param source
      */
     public MessageProperty(String content, String source){
         this.content = content;

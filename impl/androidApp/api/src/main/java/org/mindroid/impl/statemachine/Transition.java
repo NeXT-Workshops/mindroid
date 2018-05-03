@@ -10,12 +10,10 @@ public class Transition implements ITransition{
 	IConstraint constraint;
 	
 	IState destination = null;
-
+	
 	/**
-	 * Transition object between states
-	 *
-	 * @param constraint constraint of the transition
-	 * @param destination - destination state of the transition
+	 * 
+	 * @param constraint
 	 */
 	public Transition(IConstraint constraint, IState destination){
 		this.constraint = constraint;

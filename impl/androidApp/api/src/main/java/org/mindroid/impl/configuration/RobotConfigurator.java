@@ -69,8 +69,8 @@ public class RobotConfigurator implements IRobotConfigurator {
 
 	/**
 	 *
-	 * @param robotIP - brick IP
-	 * @param robotTCPPort - brick TCP port to connect to
+	 * @param robotIP
+	 * @param robotTCPPort
      */
 	public RobotConfigurator(String robotIP, int robotTCPPort){
 		this.endpointState = new StringBuffer();
@@ -229,8 +229,8 @@ public class RobotConfigurator implements IRobotConfigurator {
 	 * If an error during the initialization process on the brick occurs. All sensor and motor endpoints
 	 * on API-Side will be closed and removed and the process will be aborted and has to be restarted..
 	 *
-	 * @return true - if initialization was successful
-	 * @throws BrickIsNotReadyException - when the brick is not connected or ready to receive configuration information
+	 * @return
+	 * @throws BrickIsNotReadyException
 	 */
 	@Override
 	public boolean initializeConfiguration() throws BrickIsNotReadyException {

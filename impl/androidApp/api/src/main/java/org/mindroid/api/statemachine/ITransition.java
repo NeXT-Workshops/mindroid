@@ -5,10 +5,7 @@ import org.mindroid.api.statemachine.constraints.IConstraint;
 public interface ITransition {
 	
 
-	/** if constraint is satisfied, returns destination Sate else null
-	 *
-	 * @return sreturns the destination state of the transition
-	 * **/
+	/** if constraint is satisfied, returns destination Sate else null **/
 	IState fire();
 
 	void run();

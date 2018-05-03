@@ -23,26 +23,18 @@ public interface IState {
 	/**
 	 * Add a Transition to this State.
 	 *  
-	 * @param transition transition to add
-	 *
-	 * @throws DuplicateTransitionException thrown if the transition which should be added already exists
+	 * @param transition
+	 * @throws DuplicateTransitionException 
 	 */
 	void addTransition(ITransition transition) throws DuplicateTransitionException;
 	
 	/**
 	 * Get the ID from this state
-	 *
-	 * @return name as a string
+	 * @return
 	 */
 	String getName();
-
-	/**
-	 *  returns a transition, which is satisfied to the given IConstraint. If no satisfied transition exists it returns null
-	 *
-	 * @param tmpEvent constraint that should be satisfied
-	 *
-	 * @return satisfied transition
-	 */
+	
+	/** returns a transition, which is satisfied to the given IConstraint. If no satisfied transition exists it returns null **/
 	ITransition getSatisfiedTransition(IConstraint tmpEvent);
 
 	List<IConstraint> getConstraints();

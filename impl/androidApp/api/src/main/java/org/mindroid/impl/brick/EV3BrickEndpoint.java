@@ -68,7 +68,7 @@ public class EV3BrickEndpoint extends Listener {
 
     /**
      * returns true if connection to Brick is established
-     * @return returns true if the client is connected
+     * @return
      */
     public boolean isConnected(){
         return client.isConnected();
@@ -76,7 +76,7 @@ public class EV3BrickEndpoint extends Listener {
 
     /**
      * Returns true if connection to Brick is established and also ready to receive Commands
-     * @return true if the brick is ready else false
+     * @return
      */
     public boolean isBrickReady(){
         return (readyForCommands && isConnected());

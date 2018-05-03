@@ -8,12 +8,11 @@ public class TimeEvent implements ITimeEvent{
 	float delay = -1;
 	
 	IState owner = null;
-
+	
 	/**
 	 * Delay (sec): Time after the Event gets fired.
-	 *
-	 * @param delay duration until the time event should be thrown
-	 * @param owner state the timeevent belongs to. The TimeEvent is connected to the outgoing transitions of the owner-state containing time constraints
+	 * 
+	 * @param delay - in milliseconds
 	 */
 	public TimeEvent(float delay, IState owner){
 		this.delay = delay;

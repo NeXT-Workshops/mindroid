@@ -47,7 +47,7 @@ public interface IRegulatedMotor {
 
 	/**
 	 * Rotate to the target angle. Do not return until the move is complete.
-	 * @param angle - Angle to rotate to.
+	 * @return limitAngle - Angle to rotate to.
 	 */
 	void rotateTo(int angle);
 
@@ -71,7 +71,7 @@ public interface IRegulatedMotor {
 	 * causes motor to rotate to limitAngle;
 	 * if immediateReturn is true, method returns immediately and the motor stops by itself
 	 * and getTachoCount should be within +- 2 degrees if the limit angle If any motor method is called before the limit is reached, the rotation is canceled. When the angle is reached, the method isMoving() returns false;
-	 * @param limitAngle - to which the motor will rotate, and then stop (in degrees). Includes any positive or negative int, even values bigger 360.
+	 * @param limitAngle - to which the motor will rotate, and then stop (in degrees). Includes any positive or negative int, even values > 360.
 	 * @param immediateReturn - iff true, method returns immediately, thus allowing monitoring of sensors in the calling thread.
 	 */
 	void rotateTo(int limitAngle, boolean immediateReturn);

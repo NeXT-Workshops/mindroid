@@ -58,9 +58,12 @@ public interface IRobotCommandCenter {
     boolean isMessengerConnected();
 
     /**
+     *
      * Connects the Messenger-client to the Message Server.
      * @param msgServerIP - ip of the message server
      * @param msgServerTCPPort - port of the message server
+     *
+     * @return true if connection was successful
      */
     boolean connectMessenger(String msgServerIP, int msgServerTCPPort);
 

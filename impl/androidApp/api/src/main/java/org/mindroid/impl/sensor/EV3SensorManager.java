@@ -65,12 +65,16 @@ public class EV3SensorManager extends Listener{
     }
     
 
-    /**
-     * Creates a Sensor.
-     * 
-     * @return the sensor handle
-     * @throws PortIsAlreadyInUseException if the specified {@link EV3SensorPort} is already in use
-     */
+	/**
+	 * Creates a Sensor.
+	 *
+	 * @param brick_port brickt port
+	 * @param sensorType sensor type
+	 * @param sensorPort sensor port
+	 * @param mode - mode of the sensor
+	 * @return the sensor handle
+	 * @throws PortIsAlreadyInUseException if the specified {@link EV3SensorPort} is already in use
+	 */
     public EV3SensorEndpoint createSensor(EV3PortID brick_port, Sensors sensorType, EV3SensorPort sensorPort, Sensormode mode) throws PortIsAlreadyInUseException{
 		if(sensorType != null && sensorPort != null){
 			if(sensorEndpoints.containsKey(sensorPort)){

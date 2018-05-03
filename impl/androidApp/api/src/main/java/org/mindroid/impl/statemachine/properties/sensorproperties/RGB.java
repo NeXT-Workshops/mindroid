@@ -12,7 +12,7 @@ public class RGB extends ComplexEV3SensorProperty {
 
     /**
      *
-     * @param port
+     * @param port brickport of the RGB-mode running sensor
      */
     public RGB(EV3PortID port) {
         super(port);

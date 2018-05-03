@@ -17,7 +17,7 @@ public class ExecutorProvider extends AbstractImplVisitor{
     /**
      * Returns the proper Executor neccessary to execute the Implementation
      * @param executable - can be any type of BasicAPI
-     * @return
+     * @return Executor
      */
     public IExecutor getExecutor(BasicAPI executable){
         //Visit api. -> will set the current Executor which will be returned

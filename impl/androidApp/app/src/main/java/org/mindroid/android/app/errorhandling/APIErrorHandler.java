@@ -53,7 +53,6 @@ public class APIErrorHandler extends AbstractErrorHandler{
             mainActivity.showErrorDialog("Error", source.toString()+":\n"+e.getMessage());
         }
 
-        System.out.println("[APIErrorHandler:handleError] "+logMessage);
     }
 
     /**
@@ -75,6 +74,7 @@ public class APIErrorHandler extends AbstractErrorHandler{
      * @param msg - error msg
      */
     private void handleStatemachineErrors(Exception e, String msg) {
+        LOGGER.log(Level.WARNING,"StatemachineError: Msg={"+msg+"} , Exception={"+e+"}");
         if(e instanceof StateAlreadyExistsException){
             mainActivity.showErrorDialog("Duplicate State","The Statemachine "+msg+" can not be executed, because at least two states with the same ID exists. Check your Statemachine!");
         }else if(e instanceof NoSuchStateException){

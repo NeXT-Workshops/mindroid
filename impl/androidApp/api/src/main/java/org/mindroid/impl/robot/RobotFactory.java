@@ -19,6 +19,7 @@ import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
+import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.robot.context.RobotContextStateEvaluator;
 import org.mindroid.impl.robot.context.RobotContextStateManager;
@@ -28,6 +29,8 @@ import org.mindroid.impl.util.Messaging;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by torben on 02.03.2017.
@@ -69,11 +72,17 @@ public final class RobotFactory implements IRobotFactory {
     private String msgServerIP = null;
     private int msgServerTCPPort = -1;
 
+
     IRobotPortConfig robotConfig;
 
 
     private Robot myRobot;
     private RobotCommandCenter myRobotCommandCenter;
+
+    private static final Logger LOGGER = Logger.getLogger(RobotFactory.class.getName());
+    static{
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+    }
 
     public RobotFactory(){
         myRobot = Robot.getInstance();
@@ -196,7 +205,7 @@ public final class RobotFactory implements IRobotFactory {
                 myRobotCommandCenter = null;
             }
 
-            System.out.println("[RobotFactory:createRobot] The RobotFactory created a Robot with the following setup:\n"+toString());
+            LOGGER.log(Level.INFO,"The RobotFactory created a Robot with the following setup: "+toString());
         }
         return myRobotCommandCenter;
     }
@@ -229,6 +238,8 @@ public final class RobotFactory implements IRobotFactory {
         if(Robot.getInstance().getMessenger() != null) {
             Robot.getInstance().getMessenger().setRobotID(robotID);
         }
+
+        LOGGER.log(Level.INFO," RobotID set: "+robotID);
     }
 
 
@@ -245,6 +256,7 @@ public final class RobotFactory implements IRobotFactory {
         }
         sensorListenerToRegister.get(port).add(listener);
 
+        LOGGER.log(Level.INFO," Registered Sensor Listener: Port: "+port.toString() + "Listener: "+listener.toString());
     }
 
     @Override
@@ -274,6 +286,8 @@ public final class RobotFactory implements IRobotFactory {
 
         this.msgServerIP = null;
         this.msgServerTCPPort = -1;
+
+        LOGGER.log(Level.INFO," Configuration got cleared!");
     }
 
     public RobotCommandCenter getRobotCommandCenter() {

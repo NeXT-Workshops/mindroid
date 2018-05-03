@@ -3,6 +3,7 @@ package org.mindroid.impl.sensor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -45,6 +46,7 @@ public class EV3SensorManager extends Listener{
 	private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
 	private final EV3MsgLogger msgRcvdLogger;
 	private final EV3MsgLogger msgSendLogger;
+
 
     public EV3SensorManager(EV3BrickEndpoint ev3Brick) {
         this.ev3BrickEndpoint = ev3Brick;
@@ -90,6 +92,7 @@ public class EV3SensorManager extends Listener{
     }
 
 	public void initializeSensor(Sensors sensorType, EV3SensorPort sensorPort) throws BrickIsNotReadyException {
+		LOGGER.log(Level.INFO,"Initializing Sensor at ["+sensorPort.toString()+"] of type "+sensorType.getName());
 		if(ev3BrickEndpoint.isBrickReady()){
 			if(sensorType != null && sensorPort != null){
 				if(sensorEndpoints.containsKey(sensorPort)){
@@ -99,10 +102,10 @@ public class EV3SensorManager extends Listener{
 
 					brickClient.sendTCP(msg);
 				}else{
-					//TODO throw SensorPort is not defined Exception
+					LOGGER.log(Level.WARNING,"initializeSensor(..) failed: The Sensor-object was not found in hashmap!");
 				}
 			}else{
-				//TODO throw illegal Argument Exception
+				LOGGER.log(Level.WARNING,"The initialSensor-Method got invalid parameters! One or more  are null");
 			}
 		}else{
 			throw new BrickIsNotReadyException("Can't create a Sensor, because the Brick is not ready. Check Connection and/or try again!");

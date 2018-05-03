@@ -5,12 +5,23 @@ import org.mindroid.api.AbstractImperativeImplExecutor;
 import org.mindroid.api.IExecutor;
 import org.mindroid.api.ImperativeAPI;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
+import org.mindroid.impl.logging.APILoggerManager;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ImperativeImplExecutor extends AbstractImperativeImplExecutor implements IExecutor {
 
 
     /** true if a statemachine is running else false **/
     private boolean isRunning = false;
+
+
+    private static final Logger LOGGER = Logger.getLogger(ImperativeImplExecutor.class.getName());
+
+    static{
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+    }
 
     /**
      * Start the execution of the Implementation
@@ -19,6 +30,8 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
      */
     @Override
     public final void start() {
+
+
         final ImperativeAPI runningImpl = getRunnable();
         Runnable runImpl = new Runnable() {
             @Override
@@ -44,11 +57,14 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                 }
             }
         };
+        LOGGER.log(Level.INFO,"Starting an Implementation: ID="+runningImpl.getImplementationID());
         new Thread(runImpl).start();
     }
 
     @Override
     public void stop() {
+        LOGGER.log(Level.INFO,"Stopping the currently running implementation");
+
         //Only set interrupted field, when exection has not finished
         if (!isExecutionFinished()) {
             setInterrupted(true);
@@ -86,6 +102,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
 
     public void setImplementation(ImperativeAPI runnable) {
         setRunnable(runnable);
+        LOGGER.log(Level.INFO,"Implementation Set: ID="+runnable.getImplementationID());
     }
 
     // ------ Methods to add some code sugar ------

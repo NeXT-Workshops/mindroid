@@ -94,7 +94,6 @@ public class LoggerFragment extends Fragment {
             createEntry(log);
         }
 
-
         return view;
     }
 

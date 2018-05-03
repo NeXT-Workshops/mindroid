@@ -2,6 +2,7 @@ package org.mindroid.android.app.fragments.log;
 
 
 import android.os.Environment;
+import org.mindroid.android.app.errorhandling.APIErrorHandler;
 import org.mindroid.android.app.util.ShellService;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.logging.APILoggerManager;
@@ -53,8 +54,7 @@ public class GlobalLogger {
             logs = (ArrayList<LogRecord>) ois.readObject();
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            LOG_HANDLER.publish(createLog(Level.INFO,"Couldn't load log: "+e.getMessage()));
+            LOG_HANDLER.publish(createLog(Level.INFO,"loadLog(): Couldn't load log: "+e.getMessage()));
         }
     }
 
@@ -73,7 +73,7 @@ public class GlobalLogger {
             oos.close();
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG_HANDLER.publish(createLog(Level.WARNING, "saveLog(): Exception saving log: "+e.getMessage()));
             return false;
         }
     }
@@ -108,7 +108,7 @@ public class GlobalLogger {
                     ErrorHandlerManager.getInstance().handleError(e,GlobalLogger.class,e.getMessage());
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                LOG_HANDLER.publish(createLog(Level.WARNING, "getLogFile(): Exception getting Log File: "+e.getMessage()));
             }
         }
         return logfile;

@@ -1,6 +1,8 @@
 package org.mindroid.impl.configuration;
 
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 import org.mindroid.api.configuration.IRobotConfigurator;
@@ -20,6 +22,7 @@ import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
+import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.motor.EV3MotorManager;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
 import org.mindroid.impl.motor.Motor;
@@ -66,6 +69,12 @@ public class RobotConfigurator implements IRobotConfigurator {
 	 *
 	 **/
 	private boolean isConfigurationInterrupted = false;
+
+	private static final Logger LOGGER = Logger.getLogger(RobotConfigurator.class.getName());
+
+	static{
+		APILoggerManager.getInstance().registerLogger(LOGGER);
+	}
 
 	/**
 	 *
@@ -234,6 +243,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 	 */
 	@Override
 	public boolean initializeConfiguration() throws BrickIsNotReadyException {
+		LOGGER.log(Level.INFO,"Start initializing the Configuration: "+getConfiguration());
 		if(brick.isConnected()) {
 			//Reset Interruption-state to not_interrupted
 			setConfigurationInterrupted(false);
@@ -272,6 +282,8 @@ public class RobotConfigurator implements IRobotConfigurator {
 				}
 
 				if(hasCreationFailed || isConfigurationInterrupted()){
+					LOGGER.log(Level.WARNING,"Initialization of Sensor/Motors Failed: \r\n hasCreationFailed="+ hasCreationFailed+"\r\n isInitComplete="+init_complete+" \n\r endpointState= " +endpointState);
+
 					//Abort initialization, because the creation of a sensor/motor on the brick failed or the process got interrupted
 					motorManager.disconnectMotors();
 					sensorManager.disconnectSensors();

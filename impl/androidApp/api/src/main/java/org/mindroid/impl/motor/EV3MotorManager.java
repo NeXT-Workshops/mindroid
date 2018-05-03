@@ -2,6 +2,7 @@ package org.mindroid.impl.motor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.mindroid.api.endpoint.ClientEndpoint;
@@ -41,9 +42,13 @@ public class EV3MotorManager extends Listener {
     EV3BrickEndpoint ev3BrickEndpoint = null;
     private Client brickClient = null;
 
-	private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
+	private static final Logger LOGGER = Logger.getLogger(EV3MotorManager.class.getName());
 	private final EV3MsgLogger msgRcvdLogger;
 	private final EV3MsgLogger msgSendLogger;
+
+	static{
+		APILoggerManager.getInstance().registerLogger(LOGGER);
+	}
 
     public EV3MotorManager(EV3BrickEndpoint ev3BrickEndpoint) {
         this.ev3BrickEndpoint = ev3BrickEndpoint;
@@ -58,7 +63,7 @@ public class EV3MotorManager extends Listener {
         motors = new HashMap<>(4);
 
 		//Init Loggers
-		APILoggerManager.getInstance().registerLogger(LOGGER);
+
 		msgRcvdLogger = new EV3MsgLogger(LOGGER,"Received ");
 		msgSendLogger = new EV3MsgLogger(LOGGER,"Send ");
     }
@@ -99,6 +104,7 @@ public class EV3MotorManager extends Listener {
 	 * @throws BrickIsNotReadyException exception thrown when the Brick is not ready (to initialize hardware)
 	 */
 	public void initializeMotor(Motors motorType, EV3MotorPort motorPort) throws BrickIsNotReadyException {
+		LOGGER.log(Level.INFO,"Initializing Motor at ["+motorPort.toString()+"] of type "+motorType.getName());
 		if(ev3BrickEndpoint.isBrickReady()){
 			if(motorType != null && motorPort != null) {
 				if (motors.containsKey(motorPort)) {
@@ -108,10 +114,10 @@ public class EV3MotorManager extends Listener {
 
 					brickClient.sendTCP(msg);
 				}else{
-					//TODO throw Exception IMotor wurde noch nicht created!
+					LOGGER.log(Level.WARNING,"initializeMotor(..) failed: The Motor-object was not found in hashmap!");
 				}
 			}else{
-				//TODO throw Illegal Argument Exception
+				LOGGER.log(Level.WARNING,"The initialSensor-Method got invalid parameters! One or more  are null");
 			}
 		}else{
 			throw new BrickIsNotReadyException("Can't create a IMotor, because the Brick is not ready. Check Connection and/or try again!");

@@ -4,9 +4,11 @@ package org.mindroid.impl.imperative;
 import org.mindroid.api.AbstractImperativeImplExecutor;
 import org.mindroid.api.IExecutor;
 import org.mindroid.api.ImperativeAPI;
+import org.mindroid.api.IImplStateListener;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.logging.APILoggerManager;
 
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +18,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
     /** true if a statemachine is running else false **/
     private boolean isRunning = false;
 
+    private final HashSet<IImplStateListener> IImplStateListeners = new HashSet<>(1);
 
     private static final Logger LOGGER = Logger.getLogger(ImperativeImplExecutor.class.getName());
 
@@ -39,7 +42,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                 setExecutionFinished(false);
                 setInterrupted(false);
                 try {
-                    isRunning = true;
+                    setIsRunning(true);
                     runningImpl.run();
 
                 } catch (Exception e) {
@@ -49,16 +52,23 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                 } finally {
                     //Detects, that the implementation is finished
                     setExecutionFinished(true);
-                    isRunning = false;
+                    setIsRunning(false);
+
 
                     //When run is finished (imperative impl got stopped (interrupted) or just code is done) - stopAllMotors former state
                     stopAllMotors(runningImpl);
-
                 }
             }
         };
         LOGGER.log(Level.INFO,"Starting an Implementation: ID="+runningImpl.getImplementationID());
         new Thread(runImpl).start();
+    }
+
+    private void setIsRunning(boolean isRunning){
+        this.isRunning = isRunning;
+        for (IImplStateListener IImplStateListener : IImplStateListeners) {
+            IImplStateListener.handleIsRunning(isRunning);
+        }
     }
 
     @Override
@@ -69,7 +79,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
         if (!isExecutionFinished()) {
             setInterrupted(true);
             setExecutionFinished(true);
-            isRunning = false;
+            setIsRunning(false);
         }
 
     }
@@ -117,5 +127,10 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
         }
     }
 
-
+    @Override
+    public void registerImplStateListener(IImplStateListener IImplStateListener){
+        if(!IImplStateListeners.contains(IImplStateListener)){
+            IImplStateListeners.add(IImplStateListener);
+        }
+    }
 }

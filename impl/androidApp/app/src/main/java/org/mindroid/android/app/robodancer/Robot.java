@@ -1,10 +1,10 @@
 package org.mindroid.android.app.robodancer;
 
-import android.provider.Settings;
 import org.mindroid.android.app.fragments.log.GlobalLogger;
 import org.mindroid.android.app.fragments.sensormonitoring.SensorListener;
 import org.mindroid.android.app.serviceloader.ImplementationService;
 import org.mindroid.api.BasicAPI;
+import org.mindroid.api.IImplStateListener;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.impl.configuration.RobotPortConfig;
@@ -25,7 +25,7 @@ import org.mindroid.impl.robot.RobotFactory;
 /**
  * Created by mindroid on 09.12.16.
  */
-public class Robot {
+public class Robot implements IImplStateListener {
 
     public boolean isRunning = false;
 
@@ -186,7 +186,7 @@ public class Robot {
     public void startExecuteImplementation(String id){
         LOGGER.log(Level.INFO, "Start to execute: " + id);
         runningImplementationID = id;
-        roFactory.getRobotCommandCenter().startImplementation(id);
+        roFactory.getRobotCommandCenter().startImplementation(id,this);
     }
 
     /**
@@ -212,5 +212,10 @@ public class Robot {
 
     public SensorListener getListenerForPort(EV3PortID port){
         return (SensorListener) sensorListener.get(port);
+    }
+
+    @Override
+    public void handleIsRunning(boolean isRunning) {
+        this.isRunning = isRunning;
     }
 }

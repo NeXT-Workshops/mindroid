@@ -9,7 +9,6 @@ import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.api.statemachine.properties.ITimeProperty;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.ev3.EV3PortIDs;
-import org.mindroid.impl.imperative.ImperativeImplExecutor;
 import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.robot.Robot;
 import org.mindroid.impl.robot.context.RobotContextState;
@@ -52,6 +51,7 @@ public class StatemachineExecutor implements ISatisfiedConstraintHandler, IExecu
      */
     private ConcurrentHashMap<String,Thread> runningStatemachineThreads;
 
+    private final HashSet<IImplStateListener> IImplStateListeners = new HashSet<>(1);
 
     ArrayList<IConstraintEvaluator> evaluators;
 
@@ -77,6 +77,13 @@ public class StatemachineExecutor implements ISatisfiedConstraintHandler, IExecu
         runningStatemachineThreads = new ConcurrentHashMap<String,Thread>();
 
         setupStatemachineEngine();
+    }
+
+    @Override
+    public void registerImplStateListener(IImplStateListener IImplStateListener){
+        if(!IImplStateListeners.contains(IImplStateListener)){
+            IImplStateListeners.add(IImplStateListener);
+        }
     }
 
     public void setImplementation(List<IStatemachine> runnables) {
@@ -248,8 +255,15 @@ public class StatemachineExecutor implements ISatisfiedConstraintHandler, IExecu
 
             }
 
-            isRunning = true;
+            setIsRunning(true);
        }
+    }
+
+    private void setIsRunning(boolean isRunning){
+        this.isRunning = isRunning;
+        for (IImplStateListener IImplStateListener : IImplStateListeners) {
+            IImplStateListener.handleIsRunning(isRunning);
+        }
     }
 
     private String getStatemachineErrorMsg(String smID, Exception e){
@@ -276,7 +290,7 @@ public class StatemachineExecutor implements ISatisfiedConstraintHandler, IExecu
         currentStates.remove(sm.getID());
         runningStatemachineThreads.remove(sm.getID());
 
-        isRunning = false;
+        setIsRunning(false);
 
         //TODO stopAllMotors statemachine calling sm.stopAllMotors() ??
     }

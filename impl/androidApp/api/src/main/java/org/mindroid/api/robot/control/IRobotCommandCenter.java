@@ -1,6 +1,7 @@
 package org.mindroid.api.robot.control;
 
 import org.mindroid.api.BasicAPI;
+import org.mindroid.api.IImplStateListener;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 
@@ -82,9 +83,10 @@ public interface IRobotCommandCenter {
     /**
      * Starts an Implementation Imperative/Statemachine identified by the given ID.
      *
-     * @param id -
+     * @param id of the implementation
+     * @param IImplStateListener gets information about the current state of the implementation, provided by the executor {@link org.mindroid.api.IExecutor}
      */
-    void startImplementation(String id);
+    void startImplementation(String id, IImplStateListener IImplStateListener);
 
     /**
      * Stops the currently Running implementation

@@ -1,9 +1,6 @@
 package org.mindroid.impl.test;
 
-import org.mindroid.api.ExecutorProvider;
-import org.mindroid.api.IExecutor;
-import org.mindroid.api.ImperativeWorkshopAPI;
-import org.mindroid.api.StatemachineAPI;
+import org.mindroid.api.*;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
@@ -32,7 +29,7 @@ import java.io.IOException;
 
 import static org.mindroid.common.messages.NetworkPortConfig.SERVER_PORT;
 
-public class TestPCClient{
+public class TestPCClient {
 
     public static String brickIP = "10.0.1.1";
     public static String msgServerIP = "127.0.0.1";
@@ -46,7 +43,8 @@ public class TestPCClient{
         new TestPCClientRobot();
     }
 
-    private static class TestPCClientRobot extends StatemachineAPI {
+
+    private static class TestPCClientRobot extends StatemachineAPI implements IImplStateListener {
         IRobotCommandCenter commandCenter;
 
         public TestPCClientRobot() {
@@ -67,7 +65,7 @@ public class TestPCClient{
                 Thread.sleep(10000);
                 System.out.println("[TestRobot:PC-Client] initialized!");
 
-                commandCenter.startImplementation(impID);
+                commandCenter.startImplementation(impID,this);
 
                 Thread.sleep(20000);
 
@@ -230,6 +228,10 @@ public class TestPCClient{
         }
 
 
+        @Override
+        public void handleIsRunning(boolean isRunning) {
+            //NOTING
+        }
     }
 
     private static class TestImperativeImpl extends ImperativeWorkshopAPI{

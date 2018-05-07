@@ -4,6 +4,7 @@ package org.mindroid.impl.robot;
 import org.mindroid.api.BasicAPI;
 import org.mindroid.api.ExecutorProvider;
 import org.mindroid.api.IExecutor;
+import org.mindroid.api.IImplStateListener;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
@@ -57,10 +58,11 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     }
 
     @Override
-    public void startImplementation(String id) {
+    public void startImplementation(String id, IImplStateListener IImplStateListener) {
         //TODO make sure that currently no statemachine is running
         if(executor == null || db.contains(id) && !executor.isRunning()) {
             executor = execProv.getExecutor(db.getImplementation(id));
+            executor.registerImplStateListener(IImplStateListener);
             executor.start();
         }else{
             Exception e = new IllegalArgumentException("[RobotCommandCenter] The DB does not contain an Statemachine with the ID "+id);

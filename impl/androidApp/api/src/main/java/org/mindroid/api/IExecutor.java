@@ -8,6 +8,8 @@ public interface IExecutor{
     void stop();
 
     boolean isRunning();
+
+    void registerImplStateListener(IImplStateListener IImplStateListener);
 }
 
 

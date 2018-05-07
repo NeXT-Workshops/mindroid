@@ -37,11 +37,13 @@ public class ImplementationService {
             "org.mindroid.android.app.imperativeimpl.ImpSingleWallPingPong",
             "org.mindroid.android.app.imperativeimpl.TestMessageAccess",
             "org.mindroid.android.app.imperativeimpl.MessageTest",
+            "org.mindroid.android.app.imperativeimpl.SimpleForward",
 
             //DEV Statemachines
+            /*
             "org.mindroid.android.app.statemachinesimpl.SensorMonitoring",
             "org.mindroid.android.app.statemachinesimpl.MindroidStatemachines"
-
+            */
 
             // Stubs for Workshop
             /*

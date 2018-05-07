@@ -53,14 +53,20 @@ public class LogHandler {
         }
     }
 
-    public static File getLogFile(String filename){
-        if(fileCache.containsKey(filename)){
-            return fileCache.get(filename);
-        }
+    public static File getLogDir(){
         File dir = new File(getLogFilesDirPath());
         if(!dir.exists()) {
             dir.mkdirs();
         }
+        return dir;
+    }
+
+    public static File getLogFile(String filename){
+        if(fileCache.containsKey(filename)){
+            return fileCache.get(filename);
+        }
+        File dir = getLogDir(); //To make sure the dir is created!
+
         File logFile = new File(getLogFilePath(filename));
 
         fileCache.put(filename,logFile);

@@ -70,7 +70,21 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         });
         refreshDevices.setMnemonic('r');
 
+        JMenuItem openLogDir = new JMenuItem();
+        openLogDir.setAction(new AbstractAction("Open Log Directory") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Desktop.getDesktop().open(LogHandler.getLogDir());
+                } catch (IOException e1) {
+                    MindroidServerConsoleFrame.getMindroidServerConsole().appendLine(e1.getCause()+"\r\n"+e1.getMessage());
+                }
+            }
+        });
+        openLogDir.setMnemonic('o');
+
         fileMenu.add(refreshDevices);
+        fileMenu.add(openLogDir);
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
 

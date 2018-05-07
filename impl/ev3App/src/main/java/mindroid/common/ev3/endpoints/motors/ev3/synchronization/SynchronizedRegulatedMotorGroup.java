@@ -20,7 +20,7 @@ import java.util.HashMap;
  */
 public class SynchronizedRegulatedMotorGroup {
     /**
-     *  {@value #MAX_MOTOR_COUNT}
+     *  Maximal number of motors that can be attached to the brick
      */
     public static final int MAX_MOTOR_COUNT = 4;
 

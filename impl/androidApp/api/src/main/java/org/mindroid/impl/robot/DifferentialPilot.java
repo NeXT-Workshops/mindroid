@@ -1,5 +1,6 @@
 package org.mindroid.impl.robot;
 
+import org.mindroid.api.IInterruptable;
 import org.mindroid.api.robot.IDifferentialPilot;
 import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.common.messages.motor.synchronization.SyncedMotorOpFactory;
@@ -23,7 +24,7 @@ public class DifferentialPilot implements IDifferentialPilot {
     private final float wheelCircumference;
     private final float trackCircumference;
     private final float angleThreshold = 2f;
-
+    private IInterruptable api;
     /**
      *
      * @param motorProvider motorprovider to access synced motor group
@@ -32,7 +33,7 @@ public class DifferentialPilot implements IDifferentialPilot {
      * @param wheelDiameter in cm
      * @param trackWidth in cm
      */
-    public DifferentialPilot(MotorProvider motorProvider, EV3PortID leftMotor, EV3PortID rightMotor, float wheelDiameter, float trackWidth) {
+    public DifferentialPilot( MotorProvider motorProvider, EV3PortID leftMotor, EV3PortID rightMotor, float wheelDiameter, float trackWidth) {
         this.motorProvider = motorProvider;
         this.leftMotor = leftMotor;
         this.rightMotor = rightMotor;
@@ -52,7 +53,7 @@ public class DifferentialPilot implements IDifferentialPilot {
      * @param wheelDiameter in cm
      * @param trackWidth in cm
      */
-    public DifferentialPilot(MotorProvider motorProvider, EV3PortID leftMotor, EV3PortID rightMotor, SensorProvider sensorProvider, EV3PortID gyroPort, float wheelDiameter, float trackWidth) {
+    public DifferentialPilot(IInterruptable api,MotorProvider motorProvider, EV3PortID leftMotor, EV3PortID rightMotor, SensorProvider sensorProvider, EV3PortID gyroPort, float wheelDiameter, float trackWidth) {
         this.motorProvider = motorProvider;
         this.leftMotor = leftMotor;
         this.rightMotor = rightMotor;
@@ -60,6 +61,7 @@ public class DifferentialPilot implements IDifferentialPilot {
         this.gyroPort = gyroPort;
         this.wheelDiameter = wheelDiameter;
         this.trackWidth = trackWidth;
+        this.api = api;
         wheelCircumference = (float) (Math.PI * this.wheelDiameter);
         trackCircumference = (float) (Math.PI * this.trackWidth);
     }
@@ -217,6 +219,11 @@ public class DifferentialPilot implements IDifferentialPilot {
      * @param executed - if the former synced motor operation was successful (Message sent)
      */
     private void executeAngleCorrection(float targetAngle, boolean executed) {
+        if(api != null && api.isInterrupted()){
+            //Return without correction if the implementation got interrupted
+            return;
+        }
+
         if(isGyroSensorAvailable() && executed) {
             //Check result
             doAngleCorrection(targetAngle);

@@ -32,7 +32,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     public ImperativeWorkshopAPI(String implementationID) {
         super(implementationID);
         //This DiffPilot supports angle correction while truning
-        this.diffPilot = new DifferentialPilot(getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),getSensorProvider(),getGyroSensorPort(),5.6f,12.5f);
+        this.diffPilot = new DifferentialPilot(this, getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),getSensorProvider(),getGyroSensorPort(),5.6f,12.5f);
     }
 
     /**

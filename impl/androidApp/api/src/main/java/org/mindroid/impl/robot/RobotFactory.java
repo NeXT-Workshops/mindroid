@@ -91,6 +91,7 @@ public final class RobotFactory implements IRobotFactory {
         //Create Messenger with specified properties
         createNetworkCommunicationInterfaces();
 
+        //Add RobotContextState as Sensorlistener to the ports.
         sensorListenerToRegister.put(EV3PortIDs.PORT_1,new ArrayList<IEV3SensorEventListener>());
         sensorListenerToRegister.put(EV3PortIDs.PORT_2,new ArrayList<IEV3SensorEventListener>());
         sensorListenerToRegister.put(EV3PortIDs.PORT_3,new ArrayList<IEV3SensorEventListener>());
@@ -111,6 +112,7 @@ public final class RobotFactory implements IRobotFactory {
     public IRobotCommandCenter createRobot(boolean enableSimulation) {
         Robot.getRobotController().setRobotID(Robot.getInstance().robotID);
 
+        //Set simulation
         this.isSimulationEnabled = enableSimulation;
         Robot.getInstance().setSimulated(isSimulationEnabled);
 
@@ -153,7 +155,7 @@ public final class RobotFactory implements IRobotFactory {
 
             if(Messaging.isValidIP(brickIP) && Messaging.isValidPort(brickTCPport)) {
                 // Configuration of the robot
-                RobotConfigurator robotConfigurator = new RobotConfigurator(brickIP, brickTCPport);
+                RobotConfigurator robotConfigurator = new RobotConfigurator(brickIP, brickTCPport); //TODO
                 myRobot.setRobotConfigurator(robotConfigurator);
 
                 robotConfigurator.addSensorConfigurationSet(sensor_S1, sensor_S2, sensor_S3, sensor_S4);

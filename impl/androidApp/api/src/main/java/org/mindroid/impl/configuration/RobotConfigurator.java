@@ -45,7 +45,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 	private HashMap<EV3MotorPort,Motors> motorConfiguration = new HashMap<EV3MotorPort,Motors>(4);
 	
 	private HashMap<EV3SensorPort,EV3SensorEndpoint> sensors = new HashMap<EV3SensorPort,EV3SensorEndpoint>(4);
-	private HashMap<EV3MotorPort,IRegulatedMotor> motors = new HashMap<EV3MotorPort,IRegulatedMotor>(4);
+	private HashMap<EV3MotorPort,EV3RegulatedMotorEndpoint> motors = new HashMap<EV3MotorPort,EV3RegulatedMotorEndpoint>(4);
 	
 	/** Experimental Values - may need a change **/
 	private final int DURATION_READY_GREENLIGHT = 4000;

@@ -65,8 +65,8 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
 
         //Init Loggers
         APILoggerManager.getInstance().registerLogger(LOGGER);
-        msgRcvdLogger = new EV3MsgLogger(LOGGER,"Received FROM Port "+brick_port.getLabel()+" : ");
-        msgSendLogger = new EV3MsgLogger(LOGGER,"Send TO Port "+brick_port.getLabel()+" : ");
+        msgRcvdLogger = new EV3MsgLogger(LOGGER," [ENDPOINT: S"+brick_port.getLabel()+" ] ");
+        msgSendLogger = new EV3MsgLogger(LOGGER," [ENDPOINT: S"+brick_port.getLabel()+" ] ");
     }
 
     @Override

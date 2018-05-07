@@ -30,11 +30,15 @@ public interface IRobotFactory {
 
     void addErrorHandler(AbstractErrorHandler errorHandler);
 
+    /**
+     *
+     * @param enableSimulation SIMULATION IS NOT FULLY IMPLEMENTED - SIMULATION DEV IS ON HOLD THEREFORE SHOULD BE FALSE
+     * @return RobotCommandCenter
+     */
     IRobotCommandCenter createRobot(boolean enableSimulation);
 
     /** Clears all properties **/
      void clearConfiguration();
-
 
 
 }

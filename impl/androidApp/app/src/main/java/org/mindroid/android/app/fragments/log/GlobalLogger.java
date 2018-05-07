@@ -10,6 +10,7 @@ import org.mindroid.impl.logging.APILoggerManager;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.logging.*;
 
@@ -29,6 +30,8 @@ public class GlobalLogger {
     private final File FILE_SD_DIRECTORY = Environment.getExternalStorageDirectory(); // getDataDirectory  ## getExternalStorageDirectory
     private final String PATH_TO_LOGFILE = FILE_SD_DIRECTORY.getPath().concat("/Mindroid/Log/");
     private final String NAME_LOGFILE = "Log.txt";
+
+    private final HashSet<Logger> registeredLogger = new HashSet<Logger>();
 
     private static final GlobalLogger instance = new GlobalLogger();
 
@@ -131,8 +134,11 @@ public class GlobalLogger {
      * @param logger The Logger to register
      */
     public void registerLogger(Logger logger){
-        logger.addHandler(LOG_HANDLER);
-        logs.add(createRegistrationLog(logger));
+        if(!registeredLogger.contains(logger)) {
+            logger.addHandler(LOG_HANDLER);
+            logs.add(createRegistrationLog(logger));
+            registeredLogger.add(logger);
+        }
     }
 
     private LogRecord createRegistrationLog(Logger logger) {

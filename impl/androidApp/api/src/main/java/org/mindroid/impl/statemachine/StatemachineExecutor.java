@@ -9,6 +9,8 @@ import org.mindroid.api.statemachine.constraints.IConstraint;
 import org.mindroid.api.statemachine.properties.ITimeProperty;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.ev3.EV3PortIDs;
+import org.mindroid.impl.imperative.ImperativeImplExecutor;
+import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.robot.Robot;
 import org.mindroid.impl.robot.context.RobotContextState;
 import org.mindroid.impl.robot.context.RobotContextStateEvaluator;
@@ -18,6 +20,8 @@ import org.mindroid.impl.statemachine.constraints.TimeExpired;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by torben on 19.03.2017.
@@ -58,6 +62,12 @@ public class StatemachineExecutor implements ISatisfiedConstraintHandler, IExecu
     /** true if a statemachine is running else false **/
     private boolean isRunning = false;
 
+    private static final Logger LOGGER = Logger.getLogger(StatemachineExecutor.class.getName());
+
+    static{
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+    }
+
     public StatemachineExecutor() {
         currentStates = new ConcurrentHashMap<String,IState>();
         evaluators= new ArrayList<IConstraintEvaluator>(1);
@@ -70,6 +80,13 @@ public class StatemachineExecutor implements ISatisfiedConstraintHandler, IExecu
     }
 
     public void setImplementation(List<IStatemachine> runnables) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("{");
+        for (IStatemachine runnable : runnables) {
+            sb.append("smID=").append(runnable.getID()).append(",");
+        }
+        sb.append("}");
+        LOGGER.log(Level.INFO,"Set Statemachine(s): "+sb.toString());
         this.runnables = runnables;
     }
 
@@ -244,8 +261,12 @@ public class StatemachineExecutor implements ISatisfiedConstraintHandler, IExecu
      * @param sm
      */
     private void stopStatemachine(IStatemachine sm){
+        LOGGER.log(Level.INFO,"Stopping statemachine: "+sm.getID());
+
+
         //stop statemachine
         sm.stop();
+        sm.reset();
 
         if(Robot.getInstance().getMessenger().isConnected()){
             Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+sm.getID());
@@ -269,14 +290,6 @@ public class StatemachineExecutor implements ISatisfiedConstraintHandler, IExecu
         for (IConstraintEvaluator evaluator : evaluators) {
             evaluator.unsubscribeConstraints(ID);
         }
-    }
-
-    @Deprecated
-    public void resetStatemachine(String id){
-        /*ArrayList<IStatemachine> statemachines = statemachineCollection.getStatemachineList(id);
-        for (IStatemachine statemachine : statemachines) {
-            statemachine.stopAllMotors();
-        }*/
     }
 
     public IState getCurrentState(String id){

@@ -160,7 +160,9 @@ public class Statemachine implements IStatemachine{
 	}
 
 
-
+	/**
+	 * Calls {@link #stop()}. Resets the StartState.
+	 */
 	@Override
 	public synchronized void reset() {
 		stop();

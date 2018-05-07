@@ -22,14 +22,14 @@ public class RobotContextStateManager implements IRobotContextStateManager,ICloc
     private Timer clk_Timer;
 
     /** taking a Snapshot and constraint evaluation per second **/
-    private static final long clocksPerSecond = 20;
+    private static final long CLOCKS_PER_SECOND = 20;
 
     private RobotContextStateManager(){
         //clk_Timer.schedule(new TimerTa);
         robotContextStateSource = RobotContextState.getInstance();
         evaluators = new ArrayList<IConstraintEvaluator>(1);
         clk_Timer = new Timer(true);
-        clk_Timer.schedule(new Task_handleCLK(this),100, 1000/ clocksPerSecond);
+        clk_Timer.schedule(new Task_handleCLK(this),100, 1000/ CLOCKS_PER_SECOND);
     }
 
 
@@ -73,7 +73,9 @@ public class RobotContextStateManager implements IRobotContextStateManager,ICloc
 
     @Override
     public void registerRobotContextStateListener(IConstraintEvaluator evaluator){
-        evaluators.add(evaluator);
+        if(!evaluators.contains(evaluator)) {
+            evaluators.add(evaluator);
+        }
     }
 
     @Override

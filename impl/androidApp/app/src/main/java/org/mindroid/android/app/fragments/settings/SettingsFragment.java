@@ -165,6 +165,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        usbSwitch.setVisibility(View.GONE);
         usbSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean checked){

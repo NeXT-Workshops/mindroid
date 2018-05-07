@@ -19,22 +19,22 @@ import java.util.logging.Logger;
 
 public class EV3MsgLogger extends Handler implements IEV3MessageVisitor {
 
-    private final Logger logger;
+    private final Logger LOGGER;
     private String preLogText = "";
     private static int msgID = 0;
     /**
      *
-     * @param logger - logger to log the rcvd message
+     * @param LOGGER - LOGGER to log the rcvd message
      * @param preLogText str concatinated before the log message
      */
-    public EV3MsgLogger(Logger logger, String preLogText){
-        this.logger = logger;
+    public EV3MsgLogger(final Logger LOGGER, String preLogText){
+        this.LOGGER = LOGGER;
         this.preLogText = preLogText;
-        logger.addHandler(this);
+        LOGGER.addHandler(this);
     }
 
-    public EV3MsgLogger(Logger logger){
-        this.logger = logger;
+    public EV3MsgLogger(final Logger LOGGER){
+        this.LOGGER = LOGGER;
     }
 
     /**
@@ -42,43 +42,43 @@ public class EV3MsgLogger extends Handler implements IEV3MessageVisitor {
      * @return [MSG_ID] + PreLogText
      */
     public String getPreLogText() {
-        return "["+(msgID++)+"] "+preLogText;
+        return "["+(msgID++)+"]" +preLogText;
     }
 
     @Override
     public void visit(BeepMessage beepMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("BeepMessage: beepType = ").append(beepMessage.getBeep()).toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("BeepMessage: beepType = ").append(beepMessage.getBeep()).toString());
     }
 
     @Override
     public void visit(SoundVolumeMessage soundVolumeMessag) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("SoundVolumeMessage: volume = ").append(soundVolumeMessag.getVolume()).toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("SoundVolumeMessage: volume = ").append(soundVolumeMessag.getVolume()).toString());
     }
 
     @Override
     public void visit(ChangeSensorModeMessage changeSensorModeMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("ChangeSensorModeMessage: new mode = ").append(changeSensorModeMessage.getNewMode()).toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("ChangeSensorModeMessage: new mode = ").append(changeSensorModeMessage.getNewMode()).toString());
     }
 
     @Override
     public void visit(HelloSensorMessage helloSensorMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("HelloSensorMessage: msg = ").append(helloSensorMessage.getMsg()).toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("HelloSensorMessage: msg = ").append(helloSensorMessage.getMsg()).toString());
     }
 
     @Override
     public void visit(ModeChangedSuccessfullyMessage modeChangedSuccessfullyMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("ModeChangedSuccessfullyMessage: mode = ").append(modeChangedSuccessfullyMessage.getMode()).toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("ModeChangedSuccessfullyMessage: mode = ").append(modeChangedSuccessfullyMessage.getMode()).toString());
     }
 
     @Override
     public void visit(SensorErrorMessage sensorErrorMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("SensorErrorMessage: error = ").append(sensorErrorMessage.getErrorMsg()).toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("SensorErrorMessage: error = ").append(sensorErrorMessage.getErrorMsg()).toString());
     }
 
     @Override
@@ -92,13 +92,13 @@ public class EV3MsgLogger extends Handler implements IEV3MessageVisitor {
         */
 
         // NOT LOGGED
-        // logger.log(Level.FINEST,logMsg.toString());
+        // LOGGER.log(Level.FINEST,logMsg.toString());
     }
 
     @Override
     public void visit(SensorStatusMessage sensorStatusMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("SensorStatusMessage: msg = ").append(sensorStatusMessage.getMsg()).toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("SensorStatusMessage: msg = ").append(sensorStatusMessage.getMsg()).toString());
     }
 
     @Override
@@ -107,43 +107,43 @@ public class EV3MsgLogger extends Handler implements IEV3MessageVisitor {
         logMsg.append(getPreLogText())
                 .append("SynchronizedOperationMessage: msg = ")
                 .append(getSyncedOpArrContent(synchronizedOperationMessage.getOperations()));
-        logger.log(Level.INFO,logMsg.toString());
+        LOGGER.log(Level.INFO,logMsg.toString());
     }
 
     @Override
     public void visit(SynchronizedMotorGroupCreatedMessage synchronizedMotorGroupCreatedMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("SynchronizedMotorGroupCreatedMessage: success=").append(synchronizedMotorGroupCreatedMessage.isSuccess()).toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("SynchronizedMotorGroupCreatedMessage: success=").append(synchronizedMotorGroupCreatedMessage.isSuccess()).toString());
     }
 
     @Override
     public void visit(SyncedMotorOpCompleteMessage syncedMotorOpCompleteMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("syncedMotorOpCompleteMessage: Synced Motor-Op complete").toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("syncedMotorOpCompleteMessage: Synced Motor-Op complete").toString());
     }
 
     @Override
     public void visit(AccelerationMessage accelerationMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("AccelerationMessage: acceleration = ").append(accelerationMessage.getAcceleration()).toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("AccelerationMessage: acceleration = ").append(accelerationMessage.getAcceleration()).toString());
     }
 
     @Override
     public void visit(BackwardMessage backwardMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("BackwardMessage").toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("BackwardMessage").toString());
     }
 
     @Override
     public void visit(FltMessage fltMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("FltMessage").toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("FltMessage").toString());
     }
 
     @Override
     public void visit(ForwardMessage forwardMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("ForwardMessage").toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("ForwardMessage").toString());
     }
 
     @Override
@@ -151,43 +151,43 @@ public class EV3MsgLogger extends Handler implements IEV3MessageVisitor {
         // NOT LOGGED
 
         //StringBuilder logMsg = new StringBuilder();
-        //logger.log(Level.INFO,logMsg.append(getPreLogText()).append("MotorStateMessage: motorStateMsg = ").append(motorStateMessage.getMotorState().toString()).toString());
+        //LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("MotorStateMessage: motorStateMsg = ").append(motorStateMessage.getMotorState().toString()).toString());
     }
 
     @Override
     public void visit(RotateMessage rotateMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("RotateMessage: angle = ").append(rotateMessage.getAngle()).toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("RotateMessage: angle = ").append(rotateMessage.getAngle()).toString());
     }
 
     @Override
     public void visit(RotateToMessage rotateToMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("RotateToMessage: rotateToAngle = ").append(rotateToMessage.getAngle()).toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("RotateToMessage: rotateToAngle = ").append(rotateToMessage.getAngle()).toString());
     }
 
     @Override
     public void visit(SetMotorSpeedMessage setMotorSpeedMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("SetMotorSpeedMessage: motorSpeed = ").append(setMotorSpeedMessage.getSpeed()).toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("SetMotorSpeedMessage: motorSpeed = ").append(setMotorSpeedMessage.getSpeed()).toString());
     }
 
     @Override
     public void visit(StopMessage stopMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("StopMessage").toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("StopMessage").toString());
     }
 
     @Override
     public void visit(SetStatusLightMessage setStatusLightMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("SetStatusLightMessage: statusLight = ").append(setStatusLightMessage.getVal()).toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("SetStatusLightMessage: statusLight = ").append(setStatusLightMessage.getVal()).toString());
     }
 
     @Override
     public void visit(ClearDisplayMessage clearDisplayMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("ClearDisplayMessage").toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("ClearDisplayMessage").toString());
     }
 
     @Override
@@ -198,13 +198,13 @@ public class EV3MsgLogger extends Handler implements IEV3MessageVisitor {
                 .append(", x = ").append(drawStringMessage.getX())
                 .append(", y = ").append(drawStringMessage.getY())
                 .append(", size = ").append(drawStringMessage.getTextsize());
-        logger.log(Level.INFO,logMsg.toString());
+        LOGGER.log(Level.INFO,logMsg.toString());
     }
 
     @Override
     public void visit(HelloDisplayMessage helloDisplayMessage) {
         StringBuilder logMsg = new StringBuilder();
-        logger.log(Level.INFO,logMsg.append(getPreLogText()).append("ClearDisplayMessage").toString());
+        LOGGER.log(Level.INFO,logMsg.append(getPreLogText()).append("ClearDisplayMessage").toString());
     }
 
     @Override
@@ -213,7 +213,7 @@ public class EV3MsgLogger extends Handler implements IEV3MessageVisitor {
         logMsg.append(getPreLogText())
                 .append("ButtonMessage: btnID = ").append(buttonMessage.getButtonID())
                 .append(", action = ").append(buttonMessage.getButtonAction());
-        logger.log(Level.INFO,logMsg.toString());
+        LOGGER.log(Level.INFO,logMsg.toString());
     }
 
     @Override
@@ -222,7 +222,7 @@ public class EV3MsgLogger extends Handler implements IEV3MessageVisitor {
         logMsg.append(getPreLogText())
                 .append("CreateMotorMessage: port = ").append(createMotorMessage.getPort())
                 .append(", motorType = ").append(createMotorMessage.getMotorType());
-        logger.log(Level.INFO,logMsg.toString());
+        LOGGER.log(Level.INFO,logMsg.toString());
     }
 
     @Override
@@ -231,7 +231,7 @@ public class EV3MsgLogger extends Handler implements IEV3MessageVisitor {
         logMsg.append(getPreLogText())
                 .append("CreateSensorMessage: port = ").append(createSensorMessage.getPort())
                 .append(", sensorType = ").append(createSensorMessage.getSensorType());
-        logger.log(Level.INFO,logMsg.toString());
+        LOGGER.log(Level.INFO,logMsg.toString());
     }
 
     @Override
@@ -240,7 +240,7 @@ public class EV3MsgLogger extends Handler implements IEV3MessageVisitor {
         logMsg.append(getPreLogText())
                 .append("EndpointCreatedMessage: port = ").append(endpointCreatedMessage.getPort())
                 .append(", msg = ").append(endpointCreatedMessage.getMsg());
-        logger.log(Level.INFO,logMsg.toString());
+        LOGGER.log(Level.INFO,logMsg.toString());
     }
 
     @Override
@@ -248,7 +248,7 @@ public class EV3MsgLogger extends Handler implements IEV3MessageVisitor {
         StringBuilder logMsg = new StringBuilder();
         logMsg.append(getPreLogText())
                 .append("HelloMessage: msg = ").append(helloMessage.getMsg());
-        logger.log(Level.INFO,logMsg.toString());
+        LOGGER.log(Level.INFO,logMsg.toString());
     }
 
     @Override
@@ -256,7 +256,7 @@ public class EV3MsgLogger extends Handler implements IEV3MessageVisitor {
         StringBuilder logMsg = new StringBuilder();
         logMsg.append(getPreLogText())
                 .append("ResetBrickMessage");
-        logger.log(Level.INFO,logMsg.toString());
+        LOGGER.log(Level.INFO,logMsg.toString());
     }
 
     @Override
@@ -264,7 +264,7 @@ public class EV3MsgLogger extends Handler implements IEV3MessageVisitor {
         StringBuilder logMsg = new StringBuilder();
         logMsg.append(getPreLogText())
                 .append("CreateSynchronizedMotorsMessage");
-        logger.log(Level.INFO,logMsg.toString());
+        LOGGER.log(Level.INFO,logMsg.toString());
     }
 
     private String getFloatArrContent(float[] arr){

@@ -65,8 +65,8 @@ public class EV3Brick extends Brick {
 
 		//Init Loggers
 		APILoggerManager.getInstance().registerLogger(LOGGER);
-		msgRcvdLogger = new EV3MsgLogger(LOGGER,"Received ");
-		msgSendLogger = new EV3MsgLogger(LOGGER,"Send ");
+		msgRcvdLogger = new EV3MsgLogger(LOGGER,"[ENDPOINT: BRICK] Received ");
+		msgSendLogger = new EV3MsgLogger(LOGGER,"[ENDPOINT: BRICK] Send ");
     }
 
 

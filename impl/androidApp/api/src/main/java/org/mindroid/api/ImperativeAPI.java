@@ -3,7 +3,7 @@ package org.mindroid.api;
 /**
  * This Class defines the basic Imperative Implementation API.
  */
-public abstract class ImperativeAPI extends BasicAPI {
+public abstract class ImperativeAPI extends BasicAPI implements IInterruptable {
 
 
 
@@ -60,6 +60,7 @@ public abstract class ImperativeAPI extends BasicAPI {
      *
      * @return true, when execution should stop
      */
+    @Override
     public final boolean isInterrupted() {
         return isInterrupted;
     }

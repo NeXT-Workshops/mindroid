@@ -33,6 +33,14 @@ Framework:
 	- wird wohl nix (unnötig?)
 - Broadcast für den Server implementieren (eine Nachricht an alle Roboter im Netz)
 
+Documentation:
+- 1.1.3 mit 1.1.2 tauschen.
+- 1.3 Unterpunkt 3."Wähle "Verbindung zum EV3-Brick herstellen" überprüfen. Ist das noch notwendig?
+- Formatierung fixen
+- Geht es wirklich, dass man mit Rechtsklick auf die Java Doku verwiesen wird?
+- Woher sind die Bilder eigentlich? @Copyright
+- Aufgabe 7 umbenennen zu "Dancing Robots"
+
 bugs & improvements:
 - DONE wenn man zurück klickt sollte man im Hauptmenü landen
 - DONE Device unauthorized -> Handy mit zettel makiert

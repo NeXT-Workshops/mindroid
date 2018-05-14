@@ -1,6 +1,10 @@
 package org.mindroid.impl.configuration;
 
+import java.sql.Time;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,6 +43,10 @@ import org.mindroid.impl.sensor.Sensor;
  *
  */
 public class RobotConfigurator implements IRobotConfigurator {
+
+	//TIMEOUT AFTER 45 Sec
+	public static final int INITIALIZATION_TIMEOUT =45000;
+	private boolean isInitializationTimedOut = false;
 
 	private HashMap<EV3SensorPort,Sensors> sensorConfiguration = new HashMap<EV3SensorPort,Sensors>(4);
 	private HashMap<EV3SensorPort,Sensormode> sensorModeConfiguration = new HashMap<EV3SensorPort,Sensormode>(4);
@@ -230,13 +238,17 @@ public class RobotConfigurator implements IRobotConfigurator {
 		return syncedMotorsEndpoint;
 	}
 
+
+
 	/**
 	 * Talks to the Brick - tells how the motor and sensor port configuration looks like.
 	 * The brick will then start to initialize its motors and sensors and also creates proper endpoints to connect those with the phone.
 	 * Waits until the sensor and motor endpoints are coneected to the brick and the sensors received their first SensorEvent-Msg.
 	 *
 	 * If an error during the initialization process on the brick occurs. All sensor and motor endpoints
-	 * on API-Side will be closed and removed and the process will be aborted and has to be restarted..
+	 * on API-Side will be closed and removed and the process will be aborted and has to be restarted.
+	 *
+	 * Process times out after {@link #INITIALIZATION_TIMEOUT}.
 	 *
 	 * @return true - if initialization was successful
 	 * @throws BrickIsNotReadyException - when the brick is not connected or ready to receive configuration information
@@ -244,20 +256,24 @@ public class RobotConfigurator implements IRobotConfigurator {
 	@Override
 	public boolean initializeConfiguration() throws BrickIsNotReadyException {
 		LOGGER.log(Level.INFO,"Start initializing the Configuration: "+getConfiguration());
+
+		//Timeout for the initialization
+		startTimeoutTimer(); //TODO Check this timeout -> should appear if break app gets closed when initialization is running
+
 		if(brick.isConnected()) {
 			//Reset Interruption-state to not_interrupted
 			setConfigurationInterrupted(false);
 
 			for (EV3SensorPort senPort : sensorConfiguration.keySet()) {
 				Sensors type = getSensorType(senPort);
-				if (type != null && !isConfigurationInterrupted()) {
+				if (type != null && !isConfigurationInterrupted() && !isInitializationTimedOut) {
 					sensorManager.initializeSensor(type, senPort);
 				}
 			}
 
 			for (EV3MotorPort motorPort : motorConfiguration.keySet()) {
 				Motors type = getMotorType(motorPort);
-				if (type != null && !isConfigurationInterrupted()) {
+				if (type != null && !isConfigurationInterrupted() && !isInitializationTimedOut) {
 					motorManager.initializeMotor(type,motorPort);
 				}
 			}
@@ -281,52 +297,88 @@ public class RobotConfigurator implements IRobotConfigurator {
 					e.printStackTrace();
 				}
 
-				if(hasCreationFailed || isConfigurationInterrupted()){
+				if(hasCreationFailed || isConfigurationInterrupted() || isInitializationTimedOut){
 					LOGGER.log(Level.WARNING,"Initialization of Sensor/Motors Failed: \r\n hasCreationFailed="+ hasCreationFailed+"\r\n isInitComplete="+init_complete+" \n\r endpointState= " +endpointState);
-
-					//Abort initialization, because the creation of a sensor/motor on the brick failed or the process got interrupted
-					motorManager.disconnectMotors();
-					sensorManager.disconnectSensors();
-					//Remove all initialized sensor endpoints, as they should be recreated, when trying to retry init-process
-					sensors.clear();
-					motors.clear();
-
-					//Reset interruption state to not_interrupted
-					setConfigurationInterrupted(false);
-
+					resetConfigurationInitialization();
+					if(isInitializationTimedOut ){
+						isInitializationTimedOut = false;
+						logTimeout();
+					}
 					return false;
 				}
 			}
 
-			//Initialize Synchronized Motor Group
-			motorManager.initializeSyncedMotorGroup();
+			if(isInitializationTimedOut){
+				resetConfigurationInitialization();
+				isInitializationTimedOut = false;
+				logTimeout();
+			}else {
+				//Initialize Synchronized Motor Group
+				motorManager.initializeSyncedMotorGroup();
 
-			//Wait until Synced Motor group is created
-			while(!this.syncedMotorsEndpoint.isClientReady()){
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				//Wait until Synced Motor group is created
+				while (!this.syncedMotorsEndpoint.isClientReady()) {
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
+
+				Runnable readyLight = new Runnable() {
+					@Override
+					public void run() {
+						brick.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+						pause(DURATION_READY_GREENLIGHT);
+						brick.setLEDOff();
+					}
+				};
+				new Thread(readyLight).start();
 			}
-
-
-			Runnable readyLight = new Runnable(){
-				@Override
-				public void run(){
-				brick.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
-				pause(DURATION_READY_GREENLIGHT);
-				brick.setLEDOff();
-				}
-			};
-			new Thread(readyLight).start();
-
 			//Validate
 			validateRobot();
 
 			return true;
 		}
 		return false;
+	}
+
+	private void logTimeout() {
+		String timeoutLog = ("TimeoutException incomming: The Initialization Process should timed out after "+INITIALIZATION_TIMEOUT+"ms");
+		LOGGER.log(Level.WARNING,timeoutLog);
+	}
+
+
+	/**
+	 * Call if the initialization process got interrupted to reset the init state.
+	 */
+	private void resetConfigurationInitialization() {
+		//Abort initialization, because the creation of a sensor/motor on the brick failed or the process got interrupted
+		motorManager.disconnectMotors();
+		sensorManager.disconnectSensors();
+		//Remove all initialized sensor endpoints, as they should be recreated, when trying to retry init-process
+		sensors.clear();
+		motors.clear();
+
+		//Reset interruption state to not_interrupted
+		setConfigurationInterrupted(false);
+	}
+
+	/**
+	 * Starts the Initialization timeout timer.
+	 * Timeout is set by {@link #INITIALIZATION_TIMEOUT}
+	 *
+	 */
+	private void startTimeoutTimer() {
+		TimerTask timeoutTrigger = new TimerTask(){
+			@Override
+			public void run() {
+				isInitializationTimedOut = true;
+			}
+		};
+		Timer timeoutTimer = new Timer();
+		timeoutTimer.schedule(timeoutTrigger,INITIALIZATION_TIMEOUT);
+
 	}
 
 	@Override
@@ -354,7 +406,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 		validateionResult &= validateMotor(EV3PortIDs.PORT_D);
 
 		if (!validateionResult) {
-			ErrorHandlerManager.getInstance().handleError(new IllegalStateException("Robot validation failed!"), this.getClass(), "The validation of the created Robot failed!");
+			ErrorHandlerManager.getInstance().handleError(new IllegalStateException("Robot validation failed!"), this.getClass(), "The validation of the created Robot failed. Try again!");
 		}
 	}
 

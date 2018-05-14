@@ -2,6 +2,7 @@ package org.mindroid.impl.endpoint;
 
 import java.io.IOException;
 
+import com.esotericsoftware.kryonet.KryoNetException;
 import org.mindroid.api.endpoint.ClientEndpoint;
 
 import com.esotericsoftware.kryonet.Client;
@@ -28,14 +29,20 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
 		this.tcpPort = tcpPort;
 		this.brickTimeout = brickTimeout;
 
+
 		client = new Client();
-		client.start();
-		new Thread(client).start();
 
-		client.addListener(this);
+		try {
+			client.start();
+			new Thread(client).start();
 
-		registerMessages(client);
+			client.addListener(this);
 
+			registerMessages(client);
+
+		}catch(KryoNetException kne){
+			ErrorHandlerManager.getInstance().handleError(kne,ClientEndpointImpl.class, kne.getMessage());
+		}
 	}
 	
 	/**

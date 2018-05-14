@@ -125,21 +125,14 @@ public class EV3SensorManager extends Listener{
 			public void run(){
 		    	if(object.getClass() == EndpointCreatedMessage.class){
 					EndpointCreatedMessage ecmsg = (EndpointCreatedMessage)object;
-					
 					if(ecmsg.isSensor()){
-						System.out.println("Local-EV3SensorManager: Received a EndpointCreatedMessage! -> "+ecmsg.toString());
-						
 						if(ecmsg.isSuccess()){
-							System.out.println("Local-EV3SensorManager: isSuccess at port "+ecmsg.getPort()+"#");
 							if(sensorEndpoints.containsKey(EV3SensorPort.getPort(ecmsg.getPort()))){
-								System.out.println("Local-EV3SensorManager: Endpoint creation successfull - connect to endpoint!");
 								sensorEndpoints.get(EV3SensorPort.getPort(ecmsg.getPort())).connect();
 								sensorEndpoints.get(EV3SensorPort.getPort(ecmsg.getPort())).initSensorMode();
 
 								//Set that creation was a success on brick site. will be evaluated by configurator
 								((EV3SensorEndpoint) sensorEndpoints.get(EV3SensorPort.getPort(ecmsg.getPort()))).setHasCreationFailed(false);
-							}else{
-								System.out.println("Local-EV3SensorManager: Sensor does not exist");
 							}
 						}else{
 							//Set that creation hast failed on brick site. will be evaluated by configurator

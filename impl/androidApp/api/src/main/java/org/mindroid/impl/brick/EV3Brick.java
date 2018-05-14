@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import org.mindroid.api.brick.Brick;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
-import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.common.messages.ILoggable;
 import org.mindroid.common.messages.brick.BrickMessagesFactory;
 import org.mindroid.common.messages.led.StatusLightMessageFactory;
@@ -106,12 +105,9 @@ public class EV3Brick extends Brick {
 
 	@Override
 	public void resetBrickState() {
-    	//Log msg
 		ILoggable msg = BrickMessagesFactory.createResetBrickMsg();
-		msg.accept(msgSendLogger);
-
     	//Resets the Bricks Display,LED,SoundVolume
-		brickEndpoint.sendTCPMessage(msg);
+		brickEndpoint.sendTCPMessage(msg,msgSendLogger);
 	}
 
 	public EV3MotorManager getMotorManager() {
@@ -145,104 +141,45 @@ public class EV3Brick extends Brick {
 	//-------------- Status Light Operations ----------------
 	@Override
 	public void setEV3StatusLight(EV3StatusLightColor color, EV3StatusLightInterval interval) {
-		if(isBrickReady()){
-			//Log msg
-			ILoggable msg = StatusLightMessageFactory.createSetStatusLightMessage((color.getValue()+3*interval.getValue()));
-			msg.accept(msgSendLogger);
-
-			brickEndpoint.sendTCPMessage(msg);
-		}else{
-			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
-		}
+		ILoggable msg = StatusLightMessageFactory.createSetStatusLightMessage((color.getValue()+3*interval.getValue()));
+		brickEndpoint.sendTCPMessage(msg,msgSendLogger);
 	}
 
 	@Override
 	public void setLEDOff() {
-		if(isBrickReady()){
-			//Log msg
-			ILoggable msg = StatusLightMessageFactory.createSetStatusLightMessage(0);
-			msg.accept(msgSendLogger);
-
-			brickEndpoint.sendTCPMessage(msg);
-		}else{
-			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
-		}
+		ILoggable msg = StatusLightMessageFactory.createSetStatusLightMessage(0);
+		brickEndpoint.sendTCPMessage(msg,msgSendLogger);
 	}
 
-	private void logError(Exception e) {
-		ErrorHandlerManager.getInstance().handleError(e,EV3BrickEndpoint.class,e.getMessage());
-	}
 
 	//-------------- SOUND Operations ----------------
 	public void setVolume(int volume){
-		if(isBrickReady()){
-			//Log msg
-			ILoggable msg = SoundMessageFactory.createVolumeMessage(volume);
-			msg.accept(msgSendLogger);
-
-			brickEndpoint.sendTCPMessage(msg);
-		}else{
-			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
-		}
+		ILoggable msg = SoundMessageFactory.createVolumeMessage(volume);
+		brickEndpoint.sendTCPMessage(msg,msgSendLogger);
 	}
 
 	public void singleBeep(){
-		if(isBrickReady()){
-			//Log msg
-			ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.SINGLE_BEEP);
-			msg.accept(msgSendLogger);
-
-			brickEndpoint.sendTCPMessage(msg);
-		}else{
-			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
-		}
+		ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.SINGLE_BEEP);
+		brickEndpoint.sendTCPMessage(msg,msgSendLogger);
 	}
 
 	public void doubleBeep() {
-		if(isBrickReady()){
-			//Log msg
-			ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.DOUBLE_BEEP);
-			msg.accept(msgSendLogger);
-
-			brickEndpoint.sendTCPMessage(msg);
-		}else{
-			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
-		}
+		ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.DOUBLE_BEEP);
+		brickEndpoint.sendTCPMessage(msg,msgSendLogger);
 	}
 
 	public void buzz() {
-		if(isBrickReady()){
-			//Log msg
-			ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.LOW_BUZZ);
-			msg.accept(msgSendLogger);
-
-			brickEndpoint.sendTCPMessage(msg);
-		}else{
-			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
-		}
+		ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.LOW_BUZZ);
+		brickEndpoint.sendTCPMessage(msg,msgSendLogger);
 	}
 
 	public void beepSequenceDown() {
-		if(isBrickReady()){
-			//Log msg
-			ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.BEEP_SEQUENCE_DOWNWARDS);
-			msg.accept(msgSendLogger);
-
-			brickEndpoint.sendTCPMessage(msg);
-		}else{
-			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
-		}
+		ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.BEEP_SEQUENCE_DOWNWARDS);
+		brickEndpoint.sendTCPMessage(msg,msgSendLogger);
 	}
 	public void beepSequenceUp() {
-		if(isBrickReady()){
-			//Log msg
-			ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.BEEP_SEQUENCE_UPWARDS);
-			msg.accept(msgSendLogger);
-
-			brickEndpoint.sendTCPMessage(msg);
-		}else{
-			logError(new Exception("Brick is not ready yet. Check Brick connection!"));
-		}
+		ILoggable msg = SoundMessageFactory.createBeepMessage(BeepMessage.Beeptype.BEEP_SEQUENCE_UPWARDS);
+		brickEndpoint.sendTCPMessage(msg,msgSendLogger);
 	}
 
 	@Override

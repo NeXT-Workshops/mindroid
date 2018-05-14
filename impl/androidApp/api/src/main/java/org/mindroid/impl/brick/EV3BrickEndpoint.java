@@ -3,10 +3,14 @@ package org.mindroid.impl.brick;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import org.mindroid.common.messages.ILoggable;
 import org.mindroid.common.messages.MessageRegistrar;
 import org.mindroid.common.messages.NetworkPortConfig;
 import org.mindroid.common.messages.brick.ButtonMessage;
 import org.mindroid.common.messages.brick.HelloMessage;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
+import org.mindroid.impl.exceptions.BrickIsNotReadyException;
+import org.mindroid.impl.logging.EV3MsgLogger;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -122,6 +126,20 @@ public class EV3BrickEndpoint extends Listener {
     }
 
     protected void sendTCPMessage(Object msg){
-        conn.sendTCP(msg);
+        if(isBrickReady()){
+            conn.sendTCP(msg);
+        }else{
+            //Log that msg couldn't be sent
+            LOGGER.log(Level.WARNING,"Brick is not ready! Couldn't send msg: "+msg.toString());
+        }
+
     }
+
+    protected void sendTCPMessage(ILoggable msg, EV3MsgLogger logger){
+        //Log Msg
+        msg.accept(logger);
+        //Send Msg
+        sendTCPMessage(msg);
+    }
+
 }

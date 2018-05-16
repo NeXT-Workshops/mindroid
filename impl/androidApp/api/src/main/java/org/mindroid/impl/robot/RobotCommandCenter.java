@@ -74,6 +74,7 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     public void stopImplementation() {
         if(executor != null && executor.isRunning()){
             executor.stop();
+            robot.getRobotConfigurator().getBrick().resetBrickState();
         }
     }
 

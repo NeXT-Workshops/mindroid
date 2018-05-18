@@ -284,6 +284,7 @@ public class MainActivity extends Activity
 
     @Override
     public void showErrorDialog(final String title, final String message){
+        LOGGER.log(Level.WARNING,"ErrorDialog Shown: Title: "+title+" Msg: "+message);
         DialogFragment errorDialogFragment = ErrorDialog.newInstance(title,message);
         errorDialogFragment.show(getFragmentManager(), "errorDialog");
     }

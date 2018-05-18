@@ -49,11 +49,11 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                     //Throw error
                     Exception execException = new IIExecutionException(getExecutionErrorMsg(runningImpl.getImplementationID(), e));
                     ErrorHandlerManager.getInstance().handleError(execException, ImperativeAPI.class, execException.getMessage());
+                    LOGGER.log(Level.WARNING, "Source: ImperativeImplExecutor; ImperativeAPI.class.\n\r"+ execException.toString());
                 } finally {
                     //Detects, that the implementation is finished
                     setExecutionFinished(true);
                     setIsRunning(false);
-
 
                     //When run is finished (imperative impl got stopped (interrupted) or just code is done) - stopAllMotors former state
                     stopAllMotors(runningImpl);
@@ -81,7 +81,6 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
             setExecutionFinished(true);
             setIsRunning(false);
         }
-
     }
 
     @Override

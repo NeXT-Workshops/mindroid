@@ -9,6 +9,7 @@ import org.mindroid.common.messages.display.DisplayMessageFactory;
 import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.logging.EV3MsgLogger;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -56,16 +57,9 @@ public class EV3Display extends Listener{
 	 * @param posY startposition y of the string
 	 * @return false if display not ready 
 	 */
-	public boolean drawString(String str,Textsize textsize,int posX, int posY){
-		if(connection != null){
-			//Log msg
-			ILoggable msg = DisplayMessageFactory.createDrawStringMessage(str,textsize.getValue(),  posX, posY);
-			msg.accept(msgSendLogger);
-
-			connection.sendTCP(DisplayMessageFactory.createDrawStringMessage(str,textsize.getValue(),  posX, posY));
-			return true;
-		}
-		return false;
+	public void drawString(String str,Textsize textsize,int posX, int posY){
+		ILoggable msg = DisplayMessageFactory.createDrawStringMessage(str,textsize.getValue(),  posX, posY);
+		sendTCPMessage(msg,msgSendLogger);
 	}
 	
 	/**
@@ -73,22 +67,25 @@ public class EV3Display extends Listener{
 	 * 
 	 * @return false if display not ready 
 	 */
-	public boolean clearDisplay(){
-		if(connection != null){
-			//Log msg
-			ILoggable msg = DisplayMessageFactory.createClearDisplayMessage();
-			msg.accept(msgSendLogger);
-
-			connection.sendTCP(DisplayMessageFactory.createClearDisplayMessage());
-			return true;
-		}
-		return false;
+	public void clearDisplay(){
+		//Log msg
+		ILoggable msg = DisplayMessageFactory.createClearDisplayMessage();
+		sendTCPMessage(msg,msgSendLogger);
 	}
 
 	public void drawImage(String str) {
 		//TODO Impl
 	}
 
-
+	protected void sendTCPMessage(ILoggable msg, EV3MsgLogger logger){
+		if(connection != null && connection.isConnected()) {
+			//Log Msg
+			msg.accept(logger);
+			//Send Msg
+			connection.sendTCP(msg);
+		}else{
+			LOGGER.log(Level.WARNING, "Couldn't send display-message: Connection is null or not connected! [Connection="+connection+"]");
+		}
+	}
 
 }

@@ -26,7 +26,6 @@ public class LoggerFragment extends Fragment {
 
     private LinearLayout linLayout_logContainer;
 
-    private ArrayList<LogRecord> logs = new ArrayList<LogRecord>();
     private final int WIDTH_DATE = 270;
     private final int WIDTH_SOURCE = 450;
     private final int WIDT_MSG = 1000;
@@ -91,10 +90,13 @@ public class LoggerFragment extends Fragment {
         createHeadline();
 
         //Fetch Logs from GlobalLogger and display
+        ArrayList<LogRecord> logs = GlobalLogger.getInstance().getLogs();
         int maxShownLogs = SettingsProvider.getInstance().getMaxShownLog();
-        int startIndex = Math.max(0,GlobalLogger.logs.size()-maxShownLogs);
-        for(int i = startIndex; i < GlobalLogger.logs.size();i++){
-            createEntry(GlobalLogger.logs.get(i));
+        int startIndex = Math.max(0,logs.size()-maxShownLogs);
+
+        System.out.println("[LoggerFragment] startIndex: "+startIndex + " LoggerSize: "+logs.size());
+        for(int i = startIndex; i < logs.size();i++){
+            createEntry(logs.get(i));
         }
 
         return view;

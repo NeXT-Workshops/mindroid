@@ -2,8 +2,6 @@ package org.mindroid.android.app.fragments.log;
 
 
 import android.os.Environment;
-import org.mindroid.android.app.errorhandling.APIErrorHandler;
-import org.mindroid.android.app.util.ShellService;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.logging.APILoggerManager;
 
@@ -20,12 +18,9 @@ import java.util.logging.*;
  *
  */
 public class GlobalLogger {
-    static private FileHandler fileTxt;
-    static private SimpleFormatter formatterTxt;
 
     private final LogHandler LOG_HANDLER = new LogHandler();
     private final String GLOBAL_LOGGER_NAME =".GlobalLogger";
-    public static ArrayList<LogRecord> logs = LogHandler.logs;
 
     private final File FILE_SD_DIRECTORY = Environment.getExternalStorageDirectory(); // getDataDirectory  ## getExternalStorageDirectory
     private final String PATH_TO_LOGFILE = FILE_SD_DIRECTORY.getPath().concat("/Mindroid/Log/");
@@ -44,6 +39,8 @@ public class GlobalLogger {
         loadLog();
     }
 
+
+
     /**
      * Saves the current Log into the LogFile given by the path {@link #PATH_TO_LOGFILE} and filename {@link #NAME_LOGFILE}.
      * Appends the Log to the content of the File.
@@ -54,7 +51,7 @@ public class GlobalLogger {
         File logfile = getLogFile();
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(logfile));
-            logs = (ArrayList<LogRecord>) ois.readObject();
+            LOG_HANDLER.logs = (ArrayList<LogRecord>) ois.readObject();
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
             LOG_HANDLER.publish(createLog(Level.INFO,"loadLog(): Couldn't load log: "+e.getMessage()));
@@ -71,7 +68,7 @@ public class GlobalLogger {
         File logfile = getLogFile();
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(logfile));
-            oos.writeObject(logs);
+            oos.writeObject(LOG_HANDLER.logs);
             oos.flush();
             oos.close();
             return true;
@@ -85,7 +82,7 @@ public class GlobalLogger {
      * Deletes the Log File and clears the log cache.
      */
     public boolean deleteLog(){
-        logs.clear();
+        LOG_HANDLER.logs.clear();
 
         if(getLogFile().delete()){
             LOG_HANDLER.publish(createLog(Level.INFO, "Log deleted!"));
@@ -136,7 +133,7 @@ public class GlobalLogger {
     public void registerLogger(Logger logger){
         if(!registeredLogger.contains(logger)) {
             logger.addHandler(LOG_HANDLER);
-            logs.add(createRegistrationLog(logger));
+            LOG_HANDLER.logs.add(createRegistrationLog(logger));
             registeredLogger.add(logger);
         }
     }
@@ -165,11 +162,15 @@ public class GlobalLogger {
      */
     public String getLog(){
         StringBuffer sb = new StringBuffer();
-        for (LogRecord log : logs) {
+        for (LogRecord log : LOG_HANDLER.logs) {
             sb.append(logRecordToString(log)).append("\r\n");
         }
 
         return sb.toString();
+    }
+
+    public ArrayList<LogRecord> getLogs() {
+        return LOG_HANDLER.logs;
     }
 
     private String logRecordToString(LogRecord log){

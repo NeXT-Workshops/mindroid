@@ -14,6 +14,7 @@ import org.mindroid.android.app.robodancer.SettingsProvider;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.LogRecord;
 
@@ -35,7 +36,6 @@ public class LoggerFragment extends Fragment {
 
     public LoggerFragment() {
         // Required empty public constructor
-
     }
 
     private String calcDate(long millisecs) {
@@ -90,7 +90,7 @@ public class LoggerFragment extends Fragment {
         createHeadline();
 
         //Fetch Logs from GlobalLogger and display
-        ArrayList<LogRecord> logs = GlobalLogger.getInstance().getLogs();
+        List<LogRecord> logs = GlobalLogger.getInstance().getLogs();
         int maxShownLogs = SettingsProvider.getInstance().getMaxShownLog();
         int startIndex = Math.max(0,logs.size()-maxShownLogs);
 

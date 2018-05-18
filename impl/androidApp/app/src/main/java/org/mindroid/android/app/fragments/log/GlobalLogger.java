@@ -9,6 +9,7 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.*;
 
@@ -169,7 +170,7 @@ public class GlobalLogger {
         return sb.toString();
     }
 
-    public ArrayList<LogRecord> getLogs() {
+    public List<LogRecord> getLogs() {
         return LOG_HANDLER.logs;
     }
 
@@ -198,7 +199,7 @@ public class GlobalLogger {
      * Keeps track of the logs.
      */
     private static class LogHandler extends Handler{
-        static ArrayList<LogRecord> logs = new ArrayList<LogRecord>();
+        static List<LogRecord> logs = new SyncedArrayList<LogRecord>(new ArrayList<LogRecord>());
 
         @Override
         public void publish(LogRecord logRecord) {
@@ -215,4 +216,5 @@ public class GlobalLogger {
             //Nothing to do here
         }
     }
+
 }

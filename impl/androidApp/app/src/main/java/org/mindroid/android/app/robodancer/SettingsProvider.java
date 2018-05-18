@@ -40,6 +40,8 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     //MsgServerPort
     private int serverTCPPort = -1;
 
+    private int maxShownLog = 50;
+
     /** public Configuration Attributes **/
     private String sensorS1 = HardwareMapping.notDefined;
     private String sensorS2 = HardwareMapping.notDefined;
@@ -279,6 +281,10 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
 
     public Motors getMotorD() {
         return HardwareMapping.getMotorType(motorD);
+    }
+
+    public int getMaxShownLog(){
+        return maxShownLog;
     }
 
     @Override

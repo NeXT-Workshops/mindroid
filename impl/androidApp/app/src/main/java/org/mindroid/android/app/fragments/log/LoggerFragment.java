@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import android.widget.*;
 import org.mindroid.android.app.R;
+import org.mindroid.android.app.robodancer.SettingsProvider;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,8 +91,10 @@ public class LoggerFragment extends Fragment {
         createHeadline();
 
         //Fetch Logs from GlobalLogger and display
-        for (LogRecord log : GlobalLogger.logs) {
-            createEntry(log);
+        int maxShownLogs = SettingsProvider.getInstance().getMaxShownLog();
+        int startIndex = Math.max(0,GlobalLogger.logs.size()-maxShownLogs);
+        for(int i = startIndex; i < GlobalLogger.logs.size();i++){
+            createEntry(GlobalLogger.logs.get(i));
         }
 
         return view;

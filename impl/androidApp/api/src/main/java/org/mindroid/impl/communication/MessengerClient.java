@@ -32,7 +32,7 @@ import java.util.ArrayList;
  */
 public class MessengerClient implements IMessenger, IMessageListener,IMessageServer {
 
-    private static final int CONNECT_TIMEOUT = 1000;
+    private static final int CONNECT_TIMEOUT = 2000;
 
     public static final String SERVER_LOG = Destination.SERVER_LOG.getValue();
     public static final String BROADCAST = Destination.BROADCAST.getValue();

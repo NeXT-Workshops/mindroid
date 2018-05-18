@@ -179,7 +179,7 @@ public final class RobotFactory implements IRobotFactory {
                     ErrorHandlerManager.getInstance().handleError(e, RobotFactory.class, e.getMessage());
                 }
 
-                // --- Connect Sensorobject --> with RobotContextState
+                // --- Connect Sensorobject --> with RobotContextState // Used in Statemachines
                 for (EV3PortID port : sensorListenerToRegister.keySet()) {
                     if (port.equals(EV3PortIDs.PORT_1) && myRobot.getSensorS1() != null) {
                         for (IEV3SensorEventListener iev3SensorEventListener : sensorListenerToRegister.get(port)) {

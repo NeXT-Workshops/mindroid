@@ -8,8 +8,11 @@ import org.mindroid.api.IImplStateListener;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
+import org.mindroid.impl.logging.APILoggerManager;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -41,6 +44,12 @@ public class RobotCommandCenter implements IRobotCommandCenter {
 
     public final static String ERROR_INITIALIZATION = "INITIALIZATION ERROR";
 
+    private static final Logger LOGGER = Logger.getLogger(RobotCommandCenter.class.getName());
+
+    static{
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+    }
+
     public RobotCommandCenter(Robot robot){
         this.robot = robot;
         this.execProv = new ExecutorProvider();
@@ -66,6 +75,7 @@ public class RobotCommandCenter implements IRobotCommandCenter {
             executor.start();
         }else{
             Exception e = new IllegalArgumentException("[RobotCommandCenter] The DB does not contain an Statemachine with the ID "+id);
+            LOGGER.log(Level.WARNING,e.getMessage());
             ErrorHandlerManager.getInstance().handleError(e,RobotCommandCenter.class,e.getMessage());
         }
     }
@@ -80,6 +90,8 @@ public class RobotCommandCenter implements IRobotCommandCenter {
 
     @Override
     public void connectToBrick() throws IOException {
+        LOGGER.log(Level.INFO,"Initiating connection to Brick");
+
         long timeout = 20000;
         boolean isConnected = robot.getBrick().connect();
 
@@ -114,7 +126,9 @@ public class RobotCommandCenter implements IRobotCommandCenter {
         }else{
             isConfigurated = robot.getRobotConfigurator().initializeConfiguration();
             if(!isConfigurated) {
-                ErrorHandlerManager.getInstance().handleError(new Exception("Initialization of a Sensor/motor Failed"), this.getClass(), ERROR_INITIALIZATION);
+                Exception e = new Exception("Initialization of a Sensor/motor Failed");
+                LOGGER.log(Level.WARNING,e.getMessage());
+                ErrorHandlerManager.getInstance().handleError(e, this.getClass(), ERROR_INITIALIZATION);
             }
         }
 
@@ -142,6 +156,7 @@ public class RobotCommandCenter implements IRobotCommandCenter {
 
     @Override
     public synchronized boolean connectMessenger(String msgServerIP, int msgServerTCPPort) {
+        LOGGER.log(Level.INFO,"Initiating connection to Messenger "+msgServerIP+":"+msgServerTCPPort);
         if(this.robot.getMessenger() != null) {
             return this.robot.getMessenger().connect(msgServerIP,msgServerTCPPort);
         }else{
@@ -152,11 +167,13 @@ public class RobotCommandCenter implements IRobotCommandCenter {
 
     @Override
     public synchronized void disconnectMessenger() {
+        LOGGER.log(Level.INFO,"Initiating disconnection from Messenger");
         robot.getMessenger().disconnect();
     }
 
     @Override
     public void disconnectFromBrick() {
+        LOGGER.log(Level.INFO,"Initiating disconnection from Brick");
         robot.getRobotConfigurator().getBrick().disconnect();
     }
 }

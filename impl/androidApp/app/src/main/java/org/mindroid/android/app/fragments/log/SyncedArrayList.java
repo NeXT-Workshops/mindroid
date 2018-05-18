@@ -2,9 +2,12 @@ package org.mindroid.android.app.fragments.log;
 
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class SyncedArrayList<T> implements List<T> {
+public class SyncedArrayList<T> implements List<T>,Serializable {
+
+    private static final long serialVersionUID = -6390286979392093028L;
 
     private final ArrayList<T> list;
 

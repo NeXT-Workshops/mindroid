@@ -49,10 +49,11 @@ public class GlobalLogger {
      * calls method {@link #getLogFile()}
      */
     public void loadLog(){
+        LOG_HANDLER.publish(createLog(Level.INFO,"loadLog(): loading Log"));
         File logfile = getLogFile();
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(logfile));
-            LOG_HANDLER.logs = (ArrayList<LogRecord>) ois.readObject();
+            LOG_HANDLER.logs = (List<LogRecord>) ois.readObject();
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
             LOG_HANDLER.publish(createLog(Level.INFO,"loadLog(): Couldn't load log: "+e.getMessage()));
@@ -66,6 +67,7 @@ public class GlobalLogger {
      * calls method {@link #getLogFile()} }
      */
     public boolean saveLog(){
+        LOG_HANDLER.publish(createLog(Level.INFO,"saveLog(): Saving Log"));
         File logfile = getLogFile();
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(logfile));
@@ -74,7 +76,7 @@ public class GlobalLogger {
             oos.close();
             return true;
         } catch (IOException e) {
-            LOG_HANDLER.publish(createLog(Level.WARNING, "saveLog(): Exception saving log: "+e.getMessage()));
+            LOG_HANDLER.publish(createLog(Level.WARNING, "saveLog(): Exception saving log: "+e+" -- "+e.getMessage()+ " -> "+e.getLocalizedMessage()));
             return false;
         }
     }

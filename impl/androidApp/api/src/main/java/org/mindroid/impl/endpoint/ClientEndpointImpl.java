@@ -65,7 +65,6 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
     @Override
     public void disconnect(){
         client.stop();
-		client.close();
     }
 
     @Override

@@ -3,12 +3,15 @@ package org.mindroid.impl.robot;
 import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
+import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.motor.Motor;
 import org.mindroid.impl.sensor.EV3SensorEndpoint;
 import org.mindroid.impl.sensor.IEV3SensorEndpoint;
 import org.mindroid.impl.sensor.Sensor;
 
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -19,6 +22,12 @@ public class SensorProvider{
 
     private Robot robot;
     HashMap<EV3PortID,Sensor> sensors;
+
+    private final static Logger LOGGER = Logger.getLogger(SensorProvider.class.getName());
+
+    static{
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+    }
 
     public SensorProvider(Robot robot){
         this.robot = robot;
@@ -51,18 +60,19 @@ public class SensorProvider{
             //When not already created, create and put into hashmap
             sensors.put(sensorPort,new Sensor(getSensorEndpoint(sensorPort), sensorPort));//TODO check what happens, when the sensorEndpoint is null? -> Send an info message?
 
-            //This sleep is necessary to get the Sensor-Object up to date (receiving the first event messsage) Otherwise problems can occur. Maybe find another solution
-            //TODO this part can be removed -> test with robot first
-            try {
-                Thread.sleep(30);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            Sensor tmpSensor = sensors.get(sensorPort);
 
-            return sensors.get(sensorPort);
+            LOGGER.log(Level.INFO,"SensorProvider: requested sensor: ["+sensorPort.getLabel()+"] "+tmpSensor.toString());
+
+            return tmpSensor;
         }
         return null;
     }
 
-
+    /**
+     * Clears the {@link #sensors} hashMap, which is necessary, when a new Robot will be created by the Factory.
+     */
+    protected void clearSensors() {
+        sensors.clear();
+    }
 }

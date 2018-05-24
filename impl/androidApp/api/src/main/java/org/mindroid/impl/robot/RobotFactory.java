@@ -110,6 +110,7 @@ public final class RobotFactory implements IRobotFactory {
 
     @Override
     public IRobotCommandCenter createRobot(boolean enableSimulation) {
+        Robot.getRobotController().clearController();
         Robot.getRobotController().setRobotID(Robot.getInstance().robotID);
 
         //Set simulation

@@ -5,6 +5,7 @@ import org.mindroid.api.ImplementationIDCrawlerVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class ImplementationService {
 
@@ -26,6 +27,7 @@ public class ImplementationService {
 
     private String[] foundClasses = {
             // Dev
+            /*
             "org.mindroid.android.app.imperativeimpl.RectangleDriver",
             "org.mindroid.android.app.imperativeimpl.RectangleDriver3",
             "org.mindroid.android.app.imperativeimpl.RectangleDriver2",
@@ -38,7 +40,7 @@ public class ImplementationService {
             "org.mindroid.android.app.imperativeimpl.TestMessageAccess",
             "org.mindroid.android.app.imperativeimpl.MessageTest",
             "org.mindroid.android.app.imperativeimpl.SimpleForward",
-
+            */
             //DEV Statemachines
             /*
             "org.mindroid.android.app.statemachinesimpl.SensorMonitoring",
@@ -61,7 +63,7 @@ public class ImplementationService {
             "org.mindroid.android.app.workshopimpl.Follow"
             */
             // Solutions for Workshop
-            /*
+
             "org.mindroid.android.app.workshopSolutions.HelloWorld",
             "org.mindroid.android.app.workshopSolutions.HelloDate",
             "org.mindroid.android.app.workshopSolutions.DriveSquare",
@@ -74,7 +76,7 @@ public class ImplementationService {
             "org.mindroid.android.app.workshopSolutions.LawnMower",
             "org.mindroid.android.app.workshopSolutions.Platooning",
             "org.mindroid.android.app.workshopSolutions.Follow"
-                 */
+
     };
 
     private void findImplementations(){

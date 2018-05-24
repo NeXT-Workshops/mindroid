@@ -52,4 +52,13 @@ public class RobotController {
     protected void setRobotID(String robotID) {
         this.robotID = robotID;
     }
+
+    /**
+     * Cleans the Controller state, which is necessary, when a new Robot will be created.
+     * It assures that new created motor and sensor endpoints can be accessed correctly by the API.
+     */
+    protected void clearController(){
+        sensorProvider.clearSensors();
+        motorProvider.clearMotors();
+    }
 }

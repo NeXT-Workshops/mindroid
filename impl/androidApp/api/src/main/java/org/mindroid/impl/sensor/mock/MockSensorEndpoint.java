@@ -1,5 +1,6 @@
 package org.mindroid.impl.sensor.mock;
 
+import org.mindroid.api.sensor.IEV3SensorEvent;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.common.messages.hardware.Sensors;
@@ -22,6 +23,7 @@ public class MockSensorEndpoint implements IEV3SensorEndpoint {
     private Sensormode sensorMode;
 
     private EV3PortID brick_port;
+    private IEV3SensorEvent lastRcvdSensorEvent;
 
     // Gets set (true) when the creation on Brick site failed.
     private boolean hasCreationFailed = false;
@@ -52,9 +54,15 @@ public class MockSensorEndpoint implements IEV3SensorEndpoint {
 
     @Override
     public void handleSensorEvent(EV3SensorEvent sensorevent) {
+        lastRcvdSensorEvent = sensorevent;
         for (IEV3SensorEventListener listener : listeners) {
             listener.handleSensorEvent(brick_port,sensorevent);
         }
+    }
+
+    @Override
+    public IEV3SensorEvent getLastRcvdSensorEvt() {
+        return lastRcvdSensorEvent;
     }
 
     @Override

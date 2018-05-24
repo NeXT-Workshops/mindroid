@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.mindroid.api.sensor.IEV3SensorEvent;
 import org.mindroid.api.sensor.IEV3SensorEventListener;
 import org.mindroid.common.messages.ILoggable;
 import org.mindroid.common.messages.hardware.Sensors;
@@ -33,6 +34,7 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
 
     //True, if the first sensor event is received from the brick and its sensormode is != null
     private boolean isFirstSensEventReceived = false;
+    private EV3SensorEvent lastRcvdEvent = null;
 
     private final EV3SensorEndpoint sensor = this;
 
@@ -122,6 +124,7 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
 
     @Override
     public void handleSensorEvent(EV3SensorEvent sensorevent) {
+        lastRcvdEvent = sensorevent;
         for (IEV3SensorEventListener listener : listeners) {
             //Only handle events which have a valid (not null) sensor mode
             if(sensorevent.getSensorMode() != null) {
@@ -130,6 +133,18 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
                 isFirstSensEventReceived = true;
             }
         }
+    }
+
+    /**
+     * Returns the Last received Sensor Event.
+     * Note: After the Sensor was initialized a SensorEvent should always be returned. If null will be returned something went wrong
+     * during the initialization process!
+     *
+     * @return the last sensor event or null.
+     */
+    @Override
+    public IEV3SensorEvent getLastRcvdSensorEvt() {
+        return lastRcvdEvent;
     }
 
     @Override
@@ -173,6 +188,7 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
 
     /**
      * True if the Sensor received its first sensor event and the sensormode of the received event is != null.
+     * Used during initialization process -> Only if the first sensor event was received it is assumed that the sensor is ready.
      *
      * @return true if the first sensor data was received else false
      */

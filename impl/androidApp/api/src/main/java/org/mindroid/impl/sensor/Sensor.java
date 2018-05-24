@@ -7,6 +7,8 @@ import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.common.messages.hardware.Sensors;
 import org.mindroid.impl.ev3.EV3PortID;
 
+import java.util.Arrays;
+
 public class Sensor implements ISensorControl,IEV3SensorEventListener {
 
     private IEV3SensorEndpoint sEndpoint;
@@ -19,6 +21,9 @@ public class Sensor implements ISensorControl,IEV3SensorEventListener {
         this.sEndpoint = sEndpoint;
         this.port = port;
         this.sEndpoint.registerListener(this);
+
+        //Retrieve the last event, so the initial values (sensor-value/mode) won't be null!
+        handleSensorEvent(port,sEndpoint.getLastRcvdSensorEvt());
     }
 
     @Override
@@ -62,4 +67,14 @@ public class Sensor implements ISensorControl,IEV3SensorEventListener {
         this.mode = mode;
     }
 
+    @Override
+    public String toString() {
+        return "Sensor{" +
+                "sEndpoint=" + sEndpoint +
+                ", port=" + port +
+                ", value=" + Arrays.toString(value) +
+                ", mode=" + mode +
+                ", endpointHashCode=" + sEndpoint.hashCode() +
+                '}';
+    }
 }

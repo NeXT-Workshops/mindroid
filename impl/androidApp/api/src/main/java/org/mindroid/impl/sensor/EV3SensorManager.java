@@ -124,19 +124,19 @@ public class EV3SensorManager extends Listener{
 			@Override
 			public void run(){
 		    	if(object.getClass() == EndpointCreatedMessage.class){
-					EndpointCreatedMessage ecmsg = (EndpointCreatedMessage)object;
-					if(ecmsg.isSensor()){
-						if(ecmsg.isSuccess()){
-							if(sensorEndpoints.containsKey(EV3SensorPort.getPort(ecmsg.getPort()))){
-								sensorEndpoints.get(EV3SensorPort.getPort(ecmsg.getPort())).connect();
-								sensorEndpoints.get(EV3SensorPort.getPort(ecmsg.getPort())).initSensorMode();
+					EndpointCreatedMessage msg = (EndpointCreatedMessage)object;
+					if(msg.isSensor()){
+						if(msg.isSuccess()){
+							if(sensorEndpoints.containsKey(EV3SensorPort.getPort(msg.getPort()))){
+								sensorEndpoints.get(EV3SensorPort.getPort(msg.getPort())).connect();
+								sensorEndpoints.get(EV3SensorPort.getPort(msg.getPort())).initSensorMode();
 
 								//Set that creation was a success on brick site. will be evaluated by configurator
-								((EV3SensorEndpoint) sensorEndpoints.get(EV3SensorPort.getPort(ecmsg.getPort()))).setHasCreationFailed(false);
+								((EV3SensorEndpoint) sensorEndpoints.get(EV3SensorPort.getPort(msg.getPort()))).setHasCreationFailed(false);
 							}
 						}else{
 							//Set that creation hast failed on brick site. will be evaluated by configurator
-							((EV3SensorEndpoint) sensorEndpoints.get(EV3SensorPort.getPort(ecmsg.getPort()))).setHasCreationFailed(true);
+							((EV3SensorEndpoint) sensorEndpoints.get(EV3SensorPort.getPort(msg.getPort()))).setHasCreationFailed(true);
 						}
 					}
 				}

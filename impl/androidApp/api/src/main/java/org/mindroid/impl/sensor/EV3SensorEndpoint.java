@@ -47,7 +47,7 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
     private final EV3MsgLogger msgRcvdLogger;
     private final EV3MsgLogger msgSendLogger;
 
-
+    private final String PRE_LOG_STR;
     /**
      *
      * @param ip ip of the brick
@@ -67,6 +67,9 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
         APILoggerManager.getInstance().registerLogger(LOGGER);
         msgRcvdLogger = new EV3MsgLogger(LOGGER," [ENDPOINT: S"+brick_port.getLabel()+" ] ");
         msgSendLogger = new EV3MsgLogger(LOGGER," [ENDPOINT: S"+brick_port.getLabel()+" ] ");
+
+        //Just some logging information
+        PRE_LOG_STR = "EV3SensorEndpoint ["+brick_port.getLabel()+"]:";
     }
 
     @Override
@@ -89,27 +92,27 @@ public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorE
                 }
 
                 if (object.getClass() == HelloSensorMessage.class) {
-                    System.out.println(((HelloSensorMessage) object).toString());
+                    LOGGER.log(Level.INFO,PRE_LOG_STR+((HelloSensorMessage) object).toString());
                     return;
                 }
 
                 //Status Message
                 if (object.getClass() == SensorStatusMessage.class) {
-                    System.out.println("EV3SensorEndpoint: " + ((SensorStatusMessage) object).getMsg()); //+"\n at port: "+((SensorMessages.SensorErrorMessage)object).getPort()
+                    LOGGER.log(Level.INFO,PRE_LOG_STR + ((SensorStatusMessage) object).getMsg()); //+"\n at port: "+((SensorMessages.SensorErrorMessage)object).getPort()
                     return;
                 }
 
                 //Error Message
                 if (object.getClass() == SensorErrorMessage.class) {
                     SensorErrorMessage msg = (SensorErrorMessage) object;
-                    System.out.println("EV3SensorEndpoint: SensorErrorMessage: " + msg.getErrorMsg() + " at Port " + msg.getPort()); //+"\n at port: "+((SensorMessages.SensorErrorMessage)object).getPort()
+                    LOGGER.log(Level.INFO,PRE_LOG_STR + msg.getErrorMsg() + " at Port " + msg.getPort()); //+"\n at port: "+((SensorMessages.SensorErrorMessage)object).getPort()
                     return;
                 }
 
                 //Message that sensormode was changed successfully
                 if (object.getClass() == ModeChangedSuccessfullyMessage.class) {
                     currentMode = ((ModeChangedSuccessfullyMessage) object).getMode();
-                    System.out.println("EV3SensorEndpoint: current Mode is " + currentMode);
+                    LOGGER.log(Level.INFO,PRE_LOG_STR+" current Mode is " + currentMode);
                     return;
                 }
             }

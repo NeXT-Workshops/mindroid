@@ -15,6 +15,7 @@ import org.mindroid.impl.communication.ServerWorker;
 import org.mindroid.impl.robot.RobotCommandCenter;
 import org.mindroid.impl.statemachine.Statemachine;
 import org.mindroid.impl.statemachine.StatemachineExecutor;
+import org.mindroid.impl.util.Throwables;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,7 +38,7 @@ public class APIErrorHandler extends AbstractErrorHandler{
     @Override
     public void handleError(Exception e, Class source, String msg) {
         ErrorLogMessage logMessage = new ErrorLogMessage(source.getClass(),e,msg);
-        LOGGER.log(Level.WARNING,logMessage.toString());
+        LOGGER.log(Level.WARNING,logMessage.toString()+"\n\r Exception Stack Trace: "+Throwables.getStackTrace(e));
 
         if(source == Statemachine.class){
             handleStatemachineErrors(e,msg);

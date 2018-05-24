@@ -7,6 +7,7 @@ import org.mindroid.api.ImperativeAPI;
 import org.mindroid.api.IImplStateListener;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.logging.APILoggerManager;
+import org.mindroid.impl.util.Throwables;
 
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -47,9 +48,10 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
 
                 } catch (Exception e) {
                     //Throw error
-                    Exception execException = new IIExecutionException(getExecutionErrorMsg(runningImpl.getImplementationID(), e));
+                    String errMsg = "An Error occured while trying to execute the Imperative Implementation with the ID \"" + runningImpl.getImplementationID() + "\". \n The given errormessage is: " + e.getMessage();
+                    Exception execException = new IIExecutionException(errMsg);
                     ErrorHandlerManager.getInstance().handleError(execException, ImperativeAPI.class, execException.getMessage());
-                    LOGGER.log(Level.WARNING, "Source: ImperativeImplExecutor; ImperativeAPI.class.\n\r"+ execException.toString());
+                    LOGGER.log(Level.WARNING, "Source: ImperativeImplExecutor; ImperativeAPI.class.\n\r"+Throwables.getStackTrace(execException)+"\r\n"+ Throwables.getStackTrace(e));
                 } finally {
                     //Detects, that the implementation is finished
                     setExecutionFinished(true);
@@ -115,10 +117,6 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
     }
 
     // ------ Methods to add some code sugar ------
-
-    final String getExecutionErrorMsg(String id, Exception e) {
-        return "An Error occured while trying to execute the Imperative Implementation with the ID " + id + ". \n The given errormessage is: " + e.getMessage();
-    }
 
     final class IIExecutionException extends Exception {
         IIExecutionException(String msg) {

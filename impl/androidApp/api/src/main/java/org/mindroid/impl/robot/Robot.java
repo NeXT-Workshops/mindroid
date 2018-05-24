@@ -3,9 +3,13 @@ package org.mindroid.impl.robot;
 import org.mindroid.api.brick.Brick;
 import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.configuration.RobotConfigurator;
+import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
 import org.mindroid.impl.motor.SynchronizedMotorsEndpoint;
 import org.mindroid.impl.sensor.IEV3SensorEndpoint;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Torben on 01.03.2017.
@@ -45,6 +49,12 @@ public final class Robot {
         return robot;
     }
 
+    private static final Logger LOGGER = Logger.getLogger(Robot.class.getName());
+
+    static {
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+    }
+
     private Robot(){
 
     }
@@ -62,6 +72,7 @@ public final class Robot {
     }
 
     protected void setSensorS1(IEV3SensorEndpoint sensor_S1) {
+        LOGGER.log(Level.INFO,"SensorEndpoint S1: "+ sensor_S1.hashCode()+" -- "+sensor_S1);
         this.sensor_S1 = sensor_S1;
     }
 
@@ -70,6 +81,7 @@ public final class Robot {
     }
 
     protected void setSensorS2(IEV3SensorEndpoint sensor_S2) {
+        LOGGER.log(Level.INFO,"SensorEndpoint S2: "+ sensor_S2.hashCode()+" -- "+sensor_S2);
         this.sensor_S2 = sensor_S2;
     }
 
@@ -78,6 +90,7 @@ public final class Robot {
     }
 
     protected void setSensorS3(IEV3SensorEndpoint sensor_S3) {
+        LOGGER.log(Level.INFO,"SensorEndpoint S3: "+ sensor_S3.hashCode()+" -- "+sensor_S3);
         this.sensor_S3 = sensor_S3;
     }
 
@@ -86,6 +99,7 @@ public final class Robot {
     }
 
     protected void setSensorS4(IEV3SensorEndpoint sensor_S4) {
+        LOGGER.log(Level.INFO,"SensorEndpoint S4: "+ sensor_S4.hashCode()+" -- "+sensor_S4);
         this.sensor_S4 = sensor_S4;
     }
 

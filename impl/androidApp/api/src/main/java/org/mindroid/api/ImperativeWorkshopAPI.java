@@ -3,10 +3,14 @@ package org.mindroid.api;
 import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
+import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.robot.DifferentialPilot;
 import org.mindroid.impl.sensor.Sensor;
 import org.mindroid.impl.statemachine.properties.Colors;
 import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This API is build on the Imperative API.
@@ -19,12 +23,19 @@ import org.mindroid.impl.statemachine.properties.sensorproperties.Color;
  * @author Torben Unzicker 17.09.17
  */
 public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
-    //TODO Create some Interface to add a specific robot Configurateion: Check how to use it on app-site when creating the robot using the robotFactory.
+    //TODO: May add a constraint to specific RobotConfiguration.
 
     /**
      * The Differential pilot is used to execute synchronized motor operations and precise robot drive control.
      */
     private final DifferentialPilot diffPilot;
+
+
+    private static final Logger LOGGER = Logger.getLogger(ImperativeWorkshopAPI.class.getName());
+
+    static {
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+    }
 
     /**
      * @param implementationID  The ID of your Implementation. Necessary to run your implementation later on.

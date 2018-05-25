@@ -258,8 +258,6 @@ public class MainActivity extends Activity
     @Override
     public void onBackPressed() {
         mNavigationDrawerFragment.selectItem(0);
-        //switchFragment(0);
-
     }
 
     public void restoreActionBar() {

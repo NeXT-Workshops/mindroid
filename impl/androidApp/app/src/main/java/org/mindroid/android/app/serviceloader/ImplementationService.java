@@ -51,31 +51,39 @@ public class ImplementationService {
             /*
             "org.mindroid.android.app.workshopimpl.HelloWorld",
             "org.mindroid.android.app.workshopimpl.HelloDate",
+
             "org.mindroid.android.app.workshopimpl.DriveSquare",
             "org.mindroid.android.app.workshopimpl.ParkingSensor",
             "org.mindroid.android.app.workshopimpl.ColourTest",
+
             "org.mindroid.android.app.workshopimpl.HelloWorldPingR",
             "org.mindroid.android.app.workshopimpl.HelloWorldPingB",
+
             "org.mindroid.android.app.workshopimpl.ImpSingleWallPingPong",
             "org.mindroid.android.app.workshopimpl.ImpCoordWallPingPong",
+
             "org.mindroid.android.app.workshopimpl.LawnMower",
-            "org.mindroid.android.app.workshopimpl.Platooning",
-            "org.mindroid.android.app.workshopimpl.Follow"
+            "org.mindroid.android.app.workshopimpl.Platooning_A",
+            "org.mindroid.android.app.workshopimpl.Platooning_B"
             */
             // Solutions for Workshop
 
             "org.mindroid.android.app.workshopSolutions.HelloWorld",
             "org.mindroid.android.app.workshopSolutions.HelloDate",
+
             "org.mindroid.android.app.workshopSolutions.DriveSquare",
             "org.mindroid.android.app.workshopSolutions.ParkingSensor",
             "org.mindroid.android.app.workshopSolutions.ColourTest",
+
             "org.mindroid.android.app.workshopSolutions.HelloWorldPingR",
             "org.mindroid.android.app.workshopSolutions.HelloWorldPingB",
+
             "org.mindroid.android.app.workshopSolutions.ImpSingleWallPingPong",
             "org.mindroid.android.app.workshopSolutions.ImpCoordWallPingPong",
+
             "org.mindroid.android.app.workshopSolutions.LawnMower",
-            "org.mindroid.android.app.workshopSolutions.Platooning",
-            "org.mindroid.android.app.workshopSolutions.Follow"
+            "org.mindroid.android.app.workshopSolutions.Platooning_A",
+            "org.mindroid.android.app.workshopSolutions.Platooning_B"
 
     };
 

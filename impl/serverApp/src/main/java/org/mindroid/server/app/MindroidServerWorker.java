@@ -32,6 +32,7 @@ public class MindroidServerWorker implements Runnable {
 
     //Robot Connected to this socket - will be set when robot registers himself
     private String connectedRobot = null;
+    private boolean connected = false;
 
     public MindroidServerWorker(final Socket socket, MindroidServerFrame mindroidServerFrame) {
         this.socket = socket;
@@ -45,7 +46,7 @@ public class MindroidServerWorker implements Runnable {
             InputStream inputStream = socket.getInputStream();
             Scanner scanner = new Scanner(inputStream,"UTF-8");
             StringBuilder sb = new StringBuilder();
-            boolean connected = true;
+            connected = true;
             while(connected) {
                 if(scanner.hasNextLine())
                 {
@@ -67,8 +68,6 @@ public class MindroidServerWorker implements Runnable {
                     //Close Socekt
                     disconnect();
                     removeRegistration();
-                    //Just for testing --> will be shown in app
-
                 }
             }
         } catch (IOException e) {
@@ -89,7 +88,7 @@ public class MindroidServerWorker implements Runnable {
             socket.close();
 
             if(connectedRobot != null) {
-                mindroidServerFrame.addContentLine("Local", "-", "INFO", "Connection to "+connectedRobot+" got closed!");
+                mindroidServerFrame.addContentLine("Local", "-", "INFO", "Connection to "+getStrRobotID()+" got closed!");
             }else{
                 mindroidServerFrame.addContentLine("Local", "-", "INFO", "Connection to unknown Robot got closed!");
             }
@@ -100,7 +99,6 @@ public class MindroidServerWorker implements Runnable {
             console.appendLine("IOException: "+e.getMessage()+"\n");
         }
 
-        //TODO add Line to frame
     }
 
     private void removeRegistration(){
@@ -122,9 +120,21 @@ public class MindroidServerWorker implements Runnable {
             if (socketAddress instanceof InetSocketAddress) {
                 //the port was sent as content of the registration message
                 int port = Integer.parseInt(deserializedMsg.getContent());
-                mindroidServerFrame.register(deserializedMsg.getSource(), socket, (InetSocketAddress) socketAddress, port);
+                boolean isAccepted = mindroidServerFrame.register(deserializedMsg.getSource(), socket, (InetSocketAddress) socketAddress, port);
                 connectedRobot = deserializedMsg.getSource().getValue(); //Save registered robotID
-                mindroidServerFrame.addContentLine("Local", "-", "INFO", deserializedMsg.getSource().getValue()+" was registered.");
+
+                if(!isAccepted){
+                    //Registration got rejected by the server
+                    mindroidServerFrame.addContentLine("Local", "-", "WARNING", "The Connection of "+getStrRobotID()+" got rejected! A Robot with that ID is already connected. Change RobotID to connect.");
+                    //Stop ServerWorker run-Thread, otherwise calling disconnect will lead to the unregestration of the already connected device with the rejecetd robotID, and disconnect that connection too.
+                    connected = false;
+                    //Disconnect this socket as it got rejected.
+                    disconnect();
+                    return;
+                }
+
+
+                mindroidServerFrame.addContentLine("Local", "-", "INFO", getStrRobotID()+" was registered.");
 
                 // When device connects, connect adb to device
                 System.out.println("Device connected, establish adb_tcp");
@@ -181,6 +191,10 @@ public class MindroidServerWorker implements Runnable {
             console.appendLine("Error while forwarding a message to "+deserializedMsg.getDestination().getValue());
             console.appendLine("IOException: "+e.getMessage()+"\n");
         }
+    }
+
+    private String getStrRobotID(){
+        return connectedRobot.concat(" [").concat(socket.getInetAddress().getHostAddress()).concat("]");
     }
 
 

@@ -23,7 +23,7 @@ public class DifferentialPilot implements IDifferentialPilot {
     private float trackWidth;
     private final float wheelCircumference;
     private final float trackCircumference;
-    private final float angleThreshold = 2f;
+    private final float angleErrorThreshold = 2f;
     private IInterruptable api;
     /**
      *
@@ -340,7 +340,7 @@ public class DifferentialPilot implements IDifferentialPilot {
         float degreeDiff = (getGyroAngleValue() - targetAngle);
 
 
-        boolean isNewAngleInBounds = (Math.abs(degreeDiff) <= angleThreshold);
+        boolean isNewAngleInBounds = (Math.abs(degreeDiff) <= angleErrorThreshold);
         if(!isNewAngleInBounds){ //Not in bounds -> correct angle by turn
             if(degreeDiff > 0){
                 turnRight(Math.abs((int)degreeDiff));

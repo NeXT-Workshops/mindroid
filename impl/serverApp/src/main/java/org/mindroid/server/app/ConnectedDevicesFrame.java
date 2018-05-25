@@ -233,8 +233,6 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         if (!devices.isEmpty()) {
             devices_arr = new String[devices.size()];
             for (int i = 0; i < devices.size(); i++) {
-                StringBuffer sb = new StringBuffer();
-                sb.append(devices.get(i).getSerial());
                 devices_arr[i] = devices.get(i).getSerial();
             }
             return devices_arr;

@@ -260,11 +260,28 @@ public class MindroidServerFrame extends JFrame {
         availableColors.remove(0);
     }
 
-    public void register(RobotId robotId, Socket socket, InetSocketAddress socketAddress, int port) throws IOException {
-        IPService.getIPMapping().put(new Destination(robotId.getValue()), new InetSocketAddress( ((InetSocketAddress)socketAddress).getAddress(), port));
-        IPService.getSocketMapping().put(new Destination(robotId.getValue()), socket);
-
-        ConnectedDevicesFrame.getInstance().updateDevices();
+    /**
+     * Registers the Robot to the server.
+     * Returns false if the robot got rejected. The robot gets rejected when its id is already used.
+     *
+     * @param robotId
+     * @param socket
+     * @param socketAddress
+     * @param port
+     * @return
+     * @throws IOException
+     */
+    public boolean register(RobotId robotId, Socket socket, InetSocketAddress socketAddress, int port) throws IOException {
+        Destination destKey = new Destination(robotId.getValue());
+        if(IPService.getIPMapping().containsKey(destKey) || IPService.getSocketMapping().containsKey(destKey)){
+            //Reject registration
+            return false;
+        }else {
+            IPService.getIPMapping().put(destKey, new InetSocketAddress(((InetSocketAddress) socketAddress).getAddress(), port));
+            IPService.getSocketMapping().put(destKey, socket);
+            ConnectedDevicesFrame.getInstance().updateDevices();
+            return true;
+        }
     }
 
 

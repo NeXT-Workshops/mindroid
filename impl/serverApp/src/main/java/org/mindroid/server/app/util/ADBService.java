@@ -1,5 +1,6 @@
 package org.mindroid.server.app.util;
 
+import org.apache.logging.log4j.core.util.Throwables;
 import org.mindroid.server.app.MindroidServerConsoleFrame;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
 import se.vidstige.jadb.JadbConnection;

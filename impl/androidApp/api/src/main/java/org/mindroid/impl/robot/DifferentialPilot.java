@@ -252,7 +252,7 @@ public class DifferentialPilot implements IDifferentialPilot {
             return;
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true);
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,false);
     }
 
     /**
@@ -270,7 +270,14 @@ public class DifferentialPilot implements IDifferentialPilot {
             return;
         }
 
-        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,true);
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,false);
+
+        //TODO: check if the sleep can be removed when using blocked = true; currently blocked = true leads to an error as it is blocked forever, check on ev3app for possible debugging options
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

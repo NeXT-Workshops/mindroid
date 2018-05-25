@@ -16,7 +16,7 @@ public class Platooning_A extends ImperativeWorkshopAPI {
            forward();
            delay(500);
            forward(100);
-           delay(500);
+           delay(2000);
            forward(1000);
            delay(500);
            stop();

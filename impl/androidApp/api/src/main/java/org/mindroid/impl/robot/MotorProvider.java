@@ -1,5 +1,7 @@
 package org.mindroid.impl.robot;
 
+import org.mindroid.common.messages.motor.synchronization.OperationType;
+import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorOperation;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
@@ -84,5 +86,6 @@ public class MotorProvider implements org.mindroid.api.robot.control.MotorProvid
      */
     protected void clearMotors() {
         motors.clear();
+        syncedMotors = null;
     }
 }

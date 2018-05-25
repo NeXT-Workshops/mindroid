@@ -128,7 +128,7 @@ public class MainActivity extends Activity
 
         //Activate tethering - (used to activate tethering automatically after app got started after deployment)
         //Only works if phone is connected to to brick by usb
-        //ShellService.setTethering(true);
+        //cmdShellService.setTethering(true);
     }
 
     @Deprecated
@@ -257,7 +257,9 @@ public class MainActivity extends Activity
 
     @Override
     public void onBackPressed() {
-        switchFragment(0);
+        mNavigationDrawerFragment.selectItem(0);
+        //switchFragment(0);
+
     }
 
     public void restoreActionBar() {

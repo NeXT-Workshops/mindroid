@@ -5,7 +5,7 @@ import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.brick.Button;
 
 public class ImpCoordWallPingPong extends ImperativeWorkshopAPI {
-
+	// Konstruktor nicht ändern!!
     public ImpCoordWallPingPong() {
         super("ImpCoordWallPingPong");
     }

@@ -7,24 +7,29 @@
 	
 - DISABLE CHARGE WILL NOT WORK - disable usb charging mit in die anleitung aufnehmen
 	- eigentlich nicht nötig, soll automatisch deaktiviert werden, nur bei Bedarf aktiviert
-- belegung von sensoren mit in anleitung
+
 - getmessage etc in anleitung
-- Aufgabe 2.2 die imports in den source code ziehen
-- belegung von sensoren mit in anleiten
+- DONE Aufgabe 2.2 die imports in den source code ziehen
+	- da kompletter Quellcode in Anleitung, sind auch alle Imports drinnen
+- DONE belegung von sensoren mit in anleitung
+	- Appendix
 - DONE - default werte in app
-- falls WLan nicht funktioniert dann bitte USB zum deployen nehmen (Anleitung)
+- DONE falls WLan nicht funktioniert dann bitte USB zum deployen nehmen (Anleitung)
+	- Appendix, als Backup einfach USB anstecken und funktioniert.
 - Doku updaten: einheiten für driveDistanceBackward etc. - mit angeben
 - JavaDOC für Framework erstellen
-- Basic Java Sachen in die Beschreibung schreiben ala "equals" benutzen
-- Kabel überprüfen ob rausgerutscht und richtig montiert
-- kurze Anmerkung darüber was der Konstruktor genau macht
-- Server IP muss auch in der App gesetzt werden!
+- DONE Basic Java Sachen in die Beschreibung schreiben ala "equals" benutzen
+	- equals an entsprechender Stelle angemerkt
+- DONE Kabel überprüfen ob rausgerutscht und richtig montiert
+	- Bei Einleitung erwähnt, Kabel checken und WLAN checken
+- DONE kurze Anmerkung darüber was der Konstruktor genau macht
+- DONE Server IP muss auch in der App gesetzt werden!
 - import auf colors in der Aufgabenbeschreibung falsch
 
 Aufgabenimplementierung:
-- helloworld lösungssourcecode direkt an die schüler, den sourcecode nicht selbst tippen	
-- für jede Aufgabe eine Klasse bereitstellen, die implementiert werden kann 
-- über dem Konstruktor einen Kommentar, dass dieser nicht geändert werden darf
+- DONE helloworld lösungssourcecode direkt an die schüler, den sourcecode nicht selbst tippen	
+- DONE für jede Aufgabe eine Klasse bereitstellen, die implementiert werden kann 
+- DONE über dem Konstruktor einen Kommentar, dass dieser nicht geändert werden darf
 
 Framework:
 - DONE Mein Roboter Sensoren/Motoren default werte in app setzen

@@ -6,7 +6,7 @@ import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.impl.brick.Textsize;
 
 public class Platooning_A extends ImperativeWorkshopAPI {
-
+	// Konstruktor nicht ändern!!
     public Platooning_A() {
         super("Platooning A");
     }

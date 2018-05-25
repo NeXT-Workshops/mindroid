@@ -5,5 +5,11 @@
 **/.gradle/**
 **/local.properties
 *.~ava
+*.*~
 
 */*.docx\#
+
+*.aux
+*.toc
+*.gz
+

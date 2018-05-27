@@ -1,9 +1,6 @@
 package org.mindroid.android.app.workshopSolutions;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
-import org.mindroid.api.ev3.EV3StatusLightColor;
-import org.mindroid.api.ev3.EV3StatusLightInterval;
-import org.mindroid.impl.brick.Textsize;
 
 public class Platooning_A extends ImperativeWorkshopAPI {
 
@@ -11,14 +8,35 @@ public class Platooning_A extends ImperativeWorkshopAPI {
         super("Platooning A");
     }
 
-  @Override
+    @Override
     public void run() {
-           forward();
-           delay(500);
-           forward(100);
-           delay(2000);
-           forward(1000);
-           delay(500);
-           stop();
+        if (getDistance() > 0.30f) {
+            // I am The Leader, send Message and drive
+            sendMessage("Eve", "I am the Leader");
+            delay(2000);
+            while (!isInterrupted()) {
+                setMotorSpeed(200);
+                forward();
+
+            }
+        } else {
+            // I am the Follower, wait for Message
+            sendLogMessage("I am the Follower, waiting on GO!");
+            if (hasMessage()) {
+                sendLogMessage("Got msg");
+                String msg = getNextMessage().getContent();
+                if (msg.equals("I am the Leader")) {
+                    sendLogMessage("Got GO!");
+                    while (!isInterrupted()) {
+                        if (getDistance() > 0.35)
+                            forward(250);
+                        else if (getDistance() < 0.15f)
+                            forward(150);
+                        else
+                            forward(200);
+                    }
+                }
+            }
+        }
     }
 }

@@ -64,7 +64,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
 
     /**
      * Sends the message if a connection is established.
-     * If not conection is established the ErrorHandlerManager will be called about this problem.
+     * If not connection is established the ErrorHandlerManager will be called about this problem.
      * @param msg - msg to send
      */
     private synchronized void sendMessage(MindroidMessage msg){
@@ -76,7 +76,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
     /**
      *
      * Connects the messenger with the MessageServer.
-     * The Connection will be keeped alive.
+     * The Connection will be kept alive.
      * Only connects if the connection is not established yet.
      *
      * Note: This client can only connect to one server at the time.

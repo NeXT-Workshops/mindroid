@@ -28,62 +28,62 @@ public class ImplementationService {
     private String[] foundClasses = {
             // Dev
             /*
-            "org.mindroid.android.app.imperativeimpl.RectangleDriver",
-            "org.mindroid.android.app.imperativeimpl.RectangleDriver3",
-            "org.mindroid.android.app.imperativeimpl.RectangleDriver2",
-            "org.mindroid.android.app.imperativeimpl.ImpSingleWallPingPong",
-            "org.mindroid.android.app.imperativeimpl.ImpCoordWallPingPong",
-            "org.mindroid.android.app.imperativeimpl.SpeedTestForBackward",
-            "org.mindroid.android.app.imperativeimpl.SpeedTestTurns",
-            "org.mindroid.android.app.imperativeimpl.ButtonTest",
-            "org.mindroid.android.app.imperativeimpl.ImpSingleWallPingPong",
-            "org.mindroid.android.app.imperativeimpl.TestMessageAccess",
-            "org.mindroid.android.app.imperativeimpl.MessageTest",
-            "org.mindroid.android.app.imperativeimpl.SimpleForward",
+            "org.mindroid.android.app.programs.dev.RectangleDriver",
+            "org.mindroid.android.app.programs.dev.RectangleDriver3",
+            "org.mindroid.android.app.programs.dev.RectangleDriver2",
+            "org.mindroid.android.app.programs.dev.ImpSingleWallPingPong",
+            "org.mindroid.android.app.programs.dev.ImpCoordWallPingPong",
+            "org.mindroid.android.app.programs.dev.SpeedTestForBackward",
+            "org.mindroid.android.app.programs.dev.SpeedTestTurns",
+            "org.mindroid.android.app.programs.dev.ButtonTest",
+            "org.mindroid.android.app.programs.dev.ImpSingleWallPingPong",
+            "org.mindroid.android.app.programs.dev.TestMessageAccess",
+            "org.mindroid.android.app.programs.dev.MessageTest",
+            "org.mindroid.android.app.programs.dev.SimpleForward",
             */
             //DEV Statemachines
             /*
-            "org.mindroid.android.app.statemachinesimpl.SensorMonitoring",
-            "org.mindroid.android.app.statemachinesimpl.MindroidStatemachines"
+            "org.mindroid.android.app.programs.dev.statemachinesimpl.SensorMonitoring",
+            "org.mindroid.android.app.programs.dev.statemachinesimpl.MindroidStatemachines"
             */
 
             // Stubs for Workshop
             /*
-            "org.mindroid.android.app.workshopimpl.HelloWorld",
-            "org.mindroid.android.app.workshopimpl.HelloDate",
+            "org.mindroid.android.app.programs.workshop.stubs.HelloWorld",
+            "org.mindroid.android.app.programs.workshop.stubs.HelloDate",
 
-            "org.mindroid.android.app.workshopimpl.DriveSquare",
-            "org.mindroid.android.app.workshopimpl.ParkingSensor",
-            "org.mindroid.android.app.workshopimpl.ColourTest",
+            "org.mindroid.android.app.programs.workshop.stubs.DriveSquare",
+            "org.mindroid.android.app.programs.workshop.stubs.ParkingSensor",
+            "org.mindroid.android.app.programs.workshop.stubs.ColourTest",
 
-            "org.mindroid.android.app.workshopimpl.HelloWorldPingR",
-            "org.mindroid.android.app.workshopimpl.HelloWorldPingB",
+            "org.mindroid.android.app.programs.workshop.stubs.HelloWorldPingR",
+            "org.mindroid.android.app.programs.workshop.stubs.HelloWorldPingB",
 
-            "org.mindroid.android.app.workshopimpl.ImpSingleWallPingPong",
-            "org.mindroid.android.app.workshopimpl.ImpCoordWallPingPong",
+            "org.mindroid.android.app.programs.workshop.stubs.ImpSingleWallPingPong",
+            "org.mindroid.android.app.programs.workshop.stubs.ImpCoordWallPingPong",
 
-            "org.mindroid.android.app.workshopimpl.LawnMower",
-            "org.mindroid.android.app.workshopimpl.Platooning_A",
-            "org.mindroid.android.app.workshopimpl.Platooning_B"
+            "org.mindroid.android.app.programs.workshop.stubs.LawnMower",
+            "org.mindroid.android.app.programs.workshop.stubs.Platooning_A",
+            "org.mindroid.android.app.programs.workshop.stubs.Platooning_B"
             */
             // Solutions for Workshop
 
-            "org.mindroid.android.app.workshopSolutions.HelloWorld",
-            "org.mindroid.android.app.workshopSolutions.HelloDate",
+            "org.mindroid.android.app.programs.workshop.solutions.HelloWorld",
+            "org.mindroid.android.app.programs.workshop.solutions.HelloDate",
 
-            "org.mindroid.android.app.workshopSolutions.DriveSquare",
-            "org.mindroid.android.app.workshopSolutions.ParkingSensor",
-            "org.mindroid.android.app.workshopSolutions.ColourTest",
+            "org.mindroid.android.app.programs.workshop.solutions.DriveSquare",
+            "org.mindroid.android.app.programs.workshop.solutions.ParkingSensor",
+            "org.mindroid.android.app.programs.workshop.solutions.ColourTest",
 
-            "org.mindroid.android.app.workshopSolutions.HelloWorldPingR",
-            "org.mindroid.android.app.workshopSolutions.HelloWorldPingB",
+            "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPingR",
+            "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPingB",
 
-            "org.mindroid.android.app.workshopSolutions.ImpSingleWallPingPong",
-            "org.mindroid.android.app.workshopSolutions.ImpCoordWallPingPong",
+            "org.mindroid.android.app.programs.workshop.solutions.ImpSingleWallPingPong",
+            "org.mindroid.android.app.programs.workshop.solutions.ImpCoordWallPingPong",
 
-            "org.mindroid.android.app.workshopSolutions.LawnMower",
-            "org.mindroid.android.app.workshopSolutions.Platooning_A",
-            "org.mindroid.android.app.workshopSolutions.Platooning_B"
+            "org.mindroid.android.app.programs.workshop.solutions.LawnMower",
+            "org.mindroid.android.app.programs.workshop.solutions.Platooning_A",
+            "org.mindroid.android.app.programs.workshop.solutions.Platooning_B"
 
     };
 

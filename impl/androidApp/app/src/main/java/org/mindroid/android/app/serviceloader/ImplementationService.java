@@ -25,9 +25,20 @@ public class ImplementationService {
         findImplementations();
     }
 
-    private String[] foundClasses = {
-            // Dev
-            /*
+    private String[] foundClasses;
+    private enum Set{
+        DEV,
+        STATEMACHINE,
+        STUBS,
+        SOLUTIONS
+    }
+    // Define here which set to be selected
+    // Set wanted = Set.DEV;
+    // Set wanted = Set.STATEMACHINE;
+    // Set wanted = Set.STUBS;
+    Set wanted = Set.SOLUTIONS;
+
+    private String[] classesDev = {
             "org.mindroid.android.app.programs.dev.RectangleDriver",
             "org.mindroid.android.app.programs.dev.RectangleDriver3",
             "org.mindroid.android.app.programs.dev.RectangleDriver2",
@@ -39,16 +50,13 @@ public class ImplementationService {
             "org.mindroid.android.app.programs.dev.ImpSingleWallPingPong",
             "org.mindroid.android.app.programs.dev.TestMessageAccess",
             "org.mindroid.android.app.programs.dev.MessageTest",
-            "org.mindroid.android.app.programs.dev.SimpleForward",
-            */
-            //DEV Statemachines
-            /*
+            "org.mindroid.android.app.programs.dev.SimpleForward"
+    };
+    private String[] classesStatemachine = {
             "org.mindroid.android.app.programs.dev.statemachinesimpl.SensorMonitoring",
             "org.mindroid.android.app.programs.dev.statemachinesimpl.MindroidStatemachines"
-            */
-
-            // Stubs for Workshop
-            /*
+    };
+    private String[] classesStubs = {
             "org.mindroid.android.app.programs.workshop.stubs.HelloWorld",
             "org.mindroid.android.app.programs.workshop.stubs.HelloDate",
 
@@ -65,8 +73,8 @@ public class ImplementationService {
             "org.mindroid.android.app.programs.workshop.stubs.LawnMower",
             "org.mindroid.android.app.programs.workshop.stubs.Platooning_A",
             "org.mindroid.android.app.programs.workshop.stubs.Platooning_B"
-            */
-            // Solutions for Workshop
+    };
+    private String[] classesSolutions = {
 
             "org.mindroid.android.app.programs.workshop.solutions.HelloWorld",
             "org.mindroid.android.app.programs.workshop.solutions.HelloDate",
@@ -84,10 +92,25 @@ public class ImplementationService {
             "org.mindroid.android.app.programs.workshop.solutions.LawnMower",
             "org.mindroid.android.app.programs.workshop.solutions.Platooning_A",
             "org.mindroid.android.app.programs.workshop.solutions.Platooning_B"
-
     };
 
+
+
     private void findImplementations(){
+        switch(wanted){
+            case DEV:
+                foundClasses = classesDev;
+                break;
+            case STATEMACHINE:
+                foundClasses = classesStatemachine;
+                break;
+            case STUBS:
+                foundClasses = classesStubs;
+                break;
+            case SOLUTIONS:
+                foundClasses = classesSolutions;
+                break;
+        }
         for (String classname : foundClasses) {
             BasicAPI implementation = loadBasicAPIClasses(classname);
             if(implementation != null) {

@@ -276,10 +276,14 @@ public class MainActivity extends Activity
     public void onSettingsChanged(boolean settingsChanged){
         ((HomeFragment)HOME_FRAGMENT).onSettingsChanged(settingsChanged);
 
+        // makes sure Home is selected in Drawer
+        mNavigationDrawerFragment.selectItem(0);
+        /*
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, HOME_FRAGMENT)
                 .commit();
+        */
     }
 
     @Override

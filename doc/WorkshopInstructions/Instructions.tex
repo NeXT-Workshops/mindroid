@@ -35,12 +35,12 @@
 \usepackage{chngcntr}
 \counterwithin{figure}{section} 
 \counterwithin{table}{section} 
-\newcommand{\gcenter}[3]{
+\newcommand{\gcenter}[4]{
 	\begin{figure}[h]
 	\centering 
-	\includegraphics{#1}
+	\includegraphics[width=#4]{#1}
 	\caption{#2}
-	\label{#3}
+	\label{fig:#3}
 	\end{figure}
 }
 
@@ -63,7 +63,7 @@
 	}
 	
 %relative path to workshop solutions folder
-\newcommand{\solpath}[0]{../../impl/androidApp/app/src/main/java/org/mindroid/android/app/workshopSolutions}
+\newcommand{\solpath}[0]{../../impl/androidApp/app/src/main/java/org/mindroid/android/app/programs/workshop/solutions}
 
 %makes bold code snippets
 \newcommand{\bfcode}[1]{\texttt{\textbf{#1}}}
@@ -106,6 +106,9 @@
 	\subsubtitle{}
 
 	\maketitle
+	
+	
+	
 	\newpage
 	% no ToC, as it seems broken 	
 	%\tableofcontents 	
@@ -120,6 +123,8 @@
 	\item Alle Kabel am Roboter ordentlich sitzen und
 	\item Dein Smartphone entweder mit dem WLAN \bfcode{MD005-2.4GHz} oder \bfcode{MD0029-2.4GHz} verbunden ist.
 	\end{itemize}
+	
+	Nun kannst du den Roboter durch Drücken der Enter-Taste starten.  Die Tastenbelegung kannst du im Anhang in Abbildung \ref{fig:buttons} auf Seite \pageref{fig:buttons} nachschauen. Du musst nicht warten bis der Roboter fertig gestartet ist.
 	\subsubsection{App und PC verbinden}
 	Um neue Programme einfach und schnell auf das Smartphone übertragen zu können, muss zuerst das Smartphone mit dem PC verbunden werden. Dazu sind folgende Schritte nötig.
 	\begin{enumerate}
@@ -135,13 +140,13 @@
 	\begin{minipage}{.5\textwidth}
 	
 	\centering
-	\includegraphics[width=.4\textwidth]{img/serverstartenbat.png}
-	\includegraphics[width=.2\textwidth]{img/MindrobotWithTango}
-	\includegraphics[scale=.2]{img/screenshots/settings.png}
+	\includegraphics[width=.4\textwidth]{img/pc_serverbat.png}
+	\includegraphics[width=.2\textwidth]{img/app_logo.png}
+	\includegraphics[width=.8\textwidth]{img/app_settings_short.png}
 	
 	\end{minipage}
 	\begin{center}
-	\includegraphics[width=.9\textwidth]{img/MessageServer.png}
+	\includegraphics[width=.9\textwidth]{img/pc_server.png}
 	\end{center}	
 
 	
@@ -157,65 +162,53 @@
 	\begin{enumerate}
 	\item Starte diesen indem du die Verknüpfung auf dem Desktop startest. In der Mitte findest du den Quelltext des aktuellen Programms, hinterlegt mit Farben, die die Orientierung erleichtern sollen.
 	
-	\gcenterone{img/javaeditor.png}
+	\gcenterone{img/je_main.png}
 	
 	Wie das Programm genau funktioniert, sehen wir uns gleich an. Zunächst einmal wollen wir es auf das Smartphone spielen, um zu sehen, was passiert.
 	
 	\item Dazu klickst du auf den blauen Play-Button oben links (Der Button ändert seine Farbe nach dem Durchlauf auf Grün). 
-	\includegraphics{img/playbutton.png} \\ Dein “Hallo Welt”-Programm wird jetzt an das Handy übertragen.
+	\includegraphics{img/je_playbutton.png} \\ Dein “Hallo Welt”-Programm wird jetzt an das Handy übertragen.
 	
 	\item In der Konsolenausgabe am unteren Bildrand sollte in etwa folgender Text erscheinen:
-	\includegraphics[width=\textwidth]{img/build.png}
+	\includegraphics[width=\textwidth]{img/je_console.png}
 	Das Programm ist nun übertragen.
 	\end{enumerate}
-	
+	\newpage
 	\subsubsection{Roboter und App verbinden}
-	Zuletzt müssen nun noch Smartphone und Roboter miteinander verbunden werden. Dazu müssen zunächst ein paar Einstellungen am Roboter vorgenommen werden.
+	Zuletzt müssen nun noch Smartphone und Roboter miteinander verbunden werden. 
+	
 	
 	\begin{enumerate}
 	
-	\begin{minipage}{.5\textwidth}
-	\item Dazu musst du zuerst in das \textbf{PAN-Menü} des Roboters navigieren. Wechsle mit den Links-/Rechts-Tasten bis du den Menüpunkt \textbf{PAN} siehst und betätige die \textbf{Auswahltaste}.
-	\end{minipage}
-	\begin{minipage}{.5\textwidth}
-	\includegraphics[width=.8\textwidth]{img/Pan.png}
-	\end{minipage}
-	
-	\item Nun navigierst du durch das Menü des Roboters wie auf den Bildern zu sehen und bestätigst jeweils mit der Auswahltaste: \textbf{PAN - USB-Client - Address - Automatic}
-	
-	\includegraphics[width=.4\textwidth]{img/USB-Client.png}
-	\hspace{.05\textwidth}
-	\includegraphics[width=.4\textwidth]{img/PANusb1.png}
-	
-	\includegraphics[width=.4\textwidth]{img/PanAuto.png}
-	\hspace{.05\textwidth}
-	\includegraphics[width=.4\textwidth]{img/PANusb1.png}
-	
-	\begin{minipage}{.7\textwidth}
-	\item Mit der \textbf{Zurück}-Taste kommst du zurück in das Hauptmenü und die Einstellungen werden übernommen.
-	\end{minipage}
-	\begin{minipage}{.3\textwidth}
-	\includegraphics[width=.8\textwidth]{img/RestartPAN.png}
-	\end{minipage}
-	
 	\begin{minipage}{.45\textwidth}
-	\item Zurück im Startmenü siehst du nun wie auf dem Bild zu sehen eine \textbf{IP-Adresse}. Um die Verbindung zwischen App und Roboter herstellen zu können, muss diese Adresse nun in den Einstellungen der App hinterlegt werden. 
-	\includegraphics[width=.8\textwidth]{img/IP.png}
+	\item Überprüfe dazu, ob wie rechts gezeigt die IP-Adresse 192.168.42.253 im Hauptmenü angezeigt wird. Ist dies nicht der Fall, folge der Anleitung in Abschnitt \ref{sec:pan} auf Seite \pageref{sec:pan}. 
 	\end{minipage}
 	\hspace{.05\textwidth}
 	\begin{minipage}{.45\textwidth}
-	\includegraphics[width=.8\textwidth]{img/screenshots/settings.png}
+	\includegraphics[width=.8\textwidth]{img/ev3_main.png}
 	\end{minipage}
-	\item Nun kannst du das \textbf{EV3-Programm }starten. Wähle dazu \textbf{Run Default} im Hauptmenü des Roboters aus und bestätige mit der Auswahltaste.
 	
-	\includegraphics[width=.4\textwidth]{img/runDefault.png}
-	\includegraphics[width=.4\textwidth]{img/wait.png}
 	
+	\begin{minipage}{.45\textwidth}
+	\item Wird die \textbf{IP-Adresse} im Hauptmenü richtig angezeigt, musst du nun noch kontrollieren, ob diese IP-Adresse auch im Einstellungsmenü der App richtig gesetzt ist. Falls nicht, korrigiere das.
+	%\includegraphics[width=.8\textwidth]{img/menu.png}
+	\end{minipage}
+	\hspace{.05\textwidth}
+	\begin{minipage}{.45\textwidth}
+	\includegraphics[width=.8\textwidth]{img/app_settings_short.png}
+	\end{minipage}
+	\item Nun kannst du das \textbf{EV3-Programm }starten. Wähle dazu \textbf{Run Default} im Hauptmenü des Roboters aus und bestätige mit der Auswahltaste. Danach musst du warten, bis der Roboter \textbf{"Ready"} anzeigt
+	
+	\includegraphics[width=.3\textwidth]{img/ev3_waitasecond.png}
+	\includegraphics[width=.3\textwidth]{img/ev3_pleasewait.png}	
+	\includegraphics[width=.3\textwidth]{img/ev3_ready.png}
+	\item Der Roboter ist nun bereit dazu sich mit dem Handy zu verbinden. In der App kannst du nun \glqq Verbindung zum EV3-Brick herstellen\grqq{} antippen.
 	\item Um nun das Hello-World-Programm zu starten, wähle es in der Liste der App aus und drücke auf \textbf{Starten}. Es wird ausgeführt, und auf dem Bildschirm des Roboters erscheint \textbf{"Hallo Welt!"}
 	
 	\end{enumerate}	
+	\newpage
 	\subsection{Der Quelltext erklärt}
-	Nachdem du den Roboter erfolgreich eingerichtet und das erste mal getestet hast, gehen wir jetzt daran, uns den Quelltext näher anzusehen.
+	Nachdem du den Roboter erfolgreich eingerichtet und das erste Mal getestet hast, gehen wir jetzt daran, uns den Quelltext näher anzusehen.
 	\lstinputlisting{\solpath/HelloWorld.java}
 	Das Verhalten des Roboters befindet sich in der \textbf{run-Methode }(Zeilen 13-16). Wenn ein Mindroid-Programm ausgeführt wird, werden die Befehle in dieser Methode nacheinander abgearbeitet.
 		\begin{itemize}
@@ -399,7 +392,7 @@
 	
 	\newpage
 	\section{Mähroboter}
-	\easygcenter{.8\textwidth}{img/maehroboter.png}
+	\easygcenter{.8\textwidth}{img/task_maehroboter.jpg}
 	Nutze deine Kenntnisse, um den Roboter in einem mit schwarzem (oder weißem) Klebeband abgesperrten Bereich herumfahren zu lassen (so ähnlich wie beispielsweise viele Mähroboter arbeiten).
 	\begin{enumerate}
 	\item Wie beim Wand Ping-Pong soll der Roboter erstmal geradeaus fahren.
@@ -417,7 +410,7 @@
 	
 	\newpage
 	\section{Platooning}
-	\easygcenter{.8\textwidth}{img/platooning.png}
+	\easygcenter{.8\textwidth}{img/task_platooning.jpg}
 	In dieser Aufgabe geht es darum, zwei Roboter hintereinander her fahren zu lassen, ohne dass es einen Auffahrunfall gibt. Aktuell forschen zahlreiche Unis und Unternehmen unter dem Schlagwort Platooning an genau dieser Problemstellung bei echten LKWs und PKWs: Die Fahrzeuge fahren dabei so nahe, dass sie den Windschatten des Vorausfahrenden ausnutzen können.
 	
 	Roboter A und B werden hintereinander platziert, sodass sie in die gleiche Richtung blicken. Ziel ist es zunächst, dass Roboter B den Abstand zu Roboter A in einem bestimmen Toleranzbereich hält. Die Distanzangaben im Folgenden sind nur mögliche Werte - du bestimmst selbst, was geeignete Grenzwerte sind.
@@ -435,7 +428,7 @@
 	
 	\newpage
 	\section{Verfolgung}
-	\easygcenter{.8\textwidth}{img/chachacha.png}
+	\easygcenter{.8\textwidth}{img/task_chachacha.png}
 	Beim Cha-Cha-Cha gibt es die Tanzfigur “Verfolgung”. Dabei verfolgt jeweils ein Tanzpartner den anderen, bis beide sich umdrehen und die Rollen wechseln. Diese Figur ist tatsächlich nicht sehr weit vom Platooning-Beispiel aus der vorherigen Aufgabe entfernt.
 	Der Ablauf soll dieses Mal wie folgt aussehen:
 	\begin{enumerate}
@@ -452,7 +445,48 @@
 	\end{itemize}
 	
 	\newpage
-	\begin{appendix}
+	
+	\appendix
+	\section{EV3 Tasten}
+	Abbildung \ref{fig:buttons} zeigt dir wie die Tasten am EV3-Brick genannt werden. Die Enter-Taste wird zum Bestätigen genutzt, mit der Escape-Taste, geht es ein Menü zurück. 
+		\gcenter{img/ev3_buttons.jpg}{EV3-Tastenbelegung\protect\footnotemark\ }{buttons}{.5\textwidth}
+		\footnotetext{ Quelle http://www.roboter-im-unterricht.de/tasten-oberflaeche.html}
+	
+	\newpage
+	\section{PAN Einrichtung}
+	\label{sec:pan}
+			Wird im Hauptmenü noch nicht die richtige IP-Adresse angezeigt, müssen zuerst die PAN-Einstellungen korrigiert werden.
+		
+		\begin{enumerate}	
+		\begin{minipage}{.5\textwidth}
+		\item Dazu musst du zuerst in das \textbf{PAN-Menü} des Roboters navigieren. Wechsle mit den Links-/Rechts-Tasten bis du den Menüpunkt \textbf{PAN} siehst und betätige die \textbf{Auswahltaste}.
+		\end{minipage}
+		\begin{minipage}{.5\textwidth}
+		\includegraphics[width=.8\textwidth]{img/ev3_pan.png}
+		\end{minipage}
+		
+		\item Nun navigierst du durch das Menü des Roboters wie auf den Bildern zu sehen und bestätigst jeweils mit der Auswahltaste: \textbf{PAN - USB-Client - Address - Advanced}
+		
+		\includegraphics[width=.3\textwidth]{img/ev3_pan_usb.png}
+		\includegraphics[width=.3\textwidth]{img/ev3_pan_usb_address.png}		
+		\includegraphics[width=.3\textwidth]{img/ev3_pan_usb_advanced.png}
+		
+		Nun musst du die IP Adresse 192.168.42.253 einstellen. Dazu navigierst du mit den rechts-/links-Tasten zu den einzelnen Ziffern und änderst deren Wert mit den oben-/unten-Tasten. am Ende bestätigst du wieder mit der Enter-Taste. 
+		
+		\includegraphics[width=.3\textwidth]{img/ev3_pan_usb_setip1.png}
+		\includegraphics[width=.3\textwidth]{img/ev3_pan_usb_setip2.png}
+		\includegraphics[width=.3\textwidth]{img/ev3_pan_usb_isset.png}
+		
+		\begin{minipage}{.6\textwidth}
+		\item Mit der \textbf{Zurück}-Taste kommst du wieder in das Hauptmenü und die Einstellungen werden übernommen.
+		\end{minipage}
+		\hfill
+		\begin{minipage}{.3\textwidth}
+		\includegraphics[width=\textwidth]{img/ev3_pan_usb_restart.png}
+		\end{minipage}
+		\end{enumerate}
+	
+	\newpage
 	\section{Troubleshooting}
 	\subsection{Installation über WLAN funktioniert nicht}
 	Im Message-Server über \bfcode{File->Connected Devices }schauen ob alle Smartphones in der Liste auftauchen und der ADB-state auf \bfcode{connected} steht. 
@@ -464,7 +498,7 @@
 	
 	\section{Sensorbelegung}
 
-	\ref{tab:sensors} Zeigt die standardmäßige Sensorbelegung, wie sie in der App unter ``Mein Roboter'' definiert sein muss.
+	Tabelle	\ref{tab:sensors} zeigt die standardmäßige Sensorbelegung, wie sie in der App unter ``Mein Roboter'' definiert sein muss.
 	
 	\begin{table}[htbp]
 		\begin{center}
@@ -481,7 +515,7 @@
 		\label{tab:sensors}
 	\end{table}	
 	
-	\ref{tab:motors} Zeigt den standardmäßigen Motoranschluss, wie er in der App unter ``Mein Roboter'' definiert sein muss.
+	Tabelle \ref{tab:motors} zeigt den standardmäßigen Motoranschluss, wie er in der App unter ``Mein Roboter'' definiert sein muss.
 	\begin{table}[htbp]
 		\begin{center}
 		\begin{tabular}{|l|l|}
@@ -498,6 +532,5 @@
 	\end{table}
 	
 	
-	\end{appendix}
 	
 	\end{document}

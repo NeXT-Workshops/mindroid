@@ -26,6 +26,7 @@ public class DifferentialPilot implements IDifferentialPilot {
     private final float angleErrorThreshold = 2f;
     private IInterruptable api;
 
+    /** Fields are used to access/store current motor speed values [stored by {@link #storeCurrentSpeed()} **/
     private int oldRightMotorSpeed;
     private int oldLeftMotorSpeed;
 

@@ -6,6 +6,12 @@
 
     <!-- Activity titles -->
     <string name="title_activity_main">Mindroid</string>
+    <string name="title_activity_splash">Mindroid</string>
+
+    <!-- Splash Activity -->
+    <string name="txt_starting_adb_service">Starte ADB Service..</string>
+    <string name="txt_checking_usb">Überprüfe USB-Verbindung..</string>
+    <string name="txt_activate_tethering">Aktiviere Tethering..</string>
 
     <!-- util -->
     <string name="txt_abort">Abbrechen</string>

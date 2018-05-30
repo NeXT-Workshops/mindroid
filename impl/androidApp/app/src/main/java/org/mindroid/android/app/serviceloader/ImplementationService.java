@@ -81,7 +81,8 @@ public class ImplementationService {
 
             "org.mindroid.android.app.programs.workshop.solutions.LawnMower",
             "org.mindroid.android.app.programs.workshop.solutions.Platooning_A",
-            "org.mindroid.android.app.programs.workshop.solutions.Platooning_B"
+            "org.mindroid.android.app.programs.workshop.solutions.Platooning_B",
+            "org.mindroid.android.app.programs.workshop.solutions.Platooning",
     };
 
 

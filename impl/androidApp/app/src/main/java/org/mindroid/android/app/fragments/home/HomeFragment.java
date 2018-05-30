@@ -574,7 +574,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                         robot.stopRunningImplmentation();
 
                         //SAVING LOG AFTER EXECUTION
-                        GlobalLogger.getInstance().saveLog();
+                        //Currently removed saving log when stopping the program, as a concurrentException can occur, which is causing a dialog popping up
+                        //GlobalLogger.getInstance().saveLog();
                         return false;
                     }catch(Exception e){
                         parentActivity.showErrorDialog("Exception",e.getMessage());

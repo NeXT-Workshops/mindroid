@@ -20,7 +20,7 @@ public abstract class BasicAPI {
 
     //TODO maybe add Constructor to automatically register Implementation to some component which the app can get access to to get implementation classes
 
-    abstract protected void accept(AbstractImplVisitor visitor);
+    abstract void accept(AbstractImplVisitor visitor);
 
 
     // --------------------- BRICK CONTROLLING METHODS: Display, LED, Sounds, Buttons ---------------------
@@ -113,7 +113,7 @@ public abstract class BasicAPI {
      * @param buttonID buttonID
      * @return button
      */
-    protected EV3Button getButton(Button buttonID){
+    EV3Button getButton(Button buttonID){
         EV3Button button;
         if (BrickButtonProvider.getInstance() != null) {
             if((button = BrickButtonProvider.getInstance().getButton(buttonID)) != null){

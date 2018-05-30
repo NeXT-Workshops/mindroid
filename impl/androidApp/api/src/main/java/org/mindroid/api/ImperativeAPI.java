@@ -14,10 +14,10 @@ public abstract class ImperativeAPI extends BasicAPI implements IInterruptable {
     private final String implementationID;
 
     /** true, when stopExecution is called **/
-    protected boolean isInterrupted = false;
+    boolean isInterrupted = false;
 
     @Override
-    protected void accept(AbstractImplVisitor visitor){
+    void accept(AbstractImplVisitor visitor){
         visitor.visit(this);
     }
 

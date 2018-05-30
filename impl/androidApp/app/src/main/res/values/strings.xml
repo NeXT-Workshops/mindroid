@@ -38,6 +38,7 @@
     <string name="txt_btn_DisConnect_connect">connect</string>
     <string name="txt_btn_DisConnect_disconnect">disconnect</string>
     <string name="switch_sim_txt">Simulation</string>
+    <string name="txt_programs">Programs:</string>
 
     <!-- Sensor Monitoring Fragment -->
     <string name="dialog_info_message">No Statemachine is running! Start a Statemachine to use this feature and then

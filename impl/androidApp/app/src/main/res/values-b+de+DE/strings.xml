@@ -28,6 +28,7 @@
     <string name="txt_btn_DisConnect_connect">verbinden</string>
     <string name="txt_btn_DisConnect_disconnect">trennen</string>
     <string name="switch_sim_txt">Simulation</string>
+    <string name="txt_programs">Programme:</string>
 
     <!-- Settings Fragment -->
     <string name="txtView_note_msg_disconnect_messenger">Trenne die Verbindung zum MessageServer, um RobotID und GroupID zu ändern!</string>

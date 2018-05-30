@@ -28,6 +28,8 @@ public class ImplementationService {
 
     private String[] classesDev = {
             "org.mindroid.android.app.programs.dev.RectangleDriver",
+            "org.mindroid.android.app.programs.dev.MotorTest",
+            "org.mindroid.android.app.programs.dev.SensorTestWallPingPong",
             "org.mindroid.android.app.programs.dev.RectangleDriver3",
             "org.mindroid.android.app.programs.dev.RectangleDriver2",
             "org.mindroid.android.app.programs.dev.ImpSingleWallPingPong",

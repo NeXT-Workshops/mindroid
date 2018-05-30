@@ -68,7 +68,7 @@ bugs & improvements:
 	- nach deployen kein tethering möglich
 		
 - App schmiert ab, wenn man wild herumklickt
-- wand-ping-pong + color sensor führt zu herben bugs
+- DONE - wand-ping-pong + color sensor führt zu herben bugs - läuft nun
 - DONE <- TIMEOUT 45Sec wenn initialization failed ->kommunikation zwischen handy und brick verbessern (kill switch)
 - DONE - log für kommunikation zum brick
 - dreh-korrektur nochmal überprüfen (endlosschleife - er versucht sich minimal in die falsche Richtung zu korrigieren)

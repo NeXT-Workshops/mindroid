@@ -5,34 +5,37 @@
 	colorbacktitle,
 	instlogo,
 	accentcolor=tud1c,
-	%draft,
+	draft,
 	german,
+%	solution,
 	twoside
 ]{tudexercise}
 
 % USEPACKAGE
-
+% changed counter for section wise counting
+\usepackage{chngcntr}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
-%\usepackage[locale = DE, binary-units=true]{siunitx}
-\usepackage{todonotes}
-
-% linebreak for urls in bitexx
-\usepackage{url}
-\urlstyle{rm}
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{listings}
-\usepackage{amsmath}
-\usepackage{mathtools}
-\usepackage{pgf}
-\usepackage{tikz}
+\usepackage{todonotes}
 
-\usetikzlibrary{arrows,automata}
 
-% changed counter for section wise counting
-\usepackage{chngcntr}
+%% unused packages, might be useful someday
+% linebreak for urls in bitexx
+%\usepackage{url}
+%\urlstyle{rm}
+%\usepackage[locale = DE, binary-units=true]{siunitx}
+%\usepackage{amsmath}
+%\usepackage{mathtools}
+%\usepackage{pgf}
+%\usepackage{tikz}
+%\usetikzlibrary{arrows,automata}
+
+
+
 \counterwithin{figure}{section} 
 \counterwithin{table}{section} 
 \newcommand{\gcenter}[4]{
@@ -112,7 +115,9 @@
 	\newpage
 	% no ToC, as it seems broken 	
 	%\tableofcontents 	
-	
+	%\begin{solution}
+	%Hello WOOOORLD
+	%\end{solution}
 	\section{Hallo Welt}
 	In der Informatik ist es üblich, ein Hallo-Welt-Programm\footnote{https://de.wikipedia.org/wiki/Hallo-Welt-Programm} zu schreiben, wenn man eine Programmierumgebung kennenlernt. Deshalb fangen wir damit an. 
 	
@@ -120,33 +125,43 @@
 	Damit alles funktioniert, musst du deine Geräte zuerst überprüfen und einrichten. Dabei lernst du, wie du die einzelnen Komponenten miteinander verbindest und neu erstellte Programme auf das Smartphone überträgst.
 	Zuerst musst du dazu das Smartphone und den Roboter mit dem \textbf{USB-Kabel} verbinden. Überprüfe dabei ob
 	\begin{itemize}
-	\item Alle Kabel am Roboter ordentlich sitzen und
-	\item Dein Smartphone entweder mit dem WLAN \bfcode{MD005-2.4GHz} oder \bfcode{MD0029-2.4GHz} verbunden ist.
+		\item Alle Kabel am Roboter ordentlich sitzen und
+		\item Dein Smartphone entweder mit dem WLAN \bfcode{MD005-2.4GHz} oder \bfcode{MD0029-2.4GHz} verbunden ist.
 	\end{itemize}
+	\begin{minipage}{.8\textwidth}
+		Nun kannst du den Roboter durch Drücken der Enter-Taste starten.
+		Die Tastenbelegung kannst du im Anhang in Abbildung \ref{fig:buttons} auf Seite \pageref{fig:buttons} nachschauen. Während der Roboter startet, kannst du auch die Mindroid-App auf dem Handy starten.
+		Du musst nicht warten bis der Roboter fertig gestartet ist.
+	\end{minipage}
+	\begin{minipage}{.19\textwidth}
+	\includegraphics[width=\textwidth]{img/app_logo}	
+	\end{minipage}
 	
-	Nun kannst du den Roboter durch Drücken der Enter-Taste starten.  Die Tastenbelegung kannst du im Anhang in Abbildung \ref{fig:buttons} auf Seite \pageref{fig:buttons} nachschauen. Du musst nicht warten bis der Roboter fertig gestartet ist.
 	\subsubsection{App und PC verbinden}
-	Um neue Programme einfach und schnell auf das Smartphone übertragen zu können, muss zuerst das Smartphone mit dem PC verbunden werden. Dazu sind folgende Schritte nötig.
+	Um neue Programme einfach und schnell auf das Smartphone übertragen zu können, muss zuerst das Smartphone mit dem PC verbunden werden. Dazu sind folgende Schritte nötig:
 	\begin{enumerate}
 	\begin{minipage}{.5\textwidth}
 	
 	\item Starte den \textbf{Message-Server}, indem du die \textbf{ServerStarten.bat} auf dem Desktop des Computers mit einem Doppelklick ausführst. Der Server erledigt ein paar Einstellungen. Außerdem ist er später wichtig, damit die Roboter untereinander kommunizieren können.
 	 
-	\item Um eine dauerhafte Verbindung herzustellen, müssen wir nun das Smartphone mit dem Server bekannt machen. Dazu öffnest du auf dem Smartphone die \textbf{Mindroid-App}. 
-	
-	\item Der Message-Server zeigt dir links unten in der Ecke seine IP-Adresse an. Diese musst du nun der Mindroid-App mitteilen. Dazu navigierst du über das Menü oben links in den \textbf{Einstellungen-Bildschirm}. Dort trägst du unter \textbf{MSG-Server IP} die IP des Servers ein. Ist dies erledigt, kannst du zurück zum Hauptbildschirm der App und auf \textbf{Verbinden} klicken. Die App verbindet sich nun mit dem Server.
+	\item Um eine dauerhafte Verbindung herzustellen, müssen wir nun das Smartphone mit dem Server bekannt machen.	
+	\item Der Message-Server zeigt dir links unten in der Ecke seine IP-Adresse an (siehe Screenshot auf Seite \pageref{fig:server}). Diese musst du nun der Mindroid-App mitteilen. Dazu navigierst du über das Menü oben links in den \textbf{Einstellungen-Bildschirm} (Abbildung rechts). Dort trägst du unter \textbf{MSG-Server IP} die IP des Servers ein. Ist dies erledigt, kannst du zurück zum Hauptbildschirm der App und auf \textbf{Verbinden} klicken. Die App verbindet sich nun mit dem Server.
 	
 	\end{minipage}	
 	\begin{minipage}{.5\textwidth}
 	
 	\centering
 	\includegraphics[width=.4\textwidth]{img/pc_serverbat.png}
-	\includegraphics[width=.2\textwidth]{img/app_logo.png}
 	\includegraphics[width=.8\textwidth]{img/app_settings_short.png}
-	
+	\label{fig:app_settings}
 	\end{minipage}
 	\begin{center}
+	\begin{figure}
 	\includegraphics[width=.9\textwidth]{img/pc_server.png}
+	\caption{Screenshot des Servers}
+	\label{fig:server}
+	\end{figure}
+	
 	\end{center}	
 
 	
@@ -166,7 +181,7 @@
 	
 	Wie das Programm genau funktioniert, sehen wir uns gleich an. Zunächst einmal wollen wir es auf das Smartphone spielen, um zu sehen, was passiert.
 	
-	\item Dazu klickst du auf den blauen Play-Button oben links (Der Button ändert seine Farbe nach dem Durchlauf auf Grün). 
+	\item Dazu klickst du auf den blauen Play-Button oben links (Der Button ändert seine Farbe nach dem Durchlauf wieder zu türkis). 
 	\includegraphics{img/je_playbutton.png} \\ Dein “Hallo Welt”-Programm wird jetzt an das Handy übertragen.
 	
 	\item In der Konsolenausgabe am unteren Bildrand sollte in etwa folgender Text erscheinen:
@@ -190,14 +205,14 @@
 	
 	
 	\begin{minipage}{.45\textwidth}
-	\item Wird die \textbf{IP-Adresse} im Hauptmenü richtig angezeigt, musst du nun noch kontrollieren, ob diese IP-Adresse auch im Einstellungsmenü der App richtig gesetzt ist. Falls nicht, korrigiere das.
+	\item Wird die \textbf{IP-Adresse} im Hauptmenü des Roboters richtig angezeigt, musst du nun noch kontrollieren, ob diese IP-Adresse auch im Einstellungsmenü der App richtig gesetzt ist. Überprüfe dazu den Eintrag unter \bf{EV3 IP}. Die farblichen Markierungen auf den Bildern sind dir dabei eine Hilfe. Falls der Eintrag nicht korrekt ist, korrigiere ihn.
 	%\includegraphics[width=.8\textwidth]{img/menu.png}
 	\end{minipage}
 	\hspace{.05\textwidth}
 	\begin{minipage}{.45\textwidth}
 	\includegraphics[width=.8\textwidth]{img/app_settings_short.png}
 	\end{minipage}
-	\item Nun kannst du das \textbf{EV3-Programm }starten. Wähle dazu \textbf{Run Default} im Hauptmenü des Roboters aus und bestätige mit der Auswahltaste. Danach musst du warten, bis der Roboter \textbf{"Ready"} anzeigt
+	\item \label{sec:afterpan}Nun kannst du das \textbf{EV3-Programm }starten. Wähle dazu \textbf{Run Default} im Hauptmenü des Roboters aus und bestätige mit der Auswahltaste. Danach musst du warten, bis der Roboter \textbf{"Ready"} anzeigt
 	
 	\includegraphics[width=.3\textwidth]{img/ev3_waitasecond.png}
 	\includegraphics[width=.3\textwidth]{img/ev3_pleasewait.png}	
@@ -455,7 +470,7 @@
 	\newpage
 	\section{PAN Einrichtung}
 	\label{sec:pan}
-			Wird im Hauptmenü noch nicht die richtige IP-Adresse angezeigt, müssen zuerst die PAN-Einstellungen korrigiert werden.
+			Wird im Hauptmenü noch nicht die richtige IP-Adresse angezeigt, müssen zuerst die PAN\footnote{PAN = Personal Area Network}-Einstellungen korrigiert werden.
 		
 		\begin{enumerate}	
 		\begin{minipage}{.5\textwidth}
@@ -465,13 +480,13 @@
 		\includegraphics[width=.8\textwidth]{img/ev3_pan.png}
 		\end{minipage}
 		
-		\item Nun navigierst du durch das Menü des Roboters wie auf den Bildern zu sehen und bestätigst jeweils mit der Auswahltaste: \textbf{PAN - USB-Client - Address - Advanced}
+		\item Nun navigierst du durch das Menü des Roboters wie auf den Bildern zu sehen und bestätigst jeweils mit der Auswahltaste: \textbf{USB-Client - Address - Advanced}
 		
 		\includegraphics[width=.3\textwidth]{img/ev3_pan_usb.png}
 		\includegraphics[width=.3\textwidth]{img/ev3_pan_usb_address.png}		
 		\includegraphics[width=.3\textwidth]{img/ev3_pan_usb_advanced.png}
 		
-		Nun musst du die IP Adresse 192.168.42.253 einstellen. Dazu navigierst du mit den rechts-/links-Tasten zu den einzelnen Ziffern und änderst deren Wert mit den oben-/unten-Tasten. am Ende bestätigst du wieder mit der Enter-Taste. 
+		Nun musst du die IP Adresse 192.168.42.253 einstellen. Dazu navigierst du mit den rechts-/links-Tasten zu den einzelnen Ziffern und änderst deren Wert mit den oben-/unten-Tasten. Orientiere dich an den Bildern! Am Ende bestätigst du wieder mit der Enter-Taste. 
 		
 		\includegraphics[width=.3\textwidth]{img/ev3_pan_usb_setip1.png}
 		\includegraphics[width=.3\textwidth]{img/ev3_pan_usb_setip2.png}
@@ -484,7 +499,9 @@
 		\begin{minipage}{.3\textwidth}
 		\includegraphics[width=\textwidth]{img/ev3_pan_usb_restart.png}
 		\end{minipage}
+		\\Nun kannst du wieder zu Punkt 3 auf Seite \pageref{sec:afterpan} wechseln.
 		\end{enumerate}
+		
 	
 	\newpage
 	\section{Troubleshooting}

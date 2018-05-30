@@ -20,6 +20,8 @@ public class Display {
 
     public static void showSystemIsReady(){
         LCD.clearDisplay();
+        configureFont(Font.getSmallFont());
+        drawString("Battery: "+Brick.getBatteryStatus()+"%",5,5,GraphicsLCD.TOP);
         configureFont(Font.getLargeFont());
         drawString("READY", 40, 50, GraphicsLCD.TOP);
         configureFont(Font.getSmallFont());

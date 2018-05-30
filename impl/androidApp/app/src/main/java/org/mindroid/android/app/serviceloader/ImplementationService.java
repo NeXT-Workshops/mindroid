@@ -35,8 +35,8 @@ public class ImplementationService {
     // Define here which set to be selected
     // private Set wanted = Set.DEV;
     // private Set wanted = Set.STATEMACHINE;
-    // private Set wanted = Set.STUBS;
-    private Set wanted = Set.SOLUTIONS;
+     private Set wanted = Set.STUBS;
+    //private Set wanted = Set.SOLUTIONS;
 
     private String[] classesDev = {
             "org.mindroid.android.app.programs.dev.RectangleDriver",

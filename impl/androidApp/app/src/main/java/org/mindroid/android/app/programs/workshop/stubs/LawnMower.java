@@ -3,12 +3,12 @@ package org.mindroid.android.app.programs.workshop.stubs;
 import org.mindroid.api.ImperativeWorkshopAPI;
 
 public class LawnMower extends ImperativeWorkshopAPI {
-	// Konstruktor nicht ändern!!
+  // Konstruktor nicht ändern!!
     public LawnMower() {
         super("Lawn Mower");
     }
 
-  	@Override
+    @Override
     public void run() {
 
     }

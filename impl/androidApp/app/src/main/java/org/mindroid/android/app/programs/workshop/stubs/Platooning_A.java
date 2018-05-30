@@ -3,7 +3,7 @@ package org.mindroid.android.app.programs.workshop.stubs;
 import org.mindroid.api.ImperativeWorkshopAPI;
 
 public class Platooning_A extends ImperativeWorkshopAPI {
-	// Konstruktor nicht ändern!!
+  // Konstruktor nicht ändern!!
     public Platooning_A() {
         super("Platooning A");
     }

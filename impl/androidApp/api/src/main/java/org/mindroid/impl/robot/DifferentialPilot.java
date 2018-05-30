@@ -25,6 +25,10 @@ public class DifferentialPilot implements IDifferentialPilot {
     private final float trackCircumference;
     private final float angleErrorThreshold = 2f;
     private IInterruptable api;
+
+    private int oldRightMotorSpeed;
+    private int oldLeftMotorSpeed;
+
     /**
      *
      * @param motorProvider motorprovider to access synced motor group
@@ -82,8 +86,18 @@ public class DifferentialPilot implements IDifferentialPilot {
 
     @Override
     public void driveDistanceForward(float distance, int speed) {
+        storeCurrentSpeed();
         setMotorSpeed(speed);
         driveDistanceForward(distance);
+        setMotorSpeeds(oldLeftMotorSpeed, oldRightMotorSpeed);
+    }
+
+    /**
+     * Stores the current left and Rigt motor speed in global fields {@link #oldLeftMotorSpeed} {@link #oldRightMotorSpeed}
+     */
+    private void storeCurrentSpeed() {
+        oldLeftMotorSpeed = motorProvider.getMotor(leftMotor).getSpeed();
+        oldRightMotorSpeed = motorProvider.getMotor(rightMotor).getSpeed();
     }
 
     @Override
@@ -103,8 +117,10 @@ public class DifferentialPilot implements IDifferentialPilot {
 
     @Override
     public void driveDistanceBackward(float distance,int speed) {
+        storeCurrentSpeed();
         setMotorSpeed(speed);
         driveDistanceBackward(distance);
+        setMotorSpeeds(oldLeftMotorSpeed,oldRightMotorSpeed);
     }
 
     @Override
@@ -180,11 +196,18 @@ public class DifferentialPilot implements IDifferentialPilot {
         executeAngleCorrection(targetAngle, executed);
     }
 
+    /**
+     * Turn left with a specifc speed. Speed will be reset after the operation is complete.
+     *
+     * @param degrees degrees to turn
+     * @param speed speed 0 - 1000
+     */
     @Override
     public void turnLeft(int degrees, int speed) {
-        motorProvider.getMotor(leftMotor).setSpeed(speed);
-        motorProvider.getMotor(rightMotor).setSpeed(speed);
+        storeCurrentSpeed();
+        setMotorSpeeds(speed,speed);
         turnLeft(degrees);
+        setMotorSpeeds(oldLeftMotorSpeed,oldRightMotorSpeed);
     }
 
 
@@ -236,11 +259,28 @@ public class DifferentialPilot implements IDifferentialPilot {
         }
     }
 
+    /**
+     * Turn right with a specifc speed. Speed will be reset after the operation is complete.
+     *
+     * @param degrees degrees to turn
+     * @param speed speed 0 - 1000
+     */
     @Override
     public void turnRight(int degrees, int speed) {
-        motorProvider.getMotor(leftMotor).setSpeed(speed);
-        motorProvider.getMotor(rightMotor).setSpeed(speed);
+        storeCurrentSpeed();
+        setMotorSpeeds(speed,speed);
         turnRight(degrees);
+        setMotorSpeeds(oldLeftMotorSpeed,oldRightMotorSpeed);
+    }
+
+    /**
+     * Set different speed values of the left and right motor
+     * @param speed_left speed of left motor
+     * @param speed_right speed of right motor
+     */
+    private void setMotorSpeeds(int speed_left, int speed_right){
+        motorProvider.getMotor(leftMotor).setSpeed(speed_left);
+        motorProvider.getMotor(rightMotor).setSpeed(speed_right);
     }
 
     @Override

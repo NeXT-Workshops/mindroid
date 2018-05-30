@@ -4,14 +4,14 @@ import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.impl.brick.Textsize;
 
 public class HelloWorld extends ImperativeWorkshopAPI {
-  // Konstruktor nicht ändern!!
+    // Konstruktor nicht ändern!!
     public HelloWorld() {
         super("Hello World");
     }
 
     @Override
     public void run() {
-           clearDisplay(); 
-           drawString("Hello World", Textsize.MEDIUM, 10 , 50);   
+        clearDisplay();
+        drawString("Hello World", Textsize.MEDIUM, 10 , 50);
     }
 }

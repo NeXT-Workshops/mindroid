@@ -325,9 +325,8 @@ public abstract class BasicAPI {
     }
 
     /**
-     * TODO UNTESTED; WILL PROBABLY NOT WORK
      *
-     * Broadcast a message to all robots in Group.
+     * Broadcast a message to all robots connectd to the same msg server.
      * @param message 'message to send'
      */
     public final void broadcastMessage(String message){

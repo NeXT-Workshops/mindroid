@@ -25,18 +25,6 @@ public class ImplementationService {
         findImplementations();
     }
 
-    private String[] foundClasses;
-    private enum Set{
-        DEV,
-        STATEMACHINE,
-        STUBS,
-        SOLUTIONS
-    }
-    // Define here which set to be selected
-    // private Set wanted = Set.DEV;
-    // private Set wanted = Set.STATEMACHINE;
-     private Set wanted = Set.STUBS;
-    //private Set wanted = Set.SOLUTIONS;
 
     private String[] classesDev = {
             "org.mindroid.android.app.programs.dev.RectangleDriver",
@@ -95,22 +83,15 @@ public class ImplementationService {
     };
 
 
+    // Define here which set to be selected
+    private String[] foundClasses = classesSolutions;
+    //private String[] foundClasses = classesStubs;
+    //private String[] foundClasses = classesStatemachine;
+    //private String[] foundClasses = classesDev;
+
+
 
     private void findImplementations(){
-        switch(wanted){
-            case DEV:
-                foundClasses = classesDev;
-                break;
-            case STATEMACHINE:
-                foundClasses = classesStatemachine;
-                break;
-            case STUBS:
-                foundClasses = classesStubs;
-                break;
-            case SOLUTIONS:
-                foundClasses = classesSolutions;
-                break;
-        }
         for (String classname : foundClasses) {
             BasicAPI implementation = loadBasicAPIClasses(classname);
             if(implementation != null) {

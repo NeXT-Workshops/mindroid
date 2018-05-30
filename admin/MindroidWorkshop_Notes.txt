@@ -60,17 +60,17 @@ bugs & improvements:
 	- Fehlermeldung wird nicht mehr gezeigt	
 - DONE Handy wechselt in den Standby wenn es an den Brick angeschlossen ist
 	- Display bleibt aktiv wenn App geöffnet
-- nach deployment sollte die app immer noch mit dem server verbunden sein
-	- meh	
+- DONE nach deployment sollte die app immer noch mit dem server verbunden sein
+	- meh -> App autoconnected zum MSG-Server bei start	
 	
-- usb tethering aktiv halten (über adb möglich?)
+- DONE - usb tethering aktiv halten (über adb möglich?) --> Wird automatisch aktiviert zum APP start 
 	- Shell Command aktiviert Tethering
 	- nach deployen kein tethering möglich
 		
 - App schmiert ab, wenn man wild herumklickt
 - wand-ping-pong + color sensor führt zu herben bugs
-- kommunikation zwischen handy und brick verbessern (kill switch)
-- log für kommunikation zum brick
+- DONE <- TIMEOUT 45Sec wenn initialization failed ->kommunikation zwischen handy und brick verbessern (kill switch)
+- DONE - log für kommunikation zum brick
 - dreh-korrektur nochmal überprüfen (endlosschleife - er versucht sich minimal in die falsche Richtung zu korrigieren)
 
 sonstiges:
@@ -80,8 +80,8 @@ sonstiges:
 - vor girlsday (ende april) nochmal email an marelene wegen flyern
 - email mit code + aufgabenstellung + doku an marlene
 - mindroid film 
-- usb strom messer bestellen
-- Hiwi Verträge im Mai verlängern
+- DONE usb strom messer bestellen
+- DONE Hiwi Verträge im Mai verlängern
 	
 Bugs:
 - DONE - colorsensor zeigt immmer die farbe unter dem linken an (sowohl bei rechts als auch links im display)

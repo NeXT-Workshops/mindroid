@@ -72,7 +72,7 @@ public class Platooning extends ImperativeWorkshopAPI {
             float distance = getDistance();
 
             drawString("Dist: " + distance, Textsize.MEDIUM, 10,50);
-            if (prevState != State.FAST && distance > 0.30) {
+            if (prevState != State.FAST && distance > 0.30f) {
                 forward(300);
                 prevState = State.FAST;
                 setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
@@ -80,7 +80,7 @@ public class Platooning extends ImperativeWorkshopAPI {
                 forward(100);
                 prevState = State.SLOW;
                 setLED(EV3StatusLightColor.RED, EV3StatusLightInterval.ON);
-            } else if (prevState != State.MED) {
+            } else if (prevState != State.MED && distance > 0.20f && distance < 0.30f) {
                 forward(200);
                 prevState = State.MED;
                 setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.ON);

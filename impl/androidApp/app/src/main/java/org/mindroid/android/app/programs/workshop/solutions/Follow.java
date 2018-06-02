@@ -20,11 +20,16 @@ public class Follow extends ImperativeWorkshopAPI {
     }
     private PlatoonState prevState;
 
-    enum roleState{
+    enum RoleState {
         LEADER,
         FOLLOWER
     }
-    private roleState role;
+    private RoleState role;
+
+    enum Direction {
+        LEFT,
+        RIGHT
+    }
 
     private Random rnd = new Random();
     private String colleague;
@@ -61,7 +66,7 @@ public class Follow extends ImperativeWorkshopAPI {
             if (isButtonClicked(Button.ENTER)) {
                 sendLogMessage("I am the leader!");
                 sendMessage(colleague, leaderMsg);
-                role = roleState.LEADER;
+                role = RoleState.LEADER;
                 initDone = true;
             }
             if (hasMessage()) {
@@ -70,7 +75,7 @@ public class Follow extends ImperativeWorkshopAPI {
                 if (msg.getContent().equals(leaderMsg)) {
                     //Colleague is the leader
                     sendLogMessage("I am NOT the leader!");
-                    role = roleState.FOLLOWER;
+                    role = RoleState.FOLLOWER;
                 }
                 initDone = true;
             }
@@ -90,8 +95,9 @@ public class Follow extends ImperativeWorkshopAPI {
     private void driveAsLeader(){
         sendLogMessage("Leading the way!");
         // drive at least 3000ms + random(0..3000ms)
-        int driveTime = 300 + (int) rnd.nextFloat() * 300;
+        int driveTime = (int) (300 + Math.floor(rnd.nextFloat() * 300));
         int drivenTime = 0;
+        sendLogMessage("Driving for " + driveTime * 10 + "ms");
         setMotorSpeed(200);
         forward();
         // drive until interrupted or time is up
@@ -100,31 +106,11 @@ public class Follow extends ImperativeWorkshopAPI {
             drivenTime++;
         }
         stop();
-        // Tell colleague to Turn
+
         sendMessage(colleague, turnMsg);
-
-        /*
-        // Wait for Collegue to turn
-        while (!hasMessage() && !getNextMessage().getContent().equals(otherTurnedMsg)) {
-            delay(50);
-        }
-        if (hasMessage() && getNextMessage().getContent().equals(otherTurnedMsg))
-            role = roleState.FOLLOWER;
-        */
-
-        // Wait for Colleague to turn
-        while (!hasMessage()) delay(50);
-
-        if(hasMessage()){
-            MindroidMessage msg = getNextMessage();
-            if (msg.getContent().equals(otherTurnedMsg)){
-                sendLogMessage("turning...");
-                turnLeft(180, 100);
-                sendMessage(colleague, myTurnedMsg);
-                role = roleState.FOLLOWER;
-            }
-        }
-
+        waitForTurn();
+        turn(Direction.RIGHT);
+        role = RoleState.FOLLOWER;
     }
 
     private void driveAsFollower(){
@@ -150,25 +136,36 @@ public class Follow extends ImperativeWorkshopAPI {
                 MindroidMessage msg = getNextMessage();
                 sendLogMessage("I received: " + msg.getContent());
                 if( msg.getContent().equals(turnMsg)){
-                    sendLogMessage("turning...");
-                    turnLeft(180, 100);
-                    sendMessage(colleague, myTurnedMsg);
-                    // stop();
-
-                    // Wait for Collegue to turn
-                    while (!hasMessage()) delay(50);
-
-                    if(hasMessage()){
-                        msg = getNextMessage();
-                        if (msg.getContent().equals(otherTurnedMsg))
-                            role = roleState.LEADER;
-                        return;
-                    }
-                    //if (hasMessage() && getNextMessage().getContent().equals(otherTurnedMsg))
+                    turn(Direction.LEFT);
+                    waitForTurn();
+                    role = RoleState.LEADER;
+                    return;
                 }
             }
             delay(50);
         }
         stop();
+    }
+
+    private void waitForTurn(){
+        while (!hasMessage()) delay(50);
+        if(hasMessage()){
+            MindroidMessage msg = getNextMessage();
+            if (msg.getContent().equals(otherTurnedMsg))
+                sendLogMessage("I received: " + msg.getContent());
+        }
+    }
+
+    private void turn(Direction dir){
+        sendLogMessage("turning...");
+        switch(dir) {
+            case LEFT:
+                turnLeft(180, 100);
+                break;
+            case RIGHT:
+                turnRight(180, 100);
+                break;
+        }
+        sendMessage(colleague, myTurnedMsg);
     }
 }

@@ -1,5 +1,6 @@
 package org.mindroid.android.app.programs.workshop.solutions;
 
+import java.util.Random;
 import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
@@ -21,15 +22,14 @@ public class Platooning extends ImperativeWorkshopAPI {
 
     private final String player_1 = "Finn";
     private final String player_2 = "Berta";
+    private final String myID = getRobotID();
+    private String colleague;
 
     //Messages
     private final String leaderMsg = "I AM THE LEADER";
 
     @Override
     public void run() {
-
-        String myID = getRobotID();
-        String colleague;
 
         // find out who i am, so i know who my colleague is
         if(myID.equals(player_1)){
@@ -61,16 +61,14 @@ public class Platooning extends ImperativeWorkshopAPI {
         setMotorSpeed(200);
         forward();
         while (!isInterrupted()) {
-            delay(10);
+            delay(50);
         }
         stop();
     }
     private void driveAsFollower(){
-
         while(!isInterrupted()) {
             clearDisplay();
             float distance = getDistance();
-
             drawString("Dist: " + distance, Textsize.MEDIUM, 10,50);
             if (prevState != State.FAST && distance > 0.30f) {
                 forward(300);
@@ -85,8 +83,9 @@ public class Platooning extends ImperativeWorkshopAPI {
                 prevState = State.MED;
                 setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.ON);
             }
-            delay(500);
+            delay(50);
         }
         stop();
+
     }
 }

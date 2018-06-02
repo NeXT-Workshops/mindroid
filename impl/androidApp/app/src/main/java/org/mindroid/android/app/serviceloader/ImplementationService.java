@@ -3,6 +3,7 @@ package org.mindroid.android.app.serviceloader;
 import org.mindroid.api.BasicAPI;
 import org.mindroid.api.ImplementationIDCrawlerVisitor;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -62,8 +63,10 @@ public class ImplementationService {
             "org.mindroid.android.app.programs.workshop.stubs.ImpCoordWallPingPong",
 
             "org.mindroid.android.app.programs.workshop.stubs.LawnMower",
-            "org.mindroid.android.app.programs.workshop.stubs.Platooning_A",
-            "org.mindroid.android.app.programs.workshop.stubs.Platooning_B"
+     //       "org.mindroid.android.app.programs.workshop.stubs.Platooning_A",
+     //       "org.mindroid.android.app.programs.workshop.stubs.Platooning_B"
+            "org.mindroid.android.app.programs.workshop.stubs.Platooning",
+            "org.mindroid.android.app.programs.workshop.stubs.Follow"
     };
     private String[] classesSolutions = {
 
@@ -81,9 +84,10 @@ public class ImplementationService {
             "org.mindroid.android.app.programs.workshop.solutions.ImpCoordWallPingPong",
 
             "org.mindroid.android.app.programs.workshop.solutions.LawnMower",
-            "org.mindroid.android.app.programs.workshop.solutions.Platooning_A",
-            "org.mindroid.android.app.programs.workshop.solutions.Platooning_B",
+     //       "org.mindroid.android.app.programs.workshop.solutions.Platooning_A",
+    //       "org.mindroid.android.app.programs.workshop.solutions.Platooning_B",
             "org.mindroid.android.app.programs.workshop.solutions.Platooning",
+            "org.mindroid.android.app.programs.workshop.solutions.Follow"
     };
 
 
@@ -103,7 +107,6 @@ public class ImplementationService {
                 collectID(implementation);
             }
         }
-
     }
 
     /**

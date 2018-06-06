@@ -1,15 +1,13 @@
 \documentclass[
 	12pt,
-	article,
-	type=bsc, %sta, diplom, bsc, pp, msc, dr, drfinal, sem, prosem
 	colorbacktitle,
-	instlogo,
 	accentcolor=tud1c,
 	draft,
-	german,
-%	solution,
-	twoside
+	twoside,
+	german
 ]{tudexercise}
+% For Draft, make Report... for whatever reason normal draft doesnt work...
+% ]{tudreport}
 
 % USEPACKAGE
 % changed counter for section wise counting
@@ -85,6 +83,8 @@
 %configure listings for Java Code 
 \lstset{
 	language=Java,
+	breaklines=true,
+	postbreak=\mbox{$\hookrightarrow$\space},
 	basicstyle=\ttfamily\footnotesize,
 	%set colors
 	keywordstyle=\color{javapurple}\bfseries,
@@ -102,22 +102,12 @@
 }
 
 \begin{document}
-	\author{}
-	\pagenumbering{arabic}	
-	\title{Mindroid Pilotworkshop \\ am xx.06.2018}
-	\subtitle{FG ES / MAKI \\ TU Darmstadt}
-	\subsubtitle{}
-
-	\maketitle
-	
-	
-	
+	\input{title.tex}
+		
 	\newpage
 	% no ToC, as it seems broken 	
-	%\tableofcontents 	
-	%\begin{solution}
-	%Hello WOOOORLD
-	%\end{solution}
+	%S\tableofcontents 	
+	
 	\section{Hallo Welt}
 	In der Informatik ist es üblich, ein Hallo-Welt-Programm\footnote{https://de.wikipedia.org/wiki/Hallo-Welt-Programm} zu schreiben, wenn man eine Programmierumgebung kennenlernt. Deshalb fangen wir damit an. 
 	
@@ -140,15 +130,13 @@
 	\subsubsection{App und PC verbinden}
 	Um neue Programme einfach und schnell auf das Smartphone übertragen zu können, muss zuerst das Smartphone mit dem PC verbunden werden. Dazu sind folgende Schritte nötig:
 	\begin{enumerate}
-	\begin{minipage}{.5\textwidth}
-	
-	\item Starte den \textbf{Message-Server}, indem du die \textbf{ServerStarten.bat} auf dem Desktop des Computers mit einem Doppelklick ausführst. Der Server erledigt ein paar Einstellungen. Außerdem ist er später wichtig, damit die Roboter untereinander kommunizieren können.
-	 
+	\begin{minipage}{.47\textwidth}	
+	\item Starte den \textbf{Message-Server}, indem du die \textbf{ServerStarten.bat} auf dem Desktop des Computers mit einem Doppelklick ausführst. Der Server erledigt ein paar Einstellungen. Außerdem ist er später wichtig, damit die Roboter untereinander kommunizieren können.	 
 	\item Um eine dauerhafte Verbindung herzustellen, müssen wir nun das Smartphone mit dem Server bekannt machen.	
-	\item Der Message-Server zeigt dir links unten in der Ecke seine IP-Adresse an (siehe Screenshot auf Seite \pageref{fig:server}). Diese musst du nun der Mindroid-App mitteilen. Dazu navigierst du über das Menü oben links in den \textbf{Einstellungen-Bildschirm} (Abbildung rechts). Dort trägst du unter \textbf{MSG-Server IP} die IP des Servers ein. Ist dies erledigt, kannst du zurück zum Hauptbildschirm der App und auf \textbf{Verbinden} klicken. Die App verbindet sich nun mit dem Server.
-	
+	\item Der Message-Server zeigt dir links unten in der Ecke seine IP-Adresse an (siehe Screenshot auf Seit \pageref{fig:server}). Diese musst du nun der Mindroid-App mitteilen. Dazu navigierst du über das Menü oben links in den \textbf{Einstellungen-Bildschirm} (Abbildung rechts). Dort trägst du unter \textbf{MSG-Server IP} die IP des Servers ein. Ist dies erledigt, kannst du zurück zum Hauptbildschirm der App und auf \textbf{Verbinden} klicken. Die App verbindet sich nun mit dem Server.	
 	\end{minipage}	
-	\begin{minipage}{.5\textwidth}
+	\hfill
+	\begin{minipage}{.47\textwidth}
 	
 	\centering
 	\includegraphics[width=.4\textwidth]{img/pc_serverbat.png}
@@ -185,7 +173,7 @@
 	\includegraphics{img/je_playbutton.png} \\ Dein “Hallo Welt”-Programm wird jetzt an das Handy übertragen.
 	
 	\item In der Konsolenausgabe am unteren Bildrand sollte in etwa folgender Text erscheinen:
-	\includegraphics[width=\textwidth]{img/je_console.png}
+	\gcenterone{img/je_console.png}
 	Das Programm ist nun übertragen.
 	\end{enumerate}
 	\newpage
@@ -198,20 +186,20 @@
 	\begin{minipage}{.45\textwidth}
 	\item Überprüfe dazu, ob wie rechts gezeigt die IP-Adresse 192.168.42.253 im Hauptmenü angezeigt wird. Ist dies nicht der Fall, folge der Anleitung in Abschnitt \ref{sec:pan} auf Seite \pageref{sec:pan}. 
 	\end{minipage}
-	\hspace{.05\textwidth}
+	\hfill	
 	\begin{minipage}{.45\textwidth}
-	\includegraphics[width=.8\textwidth]{img/ev3_main.png}
+	\includegraphics[width=.9\textwidth]{img/ev3_main.png}
+	\end{minipage}
+	
+	\begin{minipage}{.45\textwidth}
+	\item Wird die \textbf{IP-Adresse} im Hauptmenü des Roboters richtig angezeigt, musst du nun noch kontrollieren, ob diese IP-Adresse auch im Einstellungsmenü der App richtig gesetzt ist. Überprüfe dazu den Eintrag unter \textbf{EV3 IP}. Die farblichen Markierungen auf den Bildern sind dir dabei eine Hilfe. Falls der Eintrag nicht korrekt ist, korrigiere ihn.
+	\end{minipage}	
+	\hfill	
+	\begin{minipage}{.45\textwidth}
+	\includegraphics[width=.9\textwidth]{img/app_settings_short.png}
 	\end{minipage}
 	
 	
-	\begin{minipage}{.45\textwidth}
-	\item Wird die \textbf{IP-Adresse} im Hauptmenü des Roboters richtig angezeigt, musst du nun noch kontrollieren, ob diese IP-Adresse auch im Einstellungsmenü der App richtig gesetzt ist. Überprüfe dazu den Eintrag unter \bf{EV3 IP}. Die farblichen Markierungen auf den Bildern sind dir dabei eine Hilfe. Falls der Eintrag nicht korrekt ist, korrigiere ihn.
-	%\includegraphics[width=.8\textwidth]{img/menu.png}
-	\end{minipage}
-	\hspace{.05\textwidth}
-	\begin{minipage}{.45\textwidth}
-	\includegraphics[width=.8\textwidth]{img/app_settings_short.png}
-	\end{minipage}
 	\item \label{sec:afterpan}Nun kannst du das \textbf{EV3-Programm }starten. Wähle dazu \textbf{Run Default} im Hauptmenü des Roboters aus und bestätige mit der Auswahltaste. Danach musst du warten, bis der Roboter \textbf{"Ready"} anzeigt
 	
 	\includegraphics[width=.3\textwidth]{img/ev3_waitasecond.png}
@@ -228,7 +216,7 @@
 	Das Verhalten des Roboters befindet sich in der \textbf{run-Methode }(Zeilen 13-16). Wenn ein Mindroid-Programm ausgeführt wird, werden die Befehle in dieser Methode nacheinander abgearbeitet.
 		\begin{itemize}
 		\item{\bfcode{clearDisplay()}} löscht den Display-Inhalt
-		\item{\bfcode{drawString(text, textsize, xPosition, yPosition)}} schreibt einen gegebenen Text(text) an die gegebenen Koordinaten (\bfcode{xPosition, yPosition}) und verwendet dabei die definierte Schriftgröße (\bfcode{textsize}).
+		\item{\bfcode{drawString(text, textsize, xPosition, yPosition)}} schreibt einen gegebenen Text (\bfcode{text}) an die gegebenen Koordinaten (\bfcode{xPosition, yPosition}) und verwendet dabei die definierte Schriftgröße (\bfcode{textsize}).
 		\item Der Konstruktor in den Zeilen 8 bis 10 gibt unserem Programm einen Namen (Zeile 8). Mit dem Aufruf von \bfcode{super("Hello World")} bestimmen wir, unter welcher Bezeichnung unser Programm später ausgewählt werden kann. Es ist sinnvoll an beiden Stellen aussagekräftige Bezeichnungen zu verwenden.
 		\end{itemize}
 		Daneben gibt es noch die sogenannten “\textbf{imports}”. Da die Programm-Bibliotheken der MindroidApp sehr groß sind, hat jede Klasse einen ausführlichen Namen, der dabei hilft, den Überblick zu bewahren. Der Teil vor dem Klassennamen heißt \textbf{Paket} (engl. package). Zum Beispiel ist die Klasse \textbf{ImperativeWorkshopAPI} im Paket \textbf{org.mindroid.api.}
@@ -301,7 +289,7 @@
 	\lstinputlisting{\solpath/ParkingSensor.java}
 	
 	\begin{itemize}
-	\item Um die LED ansteuern zu können, müssen wir die Pakete \bfcode{org.mindroid.api.ev3.EV3StatusLightColor} und \bfcode{org.mindroid.api.ev3.EV3StatusLightInterval} importieren.
+	\item Um die LED ansteuern zu können, müssen wir die Pakete \\ \bfcode{org.mindroid.api.ev3.EV3StatusLightColor}\\ und\\ \bfcode{org.mindroid.api.ev3.EV3StatusLightInterval} importieren.
 	\item Wie in Zeile 19 zu sehen ist, läuft das Programm in einer Endlosschleife, bis der “Stop”-Knopf in der App betätigt wird.
 	\item Wir müssen uns jeweils den vorherigen Zustand in der Variablen \bfcode{previousState} (Zeile 17) merken, da wir ansonsten alle 100ms den Zustand der LED zurücksetzen würden, was das Blinken verhindert. Mithilfe von \bfcode{previousState} ändern wir den LED-Modus nur dann, wenn wir müssen.
 	
@@ -321,13 +309,11 @@
 	\end{itemize}
 	
 	\subsection{Kommunikation zwischen Robotern} % - Verteiltes ``Hallo Welt!''}
-	In der vorherigen Aufgaben hast du kennengelernt, wie ein Programm auf einem einzelnen Roboter ausgeführt wird. Als nächstes wollen wir die Roboter \textbf{miteinander sprechen lassen}. Auch hier starten wir mit einem einfachen (diesmal verteilten) “Hallo Welt!”-Programm. Die Kommunikation läuft über das bereits vorgestellten “Server”-Programm, welches ihr vorhin schon auf dem Entwicklungsrechner gestartet habt. 
-	Damit die Roboter voneinander unterschieden werden können, benötigt jeder einen eigenen Namen. Um diese Einstellungen ändern zu können, müsst ihr die Verbindung zum Server erst einmal trennen. Navigiert nun wieder in das Einstellungs-Menü der App und gebt den Robotern Namen. Stellt sicher, dass die Roboter auch in Gruppen eingeteilt sind. Die Screenshots zeigen euch wie das geht. 
+	In der vorherigen Aufgaben hast du kennengelernt, wie ein Programm auf einem einzelnen Roboter ausgeführt wird. Als nächstes wollen wir die Roboter \textbf{miteinander sprechen lassen}.
 	
-	\td{Screenshots für Namen einstellen, Gruppe einstellen}
-	%\includegraphics[width=.4\textwidth]{img/serverstartenbat.png}
-	%\includegraphics[width=.5\textwidth]{img/MindrobotWithTango}
-	%\includegraphics[width=.5\textwidth]{img/MindrobotWithTango}
+	Auch hier starten wir mit einem einfachen (diesmal verteilten) “Hallo Welt!”-Programm. Die Kommunikation läuft über das bereits vorgestellten “Server”-Programm, welches ihr vorhin schon auf dem Entwicklungsrechner gestartet habt. 
+	
+	Damit die Roboter voneinander unterschieden werden können, benötigt jeder einen eigenen Namen. Um diese Einstellungen ändern zu können, müsst ihr die Verbindung zum Server erst einmal trennen. Navigiert nun wieder in das Einstellungs-Menü der App und gebt den Robotern Namen. Stellt sicher, dass die Roboter auch in Gruppen eingeteilt sind. 
 	
 	Wiederhole diesen Schritt nun auch für den zweiten Roboter. In unserem Beispiel gehen wir davon aus, die Roboter heißen Robert und Berta.
 	
@@ -356,7 +342,8 @@
 	\item Du siehst die aktuell gemessenen Werte der Sensoren
 	\begin{itemize}
 	
-	\item Der Wert \textbf{“Color ID” }beschreibt die aktuell gemessene Farbe unter dem linken Sensor. Ihre Werte sind in der Klasse \emph{org.mindroid.impl.statemachine.properties.sensorproperties.Color} dokumentiert. Wenn du ein weißes Blatt Papier direkt unter den linken Farbsensor legst, sollte der Wert auf 6 (=Weiß) wechseln (manchmal wird auch 2 (=Blau) gemessen). Wenn du einen schwarzen Gegenstand direkt unter den Sensor legst, sollte der Wert auf 1 wechseln. Die Farbbestimmung mittels Color-ID ist leider relativ unpräzise.
+	\item Der Wert \textbf{“Color ID” }beschreibt die aktuell gemessene Farbe unter dem linken Sensor. Ihre Werte sind in der Klasse \begin{center} \textbf{org.mindroid.impl.statemachine.properties.sensorproperties.Color} 
+	\end{center}dokumentiert. Wenn du ein weißes Blatt Papier direkt unter den linken Farbsensor legst, sollte der Wert auf 6 (=Weiß) wechseln (manchmal wird auch 2 (=Blau) gemessen). Wenn du einen schwarzen Gegenstand direkt unter den Sensor legst, sollte der Wert auf 1 wechseln. Die Farbbestimmung mittels Color-ID ist leider relativ unpräzise.
 	\item Der Wert \textbf{“Distance“} gibt die aktuell vom Ultraschallsensor gemessene Distanz in Metern an. Bewege deine Hand vor dem Sensor vor und zurück und beobachte die Veränderung des Wertes.
 	\item Der Wert \textbf{“Angle” }gibt den aktuell gemessenen Winkel des Gyro-Sensors an. Drehe den Roboter um die Hochachse und beobachte die Veränderung des Wertes.
 	\end{itemize}
@@ -405,7 +392,7 @@
 	
 	\begin{itemize}
 	\item (1P) Roboter kollidieren nicht.
-	\item (1P) Vergleich: Wie schnell schaffen die Roboter eine “Runde” (A: Fahren $\rightarrow$ Wand+Drehen+Stop; B: Warten $\rightarrow$ Fahren $\rightarrow$ Wand+Drehen+Stop)? Hier sollen die Roboter nicht möglichst nahe, sondern nahe genug an die Wand heranfahren (Abstand der Vorderachse kleiner 20cm).
+	\item (1P) Vergleich: Wie schnell schaffen die Roboter eine “Runde” (A: Fahren $\rightarrow$ Wand + Drehen + Stop; B: Warten $\rightarrow$ Fahren $\rightarrow$ Wand + Drehen + Stop)? Hier sollen die Roboter nicht möglichst nahe, sondern nahe genug an die Wand heranfahren (Abstand der Vorderachse kleiner 20cm).
 	\end{itemize}
 	
 	\newpage
@@ -445,7 +432,7 @@
 	\end{itemize}
 	
 	\newpage
-	\section{Verfolgung}
+	\section{Dancing Robots}
 	\easygcenter{.8\textwidth}{img/task_chachacha.png}
 	Beim Cha-Cha-Cha gibt es die Tanzfigur “Verfolgung”. Dabei verfolgt jeweils ein Tanzpartner den anderen, bis beide sich umdrehen und die Rollen wechseln. Diese Figur ist tatsächlich nicht sehr weit vom Platooning-Beispiel aus der vorherigen Aufgabe entfernt.
 	Der Ablauf soll dieses Mal wie folgt aussehen:
@@ -467,19 +454,29 @@
 	\appendix
 	\section{EV3 Tasten}
 	Abbildung \ref{fig:buttons} zeigt dir wie die Tasten am EV3-Brick genannt werden. Die Enter-Taste wird zum Bestätigen genutzt, mit der Escape-Taste, geht es ein Menü zurück. 
-		\gcenter{img/ev3_buttons.jpg}{EV3-Tastenbelegung\protect\footnotemark\ }{buttons}{.5\textwidth}
-		\footnotetext{ Quelle http://www.roboter-im-unterricht.de/tasten-oberflaeche.html}
-	
+		\gcenter{img/ev3_buttons.png}{EV3-Tastenbelegung\protect\footnotemark\ }{buttons}{.5\textwidth}
+		\footnotetext{ Quelle http://www.ev3dev.org/images/ev3/labeled-buttons.png}
+		
+	Die Bedeutung der Tasten kannst du der folgenden Aufzählung entnehmen. 
+	\begin{enumerate}
+	\item \textbf{Escape / Zurück}
+	\item \textbf{Up / Hoch}
+	\item \textbf{Left / Links}
+	\item \textbf{Enter / Bestätigen}
+	\item \textbf{Right / Rechts}  
+	\item \textbf{Down / Unten}  
+	\end{enumerate}
 	\newpage
 	\section{PAN Einrichtung}
 	\label{sec:pan}
 			Wird im Hauptmenü noch nicht die richtige IP-Adresse angezeigt, müssen zuerst die PAN\footnote{PAN = Personal Area Network}-Einstellungen korrigiert werden.
 		
 		\begin{enumerate}	
-		\begin{minipage}{.5\textwidth}
+		\begin{minipage}{.45\textwidth}
 		\item Dazu musst du zuerst in das \textbf{PAN-Menü} des Roboters navigieren. Wechsle mit den Links-/Rechts-Tasten bis du den Menüpunkt \textbf{PAN} siehst und betätige die \textbf{Auswahltaste}.
 		\end{minipage}
-		\begin{minipage}{.5\textwidth}
+		\hfill
+		\begin{minipage}{.45\textwidth}
 		\includegraphics[width=.8\textwidth]{img/ev3_pan.png}
 		\end{minipage}
 		

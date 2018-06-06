@@ -49,9 +49,6 @@ public class MindroidServerFrame extends JFrame {
 
         JMenu fileMenu = new JMenu("File");
         fileMenu.setMnemonic('f');
-        //JMenu helpMenu = new JMenu("Help");
-
-        JMenu actionMenu = new JMenu("Actions");
 
         JMenuItem exitMenuItem = new JMenuItem();
         exitMenuItem.setAction(new AbstractAction("Quit") {
@@ -61,16 +58,18 @@ public class MindroidServerFrame extends JFrame {
             }
         });
         exitMenuItem.setMnemonic('q');
+        exitMenuItem.setAccelerator(KeyStroke.getKeyStroke("control Q"));
 
         JMenuItem consoleMenuItem = new JMenuItem();
         consoleMenuItem.setAction(new AbstractAction("Show Console") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
-                console.setVisible(true);
+                console.setVisible(!console.isVisible());
             }
         });
         consoleMenuItem.setMnemonic('c');
+        consoleMenuItem.setAccelerator(KeyStroke.getKeyStroke("shift C"));
 
         refreshIP = new JMenuItem();
         refreshIP.setAction(new AbstractAction("Refresh IP Address") {
@@ -80,17 +79,18 @@ public class MindroidServerFrame extends JFrame {
             }
         });
         refreshIP.setMnemonic('r');
-
+        refreshIP.setAccelerator(KeyStroke.getKeyStroke("control R"));
 
         JMenuItem adbDevicesMenuItem = new JMenuItem();
-        adbDevicesMenuItem.setAction(new AbstractAction(ConnectedDevicesFrame.TITLE) {
+        adbDevicesMenuItem.setAction(new AbstractAction("Show "+ConnectedDevicesFrame.TITLE) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ConnectedDevicesFrame adbDevicesFrame = ConnectedDevicesFrame.getInstance();
-                adbDevicesFrame.setVisible(true);
+                adbDevicesFrame.setVisible(!adbDevicesFrame.isVisible());
             }
         });
-        consoleMenuItem.setMnemonic('d');
+        adbDevicesMenuItem.setMnemonic('d');
+        adbDevicesMenuItem.setAccelerator(KeyStroke.getKeyStroke("control D"));
 
 
         fileMenu.add(consoleMenuItem);

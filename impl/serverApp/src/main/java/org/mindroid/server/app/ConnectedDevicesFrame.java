@@ -60,6 +60,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
             }
         });
         exitMenuItem.setMnemonic('q');
+        exitMenuItem.setAccelerator(KeyStroke.getKeyStroke("control Q"));
 
         refreshDevices = new JMenuItem();
         refreshDevices.setAction(new AbstractAction("Refresh Devices") {
@@ -69,6 +70,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
             }
         });
         refreshDevices.setMnemonic('r');
+        refreshDevices.setAccelerator(KeyStroke.getKeyStroke("control R"));
 
         JMenuItem openLogDir = new JMenuItem();
         openLogDir.setAction(new AbstractAction("Open Log Directory") {
@@ -82,6 +84,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
             }
         });
         openLogDir.setMnemonic('o');
+        openLogDir.setAccelerator(KeyStroke.getKeyStroke("control O"));
 
         fileMenu.add(refreshDevices);
         fileMenu.add(openLogDir);

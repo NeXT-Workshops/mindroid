@@ -1,10 +1,11 @@
 package org.mindroid.api.robot;
 
-import org.mindroid.api.robot.control.IBrickControl;
-import org.mindroid.api.robot.control.IMotorControl;
+import org.mindroid.api.ImperativeAPI;
+import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
-import org.mindroid.api.robot.control.ISensorControl;
-import org.mindroid.api.statemachine.IStatemachine;
+import org.mindroid.api.sensor.IEV3SensorEventListener;
+import org.mindroid.impl.ev3.EV3PortID;
+import org.mindroid.impl.statemachine.StatemachineCollection;
 
 /**
  * Created by torben on 02.03.2017.
@@ -12,23 +13,32 @@ import org.mindroid.api.statemachine.IStatemachine;
 
 public interface IRobotFactory {
 
-    public void setRobotConfig(IRobodancerConfig robotConfig);
+    // ------- Robot Characteristics -------
+    void setRobotConfig(IRobotPortConfig robotConfig);
 
-    public void setBrickIP(String ip);
-    public void setBrickTCPPort(int tcpPort);
+    void setBrickIP(String ip);
 
-    public void setMSGServerIP(String msgServerIP);
-    public void setMSGServerTCPPort(int tcpPort);
+    void setBrickTCPPort(int tcpPort);
 
+    void setRobotID(String robotID);
 
+    IRobotCommandCenter getRobotCommandCenter();
 
-    //TODO public void addRuleSet(HasmMap<RobotEvent,Rule> rules);
+    // ------- Controlling ------- //TODO Maybe move some of them to the RobotCommandCenter
 
-    public void addStatemachine(IStatemachine statemachine);
+    void registerSensorListener(EV3PortID port, IEV3SensorEventListener listener);
+
+    void addErrorHandler(AbstractErrorHandler errorHandler);
+
+    /**
+     *
+     * @param enableSimulation SIMULATION IS NOT FULLY IMPLEMENTED - SIMULATION DEV IS ON HOLD THEREFORE SHOULD BE FALSE
+     * @return RobotCommandCenter
+     */
+    IRobotCommandCenter createRobot(boolean enableSimulation);
 
     /** Clears all properties **/
-    public void clear();
+     void clearConfiguration();
 
-    public IRobotCommandCenter createRobot(); //TODO return robodancer or singleton or both
 
 }

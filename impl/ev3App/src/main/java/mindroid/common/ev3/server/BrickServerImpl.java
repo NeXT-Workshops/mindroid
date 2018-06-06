@@ -8,6 +8,7 @@ import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
+import com.esotericsoftware.minlog.Log;
 import org.mindroid.common.messages.MessageRegistrar;
 import org.mindroid.common.messages.NetworkPortConfig;
 
@@ -23,6 +24,8 @@ public class BrickServerImpl implements BrickServer {
 	int tcpPort;
 	
 	Vector<Connection> clients = new Vector<Connection>();
+
+	private boolean areMessagesRegistered = false;
 	
 	public BrickServerImpl(int tcpPort){
 		this.tcpPort = tcpPort;
@@ -44,7 +47,6 @@ public class BrickServerImpl implements BrickServer {
 			server = new Server();
 			server.start();
 			server.bind(tcpPort,tcpPort-NetworkPortConfig.UDP_OFFSET);
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	
@@ -52,7 +54,10 @@ public class BrickServerImpl implements BrickServer {
 
 	@Override
 	public void registerMessages(EndPoint kryo) {
-		MessageRegistrar.register(kryo);
+		if(!areMessagesRegistered) {
+			MessageRegistrar.register(kryo);
+			areMessagesRegistered = true;
+		}
 	}
 	
 }

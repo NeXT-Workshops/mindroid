@@ -1,7 +1,7 @@
 package mindroid.common.ev3.endpoints.sensors.ev3;
 
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
+import org.mindroid.common.messages.hardware.Sensors;
 import lejos.hardware.port.Port;
 
 /**
@@ -10,29 +10,24 @@ import lejos.hardware.port.Port;
 
 public class EV3IRSensor extends AbstractSensor {
 
-    public EV3IRSensor(Port sensorPort, SensorMessages.SensorMode_ mode) {
-        super(SensorSampleRates.SENS_IR_SAMPLERATE);
-        isSensorCreated = create(sensorPort, Sensors.EV3IRSensor,mode); //Creates Lejos.EV3ColorSensor. acceptable
-        if(isSensorCreated){
-            sendSensorData();
-        }
-        System.out.println(toString());;
+
+    public EV3IRSensor(Port sensorPort) {
+        super(Sensors.EV3IRSensor,sensorPort,Sensors.EV3IRSensor.getModes()[0],SensorSampleRates.SENS_IR_SAMPLERATE);
     }
 
     @Override
-    public boolean setSensorMode(SensorMessages.SensorMode_ newMode) {
-        switch(newMode){
-            // Measures the distance to an object in front of the sensor
-            case DISTANCE:  sensor.setCurrentMode(newMode.getValue()); return true;
-                // Locates up to four beacons
-            case SEEK:		sensor.setCurrentMode(newMode.getValue()); return true;
-            default: return false;
+    public boolean setSensorMode(Sensormode newMode) {
+        if(Sensors.EV3IRSensor.isValidMode(newMode)){
+            sensor.setCurrentMode(newMode.getValue());
+            this.sensormode = newMode;
+            return true;
         }
+        return false;
     }
     
 	@Override
 	public String toString() {
-		return "EV3ColorSensor [sensor=" + sensor + ", sensortype=" + sensortype + ", sensormode=" + sensormode
+		return "EV3IRSensor [sensor=" + sensor + ", sensortype=" + sensortype + ", sensormode=" + sensormode
 				+ ", sensorPort=" + sensorPort + ", sampleRate=" + sampleRate + ", isSensorCreated=" + isSensorCreated
 				+ "]";
 	}

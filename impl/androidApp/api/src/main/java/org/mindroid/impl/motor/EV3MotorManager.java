@@ -2,10 +2,21 @@ package org.mindroid.impl.motor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.mindroid.api.endpoint.ClientEndpoint;
-import org.mindroid.api.motor.Motor;
+import org.mindroid.api.motor.IRegulatedMotor;
+import org.mindroid.common.messages.ILoggable;
+import org.mindroid.common.messages.brick.EndpointCreatedMessage;
+import org.mindroid.common.messages.brick.BrickMessagesFactory;
+import org.mindroid.common.messages.hardware.EV3MotorPort;
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.led.StatusLightMessageFactory;
+import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorGroupCreatedMessage;
+import org.mindroid.common.messages.motor.synchronization.SynchronizedMotorMessageFactory;
 import org.mindroid.impl.brick.EV3Brick;
+import org.mindroid.impl.brick.EV3BrickEndpoint;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 
@@ -13,24 +24,34 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-import org.mindroid.common.messages.BrickMessages;
-import org.mindroid.common.messages.EV3MotorPort;
-import org.mindroid.common.messages.Motors;
+
 import org.mindroid.common.messages.NetworkPortConfig;
+import org.mindroid.impl.logging.APILoggerManager;
+import org.mindroid.impl.logging.EV3MsgLogger;
 
 
 public class EV3MotorManager extends Listener {
 
-    private Map<EV3MotorPort, Motor> motors;
+    private Map<EV3MotorPort, IRegulatedMotor> motors;
     private Map<EV3MotorPort, ClientEndpoint> endpoints;
+
+    private ClientEndpoint syncedMotorsEndpoint = null;
 
     private HashMap<EV3MotorPort,Integer> portToTCPPort;
     
-    EV3Brick ev3Brick = null;
+    EV3BrickEndpoint ev3BrickEndpoint = null;
     private Client brickClient = null;
-    
-    public EV3MotorManager(EV3Brick ev3Brick) {
-        this.ev3Brick = ev3Brick;
+
+	private static final Logger LOGGER = Logger.getLogger(EV3MotorManager.class.getName());
+	private final EV3MsgLogger msgRcvdLogger;
+	private final EV3MsgLogger msgSendLogger;
+
+	static{
+		APILoggerManager.getInstance().registerLogger(LOGGER);
+	}
+
+    public EV3MotorManager(EV3BrickEndpoint ev3BrickEndpoint) {
+        this.ev3BrickEndpoint = ev3BrickEndpoint;
         
         portToTCPPort = new HashMap<EV3MotorPort,Integer>(4);
         portToTCPPort.put(EV3MotorPort.A, NetworkPortConfig.MOTOR_PORT_A);
@@ -40,24 +61,29 @@ public class EV3MotorManager extends Listener {
         
         endpoints = new HashMap<>(4);
         motors = new HashMap<>(4);
+
+		//Init Loggers
+
+		msgRcvdLogger = new EV3MsgLogger(LOGGER,"Received ");
+		msgSendLogger = new EV3MsgLogger(LOGGER,"Send ");
     }
 
-    public Motor createMotor(Motors motorType, EV3MotorPort motorPort) throws PortIsAlreadyInUseException {
+    public EV3RegulatedMotorEndpoint createMotor(Motors motorType, EV3MotorPort motorPort) throws PortIsAlreadyInUseException {
 		if(motorType != null && motorPort != null){
 			if(motors.containsKey(motorPort)){
 				throw new PortIsAlreadyInUseException(motorPort.toString());
 			}else{
-				//System.out.println("Local-EV3MotorManager: creating Motor");
-				Motor ev3Motor = null;
-				switch(motorType){
-					case UnregulatedMotor: ev3Motor = new EV3UnregulatedMotor(ev3Brick.EV3Brick_IP, portToTCPPort.get(motorPort), EV3Brick.BRICK_TIMEOUT); break;
-					case MediumRegulatedMotor: ev3Motor = new EV3RegulatedMotor(ev3Brick.EV3Brick_IP, portToTCPPort.get(motorPort), EV3Brick.BRICK_TIMEOUT); break;
-					default: ev3Motor = null;
+				//System.out.println("Local-EV3MotorManager: creating IMotor");
+				EV3RegulatedMotorEndpoint ev3IMotor = null;
+				switch(motorType){ //TODO may remove switch case?
+					case MediumRegulatedMotor: ev3IMotor = new EV3RegulatedMotorEndpoint(ev3BrickEndpoint.EV3Brick_IP, portToTCPPort.get(motorPort), EV3BrickEndpoint.BRICK_TIMEOUT); break;
+					case LargeRegulatedMotor: ev3IMotor = new EV3RegulatedMotorEndpoint(ev3BrickEndpoint.EV3Brick_IP, portToTCPPort.get(motorPort), EV3BrickEndpoint.BRICK_TIMEOUT); break;
+					default: ev3IMotor = null;
 				}
 
-				motors.put(motorPort, ev3Motor);
-				endpoints.put(motorPort, (ClientEndpoint)ev3Motor);
-				return ev3Motor;
+				motors.put(motorPort, ev3IMotor);
+				endpoints.put(motorPort, (ClientEndpoint) ev3IMotor);
+				return ev3IMotor;
 			}
 
 
@@ -66,49 +92,94 @@ public class EV3MotorManager extends Listener {
 		}
     }
 
+    public SynchronizedMotorsEndpoint createSynchronizedMotorsEndpoint(){
+		return (SynchronizedMotorsEndpoint)(syncedMotorsEndpoint = (ClientEndpoint) new SynchronizedMotorsEndpoint(ev3BrickEndpoint.EV3Brick_IP,NetworkPortConfig.SYNCED_MOTOR_GROUP,EV3BrickEndpoint.BRICK_TIMEOUT));
+	}
+
 	/**
-	 * Sends message to the Brick to initialize the Motor at Brickside.
-	 * @param motorType
-	 * @param motorPort
-     * @return
-     */
+	 *
+	 * Sends message to the Brick to create/initialize the IMotor at Brickside.
+	 * @param motorType type of the motor
+	 * @param motorPort port the motor is connected to
+	 * @throws BrickIsNotReadyException exception thrown when the Brick is not ready (to initialize hardware)
+	 */
 	public void initializeMotor(Motors motorType, EV3MotorPort motorPort) throws BrickIsNotReadyException {
-		if(ev3Brick.isBrickReady()){
+		LOGGER.log(Level.INFO,"Initializing Motor at ["+motorPort.toString()+"] of type "+motorType.getName());
+		if(ev3BrickEndpoint.isBrickReady()){
 			if(motorType != null && motorPort != null) {
 				if (motors.containsKey(motorPort)) {
-					brickClient.sendTCP(BrickMessages.createMotor(motorPort.getValue(), motorType, portToTCPPort.get(motorPort)));
+					//Log msg
+					ILoggable msg = BrickMessagesFactory.createMotor(motorPort.getValue(), motorType, portToTCPPort.get(motorPort));
+					msg.accept(msgSendLogger);
+
+					brickClient.sendTCP(msg);
 				}else{
-					//TODO throw Exception Motor wurde noch nicht created!
+					LOGGER.log(Level.WARNING,"initializeMotor(..) failed: The Motor-object was not found in hashmap!");
 				}
 			}else{
-				//TODO throw Illegal Argument Exception
+				LOGGER.log(Level.WARNING,"The initialSensor-Method got invalid parameters! One or more  are null");
 			}
 		}else{
-			throw new BrickIsNotReadyException("Can't create a Motor, because the Brick is not ready. Check Connection and/or try again!");
+			throw new BrickIsNotReadyException("Can't create a IMotor, because the Brick is not ready. Check Connection and/or try again!");
+		}
+	}
+
+	/**
+	 * Initializes the Synced Motor group to execute Synchronized motor operations
+	 *
+	 */
+	public void initializeSyncedMotorGroup(){
+		//Log msg
+		ILoggable msg = SynchronizedMotorMessageFactory.createCreateSynchronizedMotorsMessage();
+		msg.accept(msgSendLogger);
+
+		brickClient.sendTCP(msg);
+	}
+
+	public void disconnectMotors(){
+		for(EV3MotorPort key: motors.keySet()){
+			if(motors.get(key) != null && (motors.get(key) instanceof ClientEndpoint)){
+				((ClientEndpoint)motors.get(key)).disconnect();
+			}
 		}
 	}
 
     @Override
     public void received(Connection connection, Object object){
-		/** Message if the Endpoint-creation was successful or not **/
-    	System.out.println("Local-EV3MotorManager: received a message!");
+		//Log msg
+		if(object instanceof ILoggable) {
+			((ILoggable)object).accept(msgRcvdLogger);
+		}
+
     	
-		if(object.getClass() == BrickMessages.EndpointCreatedMessage.class){
-			BrickMessages.EndpointCreatedMessage ecmsg = (BrickMessages.EndpointCreatedMessage)object;
-			System.out.println("Local-EV3MotorManager: Received a EndpointCreatedMessage! -> "+ecmsg.toString());
+		if(object.getClass() == EndpointCreatedMessage.class){
+			EndpointCreatedMessage ecmsg = (EndpointCreatedMessage)object;
 			if(ecmsg.isMotor()){
 				if(ecmsg.isSuccess()){
-					System.out.println("Local-EV3MotorManager: isSuccess at port "+ecmsg.getPort()+"#");
 					if(motors.containsKey(EV3MotorPort.getPort(ecmsg.getPort()))){
-						System.out.println("Local-EV3MotorManager: Endpoint creation successfull - connect to endpoint!");
 						endpoints.get(EV3MotorPort.getPort(ecmsg.getPort())).connect();
+
+						//Set that creation was a success on brick site. will be evaluated by configurator
+						((EV3RegulatedMotorEndpoint)endpoints.get(EV3MotorPort.getPort(ecmsg.getPort()))).setHasCreationFailed(false);
 					}else{
-						System.out.println("Local-EV3MotorManager: Sensor does not exist");
+						System.out.println("Local-EV3MotorManager: Motor does not exist");
 					}
 				}else{
-					//TODO Tell Sensor/Motor Manager that endpoint creation failed
+					//Set that creation failed on brick site. will be evaluated by configurator
+					((EV3RegulatedMotorEndpoint)endpoints.get(EV3MotorPort.getPort(ecmsg.getPort()))).setHasCreationFailed(true);
 				}
 			}
+		}
+
+		if(object.getClass() == SynchronizedMotorGroupCreatedMessage.class){
+			SynchronizedMotorGroupCreatedMessage msg = (SynchronizedMotorGroupCreatedMessage)object;
+
+			System.out.println("Local-EV3MotorManager: Received a SynchronizedMotorGroupCreatedMessage! -> "+msg.toString());
+				if(msg.isSuccess() && syncedMotorsEndpoint != null){
+					syncedMotorsEndpoint.connect();
+				}else{
+					//TODO Tell Sensor/IMotor Manager that endpoint creation failed
+				}
 		}
     }
 

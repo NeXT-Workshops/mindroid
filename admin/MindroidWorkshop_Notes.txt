@@ -1,0 +1,89 @@
+﻿Dokumentation und Aufgabenstellung:
+- REPLACED - Tehthering im HandyVerbinden Skript richtig schreiben
+- Anleitung anpassen
+	- IRRELEVANT für VMs
+	- DONE was machen, wenn das Handy nicht mehr gefunden wird
+	- DONE neue Verbindungsmethode
+	
+- DISABLE CHARGE WILL NOT WORK - disable usb charging mit in die anleitung aufnehmen
+	- eigentlich nicht nötig, soll automatisch deaktiviert werden, nur bei Bedarf aktiviert
+
+- getmessage etc in anleitung
+- DONE Aufgabe 2.2 die imports in den source code ziehen
+	- da kompletter Quellcode in Anleitung, sind auch alle Imports drinnen
+- DONE belegung von sensoren mit in anleitung
+	- Appendix
+- DONE - default werte in app
+- DONE falls WLan nicht funktioniert dann bitte USB zum deployen nehmen (Anleitung)
+	- Appendix, als Backup einfach USB anstecken und funktioniert.
+- DONE Doku updaten: Einheiten für driveDistanceBackward etc. - mit angeben
+- DONE JavaDOC für Framework erstellen
+- DONE Basic Java Sachen in die Beschreibung schreiben ala "equals" benutzen
+	- equals an entsprechender Stelle angemerkt
+- DONE Kabel überprüfen ob rausgerutscht und richtig montiert
+	- Bei Einleitung erwähnt, Kabel checken und WLAN checken
+- DONE kurze Anmerkung darüber was der Konstruktor genau macht
+- DONE Server IP muss auch in der App gesetzt werden!
+- DONE import auf colors in der Aufgabenbeschreibung falsch
+
+Aufgabenimplementierung:
+- DONE helloworld lösungssourcecode direkt an die schüler, den sourcecode nicht selbst tippen	
+- DONE für jede Aufgabe eine Klasse bereitstellen, die implementiert werden kann 
+- DONE über dem Konstruktor einen Kommentar, dass dieser nicht geändert werden darf
+
+Framework:
+- DONE Mein Roboter Sensoren/Motoren default werte in app setzen
+- DONE Skripte auf dem Server ausführen? (adb bridge)
+- Server IP Belegung automatisch updaten
+	- wird wohl nix (unnötig?)
+- DONE Broadcast für den Server implementieren (eine Nachricht an alle Roboter im Netz)
+
+Documentation:
+- 1.1.3 mit 1.1.2 tauschen.
+- 1.3 Unterpunkt 3."Wähle "Verbindung zum EV3-Brick herstellen" überprüfen. Ist das noch notwendig?
+- DONE Formatierung fixen
+- Geht es wirklich, dass man mit Rechtsklick auf die Java Doku verwiesen wird?
+- Woher sind die Bilder eigentlich? @Copyright
+- DONE Aufgabe 7 umbenennen zu "Dancing Robots"
+
+bugs & improvements:
+- DONE wenn man zurück klickt sollte man im Hauptmenü landen
+- DONE Device unauthorized -> Handy mit zettel makiert
+	- Vermutlich ADB Problem
+- DONE Deployment ging nicht mit einem Handy (hinten ist ein Zettel)
+	- geht auf allen Handys, war vermutlich ADB Problem
+- DONE überall gleiches OS
+	- Lineage OS 14.1 (Android 7.0.1), 2 Stück noch mit Basis-Android 6.0.1
+- DONE einstellungsmenü tastatur überlagert button
+	- Anzeigegröße verringert 
+- DONE wenn man disconnect drückt kommt ein "error connection closed"
+	- Fehlermeldung wird nicht mehr gezeigt	
+- DONE Handy wechselt in den Standby wenn es an den Brick angeschlossen ist
+	- Display bleibt aktiv wenn App geöffnet
+- DONE nach deployment sollte die app immer noch mit dem server verbunden sein
+	- meh -> App autoconnected zum MSG-Server bei start	
+	
+- DONE - usb tethering aktiv halten (über adb möglich?) --> Wird automatisch aktiviert zum APP start 
+	- Shell Command aktiviert Tethering
+	- nach deployen kein tethering möglich
+		
+- App schmiert ab, wenn man wild herumklickt
+- DONE - wand-ping-pong + color sensor führt zu herben bugs - läuft nun
+- DONE <- TIMEOUT 45Sec wenn initialization failed ->kommunikation zwischen handy und brick verbessern (kill switch)
+- DONE - log für kommunikation zum brick
+- dreh-korrektur nochmal überprüfen (endlosschleife - er versucht sich minimal in die falsche Richtung zu korrigieren)
+
+sonstiges:
+- Aufkleber "Energy Demo" auf Handy?
+- Unterlage mit viel Grip für den nächsten Workshop
+- DONE - andy fragen wegen vm lizenz
+- vor girlsday (ende april) nochmal email an marelene wegen flyern
+- email mit code + aufgabenstellung + doku an marlene
+- mindroid film 
+- DONE usb strom messer bestellen
+- DONE Hiwi Verträge im Mai verlängern
+	
+Bugs:
+- DONE - colorsensor zeigt immmer die farbe unter dem linken an (sowohl bei rechts als auch links im display)
+- HelloWorld beispiel funktionierte nicht nach deployment -> Brick neustart notwendig, warum?
+- ständig wlan disconnects

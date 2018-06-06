@@ -6,7 +6,9 @@ package org.mindroid.api.robot.context;
 public interface IRobotContextStateManager {
 
     IRobotContextState takeSnapshot();
-    public void addRobotContextStateEvaluator(IRobotContextStateEvaluator evaluator);
+    public void registerRobotContextStateListener(IConstraintEvaluator evaluator);
 
     public void cleanContextState();
+
+    void setGyroSensorStartCondition();
 }

@@ -32,5 +32,11 @@ public abstract class AbstractTimeProperty implements ITimeProperty {
     }
 
 
-
+    @Override
+    public String toString() {
+        return "AbstractTimeProperty{" +
+                "time=" + time +
+                ", source=" + source +
+                '}';
+    }
 }

@@ -1,330 +1,221 @@
 package org.mindroid.android.app.robodancer;
 
-
-
-import android.os.AsyncTask;
-
-import org.mindroid.android.app.SchuelerProjekt.MindroidMain;
-import org.mindroid.android.app.SchuelerProjekt.RobotHardwareConfiguration;
-import org.mindroid.android.app.acitivites.MainActivity;
-import org.mindroid.android.app.acitivites.SettingsActivity;
-import org.mindroid.api.robot.IRobodancerConfig;
+import org.mindroid.android.app.fragments.log.GlobalLogger;
+import org.mindroid.android.app.fragments.sensormonitoring.SensorListener;
+import org.mindroid.android.app.serviceloader.ImplementationService;
+import org.mindroid.api.BasicAPI;
+import org.mindroid.api.IImplStateListener;
+import org.mindroid.api.errorhandling.AbstractErrorHandler;
+import org.mindroid.api.sensor.IEV3SensorEventListener;
+import org.mindroid.impl.configuration.RobotPortConfig;
 import org.mindroid.api.robot.IRobotFactory;
-import org.mindroid.api.robot.control.IRobotCommandCenter;
-import org.mindroid.api.statemachine.IMindroidMain;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
-import org.mindroid.common.messages.NetworkPortConfig;
+import org.mindroid.impl.ev3.EV3PortID;
+import org.mindroid.impl.ev3.EV3PortIDs;
+import org.mindroid.impl.exceptions.BrickIsNotReadyException;
+import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 import org.mindroid.impl.robot.RobotFactory;
 
 /**
  * Created by mindroid on 09.12.16.
  */
-public class Robot {
-
-    public boolean isConnectedToBrick = false;
-    public boolean isConfigurationBuilt = false;
+public class Robot implements IImplStateListener {
 
     public boolean isRunning = false;
 
-    private MainActivity main_activity;
+    private IRobotFactory roFactory;
+    //-------- Robot
+    private RobotPortConfig robotPortConfig;
 
-    IRobotCommandCenter commandCenter;
+    // The ID of the Implementation currently running - if empty ("") no implementation is running.
+    private String runningImplementationID = "";
 
-    //Gets set from mainActivity while loading shared preferences
-    private int ev3_tcp_port = Integer.parseInt(SettingsActivity.DEFAULT_EV3_TCP_PORT);
-    //Gets set from mainActivity while loading shared preferences
-    private String ev3_ip = SettingsActivity.DEFAULT_EV3_IP;;
+    private HashMap<EV3PortID,IEV3SensorEventListener> sensorListener;
 
-    public Robot(MainActivity mainActivity){
-        this.main_activity = mainActivity;
+    private final static Logger LOGGER = Logger.getLogger(Robot.class.getName());
+
+
+    public Robot() {
+        LOGGER.setLevel(Level.INFO);
+        GlobalLogger.getInstance().registerLogger(LOGGER);
+
+        roFactory = new RobotFactory();
+        robotPortConfig = new RobotPortConfig();
+        sensorListener = new HashMap<>();
+
+        updateRobotPortConfig();
+
+        initSensorListener();
     }
 
     /**
-     * TODO Refactor
+     * Sensor listener for sensor monitor
      */
-    public void makeRobot() throws StateAlreadyExsists {
-        IRobotFactory roFactory = new RobotFactory();
-        IRobodancerConfig config = new RobotHardwareConfiguration(); //TODO Dependency/Linked to SchuelerProjekt
-        IMindroidMain mindroid = new MindroidMain(); //TODO Dependency/Linked to SchuelerProjekt
+    private void initSensorListener() {
+        sensorListener.put(EV3PortIDs.PORT_1,new SensorListener(EV3PortIDs.PORT_1));
+        sensorListener.put(EV3PortIDs.PORT_2,new SensorListener(EV3PortIDs.PORT_2));
+        sensorListener.put(EV3PortIDs.PORT_3,new SensorListener(EV3PortIDs.PORT_3));
+        sensorListener.put(EV3PortIDs.PORT_4,new SensorListener(EV3PortIDs.PORT_4));
+    }
+
+    /**
+     * Configurate the Robot at the RobotFactory and build the Robot.
+     */
+    public void create()  {
+        updateRobotPortConfig();
 
         //Config
-        roFactory.setRobotConfig(config);
-        roFactory.setBrickIP(ev3_ip);
-        roFactory.setBrickTCPPort(ev3_tcp_port);
-        roFactory.setMSGServerIP(""); //TODO set MsgServerIP
-        roFactory.setMSGServerTCPPort(-1); //TODO set ServerPort
-
-        //Statemachine
-        roFactory.addStatemachine(mindroid.getStatemachine());
-
-        //Create Robot
-        commandCenter = roFactory.createRobot();
-    }
-
-    /**
-     *
-     * Der EV3 muss auf USB eingestellt werden und eine statische IP zugewiesen bekommen, sowie
-     * die Subnetz Maske 255.255.0.0. Den PC-Ausgang des Bricks mit dem Rechner verbinden.
-     * ACHTUNG: Bei uns musste für die Verbindung von EV3 und Smartphone die Subnetzmaske wieder auf
-     * automatic gestellt werden!!
-     *
-     */
-    public void connectToBrick(){
-        new ConnectToBrickTask().execute("Not important string"); //String is not important
-    }
-
-    /**
-     * Configurates the Robot.
-     * Make sure the connection to the brick is established first! Use connectToBrick();
-     */
-    public void configurateRobot(){
-        new InitRobotConfiguration().execute("Not important string"); //String is not important
-    }
-
-    /**
-     * Run Statemachines of the Robot
-     */
-    public void startRobot(){
-        if(isConnectedToBrick && isConfigurationBuilt) {
-            new StartStopRobotTask().execute(true);
+        roFactory.setRobotConfig(robotPortConfig);
+        roFactory.setBrickIP(SettingsProvider.getInstance().getEv3IP());
+        roFactory.setBrickTCPPort(SettingsProvider.getInstance().getEv3TCPPort());
+        roFactory.setRobotID(SettingsProvider.getInstance().getRobotID());
+        for(EV3PortID port : sensorListener.keySet()){ //TODO maybe leads to an error that sensor listener gets registered multiple times crashing the app. -> move somewhere else
+            roFactory.registerSensorListener(port,sensorListener.get(port));
         }
-        isRunning = false;
+
+        //Create the Robot - with it the RobotCommandCenter for this robot is created and can be accessed after this call.
+        roFactory.createRobot(SettingsProvider.getInstance().isSimulationEnabled());
+
+        //Adds the collected Implementations to execute
+        addImplementations(ImplementationService.getInstance().getImplementations());
+
+        LOGGER.log(Level.INFO,"Robot created!");
     }
 
     /**
-     *
+     * Adds the StatemachineAPI Implementations to the RobotCommandCenters' db
      */
-    public void stopRobot(){
-        new StartStopRobotTask().execute(false);
+    private void addImplementations(List<BasicAPI> implementations){
+        for (BasicAPI implementation : implementations) {
+            addImplemenation(implementation);
+        }
     }
 
-    private void checkState(){
-        Runnable task = new Runnable(){
-            @Override
-            public void run(){
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                isConnectedToBrick = commandCenter.isConnected();
-            }
-        };
+    private void addImplemenation(BasicAPI api){
+        roFactory.getRobotCommandCenter().addImplementation(api);
     }
 
+    private void updateRobotPortConfig() {
+        getRobotPortConfig().setSensorS1(SettingsProvider.getInstance().getSensorS1());
+        getRobotPortConfig().setSensorS2(SettingsProvider.getInstance().getSensorS2());
+        getRobotPortConfig().setSensorS3(SettingsProvider.getInstance().getSensorS3());
+        getRobotPortConfig().setSensorS4(SettingsProvider.getInstance().getSensorS4());
 
-    public int getEv3_tcp_port() {
-        return ev3_tcp_port;
+        getRobotPortConfig().setSensormodeS1(SettingsProvider.getInstance().getSensorModeS1());
+        getRobotPortConfig().setSensormodeS2(SettingsProvider.getInstance().getSensorModeS2());
+        getRobotPortConfig().setSensormodeS3(SettingsProvider.getInstance().getSensorModeS3());
+        getRobotPortConfig().setSensormodeS4(SettingsProvider.getInstance().getSensorModeS4());
+
+        getRobotPortConfig().setMotorA(SettingsProvider.getInstance().getMotorA());
+        getRobotPortConfig().setMotorB(SettingsProvider.getInstance().getMotorB());
+        getRobotPortConfig().setMotorC(SettingsProvider.getInstance().getMotorC());
+        getRobotPortConfig().setMotorD(SettingsProvider.getInstance().getMotorD());
     }
 
-    public void setEv3_tcp_port(int ev3_tcp_port) {
-        this.ev3_tcp_port = ev3_tcp_port;
+    /**
+     * Returns the state of the messenger client.
+     * Returns false, if the command center is null (no robot created yet by - call create() first!)
+     * @return true if the messenger client is connected to the message server
+     */
+    public boolean isMessengerConnected(){
+        if(roFactory.getRobotCommandCenter() != null) {
+            return roFactory.getRobotCommandCenter().isMessengerConnected();
+        }else{
+            return false;
+        }
     }
 
-    public String getEv3_ip() {
-        return ev3_ip;
+    /**
+     * Connects the messenger client to the message server
+     */
+    public boolean connectMessenger(String msgServerIP, int msgServerPort){
+        LOGGER.log(Level.INFO,"Connecting to Message-Server: "+msgServerIP+":"+msgServerPort);
+        roFactory.setRobotID(SettingsProvider.getInstance().getRobotID());
+        return roFactory.getRobotCommandCenter().connectMessenger(msgServerIP,msgServerPort);
     }
 
-    public void setEv3_ip(String ev3_ip) {
-        this.ev3_ip = ev3_ip;
+    public void disconnectMessenger(){
+        roFactory.getRobotCommandCenter().disconnectMessenger();
+    }
+
+    public void connectToBrick() throws IOException {
+        LOGGER.log(Level.INFO,"Connecting to Brick");
+        roFactory.getRobotCommandCenter().connectToBrick();
     }
 
     public boolean isConnectedToBrick() {
-        return isConnectedToBrick;
-    }
-
-    public void setConnectedToBrick(boolean connectedToBrick) {
-        isConnectedToBrick = connectedToBrick;
-    }
-
-    public boolean isConfigurationBuilt() {
-        return isConfigurationBuilt;
-    }
-
-    public void setConfigurationBuilt(boolean configurationBuilt) {
-        isConfigurationBuilt = configurationBuilt;
-    }
-
-
-
-    // ---------------------------------- ASYNC TASKS ------------------------------------- //
-    private class ConnectToBrickTask extends AsyncTask<String,Integer,Boolean> {
-
-        StringBuffer sb = new StringBuffer();
-
-
-        @Override
-        protected void onPreExecute(){
-            sb.append("connecting to "+getEv3_ip()+":"+getEv3_tcp_port()+"\n");
-
-            if(isConnectedToBrick){
-                this.cancel(true);
-            }else{
-                main_activity.showProgressDialog("Connecting to Brick","connecting to "+getEv3_ip()+":"+getEv3_tcp_port()+"\n");
-            }
-        }
-
-
-        protected Boolean doInBackground(String... str) {
-            try {
-                commandCenter.connectToBrick();
-            } catch (IOException e) {
-                sb.append("\n--------------------\n");
-                sb.append("Exception: \n").append(e.toString());
-                sb.append("\ncaused by: \n").append(e.getCause());
-                sb.append("\n--------------------\n");
-                main_activity.dismissCurrentProgressDialog();
-                main_activity.showAlertDialog("Error",sb.toString());
-                e.printStackTrace();
-
-                return false;
-            } catch(Exception e){
-                main_activity.dismissCurrentProgressDialog();
-                main_activity.showAlertDialog("Error",""+e);
-                e.printStackTrace();
-            }
-
-            boolean result = false;
-            try{
-
-                result = commandCenter.isConnected();;
-            }catch(Exception e){
-                main_activity.dismissCurrentProgressDialog();
-                main_activity.showAlertDialog("Error",e.getMessage()+"\n"+e.getCause());
-            }
-            return result;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-        }
-
-        protected void onPostExecute(Boolean result) {
-            if(result){
-                sb.append("\nCONNECTION ESTABLISHED!");
-            }else{
-                sb.append("\nCONNECTION FAILED!");
-                main_activity.showAlertDialog("Error","Connection failed!");
-            }
-
-            isConnectedToBrick = result;
-
-            main_activity.dismissCurrentProgressDialog();
-
-        }
-    }
-
-    /**--------------------------------------------- ASYNC TASK INITIALIZE ROBOT CONFIGURATION ---------------------------------------------**/
-    private class InitRobotConfiguration extends AsyncTask<String,Integer,Boolean> {
-
-        StringBuffer sb = new StringBuffer();
-
-        @Override
-        protected void onPreExecute(){
-            sb.append("Initializing Robot Configuration.. \n");
-
-            if(!isConnectedToBrick){
-                this.cancel(true);
-            }else{
-                main_activity.showProgressDialog("Initializing Robot Configuration",sb.toString());
-            }
-        }
-
-
-        protected Boolean doInBackground(String... str) {
-            boolean result = false;
-
-            try{
-
-                result = commandCenter.initializeConfiguration();;
-            }catch(Exception e){
-                main_activity.dismissCurrentProgressDialog();
-                main_activity.showAlertDialog("Error",""+e);
-                e.printStackTrace();
-            }
-            return result;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-
-        }
-
-        protected void onPostExecute(Boolean result) {
-
-            if(result){
-                sb.append("\nConfiguration complete!");
-            }else{
-                sb.append("\nConfiguration failed!");
-
-                main_activity.showAlertDialog("Error","Configuration failed!");
-            }
-
-            isConfigurationBuilt = result;
-
-            main_activity.dismissCurrentProgressDialog();
-        }
-    }
-
-    /**--------------------------------------------- ASYNC TASK START/STOP ROBOTS STATEMACHINE ---------------------------------------------**/
-    private class StartStopRobotTask extends AsyncTask<Boolean,Integer,Boolean> {
-
-        StringBuffer sb = new StringBuffer();
-
-        @Override
-        protected void onPreExecute(){
-            if(!isConnectedToBrick && !isConfigurationBuilt){
-                this.cancel(true);
-            }else{
-                main_activity.showProgressDialog("Starting Robot","starting..");
-            }
-        }
-
-        /**
-         *
-         * @param start = true => start robot ; start = false => stop robot
-         * @return
-         */
-        protected Boolean doInBackground(Boolean... start) {
-            if(start.length>0) {
-                if (start[0]) { //True => Start robot, else it should stop the Robot
-                    try {
-                        commandCenter.startStatemachine("main");//TODO use ID
-
-                        return true;
-                    }catch(Exception e){
-                        main_activity.dismissCurrentProgressDialog();
-                        main_activity.showAlertDialog("Error",""+e);
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        commandCenter.stopStatemachine("main");//TODO use ID
-
-                        return false;
-                    }catch(Exception e){
-                        main_activity.dismissCurrentProgressDialog();
-                        main_activity.showAlertDialog("Error",""+e);
-                        e.printStackTrace();
-                    }
-                }
-            }else{
-                return false;
-            }
+        if(roFactory.getRobotCommandCenter() != null) {
+            return roFactory.getRobotCommandCenter().isConnectedToBrick();
+        }else{
             return false;
         }
+    }
 
-        protected void onProgressUpdate(Integer... progress) {
+    public boolean initializeConfiguration() throws BrickIsNotReadyException, PortIsAlreadyInUseException {
+        LOGGER.log(Level.INFO,"Intializing Configuration");
+        return roFactory.getRobotCommandCenter().initializeConfiguration();
+    }
 
+    /**
+     * Aborts a running initialization.
+     * There will be no check if a initialization process is actually running.
+     */
+    public void abortInitializationProcess(){
+        roFactory.getRobotCommandCenter().abortConfiguration();
+    }
+
+    public boolean isConfigurated(){
+        if(roFactory.getRobotCommandCenter() != null) {
+            return roFactory.getRobotCommandCenter().isConfigurated();
+        }else{
+            return false;
         }
+    }
 
-        protected void onPostExecute(Boolean result) {
-            main_activity.dismissCurrentProgressDialog();
-            isRunning = result;
-        }
+    /**
+     * Start executing the Implementation with the given ID.
+     * If there is an Imperative and a Statemachine Implementation with the same ID the Imperative one will be started.
+     * @param id - of the implementation
+     */
+    public void startExecuteImplementation(String id){
+        LOGGER.log(Level.INFO, "Start to execute: " + id);
+        runningImplementationID = id;
+        roFactory.getRobotCommandCenter().startImplementation(id,this);
+    }
 
+    /**
+     * Stop the running Implementation.
+     */
+    public void stopRunningImplmentation(){
+        LOGGER.log(Level.INFO, "Stopped execution: " + runningImplementationID);
+        runningImplementationID = "";
+        roFactory.getRobotCommandCenter().stopImplementation();
+    }
 
+    public RobotPortConfig getRobotPortConfig() {
+        return robotPortConfig;
+    }
+
+    public void disconnectFromBrick() {
+        roFactory.getRobotCommandCenter().disconnectFromBrick();
+    }
+
+    public void registerErrorHandler(AbstractErrorHandler errorHandler){
+        roFactory.addErrorHandler(errorHandler);
+    }
+
+    public SensorListener getListenerForPort(EV3PortID port){
+        return (SensorListener) sensorListener.get(port);
+    }
+
+    @Override
+    public void handleIsRunning(boolean isRunning) {
+        this.isRunning = isRunning;
     }
 }

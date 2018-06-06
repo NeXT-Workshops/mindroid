@@ -4,12 +4,14 @@ public interface ClientEndpoint {
 	/**
 	 * Connect to server
 	 */
-	public void connect();
-	
+	void connect();
+
+	void disconnect();
+
 	/**
 	 * checks if client is ready 
 	 * returns true if connection is established.
-	 * @return
+	 * @return true if the client is ready
 	 */
 	public boolean isClientReady();
 	

@@ -2,15 +2,15 @@ package org.mindroid.impl.sensor;
 
 import org.mindroid.api.sensor.IEV3SensorEvent;
 
-import org.mindroid.common.messages.SensorMessages.SensorMode_;
+import org.mindroid.common.messages.hardware.Sensormode;
 
 public class EV3SensorEvent implements IEV3SensorEvent{
-    private final float sample;
+    private final float[] sample;
     private final long timeStamp;
-    private final EV3Sensor sensor;
-    private final SensorMode_ mode;
+    private final EV3SensorEndpoint sensor;
+    private final Sensormode mode;
 
-    public EV3SensorEvent(EV3Sensor sensor, float sample, long timeStamp, SensorMode_ mode){
+    public EV3SensorEvent(EV3SensorEndpoint sensor, float[] sample, long timeStamp, Sensormode mode){
         this.sample = sample;
         this.timeStamp = timeStamp;
         this.sensor = sensor;
@@ -18,12 +18,12 @@ public class EV3SensorEvent implements IEV3SensorEvent{
     }
 
     @Override
-    public EV3Sensor getSensor(){
+    public EV3SensorEndpoint getSensor(){
         return sensor;
     }
 
     @Override
-    public float getSample() {
+    public float[] getSample() {
         return this.sample;
     }
 
@@ -33,7 +33,7 @@ public class EV3SensorEvent implements IEV3SensorEvent{
     }
 
 	@Override
-	public SensorMode_ getSensorMode() {
+	public Sensormode getSensorMode() {
 		return mode;
 	}
 

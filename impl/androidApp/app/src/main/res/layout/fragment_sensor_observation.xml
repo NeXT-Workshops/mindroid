@@ -1,0 +1,148 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             tools:context=".fragments.sensormonitoring.SensorObservationFragment" android:minHeight="115dp">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_alignStart="@+id/sobs_sensor_port"
+                android:layout_alignEnd="@+id/sobs_sensormode" android:layout_below="@+id/view">
+            <TextView
+                    android:text="port"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/sobs_sensor_port"
+                    android:layout_alignParentTop="true" android:layout_alignParentStart="true"
+                    android:layout_marginStart="18dp"/>
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/sobs_sensortype"
+                    android:layout_marginStart="38dp"
+                    tools:text="sensortype" android:layout_alignBaseline="@+id/sobs_sensor_port"
+                    android:layout_alignBottom="@+id/sobs_sensor_port" android:layout_toEndOf="@+id/sobs_sensor_port"
+            />
+            <TextView
+                    android:text="sensormode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/sobs_sensormode"
+                    android:layout_marginStart="38dp"
+                    android:layout_alignBaseline="@+id/sobs_sensortype"
+                    android:layout_alignBottom="@+id/sobs_sensortype"
+                    android:layout_toEndOf="@+id/sobs_sensortype"/>
+        </LinearLayout>
+    </FrameLayout>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black"
+            android:layout_marginTop="20dp" android:layout_alignStart="@+id/sobs_sensor_port"
+            android:layout_alignEnd="@+id/sobs_sensormode" android:layout_marginLeft="15dp"
+            android:layout_marginRight="25dp"/>
+    <TextView
+            android:text="Sensor Values
+"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/txtView_txt_last_value"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="15dp"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:id="@+id/linLayout_values_container"
+            android:layout_marginLeft="35dp" android:layout_marginTop="50dp" android:layout_height="match_parent"
+            android:minWidth="200dp" android:paddingTop="0dp">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_weight="1" android:minWidth="200dp"
+                android:paddingTop="0dp" android:visibility="visible">
+            <TextView
+                    android:text="0.26"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot1_description"
+                    android:minWidth="100dp"/>
+            <TextView
+                    android:text="Avg. Value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot1_value"
+                    android:minWidth="100dp"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_weight="1" android:paddingTop="5dp"
+                android:visibility="visible">
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot2_description"
+                    android:layout_weight="1"
+                    android:minWidth="100dp"/>
+            <TextView
+                    android:text="0.15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot2_value"
+                    android:minWidth="100dp"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_weight="1" android:visibility="visible"
+                android:paddingTop="5dp">
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot3_description"
+                    android:layout_weight="1"
+                    android:minWidth="100dp"/>
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot3_value"
+                    android:layout_weight="1" android:minWidth="100dp"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_weight="1" android:visibility="visible"
+                android:paddingTop="5dp">
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot4_description"
+                    android:layout_weight="1"
+                    android:minWidth="100dp"/>
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/txtView_slot4_value"
+                    android:layout_weight="1" android:minWidth="100dp"/>
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+            android:text="Value description:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/txtView_title_value_description"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="230dp"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/txt_value_description" android:layout_marginTop="45dp" android:layout_marginLeft="230dp"
+            android:editable="false" android:textSize="12sp" android:gravity="top|left" android:singleLine="false"
+            android:visibility="gone"/>
+
+
+</FrameLayout>

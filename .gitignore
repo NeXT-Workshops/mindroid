@@ -4,3 +4,17 @@
 **/build/**
 **/.gradle/**
 **/local.properties
+*.~ava
+*.*~
+
+*/*.docx\#
+
+*.aux
+*.toc
+*.gz
+*.bbl
+*.blg
+*.dvi
+
+
+doc/*/*.log

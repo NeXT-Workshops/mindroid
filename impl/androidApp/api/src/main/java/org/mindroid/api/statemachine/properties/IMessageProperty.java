@@ -5,7 +5,7 @@ package org.mindroid.api.statemachine.properties;
  */
 public interface IMessageProperty extends IProperty {
 
-    String getSensder();
+    String getSource();
 
-    String getMessage();
+    String getContent();
 }

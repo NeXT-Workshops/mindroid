@@ -1,0 +1,29 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:context="org.mindroid.android.app.fragments.home.ProgressFragment">
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_input_add"
+            android:id="@+id/imgView_success"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_delete"
+            android:id="@+id/imgView_failed"/>
+    <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/progressBar"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="statustext"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/progressBar" android:layout_marginStart="29dp"
+            android:textColor="@android:color/black" android:id="@+id/txtView_stateInfo"/>
+
+</RelativeLayout>

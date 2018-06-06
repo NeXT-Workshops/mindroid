@@ -1,72 +1,73 @@
 package TestRobotFactory;
 
-import org.mindroid.api.robot.IRobodancerConfig;
-import org.mindroid.common.messages.Motors;
-import org.mindroid.common.messages.SensorMessages;
-import org.mindroid.common.messages.Sensors;
+import org.mindroid.api.robot.IRobotPortConfig;
+import org.mindroid.common.messages.hardware.Motors;
+import org.mindroid.common.messages.hardware.Sensormode;
+import org.mindroid.common.messages.hardware.Sensors;
 
 /**
  * Created by torben on 02.03.2017.
  */
 
-public class RobotHardwareConfigurationTest implements IRobodancerConfig {
+public class RobotHardwareConfigurationTest implements IRobotPortConfig {
     //------------------ SENSORS ------------------
     @Override
-    public Sensors getSensorAtPortS1() {
+    public Sensors getSensorS1() {
         return Sensors.EV3ColorSensor;
     }
 
     @Override
-    public Sensors getSensorAtPortS2() {
+    public Sensors getSensorS2() {
         return Sensors.EV3UltrasonicSensor;
     }
 
     @Override
-    public Sensors getSensorAtPortS3() {
+    public Sensors getSensorS3() {
         return null;
     }
 
     @Override
-    public Sensors getSensorAtPortS4() {
+    public Sensors getSensorS4() {
         return Sensors.EV3ColorSensor;
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensorModeOfS1() {
-        return SensorMessages.SensorMode_.RED;
+    public Sensormode getSensormodeS1() {
+        return Sensormode.RED;
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensorModeOfS2() {
-        return SensorMessages.SensorMode_.DISTANCE;
+    public Sensormode getSensormodeS2() {
+        return Sensormode.DISTANCE;
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensorModeOfS3() {
+    public Sensormode getSensormodeS3() {
         return null;
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensorModeOfS4() {
-        return SensorMessages.SensorMode_.RED;
+    public Sensormode getSensormodeS4() {
+        return Sensormode.RED;
     }
 
     //------------------ MOTORS ------------------
     @Override
-    public Motors getMotorAtPortA() {
-        return Motors.UnregulatedMotor;   }
+    public Motors getMotorA() {
+        return Motors.LargeRegulatedMotor;   }
 
     @Override
-    public Motors getMotorAtPortB() {
+    public Motors getMotorB() {
         return null; }
 
     @Override
-    public Motors getMotorAtPortC() {
+    public Motors getMotorC() {
         return null;
     }
 
     @Override
-    public Motors getMotorAtPortD() {
-        return Motors.UnregulatedMotor;
+    public Motors getMotorD() {
+        return Motors.LargeRegulatedMotor;
     }
+
 }

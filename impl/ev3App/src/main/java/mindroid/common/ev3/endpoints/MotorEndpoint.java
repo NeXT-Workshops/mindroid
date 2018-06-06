@@ -4,10 +4,9 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import lejos.hardware.port.PortException;
-import mindroid.common.ev3.endpoints.motors.ev3.AbstractMotor;
-import mindroid.common.ev3.endpoints.motors.ev3.MediumRegulatedMotor;
-import mindroid.common.ev3.endpoints.motors.ev3.EV3UnregulatedMotor;
-import mindroid.common.ev3.endpoints.motors.ev3.MotorMessageListener;
+import mindroid.common.ev3.endpoints.motors.ev3.*;
+import org.mindroid.common.messages.motor.MotorState;
+import org.mindroid.common.messages.motor.RegulatedMotorMessagesFactory;
 
 public class MotorEndpoint extends Listener{
 	
@@ -22,21 +21,27 @@ public class MotorEndpoint extends Listener{
 	}
 
 	private void checkMotorState(){
+
 		Runnable run = new Runnable() {
 			@Override
 			public void run() {
+				MotorState motorState;
 				while (true) {
 					try {
 						Thread.sleep(UPDATETIME);
 					} catch (InterruptedException e) {
-						System.err.println("MotorEndpoint - Thread could not sleep.");
+						//System.err.println("MotorEndpoint - Thread could not sleep.");
 						e.printStackTrace();
 					}
+					//TODO check if Motorstate needs to be send periodically, slows the motors?
 					if(conn != null && conn.isConnected() && motor != null){
 						switch(motor.getMotortype()){
-							case MediumRegulatedMotor: conn.sendTCP(((MediumRegulatedMotor)motor).getMotorState()); break;
-							case UnregulatedMotor: conn.sendTCP(((EV3UnregulatedMotor)motor).getMotorState()); break;
-							default: break;
+							case LargeRegulatedMotor:  motorState = ((LargeRegulatedIMotor)motor).getMotorState(); break;
+							case MediumRegulatedMotor: motorState = ((MediumRegulatedIMotor)motor).getMotorState(); break;
+							default: motorState = null; break;
+						}
+						if(motorState != null && conn != null) {
+							conn.sendTCP(RegulatedMotorMessagesFactory.createMotorStateMessage(motorState));
 						}
 					}
 
@@ -59,15 +64,14 @@ public class MotorEndpoint extends Listener{
 
 	@Override
 	public void received(Connection connection, Object msg){		
-		if(motor != null && conn != null && motor instanceof MotorMessageListener) {
-			System.out.println("Motor.handleMotorMessage(): "+ msg.toString()); 
-			((MotorMessageListener) motor).handleMotorMessage(msg);
+		if(motor != null && conn != null && motor instanceof IMotorMessageListener) {
+			((IMotorMessageListener) motor).handleMotorMessage(msg);
 		}
 	}
 
 	@Override
 	public void disconnected(Connection connection) {
-		System.out.println("MotorEndpoint - Connection disconnected: "+connection.toString());
+		//System.out.println("MotorEndpoint - Connection disconnected: "+connection.toString());
 		motor.getMotor().stop();
 		motor.getMotor().flt();
 		conn = null;

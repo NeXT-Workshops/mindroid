@@ -1,29 +1,35 @@
 package org.mindroid.impl.statemachine.properties.sensorproperties;
 
-import org.mindroid.api.statemachine.properties.EV3SensorPorperty;
-import org.mindroid.common.messages.SensorMessages;
+import org.mindroid.api.statemachine.properties.IProperty;
+import org.mindroid.api.statemachine.properties.SimpleEV3SensorProperty;
+
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.ev3.EV3PortID;
 
 /**
  * Created by torben on 10.03.2017.
  */
-public class Color extends EV3SensorPorperty {
-    //NONE, BLACK, BLUE, GREEN, YELLOW, RED, WHITE, BROWN
-    public static final float NONE = 0f;
-    public static final float BLACK = 1f;
-    public static final float BLUE = 2f;
-    public static final float GREEN = 3f;
-    public static final float YELLOW = 4f;
-    public static final float RED = 5f;
-    public static final float WHITE = 6f;
-    public static final float BROWN = 7f;
+public class Color extends SimpleEV3SensorProperty {
+    public static final float NONE = -1f;
+    public static final float BLACK = 0f;
+    public static final float BLUE = 1f;
+    public static final float GREEN = 2f;
+    public static final float YELLOW = 3f;
+    public static final float RED = 4f;
+    public static final float WHITE = 5f;
+    public static final float BROWN = 6f;
 
-    public Color(float value, EV3PortID port) {
-        super(value, port);
+    public Color(EV3PortID port) {
+        super(port);
     }
 
     @Override
-    public SensorMessages.SensorMode_ getSensormode() {
-        return SensorMessages.SensorMode_.COLOR_ID;
+    public Sensormode getSensormode() {
+        return Sensormode.COLOR_ID;
+    }
+
+    @Override
+    public IProperty copy() {
+        return new Color(getSensorPort());
     }
 }

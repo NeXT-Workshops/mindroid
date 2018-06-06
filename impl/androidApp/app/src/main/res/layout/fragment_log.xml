@@ -1,0 +1,35 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="org.mindroid.android.app.fragments.log.LoggerFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <Button
+                android:text="@string/txt_save_log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/btn_saveLog"/>
+        <Button
+                android:text="@string/txt_deleteLog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/btn_deleteLog"/>
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <HorizontalScrollView
+                    android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/linLayout_logContainer">
+                </LinearLayout>
+            </HorizontalScrollView>
+        </ScrollView>
+    </LinearLayout>
+</FrameLayout>

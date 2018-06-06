@@ -10,7 +10,7 @@ public class NetworkPortConfig {
     public static final int SENSOR_PORT_2 = 33696;
     public static final int SENSOR_PORT_3 = 33697;
     public static final int SENSOR_PORT_4 = 33698;
+    public static final int SYNCED_MOTOR_GROUP = 33699;
     public static final int UDP_OFFSET = 100;
     public static final int SERVER_PORT = 33044;
-    public static final int DISPLAY_PORT = 33700;
 }

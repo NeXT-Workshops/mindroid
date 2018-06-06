@@ -3,10 +3,18 @@ package org.mindroid.impl.sensor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 import org.mindroid.common.messages.*;
+import org.mindroid.common.messages.brick.BrickMessagesFactory;
+import org.mindroid.common.messages.brick.EndpointCreatedMessage;
+import org.mindroid.common.messages.hardware.EV3SensorPort;
+import org.mindroid.common.messages.hardware.Sensors;
+import org.mindroid.common.messages.hardware.Sensormode;
 import org.mindroid.impl.brick.EV3Brick;
+import org.mindroid.impl.brick.EV3BrickEndpoint;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
@@ -14,10 +22,12 @@ import org.mindroid.impl.exceptions.PortIsAlreadyInUseException;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import org.mindroid.impl.logging.APILoggerManager;
+import org.mindroid.impl.logging.EV3MsgLogger;
 
 /**
  * 
- * Manages the Sensors.
+ * Manages the SensorEndpoints.
  * Has a connection to the Brick.
  * 
  * @author Torben
@@ -25,16 +35,21 @@ import com.esotericsoftware.kryonet.Listener;
  */
 public class EV3SensorManager extends Listener{
 
-	EV3Brick ev3Brick;	
+	EV3BrickEndpoint ev3BrickEndpoint;
 	
-    private Map<EV3SensorPort, EV3Sensor> sensors;
+    private Map<EV3SensorPort, EV3SensorEndpoint> sensorEndpoints;
 
     private HashMap<EV3SensorPort,Integer> portToTCPPort;
     
     private Client brickClient = null;
-    
-    public EV3SensorManager(EV3Brick ev3Brick) {
-        this.ev3Brick = ev3Brick;
+
+	private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
+	private final EV3MsgLogger msgRcvdLogger;
+	private final EV3MsgLogger msgSendLogger;
+
+
+    public EV3SensorManager(EV3BrickEndpoint ev3Brick) {
+        this.ev3BrickEndpoint = ev3Brick;
         
         portToTCPPort = new HashMap<EV3SensorPort,Integer>(4);
         portToTCPPort.put(EV3SensorPort.S1, NetworkPortConfig.SENSOR_PORT_1);
@@ -43,45 +58,54 @@ public class EV3SensorManager extends Listener{
         portToTCPPort.put(EV3SensorPort.S4, NetworkPortConfig.SENSOR_PORT_4);
         
        
-        sensors = new HashMap<>(4);
-        
+        sensorEndpoints = new HashMap<>(4);
+
+		//Init Loggers
+		APILoggerManager.getInstance().registerLogger(LOGGER);
+		msgRcvdLogger = new EV3MsgLogger(LOGGER,"Received ");
+		msgSendLogger = new EV3MsgLogger(LOGGER,"Send ");
     }
     
 
-    /**
-     * Creates a Sensor.
-     * 
-     * @param sensorType
-     * @param sensorPort
-     * @return
-     * @throws BrickIsNotReadyException 
-     * @throws PortIsAlreadyInUseException 
-     */
-    public EV3Sensor createSensor(EV3PortID brick_port, Sensors sensorType, EV3SensorPort sensorPort, SensorMessages.SensorMode_ mode) throws PortIsAlreadyInUseException{
+	/**
+	 * Creates a Sensor.
+	 *
+	 * @param brick_port brickt port
+	 * @param sensorType sensor type
+	 * @param sensorPort sensor port
+	 * @param mode - mode of the sensor
+	 * @return the sensor handle
+	 * @throws PortIsAlreadyInUseException if the specified {@link EV3SensorPort} is already in use
+	 */
+    public EV3SensorEndpoint createSensor(EV3PortID brick_port, Sensors sensorType, EV3SensorPort sensorPort, Sensormode mode) throws PortIsAlreadyInUseException{
 		if(sensorType != null && sensorPort != null){
-			if(sensors.containsKey(sensorPort)){
+			if(sensorEndpoints.containsKey(sensorPort)){
 				throw new PortIsAlreadyInUseException(sensorPort.toString());
 			}else{
-				EV3Sensor ev3Sensor = new EV3Sensor(ev3Brick.EV3Brick_IP, portToTCPPort.get(sensorPort), EV3Brick.BRICK_TIMEOUT,sensorType,brick_port, mode);
-				sensors.put(sensorPort, ev3Sensor);
-				return ev3Sensor;
+				EV3SensorEndpoint ev3SensorEndpoint = new EV3SensorEndpoint(ev3BrickEndpoint.EV3Brick_IP, portToTCPPort.get(sensorPort), EV3BrickEndpoint.BRICK_TIMEOUT,sensorType,brick_port, mode);
+				sensorEndpoints.put(sensorPort, ev3SensorEndpoint);
+				return ev3SensorEndpoint;
 			}
 		}else{
 			return null;
 		}
     }
 
-	public void initializeSensor(Sensors sensorType,EV3SensorPort sensorPort) throws BrickIsNotReadyException {
-		System.out.println("Local-EV3SensorManager: initSensor called");
-		if(ev3Brick.isBrickReady()){
+	public void initializeSensor(Sensors sensorType, EV3SensorPort sensorPort) throws BrickIsNotReadyException {
+		LOGGER.log(Level.INFO,"Initializing Sensor at ["+sensorPort.toString()+"] of type "+sensorType.getName());
+		if(ev3BrickEndpoint.isBrickReady()){
 			if(sensorType != null && sensorPort != null){
-				if(sensors.containsKey(sensorPort)){
-					brickClient.sendTCP(BrickMessages.createSensor(sensorPort.getValue(), sensorType, portToTCPPort.get(sensorPort)));
+				if(sensorEndpoints.containsKey(sensorPort)){
+					//Log msg
+					ILoggable msg = BrickMessagesFactory.createSensor(sensorPort.getValue(), sensorType, portToTCPPort.get(sensorPort));
+					msg.accept(msgSendLogger);
+
+					brickClient.sendTCP(msg);
 				}else{
-					//TODO throw SensorPort is not defined Exception
+					LOGGER.log(Level.WARNING,"initializeSensor(..) failed: The Sensor-object was not found in hashmap!");
 				}
 			}else{
-				//TODO throw illegal Argument Exception
+				LOGGER.log(Level.WARNING,"The initialSensor-Method got invalid parameters! One or more  are null");
 			}
 		}else{
 			throw new BrickIsNotReadyException("Can't create a Sensor, because the Brick is not ready. Check Connection and/or try again!");
@@ -90,28 +114,29 @@ public class EV3SensorManager extends Listener{
 
     @Override
     public void received(Connection connection, final Object object){
-		/** Message if the Endpoint-creation was successful or not **/
-    	
+		/** receives Messages if the Endpoint-creation was successful or not **/
+		//Log msg
+		if(object instanceof ILoggable){
+			((ILoggable) object).accept(msgRcvdLogger);
+		}
+
     	Runnable handleMessage = new Runnable(){
 			@Override
 			public void run(){
-		    	if(object.getClass() == BrickMessages.EndpointCreatedMessage.class){
-					BrickMessages.EndpointCreatedMessage ecmsg = (BrickMessages.EndpointCreatedMessage)object;
-					
-					if(ecmsg.isSensor()){
-						System.out.println("Local-EV3SensorManager: Received a EndpointCreatedMessage! -> "+ecmsg.toString());
-						
-						if(ecmsg.isSuccess()){
-							System.out.println("Local-EV3SensorManager: isSuccess at port "+ecmsg.getPort()+"#");
-							if(sensors.containsKey(EV3SensorPort.getPort(ecmsg.getPort()))){
-								System.out.println("Local-EV3SensorManager: Endpoint creation successfull - connect to endpoint!");
-								sensors.get(EV3SensorPort.getPort(ecmsg.getPort())).connect();
-								sensors.get(EV3SensorPort.getPort(ecmsg.getPort())).initSensorMode();
-							}else{
-								System.out.println("Local-EV3SensorManager: Sensor does not exist");
+		    	if(object.getClass() == EndpointCreatedMessage.class){
+					EndpointCreatedMessage msg = (EndpointCreatedMessage)object;
+					if(msg.isSensor()){
+						if(msg.isSuccess()){
+							if(sensorEndpoints.containsKey(EV3SensorPort.getPort(msg.getPort()))){
+								sensorEndpoints.get(EV3SensorPort.getPort(msg.getPort())).connect();
+								sensorEndpoints.get(EV3SensorPort.getPort(msg.getPort())).initSensorMode();
+
+								//Set that creation was a success on brick site. will be evaluated by configurator
+								((EV3SensorEndpoint) sensorEndpoints.get(EV3SensorPort.getPort(msg.getPort()))).setHasCreationFailed(false);
 							}
 						}else{
-							//TODO Tell Sensor/Motor Manager that endpoint creation failed
+							//Set that creation hast failed on brick site. will be evaluated by configurator
+							((EV3SensorEndpoint) sensorEndpoints.get(EV3SensorPort.getPort(msg.getPort()))).setHasCreationFailed(true);
 						}
 					}
 				}
@@ -119,40 +144,23 @@ public class EV3SensorManager extends Listener{
     	};
     	new Thread(handleMessage).start();
     }
-    
 
-    
-    void close(EV3Sensor sensor) {
-        /*List<Integer> tmpPorts = new ArrayList<>(4);
-        for (Integer port : sensors.keySet()) {
-            if (sensors.containsKey(port) && sensors.get(port).equals(sensor)) {
-                tmpPorts.add(port);
-            }
-        }
-        for (Integer port : tmpPorts) {
-            sensors.remove(port);
-        }*/
-    }
-    
-	/** 
-	 * Checks if a Port is a valid SensorPort of the EV3Brick
-	 * 
-	 * @param
-	 * @return
-	 *//*
-	boolean isValidSensorPort(Port port){
-    	if(port == SensorPort.S1 || port == SensorPort.S2 || port == SensorPort.S3 || port == SensorPort.S4){
-    		return true;
-    	}else{
-    		return false;
-    	}		
-	}*/
+	/**
+	 * disconnects the Sensor Connections
+	 */
+	public void disconnectSensors(){
+		for(EV3SensorPort key: sensorEndpoints.keySet()){
+			if(sensorEndpoints.get(key) != null){
+				sensorEndpoints.get(key).disconnect();
+			}
+		}
+	}
 
 	public void setBrickClient(Client brickClient) {
 		this.brickClient = brickClient;
 	}
 
-	
-	
-	
+
+
+
 }

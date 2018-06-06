@@ -6,8 +6,7 @@ public enum EV3StatusLightColor
 	GREEN(1),
 	RED(2),
 	YELLOW(3);
-	
-	
+
 	int val;
 	
 	EV3StatusLightColor(int val){

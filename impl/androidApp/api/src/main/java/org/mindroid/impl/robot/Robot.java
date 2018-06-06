@@ -1,31 +1,45 @@
 package org.mindroid.impl.robot;
 
-import org.mindroid.api.motor.Motor;
-import org.mindroid.impl.brick.EV3Brick;
+import org.mindroid.api.brick.Brick;
+import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.configuration.RobotConfigurator;
-import org.mindroid.impl.sensor.EV3Sensor;
-import org.mindroid.impl.statemachine.StatemachineManager;
+import org.mindroid.impl.logging.APILoggerManager;
+import org.mindroid.impl.motor.EV3RegulatedMotorEndpoint;
+import org.mindroid.impl.motor.SynchronizedMotorsEndpoint;
+import org.mindroid.impl.sensor.IEV3SensorEndpoint;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Torben on 01.03.2017.
  */
 public final class Robot {
 
+    public String robotID = "No id set";
+
     private RobotConfigurator robotConfigurator = null;
 
-    EV3Brick brick;
+    Brick brick;
 
-    private EV3Sensor sensor_S1 = null;
-    private EV3Sensor sensor_S2 = null;
-    private EV3Sensor sensor_S3 = null;
-    private EV3Sensor sensor_S4 = null;
+    //Sensor Endpoints
+    private IEV3SensorEndpoint sensor_S1 = null;
+    private IEV3SensorEndpoint sensor_S2 = null;
+    private IEV3SensorEndpoint sensor_S3 = null;
+    private IEV3SensorEndpoint sensor_S4 = null;
 
-    private Motor motor_A = null;
-    private Motor motor_B = null;
-    private Motor motor_C = null;
-    private Motor motor_D = null;
+    //Motor Endpoints
+    private EV3RegulatedMotorEndpoint IMotor_A = null;
+    private EV3RegulatedMotorEndpoint IMotor_B = null;
+    private EV3RegulatedMotorEndpoint IMotor_C = null;
+    private EV3RegulatedMotorEndpoint IMotor_D = null;
 
-    private StatemachineManager statemachineManager;
+    //Synchronized Motors Endpoint
+    private SynchronizedMotorsEndpoint syncedMotors;
+
+    private boolean isSimulated = false;
+
+    protected MessengerClient messenger = null;
 
     private static Robot robot = new Robot();
 
@@ -35,11 +49,17 @@ public final class Robot {
         return robot;
     }
 
-    private Robot(){
-        statemachineManager = StatemachineManager.getInstance();
+    private static final Logger LOGGER = Logger.getLogger(Robot.class.getName());
+
+    static {
+        APILoggerManager.getInstance().registerLogger(LOGGER);
     }
 
-    public EV3Sensor getSensor_S1() {
+    private Robot(){
+
+    }
+
+    public IEV3SensorEndpoint getSensorS1() {
         return sensor_S1;
     }
 
@@ -51,84 +71,107 @@ public final class Robot {
         this.robotConfigurator = robotConfigurator;
     }
 
-    protected void setSensor_S1(EV3Sensor sensor_S1) {
+    protected void setSensorS1(IEV3SensorEndpoint sensor_S1) {
+        LOGGER.log(Level.INFO,"SensorEndpoint S1: "+ sensor_S1.hashCode()+" -- "+sensor_S1);
         this.sensor_S1 = sensor_S1;
     }
 
-    protected EV3Sensor getSensor_S2() {
+    protected IEV3SensorEndpoint getSensorS2() {
         return sensor_S2;
     }
 
-    protected void setSensor_S2(EV3Sensor sensor_S2) {
+    protected void setSensorS2(IEV3SensorEndpoint sensor_S2) {
+        LOGGER.log(Level.INFO,"SensorEndpoint S2: "+ sensor_S2.hashCode()+" -- "+sensor_S2);
         this.sensor_S2 = sensor_S2;
     }
 
-    protected EV3Sensor getSensor_S3() {
+    protected IEV3SensorEndpoint getSensorS3() {
         return sensor_S3;
     }
 
-    protected void setSensor_S3(EV3Sensor sensor_S3) {
+    protected void setSensorS3(IEV3SensorEndpoint sensor_S3) {
+        LOGGER.log(Level.INFO,"SensorEndpoint S3: "+ sensor_S3.hashCode()+" -- "+sensor_S3);
         this.sensor_S3 = sensor_S3;
     }
 
-    protected EV3Sensor getSensor_S4() {
+    protected IEV3SensorEndpoint getSensorS4() {
         return sensor_S4;
     }
 
-    protected void setSensor_S4(EV3Sensor sensor_S4) {
+    protected void setSensorS4(IEV3SensorEndpoint sensor_S4) {
+        LOGGER.log(Level.INFO,"SensorEndpoint S4: "+ sensor_S4.hashCode()+" -- "+sensor_S4);
         this.sensor_S4 = sensor_S4;
     }
 
-    protected Motor getMotor_A() {
-        return motor_A;
+    protected EV3RegulatedMotorEndpoint getIMotor_A() {
+        return IMotor_A;
     }
 
-    protected void setMotor_A(Motor motor_A) {
-        this.motor_A = motor_A;
+    protected void setMotorA(EV3RegulatedMotorEndpoint IMotor_A) {
+        this.IMotor_A = IMotor_A;
     }
 
-    protected Motor getMotor_B() {
-        return motor_B;
+    protected EV3RegulatedMotorEndpoint getIMotor_B() {
+        return IMotor_B;
     }
 
-    protected void setMotor_B(Motor motor_B) {
-        this.motor_B = motor_B;
+    protected void setMotorB(EV3RegulatedMotorEndpoint IMotor_B) {
+        this.IMotor_B = IMotor_B;
     }
 
-    protected Motor getMotor_C() {
-        return motor_C;
+    protected EV3RegulatedMotorEndpoint getIMotor_C() {
+        return IMotor_C;
     }
 
-    protected void setMotor_C(Motor motor_C) {
-        this.motor_C = motor_C;
+    protected void setMotorC(EV3RegulatedMotorEndpoint IMotor_C) {
+        this.IMotor_C = IMotor_C;
     }
 
-    protected Motor getMotor_D() {
-        return motor_D;
+    protected EV3RegulatedMotorEndpoint getIMotor_D() {
+        return IMotor_D;
     }
 
-    protected void setMotor_D(Motor motor_D) {
-        this.motor_D = motor_D;
+    protected void setMotorD(EV3RegulatedMotorEndpoint IMotor_D) {
+        this.IMotor_D = IMotor_D;
     }
 
-    protected StatemachineManager getStatemachineManager() {
-        return statemachineManager;
+    public SynchronizedMotorsEndpoint getSyncedMotors() {
+        return syncedMotors;
     }
 
-    protected EV3Brick getBrick() {
+    public void setSyncedMotors(SynchronizedMotorsEndpoint syncedMotors) {
+        this.syncedMotors = syncedMotors;
+    }
+
+    protected Brick getBrick() {
         return brick;
     }
 
-    protected void setBrick(EV3Brick brick) {
+    protected void setBrick(Brick brick) {
         this.brick = brick;
-    }
-
-    protected void setStatemachineManager(StatemachineManager statemachineManager) {
-        this.statemachineManager = statemachineManager;
     }
 
     public static RobotController getRobotController(){
         return robotController;
     }
 
+    protected String getRobotID() {
+        return robotID;
+    }
+
+    protected void setRobotID(String robotID) {
+        this.robotID = robotID;
+    }
+
+    public MessengerClient getMessenger() {
+        return messenger;
+    }
+
+    public boolean isSimulated() {
+        return isSimulated;
+    }
+
+    public void setSimulated(boolean simulated) {
+        isSimulated = simulated;
+    }
 }

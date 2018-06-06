@@ -10,10 +10,12 @@ public class Transition implements ITransition{
 	IConstraint constraint;
 	
 	IState destination = null;
-	
+
 	/**
-	 * 
-	 * @param constraint
+	 * Transition object between states
+	 *
+	 * @param constraint constraint of the transition
+	 * @param destination - destination state of the transition
 	 */
 	public Transition(IConstraint constraint, IState destination){
 		this.constraint = constraint;
@@ -23,8 +25,13 @@ public class Transition implements ITransition{
 	public Transition(IConstraint constraint){
 		this.constraint = constraint;
 	}
-	
-	
+
+	@Override
+	public void run() {
+		System.out.println("TRANSITION: TRANSITION FIRED! -> Standard run method executed!");
+		//do something
+	}
+
 	@Override
 	public IState fire() {
 		run();
@@ -57,8 +64,6 @@ public class Transition implements ITransition{
 		return "Transition [constraint=" + constraint + ", destination=" + destination.getName() + "]";
 	}
 
-	public void run() {
-				
-	}
+
 
 }

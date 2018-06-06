@@ -2,21 +2,30 @@ apply plugin: 'com.android.application'
 
 apply from: file('../../include/common/build.gradle')
 
+
+
 mindroidVersion = ext.mindroidVersion
 javaSourceLevel = ext.javaSourceLevel
 javaTargetLevel = ext.javaTargetLevel
 
+// Note Useful source: https://developer.android.com/studio/build/gradle-tips (06.06.2018)
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "org.mindroid.android.app"
-        minSdkVersion 18
-        targetSdkVersion 25
+        minSdkVersion 23
+        targetSdkVersion 23
         versionCode 1
         versionName mindroidVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        debug {
+            storeFile file("key/debug.keystore")
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -31,6 +40,21 @@ android {
     lintOptions {
         abortOnError false
     }
+
+
+    // Encapsulates options for running tests.
+    testOptions {
+        // Changes the directory where Gradle saves test reports. By default, Gradle saves test reports
+        // in the path_to_your_project/module_name/build/outputs/reports/ directory.
+        // '$rootDir' sets the path relative to the root directory of the current project.
+        reportDir "$rootDir/test-reports"
+        // Changes the directory where Gradle saves test results. By default, Gradle saves test results
+        // in the path_to_your_project/module_name/build/outputs/test-results/ directory.
+        // '$rootDir' sets the path relative to the root directory of the current project.
+        resultsDir "$rootDir/test-results"
+    }
+
+
 }
 
 
@@ -47,14 +71,17 @@ dependencies {
          */
         exclude group: 'org.json'
     }
-    compile project(':ev3Messages')
+
+    compile(project(':ev3Messages'))
     compile 'com.esotericsoftware.kryo:kryo:2.24.0'
     compile 'com.esotericsoftware:kryonet:2.22.0-RC1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.test:runner:0.5'
-    //compile 'com.google.android.gms:play-services:42'
     compile 'com.android.support:design:25.3.1'
+    compile 'eu.chainfire:libsuperuser:1.0.0.+'
+
 }
 
 buildscript {
@@ -63,6 +90,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.3.0'
     }
 }

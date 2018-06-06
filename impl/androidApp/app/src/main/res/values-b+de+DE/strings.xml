@@ -1,0 +1,151 @@
+<resources>
+    <string name="app_name">Mindroid</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Einstellungen</string>
+
+    <!-- Activity titles -->
+    <string name="title_activity_main">Mindroid</string>
+    <string name="title_activity_splash">Mindroid</string>
+
+    <!-- Splash Activity -->
+    <string name="txt_starting_adb_service">Starte ADB Service..</string>
+    <string name="txt_checking_usb">Überprüfe USB-Verbindung..</string>
+    <string name="txt_activate_tethering">Aktiviere Tethering..</string>
+
+    <!-- util -->
+    <string name="txt_abort">Abbrechen</string>
+
+    <!-- Home Fragment -->
+    <string name="btn_text_activate_tethering">Aktiviere Tethering</string>
+    <string name="btn_text_init_config">Initialisiere Konfiguration</string>
+    <string name="btn_text_start_robot">Start</string>
+    <string name="btn_text_stop_robot">stop</string>
+    <string name="btn_text_disconnect">Verbindung trennen</string>
+    <string name="btn_text_connect">Verbindung zum EV3-Brick herstellen</string>
+    <string name="dialog_msg_connect_to_robot">Verbindung wird aufgebaut..</string>
+    <string name="dialog_msg_connect_to_robot_error">Verbindung zum EV3-Brick konnte nicht hergestellt werden! Ueberprüfe ob der EV3 Brick bereit ist, sowie die USB-Verbindung. Versuche es nochmal!</string>
+    <string name="dialog_msg_init_config">Der Roboter wird konfiguriert..</string>
+    <string name="dialog_msg_disconnect_from_robot">Trennen..</string>
+    <string name="dialog_msg_start_robot">Roboter wird gestartet..</string>
+    <string name="dialog_msg_stop_robot">Roboter wird gestoppt..</string>
+    <string name="info_txt_msg_activate_tetherting">Tethering ist nicht aktiviert. Aktiviere Tethering, um eine Verbindung zum Brick herzustellen!</string>
+    <string name="info_txt_msg_activate_usb_not_found">USB Kabel ist nicht eingesteckt. Prüfe die USB-Verbindung!</string>
+    <string name="txt_btn_DisConnect_connect">verbinden</string>
+    <string name="txt_btn_DisConnect_disconnect">trennen</string>
+    <string name="switch_sim_txt">Simulation</string>
+    <string name="txt_programs">Programme:</string>
+
+    <!-- Settings Fragment -->
+    <string name="txtView_note_msg_disconnect_messenger">Trenne die Verbindung zum MessageServer, um RobotID und GroupID zu ändern!</string>
+    <string name="btn_text_save_settings">Einstellungen speichern</string>
+    <string name="txtView_language_text">Sprache</string>
+    <string name="msg_toast_settings_invalid_input">Ungueltige Eingabe!</string>
+    <string name="msg_taost_settings_saved">Einstellungen gespeichert!</string>
+    <string name="switch_txt_usb_charging">Laden über USB</string>
+
+    <!-- Hardware Selection Fragment -->
+    <string name="view_sensortype">Sensor</string>
+    <string name="view_sensormode">Modus</string>
+    <string name="view_motortype">Motor</string>
+
+    <!-- RobotSetupInfo Fragment-->
+    <string name="tab_connection_tag">Info</string>
+
+    <!-- Configuration Fragment -->
+    <string name="tab_sensors_tag">Sensoren</string>
+    <string name="tab_motors_tag">Motoren</string>
+
+    <!-- Shared Preferences -->
+    <string name="shared_pref_connection_Data">ConnectionData.xml</string>
+    <string name="shared_pref_portConfiguration">PortConfiguration.xml</string>
+    <string name="shared_pref_app_config_data">AppConfigData.xml</string>
+
+    <!-- Shared Preferences: DEFAULT VALUES -->
+    <string name="DEFAULT_EV3_BRICK_IP">192.168.42.253</string>
+    <string name="DEFAULT_EV3_BRICK_PORT">33690</string>
+    <string name="DEFAULT_MSG_SERVER_IP">192.168.3.100</string>
+    <string name="DEFAULT_MSG_SERVER_PORT">33044</string>
+    <string name="DEFAULT_ROBOT_ID">R</string>
+    <string name="DEFAULT_GROUP_ID">G</string>
+
+
+    <!-- Shared Preferences: KEYS for Shared Preferences - ConnectionData.xml -->
+    <string name="KEY_ROBOT_ID">ROBOT_ID</string>
+    <string name="KEY_GROUP_ID">GROUP_ID</string>
+    <string name="KEY_EV3_IP">KEY_EV3_IP</string>
+    <string name="KEY_EV3_TCP_PORT">"KEY_EV3_TCP_PORT</string>
+    <string name="KEY_SERVER_IP">KEY_SERVER_IP</string>
+    <string name="KEY_SERVER_TCP_PORT">KEY_SERVER_TCP_PORT</string>
+    <string name="KEY_ROBOT_SERVER_TCP_PORT">KEY_ROBOT_SERVER_TCP_PORT</string>
+
+    <string name="KEY_SENSOR_S1">sensorS1</string>
+    <string name="KEY_SENSOR_S2">sensorS2</string>
+    <string name="KEY_SENSOR_S3">sensorS3</string>
+    <string name="KEY_SENSOR_S4">sensorS4</string>
+    <string name="KEY_SENSORMODE_S1">sensormodeS1</string>
+    <string name="KEY_SENSORMODE_S2">sensormodeS2</string>
+    <string name="KEY_SENSORMODE_S3">sensormodeS3</string>
+    <string name="KEY_SENSORMODE_S4">sensormodeS4</string>
+    <string name="KEY_MOTOR_A">motorA</string>
+    <string name="KEY_MOTOR_B">motorB</string>
+    <string name="KEY_MOTOR_C">motorC</string>
+    <string name="KEY_MOTOR_D">motorD</string>
+
+    <!-- Shared Preferences: KEYS for Shared Preferences - AppConfigData.xml -->
+    <string name="KEY_SELECTED_IMPLEMENTATION">selected_implementation_id</string>
+
+    <!-- ErrorDialog -->
+    <string name="text_ok_button">OK</string>
+
+    <!-- Navigation Drawer item titles -->
+    <string name="title_home">Home</string>
+    <string name="title_myrobot">Mein Roboter</string>
+    <string name="title_settings">Einstellungen</string>
+    <string name="title_log">Log</string>
+    <string name="action_example">Example action</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Sensormonitoring -->
+    <string name="title_sensor_monitoring">Sensorüberwachung</string>
+    <string name="txt_sensor_description_mode_ambient_slot1">Intensität</string>
+    <string name="txt_sensor_description_mode_angle_and_rate_slot1">Winkelgeschwindigkeit:</string>
+    <string name="txt_sensor_description_mode_angle_and_rate_slot2">Winkel:</string>
+    <string name="txt_sensor_description_mode_angle_slot1">Winkel:</string>
+    <string name="txt_sensor_description_mode_color_slot1">Farb ID:</string>
+    <string name="txt_sensor_description_mode_distance_slot1">Distanz:</string>
+    <string name="txt_sensor_description_mode_listen_slot1">ist Present:</string>
+    <string name="txt_sensor_description_mode_rate_slot1">Winkelgeschwindigkeit:</string>
+    <string name="txt_sensor_description_mode_red_slot1">Reflektiertes Licht:</string>
+    <string name="txt_sensor_description_mode_rgb_slot1">Rot:</string>
+    <string name="txt_sensor_description_mode_rgb_slot2">Grün:</string>
+    <string name="txt_sensor_description_mode_rgb_slot3">Blau:</string>
+    <string name="txt_sensor_description_mode_seek_slot1">gepaart:</string>
+    <string name="txt_sensor_description_mode_touch_slot1">gedrückt:</string>
+    <string name="txt_sensor_description_mode_seek_slot2">gepaart:</string>
+    <string name="txt_sensor_description_mode_seek_slot3">gepaart:</string>
+    <string name="txt_sensor_description_mode_seek_slot4">gepaart:</string>
+    <string name="dialog_info_message">Es läuft derzeit kein Zustandsautomat! Starte einen Zustandsautomaten, um dieses
+        Feature zu verwenden und die Welt aus den Augen deines Roboters zu betrachten!
+    </string>
+    <string name="errortext_title_initialization">Konfiguration fehlgeschlagen!</string>
+    <string name="errortext_msg_initialization">Die Konfiguration eines Motors/Sensors ist fehlgeschlagen. Überprüfe die
+        Portverbindungen am Brick und die eingestelle Konfig in der App. Versuche es dann nochmal!
+    </string>
+
+    <!-- ConnectionProgressDialogFragment -->
+    <string name="title_messenger">Messenger</string>
+    <string name="title_brick">Brick</string>
+    <string name="title_sensors">Sensoren</string>
+    <string name="title_motors">Motoren</string>
+    <string name="txt_connecting_to_msg_server">Verbindung zum Message Server wird hergestellt..</string>
+
+    <!-- Log Fragment -->
+    <string name="txt_save_log">LOG SPEICHERN</string>
+    <string name="txt_log_saved">Log gespeichert</string>
+    <string name="txt_deleteLog">Log löschen</string>
+    <string name="txt_log_deleted">Log wurde gelöscht</string>
+
+</resources>

@@ -2,6 +2,7 @@ package org.mindroid.impl.endpoint;
 
 import java.io.IOException;
 
+import com.esotericsoftware.kryonet.KryoNetException;
 import org.mindroid.api.endpoint.ClientEndpoint;
 
 import com.esotericsoftware.kryonet.Client;
@@ -10,6 +11,7 @@ import com.esotericsoftware.kryonet.Listener;
 
 import org.mindroid.common.messages.MessageRegistrar;
 import org.mindroid.common.messages.NetworkPortConfig;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 
 public abstract class ClientEndpointImpl extends Listener implements ClientEndpoint {
 
@@ -19,15 +21,28 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
     protected int brickTimeout;
     
 	boolean clientReady = false;;
+
+	private boolean areMessagesRegistered = false;
     
 	public ClientEndpointImpl(String ip,int tcpPort, int brickTimeout) {
 		this.ip =ip;
 		this.tcpPort = tcpPort;
 		this.brickTimeout = brickTimeout;
 
+
 		client = new Client();
-		client.start();
-		new Thread(client).start();
+
+		try {
+			client.start();
+			new Thread(client).start();
+
+			client.addListener(this);
+
+			registerMessages(client);
+
+		}catch(KryoNetException kne){
+			ErrorHandlerManager.getInstance().handleError(kne,ClientEndpointImpl.class, kne.getMessage());
+		}
 	}
 	
 	/**
@@ -35,34 +50,38 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
 	 */
 	@Override
 	public void connect() {
-
-        
-        client.addListener(this);
-
         try {
         	client.setKeepAliveTCP(10000);
             client.connect(this.brickTimeout, this.ip, this.tcpPort,this.tcpPort-NetworkPortConfig.UDP_OFFSET); 
         } catch (IOException e) {
-            System.err.println("brick connection timed out");
-            e.printStackTrace();
-        	//throw new EV3Exception("You must have entered a wrong IP.");
+			ErrorHandlerManager.getInstance().handleError(e,ClientEndpointImpl.class,"Connect(): Connection timed out!");
         }
-        
-        registerMessages(client);
-
 
         if(client.isConnected()){
         	setClientReady(true);
         }	
 	}
-	
-	private void registerMessages(Client client){
-		MessageRegistrar.register(client);
-	}
+
+    @Override
+    public void disconnect(){
+        client.stop();
+    }
 
     @Override
     public abstract void received (Connection connection, Object object);
-	
+
+	/**
+	 * Register Message types on Kryo connections.
+	 *
+	 * @param client - client
+	 */
+	private void registerMessages(Client client) {
+		if (!areMessagesRegistered){
+			MessageRegistrar.register(client);
+			areMessagesRegistered = true;
+		}
+	}
+
 	@Override
 	public void stop(){
 		client.stop();
@@ -80,6 +99,7 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
     @Override
     public void disconnected(Connection connection) {
         super.disconnected(connection);
+        setClientReady(false);
         stop();
     }
 
@@ -104,5 +124,17 @@ public abstract class ClientEndpointImpl extends Listener implements ClientEndpo
 		result = 31 * result + tcpPort;
 		result = 31 * result + brickTimeout;
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "ClientEndpointImpl{" +
+				"client=" + client +
+				", ip='" + ip + '\'' +
+				", tcpPort=" + tcpPort +
+				", brickTimeout=" + brickTimeout +
+				", clientReady=" + clientReady +
+				", areMessagesRegistered=" + areMessagesRegistered +
+				'}';
 	}
 }

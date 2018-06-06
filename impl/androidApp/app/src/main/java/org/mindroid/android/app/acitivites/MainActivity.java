@@ -1,404 +1,321 @@
 package org.mindroid.android.app.acitivites;
 
+import android.app.*;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.os.Environment;
+import android.os.Handler;
+import android.provider.Settings;
+import android.provider.Settings.Secure;
+import android.support.v4.widget.DrawerLayout;
 
-//import com.google.android.gms.common.api.GoogleApiClient;
-
+import android.util.Log;
+import android.view.WindowManager;
+import android.widget.ListView;
 import org.mindroid.android.app.R;
+import org.mindroid.android.app.dialog.ErrorDialog;
+import org.mindroid.android.app.dialog.InfoDialog;
+import org.mindroid.android.app.errorhandling.APIErrorHandler;
+import org.mindroid.android.app.fragments.log.GlobalLogger;
+import org.mindroid.android.app.fragments.log.LoggerFragment;
+import org.mindroid.android.app.fragments.myrobot.MyRobotFragment;
+import org.mindroid.android.app.fragments.home.HomeFragment;
+import org.mindroid.android.app.fragments.NavigationDrawerFragment;
+import org.mindroid.android.app.fragments.home.RobotSetupInfoFragment;
+import org.mindroid.android.app.fragments.sensormonitoring.SensorMonitoringFragment;
+import org.mindroid.android.app.fragments.sensormonitoring.SensorObservationFragment;
+import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
-import org.mindroid.api.statemachine.exception.StateAlreadyExsists;
+import org.mindroid.android.app.robodancer.SettingsProvider;
+import org.mindroid.android.app.util.ShellService;
+import org.mindroid.api.errorhandling.AbstractErrorHandler;
 
+import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- * How to Connect to Brick.
- * PHONE WITH CYANOGENMOD:
- *  1. CYANOGENMOD PHONE
- *  2. CONNECT PHONE TO BRICK VIA USB
- *  3. ACTIVATE USB TETHERING
- *  3. ON BRICK: Go to PAN - USB Einstellungen. Set all properties to automated (IP,Subnetmask,etc)
- *  4. GO back and brick will now save the settings.
- *  5. IP should be displayed on the Brick. (IF NOT, IT WILL NOT WORK!)
- *  6. start Robot App.
- *  7. App: Go to Settings and enter the IP address of the brick.
- *  8. Save settings.
- *  9. Click on connect-to-brick button
- *
- * PHONE WITH ANDROID:
- *  1. Android phone
- *  2. Activate USB Debugging (Notwendig, wenn USB-Tethering nicht aktiviert werden kann!), Activate USB Tethering.
- *  3. Connect Phone to brick via usb.
- *  4. ON BRICK: Go to PAN - USB Einstellungen. Set all properties to automated (IP,Subnetmask,etc)
- *  5. GO back and brick will now save the settings.
- *  6. IP should be displayed on the Brick. (IF NOT, IT WILL NOT WORK!)
- *  7. Deactivate USB-Debugging.
- *  8. App: Go to Settings and enter the IP address of the brick.
- *  9. Save settings.
- *  10. Click on connect-to-brick button.
- *
- *  Alternative:
- *  1. Brick: USB-PAN. IP,Subnetmask etc auf automated.
- *  2. Brick ausschalten.
- *  3. Smartphone per USB Kabel mit Brick verbinden.
- *  4. Tethering auf dem Smartphone aktivieren.
- *  5. Brick starten.
- *  6. Brick gestartet. IP sollte auf dem Display stehen.
- *  7. App starten und IP in Settings eintragen.
- *  8. Connect to Brick.
- */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        SettingsFragment.OnFragmentInteractionListener,
+        HomeFragment.OnFragmentInteractionListener,
+        SensorMonitoringFragment.OnFragmentInteractionListener,
+        SensorObservationFragment.OnFragmentInteractionListener,
+        SettingsFragment.OnSettingsChanged,
+        MyRobotFragment.OnFragmentInteractionListener,
+        RobotSetupInfoFragment.OnFragmentInteractionListener,
+        IErrorHandler{
 
-    public static SharedPreferences connectionProperties;
+    public static Robot robot = new Robot();
 
-    //TODO Add reset Button - if Program on Brick gets resetted and you need to reconnect to the brick
-    private Button btn_initConfiguration;
-    private Button btn_connect;
-    private Button btn_startRobot;
-    private Button btn_stopRobot;
-    private Button btn_settings;
-
-    private TextView txt_isConnected;
-    private TextView txt_robotState;
-
-
-
-    /** Information Box **/
-    private FrameLayout layout_info;
-    private TextView txt_info;
-    private Button btn_activateTethering;
-
-    private ProgressDialog pd;
-
-    public static Robot robot;
     /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
-    //private GoogleApiClient client;
+    private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    public final Activity instance = this;
+    /**
+     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
+     */
+    private CharSequence mTitle;
+
+    private APIErrorHandler errorHandler;
+
+    /** Used Fragments **/ //TODO remove parameters, which are not used
+    private Fragment HOME_FRAGMENT = HomeFragment.newInstance();
+    private Fragment CONFIG_FRAGMENT = MyRobotFragment.newInstance();
+    private Fragment SETTINGS_FRAGMENT = SettingsFragment.newInstance();
+    private Fragment SENSOR_MONITOR_FRAGMENT = SensorMonitoringFragment.newInstance();
+    private Fragment LOG_FRAGMENT = LoggerFragment.newInstance();
+
+    private final String TAG_HOME_FRAGMENT = "TAG_HOME_FRAGMENT";
+    private final String TAG_CONFIG_FRAGMENT = "TAG_CONFIG_FRAGMENT";
+    private final String TAG_SETTINGS_FRAGMENT = "TAG_SETTINGS_FRAGMENT";
+    private final String TAG_SENSOR_MONITOR = "TAG_SENSOR_MONITOR";
+    private final String TAG_LOG_FRAGMENT = "TAG_LOG_FRAGMENT";
+
+    private static final Logger LOGGER = Logger.getLogger(MainActivity.class.getName());
+
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        
-        robot = new Robot(this);
 
-        /** Instantiate buttons and textviews **/
-        btn_initConfiguration = (Button) findViewById(R.id.btn_initConfig);
-        btn_connect = (Button) findViewById(R.id.btn_connect);
-        btn_startRobot = (Button) findViewById(R.id.btn_startRobot);
-        btn_stopRobot = (Button) findViewById(R.id.btn_stopRobot);
-        btn_settings = (Button) findViewById(R.id.btn_settings);
+        initialize(savedInstanceState);
 
-        txt_isConnected = (TextView) findViewById(R.id.txt_isConnected);
-        txt_robotState = (TextView) findViewById(R.id.txt_stateRobot);
-
-        /** Information Box **/
-        layout_info = (FrameLayout) findViewById(R.id.layout_infobox);
-        txt_info = (TextView) findViewById(R.id.txt_info);
-        btn_activateTethering = (Button) findViewById(R.id.btn_activateTethering);
-
-        /** Load Connection Properties **/
-        loadConnectionProperties();
-
-        /** get current IP **/
-//        WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
-
-        setButtonListeners();
-
-        checkCurrentState();
     }
 
-    private void setButtonListeners() {
-        //Handle settings button
-        btn_settings.setOnClickListener(new View.OnClickListener() {
+    private void initialize(Bundle savedInstanceState) {
+        //If the app is running the display will be set to always on and the device will not go into sleep mode.
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-                @Override
-                public void onClick(View v) {
-                    Intent nexScreen = new Intent(getApplicationContext(), SettingsActivity.class);
-                    startActivity(nexScreen);
-                }
-            });
+        SettingsProvider.getInstance().setAndroidId(Secure.getString(this.getContentResolver(), Secure.ANDROID_ID));
+        errorHandler = new APIErrorHandler(this);
 
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mTitle = getTitle();
 
-        btn_connect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                robot.connectToBrick();
-            }
-        });
-
-        btn_initConfiguration.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                robot.configurateRobot();
-            }
-        });
-
-        btn_startRobot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                robot.startRobot();
-            }
-        });
-
-        btn_stopRobot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                robot.stopRobot();
-            }
-        });
-
-        btn_activateTethering.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), 0);
-            }
-        });
-    }
-
-    /**
-     * Continuesly checking the current state of:
-     *  Robot state (connected ?, configuration ? , running? )
-     *  USB State (Connected to usb ?, Tethering actiaveted? );
-     *
-     *  Updateing the UI in respect of the current state.
-     */
-    private void checkCurrentState() {
-        final MainActivity main_activity = this;
-        final Runnable taskUpdateButtonEnableState = new Runnable(){
-            @Override
-            public void run(){
-                boolean positiveUSBState = isUSBConnected(main_activity) && isTetheringActivated(main_activity);
-
-                btn_connect.setEnabled(!robot.isConnectedToBrick && positiveUSBState);
-
-                btn_initConfiguration.setEnabled(robot.isConnectedToBrick && !robot.isConfigurationBuilt && positiveUSBState);
-
-                btn_startRobot.setEnabled(robot.isConnectedToBrick && robot.isConfigurationBuilt && !robot.isRunning && positiveUSBState);
-
-                btn_stopRobot.setEnabled(robot.isRunning);
-
-                btn_settings.setEnabled(!robot.isConnectedToBrick);
-            }
-        };
-
-        final Runnable taskUpdateStatusView = new Runnable() {
-            @Override
-            public void run() {
-                if(robot.isConnectedToBrick){
-                    txt_isConnected.setText("Connected");
-                }else{
-                    txt_isConnected.setText("Not connected");
-                }
-
-                if(robot.isConfigurationBuilt){
-                    //TODO
-                }else{
-                    //TODO
-                }
-
-                if(robot.isRunning){
-                    txt_robotState.setText("running");
-                }else{
-                    txt_robotState.setText("not running");
-                }
-            }
-        };
-
-        final Runnable taskCheckUSBState = new Runnable() {
-            @Override
-            public void run() {
-                StringBuffer sb = new StringBuffer();
-
-                boolean isUSBConnected = false;
-                boolean isTetheringActive = false;
-
-                if(!(isUSBConnected = isUSBConnected(main_activity))){
-                    sb.append("USB Kabel ist nicht eingesteckt. Prüfe die USB-Verbindung!");
-                }
-
-                if(isUSBConnected && !(isTetheringActive = isTetheringActivated(main_activity))){
-                    sb.append("Tethering ist nicht aktiviert. Aktiviere Tethering, um eine Verbindung zum Brick herzustellen!");
-                    btn_activateTethering.setVisibility(Button.VISIBLE);
-                }else{
-                    btn_activateTethering.setVisibility(Button.GONE);
-                }
-
-                if(!isUSBConnected || !isTetheringActive){
-                    txt_info.setText(sb.toString());
-                    layout_info.setVisibility(FrameLayout.VISIBLE);
-
-                    //Stop robot
-                    if(robot.isRunning){
-                        robot.stopRobot();
-                    }
-                }else{
-                    layout_info.setVisibility(FrameLayout.GONE);
-                }
-            }
-        };
-
-        //final Context cntxt_mainActivity = this;
-        Runnable check = new Runnable() {
-            @Override
-            public void run() {
-                while(true) {//TODO remove ?
-
-                    //Enable/disable control buttons (Connect to brick, init configuration, start robot,stop robot)
-                    MainActivity.this.runOnUiThread(taskUpdateButtonEnableState);
-
-                    //Update View of the current State
-                    MainActivity.this.runOnUiThread(taskUpdateStatusView);
-
-                    //Update View of the current State
-                    MainActivity.this.runOnUiThread(taskCheckUSBState);
-
-                    //TODO remove those lines
-                    //System.out.println("Usb device is rndis -> " + getUSBInfo(cntxt_mainActivity));
-                    //txt_ipPhone.setText(getUSBInfo(cntxt_mainActivity));
-
-                    try {
-                        Thread.sleep(33);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        };
+        // Set up the drawer.
+        mNavigationDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                (DrawerLayout) findViewById(R.id.drawer_layout));
 
 
-
-        new Thread(check).start();
-    } //USB_FUNCTION_RNDIS
-
-    /**
-     * Checks if USB is connected
-     * @param context
-     * @return
-     */
-    public boolean isUSBConnected(Context context){
-        Intent intent = context.registerReceiver(null, new IntentFilter("android.hardware.usb.action.USB_STATE"));
-
-        return intent.getExtras().getBoolean("connected");
-    }
-
-    /**
-     * Checks if Tethering is activated.
-     * @param context
-     * @return
-     */
-    public boolean isTetheringActivated(Context context){
-        Intent intent = context.registerReceiver(null, new IntentFilter("android.hardware.usb.action.USB_STATE"));
-
-        return (intent.getExtras().getBoolean("rndis"));
-    }
-
-
-    private void loadConnectionProperties(){
-        connectionProperties = getApplicationContext().getSharedPreferences("ConnectionData.xml",0);
-
-        if (connectionProperties != null) {
-                String savedVal = connectionProperties.getString(SettingsActivity.KEY_EV3_IP, SettingsActivity.DEFAULT_EV3_IP);
-                robot.setEv3_ip( (savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_IP : savedVal);
-
-                savedVal = connectionProperties.getString(SettingsActivity.KEY_EV3_TCP_PORT,SettingsActivity.DEFAULT_EV3_TCP_PORT);
-                robot.setEv3_tcp_port(Integer.parseInt((savedVal.isEmpty()) ? SettingsActivity.DEFAULT_EV3_TCP_PORT : savedVal));
-
-            try {
-                robot.makeRobot(); //Builds the robot with the Connection Settings
-            } catch (StateAlreadyExsists stateAlreadyExsists) {
-                showAlertDialog("State Already exists",stateAlreadyExsists.getMessage());
-            }
-        }else{
-            showAlertDialog("Error: Connection Properties","Couldn't Load connection properties. Check the Settings and may restart the application!");
+        //display Home Fragment
+        if (savedInstanceState == null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, HOME_FRAGMENT)
+                    .commit();
         }
 
-    }
-
-    public void showAlertDialog(final String title,final String message){
-        final MainActivity main_activity = this;
-
-        Runnable createDialog = new Runnable() {
+        //READ IF CONFIG
+        /*Runnable run = new Thread(){
             public void run(){
-                AlertDialog.Builder builder = new AlertDialog.Builder(main_activity);
-                // Add the buttons
-                builder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User clicked OK button
-                    }
-                });
-
-                if (title == null) {
-                    builder.setTitle("");
-                } else {
-                    builder.setTitle(title);
-                }
-
-                if (message == null) {
-                    builder.setMessage("");
-                } else {
-                    builder.setMessage(message);
-                }
-
-                //builder.setIconAttribute( android.R.attr.alertDialogIcon);
-
-                // Create the AlertDialog
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                }
-        };
-
-        runOnUiThread(createDialog);
-    }
-
-
-    public void showProgressDialog(final String title,final String message){
-        final MainActivity main_activity = this;
-        Runnable createProgressDialog = new Runnable() {
-            public void run(){
-                //pd is a global variable in this activity - so only one progress can be shown at the time
-                pd = new ProgressDialog(main_activity,ProgressDialog.STYLE_SPINNER);
-                pd.setTitle(title);
-                pd.setMessage(message);
-                pd.setCancelable(false);
-                pd.show();
+                readIFConfig();
             }
         };
+        new Thread(run).start();
+        */
 
-        runOnUiThread(createProgressDialog);
+        //Activate tethering - (used to activate tethering automatically after app got started after deployment)
+        //Only works if phone is connected to to brick by usb
+        //cmdShellService.setTethering(true);
     }
 
-    public void dismissCurrentProgressDialog(){
-        final MainActivity main_activity = this;
-        Runnable dismissProgressDialog = new Runnable() {
-            public void run(){
-                if(pd!=null) {
-                    pd.dismiss();
-                }
+    @Deprecated
+    private void readIFConfig(){
+        try {
+            String dir = Environment.getExternalStorageDirectory()+File.separator+"mindroid";
+            System.out.println("### IFCONFIG OUTPUT: dirpath: "+dir);
+            //create folder
+            File folder = new File(dir); //folder name
+            folder.mkdirs();
+
+            //create file
+            File outputFile = new File(dir, "output_ifconfig.txt");
+            outputFile.createNewFile();
+
+            String filePath = outputFile.getPath();
+
+            System.out.println("### IFCONFIG OUTPUT: outputfile: "+filePath);
+            System.out.println("### IFCONFIG OUTPUT: exec shell cmd ");
+            LOGGER.log(Level.INFO,"Start to execute IFCOnfig");
+            ShellService.execIfConfig(filePath);
+            LOGGER.log(Level.INFO,"IFConfig command executed");
+            LOGGER.log(Level.INFO,"write into file: "+filePath);
+
+            BufferedReader br = new BufferedReader(new FileReader(outputFile));
+            StringBuffer output = new StringBuffer();
+            System.out.println("### IFCONFIG OUTPUT: start reading file ");
+            LOGGER.log(Level.INFO,"IFCONIFG: Start reading output from file");
+            while(br.read() != -1){
+                output.append(br.readLine());
             }
-        };
 
-        runOnUiThread(dismissProgressDialog);
+            LOGGER.log(Level.INFO,"IFCONIFG: End reading output from file");
+
+            LOGGER.log(Level.INFO,output.toString());
+            System.out.println("### IFCONFIG OUTPUT: "+output.toString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        // update the main content by replacing fragments
+        switchFragment(position);
+    }
+
+    /**
+     * Changes the main fragment dependent on the given position parameter
+     * @param position - id of the fragment
+     */
+    private void switchFragment(int position) {
+        switch(position){
+            case 0:
+                replaceFragment(HOME_FRAGMENT,TAG_HOME_FRAGMENT);
+                setTitle(getResources().getString(R.string.title_home));
+                break;//Home
+            case 1:
+                replaceFragment(SENSOR_MONITOR_FRAGMENT,TAG_SENSOR_MONITOR);
+                setTitle(getResources().getString(R.string.title_sensor_monitoring));
+                break;
+            case 2:
+                replaceFragment(CONFIG_FRAGMENT,TAG_CONFIG_FRAGMENT);
+                setTitle(getResources().getString(R.string.title_myrobot));
+                break;//Configuration
+            case 3:
+                replaceFragment(SETTINGS_FRAGMENT,TAG_SETTINGS_FRAGMENT);
+                setTitle(getResources().getString(R.string.title_settings));
+                break;//SettingsProvider
+            case 4:
+                replaceFragment(LOG_FRAGMENT,TAG_LOG_FRAGMENT);
+                setTitle(getResources().getString(R.string.title_log));
+                break;//SettingsProvider
+            default:
+                replaceFragment(HOME_FRAGMENT,TAG_HOME_FRAGMENT);
+        }
+    }
+
+    /**
+     * Replaces the Fragments of the main container.
+     * @param newFrag - fragment to add, if its not found
+     * @param fragmentTag - the unique fragment tag, to identify the fragment
+     */
+    private void replaceFragment(Fragment newFrag, String fragmentTag){
+        FragmentManager fManager = getFragmentManager();
+        FragmentTransaction fTransaction = fManager.beginTransaction();
+        Fragment fragment = fManager.findFragmentByTag(fragmentTag);
+        if(fragment == null) {
+            fTransaction.replace(R.id.container, newFrag, fragmentTag);
+        }
+        fTransaction.commit();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // TODO Auto-generated method stub
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    public void onSectionAttached(int number) {
+        switch (number) {
+            case 0:
+                mTitle = getString(R.string.title_home);
+                break;
+            case 1:
+                mTitle = getString(R.string.title_sensor_monitoring);
+                break;
+            case 2:
+                mTitle = getString(R.string.title_myrobot);
+                break;
+            case 3:
+                mTitle = getString(R.string.title_settings);
+                break;
+            case 4:
+                mTitle = getString(R.string.title_log);
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        mNavigationDrawerFragment.selectItem(0);
+    }
+
+    public void restoreActionBar() {
+        ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(mTitle);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onSettingsChanged(boolean settingsChanged){
+        ((HomeFragment)HOME_FRAGMENT).onSettingsChanged(settingsChanged);
+
+        // makes sure Home is selected in Drawer
+        mNavigationDrawerFragment.selectItem(0);
+        /*
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, HOME_FRAGMENT)
+                .commit();
+        */
+    }
+
+    @Override
+    public void showErrorDialog(final String title, final String message){
+        LOGGER.log(Level.WARNING,"ErrorDialog Shown: Title: "+title+" Msg: "+message);
+        DialogFragment errorDialogFragment = ErrorDialog.newInstance(title,message);
+        errorDialogFragment.show(getFragmentManager(), "errorDialog");
+    }
+
+
+    public void showInfoDialog(final String title, final String message){
+        DialogFragment infoDialogFragment = InfoDialog.newInstance(title,message);
+        infoDialogFragment.show(getFragmentManager(), "infoDialog");
+    }
+
+    public ListView getMenuItemListView(){
+        return mNavigationDrawerFragment.getmDrawerListView();
+    }
+
+    @Override
+    public AbstractErrorHandler getErrorHandler() {
+        return errorHandler;
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        LOGGER.log(Level.INFO,"App got detached from Window");
+        super.onDetachedFromWindow();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

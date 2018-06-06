@@ -1,6 +1,11 @@
 package org.mindroid.server.app;
 
-import org.mindroid.common.messages.server.ServerLogMessage;
+
+import org.mindroid.common.messages.server.Destination;
+import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.common.messages.server.RobotId;
+import org.mindroid.server.app.util.ADBService;
+import org.mindroid.server.app.util.IPService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -8,10 +13,14 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+
 
 /**
  * @author Roland Kluge - Initial implementation
@@ -30,30 +39,37 @@ public class MindroidServerFrame extends JFrame {
     public MindroidServerFrame() {
         super("Mindroid Server Application");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setMinimumSize(new Dimension(400,400));
+        this.setMinimumSize(new Dimension(800,500));
+        Image titleImage = MindroidServerSettings.getTitleImage();
+        if (titleImage != null) {
+            this.setIconImage(titleImage);
+        }
         //Menubar
         JMenuBar menuBar = new JMenuBar();
 
         JMenu fileMenu = new JMenu("File");
-        JMenu helpMenu = new JMenu("Help");
+        fileMenu.setMnemonic('f');
 
         JMenuItem exitMenuItem = new JMenuItem();
-        exitMenuItem.setAction(new AbstractAction("Exit") {
+        exitMenuItem.setAction(new AbstractAction("Quit") {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Close");
+            public void actionPerformed(final ActionEvent e) {
                 System.exit(0);
             }
         });
+        exitMenuItem.setMnemonic('q');
+        exitMenuItem.setAccelerator(KeyStroke.getKeyStroke("control Q"));
 
         JMenuItem consoleMenuItem = new JMenuItem();
         consoleMenuItem.setAction(new AbstractAction("Show Console") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MindroidServerConsole console = MindroidServerConsole.getMindroidServerConsole();
-                console.setVisible(true);
+                MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
+                console.setVisible(!console.isVisible());
             }
         });
+        consoleMenuItem.setMnemonic('c');
+        consoleMenuItem.setAccelerator(KeyStroke.getKeyStroke("shift C"));
 
         refreshIP = new JMenuItem();
         refreshIP.setAction(new AbstractAction("Refresh IP Address") {
@@ -62,37 +78,52 @@ public class MindroidServerFrame extends JFrame {
                 MindroidServerApplicationMain.invokeDisplayIPAdress();
             }
         });
+        refreshIP.setMnemonic('r');
+        refreshIP.setAccelerator(KeyStroke.getKeyStroke("control R"));
 
-        fileMenu.setMnemonic('f');
-        exitMenuItem.setMnemonic('x');
-        fileMenu.setMnemonic('h');
+        JMenuItem adbDevicesMenuItem = new JMenuItem();
+        adbDevicesMenuItem.setAction(new AbstractAction("Show "+ConnectedDevicesFrame.TITLE) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ConnectedDevicesFrame adbDevicesFrame = ConnectedDevicesFrame.getInstance();
+                adbDevicesFrame.setVisible(!adbDevicesFrame.isVisible());
+            }
+        });
+        adbDevicesMenuItem.setMnemonic('d');
+        adbDevicesMenuItem.setAccelerator(KeyStroke.getKeyStroke("control D"));
+
 
         fileMenu.add(consoleMenuItem);
+        fileMenu.add(adbDevicesMenuItem);
         fileMenu.add(refreshIP);
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
-        menuBar.add(helpMenu);
+
+        //menuBar.add(helpMenu);
+
 
         this.setJMenuBar(menuBar);
 
         this.getContentPane().setLayout(new BorderLayout());
 
         //table at center
-        String[] columnNames = {"Time","Source","LogLevel","Content"};
+        String[] columnNames = {"Time", "Source", "Target", "Log Level", "Content"};
         DefaultTableModel model = new DefaultTableModel(columnNames,0);
 
         this.table = new JTable(model);
         JTextField tf = new JTextField();
         tf.setEditable(false);
         table.setDefaultEditor(Object.class, new DefaultCellEditor(tf));
-        table.getColumnModel().getColumn(3).setPreferredWidth(200);
         table.getColumnModel().getColumn(0).setPreferredWidth(60);
         table.getColumnModel().getColumn(1).setPreferredWidth(100);
         table.getColumnModel().getColumn(2).setPreferredWidth(100);
+        table.getColumnModel().getColumn(3).setPreferredWidth(100);
+        table.getColumnModel().getColumn(4).setPreferredWidth(200);
         table.getColumnModel().getColumn(0).setMaxWidth(70);
         table.getColumnModel().getColumn(0).setMinWidth(70);
         table.getColumnModel().getColumn(1).setMaxWidth(120);
-        table.getColumnModel().getColumn(2).setMaxWidth(100);
+        table.getColumnModel().getColumn(2).setMaxWidth(120);
+        table.getColumnModel().getColumn(3).setMaxWidth(100);
 
         table.getTableHeader().setReorderingAllowed(false);
 
@@ -145,38 +176,34 @@ public class MindroidServerFrame extends JFrame {
 
         this.pack();
         this.setVisible(true);
-
     }
 
-
-    public void addContentLine(ServerLogMessage deseriaLogMessage) {
+    public void addContentLine(MindroidMessage deseriaLogMessage) {
         try {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
             String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-            model.addRow(new String[]{timeStamp, deseriaLogMessage.getSource().getValue(),
-                    deseriaLogMessage.getLogLevel().toString(), deseriaLogMessage.getContent()});
+            model.addRow(new String[]{timeStamp, deseriaLogMessage.getSource().getValue(), deseriaLogMessage.getDestination().getValue(),
+                    deseriaLogMessage.getMessageType().toString(), deseriaLogMessage.getContent()});
         } catch (ArrayIndexOutOfBoundsException e) {
             //Tries again n times, error was caused by 2 threads accessing the table at the same time
             int n = 10;
-            int i=0;
-            while (!retryAddContentLine(deseriaLogMessage) && i<n) {
+            int i = 0;
+            while (!retryAddContentLine(deseriaLogMessage) && i < n) {
                 i++;
-
             }
-            if (i==n) {
+            if (i == n) {
                 //retrying failed
                 throw e;
             }
-
-             }
+        }
     }
 
-    private boolean retryAddContentLine(ServerLogMessage deseriaLogMessage) {
+    private boolean retryAddContentLine(MindroidMessage deseriaLogMessage) {
         try {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
             String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-            model.addRow(new String[]{timeStamp, deseriaLogMessage.getSource().getValue(),
-                    deseriaLogMessage.getLogLevel().toString(), deseriaLogMessage.getContent()});
+            model.addRow(new String[]{timeStamp, deseriaLogMessage.getSource().getValue(), deseriaLogMessage.getDestination().getValue(),
+                    deseriaLogMessage.getMessageType().toString(), deseriaLogMessage.getContent()});
             return true;
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
@@ -184,10 +211,10 @@ public class MindroidServerFrame extends JFrame {
 
     }
 
-    public void addContentLine(String source, String logLevel, String content ) {
+    public void addContentLine(String source, String target, String logLevel, String content) {
         DefaultTableModel model = (DefaultTableModel) this.table.getModel();
         String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-        model.addRow(new String[] {timeStamp,source,logLevel,content});
+        model.addRow(new String[] {timeStamp, source, target, logLevel, content});
     }
 
     public void displayIPAdress(String address, Color color) {
@@ -213,5 +240,39 @@ public class MindroidServerFrame extends JFrame {
         }
         assignedColors.put(source,availableColors.get(0));
         availableColors.remove(0);
+    }
+
+    /**
+     * Registers the Robot to the server.
+     * Returns false if the robot got rejected. The robot gets rejected when its id is already used.
+     *
+     * @param robotId
+     * @param socket
+     * @param socketAddress
+     * @param port
+     * @return
+     * @throws IOException
+     */
+    public boolean register(RobotId robotId, Socket socket, InetSocketAddress socketAddress, int port) throws IOException {
+        Destination destKey = new Destination(robotId.getValue());
+        if(IPService.getIPMapping().containsKey(destKey) || IPService.getSocketMapping().containsKey(destKey)){
+            //Reject registration
+            return false;
+        }else {
+            IPService.getIPMapping().put(destKey, new InetSocketAddress(((InetSocketAddress) socketAddress).getAddress(), port));
+            IPService.getSocketMapping().put(destKey, socket);
+            ConnectedDevicesFrame.getInstance().updateDevices();
+            return true;
+        }
+    }
+
+
+    public void removeRegistration(String robotName) {
+        Destination dest = new Destination(robotName);
+
+        IPService.getIPMapping().remove(dest);
+        IPService.getSocketMapping().remove(dest);
+
+        ConnectedDevicesFrame.getInstance().updateDevices();
     }
 }

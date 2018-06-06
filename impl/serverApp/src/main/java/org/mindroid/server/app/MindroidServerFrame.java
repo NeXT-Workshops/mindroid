@@ -98,27 +98,9 @@ public class MindroidServerFrame extends JFrame {
         fileMenu.add(refreshIP);
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
+
         //menuBar.add(helpMenu);
 
-        // Configure Action Menu
-        JMenuItem readDmesg = new JMenuItem();
-        readDmesg.setAction(new AbstractAction("run dmesg") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ADBService.runDmesg();
-            }
-        });
-        actionMenu.add(readDmesg);
-
-        JMenuItem refreshDevices = new JMenuItem();
-        refreshDevices.setAction(new AbstractAction("Refresh ADB-Devices") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ADBService.refreshAdbDevices();
-            }
-        });
-
-        menuBar.add(actionMenu);
 
         this.setJMenuBar(menuBar);
 

@@ -41,36 +41,6 @@ public class ADBService {
 
         }
     }
-    public static void runDmesg() {
-        InputStream is = null;
-        try {
-            is = devices.get(0).executeShell("dmesg | tail -n 5");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JadbException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader br = new BufferedReader(isr);
-            String line, timestamp;
-            while(br.read() != -1){
-                line = br.readLine();
-                console.appendLine(line);
-                if(line.contains("USB_STATE=CONFIGURED")){
-                    timestamp = line.substring(1,12);
-                    console.appendLine(timestamp);
-                }
-
-            }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public static JadbDevice getDeviceByIP(InetSocketAddress inetSocketAddress){
         refreshAdbDevices();

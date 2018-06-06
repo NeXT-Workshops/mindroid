@@ -1,9 +1,9 @@
 ﻿Dokumentation und Aufgabenstellung:
 - REPLACED - Tehthering im HandyVerbinden Skript richtig schreiben
 - Anleitung anpassen
-	- für VMs
-	- was machen, wenn das Handy nicht mehr gefunden wird
-	- neue Verbindungsmethode
+	- IRRELEVANT für VMs
+	- DONE was machen, wenn das Handy nicht mehr gefunden wird
+	- DONE neue Verbindungsmethode
 	
 - DISABLE CHARGE WILL NOT WORK - disable usb charging mit in die anleitung aufnehmen
 	- eigentlich nicht nötig, soll automatisch deaktiviert werden, nur bei Bedarf aktiviert
@@ -16,15 +16,15 @@
 - DONE - default werte in app
 - DONE falls WLan nicht funktioniert dann bitte USB zum deployen nehmen (Anleitung)
 	- Appendix, als Backup einfach USB anstecken und funktioniert.
-- Doku updaten: einheiten für driveDistanceBackward etc. - mit angeben
-- JavaDOC für Framework erstellen
+- DONE Doku updaten: Einheiten für driveDistanceBackward etc. - mit angeben
+- DONE JavaDOC für Framework erstellen
 - DONE Basic Java Sachen in die Beschreibung schreiben ala "equals" benutzen
 	- equals an entsprechender Stelle angemerkt
 - DONE Kabel überprüfen ob rausgerutscht und richtig montiert
 	- Bei Einleitung erwähnt, Kabel checken und WLAN checken
 - DONE kurze Anmerkung darüber was der Konstruktor genau macht
 - DONE Server IP muss auch in der App gesetzt werden!
-- import auf colors in der Aufgabenbeschreibung falsch
+- DONE import auf colors in der Aufgabenbeschreibung falsch
 
 Aufgabenimplementierung:
 - DONE helloworld lösungssourcecode direkt an die schüler, den sourcecode nicht selbst tippen	
@@ -36,15 +36,15 @@ Framework:
 - DONE Skripte auf dem Server ausführen? (adb bridge)
 - Server IP Belegung automatisch updaten
 	- wird wohl nix (unnötig?)
-- Broadcast für den Server implementieren (eine Nachricht an alle Roboter im Netz)
+- DONE Broadcast für den Server implementieren (eine Nachricht an alle Roboter im Netz)
 
 Documentation:
 - 1.1.3 mit 1.1.2 tauschen.
 - 1.3 Unterpunkt 3."Wähle "Verbindung zum EV3-Brick herstellen" überprüfen. Ist das noch notwendig?
-- Formatierung fixen
+- DONE Formatierung fixen
 - Geht es wirklich, dass man mit Rechtsklick auf die Java Doku verwiesen wird?
 - Woher sind die Bilder eigentlich? @Copyright
-- Aufgabe 7 umbenennen zu "Dancing Robots"
+- DONE Aufgabe 7 umbenennen zu "Dancing Robots"
 
 bugs & improvements:
 - DONE wenn man zurück klickt sollte man im Hauptmenü landen

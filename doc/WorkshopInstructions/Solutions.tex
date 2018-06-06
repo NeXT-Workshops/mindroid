@@ -85,6 +85,8 @@
 %configure listings for Java Code 
 \lstset{
 	language=Java,
+	breaklines=true,
+	postbreak=\mbox{$\hookrightarrow$\space},
 	basicstyle=\ttfamily\footnotesize,
 	%set colors
 	keywordstyle=\color{javapurple}\bfseries,
@@ -113,13 +115,11 @@
 }
 
 \begin{document}
-	\author{}
-	\pagenumbering{arabic}	
-	\title{Mindroid Pilotworkshop \\ am xx.06.2018}
-	\subtitle{FG ES / MAKI \\ TU Darmstadt}
-	\subsubtitle{}
 	
-	\maketitle	
+	\input{title.tex}
+	\centering	
+	\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip	
+	{\Huge LÖSUNGEN}
 	
 	\newpage
 	\section{Hallo Welt}
@@ -160,6 +160,6 @@
 	\section{Platooning}
 		\sol{Platooning}
 
-	\section{Verfolgung}
+	\section{Dancing Robots}
 		\sol{Follow}
 	\end{document}

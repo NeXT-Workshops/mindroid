@@ -92,7 +92,7 @@ public class ImplementationService {
 
 
     // Define here which set to be selected
-    private String[] foundClasses = classesSolutions;
+    private String[] foundClasses = classesStubs;
     //private String[] foundClasses = classesStubs;
     //private String[] foundClasses = classesStatemachine;
     //private String[] foundClasses = classesDev;

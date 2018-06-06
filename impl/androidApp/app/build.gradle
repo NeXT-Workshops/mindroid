@@ -52,13 +52,6 @@ android {
         // in the path_to_your_project/module_name/build/outputs/test-results/ directory.
         // '$rootDir' sets the path relative to the root directory of the current project.
         resultsDir "$rootDir/test-results"
-
-        //Create test-result/report dirs in app-build dir
-        new File("$rootDir/app/build/test-results").mkdirs()
-        new File("$rootDir/app/build/test-reports").mkdirs()
-        //Create test-result/report dirs in api-build dir
-        new File("$rootDir/api/build/test-results").mkdirs()
-        new File("$rootDir/api/build/test-reports").mkdirs()
     }
 
 

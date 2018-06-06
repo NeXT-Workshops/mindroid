@@ -42,6 +42,13 @@ android {
 
 }
 
+test {
+    reports {
+        junitXml.enabled = false
+        html.enabled = true
+    }
+}
+
 
 repositories {
     mavenCentral()

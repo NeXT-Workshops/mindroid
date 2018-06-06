@@ -139,13 +139,6 @@ public class MindroidServerWorker implements Runnable {
                 // When device connects, connect adb to device
                 System.out.println("Device connected, establish adb_tcp");
                 ADBService.connectADB((InetSocketAddress) socketAddress);
-                // activate Tethering on device that just connected
-                System.out.println("ADb connected, activate tethering on device...");
-                ADBService.activateTethering(ADBService.getDeviceByIP((InetSocketAddress) socketAddress));
-                // connect adb again
-                System.out.println("reconnect adb_tcp");
-                ADBService.connectADB((InetSocketAddress) socketAddress);
-
             } else {
                 throw new IOException("Registration of "+deserializedMsg.getSource().getValue()+" failed.");
             }

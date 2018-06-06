@@ -6,9 +6,6 @@ repositories {
 }
 
 dependencies {
-    new File("$rootDir/api/build/test-results").mkdirs()
-    new File("$rootDir/api/build/test-reports").mkdirs()
-
     testCompile 'junit:junit:4.12'
     compile project(':ev3Messages')
     compile 'com.esotericsoftware.kryo:kryo:2.24.0'

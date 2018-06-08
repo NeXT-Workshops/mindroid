@@ -34,7 +34,7 @@ public class Follow extends ImperativeWorkshopAPI {
     private Random rnd = new Random();
     private String colleague;
 
-    private String player_1 = "Finn";
+    private String player_1 = "Robert";
     private String player_2 = "Berta";
 
 
@@ -117,15 +117,15 @@ public class Follow extends ImperativeWorkshopAPI {
         sendLogMessage("Following!");
         while(!isInterrupted()) {
             float distance = getDistance();
-            if (prevState != PlatoonState.FAST && distance > 0.30f) {
+            if (prevState != PlatoonState.FAST && distance > 0.35f) {
                 forward(300);
                 prevState = PlatoonState.FAST;
                 setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
-            } else if (prevState != PlatoonState.SLOW && distance < 0.20f) {
+            } else if (prevState != PlatoonState.SLOW && distance < 0.25f) {
                 forward(100);
                 prevState = PlatoonState.SLOW;
                 setLED(EV3StatusLightColor.RED, EV3StatusLightInterval.ON);
-            } else if (prevState != PlatoonState.MED && distance > 0.20f && distance < 0.30f) {
+            } else if (prevState != PlatoonState.MED && distance > 0.25f && distance < 0.35f) {
                 forward(200);
                 prevState = PlatoonState.MED;
                 setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.ON);

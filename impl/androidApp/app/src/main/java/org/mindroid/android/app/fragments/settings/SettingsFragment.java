@@ -15,8 +15,11 @@ import org.mindroid.android.app.R;
 import org.mindroid.android.app.fragments.home.HomeFragment;
 import org.mindroid.android.app.robodancer.ConnectionPropertiesChangedListener;
 import org.mindroid.android.app.robodancer.SettingsProvider;
+import org.mindroid.android.app.serviceloader.ImplementationService;
 import org.mindroid.android.app.util.IPUtils;
 import org.mindroid.android.app.util.ShellService;
+
+import java.util.ServiceLoader;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,6 +65,9 @@ public class SettingsFragment extends Fragment {
     private EditText txt_input_serverip_part2;
     private EditText txt_input_serverip_part3;
     private EditText txt_input_serverip_part4;
+
+    private TextView txt_program_set;
+    private Spinner spinner_programs;
 
     //Msg showing that the messenger needs to be disconnected
     private String noteMessage;
@@ -172,6 +178,32 @@ public class SettingsFragment extends Fragment {
                 ShellService.usbChargingControl(checked);
             }
         });
+
+        txt_program_set = (TextView) view.findViewById(R.id.txt_program_set);
+        spinner_programs = (Spinner) view.findViewById(R.id.spinner_program_set);
+
+        spinner_programs.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, ImplementationService.getInstance().getImplementationSets()));
+
+        if(SettingsProvider.getInstance().isAdminModeUnlocked()) {
+            txt_program_set.setVisibility(View.VISIBLE);
+            spinner_programs.setVisibility(View.VISIBLE);
+        }else{
+            txt_program_set.setVisibility(View.GONE);
+            spinner_programs.setVisibility(View.GONE);
+        }
+
+        spinner_programs.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                SettingsProvider.getInstance().setSelectedProgramSet((String) parent.getSelectedItem());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                SettingsProvider.getInstance().setSelectedProgramSet(ImplementationService.getInstance().getDefaultSet());
+            }
+        });
+
         //Load saved SettingsProvider
         loadSettings();
 

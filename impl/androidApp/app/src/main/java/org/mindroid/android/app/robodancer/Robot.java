@@ -83,7 +83,7 @@ public class Robot implements IImplStateListener {
         roFactory.createRobot(SettingsProvider.getInstance().isSimulationEnabled());
 
         //Adds the collected Implementations to execute
-        addImplementations(ImplementationService.getInstance().getImplementations());
+        addImplementations(ImplementationService.getInstance().getImplementations(SettingsProvider.getInstance().getSelectedProgramSet()));
 
         LOGGER.log(Level.INFO,"Robot created!");
     }

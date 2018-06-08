@@ -7,6 +7,7 @@ import org.mindroid.android.app.R;
 import org.mindroid.android.app.acitivites.MainActivity;
 import org.mindroid.android.app.fragments.home.ConnectionProgressDialogFragment;
 import org.mindroid.android.app.fragments.myrobot.HardwareMapping;
+import org.mindroid.android.app.serviceloader.ImplementationService;
 import org.mindroid.common.messages.hardware.Motors;
 import org.mindroid.common.messages.hardware.Sensors;
 import org.mindroid.common.messages.hardware.Sensormode;
@@ -25,6 +26,7 @@ import java.util.Random;
  */
 public class SettingsProvider implements ConnectionPropertiesChangedListener, RobotConfigurationChangedListener {
 
+    private static final String ADMIN_MODE_UNLOCKED = "ADMIN_MODE_UNLOCKED";
     /** public Robot Attributes **/
     private String robotID = "ROBOT_ID";
     private String groupID = "GROUP_ID";
@@ -62,6 +64,7 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     private Resources resources;
     private SharedPreferences connectionProperties;
     private SharedPreferences portConfigProperties;
+    private boolean adminModeUnlocked;
 
     private boolean isInitialized = false;
     private boolean isSimulationEnabled = false;
@@ -70,6 +73,7 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
 
     private static SettingsProvider ourInstance = new SettingsProvider();
     private Bundle robotConfigBundle;
+    private String selectedProgramSet = ImplementationService.getInstance().getDefaultSet();
 
     public static SettingsProvider getInstance() {
         return ourInstance;
@@ -335,6 +339,19 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     }
 
 
+    public boolean isAdminModeUnlocked() {
+        return adminModeUnlocked;
+    }
 
+    public void setAdminModeUnlocked(boolean adminModeUnlocked) {
+        this.adminModeUnlocked = adminModeUnlocked;
+    }
 
+    public String getSelectedProgramSet() {
+        return selectedProgramSet;
+    }
+
+    public void setSelectedProgramSet(String selectedProgramSet) {
+        this.selectedProgramSet = selectedProgramSet;
+    }
 }

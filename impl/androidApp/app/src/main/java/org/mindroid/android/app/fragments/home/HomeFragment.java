@@ -495,7 +495,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     }
 
     public ArrayAdapter<String> getImplementationIDAdapter() {
-        return new ArrayAdapter<String>(parentActivity, android.R.layout.simple_spinner_dropdown_item, ImplementationService.getInstance().getImplementationIDs());
+        return new ArrayAdapter<String>(parentActivity, android.R.layout.simple_spinner_dropdown_item, ImplementationService.getInstance().getImplementationIDs(SettingsProvider.getInstance().getSelectedProgramSet()));
 
     }
 

@@ -111,7 +111,9 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_sensor_monitoring),
                         getString(R.string.title_myrobot),
                         getString(R.string.title_settings),
-                        getString(R.string.title_log)
+                        getString(R.string.title_log),
+                        getString(R.string.title_admin)
+
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 

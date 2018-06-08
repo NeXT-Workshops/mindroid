@@ -147,5 +147,7 @@
     <string name="txt_log_saved">Log gespeichert</string>
     <string name="txt_deleteLog">Log löschen</string>
     <string name="txt_log_deleted">Log wurde gelöscht</string>
+    <string name="title_admin">Admin</string>
+    <string name="PROGRAM_SET">Programmsatz</string>
 
 </resources>

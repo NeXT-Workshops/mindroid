@@ -212,7 +212,7 @@
 	\newpage
 	\subsection{Der Quelltext erklärt}
 	Nachdem du den Roboter erfolgreich eingerichtet und das erste Mal getestet hast, gehen wir jetzt daran, uns den Quelltext näher anzusehen.
-	\lstinputlisting{\solpath/HelloWorld.java}
+	\lstinputlisting[firstline=3]{\solpath/HelloWorld.java}
 	Das Verhalten des Roboters befindet sich in der \textbf{run-Methode }(Zeilen 13-16). Wenn ein Mindroid-Programm ausgeführt wird, werden die Befehle in dieser Methode nacheinander abgearbeitet.
 		\begin{itemize}
 		\item{\bfcode{clearDisplay()}} löscht den Display-Inhalt
@@ -227,7 +227,8 @@
 		Öffne dazu zuerst die \bfcode{HelloDate.java}-Datei. Ändere den Code nun, sodass er dem folgenden Code ähnelt:\\
 		\textbf{Wichtig:} Ändere in keiner Aufgabe die imports oder den Package-Namen. Diese sind bereits so wie sie sein müssen.
 		
-		\lstinputlisting{\solpath/HelloDate.java}
+		\lstinputlisting[firstline=3]{\solpath/HelloDate.java}
+		
 		\begin{itemize}
 		\item Die Imports von \bfcode{java.text.SimpleDateFormat} und \bfcode{java.util.Date} sind neu hinzugekommen.
 		\item Außerdem gibt es nun eine Variable \bfcode{formatter} (Zeile 17), die in der Lage ist, das aktuelle Datum formatiert auszugeben (\bfcode{formatter.format(new Date())}, Zeile 19)).
@@ -265,7 +266,7 @@
 	
 	Um die Fahr-Fähigkeiten des Roboters kennenzulernen, wirst du den folgenden Code nachprogrammieren, der ein etwas \textbf{spezielles Quadrat} fährt.
 	
-	\lstinputlisting{\solpath/DriveSquare.java}
+	\lstinputlisting[firstline=3]{\solpath/DriveSquare.java}
 	
 	\begin{itemize}
 	\setlength{\itemsep}{0pt}
@@ -286,7 +287,7 @@
 	\item Liegt die Distanz \textbf{über 30cm}, dann leuchtet die Status-LED grün und es wird “\textbf{OK :-)}” ausgegeben.
 	\end{enumerate}
 	
-	\lstinputlisting{\solpath/ParkingSensor.java}
+	\lstinputlisting[firstline=3]{\solpath/ParkingSensor.java}
 	
 	\begin{itemize}
 	\item Um die LED ansteuern zu können, müssen wir die Pakete \\ \bfcode{org.mindroid.api.ev3.EV3StatusLightColor}\\ und\\ \bfcode{org.mindroid.api.ev3.EV3StatusLightInterval} importieren.
@@ -299,7 +300,7 @@
 	In dieser Aufgabe lernst du die Farbsensoren des Roboters kennen. Der folgende Quelltext liest kontinuierlich den aktuell gemessenen Farbwert des linken und rechten Lichtsensors aus (\bfcode{getLeftColor()} bzw. \bfcode{getRightColor()} in Zeilen 16 und 17).
 	\\
 	
-	\lstinputlisting{\solpath/ColourTest.java}
+	\lstinputlisting[firstline=3]{\solpath/ColourTest.java}
 	
 	\begin{itemize}
 	\item Die Methode \bfcode{describeColor} (Zeilen 29-39) zeigt, wie du den Rückgabewert in einen lesbaren Text umwandelst.
@@ -319,12 +320,12 @@
 	
 	Wir möchten nun, dass Berta eine Nachricht mit dem Inhalt \textbf{``Hallo Robert!''} an den Nachrichtenserver versendet. Robert soll diese Nachricht empfangen und die Nachricht auf seinem Display ausgeben. 
 	Dazu sind zwei unterschiedliche Programme für Robert und Berta notwendig.
-	\lstinputlisting{\solpath/HelloWorldPingB.java}
+	\lstinputlisting[firstline=3]{\solpath/HelloWorldPingB.java}
 	\begin{itemize}
 	\item Bei Programmstart sendet Berta in Zeile 14 eine Nachricht an \textbf{Robert }mit den Inhalt \textbf{``Hallo Robert!''}
 	\end{itemize}
 	
-	\lstinputlisting{\solpath/HelloWorldPingR.java}
+	\lstinputlisting[firstline=3]{\solpath/HelloWorldPingR.java}
 	
 	\begin{itemize}
 	\item Robert überprüft mit \bfcode{hasMessage()} (Zeilte 16) ob neue Nachrichten auf dem Message-Server vorhanden sind. 

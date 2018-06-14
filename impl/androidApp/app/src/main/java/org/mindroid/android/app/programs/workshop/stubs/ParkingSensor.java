@@ -6,10 +6,14 @@ import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.impl.brick.Textsize;
 
 public class ParkingSensor extends ImperativeWorkshopAPI {
-    // Konstruktor nicht ändern!!
+
     public ParkingSensor() {
         super("Parking Sensor");
     }
+
+    // ------------------------------------
+    // ÄNDERUNGEN ERST HIERNACH DURCHFÜHREN
+    // ------------------------------------
 
     @Override
     public void run() {

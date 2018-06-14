@@ -4,10 +4,14 @@ import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.impl.brick.Textsize;
 
 public class HelloDate extends ImperativeWorkshopAPI {
-    // Konstruktor nicht ändern!!
+
     public HelloDate() {
         super("Hello Date");
     }
+
+    // ------------------------------------
+    // ÄNDERUNGEN ERST HIERNACH DURCHFÜHREN
+    // ------------------------------------
 
     @Override
     public void run() {

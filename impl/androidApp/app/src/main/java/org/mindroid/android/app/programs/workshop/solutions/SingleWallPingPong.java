@@ -2,10 +2,10 @@ package org.mindroid.android.app.programs.workshop.solutions;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
 
-public class ImpSingleWallPingPong extends ImperativeWorkshopAPI {
+public class SingleWallPingPong extends ImperativeWorkshopAPI {
 
 
-    public ImpSingleWallPingPong() {
+    public SingleWallPingPong() {
         super("Single Wall-PingPong");
     }
 

@@ -14,7 +14,7 @@ public class ImpCoordWallPingPong extends ImperativeWorkshopAPI {
     private final String startPingPongMsg = "YOUR TURN";
 
     public ImpCoordWallPingPong() {
-        super("ImpCoordWallPingPong");
+        super("CoordWallPingPong");
     }
 
     @Override

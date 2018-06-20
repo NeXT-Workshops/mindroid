@@ -1,13 +1,11 @@
 package org.mindroid.android.app.programs.workshop.stubs;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
-import org.mindroid.common.messages.server.MindroidMessage;
-import org.mindroid.impl.brick.Button;
 
-public class ImpCoordWallPingPong extends ImperativeWorkshopAPI {
+public class SingleWallPingPong extends ImperativeWorkshopAPI {
 
-    public ImpCoordWallPingPong() {
-        super("Coord Wall-PingPong");
+    public SingleWallPingPong() {
+        super("Single Wall-PingPong");
     }
 
     // ------------------------------------
@@ -16,6 +14,5 @@ public class ImpCoordWallPingPong extends ImperativeWorkshopAPI {
 
     @Override
     public void run() {
-
     }
 }

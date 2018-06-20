@@ -4,7 +4,7 @@ import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.brick.Button;
 
-public class ImpCoordWallPingPong extends ImperativeWorkshopAPI {
+public class CoordWallPingPong extends ImperativeWorkshopAPI {
 
     private final String player_1 = "Robert";
     private final String player_2 = "Berta";
@@ -13,7 +13,7 @@ public class ImpCoordWallPingPong extends ImperativeWorkshopAPI {
     private final String leaderMsg = "I AM THE LEADER";
     private final String startPingPongMsg = "YOUR TURN";
 
-    public ImpCoordWallPingPong() {
+    public CoordWallPingPong() {
         super("Coord Wall-PingPong");
     }
 
@@ -75,23 +75,15 @@ public class ImpCoordWallPingPong extends ImperativeWorkshopAPI {
      */
     private void runWallPingPong(String colleague){
         forward(500);
-
         while(!isInterrupted() && getDistance() > 0.15f){
             delay(50);
         }
-
         enableFloatMode();
-
         driveDistanceBackward(10f,350);
-
         turnRight(180,350);
-
         sendMessage(colleague,startPingPongMsg);
-
         driveDistanceForward(40f);
-
         enableFloatMode();
-
         turnLeft(180,350);
     }
 }

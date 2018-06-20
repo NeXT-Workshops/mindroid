@@ -6,7 +6,7 @@ public class ImpSingleWallPingPong extends ImperativeWorkshopAPI {
 
 
     public ImpSingleWallPingPong() {
-        super("ImpSingleWallPingPong");
+        super("SingleWallPingPong");
     }
 
     @Override

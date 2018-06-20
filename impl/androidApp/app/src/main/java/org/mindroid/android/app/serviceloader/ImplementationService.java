@@ -40,12 +40,12 @@ public class ImplementationService {
             "org.mindroid.android.app.programs.dev.TestBroadcasting",
             "org.mindroid.android.app.programs.dev.RectangleDriver3",
             "org.mindroid.android.app.programs.dev.RectangleDriver2",
-            "org.mindroid.android.app.programs.dev.ImpSingleWallPingPong",
-            "org.mindroid.android.app.programs.dev.ImpCoordWallPingPong",
+            "org.mindroid.android.app.programs.dev.SingleWallPingPong",
+            "org.mindroid.android.app.programs.dev.CoordWallPingPong",
             "org.mindroid.android.app.programs.dev.SpeedTestForBackward",
             "org.mindroid.android.app.programs.dev.SpeedTestTurns",
             "org.mindroid.android.app.programs.dev.ButtonTest",
-            "org.mindroid.android.app.programs.dev.ImpSingleWallPingPong",
+            "org.mindroid.android.app.programs.dev.SingleWallPingPong",
             "org.mindroid.android.app.programs.dev.TestMessageAccess",
             "org.mindroid.android.app.programs.dev.MessageTest",
             "org.mindroid.android.app.programs.dev.SimpleForward"
@@ -67,8 +67,8 @@ public class ImplementationService {
             "org.mindroid.android.app.programs.workshop.stubs.HelloWorldPingR",
             "org.mindroid.android.app.programs.workshop.stubs.HelloWorldPingB",
 
-            "org.mindroid.android.app.programs.workshop.stubs.ImpSingleWallPingPong",
-            "org.mindroid.android.app.programs.workshop.stubs.ImpCoordWallPingPong",
+            "org.mindroid.android.app.programs.workshop.stubs.SingleWallPingPong",
+            "org.mindroid.android.app.programs.workshop.stubs.CoordWallPingPong",
 
             "org.mindroid.android.app.programs.workshop.stubs.LawnMower",
             "org.mindroid.android.app.programs.workshop.stubs.Platooning",
@@ -86,8 +86,8 @@ public class ImplementationService {
             "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPingR",
             "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPingB",
 
-            "org.mindroid.android.app.programs.workshop.solutions.ImpSingleWallPingPong",
-            "org.mindroid.android.app.programs.workshop.solutions.ImpCoordWallPingPong",
+            "org.mindroid.android.app.programs.workshop.solutions.SingleWallPingPong",
+            "org.mindroid.android.app.programs.workshop.solutions.CoordWallPingPong",
 
             "org.mindroid.android.app.programs.workshop.solutions.LawnMower",
             "org.mindroid.android.app.programs.workshop.solutions.Platooning",

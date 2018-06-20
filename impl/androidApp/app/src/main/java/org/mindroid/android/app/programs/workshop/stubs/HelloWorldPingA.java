@@ -1,13 +1,11 @@
 package org.mindroid.android.app.programs.workshop.stubs;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
-import org.mindroid.impl.brick.Textsize;
 
+public class HelloWorldPingA extends ImperativeWorkshopAPI {
 
-public class HelloWorldPingR extends ImperativeWorkshopAPI {
-
-    public HelloWorldPingR() {
-        super("Hello World Ping Robert");
+    public HelloWorldPingA() {
+        super("Hello World Ping A");
     }
 
     // ------------------------------------
@@ -18,5 +16,4 @@ public class HelloWorldPingR extends ImperativeWorkshopAPI {
     public void run() {
 
     }
-  }
-  
+}

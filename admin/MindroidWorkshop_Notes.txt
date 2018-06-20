@@ -27,6 +27,7 @@
 - DONE import auf colors in der Aufgabenbeschreibung falsch
 - Button clicked und getRoboID in die Aufgabenbeschreibung
 - Aufgabenbeschreibung für die neuen Coop Stubs anpassen
+- in der Aufgabenstellung sollte erwähnt werden, dass man auf den MessageServer achten sollte (aktuell schaut da niemand drauf)
 
 Aufgabenimplementierung:
 - DONE helloworld lösungssourcecode direkt an die schüler, den sourcecode nicht selbst tippen	

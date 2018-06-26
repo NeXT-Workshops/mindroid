@@ -25,6 +25,9 @@
 - DONE kurze Anmerkung darüber was der Konstruktor genau macht
 - DONE Server IP muss auch in der App gesetzt werden!
 - DONE import auf colors in der Aufgabenbeschreibung falsch
+- Button clicked und getRoboID in die Aufgabenbeschreibung
+- Aufgabenbeschreibung für die neuen Coop Stubs anpassen
+- in der Aufgabenstellung sollte erwähnt werden, dass man auf den MessageServer achten sollte (aktuell schaut da niemand drauf)
 
 Aufgabenimplementierung:
 - DONE helloworld lösungssourcecode direkt an die schüler, den sourcecode nicht selbst tippen	
@@ -37,6 +40,11 @@ Framework:
 - Server IP Belegung automatisch updaten
 	- wird wohl nix (unnötig?)
 - DONE Broadcast für den Server implementieren (eine Nachricht an alle Roboter im Netz)
+- automatisch Delay im Hintergrund von forward, backward, stop ... aufrufen (50ms)
+- Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
+- neue Coop Stups, wie im CoopHelloWorld
+- Message Server, reset old messages
+- Fehlermeldung mit Zeilenangabe (in Bezug auf den Code der Teilnehmer)
 
 Documentation:
 - 1.1.3 mit 1.1.2 tauschen.
@@ -72,6 +80,10 @@ bugs & improvements:
 - DONE <- TIMEOUT 45Sec wenn initialization failed ->kommunikation zwischen handy und brick verbessern (kill switch)
 - DONE - log für kommunikation zum brick
 - dreh-korrektur nochmal überprüfen (endlosschleife - er versucht sich minimal in die falsche Richtung zu korrigieren)
+- Batterie ist manchmal nicht da (EV3)
+- Stubs sind bei erneutem run() Aufruf noch instanziiert und haben noch ihren alten State (new Stub()).run()
+- Manchmal werden Nachrichten gebroadcastet und manchmal nicht
+- Manchmal werden alte Nachrichten an die aktuelle Runtime geschickt (liegen die Nachrichten noch in der App?)
 
 sonstiges:
 - Aufkleber "Energy Demo" auf Handy?

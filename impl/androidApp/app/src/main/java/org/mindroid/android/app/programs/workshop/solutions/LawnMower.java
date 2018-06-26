@@ -25,7 +25,7 @@ public class LawnMower extends ImperativeWorkshopAPI {
                 turnRight(90);
             }else if(getRightColor()== tapeColor){
                 driveDistanceBackward(backDist);
-                turnRight(90);
+                turnLeft(90);
             }
             delay(50);
         }

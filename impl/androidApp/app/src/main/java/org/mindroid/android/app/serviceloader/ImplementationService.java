@@ -63,8 +63,6 @@ public class ImplementationService {
             "org.mindroid.android.app.programs.workshop.stubs.ImpCoordWallPingPong",
 
             "org.mindroid.android.app.programs.workshop.stubs.LawnMower",
-     //       "org.mindroid.android.app.programs.workshop.stubs.Platooning_A",
-     //       "org.mindroid.android.app.programs.workshop.stubs.Platooning_B"
             "org.mindroid.android.app.programs.workshop.stubs.Platooning",
             "org.mindroid.android.app.programs.workshop.stubs.Follow"
     };
@@ -84,16 +82,14 @@ public class ImplementationService {
             "org.mindroid.android.app.programs.workshop.solutions.ImpCoordWallPingPong",
 
             "org.mindroid.android.app.programs.workshop.solutions.LawnMower",
-     //       "org.mindroid.android.app.programs.workshop.solutions.Platooning_A",
-    //       "org.mindroid.android.app.programs.workshop.solutions.Platooning_B",
             "org.mindroid.android.app.programs.workshop.solutions.Platooning",
             "org.mindroid.android.app.programs.workshop.solutions.Follow"
     };
 
 
     // Define here which set to be selected
-    private String[] foundClasses = classesSolutions;
-    //private String[] foundClasses = classesStubs;
+    //private String[] foundClasses = classesSolutions;
+    private String[] foundClasses = classesStubs;
     //private String[] foundClasses = classesStatemachine;
     //private String[] foundClasses = classesDev;
 

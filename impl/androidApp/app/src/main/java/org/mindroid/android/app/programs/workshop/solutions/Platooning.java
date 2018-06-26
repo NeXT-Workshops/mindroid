@@ -20,7 +20,7 @@ public class Platooning extends ImperativeWorkshopAPI {
     }
     State prevState;
 
-    private final String player_1 = "Finn";
+    private final String player_1 = "Robert";
     private final String player_2 = "Berta";
     private final String myID = getRobotID();
     private String colleague;

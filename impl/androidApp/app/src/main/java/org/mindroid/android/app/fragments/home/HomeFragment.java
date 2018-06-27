@@ -193,7 +193,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         //Add RobotSetupInfo Fragment
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.container_robotSetupInfo, RobotSetupInfoFragment.newInstance("",""));
+        transaction.replace(R.id.container_robotSetupInfo, RobotSetupInfoFragment.newInstance());
         //transaction.addToBackStack(null);
         transaction.commit();
 

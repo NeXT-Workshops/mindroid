@@ -2,7 +2,15 @@ package org.mindroid.api;
 
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.imperative.ImperativeImplExecutor;
+import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.statemachine.StatemachineExecutor;
+import org.mindroid.impl.util.Throwables;
+
+
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+
 
 public class ExecutorProvider extends AbstractImplVisitor{
 
@@ -14,6 +22,11 @@ public class ExecutorProvider extends AbstractImplVisitor{
     //Executor for Statemachine Implementations
     private StatemachineExecutor smExecutor = new StatemachineExecutor();
 
+    private static final Logger LOGGER = Logger.getLogger(ExecutorProvider.class.getName());
+
+    static{
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+    }
 
     /**
      * Returns the proper Executor neccessary to execute the Implementation
@@ -28,8 +41,15 @@ public class ExecutorProvider extends AbstractImplVisitor{
 
     @Override
     public void visit(ImperativeAPI api) {
-        //TODO make sure thet currently no statemachine is running
-        impExecutor.setImplementation(api);
+        try {
+            impExecutor.setImplementation(api.getClass().newInstance());
+
+        } catch (InstantiationException | IllegalAccessException e) {
+            LOGGER.log(new LogRecord(Level.WARNING,Throwables.getStackTrace(e)));
+            ErrorHandlerManager.getInstance().handleError(e,ExecutorProvider.class,Throwables.getStackTrace(e));
+            return;
+        }
+
         currentExecutor = impExecutor;
     }
 

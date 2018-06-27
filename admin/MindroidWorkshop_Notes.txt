@@ -8,10 +8,8 @@
 Aufgabenimplementierung:
 
 Framework:
-- automatisch Delay im Hintergrund von forward, backward, stop ... aufrufen (50ms)
 - Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
 - neue Coop Stups, wie im CoopHelloWorld
-- Message Server, reset old messages
 - Fehlermeldung mit Zeilenangabe (in Bezug auf den Code der Teilnehmer)
 
 Documentation:
@@ -71,6 +69,8 @@ Aufgabenimplementierung:
 - DONE über dem Konstruktor einen Kommentar, dass dieser nicht geändert werden darf
 
 Framework:
+- DONE - automatisch Delay im Hintergrund von forward, backward, stop ... aufrufen (50ms)
+- DONE - Added clearMessage Method to the API - Message Server, reset old messages
 - DONE Mein Roboter Sensoren/Motoren default werte in app setzen
 - DONE Skripte auf dem Server ausführen? (adb bridge)
 - DONE Broadcast für den Server implementieren (eine Nachricht an alle Roboter im Netz)

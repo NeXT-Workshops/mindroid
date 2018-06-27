@@ -58,11 +58,16 @@ public abstract class BasicAPI {
     }
 
     /**
-     * Removes everything from the EV3 display
+     * Removes everything from the EV3 display.
      */
     public final void clearDisplay() {
         getBrickController().clearDisplay();
     }
+
+    /**
+     * Clears the Messages from the Messengers Cache.
+     */
+    public final void clearMessages(){ getRobotController().getMessenger().clearMessageCache(); }
 
     /**
      * Set the Volume of the Sounds played on the brick.

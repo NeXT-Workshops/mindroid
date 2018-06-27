@@ -242,4 +242,12 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
     public void setRobotID(String robotID) {
         this.robotID = robotID;
     }
+
+    /**
+     * Clears the Message cache.
+     * All stored messages will be deleted.
+     */
+    public void clearMessageCache() {
+        messages.clear();
+    }
 }

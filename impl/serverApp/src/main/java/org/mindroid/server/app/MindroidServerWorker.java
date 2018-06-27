@@ -1,9 +1,6 @@
 package org.mindroid.server.app;
 
-import org.mindroid.common.messages.server.Destination;
-import org.mindroid.common.messages.server.MessageMarshaller;
-import org.mindroid.common.messages.server.MessageType;
-import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.common.messages.server.*;
 import org.mindroid.server.app.util.ADBService;
 import org.mindroid.server.app.util.IPService;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
@@ -149,7 +146,8 @@ public class MindroidServerWorker implements Runnable {
             mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "INFO", deserializedMsg.getContent());
             Socket socket = IPService.findSocket(deserializedMsg.getDestination());
             sendMessage(deserializedMsg, socket);
-            }
+            mindroidServerFrame.addContentLine("SERVER",deserializedMsg.getDestination().getValue(),"DEBUG","MSG["+deserializedMsg.getContent()+"] sent to destination");
+        }
 
 
         //deliver broadcast message

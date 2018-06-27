@@ -6,7 +6,7 @@ public class SingleWallPingPong extends ImperativeWorkshopAPI {
 
 
     public SingleWallPingPong() {
-        super("Single Wall-PingPong");
+        super("Single Wall Ping-Pong");
     }
 
     @Override

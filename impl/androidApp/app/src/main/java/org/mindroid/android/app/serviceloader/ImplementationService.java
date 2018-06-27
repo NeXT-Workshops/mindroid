@@ -83,14 +83,18 @@ public class ImplementationService {
             "org.mindroid.android.app.programs.workshop.solutions.ParkingSensor",
             "org.mindroid.android.app.programs.workshop.solutions.ColourTest",
 
-            "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPingR",
+            "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPingA",
             "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPingB",
 
             "org.mindroid.android.app.programs.workshop.solutions.SingleWallPingPong",
             "org.mindroid.android.app.programs.workshop.solutions.CoordWallPingPong",
+            "org.mindroid.android.app.programs.workshop.solutions.CoordWallPingPongA",
+            "org.mindroid.android.app.programs.workshop.solutions.CoordWallPingPongB",
 
             "org.mindroid.android.app.programs.workshop.solutions.LawnMower",
             "org.mindroid.android.app.programs.workshop.solutions.Platooning",
+            "org.mindroid.android.app.programs.workshop.solutions.PlatooningFollower",
+            "org.mindroid.android.app.programs.workshop.solutions.PlatooningLeader",
             "org.mindroid.android.app.programs.workshop.solutions.Follow"
     };
 

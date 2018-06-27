@@ -11,6 +11,7 @@ Framework:
 - Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
 - neue Coop Stups, wie im CoopHelloWorld
 - Fehlermeldung mit Zeilenangabe (in Bezug auf den Code der Teilnehmer)
+- DriveDistanceBackward(distance) works like it is unblocked [but it is blocked in code] ?!
 
 Documentation:
 - 1.1.3 (Roboter und App verbinden) mit 1.1.2 (Programme Übertragen) tauschen.

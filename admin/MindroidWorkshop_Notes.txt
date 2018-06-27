@@ -23,7 +23,6 @@ Documentation:
 bugs & improvements:
 - App schmiert ab, wenn man wild herumklickt
 - dreh-korrektur nochmal überprüfen (endlosschleife - er versucht sich minimal in die falsche Richtung zu korrigieren)
-- Batterie ist manchmal nicht da (EV3)
 - Stubs sind bei erneutem run() Aufruf noch instanziiert und haben noch ihren alten State (new Stub()).run()
 - Manchmal werden Nachrichten gebroadcastet und manchmal nicht
 - Manchmal werden alte Nachrichten an die aktuelle Runtime geschickt (liegen die Nachrichten noch in der App?)
@@ -31,9 +30,8 @@ bugs & improvements:
 sonstiges:
 - Aufkleber "Energy Demo" auf Handy?
 - Unterlage mit viel Grip für den nächsten Workshop
-- vor girlsday (ende april) nochmal email an marelene wegen flyern
 - email mit code + aufgabenstellung + doku an marlene
-- mindroid film 
+- mindroid Film 
 	
 Bugs:
 - HelloWorld beispiel funktionierte nicht nach deployment -> Brick neustart notwendig, warum?
@@ -84,6 +82,7 @@ Documentation:
 - DONE Aufgabe 7 umbenennen zu "Dancing Robots"
 
 bugs & improvements:
+- DONE - Batterie ist manchmal nicht da (EV3)
 - DONE wenn man zurück klickt sollte man im Hauptmenü landen
 - DONE Device unauthorized -> Handy mit zettel makiert
 	- Vermutlich ADB Problem

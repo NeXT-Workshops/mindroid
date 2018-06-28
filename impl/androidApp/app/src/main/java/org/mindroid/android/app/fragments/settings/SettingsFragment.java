@@ -44,9 +44,6 @@ public class SettingsFragment extends Fragment {
     //UI-Button
     private Button btn_saveSettings;
 
-    //Switch
-    private Switch usbSwitch;
-
     //UI-Textfield
     private TextView txtView_note;
 
@@ -115,8 +112,6 @@ public class SettingsFragment extends Fragment {
         /** INIT Buttons **/
         btn_saveSettings = (Button) view.findViewById(R.id.btn_saveSettings);
 
-        /** INIT SWITCH */
-        usbSwitch = (Switch) view.findViewById(R.id.switchUSB);
 
         /** INIT TextEdit fields **/
         txt_input_robotID = (EditText) view.findViewById(R.id.txt_input_robotID);
@@ -168,14 +163,6 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v){
                 saveSettings();
-            }
-        });
-
-        usbSwitch.setVisibility(View.GONE);
-        usbSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean checked){
-                ShellService.usbChargingControl(checked);
             }
         });
 

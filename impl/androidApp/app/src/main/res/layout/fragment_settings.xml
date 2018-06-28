@@ -321,13 +321,7 @@
             </LinearLayout>
 
         </LinearLayout>
-
-        <Switch
-                android:text="@string/switch_txt_usb_charging"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/switchUSB"
-                android:checked="true" android:layout_marginLeft="20dp" android:layout_marginRight="20dp"
-                android:gravity="center_vertical" android:layout_weight="1"/>
+        
         <Button
             android:id="@+id/btn_saveSettings"
             android:layout_width="match_parent"

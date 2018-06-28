@@ -19,7 +19,7 @@ import java.util.Scanner;
 /**
  * @author Roland Kluge - Initial implementation
  */
-public class MindroidServerWorker implements Runnable {
+public class MindroidServerWorker implements Runnable, IUserAction {
     private Socket socket;
     private MindroidServerFrame mindroidServerFrame;
     private MessageMarshaller messageMarshaller;
@@ -55,16 +55,10 @@ public class MindroidServerWorker implements Runnable {
                         sb = new StringBuilder();
                     }
                     if (line.contains("<close>")) {
-                        connected = false;
-                        disconnect();
-                        removeRegistration();
+                        closeConnection();
                     }
                 }else {
-                    //Connection closed
-                    connected = false; //Stop listening
-                    //Close Socekt
-                    disconnect();
-                    removeRegistration();
+                    closeConnection();
                 }
             }
         } catch (IOException e) {
@@ -77,6 +71,17 @@ public class MindroidServerWorker implements Runnable {
         } catch (JadbException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Disconnects the socket. Removes the Registration.
+     */
+    private void closeConnection() {
+        //Connection closed
+        connected = false; //Stop listening
+        //Close Socekt
+        disconnect();
+        removeRegistration();
     }
 
     private void disconnect() {
@@ -189,4 +194,10 @@ public class MindroidServerWorker implements Runnable {
     }
 
 
+    @Override
+    public void kickUser(String username) {
+        if(this.connectedRobot.equals(username)){
+            closeConnection();
+        }
+    }
 }

@@ -106,7 +106,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/txtView_programs"
                             android:text="@string/txt_programs"
-                            android:textSize="18sp"
+                            android:textSize="14sp"
                             android:layout_weight="0.64"/>
 
                     <Spinner

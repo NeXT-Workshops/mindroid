@@ -78,6 +78,7 @@ public class AdminFragment extends Fragment {
         btn_login_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                txt_password_input.setText("");
                 SettingsProvider sp = SettingsProvider.getInstance();
                 if(sp.isAdminModeUnlocked()) {
                     sp.setAdminModeUnlocked(false);

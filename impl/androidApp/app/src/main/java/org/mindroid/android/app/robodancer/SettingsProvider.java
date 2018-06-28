@@ -27,6 +27,7 @@ import java.util.Random;
 public class SettingsProvider implements ConnectionPropertiesChangedListener, RobotConfigurationChangedListener {
 
     private static final String ADMIN_MODE_UNLOCKED = "ADMIN_MODE_UNLOCKED";
+
     /** public Robot Attributes **/
     private String robotID = "ROBOT_ID";
     private String groupID = "GROUP_ID";

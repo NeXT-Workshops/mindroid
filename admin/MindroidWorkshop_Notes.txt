@@ -9,6 +9,8 @@ Wichtige Funktionen (JavaDoc von ImperativeWorkshopAPI) in Doku
 - 1.3 Unterpunkt 3."Wähle "Verbindung zum EV3-Brick herstellen" überprüfen. Ist das noch notwendig?
 - Geht es wirklich, dass man mit Rechtsklick auf die Java Doku verwiesen wird?
 - Woher sind die Bilder eigentlich? @Copyright
+- JE: Tabs erklären, jede Aufgabe ein Stub
+- Fingerprint akzeptieren in Doku
 
 Aufgabenimplementierung:
 
@@ -23,12 +25,14 @@ Server:
 	> Added clearMessages-method to API to clear Message cache of the phone
 App:
 - Admin Modus verbessern:
-	- Anzeige von Set im Home Fragment
-	- ? Anzeige von Admin-Mode in Home Fragment
-	- Admin Tab erreichbar wenn mit Server verbunden
-	- nach login auf Homescreen springen
-	- Spinner bei Settings größer
+	- DONE Anzeige von Set im Home Fragment
+	- DONE Anzeige von Admin-Mode in Home Fragment
+	- DONE Admin Tab erreichbar wenn mit Server verbunden
+	- DONE nach login auf Homescreen springen
+	- DEPRECATED Spinner bei Settings größer
 	- tastatur öffnen wenn in admin mode tab gegangen wird
+- Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
+- DONE Info Tab in Home Fragment default anzeigen lassen
 
 Framework:
 - neue Coop Stups, wie im CoopHelloWorld
@@ -44,13 +48,14 @@ sonstiges:
 - Unterlage mit viel Grip für den nächsten Workshop
 - email mit code + aufgabenstellung + doku an marlene
 - mindroid Film 
+- Javassist? bzw ByteBuddy?
 	
 Bugs:
 - HelloWorld beispiel funktionierte nicht nach deployment -> Brick neustart notwendig, warum?
 
-################
-erledigt:
-################
+####################
+erledigt: 27.06.2018
+####################
 
 Dokumentation und Aufgabenstellung:
 - REPLACED - Tehthering im HandyVerbinden Skript richtig schreiben

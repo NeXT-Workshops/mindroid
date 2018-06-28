@@ -54,8 +54,8 @@ public class ImplementationService {
     };
 
     private String[] classesStatemachine = {
-            "org.mindroid.android.app.programs.dev.statemachinesimpl.SensorMonitoring",
-            "org.mindroid.android.app.programs.dev.statemachinesimpl.MindroidStatemachines"
+            "org.mindroid.android.app.programs.dev.statemachines.SensorMonitoring",
+            "org.mindroid.android.app.programs.dev.statemachines.MindroidStatemachines"
     };
 
     private String[] classesStubs = {

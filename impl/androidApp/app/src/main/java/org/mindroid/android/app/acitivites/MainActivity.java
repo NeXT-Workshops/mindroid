@@ -272,7 +272,7 @@ public class MainActivity extends Activity
     @Override
     public void onAdminChanged(boolean AdminChanged) {
         if(AdminChanged)
-            switchFragment(0);
+            mNavigationDrawerFragment.selectItem(0);
 
     }
 }

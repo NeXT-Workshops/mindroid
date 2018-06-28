@@ -78,7 +78,6 @@ public class AdminFragment extends Fragment {
         btn_login_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txt_password_input.setText("");
                 SettingsProvider sp = SettingsProvider.getInstance();
                 if(sp.isAdminModeUnlocked()) {
                     sp.setAdminModeUnlocked(false);
@@ -95,6 +94,7 @@ public class AdminFragment extends Fragment {
                         Toast.makeText(getContext(), "Wrong Password =(", Toast.LENGTH_SHORT).show();
                     }
                 }
+                txt_password_input.setText("");
             }
         });
 

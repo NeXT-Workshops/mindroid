@@ -24,7 +24,7 @@ public class CoordWallPingPongB extends ImperativeWorkshopAPI {
         while (!isInterrupted() && getDistance() > 0.1f) {
             delay(10);
         }
-        driveDistanceBackward(0.2f);
+        driveDistanceBackward(10);
         turnLeft(180);
     }
 

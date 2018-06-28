@@ -102,10 +102,14 @@ public class SplashActivity extends Activity {
      * Initializes the SettingsProvider Instance
      */
     private void initialiseSettings() {
-        SharedPreferences connectionProperties = this.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_connection_Data), Context.MODE_PRIVATE);
-        SharedPreferences portConfigProperties = this.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_portConfiguration),Context.MODE_PRIVATE);
+        SharedPreferences connectionProperties = this.getApplicationContext().getSharedPreferences(
+                getResources().getString(R.string.shared_pref_connection_Data), Context.MODE_PRIVATE);
+        SharedPreferences portConfigProperties = this.getApplicationContext().getSharedPreferences(
+                getResources().getString(R.string.shared_pref_portConfiguration),Context.MODE_PRIVATE);
+        SharedPreferences adminProperties = this.getApplicationContext().getSharedPreferences(
+                getResources().getString(R.string.shared_pref_admin),Context.MODE_PRIVATE);
 
-        SettingsProvider.getInstance().initialize(getResources(),connectionProperties,portConfigProperties);
+        SettingsProvider.getInstance().initialize(getResources(),connectionProperties,portConfigProperties, adminProperties);
     }
 
 

@@ -31,8 +31,8 @@ App:
 	- DONE nach login auf Homescreen springen
 	- DEPRECATED Spinner bei Settings größer
 	- tastatur öffnen wenn in admin mode tab gegangen wird
-- Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
-- DONE Info Tab in Home Fragment default anzeigen lassen
+	- DONE: Improved Tethering - Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
+	- DONE - Info Tab in Home Fragment default anzeigen lassen
 
 Framework:
 - neue Coop Stups, wie im CoopHelloWorld

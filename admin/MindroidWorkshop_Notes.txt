@@ -28,6 +28,7 @@ App:
 	- Admin Tab erreichbar wenn mit Server verbunden
 	- nach login auf Homescreen springen
 	- Spinner bei Settings größer
+	- tastatur öffnen wenn in admin mode tab gegangen wird
 - Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
 
 Framework:

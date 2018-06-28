@@ -7,7 +7,6 @@ import org.mindroid.common.messages.ILoggable;
  *
  * Send after the client Display endpoint is connnected;
  * @author Torben
- * TODO deprecated?
  *
  */
 public class HelloDisplayMessage implements ILoggable {

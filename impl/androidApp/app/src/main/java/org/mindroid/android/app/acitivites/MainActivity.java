@@ -119,19 +119,6 @@ public class MainActivity extends Activity
                     .replace(R.id.container, HOME_FRAGMENT)
                     .commit();
         }
-
-        //READ IF CONFIG
-        /*Runnable run = new Thread(){
-            public void run(){
-                readIFConfig();
-            }
-        };
-        new Thread(run).start();
-        */
-
-        //Activate tethering - (used to activate tethering automatically after app got started after deployment)
-        //Only works if phone is connected to to brick by usb
-        //cmdShellService.setTethering(true);
     }
 
     @Override
@@ -247,12 +234,6 @@ public class MainActivity extends Activity
 
         // makes sure Home is selected in Drawer
         mNavigationDrawerFragment.selectItem(0);
-        /*
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, HOME_FRAGMENT)
-                .commit();
-        */
     }
 
     @Override

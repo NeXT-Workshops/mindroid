@@ -105,9 +105,6 @@
     <string name="title_log">Log</string>
     <string name="action_example">Example action</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <!-- Sensormonitoring -->
     <string name="title_sensor_monitoring">Sensorüberwachung</string>
     <string name="txt_sensor_description_mode_ambient_slot1">Intensität</string>

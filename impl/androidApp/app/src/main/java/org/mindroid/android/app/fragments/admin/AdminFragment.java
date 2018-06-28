@@ -32,7 +32,7 @@ public class AdminFragment extends Fragment {
     private final String PASSWORD = "133742";
 
     private EditText txt_password_input;
-    private Button btn_enter;
+    private Button btn_login_logout;
     private TextView txt_password;
 
     public AdminFragment() {
@@ -63,21 +63,36 @@ public class AdminFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_admin, container, false);
 
         txt_password_input = (EditText) view.findViewById(R.id.txt_password_input);
-        btn_enter = (Button) view.findViewById(R.id.btn_pass_enter);
+        btn_login_logout = (Button) view.findViewById(R.id.btn_pass_enter);
+        if(SettingsProvider.getInstance().isAdminModeUnlocked()){
+            btn_login_logout.setText(R.string.btn_txt_logout);
+        }else{
+            btn_login_logout.setText(R.string.btn_txt_login);
+        }
+
+
         txt_password = (TextView) view.findViewById(R.id.txt_password);
 
         txt_password_input.requestFocus();
 
-        btn_enter.setOnClickListener(new View.OnClickListener() {
+        btn_login_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(txt_password_input.getText().toString().equals(PASSWORD)){
-                    SettingsProvider.getInstance().setAdminModeUnlocked(true);
-                    Toast.makeText(getContext(), "Admin Mode Unlocked =)", Toast.LENGTH_SHORT).show();
+                SettingsProvider sp = SettingsProvider.getInstance();
+                if(sp.isAdminModeUnlocked()) {
+                    sp.setAdminModeUnlocked(false);
+                    btn_login_logout.setText(R.string.btn_txt_login);
                     adminChangedListener.onAdminChanged(true);
-                }else{
-                    SettingsProvider.getInstance().setAdminModeUnlocked(false);
-                    Toast.makeText(getContext(), "Wrong Password =(", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (txt_password_input.getText().toString().equals(PASSWORD)) {
+                        SettingsProvider.getInstance().setAdminModeUnlocked(true);
+                        btn_login_logout.setText(R.string.btn_txt_logout);
+                        Toast.makeText(getContext(), "Admin Mode Unlocked =)", Toast.LENGTH_SHORT).show();
+                        adminChangedListener.onAdminChanged(true);
+                    } else {
+                        SettingsProvider.getInstance().setAdminModeUnlocked(false);
+                        Toast.makeText(getContext(), "Wrong Password =(", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -106,6 +121,7 @@ public class AdminFragment extends Fragment {
     public interface OnAdminChanged {
         public void onAdminChanged(boolean AdminChanged);
     }
+
     @Override
     public void onDetach() {
         super.onDetach();

@@ -20,7 +20,7 @@ Server:
 - "kick devices" implementieren
 - Manchmal werden Nachrichten gebroadcastet und manchmal nicht
 - Manchmal werden alte Nachrichten an die aktuelle Runtime geschickt (liegen die Nachrichten noch in der App?)
-
+	> Added clearMessages-method to API to clear Message cache of the phone
 App:
 - Admin Modus verbessern:
 	- Anzeige von Set im Home Fragment
@@ -29,10 +29,8 @@ App:
 	- nach login auf Homescreen springen
 	- Spinner bei Settings größer
 	- tastatur öffnen wenn in admin mode tab gegangen wird
-- Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
 
 Framework:
-
 - neue Coop Stups, wie im CoopHelloWorld
 - Fehlermeldung mit Zeilenangabe (in Bezug auf den Code der Teilnehmer)
 
@@ -87,6 +85,7 @@ Aufgabenimplementierung:
 - DONE über dem Konstruktor einen Kommentar, dass dieser nicht geändert werden darf
 
 Framework:
+- DONE: Improved Tethering activation which seem to solve the "unable to connect issu - Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
 - DONE - automatisch Delay im Hintergrund von forward, backward, stop ... aufrufen (50ms)
 - DONE - Added clearMessage Method to the API - Message Server, reset old messages
 - DONE Mein Roboter Sensoren/Motoren default werte in app setzen

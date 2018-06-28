@@ -27,6 +27,8 @@ import javax.xml.datatype.Duration;
  */
 public class AdminFragment extends Fragment {
 
+    private OnAdminChanged adminChangedListener;
+
     private final String PASSWORD = "133742";
 
     private EditText txt_password_input;
@@ -64,12 +66,15 @@ public class AdminFragment extends Fragment {
         btn_enter = (Button) view.findViewById(R.id.btn_pass_enter);
         txt_password = (TextView) view.findViewById(R.id.txt_password);
 
+        txt_password_input.requestFocus();
+
         btn_enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(txt_password_input.getText().toString().equals(PASSWORD)){
                     SettingsProvider.getInstance().setAdminModeUnlocked(true);
                     Toast.makeText(getContext(), "Admin Mode Unlocked =)", Toast.LENGTH_SHORT).show();
+                    adminChangedListener.onAdminChanged(true);
                 }else{
                     SettingsProvider.getInstance().setAdminModeUnlocked(false);
                     Toast.makeText(getContext(), "Wrong Password =(", Toast.LENGTH_SHORT).show();
@@ -90,8 +95,17 @@ public class AdminFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
 
+        if (context instanceof OnAdminChanged) {
+            adminChangedListener = (OnAdminChanged) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+    public interface OnAdminChanged {
+        public void onAdminChanged(boolean AdminChanged);
+    }
     @Override
     public void onDetach() {
         super.onDetach();

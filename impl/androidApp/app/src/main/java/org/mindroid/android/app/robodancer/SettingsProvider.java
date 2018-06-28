@@ -64,6 +64,8 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     private Resources resources;
     private SharedPreferences connectionProperties;
     private SharedPreferences portConfigProperties;
+    private SharedPreferences adminProperties;
+
     private boolean adminModeUnlocked;
 
     private boolean isInitialized = false;
@@ -103,20 +105,27 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
      * @param res App resources
      * @param connectionProperties Shared Preferences containing Connection-Properties
      * @param portConfigProperties Shared Preferences containing the Port Configuration
+     * @param adminProperties
      */
-    public void initialize(Resources res, SharedPreferences connectionProperties, SharedPreferences portConfigProperties){
+    public void initialize(Resources res, SharedPreferences connectionProperties, SharedPreferences portConfigProperties, SharedPreferences adminProperties){
         if(!isInitialized) {
             this.resources = res;
             this.connectionProperties = connectionProperties;
             this.portConfigProperties = portConfigProperties;
+            this.adminProperties = adminProperties;
 
             //Initial loading
             loadConnectionProperties();
             loadRobotPortConfiguration();
+            loadAdminModeProperties();
 
             //Initialization complete
             this.isInitialized = true;
         }
+    }
+
+    private void loadAdminModeProperties() {
+        adminModeUnlocked = adminProperties.getBoolean("adminModeUnlocked", false);
     }
 
     public void setAndroidId(final String androidId) {
@@ -344,6 +353,9 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     }
 
     public void setAdminModeUnlocked(boolean adminModeUnlocked) {
+        SharedPreferences.Editor e = adminProperties.edit();
+        e.putBoolean("adminModeUnlocked",adminModeUnlocked);
+        e.commit();
         this.adminModeUnlocked = adminModeUnlocked;
     }
 

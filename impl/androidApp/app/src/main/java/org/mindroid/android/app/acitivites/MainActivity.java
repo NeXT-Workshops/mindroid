@@ -43,11 +43,11 @@ import java.util.logging.Logger;
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        SettingsFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
         SensorMonitoringFragment.OnFragmentInteractionListener,
         SensorObservationFragment.OnFragmentInteractionListener,
         SettingsFragment.OnSettingsChanged,
+        AdminFragment.OnAdminChanged,
         MyRobotFragment.OnFragmentInteractionListener,
         RobotSetupInfoFragment.OnFragmentInteractionListener,
         IErrorHandler{
@@ -286,5 +286,12 @@ public class MainActivity extends Activity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onAdminChanged(boolean AdminChanged) {
+        if(AdminChanged)
+            switchFragment(0);
+
     }
 }

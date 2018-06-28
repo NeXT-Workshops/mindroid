@@ -155,6 +155,7 @@
     <string name="txt_log_deleted">Log deleted</string>
     <string name="title_admin">Admin</string>
     <string name="PROGRAM_SET">Programmsatz</string>
+    <string name="shared_pref_admin">shared_pref_admin</string>
 
 
 </resources>

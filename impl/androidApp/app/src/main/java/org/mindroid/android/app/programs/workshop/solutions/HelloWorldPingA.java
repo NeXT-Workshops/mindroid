@@ -1,6 +1,7 @@
 package org.mindroid.android.app.programs.workshop.solutions;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
+import org.mindroid.impl.brick.Button;
 
 public class HelloWorldPingA extends ImperativeWorkshopAPI {
 
@@ -11,6 +12,10 @@ public class HelloWorldPingA extends ImperativeWorkshopAPI {
     @Override
     public void run() {
         clearDisplay();
-        sendMessage("Robert", "Hallo Robert!");
+        while(!isInterrupted()){
+            delay(10);
+            if(isButtonClicked(Button.ENTER))
+                sendMessage("Robert", "Hallo Robert!");
+        }
     }
 }

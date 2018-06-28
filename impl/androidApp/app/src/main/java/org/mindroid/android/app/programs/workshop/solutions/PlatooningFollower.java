@@ -10,7 +10,7 @@ import org.mindroid.impl.brick.Textsize;
 public class PlatooningFollower extends ImperativeWorkshopAPI {
 
     public PlatooningFollower(){
-        super("Platooning");
+        super("Platooning Follower");
     };
     enum State {
         FAST,

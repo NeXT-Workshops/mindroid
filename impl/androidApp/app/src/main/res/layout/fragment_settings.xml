@@ -80,12 +80,7 @@
                     android:text="MSG-Server Port"
                     android:textStyle="bold" />
 
-                <TextView
-                        android:text="@string/PROGRAM_SET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txt_program_set"
-                        android:textStyle="bold"/>
+
 
             </LinearLayout>
 
@@ -303,11 +298,7 @@
                         android:numeric="integer|signed"
                         android:text="Name"/>
 
-                <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="16dp"
-                        android:id="@+id/spinner_program_set"
-                        />
+
 
             </LinearLayout>
 

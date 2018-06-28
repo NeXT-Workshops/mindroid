@@ -1,28 +1,45 @@
 ﻿Dokumentation und Aufgabenstellung:
-- getmessage etc in anleitung
-- Button clicked und getRoboID in die Aufgabenbeschreibung
+Wichtige Funktionen (JavaDoc von ImperativeWorkshopAPI) in Doku
+	- getmessage etc in anleitung
+	- sendLogMessage erwähnen
+	- Button clicked und getRoboID in die Aufgabenbeschreibung
 - Aufgabenbeschreibung für die neuen Coop Stubs anpassen
 - in der Aufgabenstellung sollte erwähnt werden, dass man auf den MessageServer achten sollte (aktuell schaut da niemand drauf)
-- dazu auch sendLogMessage erwähnen
-
-Aufgabenimplementierung:
-
-Framework:
-- neue Coop Stups, wie im CoopHelloWorld
-- Fehlermeldung mit Zeilenangabe (in Bezug auf den Code der Teilnehmer)
-
-Documentation:
 - 1.1.3 (Roboter und App verbinden) mit 1.1.2 (Programme Übertragen) tauschen.
 - 1.3 Unterpunkt 3."Wähle "Verbindung zum EV3-Brick herstellen" überprüfen. Ist das noch notwendig?
 - Geht es wirklich, dass man mit Rechtsklick auf die Java Doku verwiesen wird?
 - Woher sind die Bilder eigentlich? @Copyright
 
+Aufgabenimplementierung:
+
+Stubs & Solutions:
+
+
+Server:
+- autoscroll implementieren mit checkbox
+- "kick devices" implementieren
+- Manchmal werden Nachrichten gebroadcastet und manchmal nicht
+- Manchmal werden alte Nachrichten an die aktuelle Runtime geschickt (liegen die Nachrichten noch in der App?)
+
+App:
+- Admin Modus verbessern:
+	- Anzeige von Set im Home Fragment
+	- ? Anzeige von Admin-Mode in Home Fragment
+	- Admin Tab erreichbar wenn mit Server verbunden
+	- nach login auf Homescreen springen
+	- Spinner bei Settings größer
+	- tastatur öffnen wenn in admin mode tab gegangen wird
+- Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
+
+Framework:
+
+- neue Coop Stups, wie im CoopHelloWorld
+- Fehlermeldung mit Zeilenangabe (in Bezug auf den Code der Teilnehmer)
+
 bugs & improvements:
 - App schmiert ab, wenn man wild herumklickt
 - dreh-korrektur nochmal überprüfen (endlosschleife - er versucht sich minimal in die falsche Richtung zu korrigieren)
 - Stubs sind bei erneutem run() Aufruf noch instanziiert und haben noch ihren alten State (new Stub()).run()
-- Manchmal werden Nachrichten gebroadcastet und manchmal nicht
-- Manchmal werden alte Nachrichten an die aktuelle Runtime geschickt (liegen die Nachrichten noch in der App?)
 
 sonstiges:
 - Aufkleber "Energy Demo" auf Handy?
@@ -33,7 +50,9 @@ sonstiges:
 Bugs:
 - HelloWorld beispiel funktionierte nicht nach deployment -> Brick neustart notwendig, warum?
 
+################
 erledigt:
+################
 
 Dokumentation und Aufgabenstellung:
 - REPLACED - Tehthering im HandyVerbinden Skript richtig schreiben
@@ -68,7 +87,6 @@ Aufgabenimplementierung:
 - DONE über dem Konstruktor einen Kommentar, dass dieser nicht geändert werden darf
 
 Framework:
-- DONE -> Improved Tethering Activation - Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
 - DONE - automatisch Delay im Hintergrund von forward, backward, stop ... aufrufen (50ms)
 - DONE - Added clearMessage Method to the API - Message Server, reset old messages
 - DONE Mein Roboter Sensoren/Motoren default werte in app setzen

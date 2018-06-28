@@ -154,6 +154,8 @@
     <string name="title_admin">Admin</string>
     <string name="PROGRAM_SET">Programmsatz</string>
     <string name="shared_pref_admin">shared_pref_admin</string>
+    <string name="btn_txt_logout">Logout</string>
+    <string name="btn_txt_login">Login</string>
 
 
 </resources>

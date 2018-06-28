@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -119,6 +120,10 @@ public class SplashActivity extends Activity {
      * Activates Tethering.
      */
     private void setupTethering(boolean isUsbConnected) {
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager.setWifiEnabled(false);
+
+
         //Check USB Connection
         txtView_currentAction.setText(getResources().getText(R.string.txt_checking_usb));
 
@@ -127,6 +132,8 @@ public class SplashActivity extends Activity {
             this.txtView_currentAction.setText(getResources().getText(R.string.txt_activate_tethering));
             ShellService.setTethering(true);
         }
+
+        wifiManager.setWifiEnabled(true);
     }
 
     private void connectToMsgServer(){

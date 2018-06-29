@@ -84,6 +84,7 @@ bugs & improvements:
 - Stubs sind bei erneutem run() Aufruf noch instanziiert und haben noch ihren alten State (new Stub()).run()
 - Manchmal werden Nachrichten gebroadcastet und manchmal nicht
 - Manchmal werden alte Nachrichten an die aktuelle Runtime geschickt (liegen die Nachrichten noch in der App?)
+- Color/Colour einheitlich machen
 
 sonstiges:
 - Aufkleber "Energy Demo" auf Handy?

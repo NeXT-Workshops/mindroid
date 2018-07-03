@@ -64,7 +64,7 @@ public class ImplementationService {
 
             "org.mindroid.android.app.programs.workshop.stubs.DriveSquare",
             "org.mindroid.android.app.programs.workshop.stubs.ParkingSensor",
-            "org.mindroid.android.app.programs.workshop.stubs.ColourTest",
+            "org.mindroid.android.app.programs.workshop.stubs.ColorTest",
 
             "org.mindroid.android.app.programs.workshop.stubs.HelloWorldPingR",
             "org.mindroid.android.app.programs.workshop.stubs.HelloWorldPingB",
@@ -83,7 +83,7 @@ public class ImplementationService {
 
             "org.mindroid.android.app.programs.workshop.solutions.DriveSquare",
             "org.mindroid.android.app.programs.workshop.solutions.ParkingSensor",
-            "org.mindroid.android.app.programs.workshop.solutions.ColourTest",
+            "org.mindroid.android.app.programs.workshop.solutions.ColorTest",
 
             "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPingA",
             "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPingB",

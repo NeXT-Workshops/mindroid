@@ -18,8 +18,8 @@ Stubs & Solutions:
 
 
 Server:
-- autoscroll implementieren mit checkbox
-- "kick devices" implementieren
+- Implemented - but off by one line - autoscroll implementieren mit checkbox
+- DONE - "kick devices" implementieren
 - Manchmal werden Nachrichten gebroadcastet und manchmal nicht
 - Manchmal werden alte Nachrichten an die aktuelle Runtime geschickt (liegen die Nachrichten noch in der App?)
 	> Added clearMessages-method to API to clear Message cache of the phone

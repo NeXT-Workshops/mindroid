@@ -16,6 +16,10 @@ Aufgabenimplementierung:
 
 Stubs & Solutions:
 
+Reasearch:
+	- Lawn Mower Lars:
+		- Kryonet exceptions: Invalid object length
+		- Manchmal stoppt er nicht wenn er solte/dreht nicht -> ursache?
 
 Server:
 - Implemented - but off by one line - autoscroll implementieren mit checkbox

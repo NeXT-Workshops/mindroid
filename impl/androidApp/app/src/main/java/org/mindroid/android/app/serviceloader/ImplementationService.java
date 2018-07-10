@@ -37,6 +37,7 @@ public class ImplementationService {
             "org.mindroid.android.app.programs.dev.AccelerationTestManual",
             "org.mindroid.android.app.programs.dev.AccelerationTestAuto",
             "org.mindroid.android.app.programs.dev.RectangleDriver",
+            "org.mindroid.android.app.programs.dev.LawnMowerLars",
             "org.mindroid.android.app.programs.dev.MotorTest",
             "org.mindroid.android.app.programs.dev.SensorTestWallPingPong",
             "org.mindroid.android.app.programs.dev.TestBroadcasting",

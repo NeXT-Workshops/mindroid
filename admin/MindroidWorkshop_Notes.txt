@@ -28,6 +28,8 @@ Server:
 - Manchmal werden alte Nachrichten an die aktuelle Runtime geschickt (liegen die Nachrichten noch in der App?)
 	> Added clearMessages-method to API to clear Message cache of the phone
 App:
+- Was passiert, wenn das WLAN bei reaktivierung (tethering beschleunigung) mehrere bekannte WLAN Netze zur Verfügung hat?
+	- Lock auf das vorherige möglich?
 - Admin Modus verbessern:
 	- DONE Anzeige von Set im Home Fragment
 	- DONE Anzeige von Admin-Mode in Home Fragment

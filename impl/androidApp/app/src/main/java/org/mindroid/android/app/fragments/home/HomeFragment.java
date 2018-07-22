@@ -207,10 +207,13 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
         spinner_program_sets.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, ImplementationService.getInstance().getImplementationSets()));
 
+        //Set spinner visibility of program sets depending on logged in/out admin mode
         if(SettingsProvider.getInstance().isAdminModeUnlocked()) {
+            //LOGGED into admin mode
             txt_program_set.setVisibility(View.VISIBLE);
             spinner_program_sets.setVisibility(View.VISIBLE);
         }else{
+            //NOT LOGGED into admin mode
             txt_program_set.setVisibility(View.GONE);
             spinner_program_sets.setVisibility(View.GONE);
         }

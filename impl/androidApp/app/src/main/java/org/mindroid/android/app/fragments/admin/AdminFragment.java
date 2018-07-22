@@ -14,14 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.robodancer.SettingsProvider;
+import org.mindroid.android.app.serviceloader.ImplementationService;
 
 import javax.xml.datatype.Duration;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AdminFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
  * Use the {@link AdminFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -80,16 +78,22 @@ public class AdminFragment extends Fragment {
             public void onClick(View v) {
                 SettingsProvider sp = SettingsProvider.getInstance();
                 if(sp.isAdminModeUnlocked()) {
+                    ////Btn clicked - state: was logged in before -> log out
                     sp.setAdminModeUnlocked(false);
                     btn_login_logout.setText(R.string.btn_txt_login);
                     adminChangedListener.onAdminChanged(true);
+                    //Set program set to default (Stubs)
+                    SettingsProvider.getInstance().setSelectedProgramSet(ImplementationService.getInstance().getDefaultSet());
                 } else {
+                    //Btn clicked - was logged out before -> log in if password is correct
                     if (txt_password_input.getText().toString().equals(PASSWORD)) {
+                        //Password correct -> log in admin mode
                         SettingsProvider.getInstance().setAdminModeUnlocked(true);
                         btn_login_logout.setText(R.string.btn_txt_logout);
                         Toast.makeText(getContext(), "Admin Mode Unlocked =)", Toast.LENGTH_SHORT).show();
                         adminChangedListener.onAdminChanged(true);
                     } else {
+                        //Password incorrect -> show wrong password note
                         SettingsProvider.getInstance().setAdminModeUnlocked(false);
                         Toast.makeText(getContext(), "Wrong Password =(", Toast.LENGTH_SHORT).show();
                     }

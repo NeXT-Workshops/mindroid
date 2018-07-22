@@ -140,7 +140,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         menuItemAlwaysEnabled.put(2,false);
         menuItemAlwaysEnabled.put(3,false);
         menuItemAlwaysEnabled.put(4,true);
-        menuItemAlwaysEnabled.put(5,true);
+        menuItemAlwaysEnabled.put(5,false);
     }
 
 

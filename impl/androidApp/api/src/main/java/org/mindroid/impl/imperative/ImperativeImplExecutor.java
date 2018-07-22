@@ -119,6 +119,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
     public void setImplementation(ImperativeAPI runnable) {
         setRunnable(runnable);
         LOGGER.log(Level.INFO,"Implementation Set: ID="+runnable.getImplementationID());
+        LOGGER.log(Level.INFO,"Implementation class="+runnable.getClass());
     }
 
     // ------ Methods to add some code sugar ------

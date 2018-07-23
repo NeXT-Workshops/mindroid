@@ -1,9 +1,11 @@
 package org.mindroid.api;
 
+import java.io.Serializable;
+
 /**
  * This Class defines the basic Imperative Implementation API.
  */
-public abstract class ImperativeAPI extends BasicAPI implements IInterruptable {
+public abstract class ImperativeAPI extends BasicAPI implements IInterruptable, Serializable {
 
 
 

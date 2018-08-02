@@ -65,6 +65,7 @@ Bugs:
 erledigt: 27.06.2018
 ####################
 
+
 Dokumentation und Aufgabenstellung:
 - REPLACED - Tehthering im HandyVerbinden Skript richtig schreiben
 - Anleitung anpassen

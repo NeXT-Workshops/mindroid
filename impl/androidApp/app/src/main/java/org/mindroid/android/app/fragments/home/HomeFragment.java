@@ -93,6 +93,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private final static Logger LOGGER = Logger.getLogger(HomeFragment.class.getName());
 
     private Process shellProcess;
+    private boolean stopThreads;
 
     public HomeFragment() { //Called by newInstance(..)
         // Required empty public constructor
@@ -121,6 +122,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         robot = MainActivity.robot;
         parentActivity = (MainActivity) getActivity();
 
+        stopThreads = false;
 
         if(parentActivity instanceof IErrorHandler){
             robot.registerErrorHandler(((IErrorHandler) parentActivity).getErrorHandler());
@@ -372,7 +374,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         Runnable check = new Runnable() {
             @Override
             public void run() {
-                while(true) {
+                while(!stopThreads) {
 
                     //Enable/disable control buttons (Connect to brick, init configuration, start robot,stop robot)
                     parentActivity.runOnUiThread(taskUpdateButtonEnableState);
@@ -398,6 +400,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         new Thread(check).start();
     } //USB_FUNCTION_RNDIS
 
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        stopThreads = true;
+    }
 
 
     /**

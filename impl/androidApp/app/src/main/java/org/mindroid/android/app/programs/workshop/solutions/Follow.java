@@ -11,7 +11,7 @@ import java.util.Random;
 public class Follow extends ImperativeWorkshopAPI {
 
     public Follow() {
-        super("Follower");
+        super("Follower [sol]");
     }
     enum PlatoonState {
         FAST,
@@ -120,15 +120,15 @@ public class Follow extends ImperativeWorkshopAPI {
             if (prevState != PlatoonState.FAST && distance > 0.35f) {
                 forward(300);
                 prevState = PlatoonState.FAST;
-                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                setLED(LED_GREEN_ON);
             } else if (prevState != PlatoonState.SLOW && distance < 0.25f) {
                 forward(100);
                 prevState = PlatoonState.SLOW;
-                setLED(EV3StatusLightColor.RED, EV3StatusLightInterval.ON);
+                setLED(LED_RED_ON);
             } else if (prevState != PlatoonState.MED && distance > 0.25f && distance < 0.35f) {
                 forward(200);
                 prevState = PlatoonState.MED;
-                setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.ON);
+                setLED(LED_YELLOW_ON);
             }
 
             // check for Turn Message

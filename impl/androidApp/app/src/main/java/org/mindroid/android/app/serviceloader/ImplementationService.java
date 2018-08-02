@@ -36,6 +36,8 @@ public class ImplementationService {
     private String[] classesDev = {
             "org.mindroid.android.app.programs.dev.AccelerationTestManual",
             "org.mindroid.android.app.programs.dev.AccelerationTestAuto",
+            "org.mindroid.android.app.programs.dev.HelloWorldPingA",
+            "org.mindroid.android.app.programs.dev.HelloWorldPingB",
             "org.mindroid.android.app.programs.dev.RectangleDriver",
             "org.mindroid.android.app.programs.dev.LawnMowerLars",
             "org.mindroid.android.app.programs.dev.MotorTest",

@@ -1,4 +1,4 @@
-package org.mindroid.android.app.programs.workshop.solutions;
+package org.mindroid.android.app.programs.dev;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.impl.brick.Button;
@@ -15,6 +15,7 @@ public class HelloWorldPingA extends ImperativeWorkshopAPI {
         while(!isInterrupted()){
             delay(10);
             if(isButtonClicked(Button.ENTER))
+                sendLogMessage("Ich sende jetzt eine Nachricht an Robert!");
                 sendMessage("Robert", "Hallo Robert!");
         }
     }

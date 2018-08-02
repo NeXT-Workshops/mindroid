@@ -9,7 +9,7 @@ public class LawnMower extends ImperativeWorkshopAPI {
     private static float backDist = 10.0f;
 
     public LawnMower() {
-        super("Lawn Mower");
+        super("Lawn Mower [sol]");
     }
 
   @Override

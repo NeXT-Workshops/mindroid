@@ -27,25 +27,25 @@ public class ButtonTest extends ImperativeWorkshopAPI {
         sendLogMessage("ButtonTest: Starte LED Test");
 
         //LED TEST
-        setLED(colors[0],interval[0]);
+        setLED(LED_GREEN_ON);
         delay(1000);
-        setLED(colors[0],interval[1]);
+        setLED(LED_GREEN_BLINKING);
         delay(1000);
-        setLED(colors[0],interval[2]);
-        delay(1000);
-
-        setLED(colors[1],interval[0]);
-        delay(1000);
-        setLED(colors[1],interval[1]);
-        delay(1000);
-        setLED(colors[1],interval[2]);
+        setLED(LED_GREEN_FAST_BLINKING);
         delay(1000);
 
-        setLED(colors[2],interval[0]);
+        setLED(LED_YELLOW_ON);
         delay(1000);
-        setLED(colors[2],interval[1]);
+        setLED(LED_YELLOW_BLINKING);
         delay(1000);
-        setLED(colors[2],interval[2]);
+        setLED(LED_YELLOW_FAST_BLINKING);
+        delay(1000);
+
+        setLED(LED_RED_ON);
+        delay(1000);
+        setLED(LED_RED_BLINKING);
+        delay(1000);
+        setLED(LED_RED_FAST_BLINKING);
         delay(1000);
 
         setLEDOff();

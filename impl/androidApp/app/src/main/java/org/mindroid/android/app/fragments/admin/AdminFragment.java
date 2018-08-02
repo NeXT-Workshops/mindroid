@@ -57,8 +57,6 @@ public class AdminFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    private
-
     @Override
     public void onDestroyView(){
         imgr.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);

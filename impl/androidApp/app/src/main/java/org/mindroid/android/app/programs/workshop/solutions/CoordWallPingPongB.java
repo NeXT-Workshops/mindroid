@@ -5,7 +5,7 @@ import org.mindroid.api.ImperativeWorkshopAPI;
 public class CoordWallPingPongB extends ImperativeWorkshopAPI {
 
     public CoordWallPingPongB() {
-        super("Coord Wall Ping-Pong Bob");
+        super("Coord Wall Ping-Pong Bob [sol]");
     }
 
     String colleague = "Alice";
@@ -21,7 +21,7 @@ public class CoordWallPingPongB extends ImperativeWorkshopAPI {
 
     private void driveToWallAndTurn(){
         forward(300);
-        while (!isInterrupted() && getDistance() > 0.1f) {
+        while (!isInterrupted() && getDistance() > 10f) {
             delay(10);
         }
         driveDistanceBackward(10);

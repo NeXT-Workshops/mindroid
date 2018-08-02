@@ -5,7 +5,7 @@ import org.mindroid.api.ImperativeWorkshopAPI;
 public class DriveSquare extends ImperativeWorkshopAPI {
 
     public DriveSquare() {
-           super("Drive Square");
+           super("Drive Square [sol]");
     }
 
     @Override

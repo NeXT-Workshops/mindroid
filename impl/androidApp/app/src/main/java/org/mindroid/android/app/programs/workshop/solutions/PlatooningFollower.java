@@ -10,7 +10,7 @@ import org.mindroid.impl.brick.Textsize;
 public class PlatooningFollower extends ImperativeWorkshopAPI {
 
     public PlatooningFollower(){
-        super("Platooning Follower");
+        super("Platooning Follower [sol]l");
     };
     enum State {
         FAST,
@@ -25,18 +25,18 @@ public class PlatooningFollower extends ImperativeWorkshopAPI {
             clearDisplay();
             float distance = getDistance();
             drawString("Dist: " + distance, Textsize.MEDIUM, 10,50);
-            if (prevState != State.FAST && distance > 0.30f) {
+            if (prevState != State.FAST && distance > 30f) {
                 forward(300);
                 prevState = State.FAST;
-                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
-            } else if (prevState != State.SLOW && distance < 0.20f) {
+                setLED(LED_GREEN_ON);
+            } else if (prevState != State.SLOW && distance < 20f) {
                 forward(100);
                 prevState = State.SLOW;
-                setLED(EV3StatusLightColor.RED, EV3StatusLightInterval.ON);
-            } else if (prevState != State.MED && distance > 0.20f && distance < 0.30f) {
+                setLED(LED_RED_ON);
+            } else if (prevState != State.MED && distance > 20f && distance < 30f) {
                 forward(200);
                 prevState = State.MED;
-                setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.ON);
+                setLED(LED_YELLOW_ON);
             }
             delay(50);
         }

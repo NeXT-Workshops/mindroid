@@ -22,6 +22,17 @@ public abstract class BasicAPI {
 
     abstract void accept(AbstractImplVisitor visitor);
 
+    //LED MODES
+    public static final int LED_OFF = 0;
+    public static final int LED_GREEN_ON = 1;
+    public static final int LED_GREEN_BLINKING = 2;
+    public static final int LED_GREEN_FAST_BLINKING = 3;
+    public static final int LED_YELLOW_ON = 4;
+    public static final int LED_YELLOW_BLINKING = 5;
+    public static final int LED_YELLOW_FAST_BLINKING = 6;
+    public static final int LED_RED_ON = 7;
+    public static final int LED_RED_BLINKING = 8;
+    public static final int LED_RED_FAST_BLINKING = 9;
 
     // --------------------- BRICK CONTROLLING METHODS: Display, LED, Sounds, Buttons ---------------------
 
@@ -33,6 +44,56 @@ public abstract class BasicAPI {
      */
     public final void setLED(EV3StatusLightColor color, EV3StatusLightInterval interval) {
         getBrickController().setEV3StatusLight(color, interval);
+    }
+
+    /**
+     * Sets the LED Color
+     * 0 - off
+     * 1 - green on
+     * 2 - green blinking
+     * 3 - green double blinking
+     * 4 - yellow on
+     * 5 - yellow blinking
+     * 6 - yellow double blinking
+     * 7 - red on
+     * 8 - red blinking
+     * 9 - red double blinking
+     * @param mode 0 - 9
+     */
+    public final void setLED(int mode){
+        switch(mode){
+            case LED_OFF: setLEDOff();
+                    break;
+            case LED_GREEN_ON:
+                    setLED(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
+                    break;
+            case LED_GREEN_BLINKING:
+                    setLED(EV3StatusLightColor.GREEN,EV3StatusLightInterval.BLINKING);
+                    break;
+            case LED_GREEN_FAST_BLINKING:
+                    setLED(EV3StatusLightColor.GREEN,EV3StatusLightInterval.DOUBLE_BLINKING);
+                    break;
+            case LED_YELLOW_ON:
+                    setLED(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
+                    break;
+            case LED_YELLOW_BLINKING:
+                    setLED(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.BLINKING);
+                    break;
+            case LED_YELLOW_FAST_BLINKING:
+                    setLED(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.DOUBLE_BLINKING);
+                    break;
+            case LED_RED_ON:
+                    setLED(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
+                    break;
+            case LED_RED_BLINKING:
+                    setLED(EV3StatusLightColor.RED,EV3StatusLightInterval.BLINKING);
+                    break;
+            case LED_RED_FAST_BLINKING:
+                    setLED(EV3StatusLightColor.RED,EV3StatusLightInterval.DOUBLE_BLINKING);
+                    break;
+            default: setLEDOff();
+                    break;
+        }
     }
 
     /**

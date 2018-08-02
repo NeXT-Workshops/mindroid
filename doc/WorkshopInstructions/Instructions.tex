@@ -19,6 +19,7 @@
 \usepackage{subcaption}
 \usepackage{listings}
 \usepackage{todonotes}
+\usepackage[hyphens]{url}
 
 
 %% unused packages, might be useful someday
@@ -36,6 +37,7 @@
 
 \counterwithin{figure}{section} 
 \counterwithin{table}{section} 
+
 \newcommand{\gcenter}[4]{
 	\begin{figure}[h]
 	\centering 
@@ -320,12 +322,12 @@
 	
 	Wir möchten nun, dass Berta eine Nachricht mit dem Inhalt \textbf{``Hallo Robert!''} an den Nachrichtenserver versendet. Robert soll diese Nachricht empfangen und die Nachricht auf seinem Display ausgeben. 
 	Dazu sind zwei unterschiedliche Programme für Robert und Berta notwendig.
-	\lstinputlisting[firstline=3]{\solpath/HelloWorldPingB.java}
+	\lstinputlisting[firstline=3]{\solpath/HelloWorldPingA.java}
 	\begin{itemize}
-	\item Bei Programmstart sendet Berta in Zeile 14 eine Nachricht an \textbf{Robert }mit den Inhalt \textbf{``Hallo Robert!''}
+	\item Bei Programmstart sendet Berta in Zeile 16 eine Nachricht an \textbf{Robert }mit den Inhalt \textbf{``Hallo Robert!''}
 	\end{itemize}
 	
-	\lstinputlisting[firstline=3]{\solpath/HelloWorldPingR.java}
+	\lstinputlisting[firstline=3]{\solpath/HelloWorldPingB.java}
 	
 	\begin{itemize}
 	\item Robert überprüft mit \bfcode{hasMessage()} (Zeilte 16) ob neue Nachrichten auf dem Message-Server vorhanden sind. 
@@ -520,13 +522,13 @@
 	
 	\begin{table}[htbp]
 		\begin{center}
-		\begin{tabular}{|l|l|l|}
-		\hline
-		Anschluss & Sensortyp & Modus \\ \hline
-		\multicolumn{1}{|r|}{1} & Farbe & ColorID \\ \hline
-		\multicolumn{1}{|r|}{2} & Ultraschall & Distance \\ \hline
-		\multicolumn{1}{|r|}{3} & Gyroskop & Angle \\ \hline
-		\multicolumn{1}{|r|}{4} & Farbe & ColorID \\ \hline
+		\begin{tabular}{r|l|l}
+		
+		\textbf{Anschluss} & \textbf{Sensortyp} & \textbf{Modus} \\ \hline
+		1 & Farbe & ColorID \\ 
+		2 & Ultraschall & Distance \\ 
+		3 & Gyroskop & Angle \\ 
+		4 & Farbe & ColorID \\ 
 		\end{tabular}
 		\end{center}
 		\caption{Sensorbelegung}
@@ -536,19 +538,209 @@
 	Tabelle \ref{tab:motors} zeigt den standardmäßigen Motoranschluss, wie er in der App unter ``Mein Roboter'' definiert sein muss.
 	\begin{table}[htbp]
 		\begin{center}
-		\begin{tabular}{|l|l|}
-		\hline
-		Anschluss & Motor \\ \hline
-		A & Large Regulated Motor \\ \hline
-		B & - \\ \hline
-		C & - \\ \hline
-		D & Large Regulated Motor \\ \hline
+		\begin{tabular}{r|l}
+		
+		\textbf{Anschluss} & \textbf{Motor} \\ \hline
+		A & Large Regulated Motor \\ 
+		B & - \\ 
+		C & - \\ 
+		D & Large Regulated Motor \\ 
 		\end{tabular}
 		\end{center}
 		\caption{Motorbelegung}
 		\label{tab:motors}
 	\end{table}
 	
+	\newpage
+	\section{Wichtige Funktionen}
+	Hier eine kleine Übersicht über die wichtigsten Funktionen beim Programmieren der Roboter.
+
 	
+	\subsection{Fahren}
+		Mögliche Eingabewerte für den $speed$-Parameter liegen zwischen 0 und 1000.
+		Eine maximale Geschwindigkeit von $300$ sollte ausreichen. Niedrigere Geschwindigkeiten schonen den Akku.	
+		Die Distanz wird im $distance$-Parameter immer als Kommazahl in Zentimetern (cm) angegeben (z.B.: 20cm werden als $20.0f$ angegeben)
 	
+		\begin{table}[htbp]
+		\begin{tabular}{|p{0.1\textwidth} p{0.85\textwidth}|}
+		\hline
+		\textbf{Typ} & \textbf{Methode und Beschreibung} \\ \hline
+		void & setMotorSpeed(int speed) \\
+		& \\
+		& Bestimmt die Geschwindigkeit für Fahrmethoden ohne $speed$-Parameter. \\ \hline
+		void & forward() \\ 
+		void & backward() \\ & \\
+		& Fahren mit der von $setMotorSpeed(...)$ gesetzten Geschwindigkeit. \\ \hline
+		void & driveDistanceForward(float distance) \\
+		void & driveDistanceBackward(float distance) \\ & \\
+		& Fahren mit der von $setMotorSpeed(...)$ gesetzten Geschwindigkeit\\ 
+		& Die Distanz muss in Zentimetern angegeben werden. \\ \hline
+		
+		void & forward(int speed) \\ 
+		void & backward(int speed)  \\ 
+		void & driveDistanceForward(float distance, int speed) \\ 
+		void & driveDistanceBackward(float distance, int speed) \\ 		
+		& \\
+		& Wie oben, nur dass der $speed$-Parameter die von $setMotorSpeed()$ gesetzte Geschwindigkeit überschreibt. Nach Beendigung des Aufrufs, wird wieder die vorher gesetzte Geschwindigkeit genutzt.\\ \hline
+
+		void & turnLeft(int degrees) \\ 
+		void & turnRight(int degrees) \\ 
+		void & turnLeft(int degrees, int speed) \\ 
+		void & turnRight(int degrees, int speed) \\ 
+		& \\
+		& Dreht den Roboter um den im $degrees$-Parameter bestimmten Wert. \\
+		& Der $Speed$-Parameter verhält sich wie bei den anderen Methoden. \\ \hline
+		
+		void & stop() \\ 
+		& \\
+		& Stoppt sofort alle Motoren.	\\ \hline
+		\end{tabular}
+		\end{table}
+		
+		\newpage
+	\subsection{Sensoren}
+		\begin{table}[htbp]
+		\begin{tabular}{|p{0.1\textwidth} p{0.85\textwidth}|}
+		\hline
+		\textbf{Typ} & \textbf{Methode und Beschreibung} \\ \hline
+		float & getAngle() \\ 
+		&\\
+		& Liefert den Winkel des Gyrosensors in Grad\\ \hline
+		float & getDistance() \\ 
+		&\\
+		& Liefert die vom Ultraschallsensor gemessene Distanz in Zentimetern\\ \hline
+		
+		Colors & getLeftColor() \\ 
+		Colors & getRightColor() \\
+		&\\
+		& Liefert den Wert des Linken/Rechten Farbsensors\\ 
+		& Farbwerte: Colors.BLACK, Colors.BLUE, Colors.BROWN, Colors.GREEN, \\ &Colors.RED, Colors.WHITE, Colors.YELLOW, Colors.NONE\\ \hline
+		\end{tabular}
+		\end{table}
+
+	\subsection{Kommunikation}
+		\begin{table}[htbp]
+		\begin{tabular}{|p{0.1\textwidth} p{0.85\textwidth}|}
+		\hline
+		\textbf{Typ} & \textbf{Methode und Beschreibung} \\ \hline
+		boolean & hasMessage() \\ 
+		& Prüft ob Nachricht vorhanden ist \\ \hline
+		MindroidMessage & getNextMessage() \\ 
+		& Ruft nächste Nachricht ab \\ \hline		
+		void & broadcastMessage(String message) \\ 
+		& Sendet eine Nachricht an alle Roboter \\ \hline
+		String & getRobotID() \\ 
+		& Gibt den Namen des Roboters zurück. \\ \hline
+		void & sendLogMessage(String logmessage) \\ 
+		& Sendet eine Nachricht an den Message Server \\ \hline
+		void & sendMessage(String destination, String message) \\ 
+		& Sendet eine Nachricht an den $destination$-Roboter \\ \hline
+		\end{tabular}
+		\end{table}
+		
+		Um eine Nachricht zu empfangen, muss zuerst mit $hasMessage()$ überprüft werden ob eine Nachricht vorhanden ist. Liefert $hasMessage()$ true zurück, kann mit $getNextMessage()$ eine Nachricht abgerufen werden. Das Beispiel in Listing \ref{lst:msg} zeigt wie das geht.
+		
+		\begin{lstlisting}[captionpos=b, caption=Beispiel zum Abrufen einer Nachricht, label=lst:msg]
+		if (hasMessage()){
+          String msg = getNextMessage().getContent();
+        }
+		\end{lstlisting}
+		
+		$broadcastMessage(...)$ schickt eine Nachricht an alle mit dem selben Message-Server verbundenen Roboter.
+		
+		
+		
+	\newpage
+	\subsection{Brick}
+	\subsubsection{Display}
+		\begin{table}[htbp]
+		\begin{tabular}{|p{0.1\textwidth} p{0.85\textwidth}|}
+		\hline
+		\textbf{Typ} & \textbf{Methode und Beschreibung} \\ \hline
+		void & clearDisplay() \\ 
+		&\\
+		& Löscht den Aktuellen Inhalt des Displays \\ \hline
+		void & drawString(String text, Textsize textsize, int xPosition, int yPosition) \\ 
+		&\\
+		& Schreibt den im $text$-Parameter gegebenen Text auf das Display\\
+		& an die durch $xPosition$ und $yPosition$ definerte Stelle (siehe Abb. \ref{fig:display})\\
+		& mit Textgröße $textsize$ \\ \hline
+		\end{tabular}
+		\end{table}
+		
+		\gcenter{img/ev3_display}{Koordinaten der Pixel des Displays des EV3\protect\footnotemark\ }{display}{.5\textwidth}
+		
+\footnotetext{ \url{https://services.informatik.hs-mannheim.de/~ihme/lectures/LEGO\_Files/01\_Anfaenger\_Graphisch\_EV3\_BadenBaden.pdf}		}
+
+	\subsubsection{Buttons}
+		\begin{table}[htbp]
+		\begin{tabular}{|p{0.1\textwidth} p{0.85\textwidth}|}
+		\hline
+		\textbf{Typ} & \textbf{Methode und Beschreibung} \\ \hline
+		boolean & isDownButtonClicked() \\ 
+		boolean & isEnterButtonClicked() \\ 
+		boolean & isLeftButtonClicked() \\ 
+		boolean & isRightButtonClicked() \\ 
+		boolean & isUpButtonClicked() \\ \hline
+		\end{tabular}
+		\end{table}
+		
+		Die Funktionen liefern $true$ wenn der entsprechende Button gedrückt wurde. Die Benennung der Buttons kannst du Abbildung \ref{fig:buttons} auf Seite \pageref{fig:buttons} entnehmen
+
+		\newpage
+	\subsubsection{Sound}
+		\begin{table}[htbp]
+		\begin{tabular}{|p{0.1\textwidth} p{0.85\textwidth}|}
+		\hline
+		\textbf{Typ} & \textbf{Methode und Beschreibung} \\ \hline
+		void & setSoundVolume(int volume) \\ 
+		void & playBeepSequenceDown() \\ 
+		void & playBeepSequenceUp() \\ 
+		void & playBuzzSound() \\ 
+		void & playDoubleBeep() \\ 
+		void & playSingleBeep() \\ \hline
+		\end{tabular}
+		\end{table}
+		
+		Der Parameter $volume$ nimmt Werte von 0 bis 10 entgegen.
+	\subsubsection{LED}		
+		\begin{table}[htbp]
+		\begin{tabular}{|p{0.1\textwidth} p{0.85\textwidth}|}
+		\hline
+		\textbf{Typ} & \textbf{Methode und Beschreibung} \\ \hline
+		void & setLED(int mode) \\ 
+		&\\
+		& Lässt die LED des EV3 im angegebenen Modus leuchten\\
+		& Der Parameter $mode$ kann entweder als Ganzzahl von 0 bis 9 oder als Konstante angegeben werden. \\
+		& Siehe Tabelle \ref{tab:led}\\
+		\hline
+		
+		\end{tabular}
+		\end{table}
+		
+		
+		
+		\begin{table}[htbp]
+		\caption{Funktion der einzelnen Modi der LED}
+		\begin{center}
+		\begin{tabular}{r|l|l|l}
+		
+		\multicolumn{2}{c|}{\textbf{Modus (Parameter $mode$)}}   & \textbf{Farbe} & \textbf{Intervall} \\ 
+		\multicolumn{1}{l|}{Wert} & Konstante &  &  \\ \hline
+		0 & LED\_OFF & Aus & Aus \\ 
+		1 & LED\_GREEN\_ON & Grün & Dauer \\ 
+		2 & LED\_GREEN\_BLINKING & Grün & Blinken \\ 
+		3 & LED\_GREEN\_FAST\_BLINKING & Grün & Schnell Blinken \\ 
+		4 & LED\_YELLOW\_ON & Gelb & Dauer \\ 
+		5 & LED\_YELLOW\_BLINKING & Gelb & Blinken \\ 
+		6 & LED\_YELLOW\_FAST\_BLINKING & Gelb & Schnell Blinken \\ 
+		7 & LED\_RED\_ON & Rot & Dauer \\ 
+		8 & LED\_RED\_BLINKING & Rot & Blinken \\ 
+		9 & LED\_RED\_FAST\_BLINKING & Rot & Schnell Blinken \\ 
+		\end{tabular}
+		\end{center}
+		\label{tab:led}
+		\end{table}
+
+		
 	\end{document}

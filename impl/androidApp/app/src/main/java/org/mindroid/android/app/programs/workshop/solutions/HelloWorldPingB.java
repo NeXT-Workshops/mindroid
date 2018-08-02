@@ -6,7 +6,7 @@ import org.mindroid.impl.brick.Textsize;
 public class HelloWorldPingB extends ImperativeWorkshopAPI {
 
     public HelloWorldPingB() {
-        super("Hello World Ping B");
+        super("Hello World Ping B [sol]");
     }
 
     @Override

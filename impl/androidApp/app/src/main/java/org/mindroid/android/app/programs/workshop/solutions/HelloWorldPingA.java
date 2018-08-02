@@ -6,7 +6,7 @@ import org.mindroid.impl.brick.Button;
 public class HelloWorldPingA extends ImperativeWorkshopAPI {
 
     public HelloWorldPingA() {
-        super("Hello World Ping A");
+        super("Hello World Ping A [sol]");
     }
 
     @Override

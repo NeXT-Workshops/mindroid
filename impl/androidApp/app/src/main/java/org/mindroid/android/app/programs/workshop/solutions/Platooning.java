@@ -11,7 +11,7 @@ import org.mindroid.impl.brick.Textsize;
 public class Platooning extends ImperativeWorkshopAPI {
 
     public Platooning(){
-        super("Platooning Dynamic Leader");
+        super("Platooning Dynamic Leader [sol]");
     };
     enum State {
         FAST,

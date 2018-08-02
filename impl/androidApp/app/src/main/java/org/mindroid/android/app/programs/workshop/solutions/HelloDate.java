@@ -8,7 +8,7 @@ import java.util.Date;
 public class HelloDate extends ImperativeWorkshopAPI {
 
     public HelloDate() {
-        super("Hello Date");
+        super("Hello Date [sol]");
     }
 
     @Override

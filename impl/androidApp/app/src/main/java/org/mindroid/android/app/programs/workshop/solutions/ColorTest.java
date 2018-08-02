@@ -7,7 +7,7 @@ import org.mindroid.impl.statemachine.properties.Colors;
 public class ColorTest extends ImperativeWorkshopAPI {
 
     public ColorTest() {
-        super("Color Test");
+        super("Color Test [sol]");
     }
 
      @Override

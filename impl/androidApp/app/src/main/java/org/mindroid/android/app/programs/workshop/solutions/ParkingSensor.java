@@ -8,7 +8,7 @@ import org.mindroid.impl.brick.Textsize;
 public class ParkingSensor extends ImperativeWorkshopAPI {
 
     public ParkingSensor() {
-        super("Parking Sensor");
+        super("Parking Sensor [sol]");
     }
 
   @Override

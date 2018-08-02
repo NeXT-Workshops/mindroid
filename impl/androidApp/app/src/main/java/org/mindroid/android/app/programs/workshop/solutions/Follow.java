@@ -11,7 +11,7 @@ import java.util.Random;
 public class Follow extends ImperativeWorkshopAPI {
 
     public Follow() {
-        super("Follower");
+        super("Follower [sol]");
     }
     enum PlatoonState {
         FAST,

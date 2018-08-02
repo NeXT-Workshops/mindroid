@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -33,6 +34,8 @@ public class AdminFragment extends Fragment {
     private Button btn_login_logout;
     private TextView txt_password;
 
+    InputMethodManager imgr;
+
     public AdminFragment() {
         // Required empty public constructor
     }
@@ -54,6 +57,15 @@ public class AdminFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    private
+
+    @Override
+    public void onDestroyView(){
+        imgr.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        super.onDestroyView();
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,6 +84,11 @@ public class AdminFragment extends Fragment {
         txt_password = (TextView) view.findViewById(R.id.txt_password);
 
         txt_password_input.requestFocus();
+
+        imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        //imgr.showSoftInput(getView(), InputMethodManager.SHOW_IMPLICIT);
+        imgr.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
 
         btn_login_logout.setOnClickListener(new View.OnClickListener() {
             @Override

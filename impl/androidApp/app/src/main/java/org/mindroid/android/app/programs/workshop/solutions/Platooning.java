@@ -73,15 +73,15 @@ public class Platooning extends ImperativeWorkshopAPI {
             if (prevState != State.FAST && distance > 30f) {
                 forward(300);
                 prevState = State.FAST;
-                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                setLED(LED_GREEN_ON);
             } else if (prevState != State.SLOW && distance < 20f) {
                 forward(100);
                 prevState = State.SLOW;
-                setLED(EV3StatusLightColor.RED, EV3StatusLightInterval.ON);
+                setLED(LED_RED_ON);
             } else if (prevState != State.MED && distance > 20f && distance < 30f) {
                 forward(200);
                 prevState = State.MED;
-                setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.ON);
+                setLED(LED_YELLOW_ON);
             }
             delay(50);
         }

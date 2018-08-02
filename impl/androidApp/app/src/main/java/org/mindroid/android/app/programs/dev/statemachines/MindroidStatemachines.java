@@ -244,7 +244,7 @@ public class MindroidStatemachines extends StatemachineAPI {
                 getMotorProvider().getMotor(EV3PortIDs.PORT_A).forward();
                 getMotorProvider().getMotor(EV3PortIDs.PORT_D).backward();
 
-                setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
+                setLED(LED_YELLOW_BLINKING);
 
                 getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
                 getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
@@ -259,7 +259,7 @@ public class MindroidStatemachines extends StatemachineAPI {
         IState state_wait = new State("waiting a while"){
             @Override
             public void run(){
-                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                setLED(LED_GREEN_ON);
                 getMotorProvider().getMotor(EV3PortIDs.PORT_A).stop();
                 getMotorProvider().getMotor(EV3PortIDs.PORT_D).stop();
             }
@@ -310,7 +310,7 @@ public class MindroidStatemachines extends StatemachineAPI {
                 getMotorProvider().getMotor(EV3PortIDs.PORT_A).stop();
                 getMotorProvider().getMotor(EV3PortIDs.PORT_D).stop();
 
-                setLED(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.BLINKING);
+                setLED(LED_YELLOW_BLINKING);
             }
         };
 
@@ -322,7 +322,7 @@ public class MindroidStatemachines extends StatemachineAPI {
                 getMotorProvider().getMotor(EV3PortIDs.PORT_A).forward();
                 getMotorProvider().getMotor(EV3PortIDs.PORT_D).forward();
 
-                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                setLED(LED_GREEN_ON);
 
                 getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
                 getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
@@ -336,7 +336,7 @@ public class MindroidStatemachines extends StatemachineAPI {
                 getMotorProvider().getMotor(EV3PortIDs.PORT_A).stop();
                 getMotorProvider().getMotor(EV3PortIDs.PORT_D).stop();
 
-                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.BLINKING);
+                setLED(LED_GREEN_BLINKING);
             }
         };
 
@@ -349,7 +349,7 @@ public class MindroidStatemachines extends StatemachineAPI {
                 getMotorProvider().getMotor(EV3PortIDs.PORT_A).backward();
                 getMotorProvider().getMotor(EV3PortIDs.PORT_D).backward();
 
-                setLED(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
+                setLED(LED_RED_BLINKING);
 
                 getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
                 getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
@@ -364,7 +364,7 @@ public class MindroidStatemachines extends StatemachineAPI {
                 getMotorProvider().getMotor(EV3PortIDs.PORT_A).backward();
                 getMotorProvider().getMotor(EV3PortIDs.PORT_D).forward();
 
-                setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
+                setLED(LED_YELLOW_BLINKING);
 
                 getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
                 getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
@@ -379,7 +379,7 @@ public class MindroidStatemachines extends StatemachineAPI {
                 getMotorProvider().getMotor(EV3PortIDs.PORT_A).forward();
                 getMotorProvider().getMotor(EV3PortIDs.PORT_D).forward();
 
-                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                setLED(LED_GREEN_ON);
 
                 getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
                 getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
@@ -511,7 +511,7 @@ public class MindroidStatemachines extends StatemachineAPI {
         State state_red = new State("Show Red Light"){
             @Override
             public void run(){
-                setLED(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
+                setLED(LED_RED_ON);
                 sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
@@ -519,7 +519,7 @@ public class MindroidStatemachines extends StatemachineAPI {
         State state_yellow = new State("Show Yellow Light"){
             @Override
             public void run(){
-                setLED(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
+                setLED(LED_YELLOW_ON);
                 sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
@@ -527,7 +527,7 @@ public class MindroidStatemachines extends StatemachineAPI {
         State state_green = new State("Show Green Light"){
             @Override
             public void run(){
-                setLED(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
+                setLED(LED_GREEN_ON);
                 sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
@@ -622,7 +622,7 @@ public class MindroidStatemachines extends StatemachineAPI {
         Transition trans_red = new Transition(light_red){
             @Override
             public void run(){
-                setLED(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
+                setLED(LED_RED_ON);
                 sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
@@ -630,7 +630,7 @@ public class MindroidStatemachines extends StatemachineAPI {
         Transition trans_yellow = new Transition(light_yellow){
             @Override
             public void run(){
-                setLED(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
+                setLED(LED_YELLOW_ON);
                 sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
@@ -638,7 +638,7 @@ public class MindroidStatemachines extends StatemachineAPI {
         Transition trans_green = new Transition(light_green){
             @Override
             public void run(){
-                setLED(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
+                setLED(LED_GREEN_ON);
                 sendLogMessage("Watch "+getRobotID()+"s Lightshow!");
             }
         };
@@ -696,7 +696,7 @@ public class MindroidStatemachines extends StatemachineAPI {
 
                 getMotorProvider().getSynchronizedMotors().executeSynchronizedOperation(forwardOp, noOp,noOp,forwardOp,false);
 
-                setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                setLED(LED_GREEN_ON);
             }
         };
 
@@ -725,7 +725,7 @@ public class MindroidStatemachines extends StatemachineAPI {
 
                 getMotorProvider().getSynchronizedMotors().executeSynchronizedOperation(backwardOp, noOp,noOp,backwardOp,false);
 
-                setLED(EV3StatusLightColor.RED, EV3StatusLightInterval.BLINKING);
+                setLED(LED_RED_BLINKING);
 
                 //getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
                 //getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
@@ -744,7 +744,7 @@ public class MindroidStatemachines extends StatemachineAPI {
 
                 getMotorProvider().getSynchronizedMotors().executeSynchronizedOperation(backwardOp, noOp,noOp,forwardOp,false);
 
-                setLED(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
+                setLED(LED_YELLOW_BLINKING);
 
                 //getMotorProvider().getMotor(EV3PortIDs.PORT_A).setSpeed(500);
                 //getMotorProvider().getMotor(EV3PortIDs.PORT_D).setSpeed(500);
@@ -788,7 +788,7 @@ public class MindroidStatemachines extends StatemachineAPI {
         IState state_mathRandom = new State("Random Number State"){
             @Override
             public void run(){
-                setLED(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.DOUBLE_BLINKING);
+                setLED(LED_YELLOW_BLINKING);
                 int number;
                 do {
                     number = (int)Math.round(Math.random() * 3);
@@ -802,21 +802,21 @@ public class MindroidStatemachines extends StatemachineAPI {
         IState state_nr1 = new State("State NR1"){
             @Override
             public void run(){
-                setLED(EV3StatusLightColor.RED,EV3StatusLightInterval.ON);
+                setLED(LED_RED_ON);
             }
         };
 
         IState state_nr2 = new State("State NR2"){
             @Override
             public void run(){
-                setLED(EV3StatusLightColor.YELLOW,EV3StatusLightInterval.ON);
+                setLED(LED_YELLOW_ON);
             }
         };
 
         IState state_nr3 = new State("State NR3"){
             @Override
             public void run(){
-                setLED(EV3StatusLightColor.GREEN,EV3StatusLightInterval.ON);
+                setLED(LED_GREEN_ON);
             }
         };
 

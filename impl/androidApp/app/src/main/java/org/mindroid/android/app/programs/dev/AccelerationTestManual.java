@@ -13,6 +13,7 @@ public class AccelerationTestManual extends ImperativeWorkshopAPI {
     @Override
     public void run() {
         setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.BLINKING);
+
         accelerate(500, 20);
         delay(2000);
         stop();

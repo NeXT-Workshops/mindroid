@@ -6,10 +6,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class HelloDate extends ImperativeWorkshopAPI {
-    // Konstruktor nicht ändern!!
+
     public HelloDate() {
         super("Hello Date");
     }
+
+    // ------------------------------------
+    // ÄNDERUNGEN ERST HIERNACH DURCHFÜHREN
+    // ------------------------------------
 
     @Override
     public void run() {

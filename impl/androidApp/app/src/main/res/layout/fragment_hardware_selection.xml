@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     tools:context="org.mindroid.android.app.fragments.myrobot.HardwareSelectionFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="113dp"
@@ -21,7 +20,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="9dp"
             android:padding="5dp"
-            android:text="@string/hello_blank_fragment"
+            android:text=""
             android:textSize="60sp"
             tools:text="A" />
 

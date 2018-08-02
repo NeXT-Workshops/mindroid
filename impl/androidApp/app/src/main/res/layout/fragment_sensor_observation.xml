@@ -4,8 +4,6 @@
              android:layout_height="wrap_content"
              tools:context=".fragments.sensormonitoring.SensorObservationFragment" android:minHeight="115dp">
 
-    <!-- TODO: Update blank fragment layout -->
-
 
     <FrameLayout
             android:layout_width="wrap_content"

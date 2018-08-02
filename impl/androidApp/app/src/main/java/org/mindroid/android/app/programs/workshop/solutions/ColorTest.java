@@ -4,10 +4,10 @@ import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.impl.brick.Textsize;
 import org.mindroid.impl.statemachine.properties.Colors;
 
-public class ColourTest extends ImperativeWorkshopAPI {
+public class ColorTest extends ImperativeWorkshopAPI {
 
-    public ColourTest() {
-        super("Colour Test");
+    public ColorTest() {
+        super("Color Test [sol]");
     }
 
      @Override

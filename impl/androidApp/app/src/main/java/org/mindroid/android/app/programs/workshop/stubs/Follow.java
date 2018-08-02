@@ -8,6 +8,10 @@ public class Follow extends ImperativeWorkshopAPI {
         super("Follower");
     }
 
+    // ------------------------------------
+    // ÄNDERUNGEN ERST HIERNACH DURCHFÜHREN
+    // ------------------------------------
+
     @Override
     public void run() {
     }

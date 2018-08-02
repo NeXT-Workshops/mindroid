@@ -1,12 +1,12 @@
-package org.mindroid.android.app.programs.workshop.solutions;
+package org.mindroid.android.app.programs.dev;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.impl.brick.Textsize;
 
-public class HelloWorldPingR extends ImperativeWorkshopAPI {
+public class HelloWorldPingB extends ImperativeWorkshopAPI {
 
-    public HelloWorldPingR() {
-        super("Hello World Ping Robert");
+    public HelloWorldPingB() {
+        super("Hello World Ping B [sol]");
     }
 
     @Override
@@ -16,6 +16,7 @@ public class HelloWorldPingR extends ImperativeWorkshopAPI {
             if (hasMessage()){
                 String msg = getNextMessage().getContent();
                 if (msg.equals("Hallo Robert!")){
+                    sendLogMessage("Ich sende jetzt eine Nachricht an Berta!");
                     drawString("Nachricht von Berta erhalten", Textsize.MEDIUM, 1, 60);
                 }
             }

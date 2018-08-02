@@ -258,7 +258,7 @@ public class RobotConfigurator implements IRobotConfigurator {
 		LOGGER.log(Level.INFO,"Start initializing the Configuration: "+getConfiguration());
 
 		//Timeout for the initialization
-		startTimeoutTimer(); //TODO Check this timeout -> should appear if break app gets closed when initialization is running
+		startTimeoutTimer();
 
 		if(brick.isConnected()) {
 			//Reset Interruption-state to not_interrupted

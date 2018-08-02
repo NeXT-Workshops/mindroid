@@ -134,8 +134,6 @@
 
     <string name="action_example">Example action</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="errortext_title_initialization">Configuration Error</string>
     <string name="errortext_msg_initialization">The Configuration of at least one Sensor/Motor failed. Check port
         connections on the brick and your configuration in the App.
@@ -153,6 +151,11 @@
     <string name="txt_log_saved">Log saved</string>
     <string name="txt_deleteLog">DELETE LOG</string>
     <string name="txt_log_deleted">Log deleted</string>
+    <string name="title_admin">Admin</string>
+    <string name="PROGRAM_SET">Programmsatz</string>
+    <string name="shared_pref_admin">shared_pref_admin</string>
+    <string name="btn_txt_logout">Logout</string>
+    <string name="btn_txt_login">Login</string>
 
 
 </resources>

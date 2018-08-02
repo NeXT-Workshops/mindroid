@@ -62,8 +62,9 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     //Message client Connection state
     private TextView txtView_msgServerConnectionState;
 
-
-    private Spinner spinner_selectedImplementation;
+    private TextView txt_program_set;
+    private Spinner spinner_program_sets;
+    private Spinner spinner_implementations;
 
     /** StartStop-Robot-Task cmd **/
     private final String START_ROBOT = "start";
@@ -92,6 +93,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     private final static Logger LOGGER = Logger.getLogger(HomeFragment.class.getName());
 
     private Process shellProcess;
+    private boolean stopThreads;
 
     public HomeFragment() { //Called by newInstance(..)
         // Required empty public constructor
@@ -120,6 +122,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         robot = MainActivity.robot;
         parentActivity = (MainActivity) getActivity();
 
+        stopThreads = false;
 
         if(parentActivity instanceof IErrorHandler){
             robot.registerErrorHandler(((IErrorHandler) parentActivity).getErrorHandler());
@@ -139,6 +142,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         menuItemAlwaysEnabled.put(2,false);
         menuItemAlwaysEnabled.put(3,false);
         menuItemAlwaysEnabled.put(4,true);
+        menuItemAlwaysEnabled.put(5,false);
     }
 
 
@@ -171,7 +175,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         switch_enableSimulation = (Switch) view.findViewById(R.id.switch_enable_simulation);
         btn_connect = (Button) view.findViewById(R.id.btn_connect);
         btn_disconnect = (Button) view.findViewById(R.id.btn_disconnect);
-        spinner_selectedImplementation = (Spinner) view.findViewById(R.id.spinner_selectedStatemachine);
+        spinner_implementations = (Spinner) view.findViewById(R.id.spinner_selectedStatemachine);
         btn_startRobot = (Button) view.findViewById(R.id.btn_startRobot);
         btn_stopRobot = (Button) view.findViewById(R.id.btn_stopRobot);
 
@@ -193,13 +197,28 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         //Add RobotSetupInfo Fragment
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.container_robotSetupInfo, RobotSetupInfoFragment.newInstance("",""));
+        transaction.replace(R.id.container_robotSetupInfo, RobotSetupInfoFragment.newInstance());
         //transaction.addToBackStack(null);
         transaction.commit();
 
         ArrayAdapter<String> adapter = getImplementationIDAdapter();
-        spinner_selectedImplementation.setAdapter(adapter);
+        spinner_implementations.setAdapter(adapter);
 
+        txt_program_set = (TextView) view.findViewById(R.id.txt_program_set);
+        spinner_program_sets = (Spinner) view.findViewById(R.id.spinner_program_set);
+
+        spinner_program_sets.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, ImplementationService.getInstance().getImplementationSets()));
+
+        //Set spinner visibility of program sets depending on logged in/out admin mode
+        if(SettingsProvider.getInstance().isAdminModeUnlocked()) {
+            //LOGGED into admin mode
+            txt_program_set.setVisibility(View.VISIBLE);
+            spinner_program_sets.setVisibility(View.VISIBLE);
+        }else{
+            //NOT LOGGED into admin mode
+            txt_program_set.setVisibility(View.GONE);
+            spinner_program_sets.setVisibility(View.GONE);
+        }
 
         //mListener.showErrorDialog("Error on create",stateAlreadyExists.getMessage());
 
@@ -222,9 +241,9 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         //Set former selected Implementation ID
         if (!formerSelectedImplementationID.equals(null)) {
             int spinnerPosition = adapter.getPosition(formerSelectedImplementationID);
-            spinner_selectedImplementation.setSelection(spinnerPosition);
-            if(spinner_selectedImplementation.getSelectedItem() != null){
-                SettingsProvider.getInstance().selectedImplementationID = (String) spinner_selectedImplementation.getSelectedItem();
+            spinner_implementations.setSelection(spinnerPosition);
+            if(spinner_implementations.getSelectedItem() != null){
+                SettingsProvider.getInstance().selectedImplementationID = (String) spinner_implementations.getSelectedItem();
             }
         }
     }
@@ -267,13 +286,13 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
                 btn_disconnect.setVisibility(robot.isConnectedToBrick() ? View.VISIBLE : View.GONE);
 
-                btn_startRobot.setEnabled(robot.isConnectedToBrick() && robot.isConfigurated() && !robot.isRunning && (positiveUSBState || SettingsProvider.getInstance().isSimulationEnabled()) && spinner_selectedImplementation.getSelectedItem() != null && !spinner_selectedImplementation.getSelectedItem().toString().isEmpty());
+                btn_startRobot.setEnabled(robot.isConnectedToBrick() && robot.isConfigurated() && !robot.isRunning && (positiveUSBState || SettingsProvider.getInstance().isSimulationEnabled()) && spinner_implementations.getSelectedItem() != null && !spinner_implementations.getSelectedItem().toString().isEmpty());
 
                 btn_stopRobot.setEnabled(robot.isRunning);
 
                 setEnableMenuItems(!robot.isConnectedToBrick());
 
-                spinner_selectedImplementation.setEnabled(!robot.isRunning);
+                spinner_implementations.setEnabled(!robot.isRunning);
 
                 btn_messengerConnDisconn.setEnabled(!robot.isRunning);
 
@@ -284,6 +303,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 }else{
                     btn_messengerConnDisconn.setText(txt_btn_DisConnect_disconnect);
                 }
+                spinner_program_sets.setEnabled(!robot.isConnectedToBrick());
+
             }
         };
 
@@ -353,7 +374,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         Runnable check = new Runnable() {
             @Override
             public void run() {
-                while(true) {
+                while(!stopThreads) {
 
                     //Enable/disable control buttons (Connect to brick, init configuration, start robot,stop robot)
                     parentActivity.runOnUiThread(taskUpdateButtonEnableState);
@@ -379,6 +400,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         new Thread(check).start();
     } //USB_FUNCTION_RNDIS
 
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        stopThreads = true;
+    }
 
 
     /**
@@ -451,7 +477,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             public void onClick(View v) {
                 StartStopRobotTask task = new StartStopRobotTask("Starting robot",msgStartRobot);
                 task.execute(START_ROBOT);
-
             }
         });
 
@@ -480,7 +505,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             }
         });
 
-        spinner_selectedImplementation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+        spinner_implementations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SettingsProvider.getInstance().selectedImplementationID = (String) parent.getSelectedItem();
@@ -492,10 +517,24 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 SettingsProvider.getInstance().selectedImplementationID = "";
             }
         });
+
+        spinner_program_sets.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                SettingsProvider.getInstance().setSelectedProgramSet((String) parent.getSelectedItem());
+                spinner_implementations.setAdapter(getImplementationIDAdapter());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                SettingsProvider.getInstance().setSelectedProgramSet(ImplementationService.getInstance().getDefaultSet());
+                spinner_implementations.setAdapter(getImplementationIDAdapter());
+            }
+        });
     }
 
     public ArrayAdapter<String> getImplementationIDAdapter() {
-        return new ArrayAdapter<String>(parentActivity, android.R.layout.simple_spinner_dropdown_item, ImplementationService.getInstance().getImplementationIDs());
+        return new ArrayAdapter<String>(parentActivity, android.R.layout.simple_spinner_dropdown_item, ImplementationService.getInstance().getImplementationIDs(SettingsProvider.getInstance().getSelectedProgramSet()));
 
     }
 

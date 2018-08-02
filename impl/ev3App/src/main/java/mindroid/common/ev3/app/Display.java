@@ -20,8 +20,7 @@ public class Display {
 
     public static void showSystemIsReady(){
         LCD.clearDisplay();
-        configureFont(Font.getSmallFont());
-        drawString("Battery: "+Brick.getBatteryStatus()+"%",5,5,GraphicsLCD.TOP);
+        drawBatteryState(5,5);
         configureFont(Font.getLargeFont());
         drawString("READY", 40, 50, GraphicsLCD.TOP);
         configureFont(Font.getSmallFont());
@@ -31,6 +30,7 @@ public class Display {
 
     public static void showSystemIsReadyAndConnected(){
         LCD.clearDisplay();
+        drawBatteryState(5,5);
         configureFont(Font.getLargeFont());
         drawString("READY", 40, 50, GraphicsLCD.TOP);
         configureFont(Font.getSmallFont());
@@ -40,10 +40,22 @@ public class Display {
 
     public static void showPleaseWait(){
         LCD.clearDisplay();
+        drawBatteryState(5,5);
         configureFont(Font.getDefaultFont());
         drawString("PLEASE WAIT", 30, 50, GraphicsLCD.TOP);
         configureFont(Font.getSmallFont());
         drawString("IP: " + getIPAddress(), 25, 105, GraphicsLCD.TOP);
+    }
+
+    /**
+     * Draws the Battery state on the screen.
+     *
+     * @param x coordinate relative to the top left corner of the display (GraphicsLCD.TOP)
+     * @param y coordinate relative to the top left corner of the display (GraphicsLCD.TOP)
+     */
+    public static void drawBatteryState(int x, int y){
+        configureFont(Font.getSmallFont());
+        drawString("Battery: "+Brick.getBatteryStatus()+"%",x,y,GraphicsLCD.TOP);
     }
 
     /**

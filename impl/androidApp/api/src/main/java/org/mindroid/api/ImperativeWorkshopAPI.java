@@ -30,6 +30,11 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      */
     private final DifferentialPilot diffPilot;
 
+    /**
+     * Used with unblocked drive methods, so they will be executed at least for given amount of time (ms)
+     */
+    private final int MIN_DRIVE_DELAY = 50;
+
 
     private static final Logger LOGGER = Logger.getLogger(ImperativeWorkshopAPI.class.getName());
 
@@ -96,13 +101,13 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     }
 
     /**
-     * Returns the Distance measured by the Distance Sensor
+     * Returns the Distance measured by the Distance Sensor in centimeter
      *
-     * @return distance value in meter
+     * @return distance value in centimeter
      */
     public float getDistance(){
         if(getUltrasonicSensor().getSensormode().equals(Sensormode.DISTANCE)){
-            return getUltrasonicSensor().getValue()[0];
+            return getUltrasonicSensor().getValue()[0]*100;
         }else{
             return -1f;
         }
@@ -208,20 +213,27 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      *
      * Use {@link #stop()} to stop driving.
      * @param speed  speed of the motors [0 to 1000] deg/sec. Possible MaxSpeed depends on battery power!
+     *
+     *
+     * Note: Executed for at least {@link #MIN_DRIVE_DELAY}
      */
     public void forward(int speed) {
         if(!isInterrupted()) {
             diffPilot.driveForward(speed);
+            delay(MIN_DRIVE_DELAY);
         }
     }
 
     /**
      * Drives forward.
      * The current speed will be used.
+     *
+     * Note: Executed for at least {@link #MIN_DRIVE_DELAY}
      */
     public void forward(){
         if(!isInterrupted()){
             diffPilot.driveForward();
+            delay(MIN_DRIVE_DELAY);
         }
     }
 
@@ -257,20 +269,26 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      * Returns without action if system got interrupted.
      * Use {@link #stop()} to stop driving.
      * @param speed speed of the motors [0 to 1000] deg/sec. Possible MaxSpeed depends on battery power!
+     *
+     * Note: Executed for at least {@link #MIN_DRIVE_DELAY}
      */
     public void backward(int speed) {
         if(!isInterrupted()) {
             diffPilot.driveBackward(speed);
+            delay(MIN_DRIVE_DELAY);
         }
     }
 
     /**
      * Drives Backward.
      * The current speed will be used.
+     *
+     * Note: Executed for at least {@link #MIN_DRIVE_DELAY}
      */
     public void backward(){
         if(!isInterrupted()){
             diffPilot.driveBackward();
+            delay(MIN_DRIVE_DELAY);
         }
     }
 

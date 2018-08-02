@@ -1,9 +1,6 @@
 package org.mindroid.server.app;
 
-import org.mindroid.common.messages.server.Destination;
-import org.mindroid.common.messages.server.MessageMarshaller;
-import org.mindroid.common.messages.server.MessageType;
-import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.common.messages.server.*;
 import org.mindroid.server.app.util.ADBService;
 import org.mindroid.server.app.util.IPService;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
@@ -22,7 +19,7 @@ import java.util.Scanner;
 /**
  * @author Roland Kluge - Initial implementation
  */
-public class MindroidServerWorker implements Runnable {
+public class MindroidServerWorker implements Runnable, IUserAction {
     private Socket socket;
     private MindroidServerFrame mindroidServerFrame;
     private MessageMarshaller messageMarshaller;
@@ -58,16 +55,10 @@ public class MindroidServerWorker implements Runnable {
                         sb = new StringBuilder();
                     }
                     if (line.contains("<close>")) {
-                        connected = false;
-                        disconnect();
-                        removeRegistration();
+                        closeConnection();
                     }
                 }else {
-                    //Connection closed
-                    connected = false; //Stop listening
-                    //Close Socekt
-                    disconnect();
-                    removeRegistration();
+                    closeConnection();
                 }
             }
         } catch (IOException e) {
@@ -80,6 +71,17 @@ public class MindroidServerWorker implements Runnable {
         } catch (JadbException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Disconnects the socket. Removes the Registration.
+     */
+    private void closeConnection() {
+        //Connection closed
+        connected = false; //Stop listening
+        //Close Socekt
+        disconnect();
+        removeRegistration();
     }
 
     private void disconnect() {
@@ -149,7 +151,8 @@ public class MindroidServerWorker implements Runnable {
             mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "INFO", deserializedMsg.getContent());
             Socket socket = IPService.findSocket(deserializedMsg.getDestination());
             sendMessage(deserializedMsg, socket);
-            }
+            mindroidServerFrame.addContentLine("SERVER",deserializedMsg.getDestination().getValue(),"DEBUG","MSG["+deserializedMsg.getContent()+"] sent to destination");
+        }
 
 
         //deliver broadcast message
@@ -191,4 +194,10 @@ public class MindroidServerWorker implements Runnable {
     }
 
 
+    @Override
+    public void kickUser(String username) {
+        if(this.connectedRobot.equals(username)){
+            closeConnection();
+        }
+    }
 }

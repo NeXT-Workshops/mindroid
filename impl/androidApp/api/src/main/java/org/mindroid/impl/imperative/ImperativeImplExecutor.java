@@ -5,8 +5,10 @@ import org.mindroid.api.AbstractImperativeImplExecutor;
 import org.mindroid.api.IExecutor;
 import org.mindroid.api.ImperativeAPI;
 import org.mindroid.api.IImplStateListener;
+import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.logging.APILoggerManager;
+import org.mindroid.impl.robot.Robot;
 import org.mindroid.impl.util.Throwables;
 
 import java.util.HashSet;
@@ -56,6 +58,9 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                     //Detects, that the implementation is finished
                     setExecutionFinished(true);
                     setIsRunning(false);
+
+                    //Clear Messages from message client
+                    Robot.getRobotController().getMessenger().clearMessageCache();
 
                     //When run is finished (imperative impl got stopped (interrupted) or just code is done) - stopAllMotors former state
                     stopAllMotors(runningImpl);
@@ -114,6 +119,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
     public void setImplementation(ImperativeAPI runnable) {
         setRunnable(runnable);
         LOGGER.log(Level.INFO,"Implementation Set: ID="+runnable.getImplementationID());
+        LOGGER.log(Level.INFO,"Implementation class="+runnable.getClass());
     }
 
     // ------ Methods to add some code sugar ------

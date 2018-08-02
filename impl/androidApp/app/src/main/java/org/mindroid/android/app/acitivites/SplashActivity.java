@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ConfigurationInfo;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -14,6 +17,8 @@ import org.mindroid.android.app.R;
 import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.util.ShellService;
 import org.mindroid.android.app.util.USBService;
+
+import java.util.logging.Logger;
 
 public class SplashActivity extends Activity {
 
@@ -101,10 +106,14 @@ public class SplashActivity extends Activity {
      * Initializes the SettingsProvider Instance
      */
     private void initialiseSettings() {
-        SharedPreferences connectionProperties = this.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_connection_Data), Context.MODE_PRIVATE);
-        SharedPreferences portConfigProperties = this.getApplicationContext().getSharedPreferences(getResources().getString(R.string.shared_pref_portConfiguration),Context.MODE_PRIVATE);
+        SharedPreferences connectionProperties = this.getApplicationContext().getSharedPreferences(
+                getResources().getString(R.string.shared_pref_connection_Data), Context.MODE_PRIVATE);
+        SharedPreferences portConfigProperties = this.getApplicationContext().getSharedPreferences(
+                getResources().getString(R.string.shared_pref_portConfiguration),Context.MODE_PRIVATE);
+        SharedPreferences adminProperties = this.getApplicationContext().getSharedPreferences(
+                getResources().getString(R.string.shared_pref_admin),Context.MODE_PRIVATE);
 
-        SettingsProvider.getInstance().initialize(getResources(),connectionProperties,portConfigProperties);
+        SettingsProvider.getInstance().initialize(getResources(),connectionProperties,portConfigProperties, adminProperties);
     }
 
 
@@ -119,6 +128,26 @@ public class SplashActivity extends Activity {
      * Activates Tethering.
      */
     private void setupTethering(boolean isUsbConnected) {
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        //GET ssid of the currently connected wifi
+        /*String connectedSSID = wifiManager.getConnectionInfo().getSSID();
+        WifiConfiguration currentWifiConfiguration = null;
+        if(connectedSSID != null && !connectedSSID.equals("\"<unknown ssid>\"")){ // <unknown ssid> is quoted!
+            //Currently connected to a wifi network
+
+            for (WifiConfiguration wifiConfiguration : wifiManager.getConfiguredNetworks()) {
+                if(wifiConfiguration.SSID.equals(connectedSSID)){
+                    //Network configuration found
+                    currentWifiConfiguration = wifiConfiguration;
+                    break;
+                }
+            }
+        }
+        */
+
+        wifiManager.setWifiEnabled(false);
+
+
         //Check USB Connection
         txtView_currentAction.setText(getResources().getText(R.string.txt_checking_usb));
 
@@ -127,6 +156,20 @@ public class SplashActivity extends Activity {
             this.txtView_currentAction.setText(getResources().getText(R.string.txt_activate_tethering));
             ShellService.setTethering(true);
         }
+
+        wifiManager.setWifiEnabled(true);
+        /*if(currentWifiConfiguration != null){
+            //was conneceted to a wifi network before shutdown
+            String tmpConnectedSSID = wifiManager.getConnectionInfo().getSSID();
+            //SSID of the connected wifi network
+            if(!tmpConnectedSSID.equals(connectedSSID)){
+                //Connected to another wifi network as before
+                //close connection and connect to the old one
+                wifiManager.disconnect();
+                wifiManager.enableNetwork(currentWifiConfiguration.networkId,true);
+                wifiManager.reconnect();
+            }
+        }*/
     }
 
     private void connectToMsgServer(){

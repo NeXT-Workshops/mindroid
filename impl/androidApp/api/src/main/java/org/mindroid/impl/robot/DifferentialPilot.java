@@ -38,7 +38,7 @@ public class DifferentialPilot implements IDifferentialPilot {
      * @param wheelDiameter in cm
      * @param trackWidth in cm
      */
-    public DifferentialPilot( MotorProvider motorProvider, EV3PortID leftMotor, EV3PortID rightMotor, float wheelDiameter, float trackWidth) {
+    public DifferentialPilot(MotorProvider motorProvider, EV3PortID leftMotor, EV3PortID rightMotor, float wheelDiameter, float trackWidth) {
         this.motorProvider = motorProvider;
         this.leftMotor = leftMotor;
         this.rightMotor = rightMotor;

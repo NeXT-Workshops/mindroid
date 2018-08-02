@@ -76,6 +76,7 @@ public class MindroidServerApplicationMain {
             MindroidServerWorker w;
             try {
                 w = new MindroidServerWorker(server.accept(), mindroidServerFrame);
+                ConnectedDevicesFrame.getInstance().addUserListener(w);
                 Thread t = new Thread(w);
                 t.setUncaughtExceptionHandler(exceptionHandler);
                 t.start();

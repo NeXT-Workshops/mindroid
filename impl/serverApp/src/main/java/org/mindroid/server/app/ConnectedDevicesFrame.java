@@ -16,11 +16,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
     private static final ConnectedDevicesFrame console = new ConnectedDevicesFrame();
+    private ArrayList<IUserAction> userActionListeners = new ArrayList<IUserAction>();
 
     public static ConnectedDevicesFrame getInstance() {
         return console;
@@ -29,13 +32,13 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     public static final String TITLE =  "Connected Devices";
     private JPanel contentPane = new JPanel();
 
-    private final int[] posX = {10,100,240,380,500};
-    private final String[] columnNames = {"User","Devices", "ADB State", "Fetch Log", "Log"};
+    private final int[] posX = {10,100,240,380,500,620};
+    private final String[] columnNames = {"User","Devices", "ADB State", "Fetch Log", "Log", "Remove User"};
 
 
     private ConnectedDevicesFrame() {
         setTitle(TITLE);
-        setSize(new Dimension(620,400));
+        setSize(new Dimension(800,400));
 
         setIconImage(MindroidServerSettings.getTitleImage());
 
@@ -126,6 +129,10 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         JTextField field_headlineLog = getTextField(columnNames[4]);
         contentPane.add(field_headlineLog);
         field_headlineLog.setBounds(posX[4],10,120,30);
+
+        JTextField field_removeUser = getTextField(columnNames[5]);
+        contentPane.add(field_removeUser);
+        field_removeUser.setBounds(posX[5],10,120,30);
     }
 
     private JTextField getTextField(String content){
@@ -167,6 +174,19 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         return btn_opLogButton;
     }
 
+    private JButton getRemoveUserButton(final String userName) {
+        JButton btn_removeUser = new JButton("Remove User");
+        btn_removeUser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            for (IUserAction userActionListener : userActionListeners) {
+                userActionListener.kickUser(userName);
+            }
+            }
+        });
+        return btn_removeUser;
+    }
+
     public void updateDevices() {
         try {
             String[] devices = getDevices();
@@ -194,13 +214,17 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
                 contentPane.add(field_adbState);
                 field_adbState.setBounds(posX[2],posY,120,30);
 
-                JButton btn_fetchLog = getFetchLogButton(destinations[i].getValue(),IPService.findAddress(destinations[i])); //TODO
+                JButton btn_fetchLog = getFetchLogButton(destinations[i].getValue(),IPService.findAddress(destinations[i]));
                 contentPane.add(btn_fetchLog);
                 btn_fetchLog.setBounds(posX[3],posY,100,20);
 
-                JButton btn_opLog = getLogButton(destinations[i].getValue(),IPService.findAddress(destinations[i])); //TODO
+                JButton btn_opLog = getLogButton(destinations[i].getValue(),IPService.findAddress(destinations[i]));
                 contentPane.add(btn_opLog);
                 btn_opLog.setBounds(posX[4],posY,100,20);
+
+                JButton btn_removeUser = getRemoveUserButton(destinations[i].getValue());
+                contentPane.add(btn_removeUser);
+                btn_removeUser.setBounds(posX[5],posY,150,20);
             }
 
             contentPane.repaint();
@@ -252,6 +276,10 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     @Override
     public void handleShowLog(int rowIndex) {
         System.out.println("Handle Show LOG of "+rowIndex);
+    }
+
+    public void addUserListener(IUserAction userActionListener) {
+        this.userActionListeners.add(userActionListener);
     }
 }
 

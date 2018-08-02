@@ -8,14 +8,14 @@ import java.util.Date;
 public class HelloDate extends ImperativeWorkshopAPI {
 
     public HelloDate() {
-        super("Hello Date");
+        super("Hello Date [sol]");
     }
 
     @Override
     public void run() {
            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyy");
            clearDisplay();
-           drawString("Datum: " + formatter.format(new Date()), Textsize.SMALL, 10, 50);
+           drawString("Datum: " + formatter.format(new Date()), Textsize.MEDIUM, 10, 50);
            }
   }
   

@@ -1,4 +1,72 @@
 ﻿Dokumentation und Aufgabenstellung:
+DONE Wichtige Funktionen (JavaDoc von ImperativeWorkshopAPI) in Doku
+	- DONE getmessage etc in anleitung
+	- DONE sendLogMessage erwähnen
+	- DONE Button clicked und getRoboID in die Aufgabenbeschreibung
+- Aufgabenbeschreibung für die neuen Coop Stubs anpassen
+- in der Aufgabenstellung sollte erwähnt werden, dass man auf den MessageServer achten sollte (aktuell schaut da niemand drauf)
+- 1.1.3 (Roboter und App verbinden) mit 1.1.2 (Programme Übertragen) tauschen.
+- 1.3 Unterpunkt 3."Wähle "Verbindung zum EV3-Brick herstellen" überprüfen. Ist das noch notwendig?
+- Geht es wirklich, dass man mit Rechtsklick auf die Java Doku verwiesen wird?
+- Woher sind die Bilder eigentlich? @Copyright
+- JE: Tabs erklären, jede Aufgabe ein Stub
+- Fingerprint akzeptieren in Doku
+
+Aufgabenimplementierung:
+
+Stubs & Solutions:
+
+Reasearch:
+	- Lawn Mower Lars:
+		- Kryonet exceptions: Invalid object length
+		- Manchmal stoppt er nicht wenn er solte/dreht nicht -> ursache?
+
+Server:
+- Implemented - but off by one line - autoscroll implementieren mit checkbox
+- DONE - "kick devices" implementieren
+- Manchmal werden Nachrichten gebroadcastet und manchmal nicht
+- Manchmal werden alte Nachrichten an die aktuelle Runtime geschickt (liegen die Nachrichten noch in der App?)
+	> Added clearMessages-method to API to clear Message cache of the phone
+App:
+- Was passiert, wenn das WLAN bei reaktivierung (tethering beschleunigung) mehrere bekannte WLAN Netze zur Verfügung hat?
+	- Lock auf das vorherige möglich? - implemented code, aber scheinbar nicht notwendig
+	- Es scheint als verbindet er sich automatisch immer zum vorherigen WLAN netz.
+	
+- Admin Modus verbessern:
+	- DONE Anzeige von Set im Home Fragment
+	- DONE Anzeige von Admin-Mode in Home Fragment
+	- DONE Admin Tab erreichbar wenn mit Server verbunden
+	- DONE nach login auf Homescreen springen
+	- DEPRECATED Spinner bei Settings größer
+	- tastatur öffnen wenn in admin mode tab gegangen wird
+	- DONE: Improved Tethering - Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
+	- DONE - Info Tab in Home Fragment default anzeigen lassen
+
+Framework:
+- neue Coop Stups, wie im CoopHelloWorld
+- Fehlermeldung mit Zeilenangabe (in Bezug auf den Code der Teilnehmer)
+
+bugs & improvements:
+- App schmiert ab, wenn man wild herumklickt
+- dreh-korrektur nochmal überprüfen (endlosschleife - er versucht sich minimal in die falsche Richtung zu korrigieren)
+- Stubs sind bei erneutem run() Aufruf noch instanziiert und haben noch ihren alten State (new Stub()).run()
+
+sonstiges:
+- Aufkleber "Energy Demo" auf Handy?
+- Unterlage mit viel Grip für den nächsten Workshop
+- email mit code + aufgabenstellung + doku an marlene
+- mindroid Film 
+- Javassist? bzw ByteBuddy?
+	
+Bugs:
+- HelloWorld beispiel funktionierte nicht nach deployment -> Brick neustart notwendig, warum?
+
+####################
+erledigt: 27.06.2018
+####################
+
+
+Dokumentation und Aufgabenstellung:
 - REPLACED - Tehthering im HandyVerbinden Skript richtig schreiben
 - Anleitung anpassen
 	- IRRELEVANT für VMs
@@ -8,7 +76,6 @@
 - DISABLE CHARGE WILL NOT WORK - disable usb charging mit in die anleitung aufnehmen
 	- eigentlich nicht nötig, soll automatisch deaktiviert werden, nur bei Bedarf aktiviert
 
-- getmessage etc in anleitung
 - DONE Aufgabe 2.2 die imports in den source code ziehen
 	- da kompletter Quellcode in Anleitung, sind auch alle Imports drinnen
 - DONE belegung von sensoren mit in anleitung
@@ -25,9 +92,6 @@
 - DONE kurze Anmerkung darüber was der Konstruktor genau macht
 - DONE Server IP muss auch in der App gesetzt werden!
 - DONE import auf colors in der Aufgabenbeschreibung falsch
-- Button clicked und getRoboID in die Aufgabenbeschreibung
-- Aufgabenbeschreibung für die neuen Coop Stubs anpassen
-- in der Aufgabenstellung sollte erwähnt werden, dass man auf den MessageServer achten sollte (aktuell schaut da niemand drauf)
 
 Aufgabenimplementierung:
 - DONE helloworld lösungssourcecode direkt an die schüler, den sourcecode nicht selbst tippen	
@@ -35,26 +99,21 @@ Aufgabenimplementierung:
 - DONE über dem Konstruktor einen Kommentar, dass dieser nicht geändert werden darf
 
 Framework:
+- DONE: Improved Tethering activation which seem to solve the "unable to connect issu - Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
+- DONE - automatisch Delay im Hintergrund von forward, backward, stop ... aufrufen (50ms)
+- DONE - Added clearMessage Method to the API - Message Server, reset old messages
 - DONE Mein Roboter Sensoren/Motoren default werte in app setzen
 - DONE Skripte auf dem Server ausführen? (adb bridge)
-- Server IP Belegung automatisch updaten
-	- wird wohl nix (unnötig?)
 - DONE Broadcast für den Server implementieren (eine Nachricht an alle Roboter im Netz)
-- automatisch Delay im Hintergrund von forward, backward, stop ... aufrufen (50ms)
-- Schleife einbauen, die die connection zum brick einige Male selbst ausprobiert, bis eine Fehlermeldung geworfen wird
-- neue Coop Stups, wie im CoopHelloWorld
-- Message Server, reset old messages
-- Fehlermeldung mit Zeilenangabe (in Bezug auf den Code der Teilnehmer)
 
 Documentation:
 - 1.1.3 mit 1.1.2 tauschen.
 - 1.3 Unterpunkt 3."Wähle "Verbindung zum EV3-Brick herstellen" überprüfen. Ist das noch notwendig?
 - DONE Formatierung fixen
-- Geht es wirklich, dass man mit Rechtsklick auf die Java Doku verwiesen wird?
-- Woher sind die Bilder eigentlich? @Copyright
 - DONE Aufgabe 7 umbenennen zu "Dancing Robots"
 
 bugs & improvements:
+- DONE - Batterie ist manchmal nicht da (EV3)
 - DONE wenn man zurück klickt sollte man im Hauptmenü landen
 - DONE Device unauthorized -> Handy mit zettel makiert
 	- Vermutlich ADB Problem
@@ -75,24 +134,14 @@ bugs & improvements:
 	- Shell Command aktiviert Tethering
 	- nach deployen kein tethering möglich
 		
-- App schmiert ab, wenn man wild herumklickt
 - DONE - wand-ping-pong + color sensor führt zu herben bugs - läuft nun
 - DONE <- TIMEOUT 45Sec wenn initialization failed ->kommunikation zwischen handy und brick verbessern (kill switch)
 - DONE - log für kommunikation zum brick
-- dreh-korrektur nochmal überprüfen (endlosschleife - er versucht sich minimal in die falsche Richtung zu korrigieren)
-- Batterie ist manchmal nicht da (EV3)
-- Stubs sind bei erneutem run() Aufruf noch instanziiert und haben noch ihren alten State (new Stub()).run()
-- Manchmal werden Nachrichten gebroadcastet und manchmal nicht
-- Manchmal werden alte Nachrichten an die aktuelle Runtime geschickt (liegen die Nachrichten noch in der App?)
-- Color/Colour einheitlich machen
 
 sonstiges:
-- Aufkleber "Energy Demo" auf Handy?
-- Unterlage mit viel Grip für den nächsten Workshop
 - DONE - andy fragen wegen vm lizenz
 - vor girlsday (ende april) nochmal email an marelene wegen flyern
 - email mit code + aufgabenstellung + doku an marlene
-- mindroid film 
 - DONE usb strom messer bestellen
 - DONE Hiwi Verträge im Mai verlängern
 	

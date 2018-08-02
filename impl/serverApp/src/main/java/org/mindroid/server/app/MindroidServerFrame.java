@@ -8,6 +8,8 @@ import org.mindroid.server.app.util.ADBService;
 import org.mindroid.server.app.util.IPService;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -30,6 +32,7 @@ public class MindroidServerFrame extends JFrame {
     private final JTable table;
     private final JLabel ownIPLabel;
     private final JMenuItem refreshIP;
+    private final JCheckBox activateScrollingCheckBox;
     private HashMap<String,Color> assignedColors;
     private ArrayList<Color> availableColors;
     private final int SOURCE_COL = 1;  //Column that contains a message's source
@@ -151,7 +154,21 @@ public class MindroidServerFrame extends JFrame {
         });
         table.setColumnSelectionAllowed(false);
         table.setRowSelectionAllowed(false);
-        this.getContentPane().add(new JScrollPane(this.table), BorderLayout.CENTER);
+
+        final JScrollPane scrollPane = new JScrollPane(this.table);
+        activateScrollingCheckBox = new JCheckBox("autoscrolling");
+        activateScrollingCheckBox.setSelected(true);
+        table.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                if(activateScrollingCheckBox.isSelected()) {
+                    table.scrollRectToVisible(table.getCellRect(table.getRowCount(), table.getColumnCount(), false));
+                }
+            }
+        });
+        this.getContentPane().add(activateScrollingCheckBox,BorderLayout.NORTH);
+        scrollPane.setAutoscrolls(activateScrollingCheckBox.isSelected());
+        this.getContentPane().add(scrollPane,BorderLayout.CENTER);
 
         //colors
         assignedColors = new HashMap<>();

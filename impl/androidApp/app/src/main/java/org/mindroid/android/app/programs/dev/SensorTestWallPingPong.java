@@ -14,7 +14,7 @@ public class SensorTestWallPingPong extends ImperativeWorkshopAPI {
 
         forward(500);
         while(!isInterrupted()){
-            if(getDistance() < 0.15f || getLeftColor() == Colors.WHITE || getRightColor() == Colors.WHITE){
+            if(getDistance() < 15f || getLeftColor() == Colors.WHITE || getRightColor() == Colors.WHITE){
                 stop();
                 delay(50);
                 turnLeft(180);

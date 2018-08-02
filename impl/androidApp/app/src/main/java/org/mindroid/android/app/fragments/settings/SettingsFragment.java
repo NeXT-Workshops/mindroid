@@ -15,8 +15,11 @@ import org.mindroid.android.app.R;
 import org.mindroid.android.app.fragments.home.HomeFragment;
 import org.mindroid.android.app.robodancer.ConnectionPropertiesChangedListener;
 import org.mindroid.android.app.robodancer.SettingsProvider;
+import org.mindroid.android.app.serviceloader.ImplementationService;
 import org.mindroid.android.app.util.IPUtils;
 import org.mindroid.android.app.util.ShellService;
+
+import java.util.ServiceLoader;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +30,6 @@ import org.mindroid.android.app.util.ShellService;
  * create an instance of this fragment.
  */
 public class SettingsFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
     private OnSettingsChanged settingsChangedListener;
     private ConnectionPropertiesChangedListener connectionPropertiesChangedListener = SettingsProvider.getInstance();
 
@@ -40,9 +42,6 @@ public class SettingsFragment extends Fragment {
 
     //UI-Button
     private Button btn_saveSettings;
-
-    //Switch
-    private Switch usbSwitch;
 
     //UI-Textfield
     private TextView txtView_note;
@@ -62,6 +61,8 @@ public class SettingsFragment extends Fragment {
     private EditText txt_input_serverip_part2;
     private EditText txt_input_serverip_part3;
     private EditText txt_input_serverip_part4;
+
+
 
     //Msg showing that the messenger needs to be disconnected
     private String noteMessage;
@@ -109,8 +110,6 @@ public class SettingsFragment extends Fragment {
         /** INIT Buttons **/
         btn_saveSettings = (Button) view.findViewById(R.id.btn_saveSettings);
 
-        /** INIT SWITCH */
-        usbSwitch = (Switch) view.findViewById(R.id.switchUSB);
 
         /** INIT TextEdit fields **/
         txt_input_robotID = (EditText) view.findViewById(R.id.txt_input_robotID);
@@ -165,13 +164,8 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        usbSwitch.setVisibility(View.GONE);
-        usbSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean checked){
-                ShellService.usbChargingControl(checked);
-            }
-        });
+
+
         //Load saved SettingsProvider
         loadSettings();
 
@@ -185,8 +179,7 @@ public class SettingsFragment extends Fragment {
         //stopAllMotors
         hasChanged = false;
 
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnSettingsChanged) {
             settingsChangedListener = (OnSettingsChanged) context;
         } else {
             throw new RuntimeException(context.toString()
@@ -197,22 +190,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
     private void loadSettings(){

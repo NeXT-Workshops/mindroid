@@ -22,6 +22,7 @@ import org.mindroid.android.app.R;
 import org.mindroid.android.app.dialog.ErrorDialog;
 import org.mindroid.android.app.dialog.InfoDialog;
 import org.mindroid.android.app.errorhandling.APIErrorHandler;
+import org.mindroid.android.app.fragments.admin.AdminFragment;
 import org.mindroid.android.app.fragments.log.GlobalLogger;
 import org.mindroid.android.app.fragments.log.LoggerFragment;
 import org.mindroid.android.app.fragments.myrobot.MyRobotFragment;
@@ -42,11 +43,11 @@ import java.util.logging.Logger;
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        SettingsFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
         SensorMonitoringFragment.OnFragmentInteractionListener,
         SensorObservationFragment.OnFragmentInteractionListener,
         SettingsFragment.OnSettingsChanged,
+        AdminFragment.OnAdminChanged,
         MyRobotFragment.OnFragmentInteractionListener,
         RobotSetupInfoFragment.OnFragmentInteractionListener,
         IErrorHandler{
@@ -71,12 +72,14 @@ public class MainActivity extends Activity
     private Fragment SETTINGS_FRAGMENT = SettingsFragment.newInstance();
     private Fragment SENSOR_MONITOR_FRAGMENT = SensorMonitoringFragment.newInstance();
     private Fragment LOG_FRAGMENT = LoggerFragment.newInstance();
+    private Fragment ADMIN_FRAGEMENT = AdminFragment.newInstance();
 
     private final String TAG_HOME_FRAGMENT = "TAG_HOME_FRAGMENT";
     private final String TAG_CONFIG_FRAGMENT = "TAG_CONFIG_FRAGMENT";
     private final String TAG_SETTINGS_FRAGMENT = "TAG_SETTINGS_FRAGMENT";
     private final String TAG_SENSOR_MONITOR = "TAG_SENSOR_MONITOR";
     private final String TAG_LOG_FRAGMENT = "TAG_LOG_FRAGMENT";
+    private final String TAG_ADMIN_FRAGMENT = "TAG_ADMIN_FRAGMENT";
 
     private static final Logger LOGGER = Logger.getLogger(MainActivity.class.getName());
 
@@ -116,61 +119,7 @@ public class MainActivity extends Activity
                     .replace(R.id.container, HOME_FRAGMENT)
                     .commit();
         }
-
-        //READ IF CONFIG
-        /*Runnable run = new Thread(){
-            public void run(){
-                readIFConfig();
-            }
-        };
-        new Thread(run).start();
-        */
-
-        //Activate tethering - (used to activate tethering automatically after app got started after deployment)
-        //Only works if phone is connected to to brick by usb
-        //cmdShellService.setTethering(true);
     }
-
-    @Deprecated
-    private void readIFConfig(){
-        try {
-            String dir = Environment.getExternalStorageDirectory()+File.separator+"mindroid";
-            System.out.println("### IFCONFIG OUTPUT: dirpath: "+dir);
-            //create folder
-            File folder = new File(dir); //folder name
-            folder.mkdirs();
-
-            //create file
-            File outputFile = new File(dir, "output_ifconfig.txt");
-            outputFile.createNewFile();
-
-            String filePath = outputFile.getPath();
-
-            System.out.println("### IFCONFIG OUTPUT: outputfile: "+filePath);
-            System.out.println("### IFCONFIG OUTPUT: exec shell cmd ");
-            LOGGER.log(Level.INFO,"Start to execute IFCOnfig");
-            ShellService.execIfConfig(filePath);
-            LOGGER.log(Level.INFO,"IFConfig command executed");
-            LOGGER.log(Level.INFO,"write into file: "+filePath);
-
-            BufferedReader br = new BufferedReader(new FileReader(outputFile));
-            StringBuffer output = new StringBuffer();
-            System.out.println("### IFCONFIG OUTPUT: start reading file ");
-            LOGGER.log(Level.INFO,"IFCONIFG: Start reading output from file");
-            while(br.read() != -1){
-                output.append(br.readLine());
-            }
-
-            LOGGER.log(Level.INFO,"IFCONIFG: End reading output from file");
-
-            LOGGER.log(Level.INFO,output.toString());
-            System.out.println("### IFCONFIG OUTPUT: "+output.toString());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -189,21 +138,25 @@ public class MainActivity extends Activity
                 setTitle(getResources().getString(R.string.title_home));
                 break;//Home
             case 1:
-                replaceFragment(SENSOR_MONITOR_FRAGMENT,TAG_SENSOR_MONITOR);
+                replaceFragment(SENSOR_MONITOR_FRAGMENT, TAG_SENSOR_MONITOR);
                 setTitle(getResources().getString(R.string.title_sensor_monitoring));
                 break;
             case 2:
-                replaceFragment(CONFIG_FRAGMENT,TAG_CONFIG_FRAGMENT);
+                replaceFragment(CONFIG_FRAGMENT, TAG_CONFIG_FRAGMENT);
                 setTitle(getResources().getString(R.string.title_myrobot));
                 break;//Configuration
             case 3:
-                replaceFragment(SETTINGS_FRAGMENT,TAG_SETTINGS_FRAGMENT);
+                replaceFragment(SETTINGS_FRAGMENT, TAG_SETTINGS_FRAGMENT);
                 setTitle(getResources().getString(R.string.title_settings));
                 break;//SettingsProvider
             case 4:
-                replaceFragment(LOG_FRAGMENT,TAG_LOG_FRAGMENT);
+                replaceFragment(LOG_FRAGMENT, TAG_LOG_FRAGMENT);
                 setTitle(getResources().getString(R.string.title_log));
                 break;//SettingsProvider
+            case 5:
+                replaceFragment(ADMIN_FRAGEMENT, TAG_ADMIN_FRAGMENT);
+                setTitle(getResources().getString(R.string.title_admin));
+                break;//Admin
             default:
                 replaceFragment(HOME_FRAGMENT,TAG_HOME_FRAGMENT);
         }
@@ -252,6 +205,9 @@ public class MainActivity extends Activity
             case 4:
                 mTitle = getString(R.string.title_log);
                 break;
+            case 5:
+                mTitle = getResources().getText(R.string.title_admin);
+                break;
         }
     }
 
@@ -278,12 +234,6 @@ public class MainActivity extends Activity
 
         // makes sure Home is selected in Drawer
         mNavigationDrawerFragment.selectItem(0);
-        /*
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, HOME_FRAGMENT)
-                .commit();
-        */
     }
 
     @Override
@@ -317,5 +267,12 @@ public class MainActivity extends Activity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onAdminChanged(boolean AdminChanged) {
+        if(AdminChanged)
+            mNavigationDrawerFragment.selectItem(0);
+
     }
 }

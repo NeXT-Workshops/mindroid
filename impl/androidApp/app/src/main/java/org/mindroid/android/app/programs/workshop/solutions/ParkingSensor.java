@@ -18,14 +18,14 @@ public class ParkingSensor extends ImperativeWorkshopAPI {
         drawString("Parking sensor", Textsize.MEDIUM, 10, 10);
         while (!isInterrupted()) { 
             clearDisplay();
-            if(getDistance() < 0.30f && getDistance() > 0.15f) {
+            if(getDistance() < 30f && getDistance() > 15f) {
                 drawString("Hm :-/", Textsize.MEDIUM, 10, 10);      
                 if (!previousState.equals("hm")) {
                     setLED(EV3StatusLightColor.YELLOW, 
                            EV3StatusLightInterval.BLINKING);
                 }
                 previousState = "hm";
-            } else if (getDistance() < 0.15f) {
+            } else if (getDistance() < 15f) {
                 drawString("Oh oh :-O", Textsize.MEDIUM, 10, 10);
                 if (!previousState.equals("oh")) {
                     setLED(EV3StatusLightColor.RED, 

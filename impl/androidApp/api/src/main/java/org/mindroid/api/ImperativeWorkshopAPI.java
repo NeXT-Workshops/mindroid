@@ -101,13 +101,13 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     }
 
     /**
-     * Returns the Distance measured by the Distance Sensor
+     * Returns the Distance measured by the Distance Sensor in centimeter
      *
-     * @return distance value in meter
+     * @return distance value in centimeter
      */
     public float getDistance(){
         if(getUltrasonicSensor().getSensormode().equals(Sensormode.DISTANCE)){
-            return getUltrasonicSensor().getValue()[0];
+            return getUltrasonicSensor().getValue()[0]*100;
         }else{
             return -1f;
         }

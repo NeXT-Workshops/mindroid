@@ -73,7 +73,7 @@ public class ImpCoordWallPingPong extends ImperativeWorkshopAPI {
     private void runWallPingPong(String colleague){
         forward(500);
 
-        while(!isInterrupted() && getDistance() > 0.15f){
+        while(!isInterrupted() && getDistance() > 15f){
             delay(50);
         }
 

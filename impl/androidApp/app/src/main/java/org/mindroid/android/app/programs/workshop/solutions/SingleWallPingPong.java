@@ -13,7 +13,7 @@ public class SingleWallPingPong extends ImperativeWorkshopAPI {
     public void run() {
         do {
             forward(500);
-            while (getDistance() > 0.15f && !isInterrupted()) {
+            while (getDistance() > 15f && !isInterrupted()) {
                 delay(25);
             }
             stop();

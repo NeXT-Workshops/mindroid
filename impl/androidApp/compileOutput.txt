@@ -1,0 +1,26 @@
+Exception in thread "DisconnectableInputStream source reader" org.gradle.api.UncheckedIOException: java.io.IOException: Das Handle ist ungültig
+	at org.gradle.internal.UncheckedException.throwAsUncheckedException(UncheckedException.java:57)
+	at org.gradle.internal.UncheckedException.throwAsUncheckedException(UncheckedException.java:40)
+	at org.gradle.util.DisconnectableInputStream$1.run(DisconnectableInputStream.java:125)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.io.IOException: Das Handle ist ungültig
+	at java.io.FileInputStream.readBytes(Native Method)
+	at java.io.FileInputStream.read(FileInputStream.java:255)
+	at java.io.BufferedInputStream.fill(BufferedInputStream.java:246)
+	at java.io.BufferedInputStream.read1(BufferedInputStream.java:286)
+	at java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	at org.gradle.util.DisconnectableInputStream$1.run(DisconnectableInputStream.java:96)
+	... 1 more
+NDK is missing a "platforms" directory.
+If you are using NDK, verify the ndk.dir is set to a valid NDK directory.  It is currently set to C:\Users\Marcel\AppData\Local\Android\Sdk\ndk-bundle.
+If you are not using NDK, unset the NDK variable from ANDROID_NDK_HOME or local.properties to remove this warning.
+
+C:\Users\Marcel\Documents\Mindroid\impl\androidApp\app\src\main\java\org\mindroid\android\app\programs\workshop\stubs\ColorTest.java:10: error: ';' expected
+        super("Color Test")
+                           ^
+1 error
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 5.0.
+See https://docs.gradle.org/4.7/userguide/command_line_interface.html#sec:command_line_warnings
+
+BUILD FAILED in 1s

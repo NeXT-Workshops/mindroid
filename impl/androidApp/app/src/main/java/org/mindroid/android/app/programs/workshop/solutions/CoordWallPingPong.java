@@ -6,8 +6,8 @@ import org.mindroid.impl.brick.Button;
 
 public class CoordWallPingPong extends ImperativeWorkshopAPI {
 
-    private final String player_1 = "Robert";
-    private final String player_2 = "Berta";
+    private final String player_1 = "Alice";
+    private final String player_2 = "Bob";
 
     //Messages
     private final String leaderMsg = "I AM THE LEADER";
@@ -37,11 +37,15 @@ public class CoordWallPingPong extends ImperativeWorkshopAPI {
             if(isButtonClicked(Button.ENTER)){
                 sendLogMessage("I am the leader!");
                 //I am the Leader
-                sendMessage(colleague,leaderMsg);
+                sendMessage(colleague, leaderMsg);
                 leaderElectionFinished = true;
 
-                //Start doing wall ping pong
-                runWallPingPong(colleague);
+                //Start doing wall ping pong, start driving
+                while(!isInterrupted()) {
+                    driveToWallAndTurn();
+                    sendMessage(colleague, "Start!");
+                    waitForMessage("Weiter!");
+                }
             }
 
             if(hasMessage()){
@@ -51,39 +55,37 @@ public class CoordWallPingPong extends ImperativeWorkshopAPI {
                     //Colleague is the leader
                     leaderElectionFinished = true;
                     sendLogMessage("I am NOT the leader!");
-                }
-            }
-            delay(50);
-        }
 
-        while(!isInterrupted()){
-
-            if(hasMessage()){
-                MindroidMessage msg = getNextMessage();
-                sendLogMessage("I received a message: "+msg.getSource().getValue()+": \""+msg.getContent()+"\"");
-                if(msg.getContent().equals(startPingPongMsg)){
-                    runWallPingPong(colleague);
+                    // do wall-pingpong, start with waiting
+                    while(!isInterrupted()){
+                        waitForMessage("Start!");
+                        driveToWallAndTurn();
+                        sendMessage(colleague, "Weiter!");
+                    }
                 }
             }
             delay(50);
         }
     }
 
-    /**
-     * Do a wall ping pong
-     * @param colleague - my colleagues id
-     */
-    private void runWallPingPong(String colleague){
-        forward(500);
-        while(!isInterrupted() && getDistance() > 0.15f){
-            delay(50);
+
+    private void driveToWallAndTurn(){
+        forward(300);
+        while (!isInterrupted() && getDistance() > 10f) {
+            delay(10);
         }
-        enableFloatMode();
-        driveDistanceBackward(10f,350);
-        turnRight(180,350);
-        sendMessage(colleague,startPingPongMsg);
-        driveDistanceForward(40f);
-        enableFloatMode();
-        turnLeft(180,350);
+        driveDistanceBackward(10);
+        turnLeft(180);
+    }
+
+    private void waitForMessage(String message){
+        while (!isInterrupted()) {
+            if (hasMessage()) {
+                if (getNextMessage().getContent().equals(message)){
+                    return;
+                }
+            }
+            delay(10);
+        }
     }
 }

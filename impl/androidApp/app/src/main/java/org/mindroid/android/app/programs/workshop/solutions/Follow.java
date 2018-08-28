@@ -34,8 +34,8 @@ public class Follow extends ImperativeWorkshopAPI {
     private Random rnd = new Random();
     private String colleague;
 
-    private String player_1 = "Robert";
-    private String player_2 = "Berta";
+    private String player_1 = "Alice";
+    private String player_2 = "Bob";
 
 
     //Messages
@@ -145,6 +145,23 @@ public class Follow extends ImperativeWorkshopAPI {
             delay(50);
         }
         stop();
+    }
+
+    private void keepDistance(){
+        float distance = getDistance();
+        if (prevState != PlatoonState.FAST && distance > 0.35f) {
+            forward(300);
+            prevState = PlatoonState.FAST;
+            setLED(LED_GREEN_ON);
+        } else if (prevState != PlatoonState.SLOW && distance < 0.25f) {
+            forward(100);
+            prevState = PlatoonState.SLOW;
+            setLED(LED_RED_ON);
+        } else if (prevState != PlatoonState.MED && distance > 0.25f && distance < 0.35f) {
+            forward(200);
+            prevState = PlatoonState.MED;
+            setLED(LED_YELLOW_ON);
+        }
     }
 
     private void waitForTurn(){

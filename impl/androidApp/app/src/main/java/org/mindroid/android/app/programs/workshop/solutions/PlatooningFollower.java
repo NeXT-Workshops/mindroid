@@ -11,7 +11,8 @@ public class PlatooningFollower extends ImperativeWorkshopAPI {
 
     public PlatooningFollower(){
         super("Platooning Follower [sol]l");
-    };
+    }
+
     enum State {
         FAST,
         MED,

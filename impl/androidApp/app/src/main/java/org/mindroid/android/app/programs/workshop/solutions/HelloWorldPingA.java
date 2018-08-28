@@ -6,7 +6,7 @@ import org.mindroid.impl.brick.Button;
 public class HelloWorldPingA extends ImperativeWorkshopAPI {
 
     public HelloWorldPingA() {
-        super("Hello World Ping A [sol]");
+        super("Hello World Ping Alice [sol]");
     }
 
     @Override
@@ -15,7 +15,7 @@ public class HelloWorldPingA extends ImperativeWorkshopAPI {
         while(!isInterrupted()){
             delay(10);
             if(isButtonClicked(Button.ENTER))
-                sendMessage("Robert", "Hallo Robert!");
+                sendMessage("Bob", "Hallo Bob!");
         }
     }
 }

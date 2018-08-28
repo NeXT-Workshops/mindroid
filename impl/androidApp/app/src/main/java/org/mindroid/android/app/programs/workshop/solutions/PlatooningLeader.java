@@ -13,8 +13,6 @@ public class PlatooningLeader extends ImperativeWorkshopAPI {
         super("Platooning Leader [sol]");
     }
 
-    ;
-
     @Override
     public void run() {
         while (!isInterrupted()) {

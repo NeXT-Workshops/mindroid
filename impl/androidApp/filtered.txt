@@ -1,4 +1,0 @@
-C:\Users\Marcel\Documents\Mindroid\impl\androidApp\app\src\main\java\org\mindroid\android\app\programs\workshop\stubs\ColorTest.java:10: error: ';' expected 
-        super("Color Test") 
-                           ^ 
-1 error 

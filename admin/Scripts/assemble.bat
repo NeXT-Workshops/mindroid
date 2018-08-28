@@ -1,5 +1,7 @@
 @rem ###############################################################################################
 @rem
+@rem Improved Version, August 2018
+@rem
 @rem  This bat file checks whether an android phone is connected and proceeds
 @rem  to either only assemble the apk or to assemble and install on device.
 @rem

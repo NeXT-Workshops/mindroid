@@ -123,5 +123,11 @@ echo.
 type filtered.txt
 
 :end
+IF EXIST filtered.txt (
+	del filtered.txt
+)
+IF EXIST compileOutput.txt (
+	del compileOutput.txt
+)
 @cd %startdir% 
 ::exit

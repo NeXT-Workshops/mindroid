@@ -162,7 +162,10 @@ public class MindroidServerFrame extends JFrame {
             @Override
             public void tableChanged(TableModelEvent e) {
                 if(activateScrollingCheckBox.isSelected()) {
+                    // old try, off by one line
                     table.scrollRectToVisible(table.getCellRect(table.getRowCount(), table.getColumnCount(), false));
+                    // new try. to be tested
+                    table.changeSelection(table.getRowCount() - 1, 0, false, false);
                 }
             }
         });

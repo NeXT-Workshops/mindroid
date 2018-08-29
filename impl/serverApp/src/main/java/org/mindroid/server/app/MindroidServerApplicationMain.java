@@ -4,11 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.ServerSocket;
-import java.net.SocketException;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -20,7 +18,7 @@ import java.util.List;
  */
 public class MindroidServerApplicationMain {
 
-    private static final Logger logger = LogManager.getLogger(MindroidServerApplicationMain.class);
+    private static Logger logger;
     private final static int SERVER_PORT = 33044;
     private static MindroidServerFrame mindroidServerFrame;
     private static ServerSocket server = null;
@@ -28,6 +26,9 @@ public class MindroidServerApplicationMain {
     public static void main(String[] args) {
 
         System.setProperty("apple.laf.useScreenMenuBar", "true");
+        System.setProperty("log4j.configurationFile", "log4j2.xml");
+
+        logger = LogManager.getLogger(MindroidServerApplicationMain.class);
         mindroidServerFrame = new MindroidServerFrame();
         try {
             runServer();

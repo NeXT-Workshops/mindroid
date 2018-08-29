@@ -93,6 +93,7 @@ public class MainActivity extends Activity
 
         initialize(savedInstanceState);
 
+        addShortcut();
     }
 
     private void initialize(Bundle savedInstanceState) {
@@ -252,6 +253,30 @@ public class MainActivity extends Activity
     public ListView getMenuItemListView(){
         return mNavigationDrawerFragment.getmDrawerListView();
     }
+
+    /**
+     * Thanks to: http://viralpatel.net/blogs/android-install-uninstall-shortcut-example/
+     */
+    private void addShortcut() {
+        //Adding shortcut for MainActivity
+        //on Home screen
+        Intent shortcutIntent = new Intent(getApplicationContext(),
+                MainActivity.class);
+
+        shortcutIntent.setAction(Intent.ACTION_MAIN);
+
+        Intent addIntent = new Intent();
+        addIntent
+                .putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "HelloWorldShortcut");
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.mipmap.mindroid_with_tango));
+
+        addIntent
+                .setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        getApplicationContext().sendBroadcast(addIntent);
+    }
+
 
     @Override
     public AbstractErrorHandler getErrorHandler() {

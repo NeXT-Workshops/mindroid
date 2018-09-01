@@ -54,6 +54,7 @@ public class ImplementationService {
             "org.mindroid.android.app.programs.dev.TestMessageAccess",
             "org.mindroid.android.app.programs.dev.MessageTest",
             "org.mindroid.android.app.programs.dev.SimpleForward",
+            "org.mindroid.android.app.programs.dev.MessageEcho",
             "org.mindroid.android.app.programs.dev.TestMessageServerScroll"
     };
 

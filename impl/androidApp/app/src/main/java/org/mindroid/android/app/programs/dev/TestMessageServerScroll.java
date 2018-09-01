@@ -19,7 +19,8 @@ public class TestMessageServerScroll extends ImperativeWorkshopAPI {
         while(!isInterrupted()) {
             delay(50);
             if (isEnterButtonClicked()) {
-                sendLogMessage("Message sent No." + i);
+                sendMessage("Bob", "Umlauttest: üöäÜÖÄß");
+                //sendLogMessage("Umlauttest üöäÜÖÄß." + i);
                 i++;
             }
         }

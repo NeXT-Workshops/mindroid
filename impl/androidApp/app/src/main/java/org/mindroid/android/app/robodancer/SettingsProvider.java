@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import org.mindroid.android.app.R;
-import org.mindroid.android.app.acitivites.MainActivity;
+import org.mindroid.android.app.activities.MainActivity;
 import org.mindroid.android.app.fragments.home.ConnectionProgressDialogFragment;
 import org.mindroid.android.app.fragments.myrobot.HardwareMapping;
 import org.mindroid.android.app.serviceloader.ImplementationService;

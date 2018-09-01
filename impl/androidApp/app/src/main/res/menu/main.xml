@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="org.mindroid.android.app.acitivites.MainActivity">
+    tools:context="org.mindroid.android.app.activities.MainActivity">
     <item
         android:id="@+id/action_example"
         android:showAsAction="withText|ifRoom"

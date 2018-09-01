@@ -1,11 +1,9 @@
-package org.mindroid.android.app.acitivites;
+package org.mindroid.android.app.activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.pm.ConfigurationInfo;
-import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,8 +15,6 @@ import org.mindroid.android.app.R;
 import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.util.ShellService;
 import org.mindroid.android.app.util.USBService;
-
-import java.util.logging.Logger;
 
 public class SplashActivity extends Activity {
 

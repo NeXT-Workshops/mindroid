@@ -1,4 +1,4 @@
-package org.mindroid.android.app.acitivites;
+package org.mindroid.android.app.activities;
 
 import android.app.Activity;
 import android.os.Bundle;

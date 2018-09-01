@@ -1,12 +1,9 @@
 package org.mindroid.android.app.fragments.home;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +11,8 @@ import android.view.ViewGroup;
 
 import android.widget.LinearLayout;
 import org.mindroid.android.app.R;
-import org.mindroid.android.app.acitivites.MainActivity;
-import org.mindroid.android.app.dialog.ProgressDialog;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
-import org.mindroid.impl.robot.Robot;
 
 /**
  * Fragment displaying the progress state when connecting to the brick and initialization configuration.

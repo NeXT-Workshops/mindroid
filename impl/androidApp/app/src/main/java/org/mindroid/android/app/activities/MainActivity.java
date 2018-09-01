@@ -1,21 +1,15 @@
-package org.mindroid.android.app.acitivites;
+package org.mindroid.android.app.activities;
 
 import android.app.*;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.support.v4.widget.DrawerLayout;
 
-import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ListView;
 import org.mindroid.android.app.R;
@@ -23,7 +17,6 @@ import org.mindroid.android.app.dialog.ErrorDialog;
 import org.mindroid.android.app.dialog.InfoDialog;
 import org.mindroid.android.app.errorhandling.APIErrorHandler;
 import org.mindroid.android.app.fragments.admin.AdminFragment;
-import org.mindroid.android.app.fragments.log.GlobalLogger;
 import org.mindroid.android.app.fragments.log.LoggerFragment;
 import org.mindroid.android.app.fragments.myrobot.MyRobotFragment;
 import org.mindroid.android.app.fragments.home.HomeFragment;
@@ -34,10 +27,8 @@ import org.mindroid.android.app.fragments.sensormonitoring.SensorObservationFrag
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
 import org.mindroid.android.app.robodancer.Robot;
 import org.mindroid.android.app.robodancer.SettingsProvider;
-import org.mindroid.android.app.util.ShellService;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 
-import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -266,14 +257,11 @@ public class MainActivity extends Activity
         shortcutIntent.setAction(Intent.ACTION_MAIN);
 
         Intent addIntent = new Intent();
-        addIntent
-                .putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "HelloWorldShortcut");
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getResources().getString(R.string.app_name));
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
                 Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.mipmap.mindroid_with_tango));
-
-        addIntent
-                .setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
         getApplicationContext().sendBroadcast(addIntent);
     }
 

@@ -14,8 +14,8 @@ import android.view.*;
 import android.widget.*;
 
 import org.mindroid.android.app.R;
-import org.mindroid.android.app.acitivites.IErrorHandler;
-import org.mindroid.android.app.acitivites.MainActivity;
+import org.mindroid.android.app.activities.IErrorHandler;
+import org.mindroid.android.app.activities.MainActivity;
 import org.mindroid.android.app.asynctasks.ProgressTask;
 import org.mindroid.android.app.dialog.ProgressDialog;
 import org.mindroid.android.app.fragments.log.GlobalLogger;

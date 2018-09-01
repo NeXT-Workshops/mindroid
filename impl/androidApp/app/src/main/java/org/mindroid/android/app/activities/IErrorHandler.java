@@ -1,4 +1,4 @@
-package org.mindroid.android.app.acitivites;
+package org.mindroid.android.app.activities;
 
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 

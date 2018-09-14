@@ -18,7 +18,7 @@ import org.mindroid.android.app.util.USBService;
 
 public class SplashActivity extends Activity {
 
-    private final int WELCOME_SCREEN_USB_TIMEOUT = 5000;
+    private final int WELCOME_SCREEN_USB_TIMEOUT = 6000;
     private final int WELCOME_SCREEN_NO_USB_TIMEOUT = 1000;
     private final int DELAY_ACTIVATE_ADB_SERVICE = 10;
     private final int DELAY_GRANT_PERMISSIONS = 2000;
@@ -63,8 +63,8 @@ public class SplashActivity extends Activity {
                                 @Override
                                 public void run() {
                                     //GRANT READ AND WRITE PERMISSIONS (necessary to bypass manual activation)
-                                    ShellService.grantReadExternalSotragePermission();
-                                    ShellService.grantWriteExternalSotragePermission();
+                                    ShellService.grantReadExternalStoragePermission();
+                                    ShellService.grantWriteExternalStoragePermission();
                                 }
                             }
 
@@ -85,7 +85,7 @@ public class SplashActivity extends Activity {
                 connectToMsgServer();
 
             }
-        }, timeout - 500);
+        }, timeout - 1000);
 
         handler.postDelayed(new Runnable() {
             @Override

@@ -40,11 +40,11 @@ public class ShellService {
         Shell.SU.run("service call connectivity 33 i32 " + (on ? "1" : "0") );
     }
 
-    public static void grantWriteExternalSotragePermission(){
+    public static void grantWriteExternalStoragePermission(){
         Shell.SU.run("pm grant org.mindroid.android.app android.permission.WRITE_EXTERNAL_STORAGE" );
     }
 
-    public static void grantReadExternalSotragePermission(){
+    public static void grantReadExternalStoragePermission(){
         Shell.SU.run("pm grant org.mindroid.android.app android.permission.READ_EXTERNAL_STORAGE" );
     }
 }

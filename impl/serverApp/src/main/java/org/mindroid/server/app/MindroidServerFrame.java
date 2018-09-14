@@ -204,7 +204,7 @@ public class MindroidServerFrame extends JFrame {
         try {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
             String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-            model.addRow(new String[]{timeStamp, deseriaLogMessage.getSource().getValue(), deseriaLogMessage.getDestination().getValue(),
+            model.addRow(new String[]{timeStamp, String.valueOf(deseriaLogMessage.getRuntimeID()), deseriaLogMessage.getSource().getValue(), deseriaLogMessage.getDestination().getValue(),
                     deseriaLogMessage.getMessageType().toString(), deseriaLogMessage.getContent()});
         } catch (ArrayIndexOutOfBoundsException e) {
             //Tries again n times, error was caused by 2 threads accessing the table at the same time
@@ -224,7 +224,7 @@ public class MindroidServerFrame extends JFrame {
         try {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
             String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-            model.addRow(new String[]{timeStamp, deseriaLogMessage.getSource().getValue(), deseriaLogMessage.getDestination().getValue(),
+            model.addRow(new String[]{timeStamp, String.valueOf(deseriaLogMessage.getRuntimeID()),deseriaLogMessage.getSource().getValue(), deseriaLogMessage.getDestination().getValue(),
                     deseriaLogMessage.getMessageType().toString(), deseriaLogMessage.getContent()});
             return true;
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -236,7 +236,7 @@ public class MindroidServerFrame extends JFrame {
     public void addContentLine(String source, String target, String logLevel, String content) {
         DefaultTableModel model = (DefaultTableModel) this.table.getModel();
         String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-        model.addRow(new String[] {timeStamp, source, target, logLevel, content});
+        model.addRow(new String[] {timeStamp, "-", source, target, logLevel, content});
     }
 
     public void displayIPAdress(String address, Color color) {

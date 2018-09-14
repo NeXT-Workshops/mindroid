@@ -7,7 +7,7 @@ import java.util.Objects;
  */
 public class Destination {
 
-    public static final Destination SERVER_LOG = new Destination("ServerLog");
+    public static final Destination SERVER_LOG = new Destination("Server");
     public static final Destination BROADCAST = new Destination("Broadcast");
 
     private final String value;

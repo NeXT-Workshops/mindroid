@@ -4,7 +4,6 @@ import org.mindroid.api.communication.IMessageListener;
 import org.mindroid.api.communication.IMessageServer;
 import org.mindroid.api.communication.IMessenger;
 import org.mindroid.common.messages.server.Destination;
-import org.mindroid.common.messages.server.LogLevel;
 import org.mindroid.common.messages.server.MessageMarshaller;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
@@ -172,7 +171,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
     public void sendMessage(String destination, String content, int runtimeID) {
         MessageType type;
         if (destination.equals(IMessenger.SERVER_LOG)) {
-            type = MessageType.INFO;
+            type = MessageType.LOG;
         } else {
             type = MessageType.MESSAGE;
         }
@@ -182,13 +181,13 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
 
     @Override
     public void registerToServer(int port) {
-        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, MessageType.REGISTRATION, ""+port);
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, MessageType.REGISTRATION, ""+port,123);
         sendMessage(msgObj);
     }
 
     @Override
-    public synchronized void sendLogMessage(String content, LogLevel logLevel) {
-        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, logLevel.getMessageType(), content);
+    public synchronized void sendLogMessage(String content) {
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, MessageType.LOG, content,87);
         sendMessage(msgObj);
     }
 

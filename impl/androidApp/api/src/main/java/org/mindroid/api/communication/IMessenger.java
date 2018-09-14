@@ -1,7 +1,6 @@
 package org.mindroid.api.communication;
 
 import org.mindroid.common.messages.server.Destination;
-import org.mindroid.common.messages.server.LogLevel;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
 
@@ -37,9 +36,8 @@ public interface IMessenger {
      * Sends a log message to the server.
      *
      * @param content - content of the message
-     * @param logLevel - log level of the message
      */
-    void sendLogMessage(String content, LogLevel logLevel);
+    void sendLogMessage(String content);
 
     /**
      * Returns the state of the connection.

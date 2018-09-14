@@ -2,4 +2,5 @@
 <resources>
     <string name="btn_txt_login">Login</string>
     <string name="btn_txt_logout">Logout</string>
+    <string name="shared_pref_admin">shared_pref_admin</string>
 </resources>

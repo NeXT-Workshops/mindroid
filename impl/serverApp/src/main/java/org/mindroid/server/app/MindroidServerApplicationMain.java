@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
@@ -37,8 +36,8 @@ public class MindroidServerApplicationMain {
             console.setVisible(true);
             console.appendLine("Unknown Exception. Please restart the Application. Exception Message: " + e.getMessage());
             console.appendLine(e.toString());
-            mindroidServerFrame.addContentLine("Local", "-", "ERROR", "Server not running.");
-            mindroidServerFrame.addContentLine("Local", "-", "INFO", "See Error console.");
+            mindroidServerFrame.addContentLine("Local", "-", "ERROR", "Server not running.", "-");
+            mindroidServerFrame.addContentLine("Local", "-", "LOG", "See Error console.", "-");
             mindroidServerFrame.disableRefresh(true);
         }
 
@@ -49,14 +48,14 @@ public class MindroidServerApplicationMain {
         try {
             server = new ServerSocket(SERVER_PORT);
             invokeDisplayIPAdress();
-            mindroidServerFrame.addContentLine("Local", "-", "INFO", "Server started");
+            mindroidServerFrame.addContentLine("Local", "-", "LOG", "Server started", "-");
         } catch (IOException e) {
             MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
             console.setVisible(true);
             console.appendLine("The Server could not be started. Try restarting the Application.");
             console.appendLine(e.toString() + "\n");
-            mindroidServerFrame.addContentLine("Local", "-", "ERROR", "Server not running.");
-            mindroidServerFrame.addContentLine("Local", "-", "INFO", "See Error console.");
+            mindroidServerFrame.addContentLine("Local", "-", "ERROR", "Server not running.", "-");
+            mindroidServerFrame.addContentLine("Local", "-", "LOG", "See Error console.", "-");
             mindroidServerFrame.disableRefresh(true);
             return;
         }

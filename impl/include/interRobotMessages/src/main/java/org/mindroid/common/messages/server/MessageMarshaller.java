@@ -12,6 +12,7 @@ public class MessageMarshaller {
     private static final String KEY_CONTENT = "content";
     private static final String KEY_TYPE = "type";
     private static final String VALUE_LOGMESSAGE_TYPE = "LogMessageType";
+    private static final String KEY_RUNTIME_ID = "runtimeID";
 
     public String serialize(final MindroidMessage logMessage) {
         final JSONObject serializedMessage = new JSONObject();
@@ -20,6 +21,7 @@ public class MessageMarshaller {
         serializedMessage.put(KEY_DESTINATION, serialize(logMessage.getDestination()));
         serializedMessage.put(KEY_CONTENT, logMessage.getContent());
         serializedMessage.put(KEY_TYPE, serialize(logMessage.getMessageType()));
+        serializedMessage.put(KEY_RUNTIME_ID, serialize(logMessage.getRuntimeID()));
         return serializedMessage.toString(2);
     }
 
@@ -30,8 +32,15 @@ public class MessageMarshaller {
                 deserializeRobotId(jsonObject.get(KEY_SOURCE)),
                 deserializeDestination(jsonObject.get(KEY_DESTINATION)),
                 deserializeLogLevel(jsonObject.get(KEY_TYPE)),
-                deserializeContent(jsonObject.get(KEY_CONTENT)));
+                deserializeContent(jsonObject.get(KEY_CONTENT)),
+                deserializeRuntimeID(jsonObject.get(KEY_RUNTIME_ID)));
         return message;
+    }
+
+    private int deserializeRuntimeID(final Object runtimeID) {
+        if (!(runtimeID instanceof String))
+            throw new IllegalArgumentException("Expected String, but got " + runtimeID.getClass());
+        return Integer.valueOf((String) runtimeID);
     }
 
     private String deserializeContent(final Object content) {
@@ -72,6 +81,10 @@ public class MessageMarshaller {
 
     private String serialize(final Destination destination) {
         return destination.getValue();
+    }
+
+    private String serialize(final int implementationID){
+        return String.valueOf(implementationID);
     }
 
 

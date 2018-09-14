@@ -4,12 +4,9 @@ package org.mindroid.server.app;
 import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
-import org.mindroid.server.app.util.ADBService;
 import org.mindroid.server.app.util.IPService;
 
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -112,7 +109,7 @@ public class MindroidServerFrame extends JFrame {
         this.getContentPane().setLayout(new BorderLayout());
 
         //table at center
-        String[] columnNames = {"Time", "RuntimeID", "Source", "Target", "Log Level", "Content"};
+        String[] columnNames = {"Time", "RuntimeID", "Source", "Target", "Type", "Content"};
         DefaultTableModel model = new DefaultTableModel(columnNames,0);
 
         this.table = new JTable(model);
@@ -200,44 +197,41 @@ public class MindroidServerFrame extends JFrame {
         this.setVisible(true);
     }
 
-    public void addContentLine(MindroidMessage deseriaLogMessage) {
-        try {
-            DefaultTableModel model = (DefaultTableModel) this.table.getModel();
-            String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-            model.addRow(new String[]{timeStamp, String.valueOf(deseriaLogMessage.getRuntimeID()), deseriaLogMessage.getSource().getValue(), deseriaLogMessage.getDestination().getValue(),
-                    deseriaLogMessage.getMessageType().toString(), deseriaLogMessage.getContent()});
-        } catch (ArrayIndexOutOfBoundsException e) {
+    public void addLocalContentLine(String type, String content){
+        addContentLine("Local", "-", type, content, "-");
+    }
+
+    public void addContentLineFromMessage(MindroidMessage mMsg) {
+        String src = mMsg.getSource().getValue();
+        String dest = mMsg.getDestination().getValue();
+        String type = String.valueOf(mMsg.getMessageType());
+        String content = mMsg.getContent();
+        String runtimeID = String.valueOf(mMsg.getRuntimeID());
+        if(!addContentLine(src, dest, type, content, runtimeID)){
             //Tries again n times, error was caused by 2 threads accessing the table at the same time
             int n = 10;
             int i = 0;
-            while (!retryAddContentLine(deseriaLogMessage) && i < n) {
+            while (!addContentLine(src, dest, type, content, runtimeID) && i < n) {
                 i++;
             }
             if (i == n) {
                 //retrying failed
-                throw e;
+                MindroidServerConsoleFrame.getMindroidServerConsole().appendLine("Adding Content to Log failed");
             }
         }
     }
 
-    private boolean retryAddContentLine(MindroidMessage deseriaLogMessage) {
+    public boolean addContentLine(String source, String target, String type, String content, String runtimeID) {
         try {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
             String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-            model.addRow(new String[]{timeStamp, String.valueOf(deseriaLogMessage.getRuntimeID()),deseriaLogMessage.getSource().getValue(), deseriaLogMessage.getDestination().getValue(),
-                    deseriaLogMessage.getMessageType().toString(), deseriaLogMessage.getContent()});
+            model.addRow(new String[]{timeStamp, runtimeID, source, target, type, content});
             return true;
-        } catch (ArrayIndexOutOfBoundsException e) {
+        }catch(ArrayIndexOutOfBoundsException e){
             return false;
         }
-
     }
 
-    public void addContentLine(String source, String target, String logLevel, String content) {
-        DefaultTableModel model = (DefaultTableModel) this.table.getModel();
-        String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-        model.addRow(new String[] {timeStamp, "-", source, target, logLevel, content});
-    }
 
     public void displayIPAdress(String address, Color color) {
             ownIPLabel.setForeground(color);

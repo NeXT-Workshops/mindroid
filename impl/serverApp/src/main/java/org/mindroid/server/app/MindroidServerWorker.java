@@ -4,7 +4,6 @@ import org.mindroid.common.messages.server.*;
 import org.mindroid.server.app.util.ADBService;
 import org.mindroid.server.app.util.IPService;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
-import se.vidstige.jadb.JadbDevice;
 import se.vidstige.jadb.JadbException;
 
 import java.io.*;
@@ -12,7 +11,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -90,9 +88,9 @@ public class MindroidServerWorker implements Runnable, IUserAction {
             socket.close();
 
             if(connectedRobot != null) {
-                mindroidServerFrame.addContentLine("Local", "-", "INFO", "Connection to "+getStrRobotID()+" got closed!");
+                mindroidServerFrame.addLocalContentLine( "LOG", "Connection to "+getStrRobotID()+" got closed!");
             }else{
-                mindroidServerFrame.addContentLine("Local", "-", "INFO", "Connection to unknown Robot got closed!");
+                mindroidServerFrame.addLocalContentLine("LOG", "Connection to unknown Robot got closed!");
             }
         } catch (IOException e) {
             MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
@@ -110,14 +108,14 @@ public class MindroidServerWorker implements Runnable, IUserAction {
     }
 
     private void handleMessage(MindroidMessage deserializedMsg) throws IOException, ConnectionToRemoteDeviceException, JadbException {
-        //view log message
+        // Append to Server Log
         if (deserializedMsg.isLogMessage()) {
-            mindroidServerFrame.addContentLine(deserializedMsg);
+            mindroidServerFrame.addContentLineFromMessage(deserializedMsg);
         }
 
 
-        //handle registration message
-        if (deserializedMsg.getMessageType().equals(MessageType.REGISTRATION)) {
+        // Registration Message
+        if (deserializedMsg.isRegistrationMessage()) {
             SocketAddress socketAddress = socket.getRemoteSocketAddress();
             if (socketAddress instanceof InetSocketAddress) {
                 //the port was sent as content of the registration message
@@ -127,7 +125,7 @@ public class MindroidServerWorker implements Runnable, IUserAction {
 
                 if(!isAccepted){
                     //Registration got rejected by the server
-                    mindroidServerFrame.addContentLine("Local", "-", "WARNING", "The Connection of "+getStrRobotID()+" got rejected! A Robot with that ID is already connected. Change RobotID to connect.");
+                    mindroidServerFrame.addLocalContentLine("WARNING", "The Connection of "+getStrRobotID()+" got rejected! A Robot with that ID is already connected. Change RobotID to connect.");
                     //Stop ServerWorker run-Thread, otherwise calling disconnect will lead to the unregestration of the already connected device with the rejecetd robotID, and disconnect that connection too.
                     connected = false;
                     //Disconnect this socket as it got rejected.
@@ -136,7 +134,7 @@ public class MindroidServerWorker implements Runnable, IUserAction {
                 }
 
 
-                mindroidServerFrame.addContentLine("Local", "-", "INFO", getStrRobotID()+" was registered.");
+                mindroidServerFrame.addLocalContentLine( "LOG", getStrRobotID()+" was registered.");
 
                 // When device connects, connect adb to device
                 System.out.println("Device connected, establish adb_tcp");
@@ -146,19 +144,19 @@ public class MindroidServerWorker implements Runnable, IUserAction {
             }
         }
 
-        //deliver message meant to be sent to another robot
-        if(deserializedMsg.getMessageType().equals(MessageType.MESSAGE)&& !deserializedMsg.isLogMessage() && !deserializedMsg.isBroadcastMessage() ) {
-            mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "INFO", deserializedMsg.getContent());
+        // Unicast Message
+        if(deserializedMsg.isUnicastMessage()) {
+            mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "LOG", deserializedMsg.getContent(), String.valueOf(deserializedMsg.getRuntimeID()));
             Socket socket = IPService.findSocket(deserializedMsg.getDestination());
             sendMessage(deserializedMsg, socket);
-            mindroidServerFrame.addContentLine("SERVER",deserializedMsg.getDestination().getValue(),"DEBUG","MSG["+deserializedMsg.getContent()+"] sent to destination");
+            //mindroidServerFrame.addContentLine("SERVER",deserializedMsg.getDestination().getValue(),"DEBUG","MSG["+deserializedMsg.getContent()+"] sent to destination", "-");
         }
 
 
         //deliver broadcast message
-        if (deserializedMsg.getDestination().getValue().equals(Destination.BROADCAST.getValue())) {
+        if (deserializedMsg.isBroadcastMessage()) {
             HashMap<Destination, Socket> socketMapping = IPService.getSocketMapping();
-            mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), "everyone", "INFO", deserializedMsg.getContent());
+            mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "LOG", deserializedMsg.getContent(), String.valueOf(deserializedMsg.getRuntimeID()));
             for(Map.Entry<Destination, Socket> entry : socketMapping.entrySet()) {
                 if(!deserializedMsg.getSource().getValue().equals(entry.getKey().getValue())) {
                     Socket address = entry.getValue();

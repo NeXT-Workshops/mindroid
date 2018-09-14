@@ -7,7 +7,7 @@ public class MindroidMessage {
     private final MessageType messageType;
     private final String content;
     private final Destination destination;
-    private int runtimeID = -1;
+    private int runtimeID = -25;
 
 
     public MindroidMessage(final RobotId source, final Destination destination, final MessageType messageType, final String content, final int runtimeID) {
@@ -23,6 +23,7 @@ public class MindroidMessage {
         this.messageType = messageType;
         this.content = content;
         this.destination = destination;
+        this.runtimeID=-55;
     }
 
     public RobotId getSource() {
@@ -46,11 +47,18 @@ public class MindroidMessage {
     }
 
     public boolean isLogMessage() {
-        return destination.getValue().equals(Destination.SERVER_LOG.getValue())&&!messageType.equals(MessageType.REGISTRATION);
+        return destination.getValue().equals(Destination.SERVER_LOG.getValue()) && messageType.equals(MessageType.LOG) && !messageType.equals(MessageType.REGISTRATION);
     }
 
     public boolean isBroadcastMessage() {
         return destination.getValue().equals(Destination.BROADCAST.getValue());
+    }
+
+    public boolean isRegistrationMessage(){
+        return messageType.equals(MessageType.REGISTRATION);
+    }
+    public boolean isUnicastMessage(){
+        return messageType.equals(MessageType.MESSAGE) && !isBroadcastMessage();
     }
 
     @Override

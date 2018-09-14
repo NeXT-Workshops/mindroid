@@ -21,13 +21,13 @@ public class DummyClient {
 
             MessageMarshaller messageMarshaller = new MessageMarshaller();
 
-            String serializedMessage = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 1"), Destination.SERVER_LOG, MessageType.INFO, "Everything is awesome!"));
+            String serializedMessage = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 1"), Destination.SERVER_LOG, MessageType.LOG, "Everything is awesome!"));
             out.println(serializedMessage);
 
-            String serializedMessage2 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 2"), Destination.SERVER_LOG, MessageType.INFO, "Hello!"));
+            String serializedMessage2 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 2"), Destination.SERVER_LOG, MessageType.LOG, "Hello!"));
             out.println(serializedMessage2);
 
-            String serializedMessage3 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 3"), Destination.SERVER_LOG, MessageType.INFO, "Hi there!"));
+            String serializedMessage3 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 3"), Destination.SERVER_LOG, MessageType.LOG, "Hi there!"));
             out.println(serializedMessage3);
 
             BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -42,17 +42,17 @@ public class DummyClient {
 
             messageMarshaller = new MessageMarshaller();
 
-             serializedMessage = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 1"), Destination.SERVER_LOG, MessageType.INFO, "Everything is awesome!"));
+             serializedMessage = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 1"), Destination.SERVER_LOG, MessageType.LOG, "Everything is awesome!"));
             out.println(serializedMessage);
 
 
-            serializedMessage2 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 2"), Destination.SERVER_LOG, MessageType.INFO, "Hello!"));
+            serializedMessage2 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 2"), Destination.SERVER_LOG, MessageType.LOG, "Hello!"));
             out.println(serializedMessage2);
 
             serializedMessage = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 3"), Destination.SERVER_LOG, MessageType.REGISTRATION, "55555"));
             out.println(serializedMessage);
 
-            serializedMessage2 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 2"), Destination.SERVER_LOG, MessageType.INFO, "Hello!"));
+            serializedMessage2 = messageMarshaller.serialize(new MindroidMessage(new RobotId("Robot 2"), Destination.SERVER_LOG, MessageType.LOG, "Hello!"));
             out.println(serializedMessage2);
 
             out.println("<close>");

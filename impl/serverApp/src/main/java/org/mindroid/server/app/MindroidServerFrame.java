@@ -112,7 +112,7 @@ public class MindroidServerFrame extends JFrame {
         this.getContentPane().setLayout(new BorderLayout());
 
         //table at center
-        String[] columnNames = {"Time", "Source", "Target", "Log Level", "Content"};
+        String[] columnNames = {"Time", "RuntimeID", "Source", "Target", "Log Level", "Content"};
         DefaultTableModel model = new DefaultTableModel(columnNames,0);
 
         this.table = new JTable(model);
@@ -120,15 +120,17 @@ public class MindroidServerFrame extends JFrame {
         tf.setEditable(false);
         table.setDefaultEditor(Object.class, new DefaultCellEditor(tf));
         table.getColumnModel().getColumn(0).setPreferredWidth(60);
-        table.getColumnModel().getColumn(1).setPreferredWidth(100);
+        table.getColumnModel().getColumn(1).setPreferredWidth(60);
         table.getColumnModel().getColumn(2).setPreferredWidth(100);
         table.getColumnModel().getColumn(3).setPreferredWidth(100);
-        table.getColumnModel().getColumn(4).setPreferredWidth(200);
+        table.getColumnModel().getColumn(4).setPreferredWidth(100);
+        table.getColumnModel().getColumn(5).setPreferredWidth(200);
         table.getColumnModel().getColumn(0).setMaxWidth(70);
         table.getColumnModel().getColumn(0).setMinWidth(70);
-        table.getColumnModel().getColumn(1).setMaxWidth(120);
+        table.getColumnModel().getColumn(0).setMinWidth(50);
         table.getColumnModel().getColumn(2).setMaxWidth(120);
-        table.getColumnModel().getColumn(3).setMaxWidth(100);
+        table.getColumnModel().getColumn(3).setMaxWidth(120);
+        table.getColumnModel().getColumn(4).setMaxWidth(100);
 
         table.getTableHeader().setReorderingAllowed(false);
 

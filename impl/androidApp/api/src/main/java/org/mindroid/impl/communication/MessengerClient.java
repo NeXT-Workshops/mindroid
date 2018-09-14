@@ -171,7 +171,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
         } else {
             type = MessageType.MESSAGE;
         }
-        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), new Destination(destination), type, content);
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), new Destination(destination), type, content, runtimeID);
         sendMessage(msgObj);
     }
 

@@ -7,7 +7,7 @@ public class MindroidMessage {
     private final MessageType messageType;
     private final String content;
     private final Destination destination;
-    private final int runtimeID;
+    private int runtimeID = -1;
 
 
     public MindroidMessage(final RobotId source, final Destination destination, final MessageType messageType, final String content, final int runtimeID) {
@@ -16,6 +16,13 @@ public class MindroidMessage {
         this.content = content;
         this.destination = destination;
         this.runtimeID = runtimeID;
+    }
+
+    public MindroidMessage(RobotId source, Destination destination, MessageType messageType, String content) {
+        this.source = source;
+        this.messageType = messageType;
+        this.content = content;
+        this.destination = destination;
     }
 
     public RobotId getSource() {

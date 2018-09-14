@@ -20,8 +20,9 @@ public interface IMessenger {
      *
      * @param destination - destination of the message
      * @param content - text of the message
+     * @param runtimeID - id of the program running on the robot
      */
-    void sendMessage(String destination, String content);
+    void sendMessage(String destination, String content, int runtimeID);
 
 
     /**

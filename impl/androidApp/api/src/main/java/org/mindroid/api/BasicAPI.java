@@ -388,7 +388,7 @@ public abstract class BasicAPI {
      */
     public final void sendMessage(String destination, String message){
         if(Robot.getRobotController().getMessenger() != null){
-            Robot.getRobotController().getMessenger().sendMessage(destination,message);
+            Robot.getRobotController().getMessenger().sendMessage(destination,message,RUNTIME_ID);
         }else{
             System.out.println("[StatemachineAPI:sendMessage] Tried to send a message, but the Messenger was null");
         }
@@ -401,7 +401,7 @@ public abstract class BasicAPI {
      */
     public final void broadcastMessage(String message){
         if(Robot.getRobotController().getMessenger() != null){
-            Robot.getRobotController().getMessenger().sendMessage(IMessenger.BROADCAST,message);
+            Robot.getRobotController().getMessenger().sendMessage(IMessenger.BROADCAST,message,RUNTIME_ID);
         }else{
             System.out.println("[StatemachineAPI:broadcastMessage] Tried to broadcast a message, but the Messenger was null");
         }
@@ -413,7 +413,7 @@ public abstract class BasicAPI {
      */
     public final void sendLogMessage(String logmessage){
         if(Robot.getRobotController().getMessenger() != null){
-            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,logmessage);
+            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,logmessage,RUNTIME_ID);
         }else{
             ErrorHandlerManager.getInstance().handleError(new Exception("[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null"),BasicAPI.class,"[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null");
             System.out.println("[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null");

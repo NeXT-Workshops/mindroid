@@ -19,6 +19,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Felicia Ruppel on 04.04.17.
@@ -47,6 +49,9 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
 
     private final MessageMarshaller serverMessageMarshaller = new MessageMarshaller();
     private final ArrayList<MindroidMessage> messages = new ArrayList<MindroidMessage>();
+
+    /** Maps RobtoID to its runtimeID **/
+    private Map<RobotId,Integer> runtimeMap = new HashMap<RobotId,Integer>();
 
     public MessengerClient(String robotID){
         this.robotID = robotID;
@@ -202,7 +207,30 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
      */
     @Override
     public void handleMessage(MindroidMessage msg) {
-        getMessages().add(msg);
+        //SessionID/RuntmeID Firewall
+        if(!runtimeMap.containsKey(msg.getSource())) {
+            //Add runtime id of RobotX
+            runtimeMap.put(msg.getSource(),msg.getRuntimeID());
+        }
+
+        if (runtimeMap.get(msg.getSource()) == msg.getRuntimeID()) {
+            //Passes firewall - if message contains valid runtimeID of RobotX add to queue
+            getMessages().add(msg);
+        } else {
+            //Delete messages with old runtime id if a new runtime id from Robot X arrives arrives
+            for (MindroidMessage message : getMessages()) {
+                if(message.getSource() == msg.getSource()) {
+                    if (message.getRuntimeID() != msg.getRuntimeID()) {
+                        getMessages().remove(message);
+                    }
+                }
+            }
+            //Add new runtime ID
+            runtimeMap.put(msg.getSource(),msg.getRuntimeID());
+            //Add new message with new runtimeID to queue
+            getMessages().add(msg);
+        }
+
     }
 
     @Override

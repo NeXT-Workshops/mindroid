@@ -12,6 +12,8 @@ import org.mindroid.impl.brick.Textsize;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.robot.*;
 
+import java.util.Random;
+
 /**
  * This API provides the basic methods executable on any robot which do not depend on the implementation style (Statemachine/Imperative).
  */
@@ -33,6 +35,8 @@ public abstract class BasicAPI {
     public static final int LED_RED_ON = 7;
     public static final int LED_RED_BLINKING = 8;
     public static final int LED_RED_FAST_BLINKING = 9;
+
+    public final int RUNTIME_ID = new Random().nextInt(Integer.MAX_VALUE);
 
     // --------------------- BRICK CONTROLLING METHODS: Display, LED, Sounds, Buttons ---------------------
 

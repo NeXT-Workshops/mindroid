@@ -6,3 +6,4 @@
 @cd ../../impl/serverApp 
 @call gradlew.bat run 
 @cd %startdir% 
+exit

@@ -12,7 +12,7 @@ public class MessageMarshaller {
     private static final String KEY_CONTENT = "content";
     private static final String KEY_TYPE = "type";
     private static final String VALUE_LOGMESSAGE_TYPE = "LogMessageType";
-    private static final String KEY_RUNTIME_ID = "runtimeID";
+    private static final String KEY_SESSION_COUNT = "sessionCount";
 
     public String serialize(final MindroidMessage logMessage) {
         final JSONObject serializedMessage = new JSONObject();
@@ -21,7 +21,7 @@ public class MessageMarshaller {
         serializedMessage.put(KEY_DESTINATION, serialize(logMessage.getDestination()));
         serializedMessage.put(KEY_CONTENT, logMessage.getContent());
         serializedMessage.put(KEY_TYPE, serialize(logMessage.getMessageType()));
-        serializedMessage.put(KEY_RUNTIME_ID, serialize(logMessage.getRuntimeID()));
+        serializedMessage.put(KEY_SESSION_COUNT, serialize(logMessage.getSessionRobotCount()));
         return serializedMessage.toString(2);
     }
 
@@ -33,14 +33,14 @@ public class MessageMarshaller {
                 deserializeDestination(jsonObject.get(KEY_DESTINATION)),
                 deserializeLogLevel(jsonObject.get(KEY_TYPE)),
                 deserializeContent(jsonObject.get(KEY_CONTENT)),
-                deserializeRuntimeID(jsonObject.get(KEY_RUNTIME_ID)));
+                deserializeSessionCount(jsonObject.get(KEY_SESSION_COUNT)));
         return message;
     }
 
-    private int deserializeRuntimeID(final Object runtimeID) {
-        if (!(runtimeID instanceof String))
-            throw new IllegalArgumentException("Expected String, but got " + runtimeID.getClass());
-        return Integer.valueOf((String) runtimeID);
+    private int deserializeSessionCount(final Object sessionCount) {
+        if (!(sessionCount instanceof String))
+            throw new IllegalArgumentException("Expected String, but got " + sessionCount.getClass());
+        return Integer.valueOf((String) sessionCount);
     }
 
     private String deserializeContent(final Object content) {

@@ -7,7 +7,7 @@ import org.mindroid.impl.brick.Button;
 public class CoordWallPingPong extends ImperativeWorkshopAPI {
 
     public CoordWallPingPong() {
-        super("Coord Wall-PingPong");
+        super("Coord Wall-PingPong",2);
     }
 
     // ------------------------------------

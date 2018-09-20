@@ -22,7 +22,7 @@ public class MindroidServerWorker implements Runnable, IUserAction {
     private MindroidServerFrame mindroidServerFrame;
     private MessageMarshaller messageMarshaller;
     static MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
-
+    private SessionHandler sessionHandler;
 
 
     //Robot Connected to this socket - will be set when robot registers himself
@@ -33,6 +33,7 @@ public class MindroidServerWorker implements Runnable, IUserAction {
         this.socket = socket;
         this.mindroidServerFrame = mindroidServerFrame;
         this.messageMarshaller = new MessageMarshaller();
+        sessionHandler = new SessionHandler(this);
     }
 
     @Override
@@ -86,7 +87,6 @@ public class MindroidServerWorker implements Runnable, IUserAction {
         try {
             //Close Socket
             socket.close();
-
             if(connectedRobot != null) {
                 mindroidServerFrame.addLocalContentLine( "LOG", "Connection to "+getStrRobotID()+" got closed!");
             }else{
@@ -98,7 +98,6 @@ public class MindroidServerWorker implements Runnable, IUserAction {
             console.appendLine("Error while closing a socket");
             console.appendLine("IOException: "+e.getMessage()+"\n");
         }
-
     }
 
     private void removeRegistration(){
@@ -111,6 +110,11 @@ public class MindroidServerWorker implements Runnable, IUserAction {
         // Append to Server Log
         if (deserializedMsg.isLogMessage()) {
             mindroidServerFrame.addContentLineFromMessage(deserializedMsg);
+        }
+
+        // Session Messages
+        if (deserializedMsg.isSessionMessage()){
+            sessionHandler.handleSessionMessage(deserializedMsg);
         }
 
 
@@ -146,7 +150,7 @@ public class MindroidServerWorker implements Runnable, IUserAction {
 
         // Unicast Message
         if(deserializedMsg.isUnicastMessage()) {
-            mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "LOG", deserializedMsg.getContent(), String.valueOf(deserializedMsg.getRuntimeID()));
+            mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "LOG", deserializedMsg.getContent(), String.valueOf(deserializedMsg.getSessionRobotCount()));
             Socket socket = IPService.findSocket(deserializedMsg.getDestination());
             sendMessage(deserializedMsg, socket);
             //mindroidServerFrame.addContentLine("SERVER",deserializedMsg.getDestination().getValue(),"DEBUG","MSG["+deserializedMsg.getContent()+"] sent to destination", "-");
@@ -155,18 +159,20 @@ public class MindroidServerWorker implements Runnable, IUserAction {
 
         //deliver broadcast message
         if (deserializedMsg.isBroadcastMessage()) {
-            HashMap<Destination, Socket> socketMapping = IPService.getSocketMapping();
-            mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "LOG", deserializedMsg.getContent(), String.valueOf(deserializedMsg.getRuntimeID()));
-            for(Map.Entry<Destination, Socket> entry : socketMapping.entrySet()) {
-                if(!deserializedMsg.getSource().getValue().equals(entry.getKey().getValue())) {
-                    Socket address = entry.getValue();
-                    sendMessage(new MindroidMessage(deserializedMsg.getSource(),entry.getKey(), deserializedMsg.getMessageType(),deserializedMsg.getContent()), address);
-                }
-            }
+            broadcastMessage(deserializedMsg);
         }
 
     }
-
+    public void broadcastMessage(MindroidMessage msg) throws IOException {
+        HashMap<Destination, Socket> socketMapping = IPService.getSocketMapping();
+        mindroidServerFrame.addContentLine(msg.getSource().getValue(), msg.getDestination().getValue(), "LOG", msg.getContent(), String.valueOf(msg.getSessionRobotCount()));
+        for(Map.Entry<Destination, Socket> entry : socketMapping.entrySet()) {
+            if(!msg.getSource().getValue().equals(entry.getKey().getValue())) {
+                Socket address = entry.getValue();
+                sendMessage(new MindroidMessage(msg.getSource(),entry.getKey(), msg.getMessageType(),msg.getContent()), address);
+            }
+        }
+    }
     private void sendMessage(MindroidMessage deserializedMsg, Socket socket) throws IOException{
         if (socket==null) {
             throw new IOException("The message to "+deserializedMsg.getDestination().getValue()+" has not been sent because the address is unknown.");

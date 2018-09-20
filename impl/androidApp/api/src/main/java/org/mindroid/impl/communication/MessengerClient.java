@@ -175,19 +175,19 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
         } else {
             type = MessageType.MESSAGE;
         }
-        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), new Destination(destination), type, content, runtimeID);
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), new Destination(destination), type, content);
         sendMessage(msgObj);
     }
 
     @Override
     public void registerToServer(int port) {
-        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, MessageType.REGISTRATION, ""+port,123);
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, MessageType.REGISTRATION, ""+port);
         sendMessage(msgObj);
     }
 
     @Override
     public synchronized void sendLogMessage(String content) {
-        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, MessageType.LOG, content,87);
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, MessageType.LOG, content);
         sendMessage(msgObj);
     }
 
@@ -206,6 +206,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
      */
     @Override
     public void handleMessage(MindroidMessage msg) {
+        /*
         //SessionID/RuntmeID Firewall
         if(!runtimeMap.containsKey(msg.getSource())) {
             //Add runtime id of RobotX
@@ -229,6 +230,8 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
             //Add new message with new runtimeID to queue
             getMessages().add(msg);
         }
+        */
+        getMessages().add(msg);
 
     }
 
@@ -276,5 +279,10 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
      */
     public void clearMessageCache() {
         messages.clear();
+    }
+
+    public void sendSessionMessage(int sessionRobotCount) {
+        MindroidMessage sessionMessage = new MindroidMessage(new RobotId(robotID), MessageType.SESSION, "", Destination.SERVER_LOG, sessionRobotCount);
+        sendMessage(sessionMessage);
     }
 }

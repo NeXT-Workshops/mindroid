@@ -1,6 +1,7 @@
 package org.mindroid.api;
 
 import org.mindroid.common.messages.hardware.Sensormode;
+import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.logging.APILoggerManager;
@@ -36,6 +37,11 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     private final int MIN_DRIVE_DELAY = 50;
 
 
+
+
+    /** Defines number of Robots cooparating in a scenario /Defines lobby size at the server **/
+
+
     private static final Logger LOGGER = Logger.getLogger(ImperativeWorkshopAPI.class.getName());
 
     static {
@@ -45,8 +51,14 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     /**
      * @param implementationID  The ID of your Implementation. Necessary to run your implementation later on.
      */
+    public ImperativeWorkshopAPI(String implementationID, int sessionRobotCount) {
+        super(implementationID, sessionRobotCount);
+        //This DiffPilot supports angle correction while truning
+        this.diffPilot = new DifferentialPilot(this, getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),getSensorProvider(),getGyroSensorPort(),5.6f,12.5f);
+    }
+
     public ImperativeWorkshopAPI(String implementationID) {
-        super(implementationID);
+        super(implementationID, MindroidMessage.NO_SESSION); // without session
         //This DiffPilot supports angle correction while truning
         this.diffPilot = new DifferentialPilot(this, getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),getSensorProvider(),getGyroSensorPort(),5.6f,12.5f);
     }

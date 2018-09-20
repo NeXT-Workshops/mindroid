@@ -4,18 +4,20 @@ import java.util.Objects;
 
 public class MindroidMessage {
     private final RobotId source;
-    private final MessageType messageType;
-    private final String content;
     private final Destination destination;
-    private int runtimeID = -25;
+    private final MessageType messageType;
+    private int sessionRobotCount;
+    private final String content;
+    public final static int QUIT_SESSION = -2;
+    public final static int UNCUPLED_SESSION = -1;
+    public final static int START_SESSION = 0;
 
-
-    public MindroidMessage(final RobotId source, final Destination destination, final MessageType messageType, final String content, final int runtimeID) {
+    public MindroidMessage(RobotId source, MessageType messageType, String content, Destination destination, int sessionRobotCount) {
         this.source = source;
         this.messageType = messageType;
         this.content = content;
         this.destination = destination;
-        this.runtimeID = runtimeID;
+        this.sessionRobotCount = sessionRobotCount;
     }
 
     public MindroidMessage(RobotId source, Destination destination, MessageType messageType, String content) {
@@ -23,7 +25,7 @@ public class MindroidMessage {
         this.messageType = messageType;
         this.content = content;
         this.destination = destination;
-        this.runtimeID=-55;
+        this.sessionRobotCount =-1;
     }
 
     public RobotId getSource() {
@@ -42,9 +44,7 @@ public class MindroidMessage {
         return content;
     }
 
-    public int getRuntimeID() {
-        return runtimeID;
-    }
+    public int getSessionRobotCount() { return sessionRobotCount; }
 
     public boolean isLogMessage() {
         return destination.getValue().equals(Destination.SERVER_LOG.getValue()) && messageType.equals(MessageType.LOG) && !messageType.equals(MessageType.REGISTRATION);
@@ -60,6 +60,7 @@ public class MindroidMessage {
     public boolean isUnicastMessage(){
         return messageType.equals(MessageType.MESSAGE) && !isBroadcastMessage();
     }
+    public boolean isSessionMessage() { return messageType.equals(MessageType.SESSION);}
 
     @Override
     public String toString() {
@@ -68,7 +69,7 @@ public class MindroidMessage {
                 ", messageType=" + messageType +
                 ", content='" + content + '\'' +
                 ", destination=" + destination +
-                ", runtimeID=" + runtimeID +
+                ", sessionRobotCount=" + sessionRobotCount +
                 '}';
     }
 
@@ -76,23 +77,16 @@ public class MindroidMessage {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         MindroidMessage that = (MindroidMessage) o;
-
-        if (runtimeID != that.runtimeID) return false;
-        if (source != null ? !source.equals(that.source) : that.source != null) return false;
-        if (messageType != that.messageType) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
-        return destination != null ? destination.equals(that.destination) : that.destination == null;
+        return sessionRobotCount == that.sessionRobotCount &&
+                Objects.equals(source, that.source) &&
+                messageType == that.messageType &&
+                Objects.equals(content, that.content) &&
+                Objects.equals(destination, that.destination);
     }
 
     @Override
     public int hashCode() {
-        int result = source != null ? source.hashCode() : 0;
-        result = 31 * result + (messageType != null ? messageType.hashCode() : 0);
-        result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + (destination != null ? destination.hashCode() : 0);
-        result = 31 * result + runtimeID;
-        return result;
+        return Objects.hash(source, messageType, content, destination, sessionRobotCount);
     }
 }

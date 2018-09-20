@@ -227,12 +227,12 @@ public class MindroidServerFrame extends JFrame {
         String dest = mMsg.getDestination().getValue();
         String type = String.valueOf(mMsg.getMessageType());
         String content = mMsg.getContent();
-        String runtimeID = String.valueOf(mMsg.getRuntimeID());
-        if(!addContentLine(src, dest, type, content, runtimeID)){
+        String sourceRuntimeID = String.valueOf(mMsg.getSessionRobotCount());
+        if(!addContentLine(src, dest, type, content, sourceRuntimeID)){
             //Tries again n times, error was caused by 2 threads accessing the table at the same time
             int n = 10;
             int i = 0;
-            while (!addContentLine(src, dest, type, content, runtimeID) && i < n) {
+            while (!addContentLine(src, dest, type, content, sourceRuntimeID) && i < n) {
                 i++;
             }
             if (i == n) {

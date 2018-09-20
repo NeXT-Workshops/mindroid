@@ -12,6 +12,7 @@ public abstract class ImperativeAPI extends BasicAPI implements IInterruptable {
      * ID will be shown in the Apps dropdown.
      */
     private final String implementationID;
+    private final int sessionRobotCount;
 
     /** true, when stopExecution is called **/
     boolean isInterrupted = false;
@@ -21,11 +22,16 @@ public abstract class ImperativeAPI extends BasicAPI implements IInterruptable {
         visitor.visit(this);
     }
 
+    public int getSessionRobotCount() {
+        return sessionRobotCount;
+    }
+
     /**
      *
      * @param implementationID - The ID of your Implementation. Necessary to run your implementation later on.
      */
-    public ImperativeAPI(String implementationID){
+    public ImperativeAPI(String implementationID, int sessionRobotCount){
+        this.sessionRobotCount = sessionRobotCount;
         this.implementationID = implementationID;
     }
 

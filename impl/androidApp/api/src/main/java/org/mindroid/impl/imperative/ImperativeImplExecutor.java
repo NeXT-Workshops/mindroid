@@ -5,10 +5,13 @@ import org.mindroid.api.AbstractImperativeImplExecutor;
 import org.mindroid.api.IExecutor;
 import org.mindroid.api.ImperativeAPI;
 import org.mindroid.api.IImplStateListener;
+import org.mindroid.common.messages.server.MessageType;
+import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.robot.Robot;
+import org.mindroid.impl.robot.RobotController;
 import org.mindroid.impl.util.Throwables;
 
 import java.util.HashSet;
@@ -24,6 +27,9 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
     private final HashSet<IImplStateListener> IImplStateListeners = new HashSet<>(1);
 
     private static final Logger LOGGER = Logger.getLogger(ImperativeImplExecutor.class.getName());
+
+    private MessengerClient messenger = Robot.getRobotController().getMessenger();
+
 
     static{
         APILoggerManager.getInstance().registerLogger(LOGGER);
@@ -46,6 +52,24 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                 setInterrupted(false);
                 try {
                     setIsRunning(true);
+
+                    int sessionRobotCount = runningImpl.getSessionRobotCount();
+                    // handle Session stuff before running program itself
+                    messenger.sendSessionMessage(sessionRobotCount);
+                    // if we need to wait for other robots to join
+                    if (sessionRobotCount > 0) {
+                        boolean noMessage = true;
+                        while (noMessage) {
+                            //wait for start-message from Server
+                            if (messenger.hasMessage()) {
+                                MindroidMessage incoming = messenger.getNextMessage();
+                                if(incoming.getMessageType().equals(MessageType.SESSION) && incoming.getSessionRobotCount() == MindroidMessage.START_SESSION){
+                                    noMessage = false;
+                                }
+                            }
+                        }
+                    }
+
                     runningImpl.run();
 
                 } catch (Exception e) {
@@ -64,11 +88,17 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
 
                     //When run is finished (imperative impl got stopped (interrupted) or just code is done) - stopAllMotors former state
                     stopAllMotors(runningImpl);
+                    quitSession();
+
                 }
             }
         };
         LOGGER.log(Level.INFO,"Starting an Implementation: ID="+runningImpl.getImplementationID());
         new Thread(runImpl).start();
+    }
+
+    private void quitSession() {
+        messenger.sendSessionMessage(MindroidMessage.QUIT_SESSION);
     }
 
     private void setIsRunning(boolean isRunning){

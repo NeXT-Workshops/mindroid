@@ -84,7 +84,7 @@ public class MainActivity extends Activity
 
         initialize(savedInstanceState);
 
-        addShortcut();
+        createShortcut();
     }
 
     private void initialize(Bundle savedInstanceState) {
@@ -245,12 +245,8 @@ public class MainActivity extends Activity
         return mNavigationDrawerFragment.getmDrawerListView();
     }
 
-    /**
-     * Thanks to: http://viralpatel.net/blogs/android-install-uninstall-shortcut-example/
-     */
-    private void addShortcut() {
-        //Adding shortcut for MainActivity
-        //on Home screen
+
+    private Intent createShortcutIntent(){
         Intent shortcutIntent = new Intent(getApplicationContext(),
                 SplashActivity.class);
 
@@ -261,8 +257,32 @@ public class MainActivity extends Activity
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getResources().getString(R.string.app_name));
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
                 Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.mipmap.mindroid_with_tango));
-        addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-        getApplicationContext().sendBroadcast(addIntent);
+
+        return addIntent;
+    }
+
+    private void removeShortcut(){
+        //TODO does not work
+        Intent shortcutIntent = createShortcutIntent();
+        shortcutIntent.setAction("com.android.launcher.action.UNINSTALL_SHORTCUT");
+        getApplicationContext().sendBroadcast(shortcutIntent);
+    }
+
+    /**
+     * Thanks to: http://viralpatel.net/blogs/android-install-uninstall-shortcut-example/
+     */
+    private void addShortcut() {
+        //Adding shortcut for MainActivity
+        //on Home screen
+        Intent shortcutIntent = createShortcutIntent();
+        shortcutIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        getApplicationContext().sendBroadcast(shortcutIntent);
+    }
+
+    private void createShortcut(){
+        //Remove shortcut to not add shortcut twice on screen
+        removeShortcut();
+        addShortcut();
     }
 
 

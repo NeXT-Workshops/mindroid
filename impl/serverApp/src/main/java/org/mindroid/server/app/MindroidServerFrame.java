@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -94,10 +95,30 @@ public class MindroidServerFrame extends JFrame {
         adbDevicesMenuItem.setMnemonic('d');
         adbDevicesMenuItem.setAccelerator(KeyStroke.getKeyStroke("control D"));
 
+        JMenuItem restartServerMenuItem = new JMenuItem("Restart Server");
+        restartServerMenuItem.setAction(new AbstractAction("Restart Server") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+
+                    //start new server using startServer.bat cd ..\..\admin\Scripts
+                    Runtime.getRuntime().exec("cmd /c start \"\" ServerStarten.bat",null,new File("..\\..\\admin\\Scripts"));
+
+
+                    //Shutdown current server
+                    System.exit(0);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        //restartServerMenuItem.setMnemonic('r');
+        restartServerMenuItem.setAccelerator(KeyStroke.getKeyStroke("control N"));
 
         fileMenu.add(consoleMenuItem);
         fileMenu.add(adbDevicesMenuItem);
         fileMenu.add(refreshIP);
+        fileMenu.add(restartServerMenuItem);
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
 

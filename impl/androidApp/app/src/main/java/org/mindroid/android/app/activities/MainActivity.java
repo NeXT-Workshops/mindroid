@@ -252,7 +252,7 @@ public class MainActivity extends Activity
         //Adding shortcut for MainActivity
         //on Home screen
         Intent shortcutIntent = new Intent(getApplicationContext(),
-                MainActivity.class);
+                SplashActivity.class);
 
         shortcutIntent.setAction(Intent.ACTION_MAIN);
 

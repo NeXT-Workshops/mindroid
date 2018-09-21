@@ -9,7 +9,7 @@ public class MindroidMessage {
     private int sessionRobotCount;
     private final String content;
     public final static int QUIT_SESSION = -2;
-    public final static int UNCUPLED_SESSION = -1;
+    public final static int UNCOUPLED_SESSION = -1;
     public final static int START_SESSION = 0;
 
     public MindroidMessage(RobotId source, MessageType messageType, String content, Destination destination, int sessionRobotCount) {

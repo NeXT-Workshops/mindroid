@@ -204,4 +204,8 @@ public class MindroidServerWorker implements Runnable, IUserAction {
             closeConnection();
         }
     }
+
+    public MindroidServerFrame getMindroidServerFrame() {
+        return mindroidServerFrame;
+    }
 }

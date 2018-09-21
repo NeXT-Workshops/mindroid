@@ -117,7 +117,6 @@ public class MindroidServerWorker implements Runnable, IUserAction {
             sessionHandler.handleSessionMessage(deserializedMsg);
         }
 
-
         // Registration Message
         if (deserializedMsg.isRegistrationMessage()) {
             SocketAddress socketAddress = socket.getRemoteSocketAddress();
@@ -148,18 +147,21 @@ public class MindroidServerWorker implements Runnable, IUserAction {
             }
         }
 
-        // Unicast Message
-        if(deserializedMsg.isUnicastMessage()) {
-            mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "LOG", deserializedMsg.getContent(), String.valueOf(deserializedMsg.getSessionRobotCount()));
-            Socket socket = IPService.findSocket(deserializedMsg.getDestination());
-            sendMessage(deserializedMsg, socket);
-            //mindroidServerFrame.addContentLine("SERVER",deserializedMsg.getDestination().getValue(),"DEBUG","MSG["+deserializedMsg.getContent()+"] sent to destination", "-");
-        }
+        if( sessionHandler.isSessionRunning()) {
+            mindroidServerFrame.addLocalContentLine("WARN", "Message received, but no Session running");
+            // Unicast Message
+            if (deserializedMsg.isUnicastMessage()) {
+                mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "LOG", deserializedMsg.getContent(), String.valueOf(deserializedMsg.getSessionRobotCount()));
+                Socket socket = IPService.findSocket(deserializedMsg.getDestination());
+                sendMessage(deserializedMsg, socket);
+                //mindroidServerFrame.addContentLine("SERVER",deserializedMsg.getDestination().getValue(),"DEBUG","MSG["+deserializedMsg.getContent()+"] sent to destination", "-");
+            }
 
 
-        //deliver broadcast message
-        if (deserializedMsg.isBroadcastMessage()) {
-            broadcastMessage(deserializedMsg);
+            //deliver broadcast message
+            if (deserializedMsg.isBroadcastMessage()) {
+                broadcastMessage(deserializedMsg);
+            }
         }
 
     }

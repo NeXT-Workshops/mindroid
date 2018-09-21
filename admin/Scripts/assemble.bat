@@ -72,7 +72,6 @@ if "!IS_DEV!" == "device" (
 @ENDLOCAL
 
 echo #              App auf allen Geräten geöffnet               #
-echo #                                                           #
 echo #                     Abgeschlossen!                        #
 echo #############################################################
 goto end 
@@ -80,11 +79,23 @@ goto end
 
 :noDevices
 echo.
-echo ##############################################################
-echo #                   Kein Gerät verbunden!                    #
-echo #   Bitte verbinde das Handy bevor du die App installierst!  # 
-echo ##############################################################
-echo.   
+echo #############################################################
+echo #                  Kein Gerät verbunden!                    #
+echo #                                                           #
+echo #  App wird gebaut, aber nicht auf dem Handy installiert!   #
+echo #                                                           #
+echo #  Bitte verbinde das Handy bevor du die App installierst!  # 
+echo #                                                           #
+echo #                    Baue die App...                        #
+
+:: Call gradle wrapper and write ouput to file
+call gradlew.bat installDebug --daemon --warn 1<nul > compileOutput.txt
+
+:: Check Output in file for "BUILD FAILED", if found, goto error
+For /F %%K IN ('findstr /i /C:"BUILD FAILED" compileOutput.txt') do goto error
+echo #                                                           #
+echo #                     Abgeschlossen!                        #
+echo #############################################################
 goto end 
 
 :error
@@ -123,6 +134,8 @@ echo.
 type filtered.txt
 
 :end
+
+
 IF EXIST filtered.txt (
 	del filtered.txt
 )

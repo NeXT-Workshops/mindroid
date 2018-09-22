@@ -24,11 +24,20 @@ cd /D %~1
 set ANDROID_HOME=%~2
 set JAVA_HOME=%~3
 
+:run_finder
+:: run implementationFinder an push programs.json
+cd ..\ImplementationFinder
+call gradlew.bat run
+%ANDROID_HOME%\platform-tools\adb push programs.json /storage/emulated/0/Mindroid/programs.json
+cd %~1
+
 :check_for_devices
 @set devices_attached=0
 @FOR /F "tokens=* skip=1 delims=" %%A in ('%ANDROID_HOME%\platform-tools\adb devices') do @set devices_attached=1
 @if "%devices_attached%" == "1" goto installAndAssemble
 @goto noDevices
+
+
 
 :installAndAssemble
 
@@ -89,7 +98,7 @@ echo #                                                           #
 echo #                    Baue die App...                        #
 
 :: Call gradle wrapper and write ouput to file
-call gradlew.bat installDebug --daemon --warn 1<nul > compileOutput.txt
+call gradlew.bat assemble --daemon --warn 1<nul > compileOutput.txt
 
 :: Check Output in file for "BUILD FAILED", if found, goto error
 For /F %%K IN ('findstr /i /C:"BUILD FAILED" compileOutput.txt') do goto error

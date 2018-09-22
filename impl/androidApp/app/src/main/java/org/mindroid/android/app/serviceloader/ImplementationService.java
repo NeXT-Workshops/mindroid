@@ -1,24 +1,27 @@
 package org.mindroid.android.app.serviceloader;
 
-import org.mindroid.android.app.robodancer.SettingsProvider;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.mindroid.api.BasicAPI;
 import org.mindroid.api.ImplementationIDCrawlerVisitor;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
 
 public class ImplementationService {
 
     //Collected implementations
-    //private List<BasicAPI> implementations = new ArrayList<>();
+
     private HashMap<String, List<BasicAPI>> implementationSets = new HashMap<>();
 
     /** Collects the IDs of the APIs **/
-    //private ImplementationIDCrawlerVisitor idCollector = new ImplementationIDCrawlerVisitor();
     private HashMap<String, ImplementationIDCrawlerVisitor> idCollectorSet = new HashMap<>();
 
     private static ImplementationService ourInstance = new ImplementationService();
@@ -28,90 +31,41 @@ public class ImplementationService {
     }
 
     private ImplementationService(){
+
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = (JSONObject) parser.parse(new FileReader("/sdcard/Mindroid/programs.json"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        classesStatemachine = parseStringArray("classesStatemachine", jsonObject);
+        classesSolutions = parseStringArray("classesSolutions", jsonObject);
+        classesStubs = parseStringArray("classesStubs", jsonObject);
+        classesDev = parseStringArray("classesDev", jsonObject);
+
         setMap = makeMap();
         findImplementations();
     }
+    private String[] parseStringArray(String key, JSONObject jsonObject){
+        JSONArray classesJson = (JSONArray) jsonObject.get(key);
+        String[] classNames = new String[classesJson.size()];
+        for (int i = 0; i < classNames.length; i++) {
+            classNames[i] = (String) classesJson.get(i);
+        }
+        System.out.println("classes:" + Arrays.toString(classNames));
+        return classNames;
+    }
 
-
-    private String[] classesDev = {
-            "org.mindroid.android.app.programs.dev.AccelerationTestManual",
-            "org.mindroid.android.app.programs.dev.AccelerationTestAuto",
-            "org.mindroid.android.app.programs.dev.HelloWorldPingA",
-            "org.mindroid.android.app.programs.dev.HelloWorldPingB",
-            "org.mindroid.android.app.programs.dev.RectangleDriver",
-            "org.mindroid.android.app.programs.dev.LawnMowerLars",
-            "org.mindroid.android.app.programs.dev.MotorTest",
-            "org.mindroid.android.app.programs.dev.SensorTestWallPingPong",
-            "org.mindroid.android.app.programs.dev.TestBroadcasting",
-            "org.mindroid.android.app.programs.dev.RectangleDriver3",
-            "org.mindroid.android.app.programs.dev.RectangleDriver2",
-            "org.mindroid.android.app.programs.dev.SingleWallPingPong",
-            "org.mindroid.android.app.programs.dev.CoordWallPingPong",
-            "org.mindroid.android.app.programs.dev.SpeedTestForBackward",
-            "org.mindroid.android.app.programs.dev.SpeedTestTurns",
-            "org.mindroid.android.app.programs.dev.ButtonTest",
-            "org.mindroid.android.app.programs.dev.SingleWallPingPong",
-            "org.mindroid.android.app.programs.dev.TestMessageAccess",
-            "org.mindroid.android.app.programs.dev.MessageTest",
-            "org.mindroid.android.app.programs.dev.SimpleForward",
-            "org.mindroid.android.app.programs.dev.MessageEcho",
-            "org.mindroid.android.app.programs.dev.TestMessageServerScroll"
-    };
-
-    private String[] classesStatemachine = {
-            "org.mindroid.android.app.programs.dev.statemachines.SensorMonitoring",
-            "org.mindroid.android.app.programs.dev.statemachines.MindroidStatemachines"
-    };
-
-    private String[] classesStubs = {
-            "org.mindroid.android.app.programs.workshop.stubs.HelloWorld",
-            "org.mindroid.android.app.programs.workshop.stubs.HelloDate",
-
-            "org.mindroid.android.app.programs.workshop.stubs.DriveSquare",
-            "org.mindroid.android.app.programs.workshop.stubs.ParkingSensor",
-            "org.mindroid.android.app.programs.workshop.stubs.ColorTest",
-
-            "org.mindroid.android.app.programs.workshop.stubs.HelloWorldPingR",
-            "org.mindroid.android.app.programs.workshop.stubs.HelloWorldPingB",
-
-            "org.mindroid.android.app.programs.workshop.stubs.SingleWallPingPong",
-            "org.mindroid.android.app.programs.workshop.stubs.CoordWallPingPong",
-
-            "org.mindroid.android.app.programs.workshop.stubs.LawnMower",
-            "org.mindroid.android.app.programs.workshop.stubs.Platooning",
-            "org.mindroid.android.app.programs.workshop.stubs.Follow"
-    };
-
-    private String[] classesSolutions = {
-            "org.mindroid.android.app.programs.workshop.solutions.HelloWorld",
-            "org.mindroid.android.app.programs.workshop.solutions.HelloDate",
-
-            "org.mindroid.android.app.programs.workshop.solutions.DriveSquare",
-            "org.mindroid.android.app.programs.workshop.solutions.ParkingSensor",
-            "org.mindroid.android.app.programs.workshop.solutions.ColorTest",
-
-            "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPing",
-            "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPingA",
-            "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPingB",
-
-            "org.mindroid.android.app.programs.workshop.solutions.SingleWallPingPong",
-
-            "org.mindroid.android.app.programs.workshop.solutions.CoordWallPingPong",
-            "org.mindroid.android.app.programs.workshop.solutions.CoordWallPingPongA",
-            "org.mindroid.android.app.programs.workshop.solutions.CoordWallPingPongB",
-
-            "org.mindroid.android.app.programs.workshop.solutions.LawnMower",
-            "org.mindroid.android.app.programs.workshop.solutions.Platooning",
-            "org.mindroid.android.app.programs.workshop.solutions.PlatooningFollower",
-            "org.mindroid.android.app.programs.workshop.solutions.PlatooningLeader",
-
-            "org.mindroid.android.app.programs.workshop.solutions.Follow",
-            "org.mindroid.android.app.programs.workshop.solutions.FollowA",
-            "org.mindroid.android.app.programs.workshop.solutions.FollowB"
-    };
+    private String[] classesDev;
+    private String[] classesStatemachine;
+    private String[] classesStubs;
+    private String[] classesSolutions;
 
     private HashMap<String, String[]> setMap;// = makeMap();
-
     private String[] program_sets = {"Solutions", "Stubs", "Statemachine", "Dev"};
 
     private HashMap<String, String[]> makeMap(){
@@ -156,6 +110,7 @@ public class ImplementationService {
     private BasicAPI loadBasicAPIClasses(String classname){
         try {
             BasicAPI implementation = null;
+            if(classname == null) System.out.println("NULL" + classname); else System.out.println("OK" + classname);
             Class cls = Class.forName(classname);
             try {
                 if(cls.newInstance() instanceof BasicAPI){

@@ -1,17 +1,20 @@
 package org.mindroid.api;
 
+import org.mindroid.common.messages.server.MindroidMessage;
+
 /**
  * This Class defines the basic Imperative Implementation API.
  */
 public abstract class ImperativeAPI extends BasicAPI implements IInterruptable {
-
-
-
     /**
      * To identify the Implementation.
      * ID will be shown in the Apps dropdown.
      */
     private final String implementationID;
+
+    /**
+     * Defines number of Robots cooparating in a scenario / Defines lobby size at the server *
+     */
     private final int sessionRobotCount;
 
     /** true, when stopExecution is called **/
@@ -22,10 +25,6 @@ public abstract class ImperativeAPI extends BasicAPI implements IInterruptable {
         visitor.visit(this);
     }
 
-    public int getSessionRobotCount() {
-        return sessionRobotCount;
-    }
-
     /**
      *
      * @param implementationID - The ID of your Implementation. Necessary to run your implementation later on.
@@ -33,6 +32,11 @@ public abstract class ImperativeAPI extends BasicAPI implements IInterruptable {
     public ImperativeAPI(String implementationID, int sessionRobotCount){
         this.sessionRobotCount = sessionRobotCount;
         this.implementationID = implementationID;
+    }
+
+    public ImperativeAPI(String implementationID){
+        this.implementationID = implementationID;
+        this.sessionRobotCount = MindroidMessage.UNCOUPLED_SESSION;
     }
 
     /**
@@ -56,6 +60,10 @@ public abstract class ImperativeAPI extends BasicAPI implements IInterruptable {
     }
 
     // -------- Getter and Setter --------
+    public int getSessionRobotCount() {
+        return sessionRobotCount;
+    }
+
     public final String getImplementationID() {
         return implementationID;
     }

@@ -36,12 +36,6 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      */
     private final int MIN_DRIVE_DELAY = 50;
 
-
-
-
-    /** Defines number of Robots cooparating in a scenario /Defines lobby size at the server **/
-
-
     private static final Logger LOGGER = Logger.getLogger(ImperativeWorkshopAPI.class.getName());
 
     static {
@@ -58,7 +52,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     }
 
     public ImperativeWorkshopAPI(String implementationID) {
-        super(implementationID, MindroidMessage.NO_SESSION); // without session
+        super(implementationID, MindroidMessage.UNCOUPLED_SESSION); // without session
         //This DiffPilot supports angle correction while truning
         this.diffPilot = new DifferentialPilot(this, getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),getSensorProvider(),getGyroSensorPort(),5.6f,12.5f);
     }

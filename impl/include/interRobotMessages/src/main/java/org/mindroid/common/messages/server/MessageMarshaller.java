@@ -30,9 +30,9 @@ public class MessageMarshaller {
 
         final MindroidMessage message = new MindroidMessage(
                 deserializeRobotId(jsonObject.get(KEY_SOURCE)),
-                deserializeDestination(jsonObject.get(KEY_DESTINATION)),
                 deserializeLogLevel(jsonObject.get(KEY_TYPE)),
                 deserializeContent(jsonObject.get(KEY_CONTENT)),
+                deserializeDestination(jsonObject.get(KEY_DESTINATION)),
                 deserializeSessionCount(jsonObject.get(KEY_SESSION_COUNT)));
         return message;
     }

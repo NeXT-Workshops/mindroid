@@ -26,18 +26,18 @@ public class ManualADB extends JFrame {
 
         IP = JOptionPane.showInputDialog(this, "Enter IP Address", IP);
 
-        if(!IPService.isValidIP(IP)) {
-            MindroidServerConsoleFrame.getMindroidServerConsole().appendLine("Invalid IP Address! Enter a valid IPv4 address! (without a PORT)");
-            MindroidServerConsoleFrame.getMindroidServerConsole().setVisible(true);
-        }
-
         if (IP != null && IPService.isValidIP(IP)) {
             enteredIP = IP;
             connectADB(IP);
+        }else if(IP == null){
+            //Dialog got aborted - dont display any error
+        }else{
+            MindroidServerConsoleFrame.getMindroidServerConsole().appendLine("Invalid IP Address! Enter a valid IPv4 address! (without a PORT)");
+            MindroidServerConsoleFrame.getMindroidServerConsole().setVisible(true);
         }
     }
 
-    private static void connectADB(String IP) {
+    public static void connectADB(String IP) {
         try {
             ADBService.connectADB(IP);
         } catch (ConnectionToRemoteDeviceException | IOException | JadbException e) {

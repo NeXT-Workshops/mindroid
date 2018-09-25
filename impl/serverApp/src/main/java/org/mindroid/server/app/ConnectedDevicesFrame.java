@@ -7,6 +7,7 @@ import org.mindroid.server.app.log.LogFetcher;
 import org.mindroid.server.app.log.LogHandler;
 import org.mindroid.server.app.util.ADBService;
 import org.mindroid.server.app.util.IPService;
+import se.vidstige.jadb.ConnectionToRemoteDeviceException;
 import se.vidstige.jadb.JadbDevice;
 import se.vidstige.jadb.JadbException;
 
@@ -32,8 +33,8 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     public static final String TITLE =  "Connected Devices";
     private JPanel contentPane = new JPanel();
 
-    private final int[] posX = {10,100,240,380,500,620};
-    private final String[] columnNames = {"User","Devices", "ADB State", "Fetch Log", "Log", "Remove User"};
+    private final int[] posX = {10,100,240,380,500,620,770};
+    private final String[] columnNames = {"User","Devices", "ADB State", "Fetch Log", "Log", "Remove User", "Connect ADB"};
 
 
     private ConnectedDevicesFrame() {
@@ -133,6 +134,10 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         JTextField field_removeUser = getTextField(columnNames[5]);
         contentPane.add(field_removeUser);
         field_removeUser.setBounds(posX[5],10,120,30);
+
+        JTextField field_connectADB = getTextField(columnNames[6]);
+        contentPane.add(field_connectADB);
+        field_connectADB.setBounds(posX[6],10,120,30);
     }
 
     private JTextField getTextField(String content){
@@ -187,6 +192,23 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         return btn_removeUser;
     }
 
+    private JButton getConnectADBButton(final InetSocketAddress socketAddress){
+        JButton btn_connectADB = new JButton("Connect ADB");
+        btn_connectADB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (IUserAction userActionListener : userActionListeners) {
+                    try {
+                        ADBService.connectADB(socketAddress);
+                    } catch (IOException | JadbException | ConnectionToRemoteDeviceException e1) {
+                        MindroidServerConsoleFrame.getMindroidServerConsole().appendLine(e1.getMessage());
+                    }
+                }
+            }
+        });
+        return btn_connectADB;
+    }
+
     public void updateDevices() {
         try {
             String[] devices = getDevices();
@@ -224,7 +246,11 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
                 JButton btn_removeUser = getRemoveUserButton(destinations[i].getValue());
                 contentPane.add(btn_removeUser);
-                btn_removeUser.setBounds(posX[5],posY,150,20);
+                btn_removeUser.setBounds(posX[5],posY,120,20);
+
+                JButton btn_connectADB = getConnectADBButton(IPService.findAddress(destinations[i]));
+                contentPane.add(btn_connectADB);
+                btn_connectADB.setBounds(posX[6],posY,150,20);
             }
 
             contentPane.repaint();

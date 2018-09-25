@@ -49,9 +49,9 @@ public class MindroidMessage {
     public boolean isLogMessage() {
         return destination.getValue().equals(Destination.SERVER_LOG.getValue()) && messageType.equals(MessageType.LOG) && !messageType.equals(MessageType.REGISTRATION);
     }
-
+    // accepts any form of "Broadcast" in Destination as Broadcast message (case-insensitive)
     public boolean isBroadcastMessage() {
-        return destination.getValue().equals(Destination.BROADCAST.getValue());
+        return destination.getValue().toLowerCase().equals(Destination.BROADCAST.getValue().toLowerCase());
     }
 
     public boolean isRegistrationMessage(){

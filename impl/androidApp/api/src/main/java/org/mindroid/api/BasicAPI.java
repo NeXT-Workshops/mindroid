@@ -349,7 +349,7 @@ public abstract class BasicAPI {
      * Returns true if the down button is released
      * @return boolean
      */
-    public final boolean isDownuttonReleased(){
+    public final boolean isDownButtonReleased(){
         return isButtonReleased(Button.DOWN);
     }
 

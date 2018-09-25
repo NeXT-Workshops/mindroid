@@ -133,6 +133,16 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
 
     // ------ Motor Controlling Methods ------
 
+
+    /**
+     * Rotate counter-clockwise until stop() is called
+     */
+    public final void turnLeft(){
+        if(!isInterrupted){
+            diffPilot.turnLeft();
+        }
+    }
+
     /**
      * The robot rotates counterclockwise by the given angle.
      * This method blocks until the rotation is completed.
@@ -157,6 +167,15 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     public final void turnLeft(int degrees,int speed) {
         if(!isInterrupted()) {
             diffPilot.turnLeft(degrees,speed);
+        }
+    }
+
+    /**
+     * Rotate clockwise until stop() is called
+     */
+    public final void turnRight(){
+        if(!isInterrupted){
+            diffPilot.turnRight();
         }
     }
 

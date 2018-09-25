@@ -39,7 +39,7 @@ public class ImplementationFinder {
             outFile.flush();
             outFile.close();
         }
-        testParse();
+        //testParse();
     }
 
     private static void getImplementations(String subfolder, String setName) {

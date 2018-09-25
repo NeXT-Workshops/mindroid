@@ -3,6 +3,7 @@ package org.mindroid.impl.sensor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,8 +25,11 @@ import org.mindroid.impl.logging.EV3MsgLogger;
 //TODO Extend Listener Functionality: adding mode; value; and more?
 public class EV3SensorEndpoint extends ClientEndpointImpl implements IEV3SensorEndpoint {
 
-
-    private List<IEV3SensorEventListener> listeners = new ArrayList<>(2);
+    /*CopyOnWrite array list should solve concurrent issues access issues
+     as listeners won't be added/deleted to often, the performance should be ok for this case.
+     https://docs.oracle.com/javase/6/docs/api/java/util/concurrent/CopyOnWriteArrayList.html
+     */
+    private List<IEV3SensorEventListener> listeners = new CopyOnWriteArrayList<IEV3SensorEventListener>();
     //private final EV3SensorManager sensorManager;
 
     private Sensormode initialMode = null;

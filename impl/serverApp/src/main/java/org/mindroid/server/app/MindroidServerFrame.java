@@ -5,6 +5,7 @@ import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
 import org.mindroid.server.app.util.IPService;
+import org.mindroid.server.app.util.ManualADB;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -74,6 +75,18 @@ public class MindroidServerFrame extends JFrame {
         consoleMenuItem.setMnemonic('c');
         consoleMenuItem.setAccelerator(KeyStroke.getKeyStroke("shift C"));
 
+        JMenuItem connectADBMenuItem = new JMenuItem();
+        connectADBMenuItem.setAction(new AbstractAction("Connect ADB") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ManualADB.getInstance().showDialog();
+            }
+        });
+        connectADBMenuItem.setMnemonic('a');
+        connectADBMenuItem.setAccelerator(KeyStroke.getKeyStroke("shift A"));
+
+
+
         refreshIP = new JMenuItem();
         refreshIP.setAction(new AbstractAction("Refresh IP Address") {
             @Override
@@ -117,6 +130,7 @@ public class MindroidServerFrame extends JFrame {
 
         fileMenu.add(consoleMenuItem);
         fileMenu.add(adbDevicesMenuItem);
+        fileMenu.add(connectADBMenuItem);
         fileMenu.add(refreshIP);
         fileMenu.add(restartServerMenuItem);
         fileMenu.add(exitMenuItem);

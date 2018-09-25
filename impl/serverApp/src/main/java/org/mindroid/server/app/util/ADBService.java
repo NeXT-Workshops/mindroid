@@ -36,10 +36,15 @@ public class ADBService {
         jadb.connectToTcpDevice(new InetSocketAddress(socketAddress.getAddress(), ADB_TCP_PORT));
 
         devices = jadb.getDevices();
-        if (!devices.isEmpty()) {
+
+        /*if (!devices.isEmpty()) {
             MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
 
-        }
+        }*/
+    }
+
+    public static void connectADB(String IP) throws ConnectionToRemoteDeviceException, IOException, JadbException {
+        connectADB(new InetSocketAddress(IP,ADB_TCP_PORT));
     }
 
     public static JadbDevice getDeviceByIP(InetSocketAddress inetSocketAddress){

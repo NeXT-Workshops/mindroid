@@ -2,7 +2,6 @@ package org.mindroid.server.app;
 
 import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidLogMessage;
-import org.mindroid.common.messages.server.RobotId;
 import org.mindroid.server.app.log.LogFetcher;
 import org.mindroid.server.app.log.LogHandler;
 import org.mindroid.server.app.util.ADBService;
@@ -17,14 +16,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
     private static final ConnectedDevicesFrame console = new ConnectedDevicesFrame();
-    private ArrayList<IUserAction> userActionListeners = new ArrayList<IUserAction>();
+    private List<IUserAction> userActionListeners = new CopyOnWriteArrayList<>();
 
     public static ConnectedDevicesFrame getInstance() {
         return console;
@@ -216,7 +214,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
             createUIHeadline(columnNames);
             int posY = 0;
-
+            
             Destination[] destinations = IPService.getIPMapping().keySet().toArray(new Destination[IPService.getIPMapping().keySet().size()]);
             for (int i = 0; i < destinations.length; i++) {
                 posY = 40+i*30;
@@ -306,6 +304,10 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
     public void addUserListener(IUserAction userActionListener) {
         this.userActionListeners.add(userActionListener);
+    }
+
+    public void removeUserListener(IUserAction userActionListener){
+        this.userActionListeners.remove(userActionListener);
     }
 }
 

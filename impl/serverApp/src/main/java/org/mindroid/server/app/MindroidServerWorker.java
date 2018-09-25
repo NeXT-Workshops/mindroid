@@ -81,6 +81,9 @@ public class MindroidServerWorker implements Runnable, IUserAction {
         //Close Socekt
         disconnect();
         removeRegistration();
+
+        //Remove worker from listener
+        ConnectedDevicesFrame.getInstance().removeUserListener(this);
     }
 
     private void disconnect() {

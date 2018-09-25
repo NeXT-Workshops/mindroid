@@ -38,7 +38,7 @@ public class ManualADB extends JFrame {
     }
 
     private static void connectADB(String IP) {
-        try {A
+        try {
             ADBService.connectADB(IP);
         } catch (ConnectionToRemoteDeviceException | IOException | JadbException e) {
             MindroidServerConsoleFrame.getMindroidServerConsole().appendLine(e.getMessage());

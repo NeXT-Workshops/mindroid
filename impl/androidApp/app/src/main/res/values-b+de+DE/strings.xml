@@ -124,7 +124,7 @@
     <string name="txt_sensor_description_mode_seek_slot2">gepaart:</string>
     <string name="txt_sensor_description_mode_seek_slot3">gepaart:</string>
     <string name="txt_sensor_description_mode_seek_slot4">gepaart:</string>
-    <string name="dialog_info_message">Info: Falls keine Daten angezeigt werden, starte erstmalig ein Program. Du kannst das Pogramm dann wieder beenden und es besteht eine Verbindung mit den Sensoren. Deren Messungen kannst du dann hier in Echtzeit ablesen.
+    <string name="dialog_info_message">Info: Falls keine Daten angezeigt werden, starte erstmalig ein Programm. Du kannst das Pogramm dann wieder beenden und es besteht eine Verbindung mit den Sensoren. Deren Messungen kannst du dann hier in Echtzeit ablesen.
     </string>
     <string name="errortext_title_initialization">Konfiguration fehlgeschlagen!</string>
     <string name="errortext_msg_initialization">Die Konfiguration eines Motors/Sensors ist fehlgeschlagen. Überprüfe die

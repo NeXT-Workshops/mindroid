@@ -29,6 +29,9 @@ public class Robot implements IImplStateListener {
 
     public boolean isRunning = false;
 
+    //Used in sensorMonitoring to show info message. true if any program has been executed.
+    public boolean programExecuted = false;
+
     private IRobotFactory roFactory;
     //-------- Robot
     private RobotPortConfig robotPortConfig;
@@ -187,6 +190,8 @@ public class Robot implements IImplStateListener {
         LOGGER.log(Level.INFO, "Start to execute: " + id);
         runningImplementationID = id;
         roFactory.getRobotCommandCenter().startImplementation(id,this);
+        //True if any program got executed - used in sensorMonitoring
+        programExecuted = true;
     }
 
     /**

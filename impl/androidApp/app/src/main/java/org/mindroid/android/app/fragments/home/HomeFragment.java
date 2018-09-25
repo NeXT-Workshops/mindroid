@@ -92,7 +92,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private final static Logger LOGGER = Logger.getLogger(HomeFragment.class.getName());
 
-    private Process shellProcess;
     private boolean stopThreads;
 
     public HomeFragment() { //Called by newInstance(..)

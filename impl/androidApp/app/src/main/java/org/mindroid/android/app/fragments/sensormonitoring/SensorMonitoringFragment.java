@@ -108,7 +108,7 @@ public class SensorMonitoringFragment extends Fragment implements SensorObservat
         addSensorObservationToUI(sensor_port3_monitor);
         addSensorObservationToUI(sensor_port4_monitor);
 
-        if(!robot.isRunning){
+        if(!robot.programExecuted){ 
             if(getActivity() instanceof MainActivity){
                 ((MainActivity) getActivity()).showInfoDialog("Info",infoMessage);
             }

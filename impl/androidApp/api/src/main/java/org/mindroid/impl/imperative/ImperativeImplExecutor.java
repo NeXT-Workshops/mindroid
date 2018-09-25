@@ -5,6 +5,8 @@ import org.mindroid.api.AbstractImperativeImplExecutor;
 import org.mindroid.api.IExecutor;
 import org.mindroid.api.ImperativeAPI;
 import org.mindroid.api.IImplStateListener;
+import org.mindroid.api.ev3.EV3StatusLightColor;
+import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.communication.MessengerClient;
@@ -61,6 +63,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                         boolean noMessage = true;
                         while (noMessage) {
                             //wait for start-message from Server
+                            Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
                             if (messenger.hasMessage()) {
                                 MindroidMessage incoming = messenger.getNextMessage();
                                 if(incoming.getMessageType().equals(MessageType.SESSION) && incoming.getSessionRobotCount() == MindroidMessage.START_SESSION){
@@ -69,7 +72,9 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                             }
                         }
                     }
-
+                    Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                    Robot.getRobotController().getBrickController().buzz();
+                    
                     runningImpl.run();
 
                 } catch (Exception e) {

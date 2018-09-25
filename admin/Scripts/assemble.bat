@@ -22,13 +22,13 @@
 :set_paths
 cd /D %~1
 set ANDROID_HOME=%~2
-set JAVA_HOME=%~3
+set JAVA_HOME="%~3"
 
 :run_finder
 :: run implementationFinder and push programs.json
 echo BEFORE IMP FIND ##################
 cd ..\ImplementationFinder
-call gradlew.bat run
+call gradlew.bat run 1<nul 
 echo AFTER IMP FIND #################
 %ANDROID_HOME%\platform-tools\adb push programs.json /storage/emulated/0/Mindroid/programs.json
 cd %~1

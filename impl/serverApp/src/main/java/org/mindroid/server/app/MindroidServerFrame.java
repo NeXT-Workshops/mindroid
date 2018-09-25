@@ -32,6 +32,7 @@ public class MindroidServerFrame extends JFrame {
 
     private final JTable table;
     private final JLabel ownIPLabel;
+    private final JLabel sessionStateLabel;
     private final JMenuItem refreshIP;
     private final JCheckBox activateScrollingCheckBox;
     private HashMap<String,Color> assignedColors;
@@ -209,8 +210,10 @@ public class MindroidServerFrame extends JFrame {
         //Bottom line
         JPanel southPanel = new JPanel(new BorderLayout());
         ownIPLabel = new JLabel();
+        sessionStateLabel = new JLabel();
         //ownIPLabel.setEditable(false);
         southPanel.add(ownIPLabel,BorderLayout.WEST);
+        southPanel.add(sessionStateLabel, BorderLayout.CENTER);
 
         JButton clear = new JButton("Clear Messages");
         clear.addActionListener(new ActionListener() {
@@ -276,8 +279,13 @@ public class MindroidServerFrame extends JFrame {
 
 
     public void displayIPAdress(String address, Color color) {
-            ownIPLabel.setForeground(color);
-            ownIPLabel.setText(" Server IP: " +address + "     Port: 33044");
+        ownIPLabel.setForeground(color);
+        ownIPLabel.setText(" Server IP: " +address + "     Port: 33044");
+    }
+
+    public void displaySessionState(String text){
+        sessionStateLabel.setForeground(Color.BLACK);
+        sessionStateLabel.setText("\t" + text);
     }
 
     public void disableRefresh(boolean disable) {

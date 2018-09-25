@@ -51,7 +51,8 @@ public class ImplementationFinder {
         //String[] classes = new String[files.length];
         for (int i = 0; i < files.length; i++) {
             // only use if it is a file
-            if(files[i].isFile()) {
+            System.out.println(files[i].getName());
+            if(files[i].isFile() && !files[i].getName().contains("~ava")) {
                 // split path by 'java', second part is important, replace backslash with dot
                 String className = String.valueOf(files[i].toPath()).split("java")[1].replace('\\', '.');
                 // remove leading and trailing dots

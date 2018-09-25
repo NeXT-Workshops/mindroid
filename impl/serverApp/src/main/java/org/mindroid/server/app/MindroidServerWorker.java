@@ -33,7 +33,9 @@ public class MindroidServerWorker implements Runnable, IUserAction {
         this.socket = socket;
         this.mindroidServerFrame = mindroidServerFrame;
         this.messageMarshaller = new MessageMarshaller();
-        sessionHandler = new SessionHandler(this);
+
+        sessionHandler = SessionHandler.getInstance();
+        sessionHandler.setMsw(this);
     }
 
     @Override
@@ -110,18 +112,23 @@ public class MindroidServerWorker implements Runnable, IUserAction {
     }
 
     private void handleMessage(MindroidMessage deserializedMsg) throws IOException, ConnectionToRemoteDeviceException, JadbException {
+        console.appendLine("INCOMIIIIIIIING");
+        console.appendLine(deserializedMsg.toString());
         // Append to Server Log
         if (deserializedMsg.isLogMessage()) {
+            console.appendLine("logmessage");
             mindroidServerFrame.addContentLineFromMessage(deserializedMsg);
         }
 
         // Session Messages
         if (deserializedMsg.isSessionMessage()){
+            console.appendLine("session msg" + deserializedMsg.getSessionRobotCount());
             sessionHandler.handleSessionMessage(deserializedMsg);
         }
 
         // Registration Message
         if (deserializedMsg.isRegistrationMessage()) {
+            console.appendLine("register");
             SocketAddress socketAddress = socket.getRemoteSocketAddress();
             if (socketAddress instanceof InetSocketAddress) {
                 //the port was sent as content of the registration message
@@ -151,7 +158,8 @@ public class MindroidServerWorker implements Runnable, IUserAction {
         }
 
         if( sessionHandler.isSessionRunning()) {
-            mindroidServerFrame.addLocalContentLine("WARN", "Message received, but no Session running");
+            mindroidServerFrame.addLocalContentLine("WARN", "Message received, Session running");
+
             // Unicast Message
             if (deserializedMsg.isUnicastMessage()) {
                 mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "LOG", deserializedMsg.getContent(), String.valueOf(deserializedMsg.getSessionRobotCount()));
@@ -159,8 +167,6 @@ public class MindroidServerWorker implements Runnable, IUserAction {
                 sendMessage(deserializedMsg, socket);
                 //mindroidServerFrame.addContentLine("SERVER",deserializedMsg.getDestination().getValue(),"DEBUG","MSG["+deserializedMsg.getContent()+"] sent to destination", "-");
             }
-
-
             //deliver broadcast message
             if (deserializedMsg.isBroadcastMessage()) {
                 broadcastMessage(deserializedMsg);

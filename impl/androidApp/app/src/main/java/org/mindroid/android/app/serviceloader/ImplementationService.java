@@ -7,11 +7,9 @@ import org.json.simple.parser.ParseException;
 import org.mindroid.api.BasicAPI;
 import org.mindroid.api.ImplementationIDCrawlerVisitor;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,7 +54,6 @@ public class ImplementationService {
         for (int i = 0; i < classNames.length; i++) {
             classNames[i] = (String) classesJson.get(i);
         }
-        System.out.println("classes:" + Arrays.toString(classNames));
         return classNames;
     }
 
@@ -92,9 +89,6 @@ public class ImplementationService {
                 if (implementation != null) {
                     implementations.add(implementation);
                     idCollector.collectID(implementation);
-
-                    //addImplementation(set, implementation);
-                    //collectID(implementation);
                 }
             }
             implementationSets.put(set, implementations);
@@ -110,7 +104,6 @@ public class ImplementationService {
     private BasicAPI loadBasicAPIClasses(String classname){
         try {
             BasicAPI implementation = null;
-            if(classname == null) System.out.println("NULL" + classname); else System.out.println("OK" + classname);
             Class cls = Class.forName(classname);
             try {
                 if(cls.newInstance() instanceof BasicAPI){

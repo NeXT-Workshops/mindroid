@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class SessionHandler {
+    private static SessionHandler ourInstance = new SessionHandler();
     private MindroidServerWorker msw;
     private MindroidServerFrame msf;
     private int maxSessionSize = 0;
@@ -25,15 +26,23 @@ public class SessionHandler {
         RUNNING_UNCOUPLED
     }
 
+    public static SessionHandler getInstance(){
+        return ourInstance;
+    }
 
-    public SessionHandler(MindroidServerWorker mindroidServerWorker) {
-        msw = mindroidServerWorker;
-        msf = msw.getMindroidServerFrame();
+    private SessionHandler() {
+    }
+
+    public void setMsw(MindroidServerWorker msw){
+        this.msw = msw;
+        this.msf = msw.getMindroidServerFrame();
+        updateSessionLabel();
     }
 
     private MindroidMessage startSessionMessage= new MindroidMessage(new RobotId(Destination.SERVER_LOG.getValue()), MessageType.SESSION, "START SESSION", Destination.BROADCAST, MindroidMessage.START_SESSION);
 
     public   void handleSessionMessage(MindroidMessage msg) throws IOException {
+
         int sessionCommand = msg.getSessionRobotCount();
         RobotId robot = msg.getSource();
 
@@ -51,6 +60,7 @@ public class SessionHandler {
                         break;
                     // set Session Size, add robot and start pending
                     default: // s>0
+                        msf.addLocalContentLine("LOG", "going to pending");
                         currentState = SessionState.PENDING;
                         sessionRobots.add(robot);
                         maxSessionSize = sessionCommand;
@@ -116,52 +126,7 @@ public class SessionHandler {
                 msf.addLocalContentLine("INFO", "Unknown state!");
                 break;
         }
-
-
-
-/*
-
-
-
-        if(msg.getSessionRobotCount() < 0){
-            switch (msg.getSessionRobotCount()){
-                case MindroidMessage.QUIT_SESSION:
-                    sessionRobots.remove(msg.getSource());
-                    break;
-                case MindroidMessage.UNCOUPLED_SESSION:
-                    if(maxSessionSize == 0){
-                        msw.broadcastMessage(startSessionMessage);
-                        isSessionRunning = true;
-                        uncoupledSession = true;
-                    }
-            }
-        }else {
-            if(!isSessionRunning()){
-                //Session is not runnig, it is possible to start a session or join one
-                if (maxSessionSize == 0) {
-                    // first robot tells us sessionSize and gets added to it
-                    maxSessionSize = msg.getSessionRobotCount();
-
-                } else if (msg.getSessionRobotCount() > 0 && sessionRobots.size() < maxSessionSize) {
-                    // session not full yet, add robot
-                    sessionRobots.add(msg.getSource());
-                }
-                //check if session is full
-                if (sessionRobots.size() == maxSessionSize) {
-                    msw.broadcastMessage(startSessionMessage);
-                    isSessionRunning = true;
-                }
-            }else{
-                //A Session is already running
-                if(isUncoupledSession()){
-                    //A uncoupled session is running (0)
-
-                }else{
-                    //A Session with a limited number of users is running
-                }
-            }
-        }
-        */
+        updateSessionLabel();
     }
 
     public boolean isSessionRunning() {
@@ -170,5 +135,17 @@ public class SessionHandler {
 
     public boolean isUncoupledSession() {
         return currentState == SessionState.RUNNING_UNCOUPLED;
+    }
+    
+    private void updateSessionLabel(){        
+        String text = "";        
+        switch (currentState){
+            case IDLE: text =  "IDLE"; break;
+            case PENDING: text =  "PENDING " + sessionRobots.size() + "/" + maxSessionSize; break;
+            case RUNNING_COUPLED: text =  "RUNNING COUPLED, " + sessionRobots.size() + "/" + maxSessionSize + "connected"; break;
+            case RUNNING_UNCOUPLED: text =  "RUNNING UNCOUPLED" + sessionRobots.size() + "connected"; break;
+            default: text = "UNKNOWN STATE; PLEASE CALL SUPPORT"; break;
+        }
+        msf.displaySessionState(text);
     }
 }

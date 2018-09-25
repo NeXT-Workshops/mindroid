@@ -30,8 +30,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
 
     private static final Logger LOGGER = Logger.getLogger(ImperativeImplExecutor.class.getName());
 
-    private MessengerClient messenger = Robot.getRobotController().getMessenger();
-
+    private MessengerClient messenger;
 
     static{
         APILoggerManager.getInstance().registerLogger(LOGGER);
@@ -45,6 +44,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
     @Override
     public final void start() {
 
+        messenger = Robot.getRobotController().getMessenger();
 
         final ImperativeAPI runningImpl = getRunnable();
         Runnable runImpl = new Runnable() {
@@ -62,6 +62,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                     if (sessionRobotCount > 0) {
                         boolean noMessage = true;
                         while (noMessage) {
+                            Thread.sleep(10);
                             //wait for start-message from Server
                             Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
                             if (messenger.hasMessage()) {

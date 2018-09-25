@@ -26,11 +26,20 @@ set JAVA_HOME="%~3"
 
 :run_finder
 :: run implementationFinder and push programs.json
-echo BEFORE IMP FIND ##################
 cd ..\ImplementationFinder
-call gradlew.bat run 1<nul 
-echo AFTER IMP FIND #################
-%ANDROID_HOME%\platform-tools\adb push programs.json /storage/emulated/0/Mindroid/programs.json
+call gradlew.bat run > nul 
+
+:push
+:: push programs.json to all devices
+SETLOCAL ENABLEDELAYEDEXPANSION
+@FOR /F "tokens=1,2 skip=1" %%A IN ('%ANDROID_HOME%\platform-tools\adb devices') DO (
+    @SET IS_DEV=%%B
+if "!IS_DEV!" == "device" (
+	@SET SERIAL=%%A
+	@call %ANDROID_HOME%\platform-tools\adb -s !SERIAL! push programs.json /storage/emulated/0/Mindroid/programs.json > nul
+)
+)
+@ENDLOCAL
 cd %~1
 
 :check_for_devices

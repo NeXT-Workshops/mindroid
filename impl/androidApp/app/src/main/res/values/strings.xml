@@ -41,8 +41,7 @@
     <string name="txt_programs">Programs:</string>
 
     <!-- Sensor Monitoring Fragment -->
-    <string name="dialog_info_message">No Statemachine is running! Start a Statemachine to use this feature and then
-        come back to see the world from your robots eyes!
+    <string name="dialog_info_message">Note: If no data is shown, make sure to start a program first. You can stop it afterwards and look at the real-time sensor data.
     </string>
     <string name="txt_sensor_description_mode_rgb_slot1">Red:</string>
     <string name="txt_sensor_description_mode_rgb_slot2">Green:</string>

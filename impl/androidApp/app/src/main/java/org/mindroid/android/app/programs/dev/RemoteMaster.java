@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class RemoteMaster extends ImperativeWorkshopAPI {
 
     public RemoteMaster(){
-        super("Remote Master", 2);
+        super("Remote Master", 8);
     }
 
     private enum Directions{

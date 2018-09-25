@@ -9,6 +9,8 @@ import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
+import org.mindroid.impl.imperative.ImperativeImplExecutor;
+import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.util.Messaging;
 
 import java.io.IOException;
@@ -20,6 +22,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Felicia Ruppel on 04.04.17.
@@ -37,6 +41,12 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
 
     public static final String SERVER_LOG = Destination.SERVER_LOG.getValue();
     public static final String BROADCAST = Destination.BROADCAST.getValue();
+
+    private static final Logger LOGGER = Logger.getLogger(MessengerClient.class.getName());
+
+    static{
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+    }
 
     private String robotID;
     private InetAddress serverip;
@@ -206,31 +216,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
      */
     @Override
     public void handleMessage(MindroidMessage msg) {
-        /*
-        //SessionID/RuntmeID Firewall
-        if(!runtimeMap.containsKey(msg.getSource())) {
-            //Add runtime id of RobotX
-            runtimeMap.put(msg.getSource(),msg.getRuntimeID());
-        }
-
-        if (runtimeMap.get(msg.getSource()) == msg.getRuntimeID()) {
-            //Passes firewall - if message contains valid runtimeID of RobotX add to queue
-            getMessages().add(msg);
-        } else {
-            //Delete messages with old runtime id if a new runtime id from Robot X arrives arrives
-            for (MindroidMessage message : getMessages()) {
-                if(message.getSource() == msg.getSource()) {
-                    if (message.getRuntimeID() != msg.getRuntimeID()) {
-                        getMessages().remove(message);
-                    }
-                }
-            }
-            //Add new runtime ID
-            runtimeMap.put(msg.getSource(),msg.getRuntimeID());
-            //Add new message with new runtimeID to queue
-            getMessages().add(msg);
-        }
-        */
+        LOGGER.log(Level.INFO, "rcvd msg: " + msg.toString());
         getMessages().add(msg);
 
     }

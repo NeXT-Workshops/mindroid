@@ -180,7 +180,9 @@ public class MindroidServerWorker implements Runnable, IUserAction {
         for(Map.Entry<Destination, Socket> entry : socketMapping.entrySet()) {
             if(!msg.getSource().getValue().equals(entry.getKey().getValue())) {
                 Socket address = entry.getValue();
-                sendMessage(new MindroidMessage(msg.getSource(),entry.getKey(), msg.getMessageType(),msg.getContent()), address);
+                console.appendLine("broadcasting" + entry.getKey().toString());
+
+                sendMessage(new MindroidMessage(msg.getSource(),msg.getMessageType(), msg.getContent(), entry.getKey(),  msg.getSessionRobotCount()), address);
             }
         }
     }

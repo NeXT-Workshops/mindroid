@@ -182,6 +182,7 @@ public class DifferentialPilot implements IDifferentialPilot {
         if(!setMotorOperations(backward, forward, operations)){
             return;
         }
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations, false);
     }
 
     @Override
@@ -232,6 +233,7 @@ public class DifferentialPilot implements IDifferentialPilot {
         if(!setMotorOperations(forward, backward, operations)){
             return;
         }
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations, false);
     }
 
     @Override

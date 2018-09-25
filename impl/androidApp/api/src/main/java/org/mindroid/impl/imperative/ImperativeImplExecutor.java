@@ -61,12 +61,13 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                     // if we need to wait for other robots to join
                     if (sessionRobotCount > 0) {
                         boolean noMessage = true;
+                        Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
                         while (noMessage) {
                             Thread.sleep(10);
                             //wait for start-message from Server
-                            Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
                             if (messenger.hasMessage()) {
                                 MindroidMessage incoming = messenger.getNextMessage();
+                                LOGGER.log(Level.INFO, incoming.toString());
                                 if(incoming.getMessageType().equals(MessageType.SESSION) && incoming.getSessionRobotCount() == MindroidMessage.START_SESSION){
                                     noMessage = false;
                                 }
@@ -85,6 +86,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                     ErrorHandlerManager.getInstance().handleError(execException, ImperativeAPI.class, execException.getMessage());
                     LOGGER.log(Level.WARNING, "Source: ImperativeImplExecutor; ImperativeAPI.class.\n\r"+Throwables.getStackTrace(execException)+"\r\n"+ Throwables.getStackTrace(e));
                 } finally {
+                    LOGGER.log(Level.INFO, "Stopped Execution");
                     //Detects, that the implementation is finished
                     setExecutionFinished(true);
                     setIsRunning(false);

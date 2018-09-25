@@ -6,13 +6,14 @@ import org.mindroid.common.messages.server.MindroidMessage;
 public class RemoteSlave extends ImperativeWorkshopAPI {
 
     public RemoteSlave(){
-        super("Remote Slave", 2);
+        super("Remote Slave", 8);
     }
 
         @Override
     public void run() {
-        setMotorSpeed(100);
+        setMotorSpeed(250);
         while(!isInterrupted()){
+            delay(10);
             if(hasMessage()){
                 MindroidMessage msg = getNextMessage();
                 switch(msg.getContent()){

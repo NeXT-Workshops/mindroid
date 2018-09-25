@@ -40,8 +40,6 @@ public class MindroidServerApplicationMain {
             mindroidServerFrame.addContentLine("Local", "-", "LOG", "See Error console.", "-");
             mindroidServerFrame.disableRefresh(true);
         }
-
-
     }
 
     public static void runServer() {

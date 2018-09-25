@@ -113,13 +113,7 @@ public class MindroidServerFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-
-                    //start new server using startServer.bat cd ..\..\admin\Scripts
-                    Runtime.getRuntime().exec("cmd /c start \"\" ServerStarten.bat",null,new File("..\\..\\admin\\Scripts"));
-
-
-                    //Shutdown current server
-                    System.exit(0);
+                    restartServer();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -230,6 +224,18 @@ public class MindroidServerFrame extends JFrame {
 
         this.pack();
         this.setVisible(true);
+    }
+
+    private void restartServer() throws IOException {
+        //Kick all users
+        //TODO Kick all users when restarting server, to notify them that the server cloesd
+        // or send close message to all users, same effect.
+
+        //start new server using startServer.bat cd ..\..\admin\Scripts
+        Runtime.getRuntime().exec("cmd /c start \"\" ServerStarten.bat",null,new File("..\\..\\admin\\Scripts"));
+
+        //Shutdown current server
+        System.exit(0);
     }
 
     public void addLocalContentLine(String type, String content){

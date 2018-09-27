@@ -1,11 +1,13 @@
 package org.mindroid.server.app;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidLogMessage;
 import org.mindroid.server.app.log.LogFetcher;
 import org.mindroid.server.app.log.LogHandler;
 import org.mindroid.server.app.util.ADBService;
-import org.mindroid.server.app.util.IPService;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
 import se.vidstige.jadb.JadbDevice;
 import se.vidstige.jadb.JadbException;
@@ -17,12 +19,10 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
     private static final ConnectedDevicesFrame console = new ConnectedDevicesFrame();
-    private List<IUserAction> userActionListeners = new CopyOnWriteArrayList<>();
 
     public static ConnectedDevicesFrame getInstance() {
         return console;
@@ -34,10 +34,13 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     private final int[] posX = {10,100,240,380,500,620,770};
     private final String[] columnNames = {"User","Devices", "ADB State", "Fetch Log", "Log", "Remove User", "Connect ADB"};
 
+    private Logger logger;
 
     private ConnectedDevicesFrame() {
+        logger = LogManager.getLogger(ConnectedDevicesFrame.class);
+
         setTitle(TITLE);
-        setSize(new Dimension(800,400));
+        setSize(new Dimension(980,400));
 
         setIconImage(MindroidServerSettings.getTitleImage());
 
@@ -145,13 +148,14 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         return txtField;
     }
 
-    private JButton getFetchLogButton(final String userName, final InetSocketAddress socketAddress){
+    private JButton getFetchLogButton(final String robotID, final InetSocketAddress socketAddress){
         JButton btn_fetchButton = new JButton("fetch log");
         btn_fetchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                logger.log(Level.INFO,"Fetching log of "+robotID);
                 MindroidLogMessage logMsg = LogFetcher.fetchLog(socketAddress);
-                LogHandler.saveToFile(logMsg,LogHandler.getFilename(userName,socketAddress));
+                LogHandler.saveToFile(logMsg,LogHandler.getFilename(robotID,socketAddress));
             }
         });
         return btn_fetchButton;
@@ -159,15 +163,16 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
 
 
-    private JButton getLogButton(final String userName, final InetSocketAddress socketAddress) {
+    private JButton getLogButton(final String robotID, final InetSocketAddress socketAddress) {
         JButton btn_opLogButton = new JButton("Open Log");
         btn_opLogButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                logger.log(Level.INFO,"Open Log of "+robotID);
                 try {
                     Desktop desktop = Desktop.getDesktop();
-                    if (LogHandler.isExistent(LogHandler.getFilename(userName,socketAddress))) {
-                        desktop.open(LogHandler.getLogFile(LogHandler.getFilename(userName,socketAddress)));
+                    if (LogHandler.isExistent(LogHandler.getFilename(robotID,socketAddress))) {
+                        desktop.open(LogHandler.getLogFile(LogHandler.getFilename(robotID,socketAddress)));
                     }
                 } catch (IOException e1) {
                     MindroidServerConsoleFrame.getMindroidServerConsole().appendLine("Open Log failed: "+e1.getMessage());
@@ -177,30 +182,31 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         return btn_opLogButton;
     }
 
-    private JButton getRemoveUserButton(final String userName) {
+    private JButton getRemoveUserButton(final String robotID) {
         JButton btn_removeUser = new JButton("Remove User");
         btn_removeUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            for (IUserAction userActionListener : userActionListeners) {
-                userActionListener.kickUser(userName);
-            }
+                logger.log(Level.INFO,"Remove User "+robotID);
+                UserManagement.getInstance().removeUserAndCloseConnection(robotID);
             }
         });
         return btn_removeUser;
     }
 
-    private JButton getConnectADBButton(final InetSocketAddress socketAddress){
+    private JButton getConnectADBButton(final String robotID,final InetSocketAddress socketAddress){
         JButton btn_connectADB = new JButton("Connect ADB");
         btn_connectADB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (IUserAction userActionListener : userActionListeners) {
-                    try {
-                        ADBService.connectADB(socketAddress);
-                    } catch (IOException | JadbException | ConnectionToRemoteDeviceException e1) {
-                        MindroidServerConsoleFrame.getMindroidServerConsole().appendLine(e1.getMessage());
-                    }
+                logger.log(Level.INFO,"Remove User "+robotID);
+                try {
+                    ADBService.connectADB(socketAddress);
+                } catch (IOException | JadbException | ConnectionToRemoteDeviceException e1) {
+                    logger.log(Level.ERROR,e1.getMessage());
+                }finally {
+                    updateDevices();
+                    //TODO may just update the JLabel of ADBConnection state
                 }
             }
         });
@@ -208,59 +214,53 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     }
 
     public void updateDevices() {
-        try {
-            String[] devices = getDevices();
-            clearContentPane();
+        String[] devices = getDevices();
+        clearContentPane();
 
-            createUIHeadline(columnNames);
-            int posY = 0;
-            
-            Destination[] destinations = IPService.getIPMapping().keySet().toArray(new Destination[IPService.getIPMapping().keySet().size()]);
-            for (int i = 0; i < destinations.length; i++) {
-                posY = 40+i*30;
-                String ip = getIP(destinations[i]);
+        createUIHeadline(columnNames);
+        int posY = 0;
 
-                JTextField field_userName = getTextField(destinations[i].getValue());
-                contentPane.add(field_userName);
-                field_userName.setBounds(posX[0],posY,80,30);
+        Destination[] destinations = UserManagement.getInstance().getIPMapping().keySet().toArray(new Destination[UserManagement.getInstance().getIPMapping().keySet().size()]);
+        for (int i = 0; i < destinations.length; i++) {
+            posY = 40+i*30;
+            String ip = getIP(destinations[i]);
 
-                JTextField field_deviceIp = getTextField(ip);
-                contentPane.add(field_deviceIp);
-                field_deviceIp.setBounds(posX[1],posY,120,30);
+            JTextField field_userName = getTextField(destinations[i].getValue());
+            contentPane.add(field_userName);
+            field_userName.setBounds(posX[0],posY,80,30);
 
-                String isConnected = getConnectionState(ip,devices);
+            JTextField field_deviceIp = getTextField(ip);
+            contentPane.add(field_deviceIp);
+            field_deviceIp.setBounds(posX[1],posY,120,30);
 
-                JTextField field_adbState = getTextField(isConnected);
-                contentPane.add(field_adbState);
-                field_adbState.setBounds(posX[2],posY,120,30);
+            String isConnected = getConnectionState(ip,devices);
 
-                JButton btn_fetchLog = getFetchLogButton(destinations[i].getValue(),IPService.findAddress(destinations[i]));
-                contentPane.add(btn_fetchLog);
-                btn_fetchLog.setBounds(posX[3],posY,100,20);
+            JTextField field_adbState = getTextField(isConnected);
+            contentPane.add(field_adbState);
+            field_adbState.setBounds(posX[2],posY,120,30);
 
-                JButton btn_opLog = getLogButton(destinations[i].getValue(),IPService.findAddress(destinations[i]));
-                contentPane.add(btn_opLog);
-                btn_opLog.setBounds(posX[4],posY,100,20);
+            JButton btn_fetchLog = getFetchLogButton(destinations[i].getValue(),UserManagement.getInstance().getAddress(destinations[i]));
+            contentPane.add(btn_fetchLog);
+            btn_fetchLog.setBounds(posX[3],posY,100,20);
 
-                JButton btn_removeUser = getRemoveUserButton(destinations[i].getValue());
-                contentPane.add(btn_removeUser);
-                btn_removeUser.setBounds(posX[5],posY,120,20);
+            JButton btn_opLog = getLogButton(destinations[i].getValue(),UserManagement.getInstance().getAddress(destinations[i]));
+            contentPane.add(btn_opLog);
+            btn_opLog.setBounds(posX[4],posY,100,20);
 
-                JButton btn_connectADB = getConnectADBButton(IPService.findAddress(destinations[i]));
-                contentPane.add(btn_connectADB);
-                btn_connectADB.setBounds(posX[6],posY,150,20);
-            }
+            JButton btn_removeUser = getRemoveUserButton(destinations[i].getValue());
+            contentPane.add(btn_removeUser);
+            btn_removeUser.setBounds(posX[5],posY,120,20);
 
-            contentPane.repaint();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JadbException e) {
-            e.printStackTrace();
+            JButton btn_connectADB = getConnectADBButton(destinations[i].getValue(),UserManagement.getInstance().getAddress(destinations[i]));
+            contentPane.add(btn_connectADB);
+            btn_connectADB.setBounds(posX[6],posY,150,20);
         }
+
+        contentPane.repaint();
     }
 
     private String getIP(Destination destination) {
-        return IPService.getIPMapping().get(destination).getAddress().toString().replace("/","");
+        return UserManagement.getInstance().getIPMapping().get(destination).getAddress().toString().replace("/","");
     }
 
     private String getConnectionState(String ip, String[] devices){
@@ -278,10 +278,10 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     }
 
 
-    public String[] getDevices() throws IOException, JadbException {
+    public String[] getDevices() {
         String[] devices_arr;
         List<JadbDevice> devices = ADBService.getDevices();
-        if (!devices.isEmpty()) {
+        if (devices != null && !devices.isEmpty()) {
             devices_arr = new String[devices.size()];
             for (int i = 0; i < devices.size(); i++) {
                 devices_arr[i] = devices.get(i).getSerial();
@@ -294,20 +294,13 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
     @Override
     public void handleFetchLog(int rowIndex) {
-        System.out.println("Handle Fetch LOG of "+rowIndex);
+        logger.log(Level.INFO,"Handle Fetch LOG of "+rowIndex);
     }
 
     @Override
     public void handleShowLog(int rowIndex) {
-        System.out.println("Handle Show LOG of "+rowIndex);
+        logger.log(Level.INFO,"Handle Show LOG of "+rowIndex);
     }
 
-    public void addUserListener(IUserAction userActionListener) {
-        this.userActionListeners.add(userActionListener);
-    }
-
-    public void removeUserListener(IUserAction userActionListener){
-        this.userActionListeners.remove(userActionListener);
-    }
 }
 

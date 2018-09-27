@@ -60,10 +60,10 @@ public class MindroidServerWorker implements Runnable {
                         sb = new StringBuilder();
                     }
                     if (line.contains("<close>")) {
-                        closeConnection();
+                        UserManagement.getInstance().removeUserAndCloseConnection(connectedRobot);
                     }
                 }else {
-                    closeConnection();
+                    UserManagement.getInstance().removeUserAndCloseConnection(connectedRobot);
                 }
             }
         } catch (IOException e) {
@@ -78,6 +78,8 @@ public class MindroidServerWorker implements Runnable {
 
     /**
      * Disconnects the socket.
+     *
+     * !! NOTE: ONLY CLOSE CONNECTION USING METHODS FROM UserManagement
      */
     public void closeConnection() {
         //Connection closed
@@ -128,10 +130,10 @@ public class MindroidServerWorker implements Runnable {
             if (socketAddress instanceof InetSocketAddress) {
                 //the port was sent as content of the registration message
                 int port = Integer.parseInt(deserializedMsg.getContent());
+                //Store owner 'robotID' of this Worker
+                connectedRobot = deserializedMsg.getSource().getValue();
 
-                //TODO REFACTOR TO USER MANAGEMENT
                 boolean isAccepted = UserManagement.getInstance().registerRobot(deserializedMsg.getSource(),this, socket, port);
-                connectedRobot = deserializedMsg.getSource().getValue(); //Save registered robotID
 
                 if(!isAccepted){
                     //Registration got rejected by the server

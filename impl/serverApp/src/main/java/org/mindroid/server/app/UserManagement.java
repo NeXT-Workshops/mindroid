@@ -48,6 +48,16 @@ public class UserManagement {
         }
     }
 
+    public void removeUserAndCloseConnection(String robotID){
+        //Close connections
+        getWorkerMapping().get(robotID).closeConnection();
+
+        //remove registration
+        removeRegistration(robotID);
+
+        //Update ConnectedDevicesFrame
+        ConnectedDevicesFrame.getInstance().updateDevices();
+    }
 
     private void removeRegistration(String robotID) {
         logger.log(Level.INFO,"Remove registration: "+robotID);
@@ -57,17 +67,6 @@ public class UserManagement {
         getSocketMapping().remove(dest);
         getWorkerMapping().remove(dest);
 
-        ConnectedDevicesFrame.getInstance().updateDevices();
-    }
-
-    public void removeUserAndCloseConnection(String robotID){
-        //Close connections
-        getWorkerMapping().get(robotID).closeConnection();
-
-        //remove registration
-        removeRegistration(robotID);
-
-        //Update ConnectedDevicesFrame
         ConnectedDevicesFrame.getInstance().updateDevices();
     }
 

@@ -202,6 +202,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
                     logger.log(Level.ERROR,e1.getMessage());
                 }finally {
                     updateDevices();
+                    //TODO may just update the JLabel of ADBConnection state
                 }
             }
         });

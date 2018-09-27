@@ -29,6 +29,8 @@ public class MindroidServerWorker implements Runnable {
     private MessageMarshaller messageMarshaller;
     static MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
     private SessionHandler sessionHandler;
+    private UserManagement um = UserManagement.getInstance();
+
 
 
     //Robot Connected to this socket - will be set when robot registers himself
@@ -65,10 +67,10 @@ public class MindroidServerWorker implements Runnable {
                         sb = new StringBuilder();
                     }
                     if (line.contains("<close>")) {
-                        UserManagement.getInstance().removeUserAndCloseConnection(connectedRobot);
+                        um.removeUserAndCloseConnection(connectedRobot);
                     }
                 }else {
-                    UserManagement.getInstance().removeUserAndCloseConnection(connectedRobot);
+                    um.removeUserAndCloseConnection(connectedRobot);
                 }
             }
         } catch (IOException e) {
@@ -141,7 +143,7 @@ public class MindroidServerWorker implements Runnable {
             // Unicast Message
             if (deserializedMsg.isUnicastMessage()) {
                 mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "LOG", deserializedMsg.getContent(), String.valueOf(deserializedMsg.getSessionRobotCount()));
-                Socket socket = UserManagement.getInstance().getSocket(deserializedMsg.getDestination());
+                Socket socket = um.getSocket(deserializedMsg.getDestination());
                 sendMessage(deserializedMsg, socket);
             }
 
@@ -154,7 +156,7 @@ public class MindroidServerWorker implements Runnable {
     }
     public void broadcastMessage(MindroidMessage msg) throws IOException {
         /*
-        Map<RobotId, Socket> socketMapping = UserManagement.getInstance().getSocketMapping();
+        Map<RobotId, Socket> socketMapping = um.getSocketMapping();
         mindroidServerFrame.addContentLine(msg.getSource().getValue(), msg.getDestination().getValue(), "LOG", msg.getContent(), String.valueOf(msg.getSessionRobotCount()));
         for(Map.Entry<RobotId, Socket> entry : socketMapping.entrySet()) {
             if(!msg.getSource().getValue().equals(entry.getKey().getValue())) {
@@ -166,7 +168,6 @@ public class MindroidServerWorker implements Runnable {
         }
         */
 
-        UserManagement um = UserManagement.getInstance();
         RobotId[] robots = um.getRobotIdsArray();
         for( RobotId robot : robots){
             if( !msg.getSource().equals(robot)){
@@ -182,7 +183,7 @@ public class MindroidServerWorker implements Runnable {
         if (socketAddress instanceof InetSocketAddress) {
             //the port was sent as content of the registration message
             int port = Integer.parseInt(deserializedMsg.getContent());
-            boolean isAccepted = UserManagement.getInstance().registerRobot(deserializedMsg.getSource(),this, socket, port);
+            boolean isAccepted = um.registerRobot(deserializedMsg.getSource(),this, socket, port);
 
             if(!isAccepted){
                 //Registration got rejected by the server

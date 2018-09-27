@@ -17,7 +17,7 @@ public class UserManagement {
     private Map<RobotId, InetSocketAddress> ipMapping = new ConcurrentHashMap<>();
     private Map<RobotId, Socket> socketMapping = new ConcurrentHashMap<>();
     private Map<RobotId, MindroidServerWorker> workerMapping = new ConcurrentHashMap<>();
-    
+
     private static UserManagement ourInstance = new UserManagement();
 
     public static UserManagement getInstance(){
@@ -47,31 +47,23 @@ public class UserManagement {
     }
 
     public void removeAllUsers(){
-        for (RobotId destination : ipMapping.keySet()) {
-            removeUserAndCloseConnection(destination);
+        for (RobotId robot : ipMapping.keySet()) {
+            removeUserAndCloseConnection(robot);
         }
     }
 
     public void removeUserAndCloseConnection(RobotId robot){
         logger.log(Level.INFO,"Remove User ["+ robot.getValue() +"] and close Connection");
 
-        //Close connections
+        // Close connections
         workerMapping.get(robot).closeConnection();
 
-        //remove registration
-        removeRegistration(robot);
-
-        //Update ConnectedDevicesFrame
-        ConnectedDevicesFrame.getInstance().updateDevices();
-    }
-
-    private void removeRegistration(RobotId robot) {
-        logger.log(Level.INFO,"Remove registration of [" + robot.getValue() + "]");
-        
+        // remove registration
         ipMapping.remove(robot);
         socketMapping.remove(robot);
         workerMapping.remove(robot);
 
+        // Update ConnectedDevicesFrame
         ConnectedDevicesFrame.getInstance().updateDevices();
     }
 
@@ -84,7 +76,7 @@ public class UserManagement {
     }
 
     public RobotId[] getRobotIdsArray(){
-        return ipMapping.keySet().toArray(new RobotId[UserManagement.getInstance().ipMapping.keySet().size()]);
+        return ipMapping.keySet().toArray(new RobotId[ipMapping.keySet().size()]);
     }
 
     private static final String regexIP = "((((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)[.]){3})(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?){1}){1}";

@@ -73,7 +73,7 @@ public class MindroidServerApplicationMain {
         int iteration = 0;
         while (true) {
             ++iteration;
-            logger.info("[C# " + iteration + "] Waiting...");
+            logger.info("[C# " + iteration + "] Waiting for Connection...");
             MindroidServerWorker w;
             try {
                 w = new MindroidServerWorker(server.accept(), mindroidServerFrame);

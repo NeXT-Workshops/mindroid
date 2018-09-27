@@ -35,6 +35,8 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     private final int[] posX = {10,100,240,380,500,620,770};
     private final String[] columnNames = {"User","Devices", "ADB State", "Fetch Log", "Log", "Remove User", "Connect ADB"};
 
+    private UserManagement um = UserManagement.getInstance();
+
     private Logger logger;
 
     private ConnectedDevicesFrame() {
@@ -188,8 +190,8 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         btn_removeUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                logger.log(Level.INFO,"Remove User "+robotID);
-                UserManagement.getInstance().removeUserAndCloseConnection(robotID);
+                logger.log(Level.INFO,"Remove User "+ robotID + " by Button");
+                um.removeUserAndCloseConnection(robotID);
             }
         });
         return btn_removeUser;
@@ -221,10 +223,10 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         createUIHeadline(columnNames);
         int posY = 0;
 
-        RobotId[] robots = UserManagement.getInstance().getRobotIdsArray();
+        RobotId[] robots = um.getRobotIdsArray();
         for (int i = 0; i < robots.length; i++) {
             posY = 40+i*30;
-            String ip = getIP(robots[i]);
+            String ip = um.getAddress(robots[i]).getHostString();
 
             JTextField field_userName = getTextField(robots[i].getValue());
             contentPane.add(field_userName);
@@ -240,11 +242,11 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
             contentPane.add(field_adbState);
             field_adbState.setBounds(posX[2],posY,120,30);
 
-            JButton btn_fetchLog = getFetchLogButton(robots[i].getValue(),UserManagement.getInstance().getAddress(robots[i]));
+            JButton btn_fetchLog = getFetchLogButton(robots[i].getValue(),um.getAddress(robots[i]));
             contentPane.add(btn_fetchLog);
             btn_fetchLog.setBounds(posX[3],posY,100,20);
 
-            JButton btn_opLog = getLogButton(robots[i].getValue(),UserManagement.getInstance().getAddress(robots[i]));
+            JButton btn_opLog = getLogButton(robots[i].getValue(),um.getAddress(robots[i]));
             contentPane.add(btn_opLog);
             btn_opLog.setBounds(posX[4],posY,100,20);
 
@@ -252,16 +254,12 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
             contentPane.add(btn_removeUser);
             btn_removeUser.setBounds(posX[5],posY,120,20);
 
-            JButton btn_connectADB = getConnectADBButton(robots[i].getValue(),UserManagement.getInstance().getAddress(robots[i]));
+            JButton btn_connectADB = getConnectADBButton(robots[i].getValue(),um.getAddress(robots[i]));
             contentPane.add(btn_connectADB);
             btn_connectADB.setBounds(posX[6],posY,150,20);
         }
 
         contentPane.repaint();
-    }
-
-    private String getIP(RobotId robot) {
-        return UserManagement.getInstance().getAddress(robot).toString().replace("/","");
     }
 
     private String getConnectionState(String ip, String[] devices){

@@ -119,7 +119,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
     @Override
     public void stop() {
         LOGGER.log(Level.INFO,"Stopping the currently running implementation");
-
+        quitSession();
         //Only set interrupted field, when exection has not finished
         if (!isExecutionFinished()) {
             setInterrupted(true);

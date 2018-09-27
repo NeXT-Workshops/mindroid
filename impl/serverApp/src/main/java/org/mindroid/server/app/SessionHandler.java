@@ -142,8 +142,8 @@ public class SessionHandler {
         switch (currentState){
             case IDLE: text =  "IDLE"; break;
             case PENDING: text =  "PENDING " + sessionRobots.size() + "/" + maxSessionSize; break;
-            case RUNNING_COUPLED: text =  "RUNNING COUPLED, " + sessionRobots.size() + "/" + maxSessionSize + "connected"; break;
-            case RUNNING_UNCOUPLED: text =  "RUNNING UNCOUPLED" + sessionRobots.size() + "connected"; break;
+            case RUNNING_COUPLED: text =  "RUNNING COUPLED, " + sessionRobots.size() + "/" + maxSessionSize + " robots connected"; break;
+            case RUNNING_UNCOUPLED: text =  "RUNNING UNCOUPLED, " + sessionRobots.size() + " robot connected"; break;
             default: text = "UNKNOWN STATE; PLEASE CALL SUPPORT"; break;
         }
         msf.displaySessionState(text);

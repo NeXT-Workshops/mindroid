@@ -1,11 +1,14 @@
 package org.mindroid.server.app;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidLogMessage;
 import org.mindroid.server.app.log.LogFetcher;
 import org.mindroid.server.app.log.LogHandler;
 import org.mindroid.server.app.util.ADBService;
-import org.mindroid.server.app.util.IPService;
+import org.mindroid.server.app.util.UserManagement;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
 import se.vidstige.jadb.JadbDevice;
 import se.vidstige.jadb.JadbException;
@@ -34,8 +37,11 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     private final int[] posX = {10,100,240,380,500,620,770};
     private final String[] columnNames = {"User","Devices", "ADB State", "Fetch Log", "Log", "Remove User", "Connect ADB"};
 
+    private Logger logger;
 
     private ConnectedDevicesFrame() {
+        logger = LogManager.getLogger(ConnectedDevicesFrame.class);
+
         setTitle(TITLE);
         setSize(new Dimension(800,400));
 
@@ -215,7 +221,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
             createUIHeadline(columnNames);
             int posY = 0;
             
-            Destination[] destinations = IPService.getIPMapping().keySet().toArray(new Destination[IPService.getIPMapping().keySet().size()]);
+            Destination[] destinations = UserManagement.getInstance().getIPMapping().keySet().toArray(new Destination[UserManagement.getInstance().getIPMapping().keySet().size()]);
             for (int i = 0; i < destinations.length; i++) {
                 posY = 40+i*30;
                 String ip = getIP(destinations[i]);
@@ -234,11 +240,11 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
                 contentPane.add(field_adbState);
                 field_adbState.setBounds(posX[2],posY,120,30);
 
-                JButton btn_fetchLog = getFetchLogButton(destinations[i].getValue(),IPService.findAddress(destinations[i]));
+                JButton btn_fetchLog = getFetchLogButton(destinations[i].getValue(),UserManagement.getInstance().getAddress(destinations[i]));
                 contentPane.add(btn_fetchLog);
                 btn_fetchLog.setBounds(posX[3],posY,100,20);
 
-                JButton btn_opLog = getLogButton(destinations[i].getValue(),IPService.findAddress(destinations[i]));
+                JButton btn_opLog = getLogButton(destinations[i].getValue(),UserManagement.getInstance().getAddress(destinations[i]));
                 contentPane.add(btn_opLog);
                 btn_opLog.setBounds(posX[4],posY,100,20);
 
@@ -246,7 +252,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
                 contentPane.add(btn_removeUser);
                 btn_removeUser.setBounds(posX[5],posY,120,20);
 
-                JButton btn_connectADB = getConnectADBButton(IPService.findAddress(destinations[i]));
+                JButton btn_connectADB = getConnectADBButton(UserManagement.getInstance().getAddress(destinations[i]));
                 contentPane.add(btn_connectADB);
                 btn_connectADB.setBounds(posX[6],posY,150,20);
             }
@@ -260,7 +266,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     }
 
     private String getIP(Destination destination) {
-        return IPService.getIPMapping().get(destination).getAddress().toString().replace("/","");
+        return UserManagement.getInstance().getIPMapping().get(destination).getAddress().toString().replace("/","");
     }
 
     private String getConnectionState(String ip, String[] devices){
@@ -294,12 +300,12 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
     @Override
     public void handleFetchLog(int rowIndex) {
-        System.out.println("Handle Fetch LOG of "+rowIndex);
+        logger.log(Level.INFO,"Handle Fetch LOG of "+rowIndex);
     }
 
     @Override
     public void handleShowLog(int rowIndex) {
-        System.out.println("Handle Show LOG of "+rowIndex);
+        logger.log(Level.INFO,"Handle Show LOG of "+rowIndex);
     }
 
     public void addUserListener(IUserAction userActionListener) {

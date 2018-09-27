@@ -1,10 +1,9 @@
 package org.mindroid.server.app;
 
 
-import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
-import org.mindroid.server.app.util.IPService;
+import org.mindroid.server.app.util.UserManagement;
 import org.mindroid.server.app.util.ManualADB;
 
 import javax.swing.*;
@@ -308,37 +307,15 @@ public class MindroidServerFrame extends JFrame {
         availableColors.remove(0);
     }
 
-    /**
-     * Registers the Robot to the server.
-     * Returns false if the robot got rejected. The robot gets rejected when its id is already used.
-     *
-     * @param robotId
-     * @param socket
-     * @param socketAddress
-     * @param port
-     * @return
-     * @throws IOException
-     */
-    public boolean register(RobotId robotId, Socket socket, InetSocketAddress socketAddress, int port) throws IOException {
-        Destination destKey = new Destination(robotId.getValue());
-        if(IPService.getIPMapping().containsKey(destKey) || IPService.getSocketMapping().containsKey(destKey)){
-            //Reject registration
-            return false;
-        }else {
-            IPService.getIPMapping().put(destKey, new InetSocketAddress(((InetSocketAddress) socketAddress).getAddress(), port));
-            IPService.getSocketMapping().put(destKey, socket);
-            ConnectedDevicesFrame.getInstance().updateDevices();
-            return true;
-        }
-    }
-
-
     public void removeRegistration(String robotName) {
+        UserManagement.getInstance().removeRegistration(robotName);
+        /*
         Destination dest = new Destination(robotName);
 
-        IPService.getIPMapping().remove(dest);
-        IPService.getSocketMapping().remove(dest);
+        UserManagement.getIPMapping().remove(dest);
+        UserManagement.getSocketMapping().remove(dest);
 
         ConnectedDevicesFrame.getInstance().updateDevices();
+        */
     }
 }

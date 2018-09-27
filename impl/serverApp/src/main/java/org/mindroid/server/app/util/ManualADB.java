@@ -26,7 +26,7 @@ public class ManualADB extends JFrame {
 
         IP = JOptionPane.showInputDialog(this, "Enter IP Address", IP);
 
-        if (IP != null && IPService.isValidIP(IP)) {
+        if (IP != null && UserManagement.isValidIP(IP)) {
             enteredIP = IP;
             connectADB(IP);
         }else if(IP == null){

@@ -2,7 +2,7 @@ package org.mindroid.server.app;
 
 import org.mindroid.common.messages.server.*;
 import org.mindroid.server.app.util.ADBService;
-import org.mindroid.server.app.util.IPService;
+import org.mindroid.server.app.util.UserManagement;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
 import se.vidstige.jadb.JadbException;
 
@@ -106,6 +106,7 @@ public class MindroidServerWorker implements Runnable, IUserAction {
     }
 
     private void removeRegistration(){
+        //TODO REFACTOR TO USER MANAGEMENT
         if(connectedRobot != null) {
             mindroidServerFrame.removeRegistration(connectedRobot);
         }
@@ -128,12 +129,14 @@ public class MindroidServerWorker implements Runnable, IUserAction {
 
         // Registration Message
         if (deserializedMsg.isRegistrationMessage()) {
-            console.appendLine("register");
+            console.appendLine("registerRobot");
             SocketAddress socketAddress = socket.getRemoteSocketAddress();
             if (socketAddress instanceof InetSocketAddress) {
                 //the port was sent as content of the registration message
                 int port = Integer.parseInt(deserializedMsg.getContent());
-                boolean isAccepted = mindroidServerFrame.register(deserializedMsg.getSource(), socket, (InetSocketAddress) socketAddress, port);
+
+                //TODO REFACTOR TO USER MANAGEMENT
+                boolean isAccepted = UserManagement.getInstance().registerRobot(deserializedMsg.getSource(),this, socket, port);
                 connectedRobot = deserializedMsg.getSource().getValue(); //Save registered robotID
 
                 if(!isAccepted){
@@ -163,7 +166,7 @@ public class MindroidServerWorker implements Runnable, IUserAction {
             // Unicast Message
             if (deserializedMsg.isUnicastMessage()) {
                 mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "LOG", deserializedMsg.getContent(), String.valueOf(deserializedMsg.getSessionRobotCount()));
-                Socket socket = IPService.findSocket(deserializedMsg.getDestination());
+                Socket socket = UserManagement.getInstance().getSocket(deserializedMsg.getDestination());
                 sendMessage(deserializedMsg, socket);
                 //mindroidServerFrame.addContentLine("SERVER",deserializedMsg.getDestination().getValue(),"DEBUG","MSG["+deserializedMsg.getContent()+"] sent to destination", "-");
             }
@@ -175,7 +178,7 @@ public class MindroidServerWorker implements Runnable, IUserAction {
 
     }
     public void broadcastMessage(MindroidMessage msg) throws IOException {
-        HashMap<Destination, Socket> socketMapping = IPService.getSocketMapping();
+        Map<Destination, Socket> socketMapping = UserManagement.getInstance().getSocketMapping();
         mindroidServerFrame.addContentLine(msg.getSource().getValue(), msg.getDestination().getValue(), "LOG", msg.getContent(), String.valueOf(msg.getSessionRobotCount()));
         for(Map.Entry<Destination, Socket> entry : socketMapping.entrySet()) {
             if(!msg.getSource().getValue().equals(entry.getKey().getValue())) {

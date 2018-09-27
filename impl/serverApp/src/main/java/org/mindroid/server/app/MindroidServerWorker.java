@@ -3,12 +3,16 @@ package org.mindroid.server.app;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mindroid.common.messages.server.*;
+import org.mindroid.common.messages.server.Destination;
+import org.mindroid.common.messages.server.MessageMarshaller;
+import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.server.app.util.ADBService;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
 import se.vidstige.jadb.JadbException;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;

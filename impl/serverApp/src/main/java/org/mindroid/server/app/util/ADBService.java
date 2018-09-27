@@ -1,5 +1,7 @@
 package org.mindroid.server.app.util;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.util.Throwables;
 import org.mindroid.server.app.MindroidServerConsoleFrame;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
@@ -66,9 +68,9 @@ public class ADBService {
         try {
             devices = jadb.getDevices();
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JadbException e) {
-            e.printStackTrace();
+            LogManager.getLogger(ADBService.class).log(Level.ERROR, "[refreshAdbDevices()] IOException:" + e.getMessage());
+        }catch(JadbException e1){
+            LogManager.getLogger(ADBService.class).log(Level.ERROR, "[refreshAdbDevices()] JadbException:" + e1.getMessage());
         }
     }
 

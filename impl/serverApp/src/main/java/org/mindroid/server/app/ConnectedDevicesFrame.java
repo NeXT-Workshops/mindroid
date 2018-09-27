@@ -40,7 +40,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         logger = LogManager.getLogger(ConnectedDevicesFrame.class);
 
         setTitle(TITLE);
-        setSize(new Dimension(800,400));
+        setSize(new Dimension(980,400));
 
         setIconImage(MindroidServerSettings.getTitleImage());
 
@@ -283,7 +283,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     public String[] getDevices() throws IOException, JadbException {
         String[] devices_arr;
         List<JadbDevice> devices = ADBService.getDevices();
-        if (!devices.isEmpty()) {
+        if (devices != null && !devices.isEmpty()) {
             devices_arr = new String[devices.size()];
             for (int i = 0; i < devices.size(); i++) {
                 devices_arr[i] = devices.get(i).getSerial();

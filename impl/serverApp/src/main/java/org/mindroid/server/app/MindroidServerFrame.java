@@ -226,8 +226,7 @@ public class MindroidServerFrame extends JFrame {
 
     private void restartServer() throws IOException {
         //Kick all users
-        //TODO Kick all users when restarting server, to notify them that the server cloesd
-        // or send close message to all users, same effect.
+        UserManagement.getInstance().removeAllUsers();
 
         //start new server using startServer.bat cd ..\..\admin\Scripts
         Runtime.getRuntime().exec("cmd /c start \"\" ServerStarten.bat",null,new File("..\\..\\admin\\Scripts"));

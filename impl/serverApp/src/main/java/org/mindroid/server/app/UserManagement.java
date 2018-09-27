@@ -71,6 +71,12 @@ public class UserManagement {
         ConnectedDevicesFrame.getInstance().updateDevices();
     }
 
+    public void removeAllUsers(){
+        for (Destination destination : getIPMapping().keySet()) {
+            removeUserAndCloseConnection(destination.getValue());
+        }
+    }
+
     public InetSocketAddress getAddress(Destination destination){
         return ipMapping.get(destination);
     }

@@ -1,6 +1,7 @@
 package org.mindroid.server.app.util;
 
 import org.mindroid.server.app.MindroidServerConsoleFrame;
+import org.mindroid.server.app.UserManagement;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
 import se.vidstige.jadb.JadbException;
 

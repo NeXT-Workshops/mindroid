@@ -2,8 +2,6 @@ package org.mindroid.server.app;
 
 
 import org.mindroid.common.messages.server.MindroidMessage;
-import org.mindroid.common.messages.server.RobotId;
-import org.mindroid.server.app.util.UserManagement;
 import org.mindroid.server.app.util.ManualADB;
 
 import javax.swing.*;
@@ -16,8 +14,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -305,17 +301,5 @@ public class MindroidServerFrame extends JFrame {
         }
         assignedColors.put(source,availableColors.get(0));
         availableColors.remove(0);
-    }
-
-    public void removeRegistration(String robotName) {
-        UserManagement.getInstance().removeRegistration(robotName);
-        /*
-        Destination dest = new Destination(robotName);
-
-        UserManagement.getIPMapping().remove(dest);
-        UserManagement.getSocketMapping().remove(dest);
-
-        ConnectedDevicesFrame.getInstance().updateDevices();
-        */
     }
 }

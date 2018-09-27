@@ -1,26 +1,24 @@
-package org.mindroid.server.app.util;
+package org.mindroid.server.app;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.RobotId;
-import org.mindroid.server.app.ConnectedDevicesFrame;
-import org.mindroid.server.app.MindroidServerWorker;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class UserManagement {
 
     private Logger logger;
 
-    private Map<Destination, InetSocketAddress> ipMapping = new HashMap<>();
-    private Map<Destination, Socket> socketMapping = new HashMap<>();
-    private Map<Destination, MindroidServerWorker> workerMapping = new HashMap<>();
+    private Map<Destination, InetSocketAddress> ipMapping = new ConcurrentHashMap<>();
+    private Map<Destination, Socket> socketMapping = new ConcurrentHashMap<>();
+    private Map<Destination, MindroidServerWorker> workerMapping = new ConcurrentHashMap<>();
 
     private static UserManagement ourInstance = new UserManagement();
 
@@ -51,16 +49,27 @@ public class UserManagement {
     }
 
 
-    public void removeRegistration(String robotName) {
-        logger.log(Level.INFO,"Remove registration: "+robotName);
-        Destination dest = new Destination(robotName);
+    private void removeRegistration(String robotID) {
+        logger.log(Level.INFO,"Remove registration: "+robotID);
+        Destination dest = new Destination(robotID);
 
         getIPMapping().remove(dest);
         getSocketMapping().remove(dest);
+        getWorkerMapping().remove(dest);
 
         ConnectedDevicesFrame.getInstance().updateDevices();
     }
 
+    public void removeUserAndCloseConnection(String robotID){
+        //Close connections
+        getWorkerMapping().get(robotID).closeConnection();
+
+        //remove registration
+        removeRegistration(robotID);
+
+        //Update ConnectedDevicesFrame
+        ConnectedDevicesFrame.getInstance().updateDevices();
+    }
 
     public InetSocketAddress getAddress(Destination destination){
         return ipMapping.get(destination);
@@ -91,5 +100,6 @@ public class UserManagement {
         }
         return ip.matches(regexIP);
     }
+
 
 }

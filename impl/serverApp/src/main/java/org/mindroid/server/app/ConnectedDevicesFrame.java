@@ -8,7 +8,6 @@ import org.mindroid.common.messages.server.MindroidLogMessage;
 import org.mindroid.server.app.log.LogFetcher;
 import org.mindroid.server.app.log.LogHandler;
 import org.mindroid.server.app.util.ADBService;
-import org.mindroid.server.app.util.UserManagement;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
 import se.vidstige.jadb.JadbDevice;
 import se.vidstige.jadb.JadbException;
@@ -20,12 +19,10 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
     private static final ConnectedDevicesFrame console = new ConnectedDevicesFrame();
-    private List<IUserAction> userActionListeners = new CopyOnWriteArrayList<>();
 
     public static ConnectedDevicesFrame getInstance() {
         return console;
@@ -183,14 +180,12 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         return btn_opLogButton;
     }
 
-    private JButton getRemoveUserButton(final String userName) {
+    private JButton getRemoveUserButton(final String robotID) {
         JButton btn_removeUser = new JButton("Remove User");
         btn_removeUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            for (IUserAction userActionListener : userActionListeners) {
-                userActionListener.kickUser(userName);
-            }
+                UserManagement.getInstance().removeUserAndCloseConnection(robotID);
             }
         });
         return btn_removeUser;
@@ -201,12 +196,12 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         btn_connectADB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (IUserAction userActionListener : userActionListeners) {
-                    try {
-                        ADBService.connectADB(socketAddress);
-                    } catch (IOException | JadbException | ConnectionToRemoteDeviceException e1) {
-                        MindroidServerConsoleFrame.getMindroidServerConsole().appendLine(e1.getMessage());
-                    }
+                try {
+                    ADBService.connectADB(socketAddress);
+                } catch (IOException | JadbException | ConnectionToRemoteDeviceException e1) {
+                    logger.log(Level.ERROR,e1.getMessage());
+                }finally {
+                    updateDevices();
                 }
             }
         });
@@ -308,12 +303,5 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         logger.log(Level.INFO,"Handle Show LOG of "+rowIndex);
     }
 
-    public void addUserListener(IUserAction userActionListener) {
-        this.userActionListeners.add(userActionListener);
-    }
-
-    public void removeUserListener(IUserAction userActionListener){
-        this.userActionListeners.remove(userActionListener);
-    }
 }
 

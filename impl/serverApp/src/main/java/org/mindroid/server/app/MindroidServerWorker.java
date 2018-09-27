@@ -1,8 +1,10 @@
 package org.mindroid.server.app;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mindroid.common.messages.server.*;
 import org.mindroid.server.app.util.ADBService;
-import org.mindroid.server.app.util.UserManagement;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
 import se.vidstige.jadb.JadbException;
 
@@ -10,14 +12,13 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 /**
  * @author Roland Kluge - Initial implementation
  */
-public class MindroidServerWorker implements Runnable, IUserAction {
+public class MindroidServerWorker implements Runnable {
     private Socket socket;
     private MindroidServerFrame mindroidServerFrame;
     private MessageMarshaller messageMarshaller;
@@ -29,7 +30,10 @@ public class MindroidServerWorker implements Runnable, IUserAction {
     private String connectedRobot = null;
     private boolean connected = false;
 
+    private Logger logger;
+
     public MindroidServerWorker(final Socket socket, MindroidServerFrame mindroidServerFrame) {
+        logger = LogManager.getLogger(MindroidServerWorker.class);
         this.socket = socket;
         this.mindroidServerFrame = mindroidServerFrame;
         this.messageMarshaller = new MessageMarshaller();
@@ -67,28 +71,24 @@ public class MindroidServerWorker implements Runnable, IUserAction {
             console.setVisible(true);
             console.appendLine("Error while receiving or forwarding a message.");
             console.appendLine("IOException: "+e.getMessage()+"\n");
-        } catch (ConnectionToRemoteDeviceException e) {
-            e.printStackTrace();
-        } catch (JadbException e) {
+        } catch (ConnectionToRemoteDeviceException | JadbException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Disconnects the socket. Removes the Registration.
+     * Disconnects the socket.
      */
-    private void closeConnection() {
+    public void closeConnection() {
         //Connection closed
         connected = false; //Stop listening
+
         //Close Socekt
         disconnect();
-        removeRegistration();
-
-        //Remove worker from listener
-        ConnectedDevicesFrame.getInstance().removeUserListener(this);
     }
 
     private void disconnect() {
+        logger.log(Level.INFO,"Disconnecting robot: "+connectedRobot);
         try {
             //Close Socket
             socket.close();
@@ -105,14 +105,8 @@ public class MindroidServerWorker implements Runnable, IUserAction {
         }
     }
 
-    private void removeRegistration(){
-        //TODO REFACTOR TO USER MANAGEMENT
-        if(connectedRobot != null) {
-            mindroidServerFrame.removeRegistration(connectedRobot);
-        }
-    }
-
     private void handleMessage(MindroidMessage deserializedMsg) throws IOException, ConnectionToRemoteDeviceException, JadbException {
+        logger.log(Level.INFO,"[Connection "+connectedRobot+"] Handling message: "+deserializedMsg.toString());
         console.appendLine("INCOMIIIIIIIING");
         console.appendLine(deserializedMsg.toString());
         // Append to Server Log
@@ -211,14 +205,6 @@ public class MindroidServerWorker implements Runnable, IUserAction {
 
     private String getStrRobotID(){
         return connectedRobot.concat(" [").concat(socket.getInetAddress().getHostAddress()).concat("]");
-    }
-
-
-    @Override
-    public void kickUser(String username) {
-        if(this.connectedRobot.equals(username)){
-            closeConnection();
-        }
     }
 
     public MindroidServerFrame getMindroidServerFrame() {

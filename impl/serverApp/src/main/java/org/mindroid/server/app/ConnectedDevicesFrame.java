@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidLogMessage;
+import org.mindroid.common.messages.server.RobotId;
 import org.mindroid.server.app.log.LogFetcher;
 import org.mindroid.server.app.log.LogHandler;
 import org.mindroid.server.app.util.ADBService;
@@ -182,7 +183,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         return btn_opLogButton;
     }
 
-    private JButton getRemoveUserButton(final String robotID) {
+    private JButton getRemoveUserButton(final RobotId robotID) {
         JButton btn_removeUser = new JButton("Remove User");
         btn_removeUser.addActionListener(new ActionListener() {
             @Override
@@ -220,12 +221,12 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         createUIHeadline(columnNames);
         int posY = 0;
 
-        Destination[] destinations = UserManagement.getInstance().getIPMapping().keySet().toArray(new Destination[UserManagement.getInstance().getIPMapping().keySet().size()]);
-        for (int i = 0; i < destinations.length; i++) {
+        RobotId[] robots = UserManagement.getInstance().getRobotIdsArray();
+        for (int i = 0; i < robots.length; i++) {
             posY = 40+i*30;
-            String ip = getIP(destinations[i]);
+            String ip = getIP(robots[i]);
 
-            JTextField field_userName = getTextField(destinations[i].getValue());
+            JTextField field_userName = getTextField(robots[i].getValue());
             contentPane.add(field_userName);
             field_userName.setBounds(posX[0],posY,80,30);
 
@@ -239,19 +240,19 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
             contentPane.add(field_adbState);
             field_adbState.setBounds(posX[2],posY,120,30);
 
-            JButton btn_fetchLog = getFetchLogButton(destinations[i].getValue(),UserManagement.getInstance().getAddress(destinations[i]));
+            JButton btn_fetchLog = getFetchLogButton(robots[i].getValue(),UserManagement.getInstance().getAddress(robots[i]));
             contentPane.add(btn_fetchLog);
             btn_fetchLog.setBounds(posX[3],posY,100,20);
 
-            JButton btn_opLog = getLogButton(destinations[i].getValue(),UserManagement.getInstance().getAddress(destinations[i]));
+            JButton btn_opLog = getLogButton(robots[i].getValue(),UserManagement.getInstance().getAddress(robots[i]));
             contentPane.add(btn_opLog);
             btn_opLog.setBounds(posX[4],posY,100,20);
 
-            JButton btn_removeUser = getRemoveUserButton(destinations[i].getValue());
+            JButton btn_removeUser = getRemoveUserButton(robots[i]);
             contentPane.add(btn_removeUser);
             btn_removeUser.setBounds(posX[5],posY,120,20);
 
-            JButton btn_connectADB = getConnectADBButton(destinations[i].getValue(),UserManagement.getInstance().getAddress(destinations[i]));
+            JButton btn_connectADB = getConnectADBButton(robots[i].getValue(),UserManagement.getInstance().getAddress(robots[i]));
             contentPane.add(btn_connectADB);
             btn_connectADB.setBounds(posX[6],posY,150,20);
         }
@@ -259,8 +260,8 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         contentPane.repaint();
     }
 
-    private String getIP(Destination destination) {
-        return UserManagement.getInstance().getIPMapping().get(destination).getAddress().toString().replace("/","");
+    private String getIP(RobotId robot) {
+        return UserManagement.getInstance().getAddress(robot).toString().replace("/","");
     }
 
     private String getConnectionState(String ip, String[] devices){

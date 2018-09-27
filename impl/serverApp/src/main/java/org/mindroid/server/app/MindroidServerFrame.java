@@ -29,7 +29,7 @@ import java.util.HashMap;
  * @author Roland Kluge - Initial implementation
  */
 public class MindroidServerFrame extends JFrame {
-
+    private final String SPACES = "                 ";
     private final JTable table;
     private final JLabel ownIPLabel;
     private final JLabel sessionStateLabel;
@@ -211,6 +211,7 @@ public class MindroidServerFrame extends JFrame {
         JPanel southPanel = new JPanel(new BorderLayout());
         ownIPLabel = new JLabel();
         sessionStateLabel = new JLabel();
+        sessionStateLabel.setText(SPACES + "State: NONE");
         //ownIPLabel.setEditable(false);
         southPanel.add(ownIPLabel,BorderLayout.WEST);
         southPanel.add(sessionStateLabel, BorderLayout.CENTER);
@@ -285,7 +286,7 @@ public class MindroidServerFrame extends JFrame {
 
     public void displaySessionState(String text){
         sessionStateLabel.setForeground(Color.BLACK);
-        sessionStateLabel.setText("\t" + text);
+        sessionStateLabel.setText(SPACES + "State: " + text);
     }
 
     public void disableRefresh(boolean disable) {
@@ -294,7 +295,6 @@ public class MindroidServerFrame extends JFrame {
 
     public void findColor(String source) {
         if (availableColors.size()==0) {
-
             availableColors.add(Color.ORANGE);
             availableColors.add(Color.GREEN);
             availableColors.add(Color.YELLOW);

@@ -39,14 +39,12 @@ public class LogFetcher {
                         is.close();
                     }
                 }
-
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
             }
-
             return deserializedMsg;
         } catch (IOException e1) {
             e1.printStackTrace();

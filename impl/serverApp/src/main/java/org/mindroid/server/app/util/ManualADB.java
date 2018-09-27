@@ -1,6 +1,7 @@
 package org.mindroid.server.app.util;
 
 import org.mindroid.server.app.MindroidServerConsoleFrame;
+import org.mindroid.server.app.UserManagement;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
 import se.vidstige.jadb.JadbException;
 
@@ -26,7 +27,7 @@ public class ManualADB extends JFrame {
 
         IP = JOptionPane.showInputDialog(this, "Enter IP Address", IP);
 
-        if (IP != null && IPService.isValidIP(IP)) {
+        if (IP != null && UserManagement.isValidIP(IP)) {
             enteredIP = IP;
             connectADB(IP);
         }else if(IP == null){

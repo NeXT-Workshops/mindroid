@@ -5,7 +5,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.io.IOException;
-import java.net.*;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.ServerSocket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -70,11 +73,10 @@ public class MindroidServerApplicationMain {
         int iteration = 0;
         while (true) {
             ++iteration;
-            logger.info("[C# " + iteration + "] Waiting...");
+            logger.info("[C# " + iteration + "] Waiting for Connection...");
             MindroidServerWorker w;
             try {
                 w = new MindroidServerWorker(server.accept(), mindroidServerFrame);
-                ConnectedDevicesFrame.getInstance().addUserListener(w);
                 Thread t = new Thread(w);
                 t.setUncaughtExceptionHandler(exceptionHandler);
                 t.start();

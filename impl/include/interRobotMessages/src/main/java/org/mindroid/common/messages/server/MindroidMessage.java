@@ -58,9 +58,11 @@ public class MindroidMessage {
         return messageType.equals(MessageType.REGISTRATION);
     }
     public boolean isUnicastMessage(){
-        return messageType.equals(MessageType.MESSAGE) && !isBroadcastMessage();
+        return messageType.equals(MessageType.MESSAGE);
     }
-    public boolean isSessionMessage() { return messageType.equals(MessageType.SESSION);}
+    public boolean isSessionMessage() {
+        return messageType.equals(MessageType.SESSION);
+    }
 
     @Override
     public String toString() {

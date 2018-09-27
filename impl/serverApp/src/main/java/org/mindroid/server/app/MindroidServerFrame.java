@@ -1,10 +1,7 @@
 package org.mindroid.server.app;
 
 
-import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidMessage;
-import org.mindroid.common.messages.server.RobotId;
-import org.mindroid.server.app.util.IPService;
 import org.mindroid.server.app.util.ManualADB;
 
 import javax.swing.*;
@@ -17,8 +14,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -232,8 +227,7 @@ public class MindroidServerFrame extends JFrame {
 
     private void restartServer() throws IOException {
         //Kick all users
-        //TODO Kick all users when restarting server, to notify them that the server cloesd
-        // or send close message to all users, same effect.
+        UserManagement.getInstance().removeAllUsers();
 
         //start new server using startServer.bat cd ..\..\admin\Scripts
         Runtime.getRuntime().exec("cmd /c start \"\" ServerStarten.bat",null,new File("..\\..\\admin\\Scripts"));
@@ -306,39 +300,5 @@ public class MindroidServerFrame extends JFrame {
         }
         assignedColors.put(source,availableColors.get(0));
         availableColors.remove(0);
-    }
-
-    /**
-     * Registers the Robot to the server.
-     * Returns false if the robot got rejected. The robot gets rejected when its id is already used.
-     *
-     * @param robotId
-     * @param socket
-     * @param socketAddress
-     * @param port
-     * @return
-     * @throws IOException
-     */
-    public boolean register(RobotId robotId, Socket socket, InetSocketAddress socketAddress, int port) throws IOException {
-        Destination destKey = new Destination(robotId.getValue());
-        if(IPService.getIPMapping().containsKey(destKey) || IPService.getSocketMapping().containsKey(destKey)){
-            //Reject registration
-            return false;
-        }else {
-            IPService.getIPMapping().put(destKey, new InetSocketAddress(((InetSocketAddress) socketAddress).getAddress(), port));
-            IPService.getSocketMapping().put(destKey, socket);
-            ConnectedDevicesFrame.getInstance().updateDevices();
-            return true;
-        }
-    }
-
-
-    public void removeRegistration(String robotName) {
-        Destination dest = new Destination(robotName);
-
-        IPService.getIPMapping().remove(dest);
-        IPService.getSocketMapping().remove(dest);
-
-        ConnectedDevicesFrame.getInstance().updateDevices();
     }
 }

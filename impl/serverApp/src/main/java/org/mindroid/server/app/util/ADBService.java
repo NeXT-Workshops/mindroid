@@ -68,9 +68,9 @@ public class ADBService {
         try {
             devices = jadb.getDevices();
         } catch (IOException e) {
-            LogManager.getLogger(ADBService.class).log(Level.ERROR, "[refreshAdbDevices()] IOException:" + e.getMessage());
+            LogManager.getLogger(ADBService.class).log(Level.ERROR, "[refreshAdbDevices()] IOException: " + e.getMessage());
         }catch(JadbException e1){
-            LogManager.getLogger(ADBService.class).log(Level.ERROR, "[refreshAdbDevices()] JadbException:" + e1.getMessage());
+            LogManager.getLogger(ADBService.class).log(Level.ERROR, "[refreshAdbDevices()] JadbException: " + e1.getMessage());
         }
     }
 

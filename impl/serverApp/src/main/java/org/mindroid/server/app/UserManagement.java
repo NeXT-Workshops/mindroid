@@ -49,6 +49,8 @@ public class UserManagement {
     }
 
     public void removeUserAndCloseConnection(String robotID){
+        logger.log(Level.INFO,"Remove User ["+robotID+"] and close Connection");
+
         //Close connections
         getWorkerMapping().get(robotID).closeConnection();
 

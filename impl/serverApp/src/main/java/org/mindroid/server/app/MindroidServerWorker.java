@@ -82,6 +82,8 @@ public class MindroidServerWorker implements Runnable {
      * !! NOTE: ONLY CLOSE CONNECTION USING METHODS FROM UserManagement
      */
     public void closeConnection() {
+        logger.log(Level.INFO,"Closing Connection of "+connectedRobot);
+
         //Connection closed
         connected = false; //Stop listening
 

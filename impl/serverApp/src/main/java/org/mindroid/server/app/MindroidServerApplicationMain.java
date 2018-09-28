@@ -47,6 +47,8 @@ public class MindroidServerApplicationMain {
 
     public static void runServer() {
         try {
+            Runtime.getRuntime().exec("adb start-server");
+
             server = new ServerSocket(SERVER_PORT);
             invokeDisplayIPAdress();
             mindroidServerFrame.addContentLine("Local", "-", "LOG", "Server started");

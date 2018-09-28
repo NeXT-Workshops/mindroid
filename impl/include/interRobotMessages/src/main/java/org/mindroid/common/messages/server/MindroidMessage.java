@@ -66,12 +66,12 @@ public class MindroidMessage {
 
     @Override
     public String toString() {
-        return "MindroidMessage{" +
-                "source=" + source +
-                ", messageType=" + messageType +
+        return "MindroidMsg{" +
+                "src=" + source +
+                ", mType=" + messageType +
                 ", content='" + content + '\'' +
-                ", destination=" + destination +
-                ", sessionRobotCount=" + sessionRobotCount +
+                ", dest=" + destination +
+                ", session=" + sessionRobotCount +
                 '}';
     }
 

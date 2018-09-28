@@ -134,7 +134,7 @@ public class MindroidServerFrame extends JFrame {
         this.getContentPane().setLayout(new BorderLayout());
 
         //table at center
-        String[] columnNames = {"Time", "RuntimeID", "Source", "Target", "Type", "Content"};
+        String[] columnNames = {"Time", "Source", "Target", "Type", "Content"};
         DefaultTableModel model = new DefaultTableModel(columnNames,0);
 
         this.table = new JTable(model);
@@ -142,17 +142,19 @@ public class MindroidServerFrame extends JFrame {
         tf.setEditable(false);
         table.setDefaultEditor(Object.class, new DefaultCellEditor(tf));
         table.getColumnModel().getColumn(0).setPreferredWidth(60);
-        table.getColumnModel().getColumn(1).setPreferredWidth(60);
+        table.getColumnModel().getColumn(1).setPreferredWidth(100);
         table.getColumnModel().getColumn(2).setPreferredWidth(100);
         table.getColumnModel().getColumn(3).setPreferredWidth(100);
-        table.getColumnModel().getColumn(4).setPreferredWidth(100);
-        table.getColumnModel().getColumn(5).setPreferredWidth(200);
+        table.getColumnModel().getColumn(4).setPreferredWidth(200);
+
         table.getColumnModel().getColumn(0).setMaxWidth(70);
-        table.getColumnModel().getColumn(0).setMinWidth(70);
         table.getColumnModel().getColumn(0).setMinWidth(50);
-        table.getColumnModel().getColumn(2).setMaxWidth(120);
+        table.getColumnModel().getColumn(1).setMaxWidth(70);
+        table.getColumnModel().getColumn(1).setMinWidth(50);
+        table.getColumnModel().getColumn(2).setMaxWidth(70);
+        table.getColumnModel().getColumn(2).setMinWidth(50);
         table.getColumnModel().getColumn(3).setMaxWidth(120);
-        table.getColumnModel().getColumn(4).setMaxWidth(100);
+        //table.getColumnModel().getColumn(4).setMaxWidth(100);
 
         table.getTableHeader().setReorderingAllowed(false);
 
@@ -237,7 +239,7 @@ public class MindroidServerFrame extends JFrame {
     }
 
     public void addLocalContentLine(String type, String content){
-        addContentLine("Local", "-", type, content, "-");
+        addContentLine("Local", "-", type, content);
     }
 
     public void addContentLineFromMessage(MindroidMessage mMsg) {
@@ -245,13 +247,12 @@ public class MindroidServerFrame extends JFrame {
         String dest = mMsg.getDestination().getValue();
         String type = String.valueOf(mMsg.getMessageType());
         String content = mMsg.getContent();
-        String sourceRuntimeID = String.valueOf(mMsg.getSessionRobotCount());
 
-        if(!addContentLine(src, dest, type, content, sourceRuntimeID)){
+        if(!addContentLine(src, dest, type, content)){
             //Tries again n times, error was caused by 2 threads accessing the table at the same time
             int n = 10;
             int i = 0;
-            while (!addContentLine(src, dest, type, content, sourceRuntimeID) && i < n) {
+            while (!addContentLine(src, dest, type, content) && i < n) {
                 i++;
             }
             if (i == n) {
@@ -261,11 +262,11 @@ public class MindroidServerFrame extends JFrame {
         }
     }
 
-    public boolean addContentLine(String source, String target, String type, String content, String runtimeID) {
+    public boolean addContentLine(String source, String target, String type, String content) {
         try {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
             String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-            model.addRow(new String[]{timeStamp, runtimeID, source, target, type, content});
+            model.addRow(new String[]{timeStamp, source, target, type, content});
             return true;
         }catch(ArrayIndexOutOfBoundsException e){
             return false;

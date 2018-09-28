@@ -36,8 +36,6 @@ public abstract class BasicAPI {
     public static final int LED_RED_BLINKING = 8;
     public static final int LED_RED_FAST_BLINKING = 9;
 
-    public final int RUNTIME_ID = new Random().nextInt(Integer.MAX_VALUE);
-
     // --------------------- BRICK CONTROLLING METHODS: Display, LED, Sounds, Buttons ---------------------
 
     /**
@@ -388,7 +386,7 @@ public abstract class BasicAPI {
      */
     public final void sendMessage(String destination, String message){
         if(Robot.getRobotController().getMessenger() != null){
-            Robot.getRobotController().getMessenger().sendMessage(destination, message, RUNTIME_ID);
+            Robot.getRobotController().getMessenger().sendMessage(destination, message);
         }else{
             System.out.println("[StatemachineAPI:sendMessage] Tried to send a message, but the Messenger was null");
         }
@@ -401,7 +399,7 @@ public abstract class BasicAPI {
      */
     public final void broadcastMessage(String message){
         if(Robot.getRobotController().getMessenger() != null){
-            Robot.getRobotController().getMessenger().sendMessage(IMessenger.BROADCAST, message, RUNTIME_ID);
+            Robot.getRobotController().getMessenger().sendMessage(IMessenger.BROADCAST, message);
         }else{
             System.out.println("[StatemachineAPI:broadcastMessage] Tried to broadcast a message, but the Messenger was null");
         }
@@ -413,7 +411,7 @@ public abstract class BasicAPI {
      */
     public final void sendLogMessage(String logmessage){
         if(Robot.getRobotController().getMessenger() != null){
-            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, logmessage, RUNTIME_ID);
+            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, logmessage);
         }else{
             ErrorHandlerManager.getInstance().handleError(new Exception("[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null"),BasicAPI.class,"[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null");
             System.out.println("[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null");

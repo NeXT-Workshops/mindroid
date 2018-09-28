@@ -178,7 +178,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
     }
 
     @Override
-    public void sendMessage(String destination, String content, int runtimeID) {
+    public void sendMessage(String destination, String content) {
         MessageType type;
         if (destination.equals(IMessenger.SERVER_LOG)) {
             type = MessageType.LOG;

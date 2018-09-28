@@ -1,5 +1,7 @@
 package org.mindroid.server.app;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
@@ -9,12 +11,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class SessionHandler {
+
     private static SessionHandler ourInstance = new SessionHandler();
     private MindroidServerWorker msw;
     private MindroidServerFrame msf;
     private int maxSessionSize = 0;
     private ArrayList<RobotId> sessionRobots = new ArrayList<>();
     private SessionState currentState = SessionState.IDLE;
+    private Logger l;
 
 
     private enum SessionState{
@@ -31,6 +35,7 @@ public class SessionHandler {
     }
 
     private SessionHandler() {
+        l = LogManager.getLogger(SessionHandler.class);
     }
 
     public void setMsw(MindroidServerWorker msw){
@@ -41,8 +46,8 @@ public class SessionHandler {
 
     private MindroidMessage startSessionMessage= new MindroidMessage(new RobotId(Destination.SERVER_LOG.getValue()), MessageType.SESSION, "START SESSION", Destination.BROADCAST, MindroidMessage.START_SESSION);
 
-    public   void handleSessionMessage(MindroidMessage msg) throws IOException {
-
+    public void handleSessionMessage(MindroidMessage msg) throws IOException {
+        l.info("State before: "+ currentState);
         int sessionCommand = msg.getSessionRobotCount();
         RobotId robot = msg.getSource();
 
@@ -51,7 +56,6 @@ public class SessionHandler {
                 switch(sessionCommand){
                     // Leave Session: no Session to leave
                     case MindroidMessage.QUIT_SESSION:
-                        msf.addLocalContentLine("LOG", "No Session open to leave.");
                         break;
                     // add Robot and start uncoupled Session
                     case MindroidMessage.UNCOUPLED_SESSION:
@@ -60,7 +64,6 @@ public class SessionHandler {
                         break;
                     // set Session Size, add robot and start pending
                     default: // s>0
-                        msf.addLocalContentLine("LOG", "going to pending");
                         currentState = SessionState.PENDING;
                         sessionRobots.add(robot);
                         maxSessionSize = sessionCommand;
@@ -106,7 +109,7 @@ public class SessionHandler {
                     currentState = SessionState.IDLE;
                     msf.addLocalContentLine("INFO", "Robot quit session, session ended");
                 } else {
-                    msf.addLocalContentLine("INFO", "Coupled Session already running");
+                    msf.addLocalContentLine("INFO", "Coupled Session already running, cannot join");
                 }
                 break;
             case RUNNING_UNCOUPLED:
@@ -123,10 +126,11 @@ public class SessionHandler {
                         break;
                 }
             default:
-                msf.addLocalContentLine("INFO", "Unknown state!");
+                msf.addLocalContentLine("INFO", "Unknown state, please contact support!");
                 break;
         }
         updateSessionLabel();
+        l.info("State after: "+ currentState);
     }
 
     public boolean isSessionRunning() {

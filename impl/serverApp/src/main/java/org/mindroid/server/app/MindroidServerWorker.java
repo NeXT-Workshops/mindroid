@@ -66,11 +66,13 @@ public class MindroidServerWorker implements Runnable {
                         handleMessage(deserializedMsg);
                         sb = new StringBuilder();
                     }
-                    if (line.contains("<close>")) {
+                    if (line.contains("<close>") && connected) {
                         um.removeUserAndCloseConnection(connectedRobot);
                     }
                 }else {
-                    um.removeUserAndCloseConnection(connectedRobot);
+                    if(connected) {
+                        um.removeUserAndCloseConnection(connectedRobot);
+                    }
                 }
             }
         } catch (IOException e) {

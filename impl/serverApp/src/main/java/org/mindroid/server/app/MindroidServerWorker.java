@@ -3,10 +3,7 @@ package org.mindroid.server.app;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mindroid.common.messages.server.Destination;
-import org.mindroid.common.messages.server.MessageMarshaller;
-import org.mindroid.common.messages.server.MindroidMessage;
-import org.mindroid.common.messages.server.RobotId;
+import org.mindroid.common.messages.server.*;
 import org.mindroid.server.app.util.ADBService;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
 import se.vidstige.jadb.JadbException;
@@ -17,7 +14,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -37,10 +34,10 @@ public class MindroidServerWorker implements Runnable {
     private RobotId connectedRobot = null;
     private boolean connected = false;
 
-    private Logger logger;
+    private Logger l;
 
     public MindroidServerWorker(final Socket socket, MindroidServerFrame mindroidServerFrame) {
-        logger = LogManager.getLogger(MindroidServerWorker.class);
+        l = LogManager.getLogger(MindroidServerWorker.class);
         this.socket = socket;
         this.mindroidServerFrame = mindroidServerFrame;
         this.messageMarshaller = new MessageMarshaller();
@@ -91,7 +88,7 @@ public class MindroidServerWorker implements Runnable {
      * !! NOTE: ONLY CLOSE CONNECTION USING METHODS FROM UserManagement
      */
     public void closeConnection() {
-        logger.log(Level.INFO,"Closing Connection of "+connectedRobot);
+        l.log(Level.INFO,"Closing Connection of "+connectedRobot);
 
         //Connection closed
         connected = false; //Stop listening
@@ -101,7 +98,7 @@ public class MindroidServerWorker implements Runnable {
     }
 
     private void disconnect() {
-        logger.log(Level.INFO,"Disconnecting robot: "+connectedRobot);
+        l.log(Level.INFO,"Disconnecting robot: "+connectedRobot);
         try {
             //Close Socket
             socket.close();
@@ -118,42 +115,45 @@ public class MindroidServerWorker implements Runnable {
         }
     }
 
-    private void handleMessage(MindroidMessage deserializedMsg) throws IOException, ConnectionToRemoteDeviceException, JadbException {
+    private void handleMessage(MindroidMessage msg) throws IOException, ConnectionToRemoteDeviceException, JadbException {
         if(connectedRobot==null){
-            connectedRobot=deserializedMsg.getSource();
+            connectedRobot=msg.getSource();
         }
-        logger.log(Level.INFO,"[Connection "+connectedRobot+"] Handling message: "+deserializedMsg.toString());
-        // Append to Server Log
-        if (deserializedMsg.isLogMessage()) {
-            console.appendLine("logmessage");
-            mindroidServerFrame.addContentLineFromMessage(deserializedMsg);
+        l.log(Level.INFO,"[Connection "+connectedRobot+"] Handling message: "+msg.toString());
+
+        switch (msg.getMessageType()){
+            case LOG:
+                l.info("Handling ServerLog Message, Content: " + msg.getContent());
+                mindroidServerFrame.addContentLineFromMessage(msg);
+                break;
+            case SESSION:
+                l.info("Handling Session Message, Session: " + msg.getSessionRobotCount());
+                sessionHandler.handleSessionMessage(msg);
+                break;
+            case REGISTRATION:
+                l.info("Handling Registration Message");
+                registerRobot(msg);
+                break;
+            case MESSAGE:
+                if (sessionHandler.isSessionRunning()){
+                    if(msg.getDestination() == Destination.BROADCAST){
+                        l.info("Handling Broadcast Message");
+                        mindroidServerFrame.addContentLine(msg.getSource().getValue(), msg.getDestination().getValue(), "LOG", msg.getContent());
+                        broadcastMessage(msg);
+                    }else{
+                        l.info("Handling Unicast Message");
+                        mindroidServerFrame.addContentLine(msg.getSource().getValue(), msg.getDestination().getValue(), "LOG", msg.getContent());
+                        Socket socket = um.getSocket(msg.getDestination());
+                        sendMessage(msg, socket);
+                    }
+                }else{
+                    l.warn("No Session Running, message not forwarded");
+                }
+                break;
+            default:
+                l.warn("Message is not conform. Seems to have bad format.");
         }
 
-        // Session Messages
-        if (deserializedMsg.isSessionMessage()){
-            console.appendLine("session msg" + deserializedMsg.getSessionRobotCount());
-            sessionHandler.handleSessionMessage(deserializedMsg);
-        }
-
-        // Registration Message
-        if (deserializedMsg.isRegistrationMessage()) {
-            console.appendLine("registerRobot");
-            registerRobot(deserializedMsg);
-        }
-
-        if( sessionHandler.isSessionRunning()) {
-            // Unicast Message
-            if (deserializedMsg.isUnicastMessage()) {
-                mindroidServerFrame.addContentLine(deserializedMsg.getSource().getValue(), deserializedMsg.getDestination().getValue(), "LOG", deserializedMsg.getContent(), String.valueOf(deserializedMsg.getSessionRobotCount()));
-                Socket socket = um.getSocket(deserializedMsg.getDestination());
-                sendMessage(deserializedMsg, socket);
-            }
-
-            // broadcast message
-            if (deserializedMsg.isBroadcastMessage()) {
-                broadcastMessage(deserializedMsg);
-            }
-        }
 
     }
     public void broadcastMessage(MindroidMessage msg) throws IOException {
@@ -169,12 +169,13 @@ public class MindroidServerWorker implements Runnable {
             }
         }
         */
-
+        mindroidServerFrame.addContentLine(msg.getSource().getValue(), msg.getDestination().getValue(), "LOG", msg.getContent());
         RobotId[] robots = um.getRobotIdsArray();
         for( RobotId robot : robots){
             if( !msg.getSource().equals(robot)){
                 Socket socket = um.getSocket(robot);
                 sendMessage(new MindroidMessage(msg.getSource(),msg.getMessageType(), msg.getContent(), (Destination) robot,  msg.getSessionRobotCount()), socket);
+                l.info("Broadcast Message sent to: " + robot );
             }
         }
 

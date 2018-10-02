@@ -113,7 +113,7 @@ public class MindroidServerConsoleFrame extends JFrame {
             };
 
             System.setOut(new PrintStream(out, true));
-            System.setErr(new PrintStream(out, true));
+            //System.setErr(new PrintStream(out, true)); Removed redirection for error debugging purpose at start
         }
 
     }

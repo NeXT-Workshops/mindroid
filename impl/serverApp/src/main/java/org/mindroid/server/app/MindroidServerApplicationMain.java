@@ -1,8 +1,8 @@
 package org.mindroid.server.app;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mindroid.server.app.language.Language;
 
 import java.awt.*;
 import java.io.IOException;
@@ -10,8 +10,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -27,13 +26,16 @@ public class MindroidServerApplicationMain {
     private static ServerSocket server = null;
 
     public static void main(String[] args) {
+        Language.setLocale(Language.GERMAN);
+
         //Call this to create MindroidServerConsoleFrame-object before creating the logger redirecting the System.out-Stream to its textArea. DONT REMOVE!
         MindroidServerConsoleFrame.getMindroidServerConsole();
-
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("log4j.configurationFile", "log4j2.xml");
-
         logger = LogManager.getLogger(MindroidServerApplicationMain.class);
+
+
+
         mindroidServerFrame = new MindroidServerFrame();
         try {
             runServer();

@@ -1,16 +1,15 @@
 package org.mindroid.api.communication;
 
-import org.mindroid.common.messages.server.Destination;
-import org.mindroid.common.messages.server.MessageType;
-import org.mindroid.common.messages.server.MindroidMessage;
+
+import org.mindroid.common.messages.server.RobotId;
 
 /**
  * Created by torben on 04.04.2017.
  */
 public interface IMessenger {
 
-    public static final String SERVER_LOG = Destination.SERVER_LOG.getValue();
-    public static final String BROADCAST = Destination.BROADCAST.getValue();
+    public static final String SERVER_LOG = RobotId.SERVER_LOG.getValue();
+    public static final String BROADCAST = RobotId.BROADCAST.getValue();
 
 
     /**

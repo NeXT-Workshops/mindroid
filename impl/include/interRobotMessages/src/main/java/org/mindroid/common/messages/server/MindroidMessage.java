@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class MindroidMessage {
     private final RobotId source;
-    private final Destination destination;
+    private final RobotId destination;
     private final MessageType messageType;
     private int sessionRobotCount;
     private final String content;
@@ -12,7 +12,7 @@ public class MindroidMessage {
     public final static int UNCOUPLED_SESSION = -1;
     public final static int START_SESSION = 0;
 
-    public MindroidMessage(RobotId source, MessageType messageType, String content, Destination destination, int sessionRobotCount) {
+    public MindroidMessage(RobotId source, MessageType messageType, String content, RobotId destination, int sessionRobotCount) {
         this.source = source;
         this.messageType = messageType;
         this.content = content;
@@ -20,7 +20,7 @@ public class MindroidMessage {
         this.sessionRobotCount = sessionRobotCount;
     }
 
-    public MindroidMessage(RobotId source, Destination destination, MessageType messageType, String content) {
+    public MindroidMessage(RobotId source, RobotId destination, MessageType messageType, String content) {
         this.source = source;
         this.messageType = messageType;
         this.content = content;
@@ -32,7 +32,7 @@ public class MindroidMessage {
         return source;
     }
 
-    public Destination getDestination() {
+    public RobotId getDestination() {
         return destination;
     }
 
@@ -46,23 +46,11 @@ public class MindroidMessage {
 
     public int getSessionRobotCount() { return sessionRobotCount; }
 
-    public boolean isLogMessage() {
-        return destination.getValue().equals(Destination.SERVER_LOG.getValue()) && messageType.equals(MessageType.LOG) && !messageType.equals(MessageType.REGISTRATION);
-    }
     // accepts any form of "Broadcast" in Destination as Broadcast message (case-insensitive)
     public boolean isBroadcastMessage() {
-        return destination.getValue().toLowerCase().equals(Destination.BROADCAST.getValue().toLowerCase());
+        return destination.getValue().toLowerCase().equals(RobotId.BROADCAST.getValue().toLowerCase());
     }
 
-    public boolean isRegistrationMessage(){
-        return messageType.equals(MessageType.REGISTRATION);
-    }
-    public boolean isUnicastMessage(){
-        return messageType.equals(MessageType.MESSAGE);
-    }
-    public boolean isSessionMessage() {
-        return messageType.equals(MessageType.SESSION);
-    }
 
     @Override
     public String toString() {

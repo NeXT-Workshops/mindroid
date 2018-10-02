@@ -2,7 +2,6 @@ package org.mindroid.server.app;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
@@ -44,7 +43,7 @@ public class SessionHandler {
         updateSessionLabel();
     }
 
-    private MindroidMessage startSessionMessage= new MindroidMessage(Destination.SERVER_LOG, MessageType.SESSION, "START SESSION", Destination.BROADCAST, MindroidMessage.START_SESSION);
+    private MindroidMessage startSessionMessage= new MindroidMessage(RobotId.SERVER_LOG, MessageType.SESSION, "START SESSION", RobotId.BROADCAST, MindroidMessage.START_SESSION);
 
     public void handleSessionMessage(MindroidMessage msg) throws IOException {
         l.info("State before: "+ currentState);

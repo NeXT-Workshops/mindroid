@@ -95,7 +95,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                     ErrorHandlerManager.getInstance().handleError(execException, ImperativeAPI.class, execException.getMessage());
                     LOGGER.log(Level.WARNING, "Source: ImperativeImplExecutor; ImperativeAPI.class.\n\r"+Throwables.getStackTrace(execException)+"\r\n"+ Throwables.getStackTrace(e));
                 } finally {
-                    LOGGER.log(Level.INFO, "Stopped Execution");
+                    LOGGER.log(Level.INFO, "Execution finished");
                     //Detects, that the implementation is finished
                     setExecutionFinished(true);
                     setIsRunning(false);

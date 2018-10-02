@@ -135,7 +135,7 @@ public class MindroidServerWorker implements Runnable {
                 break;
             case MESSAGE:
                 if (sessionHandler.isSessionRunning()){
-                    if(msg.getDestination() == Destination.BROADCAST){
+                    if(msg.getDestination() == RobotId.BROADCAST){
                         logger.info("Handling Broadcast Message");
                         mindroidServerFrame.addContentLine(msg.getSource().getValue(), msg.getDestination().getValue(), "LOG", msg.getContent());
                         broadcastMessage(msg);

@@ -3,7 +3,6 @@ package org.mindroid.server.app;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MindroidLogMessage;
 import org.mindroid.common.messages.server.RobotId;
 import org.mindroid.server.app.log.LogFetcher;

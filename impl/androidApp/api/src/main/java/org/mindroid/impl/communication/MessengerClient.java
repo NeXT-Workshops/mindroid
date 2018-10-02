@@ -3,7 +3,6 @@ package org.mindroid.impl.communication;
 import org.mindroid.api.communication.IMessageListener;
 import org.mindroid.api.communication.IMessageServer;
 import org.mindroid.api.communication.IMessenger;
-import org.mindroid.common.messages.server.Destination;
 import org.mindroid.common.messages.server.MessageMarshaller;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
@@ -39,8 +38,8 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
 
     private static final int CONNECT_TIMEOUT = 2000;
 
-    public static final String SERVER_LOG = Destination.SERVER_LOG.getValue();
-    public static final String BROADCAST = Destination.BROADCAST.getValue();
+    public static final String SERVER_LOG = RobotId.SERVER_LOG.getValue();
+    public static final String BROADCAST = RobotId.BROADCAST.getValue();
 
     private static final Logger LOGGER = Logger.getLogger(MessengerClient.class.getName());
 
@@ -185,19 +184,19 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
         } else {
             type = MessageType.MESSAGE;
         }
-        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), new Destination(destination), type, content);
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), new RobotId(destination), type, content);
         sendMessage(msgObj);
     }
 
     @Override
     public void registerToServer(int port) {
-        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, MessageType.REGISTRATION, ""+port);
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), RobotId.SERVER_LOG, MessageType.REGISTRATION, ""+port);
         sendMessage(msgObj);
     }
 
     @Override
     public synchronized void sendLogMessage(String content) {
-        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, MessageType.LOG, content);
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), RobotId.SERVER_LOG, MessageType.LOG, content);
         sendMessage(msgObj);
     }
 
@@ -268,7 +267,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
     }
 
     public void sendSessionMessage(int sessionRobotCount) {
-        MindroidMessage sessionMessage = new MindroidMessage(new RobotId(robotID), MessageType.SESSION, "", Destination.SERVER_LOG, sessionRobotCount);
+        MindroidMessage sessionMessage = new MindroidMessage(new RobotId(robotID), MessageType.SESSION, "", RobotId.SERVER_LOG, sessionRobotCount);
         sendMessage(sessionMessage);
     }
 }

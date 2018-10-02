@@ -1,9 +1,6 @@
 package org.mindroid.android.app.programs.dev;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
-import org.mindroid.common.messages.server.Destination;
-
-import java.util.ArrayList;
 
 public class RemoteMaster extends ImperativeWorkshopAPI {
 

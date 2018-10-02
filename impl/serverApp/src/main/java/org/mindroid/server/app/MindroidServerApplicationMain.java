@@ -40,8 +40,8 @@ public class MindroidServerApplicationMain {
         } catch (Exception e) {
             MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
             console.setVisible(true);
-            logger.log(Level.ERROR,"Unknown Exception. Please restart the Application. Exception Message: " + e.getMessage());
-            logger.log(Level.ERROR,e.toString());
+            logger.error("Unknown Exception. Please restart the Application. Exception Message: " + e.getMessage());
+            logger.error(e.toString());
             mindroidServerFrame.addContentLine("Local", "-", "ERROR", "Server not running.");
             mindroidServerFrame.addContentLine("Local", "-", "LOG", "See Error console.");
             mindroidServerFrame.disableRefresh(true);
@@ -58,8 +58,8 @@ public class MindroidServerApplicationMain {
         } catch (IOException e) {
             MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
             console.setVisible(true);
-            logger.log(Level.ERROR,"The Server could not be started. Try restarting the Application.: " + e.getMessage());
-            logger.log(Level.ERROR,e.toString());
+            logger.error("The Server could not be started. Try restarting the Application.: " + e.getMessage());
+            logger.error(e.toString());
             mindroidServerFrame.addContentLine("Local", "-", "ERROR", "Server not running.");
             mindroidServerFrame.addContentLine("Local", "-", "LOG", "See Error console.");
             mindroidServerFrame.disableRefresh(true);
@@ -88,8 +88,8 @@ public class MindroidServerApplicationMain {
             } catch (IOException e) {
                 MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
                 console.setVisible(true);
-                logger.log(Level.ERROR,"Error while receiving a message.");
-                logger.log(Level.ERROR,"IOException: " + e.getMessage() + "\n");
+                logger.error("Error while receiving a message.");
+                logger.error("IOException: " + e.getMessage() + "\n");
                 return;
             }
         }
@@ -122,21 +122,21 @@ public class MindroidServerApplicationMain {
             if (!privateIP.isEmpty()) {
                 mindroidServerFrame.displayIPAdress(privateIP.get(0).getHostAddress(), Color.BLACK);
                 MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
-                logger.log(Level.INFO,"Available IP addresses: " + privateIP.toString());
-                logger.log(Level.INFO,"Connected to the router.");
-                logger.log(Level.INFO,"Server IP Address: " + privateIP.get(0).getHostAddress() + "\n");
+                logger.info("Available IP addresses: " + privateIP.toString());
+                logger.info("Connected to the router.");
+                logger.info("Server IP Address: " + privateIP.get(0).getHostAddress() + "\n");
             } else if (loopback != null) {
                 mindroidServerFrame.displayIPAdress(loopback.getHostAddress(), Color.RED);
                 MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
                 console.setVisible(true);
-                logger.log(Level.WARN,"Check your connection to the router. Only a loopback address was found.");
-                logger.log(Level.WARN,"Try refreshing the IP Address (in File Menu). \n");
+                logger.warn("Check your connection to the router. Only a loopback address was found.");
+                logger.warn("Try refreshing the IP Address (in File Menu). \n");
             } else {
                 mindroidServerFrame.displayIPAdress("Check connection.", Color.RED);
                 MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
                 console.setVisible(true);
-                logger.log(Level.WARN,"Check your connection to the router.");
-                logger.log(Level.WARN,"Try refreshing the IP Address (in File Menu). \n");
+                logger.warn("Check your connection to the router.");
+                logger.warn("Try refreshing the IP Address (in File Menu). \n");
             }
 
         } catch (SocketException e1) {
@@ -144,9 +144,9 @@ public class MindroidServerApplicationMain {
             mindroidServerFrame.displayIPAdress("Check connection.", Color.RED);
             MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
             console.setVisible(true);
-            logger.log(Level.ERROR,"Check your connection to the router.");
-            logger.log(Level.ERROR,"Try refreshing the IP Address (in File Menu). \n");
-            logger.log(Level.ERROR,e1.toString());
+            logger.error("Check your connection to the router.");
+            logger.error("Try refreshing the IP Address (in File Menu). \n");
+            logger.error(e1.toString());
         }
 
     }

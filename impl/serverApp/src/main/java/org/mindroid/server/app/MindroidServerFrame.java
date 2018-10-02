@@ -1,9 +1,13 @@
 package org.mindroid.server.app;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.server.app.util.ManualADB;
+import org.mindroid.server.app.util.StubCreator;
 
+import javax.management.JMException;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -13,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,84 +33,62 @@ public class MindroidServerFrame extends JFrame {
     private final JTable table;
     private final JLabel ownIPLabel;
     private final JLabel sessionStateLabel;
-    private final JMenuItem refreshIP;
     private final JCheckBox activateScrollingCheckBox;
     private HashMap<String,Color> assignedColors;
     private ArrayList<Color> availableColors;
     private final int SOURCE_COL = 1;  //Column that contains a message's source
     private final int LEVEL_COL = 2;
+    private Logger l = LogManager.getLogger(MindroidServerFrame.class);
+    private JMenuItem refreshIP;
 
-
-    public MindroidServerFrame() {
-        super("Mindroid Server Application");
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setMinimumSize(new Dimension(800,500));
-        Image titleImage = MindroidServerSettings.getTitleImage();
-        if (titleImage != null) {
-            this.setIconImage(titleImage);
-        }
-        //Menubar
+    private JMenuItem createMenuItem(AbstractAction action, char mnemonic, String keystroke){
+        JMenuItem menuItem = new JMenuItem();
+        menuItem.setAction(action);
+        menuItem.setMnemonic(mnemonic);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(keystroke));
+        return menuItem;
+    }
+    private void makeMenuBar(){
+        // Menubar
         JMenuBar menuBar = new JMenuBar();
-
+        // File-Menu
         JMenu fileMenu = new JMenu("File");
         fileMenu.setMnemonic('f');
 
-        JMenuItem exitMenuItem = new JMenuItem();
-        exitMenuItem.setAction(new AbstractAction("Quit") {
+        // Actions
+        AbstractAction quitAction = new AbstractAction("Quit"){
             @Override
             public void actionPerformed(final ActionEvent e) {
                 System.exit(0);
             }
-        });
-        exitMenuItem.setMnemonic('q');
-        exitMenuItem.setAccelerator(KeyStroke.getKeyStroke("control Q"));
-
-        JMenuItem consoleMenuItem = new JMenuItem();
-        consoleMenuItem.setAction(new AbstractAction("Show Console") {
+        };
+        AbstractAction consoleAction = new AbstractAction("Show Console") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
                 console.setVisible(!console.isVisible());
             }
-        });
-        consoleMenuItem.setMnemonic('c');
-        consoleMenuItem.setAccelerator(KeyStroke.getKeyStroke("shift C"));
-
-        JMenuItem connectADBMenuItem = new JMenuItem();
-        connectADBMenuItem.setAction(new AbstractAction("Connect ADB") {
+        };
+        AbstractAction adbAction = new AbstractAction("Connect ADB") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ManualADB.getInstance().showDialog();
             }
-        });
-        connectADBMenuItem.setMnemonic('a');
-        connectADBMenuItem.setAccelerator(KeyStroke.getKeyStroke("shift A"));
-
-
-
-        refreshIP = new JMenuItem();
-        refreshIP.setAction(new AbstractAction("Refresh IP Address") {
+        };
+        AbstractAction refreshAction = new AbstractAction("Refresh IP Address") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MindroidServerApplicationMain.invokeDisplayIPAdress();
             }
-        });
-        refreshIP.setMnemonic('r');
-        refreshIP.setAccelerator(KeyStroke.getKeyStroke("control R"));
-
-        JMenuItem adbDevicesMenuItem = new JMenuItem();
-        adbDevicesMenuItem.setAction(new AbstractAction("Show "+ConnectedDevicesFrame.TITLE) {
+        };
+        AbstractAction devicesAction = new AbstractAction("Show "+ConnectedDevicesFrame.TITLE) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ConnectedDevicesFrame adbDevicesFrame = ConnectedDevicesFrame.getInstance();
                 adbDevicesFrame.setVisible(!adbDevicesFrame.isVisible());
             }
-        });
-        adbDevicesMenuItem.setMnemonic('d');
-        adbDevicesMenuItem.setAccelerator(KeyStroke.getKeyStroke("control D"));
-
-        JMenuItem restartServerMenuItem = new JMenuItem("Restart Server");
-        restartServerMenuItem.setAction(new AbstractAction("Restart Server") {
+        };
+        AbstractAction restartAction = new AbstractAction("Restart Server") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -114,23 +97,53 @@ public class MindroidServerFrame extends JFrame {
                     e1.printStackTrace();
                 }
             }
-        });
-        //restartServerMenuItem.setMnemonic('r');
-        restartServerMenuItem.setAccelerator(KeyStroke.getKeyStroke("control N"));
+        };
+        AbstractAction stubAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StubCreator.getInstance().showDialog();
+            }
+        };
 
+        // MenuItems
+        JMenuItem exitMenuItem = createMenuItem(quitAction, 'q', "shift Q");
+        JMenuItem consoleMenuItem = createMenuItem(consoleAction, 'c', "shift C");
+        JMenuItem adbDevicesMenuItem = createMenuItem(devicesAction, 'd', "shift D");
+        JMenuItem refreshIP = createMenuItem(refreshAction, 'r', "shift R");
+        JMenuItem connectADBMenuItem = createMenuItem(adbAction, 'a', "shift A");
+        JMenuItem restartServerMenuItem = createMenuItem(restartAction, 's', "shift N");
+        JMenuItem stubItem = createMenuItem(stubAction, 'u', "shift U" );
+
+        // add MenuItems to FileMenu
         fileMenu.add(consoleMenuItem);
         fileMenu.add(adbDevicesMenuItem);
         fileMenu.add(connectADBMenuItem);
         fileMenu.add(refreshIP);
         fileMenu.add(restartServerMenuItem);
         fileMenu.add(exitMenuItem);
+        fileMenu.add(stubItem);
+
+        // add FileMenu to MenuBar
         menuBar.add(fileMenu);
 
-        //menuBar.add(helpMenu);
-
-
         this.setJMenuBar(menuBar);
+    }
 
+
+    public MindroidServerFrame() {
+        // CREATE WINDOW
+        super("Mindroid Server Application");
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setMinimumSize(new Dimension(800,500));
+        Image titleImage = MindroidServerSettings.getTitleImage();
+        if (titleImage != null) {
+            this.setIconImage(titleImage);
+        }
+
+        // BUILD MENU BAR
+        makeMenuBar();
+
+        // MAKE TABLE-CONTENT
         this.getContentPane().setLayout(new BorderLayout());
 
         //table at center
@@ -154,7 +167,6 @@ public class MindroidServerFrame extends JFrame {
         table.getColumnModel().getColumn(2).setMaxWidth(70);
         table.getColumnModel().getColumn(2).setMinWidth(50);
         table.getColumnModel().getColumn(3).setMaxWidth(120);
-        //table.getColumnModel().getColumn(4).setMaxWidth(100);
 
         table.getTableHeader().setReorderingAllowed(false);
 
@@ -163,7 +175,6 @@ public class MindroidServerFrame extends JFrame {
             @Override
             public Component getTableCellRendererComponent(JTable table,
                                                            Object value, boolean isSelected, boolean hasFocus, int row, int col) {
-
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
                 String source = (String)table.getModel().getValueAt(row, SOURCE_COL);
                 if (!assignedColors.containsKey(source)) {
@@ -209,7 +220,6 @@ public class MindroidServerFrame extends JFrame {
         ownIPLabel = new JLabel();
         sessionStateLabel = new JLabel();
         sessionStateLabel.setText(SPACES + "State: NONE");
-        //ownIPLabel.setEditable(false);
         southPanel.add(ownIPLabel,BorderLayout.WEST);
         southPanel.add(sessionStateLabel, BorderLayout.CENTER);
 
@@ -225,6 +235,7 @@ public class MindroidServerFrame extends JFrame {
 
         this.pack();
         this.setVisible(true);
+        this.refreshIP = refreshIP;
     }
 
     private void restartServer() throws IOException {
@@ -302,4 +313,5 @@ public class MindroidServerFrame extends JFrame {
         assignedColors.put(source,availableColors.get(0));
         availableColors.remove(0);
     }
+
 }

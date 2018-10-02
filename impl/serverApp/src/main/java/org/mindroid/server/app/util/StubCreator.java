@@ -46,9 +46,9 @@ public class StubCreator {
         return in.substring(0,1).toUpperCase() + in.substring(1, in.length());
     }
 
-    final String basePath = "..\\androidApp\\app\\src\\main\\java\\org\\mindroid\\android\\app\\programs\\workshop\\stubs\\";
+    private final String basePath = "..\\androidApp\\app\\src\\main\\java\\org\\mindroid\\android\\app\\programs\\workshop\\stubs\\";
 
-    String stub = "package org.mindroid.android.app.programs.workshop.stubs;\n" +
+    private String stub = "package org.mindroid.android.app.programs.workshop.stubs;\n" +
             "\n" +
             "import org.mindroid.api.ImperativeWorkshopAPI;\n" +
             "import org.mindroid.api.ev3.EV3StatusLightColor;\n" +
@@ -68,24 +68,22 @@ public class StubCreator {
             "\t}\n" +
             "}";
 
-    private boolean createStub(String classname, String progname, int sessionSize) throws IOException {
+    private void createStub(String classname, String progname, int sessionSize) throws IOException {
         File f  = new File(basePath + classname + ".java");
         FileWriter classfile = null;
         if(!f.exists()){
             try {
                 classfile = new FileWriter(f);
                 classfile.write(stub.replace("CLASSNAME", classname).replace("PROGNAME", progname).replace("SESSIONSIZE", String.valueOf(sessionSize)));
-                return true;
             } catch (IOException e) {
                 e.printStackTrace();
-                return false;
             }finally {
+                assert classfile != null;
                 classfile.flush();
                 classfile.close();
             }
         }else{
             l.error("Classname already in use");
-            return false;
         }
     }
 }

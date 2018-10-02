@@ -97,7 +97,7 @@ public class MindroidServerFrame extends JFrame {
                 }
             }
         };
-        AbstractAction stubAction = new AbstractAction() {
+        AbstractAction stubAction = new AbstractAction("Create new Stub") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 StubCreator.getInstance().showDialog();
@@ -171,11 +171,11 @@ public class MindroidServerFrame extends JFrame {
         // add MenuItems to FileMenu
         fileMenu.add(consoleMenuItem);
         fileMenu.add(adbDevicesMenuItem);
-        fileMenu.add(connectADBMenuItem);
         fileMenu.add(refreshIP);
+        fileMenu.add(connectADBMenuItem);
+        fileMenu.add(stubItem);
         fileMenu.add(restartServerMenuItem);
         fileMenu.add(exitMenuItem);
-        fileMenu.add(stubItem);
 
         // add FileMenu to MenuBar
         menuBar.add(fileMenu);
@@ -349,11 +349,11 @@ public class MindroidServerFrame extends JFrame {
         sessionStateLabel.setText(SPACES + "State: " + text);
     }
 
-    public void disableRefresh(boolean disable) {
+    void disableRefresh(boolean disable) {
         refreshIP.setEnabled(!disable);
     }
 
-    public void findColor(String source) {
+    private void findColor(String source) {
         if (availableColors.size()==0) {
             availableColors.add(Color.ORANGE);
             availableColors.add(Color.GREEN);

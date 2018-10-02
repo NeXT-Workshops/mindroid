@@ -24,31 +24,11 @@ cd /D %~1
 set ANDROID_HOME=%~2
 set JAVA_HOME="%~3"
 
-:run_finder
-:: run implementationFinder and push programs.json
-cd ..\ImplementationFinder
-call gradlew.bat run > nul 
-
-:push
-:: push programs.json to all devices
-SETLOCAL ENABLEDELAYEDEXPANSION
-@FOR /F "tokens=1,2 skip=1" %%A IN ('%ANDROID_HOME%\platform-tools\adb devices') DO (
-    @SET IS_DEV=%%B
-if "!IS_DEV!" == "device" (
-	@SET SERIAL=%%A
-	@call %ANDROID_HOME%\platform-tools\adb -s !SERIAL! push programs.json /storage/emulated/0/Mindroid/programs.json > nul
-)
-)
-@ENDLOCAL
-cd %~1
-
 :check_for_devices
 @set devices_attached=0
 @FOR /F "tokens=* skip=1 delims=" %%A in ('%ANDROID_HOME%\platform-tools\adb devices') do @set devices_attached=1
 @if "%devices_attached%" == "1" goto installAndAssemble
 @goto noDevices
-
-
 
 :installAndAssemble
 

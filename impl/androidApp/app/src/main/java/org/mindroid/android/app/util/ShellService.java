@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ShellService {
 
-    public static final String ADB_DEFAULT_PORT = "12345";
+    public static final String ADB_DEFAULT_PORT = "5555";
 
 
 

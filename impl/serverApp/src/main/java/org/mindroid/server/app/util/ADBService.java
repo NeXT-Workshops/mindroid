@@ -13,7 +13,7 @@ import java.net.InetSocketAddress;
 import java.util.List;
 
 public class ADBService {
-    private final static int ADB_TCP_PORT = 12345;
+    private final static int ADB_TCP_PORT = 5555;
     static JadbConnection jadb = new JadbConnection();
     static List<JadbDevice> devices;
     static MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();

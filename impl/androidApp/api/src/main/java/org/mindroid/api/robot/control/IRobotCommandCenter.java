@@ -1,5 +1,6 @@
 package org.mindroid.api.robot.control;
 
+import org.mindroid.api.AbstractImperativeImplExecutor;
 import org.mindroid.api.BasicAPI;
 import org.mindroid.api.IImplStateListener;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
@@ -92,4 +93,10 @@ public interface IRobotCommandCenter {
      * Stops the currently Running implementation
      */
     void stopImplementation();
+
+    /**
+     *
+     * @param obs observer
+     */
+    void addSessionStateObserver(AbstractImperativeImplExecutor.SessionStateObserver obs);
 }

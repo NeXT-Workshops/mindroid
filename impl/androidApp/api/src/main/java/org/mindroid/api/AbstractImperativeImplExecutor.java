@@ -1,8 +1,15 @@
 package org.mindroid.api;
 
-public abstract class AbstractImperativeImplExecutor implements IExecutor {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+public abstract class AbstractImperativeImplExecutor extends Observable implements IExecutor {
 
     private ImperativeAPI runnable;
+
+    List<SessionStateObserver> obsList = new CopyOnWriteArrayList<SessionStateObserver>();
 
     public void setInterrupted(boolean isInterrupted){
         runnable.isInterrupted = isInterrupted;
@@ -24,5 +31,25 @@ public abstract class AbstractImperativeImplExecutor implements IExecutor {
      */
     public void stopAllMotors(ImperativeAPI runnable){
         runnable.stopAllMotors();
+    }
+
+    public void addSessionStateObserver(SessionStateObserver observer){
+        if(!obsList.contains(observer)){
+            obsList.add(observer);
+        }
+    }
+
+    public void removeSessionStateObserver(SessionStateObserver observer){
+        obsList.remove(observer);
+    }
+
+    public void updateObserver(String state, int currentRobotCount, int maxSessionRobots){
+        for (SessionStateObserver sessionStateObserver : obsList) {
+            sessionStateObserver.updateState(state,currentRobotCount,maxSessionRobots);
+        }
+    }
+
+    public interface SessionStateObserver{
+        void updateState(String state, int currentRobotCount, int maxSessionRobots);
     }
 }

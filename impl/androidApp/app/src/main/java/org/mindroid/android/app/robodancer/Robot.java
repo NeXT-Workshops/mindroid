@@ -1,5 +1,6 @@
 package org.mindroid.android.app.robodancer;
 
+import org.mindroid.android.app.fragments.home.SessionStateObserver;
 import org.mindroid.android.app.fragments.log.GlobalLogger;
 import org.mindroid.android.app.fragments.sensormonitoring.SensorListener;
 import org.mindroid.android.app.serviceloader.ImplementationService;
@@ -55,6 +56,8 @@ public class Robot implements IImplStateListener {
         updateRobotPortConfig();
 
         initSensorListener();
+
+        roFactory.getRobotCommandCenter().addSessionStateObserver(SessionStateObserver.getInstance());
     }
 
     /**

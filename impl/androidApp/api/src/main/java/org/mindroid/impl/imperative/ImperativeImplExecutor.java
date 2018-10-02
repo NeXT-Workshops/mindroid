@@ -1,6 +1,7 @@
 package org.mindroid.impl.imperative;
 
 
+import javafx.beans.InvalidationListener;
 import org.mindroid.api.AbstractImperativeImplExecutor;
 import org.mindroid.api.IExecutor;
 import org.mindroid.api.ImperativeAPI;
@@ -13,10 +14,11 @@ import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.robot.Robot;
-import org.mindroid.impl.robot.RobotController;
 import org.mindroid.impl.util.Throwables;
 
 import java.util.HashSet;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +33,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
     private static final Logger LOGGER = Logger.getLogger(ImperativeImplExecutor.class.getName());
 
     private MessengerClient messenger;
+
 
     static{
         APILoggerManager.getInstance().registerLogger(LOGGER);
@@ -59,11 +62,16 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                     // handle Session stuff before running program itself
                     messenger.sendSessionMessage(sessionRobotCount);
                     // if we need to wait for other robots to join
+
+                    updateObserver("Init Session",0,runningImpl.getSessionRobotCount());
+
                     if (sessionRobotCount > 0) {
                         boolean noMessage = true;
                         Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
+                        updateObserver("Pending",1,runningImpl.getSessionRobotCount());
                         while (noMessage) {
                             Thread.sleep(10);
+
                             //wait for start-message from Server
                             if (messenger.hasMessage()) {
                                 MindroidMessage incoming = messenger.getNextMessage();
@@ -74,6 +82,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                             }
                         }
                     }
+                    updateObserver("READY",1,runningImpl.getSessionRobotCount());
                     Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
                     Robot.getRobotController().getBrickController().buzz();
                     

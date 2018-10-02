@@ -589,10 +589,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
     }
 
-    private class StartStopRobotTask extends ProgressTask{
+    private class StartStopRobotTask extends SessionProgressTask{
 
         public StartStopRobotTask(String title,String progressMsg) {
-            super(getFragmentManager(),title,progressMsg);
+            super(title,new Bundle(),getFragmentManager());
         }
 
         @Override
@@ -601,6 +601,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 if (params[0].equals(START_ROBOT)) { //True => Start robot, else it should stop the Robot
                     try {
                         robot.startExecuteImplementation(SettingsProvider.getInstance().selectedImplementationID);
+
+                        do{
+                            Thread.sleep(10);
+                        }while(!SessionStateObserver.getInstance().isSessionComplete());
 
                         return true;
                     }catch(Exception e){

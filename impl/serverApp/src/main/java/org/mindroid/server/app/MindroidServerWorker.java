@@ -168,20 +168,17 @@ public class MindroidServerWorker implements Runnable {
             }
         }
         */
+        multicast(um.getRobotIdsArray(), msg);
+    }
+
+    public void multicast(RobotId[] robots, final MindroidMessage msg){
         mindroidServerFrame.addContentLine(msg.getSource().getValue(), msg.getDestination().getValue(), "LOG", msg.getContent());
-        RobotId[] robots = um.getRobotIdsArray();
         for(final RobotId robot : robots) {
             Runnable run = new Runnable() {
                 @Override
                 public void run() {
                     if (!msg.getSource().equals(robot)) {
-                        Socket socket = um.getSocket(robot);
-                        try {
-                            sendMessage(new MindroidMessage(msg.getSource(), msg.getMessageType(), msg.getContent(), (Destination) robot, msg.getSessionRobotCount()), socket);
-                        } catch (IOException e) {
-                            logger.error("IOException broadcasting a message to "+robot);
-                            logger.error("IOException: "+e.toString());
-                        }
+                        sendMessage(new MindroidMessage(msg.getSource(), msg.getMessageType(), msg.getContent(), robot, msg.getSessionRobotCount()), robot);
                         logger.info("Broadcast Message sent to: " + robot);
                     }
                 }
@@ -216,6 +213,14 @@ public class MindroidServerWorker implements Runnable {
             ADBService.connectADB((InetSocketAddress) socketAddress);
         } else {
             throw new IOException("Registration of "+deserializedMsg.getSource().getValue()+" failed.");
+        }
+    }
+
+    public void sendMessage(MindroidMessage msg, RobotId robot){
+        try {
+            sendMessage(msg, um.getSocket(robot));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

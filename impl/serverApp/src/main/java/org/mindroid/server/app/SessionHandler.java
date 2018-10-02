@@ -44,7 +44,7 @@ public class SessionHandler {
         updateSessionLabel();
     }
 
-    private MindroidMessage startSessionMessage= new MindroidMessage(new RobotId(Destination.SERVER_LOG.getValue()), MessageType.SESSION, "START SESSION", Destination.BROADCAST, MindroidMessage.START_SESSION);
+    private MindroidMessage startSessionMessage= new MindroidMessage(Destination.SERVER_LOG, MessageType.SESSION, "START SESSION", Destination.BROADCAST, MindroidMessage.START_SESSION);
 
     public void handleSessionMessage(MindroidMessage msg) throws IOException {
         l.info("State before: "+ currentState);
@@ -92,7 +92,8 @@ public class SessionHandler {
                             // if all joined, run session, else keep Pending
                             if (sessionRobots.size() == maxSessionSize) {
                                 currentState = SessionState.RUNNING_COUPLED;
-                                msw.broadcastMessage(startSessionMessage);
+                                msw.multicast( sessionRobots.toArray(new RobotId[sessionRobots.size()]), startSessionMessage);
+                                //msw.broadcastMessage(startSessionMessage);
                             }else{
                                 currentState = SessionState.PENDING;
                             }
@@ -120,6 +121,7 @@ public class SessionHandler {
                         break;
                     case MindroidMessage.UNCOUPLED_SESSION:
                         sessionRobots.add(robot);
+                        msw.sendMessage(startSessionMessage, robot);
                         break;
                     default:
                         msf.addLocalContentLine("INFO", "Can't start coupled session as uncoupled session is already running");

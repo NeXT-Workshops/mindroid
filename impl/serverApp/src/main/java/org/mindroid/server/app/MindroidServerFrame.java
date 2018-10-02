@@ -4,10 +4,10 @@ package org.mindroid.server.app;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.server.app.language.Language;
 import org.mindroid.server.app.util.ManualADB;
 import org.mindroid.server.app.util.StubCreator;
 
-import javax.management.JMException;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -17,7 +17,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -104,6 +103,61 @@ public class MindroidServerFrame extends JFrame {
                 StubCreator.getInstance().showDialog();
             }
         };
+
+        //INTERNATIONALOIZATION
+        // Actions
+        /*
+        AbstractAction quitAction = new AbstractAction(Language.getString("menu_item_quit")){
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                System.exit(0);
+            }
+        };
+        AbstractAction consoleAction = new AbstractAction(Language.getString("menu_item_showConsole")) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
+                console.setVisible(!console.isVisible());
+            }
+        };
+        AbstractAction adbAction = new AbstractAction(Language.getString("menu_item_connectAdb")) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ManualADB.getInstance().showDialog();
+            }
+        };
+        AbstractAction refreshAction = new AbstractAction(Language.getString("menu_item_refreshIP")) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MindroidServerApplicationMain.invokeDisplayIPAdress();
+            }
+        };
+        AbstractAction devicesAction = new AbstractAction(Language.getString("menu_item_connectedDevices")) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ConnectedDevicesFrame adbDevicesFrame = ConnectedDevicesFrame.getInstance();
+                adbDevicesFrame.setVisible(!adbDevicesFrame.isVisible());
+            }
+        };
+        AbstractAction restartAction = new AbstractAction(Language.getString("menu_item_restart")) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    restartServer();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        };
+        AbstractAction stubAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StubCreator.getInstance().showDialog();
+            }
+        };
+        */
+
+
 
         // MenuItems
         JMenuItem exitMenuItem = createMenuItem(quitAction, 'q', "shift Q");

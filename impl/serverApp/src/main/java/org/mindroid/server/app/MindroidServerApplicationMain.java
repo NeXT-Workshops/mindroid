@@ -2,6 +2,8 @@ package org.mindroid.server.app;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.appender.OutputStreamAppender;
+import org.apache.logging.log4j.spi.LoggerContextFactory;
 
 import java.awt.*;
 import java.io.IOException;
@@ -26,6 +28,8 @@ public class MindroidServerApplicationMain {
     private static ServerSocket server = null;
 
     public static void main(String[] args) {
+        //Call this to create MindroidServerConsoleFrame-object before creating the logger redirecting the System.out-Stream to its textArea. DONT REMOVE!
+        MindroidServerConsoleFrame.getMindroidServerConsole();
 
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("log4j.configurationFile", "log4j2.xml");

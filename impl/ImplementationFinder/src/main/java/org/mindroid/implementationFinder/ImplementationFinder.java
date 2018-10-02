@@ -48,22 +48,23 @@ public class ImplementationFinder {
         // get list of Files
         File[] files = folder.listFiles();
         JSONArray classes = new JSONArray();
-        //String[] classes = new String[files.length];
-        for (int i = 0; i < files.length; i++) {
-            // only use if it is a file
-            System.out.println(files[i].getName());
-            if(files[i].isFile() && !files[i].getName().contains("~ava")) {
-                // split path by 'java', second part is important, replace backslash with dot
-                String className = String.valueOf(files[i].toPath()).split("java")[1].replace('\\', '.');
-                // remove leading and trailing dots
-                className = className.substring(1, className.length() - 1);
-                // write to array
-                classes.add(className);
+        if (files!=null) {
+            for (int i = 0; i < files.length; i++) {
+                // only use if it is a file
+                System.out.println(files[i].getName());
+                if (files[i].isFile() && !files[i].getName().contains("~ava")) {
+                    // split path by 'java', second part is important, replace backslash with dot
+                    String className = String.valueOf(files[i].toPath()).split("java")[1].replace('\\', '.');
+                    // remove leading and trailing dots
+                    className = className.substring(1, className.length() - 1);
+                    // write to array
+                    classes.add(className);
+                }
             }
+            // put array to JSON
+            json.put(setName, classes);
+            //System.out.println(json.toJSONString());
         }
-        // put array to JSON
-        json.put(setName, classes);
-        //System.out.println(json.toJSONString());
     }
 
     private static void testParse(){

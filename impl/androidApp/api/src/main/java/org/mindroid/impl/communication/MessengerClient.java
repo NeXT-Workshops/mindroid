@@ -58,9 +58,6 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
     private final MessageMarshaller serverMessageMarshaller = new MessageMarshaller();
     private final ArrayList<MindroidMessage> messages = new ArrayList<MindroidMessage>();
 
-    /** Maps RobtoID to its runtimeID **/
-    private Map<RobotId,Integer> runtimeMap = new HashMap<RobotId,Integer>();
-
     public MessengerClient(String robotID){
         this.robotID = robotID;
         this.socket = new Socket();

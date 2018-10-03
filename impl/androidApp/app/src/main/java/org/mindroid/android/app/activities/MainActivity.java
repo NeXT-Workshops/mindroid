@@ -63,7 +63,7 @@ public class MainActivity extends Activity
     private Fragment SETTINGS_FRAGMENT = SettingsFragment.newInstance();
     private Fragment SENSOR_MONITOR_FRAGMENT = SensorMonitoringFragment.newInstance();
     private Fragment LOG_FRAGMENT = LoggerFragment.newInstance();
-    private Fragment ADMIN_FRAGEMENT = AdminFragment.newInstance();
+    private Fragment ADMIN_FRAGMENT = AdminFragment.newInstance();
 
     private final String TAG_HOME_FRAGMENT = "TAG_HOME_FRAGMENT";
     private final String TAG_CONFIG_FRAGMENT = "TAG_CONFIG_FRAGMENT";
@@ -74,10 +74,9 @@ public class MainActivity extends Activity
 
     private static final Logger LOGGER = Logger.getLogger(MainActivity.class.getName());
 
-
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        LOGGER.info("Main Activity on Create");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -146,7 +145,7 @@ public class MainActivity extends Activity
                 setTitle(getResources().getString(R.string.title_log));
                 break;//SettingsProvider
             case 5:
-                replaceFragment(ADMIN_FRAGEMENT, TAG_ADMIN_FRAGMENT);
+                replaceFragment(ADMIN_FRAGMENT, TAG_ADMIN_FRAGMENT);
                 setTitle(getResources().getString(R.string.title_admin));
                 break;//Admin
             default:

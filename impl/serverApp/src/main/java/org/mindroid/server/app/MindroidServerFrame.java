@@ -136,7 +136,7 @@ public class MindroidServerFrame extends JFrame {
 
     public MindroidServerFrame() {
         // CREATE WINDOW
-        super("Mindroid Server Application");
+        super(Language.getString("frame_mindroidServer_title"));
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setMinimumSize(new Dimension(800,500));
         Image titleImage = MindroidServerSettings.getTitleImage();

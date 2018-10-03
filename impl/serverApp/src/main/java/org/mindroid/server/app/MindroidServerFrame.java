@@ -55,58 +55,6 @@ public class MindroidServerFrame extends JFrame {
         fileMenu.setMnemonic('f');
 
         // Actions
-        AbstractAction quitAction = new AbstractAction("Quit"){
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                System.exit(0);
-            }
-        };
-        AbstractAction consoleAction = new AbstractAction("Show Console") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
-                console.setVisible(!console.isVisible());
-            }
-        };
-        AbstractAction adbAction = new AbstractAction("Connect ADB") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ManualADB.getInstance().showDialog();
-            }
-        };
-        AbstractAction refreshAction = new AbstractAction("Refresh IP Address") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MindroidServerApplicationMain.invokeDisplayIPAdress();
-            }
-        };
-        AbstractAction devicesAction = new AbstractAction("Show "+ConnectedDevicesFrame.TITLE) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ConnectedDevicesFrame adbDevicesFrame = ConnectedDevicesFrame.getInstance();
-                adbDevicesFrame.setVisible(!adbDevicesFrame.isVisible());
-            }
-        };
-        AbstractAction restartAction = new AbstractAction("Restart Server") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    restartServer();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        };
-        AbstractAction stubAction = new AbstractAction("Create new Stub") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                StubCreator.getInstance().showDialog();
-            }
-        };
-
-        //INTERNATIONALOIZATION
-        // Actions
-        /*
         AbstractAction quitAction = new AbstractAction(Language.getString("menu_item_quit")){
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -126,6 +74,7 @@ public class MindroidServerFrame extends JFrame {
                 ManualADB.getInstance().showDialog();
             }
         };
+
         AbstractAction refreshAction = new AbstractAction(Language.getString("menu_item_refreshIP")) {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -149,13 +98,14 @@ public class MindroidServerFrame extends JFrame {
                 }
             }
         };
-        AbstractAction stubAction = new AbstractAction() {
+        AbstractAction stubAction = new AbstractAction(Language.getString("menu_item_createStub")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 StubCreator.getInstance().showDialog();
             }
         };
-        */
+
+
 
 
 
@@ -186,7 +136,7 @@ public class MindroidServerFrame extends JFrame {
 
     public MindroidServerFrame() {
         // CREATE WINDOW
-        super("Mindroid Server Application");
+        super(Language.getString("frame_mindroidServer_title"));
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setMinimumSize(new Dimension(800,500));
         Image titleImage = MindroidServerSettings.getTitleImage();

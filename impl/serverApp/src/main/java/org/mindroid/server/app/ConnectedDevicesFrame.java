@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindroid.common.messages.server.MindroidLogMessage;
 import org.mindroid.common.messages.server.RobotId;
+import org.mindroid.server.app.language.Language;
 import org.mindroid.server.app.log.LogFetcher;
 import org.mindroid.server.app.log.LogHandler;
 import org.mindroid.server.app.util.ADBService;
@@ -28,11 +29,17 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         return console;
     }
 
-    public static final String TITLE =  "Connected Devices";
     private JPanel contentPane = new JPanel();
 
     private final int[] posX = {10,100,240,380,500,620,770};
-    private final String[] columnNames = {"User","Devices", "ADB State", "Fetch Log", "Log", "Remove User", "Connect ADB"};
+    private final String[] columnNames = {
+            Language.getString("label_user"),
+            Language.getString("label_devices"),
+            Language.getString("label_adbState"),
+            Language.getString("label_fetchLog"),
+            Language.getString("label_log"),
+            Language.getString("label_removeUser"),
+            Language.getString("label_connectAdb")};
 
     private UserManagement um = UserManagement.getInstance();
 
@@ -41,7 +48,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     private ConnectedDevicesFrame() {
         logger = LogManager.getLogger(ConnectedDevicesFrame.class);
 
-        setTitle(TITLE);
+        setTitle(Language.getString("frame_conncetedDevices_title"));
         setSize(new Dimension(980,400));
 
         setIconImage(MindroidServerSettings.getTitleImage());
@@ -60,27 +67,27 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         JMenuItem refreshDevices;
 
         JMenuItem exitMenuItem = new JMenuItem();
-        exitMenuItem.setAction(new AbstractAction("Quit") {
+        exitMenuItem.setAction(new AbstractAction(Language.getString("menu_item_quit")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 disposeFrame();
             }
         });
         exitMenuItem.setMnemonic('q');
-        exitMenuItem.setAccelerator(KeyStroke.getKeyStroke("control Q"));
+        exitMenuItem.setAccelerator(KeyStroke.getKeyStroke("shift Q"));
 
         refreshDevices = new JMenuItem();
-        refreshDevices.setAction(new AbstractAction("Refresh Devices") {
+        refreshDevices.setAction(new AbstractAction(Language.getString("menu_item_refreshDevices")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateDevices();
             }
         });
         refreshDevices.setMnemonic('r');
-        refreshDevices.setAccelerator(KeyStroke.getKeyStroke("control R"));
+        refreshDevices.setAccelerator(KeyStroke.getKeyStroke("F5"));
 
         JMenuItem openLogDir = new JMenuItem();
-        openLogDir.setAction(new AbstractAction("Open Log Directory") {
+        openLogDir.setAction(new AbstractAction(Language.getString("menu_item_openLogDir")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -91,7 +98,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
             }
         });
         openLogDir.setMnemonic('o');
-        openLogDir.setAccelerator(KeyStroke.getKeyStroke("control O"));
+        openLogDir.setAccelerator(KeyStroke.getKeyStroke("shift O"));
 
         fileMenu.add(refreshDevices);
         fileMenu.add(openLogDir);
@@ -151,7 +158,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     }
 
     private JButton getFetchLogButton(final String robotID, final InetSocketAddress socketAddress){
-        JButton btn_fetchButton = new JButton("fetch log");
+        JButton btn_fetchButton = new JButton(Language.getString("label_fetchLog"));
         btn_fetchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -166,7 +173,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
 
     private JButton getLogButton(final String robotID, final InetSocketAddress socketAddress) {
-        JButton btn_opLogButton = new JButton("Open Log");
+        JButton btn_opLogButton = new JButton(Language.getString("label_openLog"));
         btn_opLogButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -185,7 +192,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     }
 
     private JButton getRemoveUserButton(final RobotId robotID) {
-        JButton btn_removeUser = new JButton("Remove User");
+        JButton btn_removeUser = new JButton(Language.getString("label_removeUser"));
         btn_removeUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -197,7 +204,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     }
 
     private JButton getConnectADBButton(final String robotID,final InetSocketAddress socketAddress){
-        JButton btn_connectADB = new JButton("Connect ADB");
+        JButton btn_connectADB = new JButton(Language.getString("label_connectAdb"));
         btn_connectADB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

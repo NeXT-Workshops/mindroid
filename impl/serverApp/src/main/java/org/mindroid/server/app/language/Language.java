@@ -32,11 +32,11 @@ public class Language {
 
     private static ResourceBundle getResources(Locale locale){
         try {
-            return ResourceBundle.getBundle(BASENAME,currentLocale,Language.class.getClassLoader());
+            return ResourceBundle.getBundle(BASENAME,currentLocale);
         }catch(MissingResourceException mre){
             MindroidServerConsoleFrame.getMindroidServerConsole().appendLine(mre.toString());
             MindroidServerConsoleFrame.getMindroidServerConsole().appendLine("Loaded Default Language (English)");
-            return ResourceBundle.getBundle(BASENAME,Locale.getDefault(),Language.class.getClassLoader());
+            return ResourceBundle.getBundle(BASENAME,Locale.getDefault());
         }
     }
 

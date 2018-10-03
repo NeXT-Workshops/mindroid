@@ -28,7 +28,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     public static ConnectedDevicesFrame getInstance() {
         return console;
     }
-    
+
     private JPanel contentPane = new JPanel();
 
     private final int[] posX = {10,100,240,380,500,620,770};
@@ -74,7 +74,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
             }
         });
         exitMenuItem.setMnemonic('q');
-        exitMenuItem.setAccelerator(KeyStroke.getKeyStroke("control Q"));
+        exitMenuItem.setAccelerator(KeyStroke.getKeyStroke("shift Q"));
 
         refreshDevices = new JMenuItem();
         refreshDevices.setAction(new AbstractAction(Language.getString("menu_item_refreshDevices")) {
@@ -84,7 +84,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
             }
         });
         refreshDevices.setMnemonic('r');
-        refreshDevices.setAccelerator(KeyStroke.getKeyStroke("control R"));
+        refreshDevices.setAccelerator(KeyStroke.getKeyStroke("F5"));
 
         JMenuItem openLogDir = new JMenuItem();
         openLogDir.setAction(new AbstractAction(Language.getString("menu_item_openLogDir")) {
@@ -98,7 +98,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
             }
         });
         openLogDir.setMnemonic('o');
-        openLogDir.setAccelerator(KeyStroke.getKeyStroke("control O"));
+        openLogDir.setAccelerator(KeyStroke.getKeyStroke("shift O"));
 
         fileMenu.add(refreshDevices);
         fileMenu.add(openLogDir);

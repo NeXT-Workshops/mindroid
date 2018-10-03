@@ -5,7 +5,7 @@ import org.mindroid.api.ImperativeWorkshopAPI;
 public class RemoteMaster extends ImperativeWorkshopAPI {
 
     public RemoteMaster(){
-        super("Remote Master", 8);
+        super("Remote Master", 2);
     }
 
     private enum Directions{

@@ -1,8 +1,10 @@
 package org.mindroid.android.app.fragments.home;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,8 @@ public class SessionProgressFragment extends DialogFragment {
 
     private static final String KEY_TITLE = "TITLE";
 
+    private static SessionProgressTask parentTask;
+
     private Dialog dialog;
     private TextView txtView_sessionState;
     private TextView txtView_sessionSize;
@@ -26,10 +30,11 @@ public class SessionProgressFragment extends DialogFragment {
         // Required empty public constructor
     }
 
-    public static SessionProgressFragment newInstance(String title, Bundle configBundle) {
+    public static SessionProgressFragment newInstance(String title, Bundle configBundle,SessionProgressTask parent) {
         SessionProgressFragment fragment = new SessionProgressFragment();
         configBundle.putString(KEY_TITLE,title);
         fragment.setArguments(configBundle);
+        parentTask = parent;
         return fragment;
     }
 
@@ -42,15 +47,21 @@ public class SessionProgressFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         dialog = super.onCreateDialog(savedInstanceState);
-        return dialog;
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return getCustomView();
-    }
+        AlertDialog.Builder builder =  new  AlertDialog.Builder(getActivity())
+                .setNegativeButton(getResources().getString(R.string.txt_abort),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //Interrupt Task using this dialog
+                        parentTask.interrupt();
+                    }
+                }
 
+        )
+        .setView(getCustomView());
+
+        return builder.create();
+    }
 
     /**
      *

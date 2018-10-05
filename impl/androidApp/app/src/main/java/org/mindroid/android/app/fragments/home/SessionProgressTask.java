@@ -11,16 +11,18 @@ public abstract class SessionProgressTask extends AsyncTask<String,Integer,Boole
     String title;
     Bundle configBundle;
 
+    boolean isInterrupted = false;
+
     public SessionProgressTask(String title, Bundle configBundle, FragmentManager fManager) {
         this.fManager = fManager;
         this.title = title;
         this.configBundle = configBundle;
+        this.isInterrupted = false;
     }
 
     @Override
     protected void onPreExecute() {
-
-        this.dFragment = SessionStateObserver.getInstance().createSessionProgressDialog();
+        this.dFragment = SessionStateObserver.getInstance().createSessionProgressDialog(this);
         dFragment.setCancelable(false);
         dFragment.show(fManager, "SessionProgressDialog");
     }
@@ -32,4 +34,8 @@ public abstract class SessionProgressTask extends AsyncTask<String,Integer,Boole
 
     @Override
     protected abstract Boolean doInBackground(String... params);
+
+    protected void interrupt(){
+        this.isInterrupted = true;
+    }
 }

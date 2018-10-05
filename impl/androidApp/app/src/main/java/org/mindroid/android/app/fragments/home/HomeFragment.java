@@ -597,35 +597,35 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
         @Override
         protected Boolean doInBackground(String... params) {
-            if(params.length>0) {
-                if (params[0].equals(START_ROBOT)) { //True => Start robot, else it should stop the Robot
-                    try {
+            if(params.length == 0){
+                return false;
+            }
+            try{
+                switch(params[0]) {
+                    case START_ROBOT:
                         robot.startExecuteImplementation(SettingsProvider.getInstance().selectedImplementationID);
-
-                        do{
+                        do {
                             Thread.sleep(10);
-                        }while(!SessionStateObserver.getInstance().isSessionComplete());
+
+                        } while (!SessionStateObserver.getInstance().isSessionComplete() || !isInterrupted);
+                        //Finish execution when the Session is Full and gets started, or the cancel button of the dialog is pressed (isInterrutped)
+                        //-> with ending this method the dialog will be disposed onPostExecute(..)
+                        if(isInterrupted){
+                            //Stop execution of implementation
+                            robot.stopRunningImplmentation();
+                            return false;
+                        }
 
                         return true;
-                    }catch(Exception e){
-                        parentActivity.showErrorDialog("Exception",e.getMessage());
-                        e.printStackTrace();
-                    }
-                } else if(params[0].equals(STOP_ROBOT)) {
-                    try {
+                    case STOP_ROBOT:
                         robot.stopRunningImplmentation();
-
-                        //SAVING LOG AFTER EXECUTION
-                        //Currently removed saving log when stopping the program, as a concurrentException can occur, which is causing a dialog popping up
-                        //GlobalLogger.getInstance().saveLog();
                         return false;
-                    }catch(Exception e){
-                        parentActivity.showErrorDialog("Exception",e.getMessage());
-                        e.printStackTrace();
-                    }
+                    default:
+                        return false;
                 }
-            }else{
-                return false;
+            }catch(Exception e){
+                parentActivity.showErrorDialog("Exception",e.getMessage());
+                e.printStackTrace();
             }
             return false;
         }

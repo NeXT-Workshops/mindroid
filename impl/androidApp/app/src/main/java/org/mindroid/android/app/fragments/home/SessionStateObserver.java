@@ -30,10 +30,10 @@ public class SessionStateObserver implements AbstractImperativeImplExecutor.Sess
         }
     }
 
-    public SessionProgressFragment createSessionProgressDialog(){
+    public SessionProgressFragment createSessionProgressDialog(SessionProgressTask parent){
         isReady = false;
         isStopped = false;
-        return spf = SessionProgressFragment.newInstance("Session State",new Bundle());
+        return spf = SessionProgressFragment.newInstance("Session State",new Bundle(),parent);
     }
 
     public boolean isSessionComplete() {

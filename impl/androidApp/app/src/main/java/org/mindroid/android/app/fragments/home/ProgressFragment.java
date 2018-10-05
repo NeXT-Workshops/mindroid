@@ -108,7 +108,7 @@ public class ProgressFragment extends Fragment {
                 }
             }
         };
-
+        //TODO maybe refactor to -> view.post(updateUI); -> to remove activity parameter from method
         activity.runOnUiThread(updateUI);
     }
 

@@ -22,6 +22,10 @@ public class SessionStateObserver implements AbstractImperativeImplExecutor.Sess
         robot = MainActivity.robot;
     }
 
+    public boolean isDialogDisplayed() {
+        return spf.isDialogDisplayed();
+    }
+
     @Override
     public void updateState(String state, int currentRobotCount, int maxSessionRobots) {
         spf.setProgressState(state,currentRobotCount,maxSessionRobots);

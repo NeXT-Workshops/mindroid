@@ -8,11 +8,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.mindroid.android.app.R;
-import org.mindroid.impl.ev3.EV3PortIDs;
+
+import java.util.Objects;
 
 public class SessionProgressFragment extends DialogFragment {
 
@@ -28,6 +27,10 @@ public class SessionProgressFragment extends DialogFragment {
 
     public SessionProgressFragment() {
         // Required empty public constructor
+    }
+
+    public boolean isDialogDisplayed(){
+        return dialog != null && dialog.isShowing();
     }
 
     public static SessionProgressFragment newInstance(String title, Bundle configBundle,SessionProgressTask parent) {
@@ -46,7 +49,7 @@ public class SessionProgressFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        dialog = super.onCreateDialog(savedInstanceState);
+        super.onCreateDialog(savedInstanceState);
 
         AlertDialog.Builder builder =  new  AlertDialog.Builder(getActivity())
                 .setNegativeButton(getResources().getString(R.string.txt_abort),
@@ -60,7 +63,7 @@ public class SessionProgressFragment extends DialogFragment {
         )
         .setView(getCustomView());
 
-        return builder.create();
+        return (this.dialog = builder.create());
     }
 
     /**
@@ -79,7 +82,7 @@ public class SessionProgressFragment extends DialogFragment {
     }
 
 
-    public void setProgressState(final String state, final int currentSize, final int sessionMaxSize){
+    public void setProgressState(final String state, final int currentSize, final int sessionMaxSize) {
         Runnable updateView = new Runnable() {
             @Override
             public void run() {
@@ -89,7 +92,9 @@ public class SessionProgressFragment extends DialogFragment {
                 }
             }
         };
-        view.post(updateView);
+
+
+        Objects.requireNonNull(view, "[SessionProgressFragment] View is null").post(updateView);
     }
 
     @Override

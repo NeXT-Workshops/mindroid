@@ -1,5 +1,6 @@
 package org.mindroid.android.app.fragments.home;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -7,12 +8,12 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.Handler;
 import android.util.SparseBooleanArray;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
-
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.activities.IErrorHandler;
 import org.mindroid.android.app.activities.MainActivity;
@@ -25,7 +26,6 @@ import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.serviceloader.ImplementationService;
 import org.mindroid.android.app.util.ShellService;
 import org.mindroid.android.app.util.USBService;
-
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -607,6 +607,14 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
 
         private boolean startRobot(){
+            while(!SessionStateObserver.getInstance().isDialogDisplayed()){
+                //Wait until dialog is displayed, then start robot otherwise accessing non existing view is not cool
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             robot.startExecuteImplementation(SettingsProvider.getInstance().selectedImplementationID);
             do {
                 try {

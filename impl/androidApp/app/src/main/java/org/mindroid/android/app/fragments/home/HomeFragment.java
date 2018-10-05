@@ -44,8 +44,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
 
     //Task
-    private final String MSG_TASK_PARAM_0_CONNECT = "connect";
-    private final String MSG_TASK_PARAM_0_DISCONNECT = "disconnectFromBrick";
+    private final String MSG_TASK_CONNECT = "connect";
+    private final String MSG_TASK_DISCONNECT = "disconnectFromBrick";
 
     //--- Buttons etc --//
 
@@ -337,8 +337,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
                 //Stop robot
                 if(robot.isRunning){
-                    StartStopRobotTask task_stopRobot = new StartStopRobotTask("Robot",msgStartRobot);
-                    task_stopRobot.execute(STOP_ROBOT);
+                    StopRobotTask task_stopRobot = new StopRobotTask("Robot",msgStopRobot);
+                    task_stopRobot.execute();
 
                     DisconnectFromBrickTask task_disconnect = new DisconnectFromBrickTask("Robot",msgDisconnectFromRobot);
                     task_disconnect.execute();
@@ -440,10 +440,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             public void onClick(View v) {
                 if(robot.isMessengerConnected()){
                     DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask("Messenger","Messenger Client tries to connect");
-                    msgClientTask.execute(MSG_TASK_PARAM_0_DISCONNECT);
+                    msgClientTask.execute(MSG_TASK_DISCONNECT);
                 }else{
                     DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask("Messenger","Messenger Client tries to connect");
-                    msgClientTask.execute(MSG_TASK_PARAM_0_CONNECT);
+                    msgClientTask.execute(MSG_TASK_CONNECT);
                 }
 
             }
@@ -462,8 +462,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             @Override
             public void onClick(View v) {
                 if(robot.isRunning){
-                    StartStopRobotTask task = new StartStopRobotTask("Start/Stop robot",msgStopRobot);
-                    task.execute(STOP_ROBOT);
+                    StopRobotTask task = new StopRobotTask("Stop robot",msgStopRobot);
+                    task.execute();
                 }
 
                 DisconnectFromBrickTask task = new DisconnectFromBrickTask("Disconnecting robot",msgDisconnectFromRobot);
@@ -474,16 +474,16 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_startRobot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartStopRobotTask task = new StartStopRobotTask("Starting robot",msgStartRobot);
-                task.execute(START_ROBOT);
+                StartRobotTask task = new StartRobotTask("Starting robot",msgStartRobot);
+                task.execute();
             }
         });
 
         btn_stopRobot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartStopRobotTask task = new StartStopRobotTask("Stopping robot",msgStopRobot);
-                task.execute(STOP_ROBOT);
+                StopRobotTask task = new StopRobotTask("Stopping robot",msgStopRobot);
+                task.execute();
             }
         });
 
@@ -589,50 +589,54 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
     }
 
-    private class StartStopRobotTask extends SessionProgressTask{
+    private class StartRobotTask extends SessionProgressTask{
 
-        public StartStopRobotTask(String title,String progressMsg) {
+        public StartRobotTask(String title, String progressMsg) {
             super(title,new Bundle(),getFragmentManager());
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
-            if(params.length == 0){
-                return false;
-            }
-            try{
-                switch(params[0]) {
-                    case START_ROBOT:
-                        robot.startExecuteImplementation(SettingsProvider.getInstance().selectedImplementationID);
-                        do {
-                            Thread.sleep(10);
-
-                        } while (!SessionStateObserver.getInstance().isSessionComplete() || !isInterrupted);
-                        //Finish execution when the Session is Full and gets started, or the cancel button of the dialog is pressed (isInterrutped)
-                        //-> with ending this method the dialog will be disposed onPostExecute(..)
-                        if(isInterrupted){
-                            //Stop execution of implementation
-                            robot.stopRunningImplmentation();
-                            return false;
-                        }
-
-                        return true;
-                    case STOP_ROBOT:
-                        robot.stopRunningImplmentation();
-                        return false;
-                    default:
-                        return false;
-                }
-            }catch(Exception e){
-                parentActivity.showErrorDialog("Exception",e.getMessage());
-                e.printStackTrace();
-            }
-            return false;
+            return startRobot();
         }
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
             robot.isRunning = result;
+        }
+
+        private boolean startRobot(){
+            robot.startExecuteImplementation(SettingsProvider.getInstance().selectedImplementationID);
+            do {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            } while (!SessionStateObserver.getInstance().isSessionComplete() || !isInterrupted);
+            //Finish execution when the Session is Full and gets started, or the cancel button of the dialog is pressed (isInterrutped)
+            //-> with ending this method the dialog will be disposed onPostExecute(..)
+            if(isInterrupted){
+                //Stop execution of implementation
+                robot.stopRunningImplmentation();
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    private class StopRobotTask extends ProgressTask{
+
+        public StopRobotTask(String title, String progressMsg) {
+            super(getFragmentManager(), title, progressMsg);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            robot.stopRunningImplmentation();
+            return false;
         }
     }
 
@@ -649,22 +653,24 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
         @Override
         protected Boolean doInBackground(String... params) {
-            if(params.length > 0){
-                if(params[0].equals(MSG_TASK_PARAM_0_CONNECT)){
+            if(params.length == 0){
+                return false;
+            }
+
+            switch(params[0]){
+                case MSG_TASK_CONNECT:
                     if(!robot.isMessengerConnected()) {
                         LOGGER.log(Level.INFO,"Connecting to Message Server");
                         robot.connectMessenger(SettingsProvider.getInstance().getMsgServerIP(),SettingsProvider.getInstance().getMsgServerPort());
-                    }
-                }else if(params[0].equals(MSG_TASK_PARAM_0_DISCONNECT)){
+                    } break;
+                case MSG_TASK_DISCONNECT:
                     if(robot.isMessengerConnected()) {
                         LOGGER.log(Level.INFO,"Disconnecting to Message Server");
                         robot.disconnectMessenger();
-                    }
-                }
+                    } break;
             }
             return robot.isMessengerConnected();
         }
-
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);

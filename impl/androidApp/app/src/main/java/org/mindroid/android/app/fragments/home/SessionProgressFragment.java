@@ -20,6 +20,7 @@ public class SessionProgressFragment extends DialogFragment {
     private TextView txtView_sessionState;
     private TextView txtView_sessionSize;
 
+    private View view;
 
     public SessionProgressFragment() {
         // Required empty public constructor
@@ -63,15 +64,21 @@ public class SessionProgressFragment extends DialogFragment {
         txtView_sessionSize = (TextView) view.findViewById(R.id.txtView_sessionSize);
 
         // Inflate the layout for this fragment
-        return view;
+        return (this.view = view);
     }
 
 
-    public void setProgressState(String state, int currentSize, int sessionMaxSize){
-        if(txtView_sessionState != null && txtView_sessionSize != null) {
-            this.txtView_sessionState.setText(state);
-            this.txtView_sessionSize.setText(String.valueOf(currentSize).concat("/").concat(String.valueOf(sessionMaxSize)));
-        }
+    public void setProgressState(final String state, final int currentSize, final int sessionMaxSize){
+        Runnable updateView = new Runnable() {
+            @Override
+            public void run() {
+                if(txtView_sessionState != null && txtView_sessionSize != null) {
+                    txtView_sessionState.setText(state);
+                    txtView_sessionSize.setText(String.valueOf(currentSize).concat("/").concat(String.valueOf(sessionMaxSize)));
+                }
+            }
+        };
+        view.post(updateView);
     }
 
     @Override

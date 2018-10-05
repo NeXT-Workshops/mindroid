@@ -65,6 +65,7 @@ public class SessionHandler {
                             // add Robot and start uncoupled Session
                             currentState = SessionState.RUNNING_UNCOUPLED;
                             sessionRobots.add(robot);
+                            msw.sendMessage(startSessionMessage, robot);
                             l.info(robot + " started uncoupled Session");
                             break;
                         case MindroidMessage.START_SESSION:

@@ -1,12 +1,10 @@
 package org.mindroid.impl.imperative;
 
 
-import com.sun.deploy.util.SessionState;
-import javafx.beans.InvalidationListener;
 import org.mindroid.api.AbstractImperativeImplExecutor;
 import org.mindroid.api.IExecutor;
-import org.mindroid.api.ImperativeAPI;
 import org.mindroid.api.IImplStateListener;
+import org.mindroid.api.ImperativeAPI;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.common.messages.server.MessageType;
@@ -19,8 +17,6 @@ import org.mindroid.impl.robot.Robot;
 import org.mindroid.impl.util.Throwables;
 
 import java.util.HashSet;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

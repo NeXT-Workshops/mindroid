@@ -56,7 +56,7 @@ public class SessionProgressFragment extends DialogFragment {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //Interrupt Task using this dialog
-                        parentTask.interrupt();
+                        parentTask.cancelDialog();
                     }
                 }
 

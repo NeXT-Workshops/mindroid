@@ -607,6 +607,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         }
 
         private boolean startRobot(){
+
             while(!SessionStateObserver.getInstance().isDialogDisplayed()){
                 //Wait until dialog is displayed, then start robot otherwise accessing non existing view is not cool
                 try {
@@ -622,11 +623,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-            } while (!SessionStateObserver.getInstance().isSessionComplete() || !isInterrupted);
+            } while (!SessionStateObserver.getInstance().isSessionComplete() && !isDialogCancelled);
             //Finish execution when the Session is Full and gets started, or the cancel button of the dialog is pressed (isInterrutped)
             //-> with ending this method the dialog will be disposed onPostExecute(..)
-            if(isInterrupted){
+            if(isDialogCancelled){
                 //Stop execution of implementation
                 robot.stopRunningImplementation();
                 return false;

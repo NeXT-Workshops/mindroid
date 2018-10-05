@@ -11,13 +11,13 @@ public abstract class SessionProgressTask extends AsyncTask<String,Integer,Boole
     String title;
     Bundle configBundle;
 
-    boolean isInterrupted = false;
+    boolean isDialogCancelled = false;
 
     public SessionProgressTask(String title, Bundle configBundle, FragmentManager fManager) {
         this.fManager = fManager;
         this.title = title;
         this.configBundle = configBundle;
-        this.isInterrupted = false;
+        this.isDialogCancelled = false;
     }
 
     @Override
@@ -35,7 +35,7 @@ public abstract class SessionProgressTask extends AsyncTask<String,Integer,Boole
     @Override
     protected abstract Boolean doInBackground(String... params);
 
-    protected void interrupt(){
-        this.isInterrupted = true;
+    protected void cancelDialog(){
+        this.isDialogCancelled = true;
     }
 }

@@ -51,45 +51,60 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
         Runnable runImpl = new Runnable() {
             @Override
             public void run() {
+
+                LOGGER.info("Started execution of implementation.");
                 setExecutionFinished(false);
                 setInterrupted(false);
                 try {
                     setIsRunning(true);
-
                     int sessionRobotCount = runningImpl.getSessionRobotCount();
+
                     // handle Session stuff before running program itself
                     messenger.sendSessionMessage(sessionRobotCount);
                     // if we need to wait for other robots to join
 
                     updateObserver(SessionStateObserver.INIT,0,runningImpl.getSessionRobotCount());
-
+                    LOGGER.info("Session Size is : "+ sessionRobotCount);
                     if (sessionRobotCount > 0) {
-                        boolean startSession = false;
+
+                        boolean waitingForCoupledStart = true;
+
                         Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
                         updateObserver(SessionStateObserver.PENDING,1,runningImpl.getSessionRobotCount());
-                        while (!startSession) {
+                        // if no
+                        while (waitingForCoupledStart && !runningImpl.isInterrupted()) {
                             Thread.sleep(10);
                             // wait for start-message from Server
                             if (messenger.hasMessage()) {
+                                LOGGER.info("receivedMessage");
                                 MindroidMessage msg = messenger.getNextMessage();
                                 int sessionCommand = msg.getSessionRobotCount();
-                                LOGGER.log(Level.INFO, msg.toString());
+                                //LOGGER.log(Level.INFO, msg.toString());
                                 if(msg.getSource().equals(RobotId.SESSION_HANDLER) && msg.getMessageType().equals(MessageType.SESSION) ){
                                     if (sessionCommand == MindroidMessage.START_SESSION) {
-                                        startSession = true;
+                                        LOGGER.info("Received start-message, can execute implementation");
+                                        waitingForCoupledStart = false;
                                     }else{
+                                        LOGGER.info("Received Update-Message, sessionCommand: " + sessionCommand);
                                         updateObserver(SessionStateObserver.PENDING, sessionCommand, runningImpl.getSessionRobotCount());
                                     }
                                 }
                             }
                         }
                     }
-                    updateObserver(SessionStateObserver.READY,1, runningImpl.getSessionRobotCount());
-                    Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
-                    Robot.getRobotController().getBrickController().buzz();
-                    
-                    runningImpl.run();
 
+                    if(runningImpl.isInterrupted()){
+                        // if aborted from Button
+                        LOGGER.info("Execution aborted while in pending");
+                        messenger.sendSessionMessage(MindroidMessage.QUIT_SESSION);
+                    }else{
+                        // else not aborted -> run implementation
+                        LOGGER.info("Executing Implementation");
+                        updateObserver(SessionStateObserver.READY, 1, runningImpl.getSessionRobotCount());
+                        Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                        Robot.getRobotController().getBrickController().buzz();
+                        runningImpl.run();
+                    }
                 } catch (Exception e) {
                     //Throw error
                     String errMsg = "An Error occured while trying to execute the Imperative Implementation with the ID \"" + runningImpl.getImplementationID() + "\". \n The given errormessage is: " + e.getMessage();

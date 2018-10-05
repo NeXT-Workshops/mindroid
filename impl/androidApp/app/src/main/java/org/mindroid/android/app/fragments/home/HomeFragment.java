@@ -599,6 +599,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         protected Boolean doInBackground(String... params) {
             return startRobot();
         }
+
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
@@ -637,6 +638,12 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         protected Boolean doInBackground(String... params) {
             robot.stopRunningImplmentation();
             return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            robot.isRunning = result;
         }
     }
 

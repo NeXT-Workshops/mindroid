@@ -60,7 +60,7 @@ echo.
 
 set /p input = start recovery and hit enter
 echo Copy Lineage zip-file
-adb push lineage-14.1-20180301-nightly-hammerhead-signed.zip /sdcard/
+adb push lineage-14.1-20181004-nightly-hammerhead-signed.zip /sdcard/
 echo.
 
 echo On Screen goto Wipe - Advanced Wipe 
@@ -73,15 +73,6 @@ echo select "Do not install"
 pause
 
 exit
-
-
-
-
-
-
-
-
-
 
 :androidHomeNotSetError
 @echo ^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-

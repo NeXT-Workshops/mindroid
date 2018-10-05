@@ -3,6 +3,7 @@ package org.mindroid.impl.robot;
 
 import org.mindroid.api.*;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
+import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.logging.APILoggerManager;
@@ -89,6 +90,7 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     @Override
     public void addSessionStateObserver(AbstractImperativeImplExecutor.SessionStateObserver obs) {
         execProv.addSessionStateObserver(obs);
+        robot.getMessenger().addObserver(obs);
     }
 
     @Override

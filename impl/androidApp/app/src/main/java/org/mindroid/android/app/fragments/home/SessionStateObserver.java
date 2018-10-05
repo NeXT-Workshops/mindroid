@@ -21,13 +21,19 @@ public class SessionStateObserver implements AbstractImperativeImplExecutor.Sess
     @Override
     public void updateState(String state, int currentRobotCount, int maxSessionRobots) {
         spf.setProgressState(state,currentRobotCount,maxSessionRobots);
-        if(state.equals("READY")){
+        if(state.equals(READY)){
             isReady = true;
         }
 
-        if(state.equals("STOP")){
+        if(state.equals(STOP)){
             isStopped = true;
         }
+    }
+
+    @Override
+    public void stopExecution() {
+        isReady = false;
+        isStopped = true;
     }
 
     public SessionProgressFragment createSessionProgressDialog(SessionProgressTask parent){

@@ -1,6 +1,7 @@
 package org.mindroid.impl.imperative;
 
 
+import com.sun.deploy.util.SessionState;
 import javafx.beans.InvalidationListener;
 import org.mindroid.api.AbstractImperativeImplExecutor;
 import org.mindroid.api.IExecutor;
@@ -64,12 +65,12 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                     messenger.sendSessionMessage(sessionRobotCount);
                     // if we need to wait for other robots to join
 
-                    updateObserver("Init Session",0,runningImpl.getSessionRobotCount());
+                    updateObserver(SessionStateObserver.INIT,0,runningImpl.getSessionRobotCount());
 
                     if (sessionRobotCount > 0) {
                         boolean startSession = false;
                         Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
-                        updateObserver("Pending",1,runningImpl.getSessionRobotCount());
+                        updateObserver(SessionStateObserver.PENDING,1,runningImpl.getSessionRobotCount());
                         while (!startSession) {
                             Thread.sleep(10);
                             // wait for start-message from Server
@@ -81,13 +82,13 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                                     if (sessionCommand == MindroidMessage.START_SESSION) {
                                         startSession = true;
                                     }else{
-                                        updateObserver("Pending", sessionCommand, runningImpl.getSessionRobotCount());
+                                        updateObserver(SessionStateObserver.PENDING, sessionCommand, runningImpl.getSessionRobotCount());
                                     }
                                 }
                             }
                         }
                     }
-                    updateObserver("READY",1, runningImpl.getSessionRobotCount());
+                    updateObserver(SessionStateObserver.READY,1, runningImpl.getSessionRobotCount());
                     Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
                     Robot.getRobotController().getBrickController().buzz();
                     

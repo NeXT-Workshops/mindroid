@@ -94,9 +94,9 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                     }
 
                     if(runningImpl.isInterrupted()){
-                        // if aborted from Button
+                        // if aborted from Button, quitSession is called in finally
                         LOGGER.info("Execution aborted while in pending");
-                        messenger.sendSessionMessage(MindroidMessage.QUIT_SESSION);
+                        // messenger.sendSessionMessage(MindroidMessage.QUIT_SESSION);
                     }else{
                         // else not aborted -> run implementation
                         LOGGER.info("Executing Implementation");
@@ -145,7 +145,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
     @Override
     public void stop() {
         LOGGER.log(Level.INFO,"Stopping the currently running implementation");
-        quitSession();
+        // quitSession();
         //Only set interrupted field, when exection has not finished
         if (!isExecutionFinished()) {
             setInterrupted(true);

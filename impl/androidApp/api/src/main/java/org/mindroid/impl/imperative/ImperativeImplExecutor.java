@@ -10,6 +10,7 @@ import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.common.messages.server.RobotId;
 import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.logging.APILoggerManager;
@@ -66,23 +67,27 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                     updateObserver("Init Session",0,runningImpl.getSessionRobotCount());
 
                     if (sessionRobotCount > 0) {
-                        boolean noMessage = true;
+                        boolean startSession = false;
                         Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
                         updateObserver("Pending",1,runningImpl.getSessionRobotCount());
-                        while (noMessage) {
+                        while (!startSession) {
                             Thread.sleep(10);
-
-                            //wait for start-message from Server
+                            // wait for start-message from Server
                             if (messenger.hasMessage()) {
-                                MindroidMessage incoming = messenger.getNextMessage();
-                                LOGGER.log(Level.INFO, incoming.toString());
-                                if(incoming.getMessageType().equals(MessageType.SESSION) && incoming.getSessionRobotCount() == MindroidMessage.START_SESSION){
-                                    noMessage = false;
+                                MindroidMessage msg = messenger.getNextMessage();
+                                int sessionCommand = msg.getSessionRobotCount();
+                                LOGGER.log(Level.INFO, msg.toString());
+                                if(msg.getSource().equals(RobotId.SESSION_HANDLER) && msg.getMessageType().equals(MessageType.SESSION) ){
+                                    if (sessionCommand == MindroidMessage.START_SESSION) {
+                                        startSession = true;
+                                    }else{
+                                        updateObserver("Pending", sessionCommand, runningImpl.getSessionRobotCount());
+                                    }
                                 }
                             }
                         }
                     }
-                    updateObserver("READY",1,runningImpl.getSessionRobotCount());
+                    updateObserver("READY",1, runningImpl.getSessionRobotCount());
                     Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
                     Robot.getRobotController().getBrickController().buzz();
                     

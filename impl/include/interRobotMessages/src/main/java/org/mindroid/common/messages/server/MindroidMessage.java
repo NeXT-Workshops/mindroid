@@ -10,10 +10,12 @@ public class MindroidMessage {
     private final String content;
     private final int sessionRobotCount;
 
-    public final static int BAD_SESSION_SIZE = -666;
-    public final static int START_SESSION = -3;
-    public final static int QUIT_SESSION = -2;
-    public final static int UNCOUPLED_SESSION = -1;
+    public static final int BAD_SESSION_SIZE = -666;
+    public static final int START_SESSION = -3;
+    public static final int QUIT_SESSION = -2;
+    public static final int UNCOUPLED_SESSION = -1;
+    public static final int STOP_SESSION = 0;
+
 
     public MindroidMessage(RobotId source, RobotId destination, MessageType messageType, String content, int sessionRobotCount) {
         this.source = source;

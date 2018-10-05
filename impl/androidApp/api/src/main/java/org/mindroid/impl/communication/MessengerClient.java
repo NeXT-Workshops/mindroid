@@ -1,5 +1,6 @@
 package org.mindroid.impl.communication;
 
+import org.mindroid.api.AbstractImperativeImplExecutor;
 import org.mindroid.api.communication.IMessageListener;
 import org.mindroid.api.communication.IMessageServer;
 import org.mindroid.api.communication.IMessenger;
@@ -57,9 +58,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
 
     private final MessageMarshaller serverMessageMarshaller = new MessageMarshaller();
     private final ArrayList<MindroidMessage> messages = new ArrayList<MindroidMessage>();
-
-    /** Maps RobtoID to its runtimeID **/
-    private Map<RobotId,Integer> runtimeMap = new HashMap<RobotId,Integer>();
+    private AbstractImperativeImplExecutor.SessionStateObserver observer;
 
     public MessengerClient(String robotID){
         this.robotID = robotID;
@@ -215,6 +214,9 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
      */
     @Override
     public void handleMessage(MindroidMessage msg) {
+        if(msg.getMessageType().equals(MessageType.SESSION) && msg.getSessionRobotCount() == MindroidMessage.STOP_SESSION){
+            observer.stopExecution();
+        }
         LOGGER.log(Level.INFO, "rcvd msg: " + msg.toString());
         getMessages().add(msg);
 
@@ -269,5 +271,9 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
     public void sendSessionMessage(int sessionRobotCount) {
         MindroidMessage sessionMessage = new MindroidMessage(new RobotId(robotID), RobotId.SERVER_LOG, MessageType.SESSION, "", sessionRobotCount);
         sendMessage(sessionMessage);
+    }
+
+    public void addObserver(AbstractImperativeImplExecutor.SessionStateObserver obs) {
+        this.observer = obs;
     }
 }

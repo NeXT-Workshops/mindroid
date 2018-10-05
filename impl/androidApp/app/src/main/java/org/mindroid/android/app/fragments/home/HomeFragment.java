@@ -620,7 +620,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             //-> with ending this method the dialog will be disposed onPostExecute(..)
             if(isInterrupted){
                 //Stop execution of implementation
-                robot.stopRunningImplmentation();
+                robot.stopRunningImplementation();
                 return false;
             }
 
@@ -636,7 +636,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
         @Override
         protected Boolean doInBackground(String... params) {
-            robot.stopRunningImplmentation();
+            robot.stopRunningImplementation();
             return false;
         }
 

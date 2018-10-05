@@ -43,7 +43,7 @@ public class SessionHandler {
         updateSessionLabel();
     }
 
-    private MindroidMessage startSessionMessage= new MindroidMessage(RobotId.SERVER_LOG, MessageType.SESSION, "START SESSION", RobotId.BROADCAST, MindroidMessage.START_SESSION);
+    private MindroidMessage startSessionMessage= new MindroidMessage(RobotId.SESSION_HANDLER, RobotId.BROADCAST, MessageType.SESSION, "START SESSION", MindroidMessage.START_SESSION);
 
     public void handleSessionMessage(MindroidMessage msg) throws IOException {
         l.info("State before: "+ currentState);

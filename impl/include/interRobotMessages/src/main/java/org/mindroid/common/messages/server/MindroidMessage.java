@@ -7,15 +7,15 @@ public class MindroidMessage {
     private final RobotId source;
     private final RobotId destination;
     private final MessageType messageType;
-    private int sessionRobotCount;
     private final String content;
+    private final int sessionRobotCount;
 
     public static final int BAD_SESSION_SIZE = -666;
     public final static int QUIT_SESSION = -2;
     public final static int UNCOUPLED_SESSION = -1;
     public final static int START_SESSION = 0;
 
-    public MindroidMessage(RobotId source, MessageType messageType, String content, RobotId destination, int sessionRobotCount) {
+    public MindroidMessage(RobotId source, RobotId destination, MessageType messageType, String content, int sessionRobotCount) {
         this.source = source;
         this.messageType = messageType;
         this.content = content;

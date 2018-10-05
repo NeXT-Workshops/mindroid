@@ -178,7 +178,7 @@ public class MindroidServerWorker implements Runnable {
                 @Override
                 public void run() {
                     if (!msg.getSource().equals(robot)) {
-                        sendMessage(new MindroidMessage(msg.getSource(), msg.getMessageType(), msg.getContent(), robot, msg.getSessionRobotCount()), robot);
+                        sendMessage(new MindroidMessage(msg.getSource(), robot, msg.getMessageType(), msg.getContent(), msg.getSessionRobotCount()), robot);
                         logger.info("Broadcast Message sent to: " + robot);
                     }
                 }

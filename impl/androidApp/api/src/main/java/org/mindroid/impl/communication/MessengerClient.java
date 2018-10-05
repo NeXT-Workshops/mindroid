@@ -267,7 +267,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
     }
 
     public void sendSessionMessage(int sessionRobotCount) {
-        MindroidMessage sessionMessage = new MindroidMessage(new RobotId(robotID), MessageType.SESSION, "", RobotId.SERVER_LOG, sessionRobotCount);
+        MindroidMessage sessionMessage = new MindroidMessage(new RobotId(robotID), RobotId.SERVER_LOG, MessageType.SESSION, "", sessionRobotCount);
         sendMessage(sessionMessage);
     }
 }

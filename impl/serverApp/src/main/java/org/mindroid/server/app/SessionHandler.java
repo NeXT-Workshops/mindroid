@@ -108,9 +108,8 @@ public class SessionHandler {
                             if (sessionCommand == maxSessionSize) {
                                 // sessionSize correct, join Session
                                 sessionRobots.add(robot);
-                                sendSessionUpdate(sessionRobots.size());
                                 l.info(robot + " joins Session");
-                                // if all joined, run session, else keep Pending
+
                                 if (sessionRobots.size() == maxSessionSize) {
                                     l.info("Session is full, start RUNNING_COUPLED");
                                     currentState = SessionState.RUNNING_COUPLED;
@@ -118,6 +117,7 @@ public class SessionHandler {
                                 } else {
                                     l.info("Session not full yet, keep PENDING");
                                     currentState = SessionState.PENDING;
+                                    sendSessionUpdate(sessionRobots.size());
                                 }
                             } else {
                                 l.warn(robot + " tried to join Session but sent wrong size");

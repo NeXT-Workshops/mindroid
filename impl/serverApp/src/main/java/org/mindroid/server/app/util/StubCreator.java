@@ -4,13 +4,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindroid.server.app.MindroidServerFrame;
 
+import javax.lang.model.SourceVersion;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class StubCreator {
-    private Logger l = LogManager.getLogger(MindroidServerFrame.class);
+    private Logger LOGGER = LogManager.getLogger(MindroidServerFrame.class);
 
     private static StubCreator  ourInstance = new StubCreator();
 
@@ -23,6 +24,7 @@ public class StubCreator {
     }
 
     public void showDialog() {
+        LOGGER.info("Showing Dialog to create new stub");
         JTextField className = new JTextField();
         JTextField progName = new JTextField();
         Integer[] sizes = {-1, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -30,20 +32,50 @@ public class StubCreator {
         Object[] message = {"Klassenname", className,
                             "Programmname", progName,
                             "Sessiongröße", sessionSize};
+        int n = JOptionPane.showOptionDialog(null, message, "title", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-        JOptionPane pane = new JOptionPane( message,
-                JOptionPane.PLAIN_MESSAGE,
-                JOptionPane.OK_CANCEL_OPTION);
-        pane.createDialog(null, "Klasse generieren").setVisible(true);
-        try {
-
-            createStub(capitalize(className.getText()), progName.getText(), sizes[sessionSize.getSelectedIndex()]);
-        } catch (IOException e) {
-            e.printStackTrace();
+        switch (n){
+            case JOptionPane.CANCEL_OPTION:
+                LOGGER.info("Canceled StubCreator Dialog");
+                break;
+            case JOptionPane.CLOSED_OPTION:
+                LOGGER.info("Closed StubCreator Dialog");
+                break;
+            case JOptionPane.OK_OPTION:
+                LOGGER.info("Chose to create Class in Dialog");
+                LOGGER.info("Input from stub-dialog: " +
+                        "Classname: [" + className.getText() + "] " +
+                        "ProgName: [" + progName.getText() + "] " +
+                        "SessionSize: [" + sizes[sessionSize.getSelectedIndex()] + "] ");
+                String name = capitalize(className.getText());
+                if (isValidName(name)){
+                    try {
+                        createStub(name, progName.getText(), sizes[sessionSize.getSelectedIndex()]);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    LOGGER.error("[" + name + "] is not a valid identifier for a Java Class");
+                }
         }
     }
+
+    /**
+     * Takes a String and capitalizes the first character
+     * @param in the String whose first character shall be capitalized
+     * @return the capitalized String
+     */
     private String capitalize(String in){
         return in.substring(0,1).toUpperCase() + in.substring(1, in.length());
+    }
+
+    /**
+     * Checks if the String is a valid name for a Java Class
+     * @param className
+     * @return
+     */
+    boolean isValidName (String className) {
+        return SourceVersion.isIdentifier(className) && !SourceVersion.isKeyword(className);
     }
 
     private final String basePath = "..\\androidApp\\app\\src\\main\\java\\org\\mindroid\\android\\app\\programs\\workshop\\stubs\\";
@@ -81,9 +113,10 @@ public class StubCreator {
                 assert classfile != null;
                 classfile.flush();
                 classfile.close();
+                LOGGER.info("Created class: " + f.getCanonicalPath());
             }
         } else {
-            l.error("Classname already in use");
+            LOGGER.error("Classname already in use");
         }
     }
 }

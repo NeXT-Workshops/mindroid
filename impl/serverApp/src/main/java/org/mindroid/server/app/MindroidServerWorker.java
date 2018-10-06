@@ -14,7 +14,9 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * @author Roland Kluge - Initial implementation
@@ -156,34 +158,50 @@ public class MindroidServerWorker implements Runnable {
 
     }
     public void broadcastMessage(final MindroidMessage msg) {
+        RobotId[] destinations = um.getRobotIdsArray();
+        LOGGER.info("Sending broadcast message to: " + Arrays.toString(destinations));
         mindroidServerFrame.addContentLine(msg.getSource().getValue(), msg.getDestination().getValue(), "LOG", msg.getContent());
-        for(final RobotId robot : um.getRobotIdsArray()) {
-            Runnable run = new Runnable() {
-                @Override
-                public void run() {
-                    if (!msg.getSource().equals(robot)) {
-                        sendMessage(new MindroidMessage(msg.getSource(), robot, msg.getMessageType(), msg.getContent(), msg.getSessionRobotCount()), robot);
-                        LOGGER.info("Broadcast Message sent to: " + robot);
-                    }
-                }
-            };
-            new Thread(run).start();
-        }
+        sendToRobots(destinations, msg);
     }
 
-    public void multicast(RobotId[] robots, final MindroidMessage msg){
-        for(final RobotId robot : robots) {
-            Runnable run = new Runnable() {
-                @Override
-                public void run() {
-                    if (!msg.getSource().equals(robot)) {
-                        sendMessage(new MindroidMessage(msg.getSource(), robot, msg.getMessageType(), msg.getContent(), msg.getSessionRobotCount()), robot);
-                        LOGGER.info("Multicast Message sent to: " + robot);
+    public void multicast(RobotId[] destinatins, final MindroidMessage msg){
+        LOGGER.info("Sending multicast message to: " + Arrays.toString(destinatins));
+        sendToRobots(destinatins, msg);
+    }
+
+    private void sendToRobots(RobotId[] destinations, final MindroidMessage msg){
+        // V1, start each thread right after creating it
+
+        for(final RobotId destination : destinations) {
+            if (!msg.getSource().equals(destination)) {
+                Runnable sendMessage = new Runnable() {
+                    @Override
+                    public void run() {
+                        sendMessage(new MindroidMessage(msg.getSource(), destination, msg.getMessageType(), msg.getContent(), msg.getSessionRobotCount()), destination);
                     }
-                }
-            };
-            new Thread(run).start();
+                };
+                new Thread(sendMessage).start();
+            }
         }
+
+        // V2, collect threads and start them in seperate loop after all threads have been created
+        /*
+        Set<Thread> threads = null;
+        for(final RobotId destination : destinations) {
+            if (!msg.getSource().equals(destinations)) {
+                Runnable sendMessage = new Runnable() {
+                    @Override
+                    public void run() {
+                        sendMessage(new MindroidMessage(msg.getSource(), destination, msg.getMessageType(), msg.getContent(), msg.getSessionRobotCount()), destination);
+                    }
+                };
+                threads.add(new Thread(sendMessage));
+            }
+        }
+        for (Thread thread : threads){
+            thread.start();
+        }
+        */
 
     }
 

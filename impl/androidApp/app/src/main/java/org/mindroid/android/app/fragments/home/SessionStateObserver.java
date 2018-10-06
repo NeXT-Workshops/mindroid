@@ -13,13 +13,10 @@ public class SessionStateObserver implements AbstractImperativeImplExecutor.Sess
     }
 
     SessionProgressFragment spf;
-    private org.mindroid.android.app.robodancer.Robot robot;
-
     private boolean ready = false;
     private boolean stopped = false;
 
     private SessionStateObserver() {
-        robot = MainActivity.robot;
     }
 
     public boolean isDialogDisplayed() {
@@ -42,7 +39,7 @@ public class SessionStateObserver implements AbstractImperativeImplExecutor.Sess
     public void stopExecution() {
         ready = false;
         stopped = true;
-        robot.stopRunningImplementation();
+        MainActivity.robot.stopRunningImplementation();
     }
 
     public SessionProgressFragment createSessionProgressDialog(SessionProgressTask parent){

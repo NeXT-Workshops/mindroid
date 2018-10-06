@@ -26,7 +26,7 @@ public class MindroidServerApplicationMain {
     private static ServerSocket server = null;
 
     public static void main(String[] args) {
-        Language.setLocale(Language.GERMAN);
+        Language.setLocale(Locale.getDefault());
 
         //Call this to create MindroidServerConsoleFrame-object before creating the logger redirecting the System.out-Stream to its textArea. DONT REMOVE!
         MindroidServerConsoleFrame.getMindroidServerConsole();

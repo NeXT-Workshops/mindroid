@@ -50,6 +50,13 @@ public abstract class AbstractImperativeImplExecutor extends Observable implemen
     }
 
     public interface SessionStateObserver{
+        String INIT = "Init Session";
+        String PENDING = "Pending";
+        String READY = "Ready";
+        String STOP = "Stop";
+
         void updateState(String state, int currentRobotCount, int maxSessionRobots);
-    }
+        void stopExecution();
+
+        }
 }

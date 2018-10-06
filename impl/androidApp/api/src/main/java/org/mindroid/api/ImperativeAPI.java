@@ -1,11 +1,21 @@
 package org.mindroid.api;
 
 import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.impl.logging.APILoggerManager;
+
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * This Class defines the basic Imperative Implementation API.
  */
 public abstract class ImperativeAPI extends BasicAPI implements IInterruptable {
+    private static final Logger LOGGER = Logger.getLogger(ImperativeAPI.class.getName());
+    static{
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+    }
+
     /**
      * To identify the Implementation.
      * ID will be shown in the Apps dropdown.
@@ -26,11 +36,23 @@ public abstract class ImperativeAPI extends BasicAPI implements IInterruptable {
     }
 
     /**
-     *
+     * @param sessionRobotCount - The Size of the session you want to start aka the number of robots collaborating in
+     *                          this implementation
+     *                          must be > 1
      * @param implementationID - The ID of your Implementation. Necessary to run your implementation later on.
      */
     public ImperativeAPI(String implementationID, int sessionRobotCount){
-        this.sessionRobotCount = sessionRobotCount;
+        /**
+         * Session Robot Count from this constructor should only be >1
+         * Values <= 0 are control commands as defined in class MindroidMessage
+         * Uncoupled Sessions should not make use of this constructor, they should only provide String implementationID
+         */
+        if (sessionRobotCount > 1) {
+            this.sessionRobotCount = sessionRobotCount;
+        } else {
+            LOGGER.log(Level.WARNING, "Implementation "+ implementationID + " tried to set faulty SessionSize");
+            this.sessionRobotCount = MindroidMessage.BAD_SESSION_SIZE;
+        }
         this.implementationID = implementationID;
     }
 

@@ -52,7 +52,7 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     }
 
     public ImperativeWorkshopAPI(String implementationID) {
-        super(implementationID, MindroidMessage.UNCOUPLED_SESSION); // without session
+        super(implementationID); // without session
         //This DiffPilot supports angle correction while truning
         this.diffPilot = new DifferentialPilot(this, getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),getSensorProvider(),getGyroSensorPort(),5.6f,12.5f);
     }

@@ -5,18 +5,18 @@ import org.mindroid.common.messages.server.MindroidMessage;
 
 public class RemoteSlave extends ImperativeWorkshopAPI {
 
-    public RemoteSlave(){
+    public RemoteSlave() {
         super("Remote Slave", 2);
     }
 
-        @Override
+    @Override
     public void run() {
         setMotorSpeed(250);
-        while(!isInterrupted()){
+        while (!isInterrupted()) {
             delay(10);
-            if(hasMessage()){
+            if (hasMessage()) {
                 MindroidMessage msg = getNextMessage();
-                switch(msg.getContent()){
+                switch (msg.getContent()) {
                     case "UP":
                         forward();
                         break;

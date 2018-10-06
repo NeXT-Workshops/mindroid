@@ -1,15 +1,15 @@
 package org.mindroid.impl.imperative;
 
 
-import javafx.beans.InvalidationListener;
 import org.mindroid.api.AbstractImperativeImplExecutor;
 import org.mindroid.api.IExecutor;
-import org.mindroid.api.ImperativeAPI;
 import org.mindroid.api.IImplStateListener;
+import org.mindroid.api.ImperativeAPI;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
+import org.mindroid.common.messages.server.RobotId;
 import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.logging.APILoggerManager;
@@ -17,8 +17,6 @@ import org.mindroid.impl.robot.Robot;
 import org.mindroid.impl.util.Throwables;
 
 import java.util.HashSet;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,41 +51,60 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
         Runnable runImpl = new Runnable() {
             @Override
             public void run() {
+
+                LOGGER.info("Started execution of implementation.");
                 setExecutionFinished(false);
                 setInterrupted(false);
                 try {
                     setIsRunning(true);
-
                     int sessionRobotCount = runningImpl.getSessionRobotCount();
+
                     // handle Session stuff before running program itself
                     messenger.sendSessionMessage(sessionRobotCount);
                     // if we need to wait for other robots to join
 
-                    updateObserver("Init Session",0,runningImpl.getSessionRobotCount());
-
+                    updateObserver(SessionStateObserver.INIT,0,runningImpl.getSessionRobotCount());
+                    LOGGER.info("Session Size is : "+ sessionRobotCount);
                     if (sessionRobotCount > 0) {
-                        boolean noMessage = true;
-                        Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
-                        updateObserver("Pending",1,runningImpl.getSessionRobotCount());
-                        while (noMessage) {
-                            Thread.sleep(10);
 
-                            //wait for start-message from Server
+                        boolean waitingForCoupledStart = true;
+
+                        Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.YELLOW, EV3StatusLightInterval.BLINKING);
+                        updateObserver(SessionStateObserver.PENDING,1,runningImpl.getSessionRobotCount());
+                        // if no
+                        while (waitingForCoupledStart && !runningImpl.isInterrupted()) {
+                            Thread.sleep(10);
+                            // wait for start-message from Server
                             if (messenger.hasMessage()) {
-                                MindroidMessage incoming = messenger.getNextMessage();
-                                LOGGER.log(Level.INFO, incoming.toString());
-                                if(incoming.getMessageType().equals(MessageType.SESSION) && incoming.getSessionRobotCount() == MindroidMessage.START_SESSION){
-                                    noMessage = false;
+                                LOGGER.info("receivedMessage");
+                                MindroidMessage msg = messenger.getNextMessage();
+                                int sessionCommand = msg.getSessionRobotCount();
+                                //LOGGER.log(Level.INFO, msg.toString());
+                                if(msg.getSource().equals(RobotId.SESSION_HANDLER) && msg.getMessageType().equals(MessageType.SESSION) ){
+                                    if (sessionCommand == MindroidMessage.START_SESSION) {
+                                        LOGGER.info("Received start-message, can execute implementation");
+                                        waitingForCoupledStart = false;
+                                    }else{
+                                        LOGGER.info("Received Update-Message, sessionCommand: " + sessionCommand);
+                                        updateObserver(SessionStateObserver.PENDING, sessionCommand, runningImpl.getSessionRobotCount());
+                                    }
                                 }
                             }
                         }
                     }
-                    updateObserver("READY",1,runningImpl.getSessionRobotCount());
-                    Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
-                    Robot.getRobotController().getBrickController().buzz();
-                    
-                    runningImpl.run();
 
+                    if(runningImpl.isInterrupted()){
+                        // if aborted from Button, quitSession is called in finally
+                        LOGGER.info("Execution aborted while in pending");
+                        // messenger.sendSessionMessage(MindroidMessage.QUIT_SESSION);
+                    }else{
+                        // else not aborted -> run implementation
+                        LOGGER.info("Executing Implementation");
+                        updateObserver(SessionStateObserver.READY, 1, runningImpl.getSessionRobotCount());
+                        Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                        Robot.getRobotController().getBrickController().buzz();
+                        runningImpl.run();
+                    }
                 } catch (Exception e) {
                     //Throw error
                     String errMsg = "An Error occured while trying to execute the Imperative Implementation with the ID \"" + runningImpl.getImplementationID() + "\". \n The given errormessage is: " + e.getMessage();
@@ -128,7 +145,7 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
     @Override
     public void stop() {
         LOGGER.log(Level.INFO,"Stopping the currently running implementation");
-        quitSession();
+        // quitSession();
         //Only set interrupted field, when exection has not finished
         if (!isExecutionFinished()) {
             setInterrupted(true);

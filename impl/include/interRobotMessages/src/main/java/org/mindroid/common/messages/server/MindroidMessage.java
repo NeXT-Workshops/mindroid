@@ -3,16 +3,21 @@ package org.mindroid.common.messages.server;
 import java.util.Objects;
 
 public class MindroidMessage {
+
     private final RobotId source;
     private final RobotId destination;
     private final MessageType messageType;
-    private int sessionRobotCount;
     private final String content;
-    public final static int QUIT_SESSION = -2;
-    public final static int UNCOUPLED_SESSION = -1;
-    public final static int START_SESSION = 0;
+    private final int sessionRobotCount;
 
-    public MindroidMessage(RobotId source, MessageType messageType, String content, RobotId destination, int sessionRobotCount) {
+    public static final int BAD_SESSION_SIZE = -666;
+    public static final int START_SESSION = -3;
+    public static final int QUIT_SESSION = -2;
+    public static final int UNCOUPLED_SESSION = -1;
+    public static final int STOP_SESSION = 0;
+
+
+    public MindroidMessage(RobotId source, RobotId destination, MessageType messageType, String content, int sessionRobotCount) {
         this.source = source;
         this.messageType = messageType;
         this.content = content;

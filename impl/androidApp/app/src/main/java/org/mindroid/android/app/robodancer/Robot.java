@@ -200,7 +200,7 @@ public class Robot implements IImplStateListener {
     /**
      * Stop the running Implementation.
      */
-    public void stopRunningImplmentation(){
+    public void stopRunningImplementation(){
         LOGGER.log(Level.INFO, "Stopped execution: " + runningImplementationID);
         runningImplementationID = "";
         roFactory.getRobotCommandCenter().stopImplementation();

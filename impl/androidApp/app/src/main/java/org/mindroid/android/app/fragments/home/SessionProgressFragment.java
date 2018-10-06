@@ -1,34 +1,43 @@
 package org.mindroid.android.app.fragments.home;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.mindroid.android.app.R;
-import org.mindroid.impl.ev3.EV3PortIDs;
+
+import java.util.Objects;
 
 public class SessionProgressFragment extends DialogFragment {
 
     private static final String KEY_TITLE = "TITLE";
 
+    private static SessionProgressTask parentTask;
+
     private Dialog dialog;
     private TextView txtView_sessionState;
     private TextView txtView_sessionSize;
 
+    private View view;
 
     public SessionProgressFragment() {
         // Required empty public constructor
     }
 
-    public static SessionProgressFragment newInstance(String title, Bundle configBundle) {
+    public boolean isDialogDisplayed(){
+        return dialog != null && dialog.isShowing();
+    }
+
+    public static SessionProgressFragment newInstance(String title, Bundle configBundle,SessionProgressTask parent) {
         SessionProgressFragment fragment = new SessionProgressFragment();
         configBundle.putString(KEY_TITLE,title);
         fragment.setArguments(configBundle);
+        parentTask = parent;
         return fragment;
     }
 
@@ -40,16 +49,22 @@ public class SessionProgressFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        dialog = super.onCreateDialog(savedInstanceState);
-        return dialog;
-    }
+        super.onCreateDialog(savedInstanceState);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return getCustomView();
-    }
+        AlertDialog.Builder builder =  new  AlertDialog.Builder(getActivity())
+                .setNegativeButton(getResources().getString(R.string.txt_abort),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //Interrupt Task using this dialog
+                        parentTask.cancelDialog();
+                    }
+                }
 
+        )
+        .setView(getCustomView());
+
+        return (this.dialog = builder.create());
+    }
 
     /**
      *
@@ -63,15 +78,23 @@ public class SessionProgressFragment extends DialogFragment {
         txtView_sessionSize = (TextView) view.findViewById(R.id.txtView_sessionSize);
 
         // Inflate the layout for this fragment
-        return view;
+        return (this.view = view);
     }
 
 
-    public void setProgressState(String state, int currentSize, int sessionMaxSize){
-        if(txtView_sessionState != null && txtView_sessionSize != null) {
-            this.txtView_sessionState.setText(state);
-            this.txtView_sessionSize.setText(String.valueOf(currentSize).concat("/").concat(String.valueOf(sessionMaxSize)));
-        }
+    public void setProgressState(final String state, final int currentSize, final int sessionMaxSize) {
+        Runnable updateView = new Runnable() {
+            @Override
+            public void run() {
+                if(txtView_sessionState != null && txtView_sessionSize != null) {
+                    txtView_sessionState.setText(state);
+                    txtView_sessionSize.setText(String.valueOf(currentSize).concat("/").concat(String.valueOf(sessionMaxSize)));
+                }
+            }
+        };
+
+
+        Objects.requireNonNull(view, "[SessionProgressFragment] View is null").post(updateView);
     }
 
     @Override

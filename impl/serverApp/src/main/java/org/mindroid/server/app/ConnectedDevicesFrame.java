@@ -208,7 +208,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         btn_connectADB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                logger.log(Level.INFO,"Remove User "+robotID);
+                logger.log(Level.INFO,"Connect ADB to User "+robotID);
                 try {
                     ADBService.connectADB(socketAddress);
                 } catch (IOException | JadbException | ConnectionToRemoteDeviceException e1) {

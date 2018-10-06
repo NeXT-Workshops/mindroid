@@ -92,7 +92,7 @@ public class SessionHandler {
                                 l.info("Session now empty, going to IDLE");
                             }else {
                                 currentState = SessionState.PENDING;
-                                sendSessionUpdate();
+                                sendSessionUpdate(sessionRobots.size());
                                 l.info("Session not empty yet, keep PENDING");
                             }
                             break;
@@ -108,7 +108,7 @@ public class SessionHandler {
                             if (sessionCommand == maxSessionSize) {
                                 // sessionSize correct, join Session
                                 sessionRobots.add(robot);
-                                sendSessionUpdate();
+                                sendSessionUpdate(sessionRobots.size());
                                 l.info(robot + " joins Session");
                                 // if all joined, run session, else keep Pending
                                 if (sessionRobots.size() == maxSessionSize) {
@@ -128,8 +128,8 @@ public class SessionHandler {
                     break;
                 case RUNNING_COUPLED:
                     if (sessionCommand == MindroidMessage.QUIT_SESSION) {
+                        sendSessionUpdate(MindroidMessage.STOP_SESSION);
                         sessionRobots.clear();
-                        sendSessionUpdate();
                         currentState = SessionState.IDLE;
                         l.info(robot + " leaves Session, going to IDLE");
                         msf.addLocalContentLine("INFO", "Robot quit session, session ended");
@@ -169,20 +169,15 @@ public class SessionHandler {
         }
     }
 
-    private void sendSessionUpdate(){
-        int sessionUpdate = sessionRobots.size();
+    private void sendSessionUpdate(int sessionUpdate){
         MindroidMessage msg = new MindroidMessage(RobotId.SESSION_HANDLER, RobotId.BROADCAST, MessageType.SESSION, "SessionUpdate", sessionUpdate);
-        msw.multicast(sessionRobots.toArray(new RobotId[sessionUpdate]), msg);
+        msw.multicast(sessionRobots.toArray(new RobotId[sessionRobots.size()]), msg);
     }
 
     public boolean isSessionRunning() {
         return currentState == SessionState.RUNNING_COUPLED || currentState == SessionState.RUNNING_UNCOUPLED;
     }
 
-    public boolean isUncoupledSession() {
-        return currentState == SessionState.RUNNING_UNCOUPLED;
-    }
-    
     private void updateSessionLabel(){        
         String text = "";        
         switch (currentState){

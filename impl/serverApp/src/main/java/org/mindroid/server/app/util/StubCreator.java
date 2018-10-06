@@ -57,10 +57,10 @@ public class StubCreator {
             "import org.mindroid.impl.brick.Button;\n" +
             "import org.mindroid.impl.brick.Textsize;\n" +
             "\n" +
-            "public class CLASSNAME extends ImperativeWorkshopAPI {\n" +
+            "public class $CLASSNAME$ extends ImperativeWorkshopAPI {\n" +
             "\n" +
-            "\tpublic CLASSNAME(){\n" +
-            "\t\tsuper(\"PROGNAME\", SESSIONSIZE);\n" +
+            "\tpublic $CLASSNAME$(){\n" +
+            "\t\tsuper(\"$PROGNAME$\", $SESSIONSIZE$);\n" +
             "\t}\n" +
             "\n" +
             "\t@Override\n" +
@@ -69,20 +69,20 @@ public class StubCreator {
             "}";
 
     private void createStub(String classname, String progname, int sessionSize) throws IOException {
-        File f  = new File(basePath + classname + ".java");
+        File f = new File(basePath + classname + ".java");
         FileWriter classfile = null;
-        if(!f.exists()){
+        if (!f.exists()) {
             try {
                 classfile = new FileWriter(f);
-                classfile.write(stub.replace("CLASSNAME", classname).replace("PROGNAME", progname).replace("SESSIONSIZE", String.valueOf(sessionSize)));
+                classfile.write(stub.replace("$CLASSNAME$", classname).replace("$PROGNAME$", progname).replace("$SESSIONSIZE$", String.valueOf(sessionSize)));
             } catch (IOException e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 assert classfile != null;
                 classfile.flush();
                 classfile.close();
             }
-        }else{
+        } else {
             l.error("Classname already in use");
         }
     }

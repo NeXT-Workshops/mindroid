@@ -14,20 +14,9 @@ public class LawnMower extends ImperativeWorkshopAPI {
 
   @Override
     public void run() {
-        while(!isInterrupted()){
-            setMotorSpeed(200);
-            forward();
-            if(getLeftColor()== tapeColor && getRightColor() == tapeColor){
-                driveDistanceBackward(backDist);
-                turnRight(135);
-            }else if(getLeftColor()== tapeColor){
-                driveDistanceBackward(backDist);
-                turnRight(90);
-            }else if(getRightColor()== tapeColor){
-                driveDistanceBackward(backDist);
-                turnLeft(90);
-            }
-            delay(50);
-        }
+        /*
+        Änderungen erst hiernach einfügen
+         */
+
     }
 }

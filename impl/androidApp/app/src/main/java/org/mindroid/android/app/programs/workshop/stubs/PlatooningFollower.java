@@ -12,6 +12,8 @@ public class PlatooningFollower extends ImperativeWorkshopAPI {
 
     @Override
     public void run() {
-
+        /*
+        Änderungen erst hiernach einfügen
+         */
     }
 }

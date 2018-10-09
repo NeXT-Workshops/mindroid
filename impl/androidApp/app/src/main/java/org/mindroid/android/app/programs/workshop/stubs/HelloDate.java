@@ -14,6 +14,9 @@ public class HelloDate extends ImperativeWorkshopAPI {
 
     @Override
     public void run() {
+        clearDisplay();
+        drawString("Hello World", Textsize.MEDIUM, 10 , 50);
+    }
 
   }
   

@@ -11,6 +11,8 @@ public class PlatooningLeader extends ImperativeWorkshopAPI {
 
     @Override
     public void run() {
-
+        /*
+        Änderungen erst hiernach einfügen
+         */
     }
 }

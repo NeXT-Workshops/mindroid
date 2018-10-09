@@ -12,14 +12,8 @@ public class HelloWorldPingA extends ImperativeWorkshopAPI {
 
     @Override
     public void run() {
-        clearDisplay();
-        while(!isInterrupted()){
-            delay(10);
-            if(isButtonClicked(Button.ENTER)) {
-                sendMessage("Bob", "Hallo Bob!");
-                drawString("Nachricht an Bob gesendet!", Textsize.SMALL, 1, 60);
-                sendLogMessage("Nachricht an Bob gesendet!");
-            }
-        }
+        /*
+        Änderungen erst hiernach einfügen
+         */
     }
 }

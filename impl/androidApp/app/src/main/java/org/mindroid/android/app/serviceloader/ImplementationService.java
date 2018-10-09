@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.mindroid.android.app.fragments.log.LoggerFragment;
 import org.mindroid.api.BasicAPI;
 import org.mindroid.api.ImplementationIDCrawlerVisitor;
 
@@ -46,17 +47,19 @@ public class ImplementationService {
         classesSolutions = parseStringArray("classesSolutions", jsonObject);
         classesStubs = parseStringArray("classesStubs", jsonObject);
         classesDev = parseStringArray("classesDev", jsonObject);
-        classesDemo = parseStringArray("classesDemo", jsonObject);
+        //classesDemo = parseStringArray("classesDemo", jsonObject); TODO update jsonFinder
 
         setMap = makeMap();
         findImplementations();
     }
     private String[] parseStringArray(String key, JSONObject jsonObject){
         JSONArray classesJson = (JSONArray) jsonObject.get(key);
+
         String[] classNames = new String[classesJson.size()];
         for (int i = 0; i < classNames.length; i++) {
             classNames[i] = (String) classesJson.get(i);
         }
+
         return classNames;
     }
 
@@ -67,7 +70,7 @@ public class ImplementationService {
     private String[] classesDemo;
 
     private HashMap<String, String[]> setMap;// = makeMap();
-    private String[] program_sets = {"Solutions", "Stubs", "Statemachine", "Dev", DEMO};
+    private String[] program_sets = {"Solutions", "Stubs", "Statemachine", "Dev"};//TODO DEMO};
 
     private HashMap<String, String[]> makeMap(){
         HashMap<String, String[]> map = new HashMap<>();
@@ -75,7 +78,7 @@ public class ImplementationService {
         map.put(program_sets[1], classesStubs);
         map.put(program_sets[2], classesStatemachine);
         map.put(program_sets[3], classesDev);
-        map.put(program_sets[4], classesDemo);
+        //map.put(program_sets[4], classesDemo); TODO
         return map;
     }
 

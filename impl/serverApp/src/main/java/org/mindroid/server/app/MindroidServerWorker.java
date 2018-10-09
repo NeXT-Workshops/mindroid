@@ -16,7 +16,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.Set;
 
 /**
  * @author Roland Kluge - Initial implementation
@@ -202,7 +201,18 @@ public class MindroidServerWorker implements Runnable {
             thread.start();
         }
         */
+        // V3 no threads at all
+        /*
+        for(final RobotId destination : destinations) {
+            if (!msg.getSource().equals(destination)) {
+                sendMessage(new MindroidMessage(msg.getSource(), destination, msg.getMessageType(), msg.getContent(), msg.getSessionRobotCount()), destination);
+            }
+        }
+        */
+    }
 
+    public Socket getSocket() {
+        return socket;
     }
 
     private void registerRobot(MindroidMessage deserializedMsg) throws IOException, JadbException, ConnectionToRemoteDeviceException {
@@ -210,11 +220,10 @@ public class MindroidServerWorker implements Runnable {
         if (socketAddress instanceof InetSocketAddress) {
             //the port was sent as content of the registration message
             int port = Integer.parseInt(deserializedMsg.getContent());
-            boolean isAccepted = um.registerRobot(deserializedMsg.getSource(),this, socket, port);
+            boolean isAccepted = um.requestRegistration(deserializedMsg.getSource(),this, socket, port);
 
             if(!isAccepted){
                 //Registration got rejected by the server
-                mindroidServerFrame.addLocalContentLine("WARNING", "The Connection of "+getStrRobotID()+" got rejected! A Robot with that ID is already connected. Change RobotID to connect.");
                 //Stop ServerWorker run-Thread, otherwise calling disconnect will lead to the unregestration of the already connected device with the rejecetd robotID, and disconnect that connection too.
                 connected = false;
                 //Disconnect this socket as it got rejected.

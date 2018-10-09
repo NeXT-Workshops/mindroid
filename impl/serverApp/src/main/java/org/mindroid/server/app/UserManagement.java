@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class UserManagement {
 
-    private Logger logger;
+    private Logger LOGGER;
 
     private Map<RobotId, InetSocketAddress> ipMapping = new ConcurrentHashMap<>();
     private Map<RobotId, Socket> socketMapping = new ConcurrentHashMap<>();
@@ -25,26 +25,39 @@ public class UserManagement {
     }
 
     private UserManagement(){
-        logger = LogManager.getLogger(UserManagement.class);
+        LOGGER = LogManager.getLogger(UserManagement.class);
     }
 
-    public boolean registerRobot(RobotId robotId, MindroidServerWorker msWorker, Socket socket, int port) {
-        logger.log(Level.INFO,"Registering robot: "+robotId.getValue() + " with IP " + socket.getInetAddress().toString().replace("/",""));
-
-        InetSocketAddress remoteSocketAddress = (InetSocketAddress) socket.getRemoteSocketAddress();
-
-        if(ipMapping.containsKey(robotId) || socketMapping.containsKey(robotId)){
-            //Reject registration
-            return false;
+    public boolean requestRegistration(RobotId robotId, MindroidServerWorker msWorker, Socket socket, int port) {
+        if(ipMapping.containsKey(robotId)){
+            if(ipMapping.get(robotId).equals(socket.getRemoteSocketAddress())){
+                // Robot is known, tries to connect with known IP address -> robot is reconnecting, so allow
+                LOGGER.log(Level.INFO,"Reconnecting robot: "+robotId.getValue() + " with IP " + socket.getInetAddress().toString().replace("/",""));
+                removeUserAndCloseConnection(robotId);
+                registerRobot(robotId, msWorker, port);
+                return true;
+            }else{
+                // Connecting Known Name with new IP, reject registration
+                msWorker.getMindroidServerFrame().addLocalContentLine("WARNING", "The Connection of "+robotId.getValue()+" got rejected! A Robot with that ID is already connected. Change RobotID to connect.");
+                LOGGER.warn("The Connection of "+robotId.getValue()+" got rejected! A Robot with that ID is already connected. Change RobotID to connect.");
+                return false;
+            }
         }else {
-            ipMapping.put(robotId, new InetSocketAddress(remoteSocketAddress.getAddress(), port));
-            socketMapping.put(robotId, socket);
-            workerMapping.put(robotId, msWorker);
-
-            ConnectedDevicesFrame.getInstance().updateDevices();
+            // New Robot, normal registration
+            LOGGER.log(Level.INFO,"Registering robot: "+robotId.getValue() + " with IP " + socket.getInetAddress().toString().replace("/",""));
+            registerRobot(robotId, msWorker, port);
             return true;
         }
     }
+
+    private void registerRobot(RobotId robotId, MindroidServerWorker msWorker, int port){
+        ipMapping.put(robotId, new InetSocketAddress(((InetSocketAddress)msWorker.getSocket().getRemoteSocketAddress()).getAddress(), port));;
+        socketMapping.put(robotId, msWorker.getSocket());
+        workerMapping.put(robotId, msWorker);
+
+        ConnectedDevicesFrame.getInstance().updateDevices();
+    }
+
 
     public void removeAllUsers(){
         for (RobotId robot : ipMapping.keySet()) {
@@ -53,7 +66,7 @@ public class UserManagement {
     }
 
     public void removeUserAndCloseConnection(RobotId robot){
-        logger.log(Level.INFO,"Remove User ["+ robot.getValue() +"] and close Connection");
+        LOGGER.log(Level.INFO,"Remove User ["+ robot.getValue() +"] and close Connection");
 
         // Close connections
         workerMapping.get(robot).closeConnection();

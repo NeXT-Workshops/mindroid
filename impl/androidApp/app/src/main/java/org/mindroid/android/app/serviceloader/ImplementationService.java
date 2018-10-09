@@ -15,6 +15,8 @@ import java.util.List;
 
 public class ImplementationService {
 
+    public static final String DEMO = "Demo";
+
     //Collected implementations
 
     private HashMap<String, List<BasicAPI>> implementationSets = new HashMap<>();
@@ -44,6 +46,7 @@ public class ImplementationService {
         classesSolutions = parseStringArray("classesSolutions", jsonObject);
         classesStubs = parseStringArray("classesStubs", jsonObject);
         classesDev = parseStringArray("classesDev", jsonObject);
+        classesDemo = parseStringArray("classesDemo", jsonObject);
 
         setMap = makeMap();
         findImplementations();
@@ -61,9 +64,10 @@ public class ImplementationService {
     private String[] classesStatemachine;
     private String[] classesStubs;
     private String[] classesSolutions;
+    private String[] classesDemo;
 
     private HashMap<String, String[]> setMap;// = makeMap();
-    private String[] program_sets = {"Solutions", "Stubs", "Statemachine", "Dev"};
+    private String[] program_sets = {"Solutions", "Stubs", "Statemachine", "Dev", DEMO};
 
     private HashMap<String, String[]> makeMap(){
         HashMap<String, String[]> map = new HashMap<>();
@@ -71,6 +75,7 @@ public class ImplementationService {
         map.put(program_sets[1], classesStubs);
         map.put(program_sets[2], classesStatemachine);
         map.put(program_sets[3], classesDev);
+        map.put(program_sets[4], classesDemo);
         return map;
     }
 

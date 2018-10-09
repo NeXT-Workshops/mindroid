@@ -18,6 +18,7 @@ import org.mindroid.android.app.R;
 import org.mindroid.android.app.activities.IErrorHandler;
 import org.mindroid.android.app.activities.MainActivity;
 import org.mindroid.android.app.asynctasks.ProgressTask;
+import org.mindroid.android.app.dialog.DemoDialogFragment;
 import org.mindroid.android.app.dialog.ProgressDialog;
 import org.mindroid.android.app.fragments.log.GlobalLogger;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
@@ -601,6 +602,15 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                     e.printStackTrace();
                 }
             }
+
+            //If Demo implementation - show FullscreenDemoFragment //TODO
+            if(SettingsProvider.getInstance().getSelectedProgramSet().equals(ImplementationService.DEMO)){
+                //TODO test
+                DemoDialogFragment ddf = DemoDialogFragment.newInstance();
+                ddf.show(getFragmentManager(),"DemoDialog");
+            }
+
+
             robot.startExecuteImplementation(SettingsProvider.getInstance().selectedImplementationID);
             do {
                 try {

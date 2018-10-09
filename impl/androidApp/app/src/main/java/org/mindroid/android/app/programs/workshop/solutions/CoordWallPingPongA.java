@@ -5,7 +5,7 @@ import org.mindroid.api.ImperativeWorkshopAPI;
 public class CoordWallPingPongA extends ImperativeWorkshopAPI{
 
     public CoordWallPingPongA(){
-        super("Coord Wall Ping-Pong Alice [sol]");
+        super("Coord Wall Ping-Pong Alice [sol]", 2);
     }
 
     String colleague = "Bob";

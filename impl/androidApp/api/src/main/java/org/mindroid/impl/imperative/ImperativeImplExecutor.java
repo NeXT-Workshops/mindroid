@@ -7,6 +7,7 @@ import org.mindroid.api.IImplStateListener;
 import org.mindroid.api.ImperativeAPI;
 import org.mindroid.api.ev3.EV3StatusLightColor;
 import org.mindroid.api.ev3.EV3StatusLightInterval;
+import org.mindroid.api.robot.control.IBrickControl;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
@@ -58,14 +59,15 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                 try {
                     setIsRunning(true);
                     int sessionRobotCount = runningImpl.getSessionRobotCount();
-
+                    messenger.clearMessageCache();
                     // handle Session stuff before running program itself
                     messenger.sendSessionMessage(sessionRobotCount);
                     // if we need to wait for other robots to join
 
-                    updateObserver(SessionStateObserver.INIT,0,runningImpl.getSessionRobotCount());
                     LOGGER.info("Session Size is : "+ sessionRobotCount);
+
                     if (sessionRobotCount > 0) {
+                        updateObserver(SessionStateObserver.INIT,0,runningImpl.getSessionRobotCount());
 
                         boolean waitingForCoupledStart = true;
 
@@ -101,8 +103,11 @@ public class ImperativeImplExecutor extends AbstractImperativeImplExecutor imple
                         // else not aborted -> run implementation
                         LOGGER.info("Executing Implementation");
                         updateObserver(SessionStateObserver.READY, 1, runningImpl.getSessionRobotCount());
-                        Robot.getRobotController().getBrickController().setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
-                        Robot.getRobotController().getBrickController().buzz();
+                        IBrickControl brickController = Robot.getRobotController().getBrickController();
+                        brickController.setEV3StatusLight(EV3StatusLightColor.GREEN, EV3StatusLightInterval.ON);
+                        brickController.setVolume(1);
+                        brickController.buzz();
+
                         runningImpl.run();
                     }
                 } catch (Exception e) {

@@ -161,6 +161,7 @@ public class SessionHandler {
                             msf.addLocalContentLine("WARN", "Can't start coupled session as uncoupled session is already running");
                             break;
                     }
+                    break;
                 default:
                     msf.addLocalContentLine("INFO", "Unknown state, please contact support!");
                     break;

@@ -10,7 +10,7 @@ import org.mindroid.impl.brick.Textsize;
 public class PlatooningLeader extends ImperativeWorkshopAPI {
 
     public PlatooningLeader() {
-        super("Platooning Leader [sol]");
+        super("Platooning Leader [sol]", 2);
     }
 
     @Override

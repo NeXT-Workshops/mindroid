@@ -11,7 +11,7 @@ public class HelloWorldPing extends ImperativeWorkshopAPI {
     private final String player_2 = "Bob";
 
     public HelloWorldPing() {
-        super("Hello World Ping [sol]");
+        super("Hello World Ping [sol]", 2);
     }
 
     @Override

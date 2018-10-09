@@ -16,7 +16,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.Set;
 
 /**
  * @author Roland Kluge - Initial implementation
@@ -160,18 +159,16 @@ public class MindroidServerWorker implements Runnable {
     public void broadcastMessage(final MindroidMessage msg) {
         RobotId[] destinations = um.getRobotIdsArray();
         LOGGER.info("Sending broadcast message to: " + Arrays.toString(destinations));
-        mindroidServerFrame.addContentLine(msg.getSource().getValue(), msg.getDestination().getValue(), "LOG", msg.getContent());
         sendToRobots(destinations, msg);
     }
 
-    public void multicast(RobotId[] destinatins, final MindroidMessage msg){
-        LOGGER.info("Sending multicast message to: " + Arrays.toString(destinatins));
-        sendToRobots(destinatins, msg);
+    public void multicast(RobotId[] destinations, final MindroidMessage msg){
+        LOGGER.info("Sending multicast message to: " + Arrays.toString(destinations));
+        sendToRobots(destinations, msg);
     }
 
     private void sendToRobots(RobotId[] destinations, final MindroidMessage msg){
-        // V1, start each thread right after creating it
-
+        // start each thread right after creating it
         for(final RobotId destination : destinations) {
             if (!msg.getSource().equals(destination)) {
                 Runnable sendMessage = new Runnable() {
@@ -183,26 +180,10 @@ public class MindroidServerWorker implements Runnable {
                 new Thread(sendMessage).start();
             }
         }
+    }
 
-        // V2, collect threads and start them in seperate loop after all threads have been created
-        /*
-        Set<Thread> threads = null;
-        for(final RobotId destination : destinations) {
-            if (!msg.getSource().equals(destinations)) {
-                Runnable sendMessage = new Runnable() {
-                    @Override
-                    public void run() {
-                        sendMessage(new MindroidMessage(msg.getSource(), destination, msg.getMessageType(), msg.getContent(), msg.getSessionRobotCount()), destination);
-                    }
-                };
-                threads.add(new Thread(sendMessage));
-            }
-        }
-        for (Thread thread : threads){
-            thread.start();
-        }
-        */
-
+    public Socket getSocket() {
+        return socket;
     }
 
     private void registerRobot(MindroidMessage deserializedMsg) throws IOException, JadbException, ConnectionToRemoteDeviceException {
@@ -210,11 +191,10 @@ public class MindroidServerWorker implements Runnable {
         if (socketAddress instanceof InetSocketAddress) {
             //the port was sent as content of the registration message
             int port = Integer.parseInt(deserializedMsg.getContent());
-            boolean isAccepted = um.registerRobot(deserializedMsg.getSource(),this, socket, port);
+            boolean isAccepted = um.requestRegistration(deserializedMsg.getSource(),this, socket, port);
 
             if(!isAccepted){
                 //Registration got rejected by the server
-                mindroidServerFrame.addLocalContentLine("WARNING", "The Connection of "+getStrRobotID()+" got rejected! A Robot with that ID is already connected. Change RobotID to connect.");
                 //Stop ServerWorker run-Thread, otherwise calling disconnect will lead to the unregestration of the already connected device with the rejecetd robotID, and disconnect that connection too.
                 connected = false;
                 //Disconnect this socket as it got rejected.

@@ -11,7 +11,7 @@ import org.mindroid.impl.brick.Textsize;
 public class Platooning extends ImperativeWorkshopAPI {
 
     public Platooning(){
-        super("Platooning Dynamic Leader [sol]");
+        super("Platooning Dynamic Leader [sol]", 2);
     };
     enum State {
         FAST,
@@ -20,8 +20,8 @@ public class Platooning extends ImperativeWorkshopAPI {
     }
     State prevState;
 
-    private final String player_1 = "Robert";
-    private final String player_2 = "Berta";
+    private final String player_1 = "Alice";
+    private final String player_2 = "Bob";
     private final String myID = getRobotID();
     private String colleague;
 

@@ -6,7 +6,7 @@ import org.mindroid.common.messages.server.MindroidMessage;
 public class FollowA extends ImperativeWorkshopAPI {
 
     public FollowA() {
-        super("Follower Alice [sol]");
+        super("Follower Alice [sol]", 2);
     }
 
     enum DistState {
@@ -72,15 +72,15 @@ public class FollowA extends ImperativeWorkshopAPI {
 
     private void keepDistance(){
         float distance = getDistance();
-        if (prevState != DistState.FAST && distance > 0.35f) {
+        if (prevState != DistState.FAST && distance > 35) {
             forward(300);
             prevState = DistState.FAST;
             setLED(LED_GREEN_ON);
-        } else if (prevState != DistState.SLOW && distance < 0.25f) {
+        } else if (prevState != DistState.SLOW && distance < 25) {
             forward(100);
             prevState = DistState.SLOW;
             setLED(LED_RED_ON);
-        } else if (prevState != DistState.MED && distance > 0.25f && distance < 0.35f) {
+        } else if (prevState != DistState.MED && distance > 25 && distance < 35) {
             forward(200);
             prevState = DistState.MED;
             setLED(LED_YELLOW_ON);

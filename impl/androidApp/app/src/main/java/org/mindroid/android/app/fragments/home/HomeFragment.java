@@ -88,8 +88,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private final int ACTIVATE_TETHERING_TIMEOUT = 4000;
 
-    private SparseBooleanArray menuItemAlwaysEnabled = new SparseBooleanArray();
-
     private final static Logger LOGGER = Logger.getLogger(HomeFragment.class.getName());
 
     private boolean stopThreads;
@@ -127,23 +125,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             robot.registerErrorHandler(((IErrorHandler) parentActivity).getErrorHandler());
         }
 
-        getMenuEnabledSettings();
     }
-
-    /**
-     *
-     */
-    private void getMenuEnabledSettings() {
-        //TODO refactor to a another class to configure menu
-        //SettingsProvider menu enable
-        menuItemAlwaysEnabled.put(0,true);
-        menuItemAlwaysEnabled.put(1,true);
-        menuItemAlwaysEnabled.put(2,false);
-        menuItemAlwaysEnabled.put(3,false);
-        menuItemAlwaysEnabled.put(4,true);
-        menuItemAlwaysEnabled.put(5,false);
-    }
-
 
     @Override
     public void onAttach(Context context) {
@@ -264,6 +246,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
      */
     public interface OnFragmentInteractionListener {
         void showErrorDialog(String title,String message);
+
+        void enableMenuItems();
+
+        void disableMenuItems();
     }
 
     /**
@@ -288,8 +274,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 btn_startRobot.setEnabled(robot.isConnectedToBrick() && robot.isConfigurated() && !robot.isRunning && (positiveUSBState || SettingsProvider.getInstance().isSimulationEnabled()) && spinner_implementations.getSelectedItem() != null && !spinner_implementations.getSelectedItem().toString().isEmpty());
 
                 btn_stopRobot.setEnabled(robot.isRunning);
-
-                setEnableMenuItems(!robot.isConnectedToBrick());
 
                 spinner_implementations.setEnabled(!robot.isRunning);
 
@@ -455,6 +439,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 //TODO add internationalization to title
                 ConnectInitBrickTask task = new ConnectInitBrickTask("Connecting",SettingsProvider.getInstance().getRobotConfigBundle(),getFragmentManager());
                 task.execute();
+
             }
         });
 
@@ -538,12 +523,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     }
 
     public void setEnableMenuItems(boolean enable){
-        ListView mDrawerListView;
-        if((mDrawerListView = parentActivity.getMenuItemListView()) != null) {
-            for(int i = 0; i < mDrawerListView.getChildCount(); i++){
-                if(!menuItemAlwaysEnabled.get(i)) {
-                    mDrawerListView.getChildAt(i).setEnabled(enable);
-                }
+        if(getContext() instanceof OnFragmentInteractionListener){
+            if(enable){
+                ((OnFragmentInteractionListener) getContext()).enableMenuItems();
+            }else{
+                ((OnFragmentInteractionListener) getContext()).disableMenuItems();
             }
         }
     }
@@ -585,6 +569,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 e.printStackTrace();
                 parentActivity.showErrorDialog("Exception",e.getMessage());
             }
+            setEnableMenuItems(!result); //!isConnectedToBrick -> menu enabled when not connected
             return result;
         }
     }
@@ -716,7 +701,9 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
             if(robot.isConnectedToBrick()) {
                 boolean isConfigurationInitialized = initConfiguration();
-                return createRobot && isMessengerConnected && connectedToBrick && isConfigurationInitialized;
+                boolean result = createRobot && isMessengerConnected && connectedToBrick && isConfigurationInitialized;
+                setEnableMenuItems(!result); //!result = !everythingEstablished = false when everything is fine -> disable menu items
+                return result;
             }else{
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P1, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P2, false);
@@ -726,6 +713,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_B, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_C, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_D, false);
+                setEnableMenuItems(true); //Enable menuItems, no change as robot is not connected to brick to initialize
                 return false;
             }
         }

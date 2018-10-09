@@ -8,10 +8,16 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.support.v7.app.ActionBar;
+import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.ListView;
+import android.widget.Toast;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.dialog.ErrorDialog;
 import org.mindroid.android.app.dialog.InfoDialog;
@@ -20,7 +26,6 @@ import org.mindroid.android.app.fragments.admin.AdminFragment;
 import org.mindroid.android.app.fragments.log.LoggerFragment;
 import org.mindroid.android.app.fragments.myrobot.MyRobotFragment;
 import org.mindroid.android.app.fragments.home.HomeFragment;
-import org.mindroid.android.app.fragments.NavigationDrawerFragment;
 import org.mindroid.android.app.fragments.home.RobotSetupInfoFragment;
 import org.mindroid.android.app.fragments.sensormonitoring.SensorMonitoringFragment;
 import org.mindroid.android.app.fragments.sensormonitoring.SensorObservationFragment;
@@ -32,8 +37,8 @@ import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+public class MainActivity extends AppCompatActivity
+        implements
         HomeFragment.OnFragmentInteractionListener,
         SensorMonitoringFragment.OnFragmentInteractionListener,
         SensorObservationFragment.OnFragmentInteractionListener,
@@ -44,16 +49,6 @@ public class MainActivity extends Activity
         IErrorHandler{
 
     public static Robot robot = new Robot();
-
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
-
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence mTitle;
 
     private APIErrorHandler errorHandler;
 
@@ -66,13 +61,17 @@ public class MainActivity extends Activity
     private Fragment ADMIN_FRAGMENT = AdminFragment.newInstance();
 
     private final String TAG_HOME_FRAGMENT = "TAG_HOME_FRAGMENT";
-    private final String TAG_CONFIG_FRAGMENT = "TAG_CONFIG_FRAGMENT";
+    private final String TAG_MYROBOT_FRAGMENT = "TAG_MYROBOT_FRAGMENT";
     private final String TAG_SETTINGS_FRAGMENT = "TAG_SETTINGS_FRAGMENT";
     private final String TAG_SENSOR_MONITOR = "TAG_SENSOR_MONITOR";
     private final String TAG_LOG_FRAGMENT = "TAG_LOG_FRAGMENT";
     private final String TAG_ADMIN_FRAGMENT = "TAG_ADMIN_FRAGMENT";
 
     private static final Logger LOGGER = Logger.getLogger(MainActivity.class.getName());
+
+    private DrawerLayout mDrawerLayout;
+
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -81,9 +80,42 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        initialize(savedInstanceState);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        createShortcut();
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        //menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        //mDrawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+                        // Done using onClick in xml resource calling methods open..Fragment(..)
+
+                        return true;
+                    }
+                });
+
+        initialize(savedInstanceState);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initialize(Bundle savedInstanceState) {
@@ -92,16 +124,6 @@ public class MainActivity extends Activity
 
         SettingsProvider.getInstance().setAndroidId(Secure.getString(this.getContentResolver(), Secure.ANDROID_ID));
         errorHandler = new APIErrorHandler(this);
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
-
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
-
 
         //display Home Fragment
         if (savedInstanceState == null) {
@@ -112,39 +134,70 @@ public class MainActivity extends Activity
         }
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        switchFragment(position);
+    public void openHomeFragment(MenuItem item) {
+        switchFragment(TAG_HOME_FRAGMENT);
+        mDrawerLayout.closeDrawers();
     }
+
+    public void openSensorMonitoringFragment(MenuItem item){
+        switchFragment(TAG_SENSOR_MONITOR);
+        mDrawerLayout.closeDrawers();
+    }
+
+    public void openMyRobotFragment(MenuItem item) {
+        switchFragment(TAG_MYROBOT_FRAGMENT);
+        mDrawerLayout.closeDrawers();
+    }
+
+    public void openSettingsFragment(MenuItem item) {
+        switchFragment(TAG_SETTINGS_FRAGMENT);
+        mDrawerLayout.closeDrawers();
+    }
+
+    public void openLogFragment(MenuItem item) {
+        switchFragment(TAG_LOG_FRAGMENT);
+        mDrawerLayout.closeDrawers();
+    }
+
+    public void openAdminFragment(MenuItem item){
+        switchFragment(TAG_ADMIN_FRAGMENT);
+        mDrawerLayout.closeDrawers();
+    }
+
+    public void createShortcut(MenuItem item){
+        createShortcut();
+        Toast.makeText(getApplicationContext(),getResources().getString(R.string.txt_shortcut_success),Toast.LENGTH_LONG).show();
+        mDrawerLayout.closeDrawers();
+    }
+
 
     /**
      * Changes the main fragment dependent on the given position parameter
      * @param position - id of the fragment
      */
-    private void switchFragment(int position) {
+    private void switchFragment(String position) {
         switch(position){
-            case 0:
+            case TAG_HOME_FRAGMENT:
                 replaceFragment(HOME_FRAGMENT,TAG_HOME_FRAGMENT);
                 setTitle(getResources().getString(R.string.title_home));
                 break;//Home
-            case 1:
+            case TAG_SENSOR_MONITOR:
                 replaceFragment(SENSOR_MONITOR_FRAGMENT, TAG_SENSOR_MONITOR);
                 setTitle(getResources().getString(R.string.title_sensor_monitoring));
                 break;
-            case 2:
-                replaceFragment(CONFIG_FRAGMENT, TAG_CONFIG_FRAGMENT);
+            case TAG_MYROBOT_FRAGMENT:
+                replaceFragment(CONFIG_FRAGMENT, TAG_MYROBOT_FRAGMENT);
                 setTitle(getResources().getString(R.string.title_myrobot));
                 break;//Configuration
-            case 3:
+            case TAG_SETTINGS_FRAGMENT:
                 replaceFragment(SETTINGS_FRAGMENT, TAG_SETTINGS_FRAGMENT);
                 setTitle(getResources().getString(R.string.title_settings));
                 break;//SettingsProvider
-            case 4:
+            case TAG_LOG_FRAGMENT:
                 replaceFragment(LOG_FRAGMENT, TAG_LOG_FRAGMENT);
                 setTitle(getResources().getString(R.string.title_log));
                 break;//SettingsProvider
-            case 5:
+            case TAG_ADMIN_FRAGMENT:
                 replaceFragment(ADMIN_FRAGMENT, TAG_ADMIN_FRAGMENT);
                 setTitle(getResources().getString(R.string.title_admin));
                 break;//Admin
@@ -179,39 +232,9 @@ public class MainActivity extends Activity
         super.onPause();
     }
 
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 0:
-                mTitle = getString(R.string.title_home);
-                break;
-            case 1:
-                mTitle = getString(R.string.title_sensor_monitoring);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_myrobot);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_settings);
-                break;
-            case 4:
-                mTitle = getString(R.string.title_log);
-                break;
-            case 5:
-                mTitle = getResources().getText(R.string.title_admin);
-                break;
-        }
-    }
-
     @Override
     public void onBackPressed() {
-        mNavigationDrawerFragment.selectItem(0);
-    }
-
-    public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        switchFragment(TAG_HOME_FRAGMENT);
     }
 
     @Override
@@ -224,7 +247,7 @@ public class MainActivity extends Activity
         ((HomeFragment)HOME_FRAGMENT).onSettingsChanged(settingsChanged);
 
         // makes sure Home is selected in Drawer
-        mNavigationDrawerFragment.selectItem(0);
+        switchFragment(TAG_HOME_FRAGMENT);
     }
 
     @Override
@@ -234,16 +257,33 @@ public class MainActivity extends Activity
         errorDialogFragment.show(getFragmentManager(), "errorDialog");
     }
 
+    @Override
+    public void enableMenuItems() {
+        Runnable changeItemState = new Runnable() {
+            @Override
+            public void run() {
+                navigationView.getMenu().setGroupEnabled(R.id.menu_group_settigns,true);
+            }
+        };
+        runOnUiThread(changeItemState);
+    }
+
+    @Override
+    public void disableMenuItems() {
+        Runnable changeItemState = new Runnable() {
+            @Override
+            public void run() {
+                navigationView.getMenu().setGroupEnabled(R.id.menu_group_settigns,false);
+            }
+        };
+        runOnUiThread(changeItemState);
+    }
+
 
     public void showInfoDialog(final String title, final String message){
         DialogFragment infoDialogFragment = InfoDialog.newInstance(title,message);
         infoDialogFragment.show(getFragmentManager(), "infoDialog");
     }
-
-    public ListView getMenuItemListView(){
-        return mNavigationDrawerFragment.getmDrawerListView();
-    }
-
 
     private Intent createShortcutIntent(){
         Intent shortcutIntent = new Intent(getApplicationContext(),
@@ -261,7 +301,6 @@ public class MainActivity extends Activity
     }
 
     private void removeShortcut(){
-        //TODO does not work
         Intent shortcutIntent = createShortcutIntent();
         shortcutIntent.setAction("com.android.launcher.action.UNINSTALL_SHORTCUT");
         getApplicationContext().sendBroadcast(shortcutIntent);
@@ -303,8 +342,10 @@ public class MainActivity extends Activity
 
     @Override
     public void onAdminChanged(boolean AdminChanged) {
-        if(AdminChanged)
-            mNavigationDrawerFragment.selectItem(0);
+        if(AdminChanged) {
+            switchFragment(TAG_HOME_FRAGMENT);
+        }
 
     }
+
 }

@@ -4,6 +4,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Einstellungen</string>
 
+    <string name="txt_shortcut_success">Verknüpfung wurde erstellt!</string>
+
     <!-- Activity titles -->
     <string name="title_activity_main">Mindroid</string>
     <string name="title_activity_splash">Mindroid</string>
@@ -103,6 +105,7 @@
     <string name="title_myrobot">Mein Roboter</string>
     <string name="title_settings">Einstellungen</string>
     <string name="title_log">Log</string>
+    <string name="title_create_shortcut">Verknüpfung erstellen</string>
     <string name="action_example">Example action</string>
 
     <!-- Sensormonitoring -->

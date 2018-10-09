@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group
+            android:id="@+id/menu_group_main"
+            android:checkableBehavior="none">
+        <item
+                android:id="@+id/drawer_item_home"
+                android:title="@string/title_home"
+                android:onClick="openHomeFragment"/>
+
+        <item
+                android:id="@+id/drawer_item_sensor_monitoring"
+                android:title="@string/title_sensor_monitoring"
+                android:onClick="openSensorMonitoringFragment"/>
+
+
+    </group>
+
+    <group android:id="@+id/menu_group_settigns">
+        <item
+            android:id="@+id/drawer_item_settings"
+            android:title="@string/title_settings"
+            android:onClick="openSettingsFragment"/>
+
+        <item android:id="@+id/drawer_item_myrobot"
+              android:title="@string/title_myrobot"
+              android:onClick="openMyRobotFragment"/>
+
+    </group>
+
+    <group android:id="@+id/menu_group_convenient">
+
+    <item
+            android:id="@+id/drawer_item_shortcut"
+            android:title="@string/title_create_shortcut"
+            android:onClick="createShortcut"/>
+
+    </group>
+
+    <group android:id="@+id/menu_group_advanced">
+
+        <item
+                android:id="@+id/drawer_item_log"
+                android:title="@string/title_log"
+                android:onClick="openLogFragment"/>
+
+        <item
+            android:id="@+id/drawer_admin"
+            android:title="@string/title_admin"
+            android:onClick="openAdminFragment"/>
+    </group>
+
+
+</menu>

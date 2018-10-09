@@ -11,7 +11,7 @@
 
 
     <!-- Customize your theme here. -->
-    <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#1826B0</item>
         <item name="colorPrimaryDark">#081272</item>
         <item name="colorAccent">#4C59D8</item>

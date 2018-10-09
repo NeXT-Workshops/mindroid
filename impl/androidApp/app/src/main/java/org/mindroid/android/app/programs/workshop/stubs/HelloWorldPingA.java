@@ -1,4 +1,4 @@
-package org.mindroid.android.app.programs.workshop.solutions;
+package org.mindroid.android.app.programs.workshop.stubs;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.impl.brick.Button;
@@ -7,7 +7,7 @@ import org.mindroid.impl.brick.Textsize;
 public class HelloWorldPingA extends ImperativeWorkshopAPI {
 
     public HelloWorldPingA() {
-        super("Hello World Ping Alice [sol]", 2);
+        super("Hello World Ping Alice", 2);
     }
 
     @Override

@@ -30,9 +30,10 @@ public class UserManagement {
 
     public boolean requestRegistration(RobotId robotId, MindroidServerWorker msWorker, Socket socket, int port) {
         if(ipMapping.containsKey(robotId)){
-            LOGGER.info("Saved IP: " + ipMapping.get(robotId));
-            LOGGER.info("Connecting IP: " + socket.getRemoteSocketAddress());
-            if(ipMapping.get(robotId).equals(socket.getRemoteSocketAddress())){
+            InetSocketAddress remoteAddress = (InetSocketAddress) socket.getRemoteSocketAddress();
+            LOGGER.info("Saved IP: " + ipMapping.get(robotId).getAddress());
+            LOGGER.info("Connecting IP: " + remoteAddress.getAddress());
+            if(ipMapping.get(robotId).getAddress().equals(remoteAddress.getAddress())){
                 // Robot is known, tries to connect with known IP address -> robot is reconnecting, so allow
                 LOGGER.log(Level.INFO,"Reconnecting robot: "+robotId.getValue() + " with IP " + socket.getInetAddress().toString().replace("/",""));
                 removeUserAndCloseConnection(robotId);

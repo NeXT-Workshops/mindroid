@@ -11,10 +11,9 @@ public class CoordWallPingPong extends ImperativeWorkshopAPI {
 
     //Messages
     private final String leaderMsg = "I AM THE LEADER";
-    private final String startPingPongMsg = "YOUR TURN";
 
     public CoordWallPingPong() {
-        super("Coord Wall Ping-Pong Dynamic Leader [sol]");
+        super("Coord Wall Ping-Pong Dynamic Leader [sol]", 2);
     }
 
     @Override

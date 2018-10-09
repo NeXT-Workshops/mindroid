@@ -1,15 +1,12 @@
-package org.mindroid.android.app.programs.workshop.solutions;
+package org.mindroid.android.app.programs.workshop.stubs;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.common.messages.server.MindroidMessage;
-import org.mindroid.impl.brick.Button;
 
-import java.util.Random;
+public class FollowA extends ImperativeWorkshopAPI {
 
-public class FollowB extends ImperativeWorkshopAPI {
-
-    public FollowB() {
-        super("Follower Bob [sol]", 2);
+    public FollowA() {
+        super("Follower Alice", 2);
     }
 
     enum DistState {
@@ -33,10 +30,11 @@ public class FollowB extends ImperativeWorkshopAPI {
     @Override
     public void run(){
         while(!isInterrupted()) {
-            driveAsFollower();
             driveAsLeader();
+            driveAsFollower();
         }
     }
+
 
     private void driveAsLeader(){
         sendLogMessage("Leading the way!");

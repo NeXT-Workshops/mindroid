@@ -11,7 +11,7 @@ import java.util.Random;
 public class FollowOverkill extends ImperativeWorkshopAPI {
 
     public FollowOverkill() {
-        super("Follower Dynamic Leader [sol]",2);
+        super("Follower OVERKILL [sol]",2);
     }
     enum PlatoonState {
         FAST,

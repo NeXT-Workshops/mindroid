@@ -2,6 +2,7 @@ package org.mindroid.android.app.activities;
 
 import android.app.*;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -16,7 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import org.mindroid.android.app.R;
 import org.mindroid.android.app.dialog.ErrorDialog;
@@ -134,34 +137,64 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void openHomeFragment(MenuItem item) {
-        switchFragment(TAG_HOME_FRAGMENT);
+    /**
+     * Switches the main fragment and closes the drawers and the possible open keyboard
+     *
+     * @param fragTag - tag/id of the fragment to switch to
+     */
+    private void switchFragAndCloseDrawerAndKeyboard(String fragTag){
+        switchFragment(fragTag);
+
+        //Close Menu Drawer
         mDrawerLayout.closeDrawers();
+
+        //Close keyboard
+        hideKeyboard(this);
+    }
+
+    /**
+     * Hides the keyboard. Always needs to be called from an activity!!!
+     *
+     * Thanks to: https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard
+     *
+     * @param activity
+     */
+    public void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+        //Clear focus to avoid showing keyboard again if you open the app from the background
+        view.clearFocus();
+    }
+
+    public void openHomeFragment(MenuItem item) {
+        switchFragAndCloseDrawerAndKeyboard(TAG_HOME_FRAGMENT);
     }
 
     public void openSensorMonitoringFragment(MenuItem item){
-        switchFragment(TAG_SENSOR_MONITOR);
-        mDrawerLayout.closeDrawers();
+        switchFragAndCloseDrawerAndKeyboard(TAG_SENSOR_MONITOR);
     }
 
     public void openMyRobotFragment(MenuItem item) {
-        switchFragment(TAG_MYROBOT_FRAGMENT);
-        mDrawerLayout.closeDrawers();
+        switchFragAndCloseDrawerAndKeyboard(TAG_MYROBOT_FRAGMENT);
     }
 
     public void openSettingsFragment(MenuItem item) {
-        switchFragment(TAG_SETTINGS_FRAGMENT);
-        mDrawerLayout.closeDrawers();
+        switchFragAndCloseDrawerAndKeyboard(TAG_SETTINGS_FRAGMENT);
     }
 
     public void openLogFragment(MenuItem item) {
-        switchFragment(TAG_LOG_FRAGMENT);
-        mDrawerLayout.closeDrawers();
+        switchFragAndCloseDrawerAndKeyboard(TAG_LOG_FRAGMENT);
     }
 
     public void openAdminFragment(MenuItem item){
-        switchFragment(TAG_ADMIN_FRAGMENT);
-        mDrawerLayout.closeDrawers();
+        switchFragAndCloseDrawerAndKeyboard(TAG_ADMIN_FRAGMENT);
     }
 
     public void createShortcut(MenuItem item){
@@ -234,7 +267,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        switchFragment(TAG_HOME_FRAGMENT);
+        switchFragAndCloseDrawerAndKeyboard(TAG_HOME_FRAGMENT);
     }
 
     @Override
@@ -247,8 +280,15 @@ public class MainActivity extends AppCompatActivity
         ((HomeFragment)HOME_FRAGMENT).onSettingsChanged(settingsChanged);
 
         // makes sure Home is selected in Drawer
-        switchFragment(TAG_HOME_FRAGMENT);
+        switchFragAndCloseDrawerAndKeyboard(TAG_HOME_FRAGMENT);
+
+        InputMethodManager imgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        //imgr.showSoftInput(getView(), InputMethodManager.SHOW_IMPLICIT);
+        imgr.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
     }
+
+
 
     @Override
     public void showErrorDialog(final String title, final String message){
@@ -343,7 +383,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onAdminChanged(boolean AdminChanged) {
         if(AdminChanged) {
-            switchFragment(TAG_HOME_FRAGMENT);
+            switchFragAndCloseDrawerAndKeyboard(TAG_HOME_FRAGMENT);
         }
 
     }

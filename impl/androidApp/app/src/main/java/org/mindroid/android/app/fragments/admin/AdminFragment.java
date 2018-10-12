@@ -72,6 +72,7 @@ public class AdminFragment extends Fragment {
 
         txt_password_input = (EditText) view.findViewById(R.id.txt_password_input);
         btn_login_logout = (Button) view.findViewById(R.id.btn_pass_enter);
+
         if(SettingsProvider.getInstance().isAdminModeUnlocked()){
             btn_login_logout.setText(R.string.btn_txt_logout);
         }else{
@@ -117,8 +118,12 @@ public class AdminFragment extends Fragment {
             }
         });
 
-
-
+        //hide password input field when admin mode is active
+        if(SettingsProvider.getInstance().isAdminModeUnlocked()) {
+            txt_password_input.setVisibility(View.GONE);
+        }else{
+            txt_password_input.setVisibility(View.VISIBLE);
+        }
 
         return view;
     }

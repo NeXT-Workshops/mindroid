@@ -392,16 +392,18 @@ public abstract class BasicAPI {
         }
     }
 
+
+
     /**
      *
      * Broadcast a message to all robots connectd to the same msg server.
      * @param message 'message to send'
      */
-    public final void broadcastMessage(String message){
+    public final void sendBroadcastMessage(String message){
         if(Robot.getRobotController().getMessenger() != null){
             Robot.getRobotController().getMessenger().sendMessage(IMessenger.BROADCAST, message);
         }else{
-            System.out.println("[StatemachineAPI:broadcastMessage] Tried to broadcast a message, but the Messenger was null");
+            System.out.println("[StatemachineAPI:sendBroadcastMessage] Tried to broadcast a message, but the Messenger was null");
         }
     }
 

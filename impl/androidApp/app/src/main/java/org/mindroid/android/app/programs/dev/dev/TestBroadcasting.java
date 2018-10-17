@@ -14,7 +14,7 @@ public class TestBroadcasting extends ImperativeWorkshopAPI {
     public void run() {
         while(!isInterrupted()){
             if(isButtonClicked(Button.ENTER)){
-                broadcastMessage("Hello There this is a broadcast message :) ");
+                sendBroadcastMessage("Hello There this is a broadcast message :) ");
             }
 
             if(hasMessage()){

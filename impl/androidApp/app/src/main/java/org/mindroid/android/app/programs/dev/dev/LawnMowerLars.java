@@ -1,4 +1,4 @@
-package org.mindroid.android.app.programs.dev;
+package org.mindroid.android.app.programs.dev.dev;
 
 import java.util.Random;
 import org.mindroid.api.ImperativeWorkshopAPI;

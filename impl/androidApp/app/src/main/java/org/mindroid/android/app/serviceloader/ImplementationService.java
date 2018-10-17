@@ -4,7 +4,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.mindroid.android.app.fragments.log.LoggerFragment;
 import org.mindroid.api.BasicAPI;
 import org.mindroid.api.ImplementationIDCrawlerVisitor;
 
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class ImplementationService {
 
-    public static final String DEMO = "Demo";
+    public static final String DEMO = "demo";
 
     //Collected implementations
 
@@ -31,8 +30,14 @@ public class ImplementationService {
         return ourInstance;
     }
 
-    private ImplementationService(){
+    //realID,String[]
+    private HashMap<String, String[]> setMap;// = makeMap();
 
+    //MAPS internal Set IDs to displayed Set IDs
+    //displayedID, realID
+    private HashMap<String, String> displayedIDMap;// = makeMap();
+
+    private ImplementationService(){
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = null;
         try {
@@ -43,16 +48,32 @@ public class ImplementationService {
             e.printStackTrace();
         }
 
-        classesStatemachine = parseStringArray("classesStatemachine", jsonObject);
-        classesSolutions = parseStringArray("classesSolutions", jsonObject);
-        classesStubs = parseStringArray("classesStubs", jsonObject);
-        classesDev = parseStringArray("classesDev", jsonObject);
-        //classesDemo = parseStringArray("classesDemo", jsonObject); TODO update jsonFinder
+        String[] IDs = (String[]) jsonObject.keySet().toArray(new String[jsonObject.keySet().size()]);
+        ArrayList<String> programSets = new ArrayList<String>();
+        setMap = new HashMap<>();
+        displayedIDMap = new HashMap<>();
 
-        setMap = makeMap();
+        String prefixWorkshop = "WORKSHOP_";
+        String prefixDev = "DEV_";
+
+
+        for (String id : IDs) {
+            if(id.contains(prefixWorkshop)){
+                String displayedID = id.replace(prefixWorkshop,"");
+                displayedIDMap.put(displayedID,id);
+                setMap.put(id,parseStringArray(id, jsonObject));
+            }else if(id.contains(prefixDev)){
+                String displayedID = id.replace(prefixDev,"");
+                displayedIDMap.put(displayedID,id);
+                setMap.put(id,parseStringArray(id, jsonObject));
+            }else{
+                //NOTHING
+            }
+        }
+
         findImplementations();
     }
-    private String[] parseStringArray(String key, JSONObject jsonObject){
+    public static String[] parseStringArray(String key, JSONObject jsonObject){
         JSONArray classesJson = (JSONArray) jsonObject.get(key);
 
         String[] classNames = new String[classesJson.size()];
@@ -63,35 +84,19 @@ public class ImplementationService {
         return classNames;
     }
 
-    private String[] classesDev;
-    private String[] classesStatemachine;
-    private String[] classesStubs;
-    private String[] classesSolutions;
-    private String[] classesDemo;
-
-    private HashMap<String, String[]> setMap;// = makeMap();
-    private String[] program_sets = {"Solutions", "Stubs", "Statemachine", "Dev"};//TODO DEMO};
-
-    private HashMap<String, String[]> makeMap(){
-        HashMap<String, String[]> map = new HashMap<>();
-        map.put(program_sets[0], classesSolutions);
-        map.put(program_sets[1], classesStubs);
-        map.put(program_sets[2], classesStatemachine);
-        map.put(program_sets[3], classesDev);
-        //map.put(program_sets[4], classesDemo); TODO
-        return map;
-    }
 
     public String getDefaultSet() {
-        return program_sets[1];
+        return "stubs";
     }
 
 
     private void findImplementations(){
-        for(String set : program_sets){
+        for(String set : setMap.keySet()){
             List<BasicAPI> implementations = new ArrayList<>();
             ImplementationIDCrawlerVisitor idCollector = new ImplementationIDCrawlerVisitor();
+            System.out.println("################ "+set);
             String[] foundClasses = setMap.get(set); //SettingsProvider.getInstance().getSelectedProgramSet());
+            System.out.println("################ "+setMap.get(set));
             for (String classname : foundClasses) {
                 BasicAPI implementation = loadBasicAPIClasses(classname);
                 if (implementation != null) {
@@ -154,7 +159,7 @@ public class ImplementationService {
      * @return ArrayList of IDs
      */
     public List<BasicAPI> getImplementations(String setKey) {
-        return implementationSets.get(setKey);
+        return implementationSets.get(displayedIDMap.get(setKey));
     }
 
     /**
@@ -162,12 +167,15 @@ public class ImplementationService {
      * @return String[] of collected IDs
      */
     public String[] getImplementationIDs(String setKey){
-        List<String> idList = idCollectorSet.get(setKey).getCollectedIDs();
+        System.out.println("################ getImplementationIDsSetKey: " +setKey );
+        System.out.println("################ getImplementationIDsSetKey MAPPING: " +displayedIDMap.get(setKey) );
+        System.out.println(idCollectorSet.toString());
+        List<String> idList = idCollectorSet.get(displayedIDMap.get(setKey)).getCollectedIDs();
         return idList.toArray(new String[idList.size()]);
     }
 
     public String[] getImplementationSets(){
-        return program_sets;
+        return displayedIDMap.keySet().toArray(new String[displayedIDMap.keySet().size()]);
     }
 
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
@@ -14,17 +15,22 @@ public class ImplementationFinder {
     static String basePath = "..\\androidApp\\app\\src\\main\\java\\org\\mindroid\\android\\app\\programs\\";
     static final JSONObject json = new JSONObject();
 
-
     static String[] classesSolutions;
     static String[] classesStubs;
     static String[] classesDev;
     static String[] classesStatemachine;
 
     public static void main(String[] args) throws IOException {
-        getImplementations("dev", "classesDev");
-        getImplementations("dev\\statemachines", "classesStatemachine");
-        getImplementations("workshop\\solutions", "classesSolutions");
-        getImplementations("workshop\\stubs", "classesStubs");
+        File[] dev = getDevSetsList();
+        File[] workshop = getWorkshopSetList();
+
+        for (File file : dev) {
+            getImplementations(file.getPath(),"DEV_"+file.getName());
+        }
+
+        for (File file : workshop) {
+            getImplementations(file.getPath(),"WORKSHOP_"+file.getName());
+        }
 
         String jsonString = json.toJSONString();
         //System.out.println("JSON String: " + jsonString);
@@ -42,9 +48,30 @@ public class ImplementationFinder {
 
     }
 
-    private static void getImplementations(String subfolder, String setName) {
+    private static File[] getDevSetsList(){
+        File folder = new File(basePath + "dev");
+        return getSubDirsToStringArray(folder);
+    }
+
+    private static File[] getWorkshopSetList(){
+        File folder = new File(basePath + "workshop");
+        return getSubDirsToStringArray(folder);
+    }
+
+    private static File[] getSubDirsToStringArray(File folder){
+        File[] listOfFiles = folder.listFiles();
+        ArrayList<File> listOfDirs = new ArrayList<File>(listOfFiles.length);
+        for (File file : listOfFiles) {
+            if(file.isDirectory()){
+                listOfDirs.add(file);
+            }
+        }
+        return listOfDirs.toArray(new File[listOfDirs.size()]);
+    }
+
+    private static void getImplementations(String path, String setName) {
         // build correct Path
-        File folder = new File(basePath + subfolder);
+        File folder = new File(path);
         // get list of Files
         File[] files = folder.listFiles();
         JSONArray classes = new JSONArray();
@@ -67,6 +94,7 @@ public class ImplementationFinder {
         }
     }
 
+    @Deprecated
     private static void testParse(){
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = null;

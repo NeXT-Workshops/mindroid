@@ -1,4 +1,4 @@
-package org.mindroid.android.app.programs.dev;
+package org.mindroid.android.app.programs.dev.dev;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.api.ev3.EV3StatusLightColor;

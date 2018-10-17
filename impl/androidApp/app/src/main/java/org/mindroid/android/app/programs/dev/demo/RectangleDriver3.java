@@ -1,4 +1,4 @@
-package org.mindroid.android.app.programs.dev;
+package org.mindroid.android.app.programs.dev.demo;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -235,7 +236,20 @@ public class RobotSetupInfoFragment extends Fragment {
             txtView_group_id.setText(SettingsProvider.getInstance().getGroupID());
             txtView_msg_server_ip.setText(SettingsProvider.getInstance().getMsgServerIP());
             txtView_ev3_brick_ip.setText(SettingsProvider.getInstance().getEv3IP());
-            txtView_dev_ip.setText(IPUtils.getDevIP(getContext()));
+            String device_IP = IPUtils.getDevIP(getContext());
+            txtView_dev_ip.setText(device_IP);
+
+            //fecth IP again after 2500 millis, when it could not be determined
+            if(device_IP.equals("0.0.0.0")){
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String device_IP = IPUtils.getDevIP(getContext());
+                        txtView_dev_ip.setText(device_IP);
+                    }
+                },2500);
+            }
         }
     }
 }

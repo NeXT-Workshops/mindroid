@@ -41,7 +41,9 @@ public class DemoDialogFragment extends DialogFragment {
                         }
 
                 )
-                .setView(getCustomView());
+                .setView(getCustomView())
+                .setCancelable(false);
+
 
         return builder.create();
     }

@@ -10,33 +10,18 @@ public class CrazyDriver extends ImperativeWorkshopAPI {
     public CrazyDriver() {
         super("Crazy Driver aka Dancer", -1);
     }
-    // Halber Radabstand
-    private final double d = 6.25f; //cm
-    // Raddurchmesser
-    private final double diameter_wheel = 5.6f;
-    // Radumfang
-    private final double circ_wheel = diameter_wheel * Math.PI;
+    private double d = 6.25f; //cm
+    private double u = 2 * d * Math.PI;
     Motor leftMotor = getMotorProvider().getMotor(getLeftMotorPort());
     Motor rightMotor = getMotorProvider().getMotor(getRightMotorPort());
 
     @Override
     public void run() {
-
-        driveCurve(20.0, (40 * Math.PI)/10);
-        delay(10000);
-
-        /*
-        leftMotor.setSpeed(getDegFromCm(10));
-        rightMotor.setSpeed(getDegFromCm(10));
-        forward();
-        delay(1000);
-        */
-        stop();
-
+        driveCurve(25, 25);
+        delay(6280);
     }
-
-    private int getDegFromCm(double cmPerSec){
-        return (int) ((cmPerSec/circ_wheel) * 360);
+    private int getDegFromCm(int cmPerSec){
+        return 360 * cmPerSec / 360;
     }
 
     /**
@@ -44,20 +29,14 @@ public class CrazyDriver extends ImperativeWorkshopAPI {
      * @param r Curve radius in cm
      * @param v Speed in cm/sec
      */
-    void driveCurve(double r, double v){
-        double w = v / (2 * PI * r);
-        double vl = (w * 2 * Math.PI * (r-d) );
-        double vr = (w * 2 * Math.PI * (r+d) );
-
-        clearDisplay();
-
-        drawString("w:   " + w, Textsize.MEDIUM, 10, 10);
-        drawString("v_l: " + vl, Textsize.MEDIUM, 10, 26);
-        drawString("v_r: " + vr, Textsize.MEDIUM, 10, 42);
-
+    void driveCurve(int r, int v){
+        double w = v / 2 * PI * r;
+        drawString("w: " + w, Textsize.MEDIUM, 10, 10);
+        int vl = (int) (v-d*w);
+        int vr = (int) (v+d*w);
+        
         leftMotor.setSpeed(getDegFromCm(vl));
         rightMotor.setSpeed(getDegFromCm(vr));
-
         forward();
     }
 }

@@ -6,11 +6,13 @@ import org.mindroid.impl.brick.Button;
 
 public class CoordWallPingPong extends ImperativeWorkshopAPI {
 
-    private final String player_1 = "Alice";
-    private final String player_2 = "Bob";
+    private final String PLAYER_1 = "Alice";
+    private final String PLAYER_2 = "Bob";
 
     //Messages
-    private final String leaderMsg = "I AM THE LEADER";
+    private final String LEADER_MSG = "I AM THE LEADER";
+    private final String START_MSG = "START!";
+    private final String CONTINUE_MSG = "WEITER!";
 
     public CoordWallPingPong() {
         super("Coord Wall Ping-Pong Dynamic Leader [sol]", 2);
@@ -21,10 +23,10 @@ public class CoordWallPingPong extends ImperativeWorkshopAPI {
         String myID = getRobotID();
         String colleague;
 
-        if(myID.equals(player_1)){
-            colleague = player_2;
+        if(myID.equals(PLAYER_1)){
+            colleague = PLAYER_2;
         }else{
-            colleague = player_1;
+            colleague = PLAYER_1;
         }
 
         sendLogMessage("I am " + myID);
@@ -36,30 +38,30 @@ public class CoordWallPingPong extends ImperativeWorkshopAPI {
             if(isButtonClicked(Button.ENTER)){
                 sendLogMessage("I am the leader!");
                 //I am the Leader
-                sendMessage(colleague, leaderMsg);
+                sendMessage(colleague, LEADER_MSG);
                 leaderElectionFinished = true;
 
                 //Start doing wall ping pong, start driving
                 while(!isInterrupted()) {
                     driveToWallAndTurn();
-                    sendMessage(colleague, "Start!");
-                    waitForMessage("Weiter!");
+                    sendMessage(colleague, START_MSG);
+                    waitForMessage(CONTINUE_MSG);
                 }
             }
 
             if(hasMessage()){
                 MindroidMessage msg = getNextMessage();
                 sendLogMessage("I received a message: "+msg.getSource().getValue()+": \""+msg.getContent()+"\"");
-                if(msg.getContent().equals(leaderMsg)){
+                if(msg.getContent().equals(LEADER_MSG)){
                     //Colleague is the leader
                     leaderElectionFinished = true;
                     sendLogMessage("I am NOT the leader!");
 
                     // do wall-pingpong, start with waiting
                     while(!isInterrupted()){
-                        waitForMessage("Start!");
+                        waitForMessage(START_MSG);
                         driveToWallAndTurn();
-                        sendMessage(colleague, "Weiter!");
+                        sendMessage(colleague, CONTINUE_MSG);
                     }
                 }
             }
@@ -78,6 +80,7 @@ public class CoordWallPingPong extends ImperativeWorkshopAPI {
     }
 
     private void waitForMessage(String message){
+        sendLogMessage("Warte auf: \"" + message + "\"");
         while (!isInterrupted()) {
             if (hasMessage()) {
                 if (getNextMessage().getContent().equals(message)){

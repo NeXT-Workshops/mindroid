@@ -1,4 +1,4 @@
-package org.mindroid.android.app.programs.dev;
+package org.mindroid.android.app.programs.dev.dev;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.common.messages.server.MindroidMessage;
@@ -13,7 +13,7 @@ public class Domino extends ImperativeWorkshopAPI {
 	private final String LEADER_MSG = "I am the leader!";
 
 	public Domino(){
-		super("Domino", 3);
+		super("Domino", 2);
 	}
 
 	@Override

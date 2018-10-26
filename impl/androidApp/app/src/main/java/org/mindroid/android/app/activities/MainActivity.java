@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity
         //If the app is running the display will be set to always on and the device will not go into sleep mode.
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        SettingsProvider.getInstance().setAndroidId(Secure.getString(this.getContentResolver(), Secure.ANDROID_ID));
         errorHandler = new APIErrorHandler(this);
 
         //display Home Fragment
@@ -168,6 +167,7 @@ public class MainActivity extends AppCompatActivity
             view = new View(activity);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
 
         //Clear focus to avoid showing keyboard again if you open the app from the background
         view.clearFocus();

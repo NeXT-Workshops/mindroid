@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.Handler;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.TextView;
 import org.mindroid.android.app.R;
@@ -109,6 +110,7 @@ public class SplashActivity extends Activity {
         SharedPreferences adminProperties = this.getApplicationContext().getSharedPreferences(
                 getResources().getString(R.string.shared_pref_admin),Context.MODE_PRIVATE);
 
+        SettingsProvider.getInstance().setAndroidId(Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID));
         SettingsProvider.getInstance().initialize(getResources(),connectionProperties,portConfigProperties, adminProperties);
     }
 

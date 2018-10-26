@@ -14,7 +14,7 @@ public class AccelerationTestManual extends ImperativeWorkshopAPI {
     public void run() {
         setLED(EV3StatusLightColor.GREEN, EV3StatusLightInterval.BLINKING);
 
-        accelerate(500, 20);
+        accelerate(200, 10);
         delay(2000);
         stop();
 
@@ -29,7 +29,7 @@ public class AccelerationTestManual extends ImperativeWorkshopAPI {
 
     private void accelerate(int targetSpeed, int steps){
 
-        int accelTime = 500;
+        int accelTime = 1000;
         int delay = accelTime / steps;
         int step = targetSpeed / steps;
         int speed = 0;

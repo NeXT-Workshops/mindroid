@@ -3,6 +3,7 @@ package org.mindroid.server.app;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindroid.server.app.language.Language;
+import org.mindroid.server.app.util.EnviromentalVars;
 
 import java.awt.*;
 import java.io.IOException;
@@ -37,6 +38,11 @@ public class MindroidServerApplicationMain {
 
 
         mindroidServerFrame = new MindroidServerFrame();
+
+        if(!EnviromentalVars.doesAndroidHomeExist()){
+            mindroidServerFrame.addContentLine("SERVER","-","WARNING", "ANDROID_HOME system variable is not set! Add path to system properties to ensure that everything works properly");
+        }
+
         try {
             runServer();
         } catch (Exception e) {

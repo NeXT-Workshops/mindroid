@@ -91,7 +91,7 @@
     <string name="shared_pref_app_config_data">AppConfigData.xml</string>
 
     <!-- Shared Preferences: DEFAULT VALUES -->
-    <string name="DEFAULT_EV3_BRICK_IP">10.0.1.1</string>
+    <string name="DEFAULT_EV3_BRICK_IP">192.168.42.253</string>
     <string name="DEFAULT_EV3_BRICK_PORT">33690</string>
     <string name="DEFAULT_MSG_SERVER_IP">192.168.3.100</string>
     <string name="DEFAULT_MSG_SERVER_PORT">33044</string>

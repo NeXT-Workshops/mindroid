@@ -32,11 +32,11 @@ public class ImplementationService {
     }
 
     //realID,String[]
-    private HashMap<String, String[]> setMap;// = makeMap();
+    private HashMap<String, String[]> setMap = new HashMap<>();;// = makeMap();
 
     //MAPS internal Set IDs to displayed Set IDs
     //displayedID, realID
-    private HashMap<String, String> displayedIDMap;// = makeMap();
+    private HashMap<String, String> displayedIDMap = new HashMap<>();;// = makeMap();
 
     private ImplementationService(){
         JSONParser parser = new JSONParser();
@@ -54,8 +54,6 @@ public class ImplementationService {
         }else {
             String[] IDs = (String[]) jsonObject.keySet().toArray(new String[jsonObject.keySet().size()]);
             ArrayList<String> programSets = new ArrayList<String>();
-            setMap = new HashMap<>();
-            displayedIDMap = new HashMap<>();
 
             String prefixWorkshop = "WORKSHOP_";
             String prefixDev = "DEV_";
@@ -99,9 +97,7 @@ public class ImplementationService {
         for(String set : setMap.keySet()){
             List<BasicAPI> implementations = new ArrayList<>();
             ImplementationIDCrawlerVisitor idCollector = new ImplementationIDCrawlerVisitor();
-            System.out.println("################ "+set);
             String[] foundClasses = setMap.get(set); //SettingsProvider.getInstance().getSelectedProgramSet());
-            System.out.println("################ "+setMap.get(set));
             for (String classname : foundClasses) {
                 BasicAPI implementation = loadBasicAPIClasses(classname);
                 if (implementation != null) {

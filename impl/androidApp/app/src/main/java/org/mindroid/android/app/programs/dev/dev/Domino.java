@@ -9,67 +9,67 @@ import java.util.Arrays;
 public class Domino extends ImperativeWorkshopAPI {
 
 
-	private final String WALL_MSG = "Wall found!";
-	private final String LEADER_MSG = "I am the leader!";
+  private final String WALL_MSG = "Wall found!";
+  private final String LEADER_MSG = "I am the leader!";
 
-	public Domino(){
-		super("Domino", 2);
-	}
+  public Domino(){
+    super("Domino", 2);
+  }
 
-	@Override
-		public void run() {
+  @Override
+    public void run() {
 
-		boolean leader = false;
-		while(!isInterrupted()) {
-			if (isButtonClicked(Button.ENTER)) {
-				sendBroadcastMessage(LEADER_MSG);
-				leader = true;
-				break;
-			}else if (hasMessage()) {
-				MindroidMessage msg = getNextMessage();
-				sendLogMessage("I received a message: " + msg.getSource().getValue() + ": \"" + msg.getContent() + "\"");
-				if (msg.getContent().equals(LEADER_MSG)) {
-					//Colleague is the leader
-					sendLogMessage("I am NOT the leader!");
-					break;
-				}
+    boolean leader = false;
+    while(!isInterrupted()) {
+      if (isButtonClicked(Button.ENTER)) {
+        sendBroadcastMessage(LEADER_MSG);
+        leader = true;
+        break;
+      }else if (hasMessage()) {
+        MindroidMessage msg = getNextMessage();
+        sendLogMessage("I received a message: " + msg.getSource().getValue() + ": \"" + msg.getContent() + "\"");
+        if (msg.getContent().equals(LEADER_MSG)) {
+          //Colleague is the leader
+          sendLogMessage("I am NOT the leader!");
+          break;
+        }
 
-			}
-			delay(10);
-		}
+      }
+      delay(10);
+    }
 
-		if(!leader){
-			waitForMessage();
-			turnLeft(180);
-		}
+    if(!leader){
+      waitForMessage();
+      turnLeft(180);
+    }
 
-		setMotorSpeed(200);
-		forward();
-		while(!isInterrupted() && getDistance() > 20){
-			delay(10);
-		}
-		stop();
-		sendBroadcastMessage(WALL_MSG);
+    setMotorSpeed(200);
+    forward();
+    while(!isInterrupted() && getDistance() > 20){
+      delay(10);
+    }
+    stop();
+    sendBroadcastMessage(WALL_MSG);
 
-		while(!isInterrupted()) delay(50);
+    while(!isInterrupted()) delay(50);
 
-	}
+  }
 
-	private void waitForMessage(){
-		boolean waitOver = false;
-		while (!isInterrupted() && !waitOver) {
-			delay(10);
-			if (hasMessage()) {
-				MindroidMessage msg = getNextMessage();
-				if (msg.getContent().equals(WALL_MSG)) {
-					sendLogMessage("I received: " + msg.getContent());
-					if (getDistance() < 20){
-						waitOver = true;
-						sendLogMessage("I am the chosen one");
-					}
-				}
-			}
-		}
+  private void waitForMessage(){
+    boolean waitOver = false;
+    while (!isInterrupted() && !waitOver) {
+      delay(10);
+      if (hasMessage()) {
+        MindroidMessage msg = getNextMessage();
+        if (msg.getContent().equals(WALL_MSG)) {
+          sendLogMessage("I received: " + msg.getContent());
+          if (getDistance() < 20){
+            waitOver = true;
+            sendLogMessage("I am the chosen one");
+          }
+        }
+      }
+    }
 
-	}
+  }
 }

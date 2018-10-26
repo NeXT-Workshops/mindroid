@@ -85,7 +85,7 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     private static final List<String> DEFAULT_NAMES = Arrays.asList(
             "Mia", "Emma", "Sofia", "Hannah", "Emilia",
             "Anne", "Marie", "Mila", "Lina", "Lea",
-            "Amelie", "Luisa", "Johanna", "Emily", "Clara",//
+            "Amelie", "Luisa", "Johanna", "Emily", "Clara",
             "Ben", "Paul", "Jonas", "Elias", "Leon",
             "Finn", "Noah", "Louis", "Lukas", "Felix",
             "Max", "Henry", "Oskar", "Emil", "Liam"

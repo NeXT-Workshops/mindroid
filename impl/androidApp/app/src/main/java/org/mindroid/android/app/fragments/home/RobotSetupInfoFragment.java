@@ -236,17 +236,22 @@ public class RobotSetupInfoFragment extends Fragment {
             txtView_group_id.setText(SettingsProvider.getInstance().getGroupID());
             txtView_msg_server_ip.setText(SettingsProvider.getInstance().getMsgServerIP());
             txtView_ev3_brick_ip.setText(SettingsProvider.getInstance().getEv3IP());
-            String device_IP = IPUtils.getDevIP(getContext());
+            final String device_IP = IPUtils.getDevIP(getContext());
             txtView_dev_ip.setText(device_IP);
 
-            //fecth IP again after 2500 millis, when it could not be determined
+            //fecth IP again peridoically eah 2500 millis, when it could not be determined
             if(device_IP.equals("0.0.0.0")){
+
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         String device_IP = IPUtils.getDevIP(getContext());
                         txtView_dev_ip.setText(device_IP);
+
+                        if(!device_IP.equals("0.0.0.0")) {
+                            new Handler().postDelayed(this, 2500);
+                        }
                     }
                 },2500);
             }

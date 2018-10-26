@@ -19,3 +19,9 @@ if "!IS_DEV!" == "device" (
 @ENDLOCAL
 
 @cd %startdir% 
+
+IF "%ANDROID_HOME%"=="" (
+	ECHO ANDROID_HOME IS NOT DEFINED
+	ECHO NOTHING WAS DONE
+	pause 
+	)

@@ -6,6 +6,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.mindroid.api.BasicAPI;
 import org.mindroid.api.ImplementationIDCrawlerVisitor;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -42,36 +43,40 @@ public class ImplementationService {
         JSONObject jsonObject = null;
         try {
             jsonObject = (JSONObject) parser.parse(new FileReader("/sdcard/Mindroid/programs.json"));
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        if (jsonObject == null){
+            ErrorHandlerManager.getInstance().handleError(new NullPointerException(), ImplementationService.class, "Please push programs.json again. Use Script \"find and push\"");
+        }else {
+            String[] IDs = (String[]) jsonObject.keySet().toArray(new String[jsonObject.keySet().size()]);
+            ArrayList<String> programSets = new ArrayList<String>();
+            setMap = new HashMap<>();
+            displayedIDMap = new HashMap<>();
 
-        String[] IDs = (String[]) jsonObject.keySet().toArray(new String[jsonObject.keySet().size()]);
-        ArrayList<String> programSets = new ArrayList<String>();
-        setMap = new HashMap<>();
-        displayedIDMap = new HashMap<>();
-
-        String prefixWorkshop = "WORKSHOP_";
-        String prefixDev = "DEV_";
+            String prefixWorkshop = "WORKSHOP_";
+            String prefixDev = "DEV_";
 
 
-        for (String id : IDs) {
-            if(id.contains(prefixWorkshop)){
-                String displayedID = id.replace(prefixWorkshop,"");
-                displayedIDMap.put(displayedID,id);
-                setMap.put(id,parseStringArray(id, jsonObject));
-            }else if(id.contains(prefixDev)){
-                String displayedID = id.replace(prefixDev,"");
-                displayedIDMap.put(displayedID,id);
-                setMap.put(id,parseStringArray(id, jsonObject));
-            }else{
-                //NOTHING
+            for (String id : IDs) {
+                if (id.contains(prefixWorkshop)) {
+                    String displayedID = id.replace(prefixWorkshop, "");
+                    displayedIDMap.put(displayedID, id);
+                    setMap.put(id, parseStringArray(id, jsonObject));
+                } else if (id.contains(prefixDev)) {
+                    String displayedID = id.replace(prefixDev, "");
+                    displayedIDMap.put(displayedID, id);
+                    setMap.put(id, parseStringArray(id, jsonObject));
+                } else {
+                    //NOTHING
+                }
             }
-        }
 
-        findImplementations();
+            findImplementations();
+        }
     }
     public static String[] parseStringArray(String key, JSONObject jsonObject){
         JSONArray classesJson = (JSONArray) jsonObject.get(key);

@@ -1,0 +1,23 @@
+\subsection{Kommunikation zwischen Robotern} % - Verteiltes ``Hallo Welt!''}
+	In der vorherigen Aufgaben hast du kennengelernt, wie ein Programm auf einem einzelnen Roboter ausgeführt wird. Als nächstes wollen wir die Roboter \textbf{miteinander sprechen lassen}.
+	
+	Auch hier starten wir mit einem einfachen (diesmal verteilten) “Hallo Welt!”-Programm. Die Kommunikation läuft über das bereits vorgestellten “Server”-Programm, welches ihr vorhin schon auf dem Entwicklungsrechner gestartet habt. 
+	
+	Damit die Roboter voneinander unterschieden werden können, benötigt jeder einen eigenen Namen. Um diese Einstellungen ändern zu können, müsst ihr die Verbindung zum Server erst einmal trennen. Navigiert nun wieder in das Einstellungs-Menü der App und gebt den Robotern Namen. Stellt sicher, dass die Roboter auch in Gruppen eingeteilt sind. 
+	
+	Wiederhole diesen Schritt nun auch für den zweiten Roboter. In unserem Beispiel gehen wir davon aus, die Roboter heißen Robert und Berta.
+	
+	Wir möchten nun, dass Berta eine Nachricht mit dem Inhalt \textbf{``Hallo Robert!''} an den Nachrichtenserver versendet. Robert soll diese Nachricht empfangen und die Nachricht auf seinem Display ausgeben. 
+	Dazu sind zwei unterschiedliche Programme für Robert und Berta notwendig.
+	\lstinputlisting[firstline=3]{\solpath/HelloWorldPingA.java}
+	\begin{itemize}
+	\item Bei Programmstart sendet Berta in Zeile 16 eine Nachricht an \textbf{Robert }mit den Inhalt \textbf{``Hallo Robert!''}
+	\end{itemize}
+	
+	\lstinputlisting[firstline=3]{\solpath/HelloWorldPingB.java}
+	
+	\begin{itemize}
+	\item Robert überprüft mit \bfcode{hasMessage()} (Zeilte 16) ob neue Nachrichten auf dem Message-Server vorhanden sind. 
+	\item Sobald eine Nachricht vorliegt, wird der Inhalt der Nachricht in die Variable \bfcode{msg} gespeichert (Zeile 16).
+	\item die Nachricht wird nun mit dem String \textbf{``Hallo Robert!''} verglichen\footnote{Beachte: Strings werden in Java nicht mit == verglichen, sondern mittels der \bfcode{equals()}-Methode}. Stimmen beide überein, schreibt Robert auf sein Display einen Text (Zeile 19).
+	\end{itemize}

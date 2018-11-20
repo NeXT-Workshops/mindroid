@@ -1,0 +1,11 @@
+	\section{Hello World}
+	In der Informatik ist es üblich, ein Hallo-Welt-Programm\footnote{https://de.wikipedia.org/wiki/Hallo-Welt-Programm} zu schreiben, wenn man eine Programmierumgebung kennenlernt. Deshalb fangen wir damit an. 
+	Nachdem du den Roboter erfolgreich eingerichtet und das erste Mal getestet hast, gehen wir jetzt daran, uns den Quelltext näher anzusehen.
+	\lstinputlisting[firstline=3]{\solpath/HelloWorld.java}
+	Das Verhalten des Roboters befindet sich in der \textbf{run-Methode }(Zeilen 13-16). Wenn ein Mindroid-Programm ausgeführt wird, werden die Befehle in dieser Methode nacheinander abgearbeitet.
+		\begin{itemize}
+		\item{\bfcode{clearDisplay()}} löscht den Display-Inhalt
+		\item{\bfcode{drawString(text, textsize, xPosition, yPosition)}} schreibt einen gegebenen Text (\bfcode{text}) an die gegebenen Koordinaten (\bfcode{xPosition, yPosition}) und verwendet dabei die definierte Schriftgröße (\bfcode{textsize}).
+		\item Der Konstruktor in den Zeilen 8 bis 10 gibt unserem Programm einen Namen (Zeile 8). Mit dem Aufruf von \bfcode{super("Hello World")} bestimmen wir, unter welcher Bezeichnung unser Programm später ausgewählt werden kann. Es ist sinnvoll an beiden Stellen aussagekräftige Bezeichnungen zu verwenden.
+		\end{itemize}
+		Daneben gibt es noch die sogenannten “\textbf{imports}”. Da die Programm-Bibliotheken der MindroidApp sehr groß sind, hat jede Klasse einen ausführlichen Namen, der dabei hilft, den Überblick zu bewahren. Der Teil vor dem Klassennamen heißt \textbf{Paket} (engl. package). Zum Beispiel ist die Klasse \textbf{ImperativeWorkshopAPI} im Paket \textbf{org.mindroid.api.}

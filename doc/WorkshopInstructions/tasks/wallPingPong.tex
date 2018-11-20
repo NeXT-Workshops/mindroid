@@ -1,0 +1,23 @@
+	\section{Wand-Ping-Pong}
+
+
+	\ifthenelse{\boolean{tasks}}{
+	Nutze deine Kenntnisse, um den Roboter wie einen Ping-Pong-Ball in gerader Linie zwischen zwei Wänden/Gegenständen/... hin und her fahren zu lassen.
+	Anweisungen:
+	\begin{enumerate}
+		\item Der Roboter soll solange geradeaus fahren, bis er eine Wand erkennt. Er soll dabei so nah wie möglich an die Wand heranfahren, ohne mit ihr zu kollidieren.
+		\item Dann soll er ein kleines Stück rückwärts fahren und sich um 180° drehen
+		\item Beginne bei 1.
+	\end{enumerate}
+	\td{Machen die Kriterien Sinn? Überhaupt bewertung machen?}
+	Bewertungskriterien:
+	\begin{itemize}
+		\item (1P) Ist die 180°-Drehung exakt?
+		\item (1P) Vergleich: Wie nahe kommst du an die Wand heran?
+		\item (1P) Vergleich: Wie schnell schaffst du eine Runde (Fahren $\rightarrow$ Wand+Drehen $\rightarrow$ Fahren)?
+	\end{itemize}
+}{}
+
+	\ifthenelse{\boolean{solution}}{
+		
+		\sol{SingleWallPingPong}}{}

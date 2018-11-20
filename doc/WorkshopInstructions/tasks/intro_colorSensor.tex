@@ -1,0 +1,12 @@
+\subsection{Die Farbsensoren - Farbe messen}
+	In dieser Aufgabe lernst du die Farbsensoren des Roboters kennen. Der folgende Quelltext liest kontinuierlich den aktuell gemessenen Farbwert des linken und rechten Lichtsensors aus (\bfcode{getLeftColor()} bzw. \bfcode{getRightColor()} in Zeilen 16 und 17).
+	\\
+	
+	\lstinputlisting[firstline=3]{\solpath/ColorTest.java}
+	
+	\begin{itemize}
+	\item Die Methode \bfcode{describeColor} (Zeilen 29-39) zeigt, wie du den Rückgabewert in einen lesbaren Text umwandelst.
+	\item In den Zeilen 20-21 siehst du, wie man auf dem Display mehrzeiligen Text ausgeben kann. Die Buchstaben haben jeweils eine Höhe von 16 Pixeln, sodass die zweite Zeile an der y-Position 17 und die dritte Zeile an der y-Position 33 beginnt.
+	\item Um die Qualität der Farbmessung näher zu betrachten, haben wir für dich Farbtafeln mit allen sieben unterstützten Farben des EV3-Lichtsensors vorbereitet. Bei welchen Farben funktioniert die Erkennung gut, bei welchen eher weniger?
+	\item Der Farbsensor kann auch zur Erkennung von Abgründen eingesetzt werden: Welche Farbwerte werden gemessen, wenn der Roboter auf der Tischplatte steht und wenn die Farbsensoren über den Tischrand ragen?
+	\end{itemize}

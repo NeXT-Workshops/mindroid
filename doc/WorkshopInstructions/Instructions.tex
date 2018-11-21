@@ -1,13 +1,32 @@
 \documentclass[
 	12pt,
 	colorbacktitle,
-	accentcolor=tud1c,
 	%draft,
 	%twoside,
-	german
+	german,
+	%article,
+	accentcolor=tud1c
 ]{tuddesign/tudexercise}
 % For Draft, make Report... for whatever reason normal draft doesnt work...
- %]{tuddesign/tudreport}
+% ]{tuddesign/tudreport}
+
+
+
+\newboolean{solution}
+\newboolean{tasks}
+\newboolean{intro}
+
+%% CONFIGURATION
+
+\setboolean{tasks}{true}
+%\setboolean{solution}{true}
+%\setboolean{intro}{true}
+
+%\setinstitutionlogo[height]{logo/ist_logo.pdf}
+
+
+
+
 
 % USEPACKAGE
 % changed counter for section wise counting
@@ -21,20 +40,6 @@
 \usepackage{todonotes}
 \usepackage[hyphens]{url}
 \usepackage{ifthen}
-
-
-%% unused packages, might be useful someday
-% linebreak for urls in bitexx
-%\usepackage{url}
-%\urlstyle{rm}
-%\usepackage[locale = DE, binary-units=true]{siunitx}
-%\usepackage{amsmath}
-%\usepackage{mathtools}
-%\usepackage{pgf}
-%\usepackage{tikz}
-%\usetikzlibrary{arrows,automata}
-
-
 
 \counterwithin{figure}{section} 
 \counterwithin{table}{section} 
@@ -61,15 +66,16 @@
 	\end{figure}
 }
 
-
 \newcommand{\td}[1]{
 	\todo[inline]{#1}
 	}
 	
 %relative path to workshop solutions folder
 \newcommand{\solpath}[0]{../../impl/androidApp/app/src/main/java/org/mindroid/android/app/programs/workshop/solutions}
+
 \newcommand{\sol}{\begingroup
 	\catcode`_=12 \docodelst}
+
 \newcommand{\docodelst}[1]{
 	\lstinputlisting[caption=\texttt{#1.java}]{\solpath/#1.java}
 	\endgroup
@@ -82,12 +88,11 @@
 \renewcommand{\labelenumi}{\theenumi .}
 \renewcommand{\labelenumii}{\theenumii )}
 
-
 %define colors for listings		
 \definecolor{javared}{rgb}{0.6,0,0} 			% for strings
 \definecolor{javagreen}{rgb}{0.25,0.5,0.35}    	% comments
 \definecolor{javapurple}{rgb}{0.5,0,0.35} 		% keywords
-\definecolor{javadocblue}{rgb}{0.25,0.35,0.75}    % javadoc
+\definecolor{javadocblue}{rgb}{0.25,0.35,0.75}  % javadoc
 
 %configure listings for Java Code 
 \lstset{
@@ -109,14 +114,27 @@
 	showspaces=false,
 	showstringspaces=false
 }
-\newboolean{solution}
-\newboolean{tasks}
+
+
+
 \begin{document}
-	\setboolean{tasks}{true}
-	%\setboolean{solution}{true}
-	\input{title.tex}
 	
+%	\author{}
+	\pagenumbering{arabic}	
+	\title{Mindroid Workshop \\ Aufgabenstellung}
+	\subtitle{NeXT Generation on Campus}
+	\subsubtitle{Computational Engineering \\ Informationssystemtechnik \\ TU Darmstadt}
+
+	\maketitle	
 	
+	\ifthenelse{\boolean{intro}}{
+	\input{tasks/intro_helloWorld}
+	\input{tasks/intro_helloDate}
+	\input{tasks/intro_parkSensor}
+	\input{tasks/intro_colorSensor}
+	\input{tasks/intro_helloWorldCoord}
+}
+
 	\input{tasks/wallPingPong}
 	\input{tasks/wallPingPongCoord}
 	\input{tasks/mower}
@@ -124,11 +142,7 @@
 	\input{tasks/dancing}
 	
 	
-	%\input{misc/setup}
-	\newpage
-	% no ToC, as it seems broken 	
-	%\tableofcontents 	
-	
+	%\input{misc/setup}	
 	
 	\section{Den Roboter kennenlernen}
 	In dieser Aufgabe wollen wir gemeinsam die Fähigkeiten des Roboters kennenlernen. Das Display ist nützlich, um bestimmte Informationen schnell auszugeben, aber wirklich nützlich wird der Roboter erst durch seine beiden \textbf{Antriebsmotoren}, den \textbf{Gyrosensor}, die beiden \textbf{Lichtsensoren} und den \textbf{Ultraschallsensor}.

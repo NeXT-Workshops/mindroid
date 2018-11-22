@@ -12,13 +12,13 @@ import org.json.simple.parser.ParseException;
 
 
 public class ImplementationFinder {
-    static String basePath = "..\\androidApp\\app\\src\\main\\java\\org\\mindroid\\android\\app\\programs\\";
-    static final JSONObject json = new JSONObject();
+    private static String basePath = "..\\androidApp\\app\\src\\main\\java\\org\\mindroid\\android\\app\\programs\\";
+    private static final JSONObject json = new JSONObject();
 
-    static String[] classesSolutions;
-    static String[] classesStubs;
-    static String[] classesDev;
-    static String[] classesStatemachine;
+    private static String[] classesSolutions;
+    private static String[] classesStubs;
+    private static String[] classesDev;
+    private static String[] classesStatemachine;
 
     public static void main(String[] args) throws IOException {
         File[] dev = getDevSetsList();

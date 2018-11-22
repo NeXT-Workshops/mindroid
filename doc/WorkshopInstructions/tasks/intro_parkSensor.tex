@@ -1,0 +1,16 @@
+	\subsection{Der Ultraschallsensor - Abstand Messen}
+	Um dich mit dem Ultraschall-Distanzssensor vertraut zu machen, implementiere den folgenden Code nach. Er stellt einen einfachen Parksensor dar, der wie folgt funktioniert:
+	\begin{enumerate}
+	\item Liegt die Distanz zu einem Objekt vor dem Roboter \textbf{unter 15cm}, dann blinkt die Status-LED schnell rot und es wird “\textbf{Oh oh :-O}” ausgegeben.
+	\item Liegt die Distanz \textbf{zwischen 15cm und 30cm}, dann blinkt die Status-LED gelb und es wird “\textbf{Hm :-/}” ausgegeben.
+	\item Liegt die Distanz \textbf{über 30cm}, dann leuchtet die Status-LED grün und es wird “\textbf{OK :-)}” ausgegeben.
+	\end{enumerate}
+	
+	\lstinputlisting[firstline=3]{\solpath/ParkingSensor.java}
+	
+	\begin{itemize}
+	\item Um die LED ansteuern zu können, müssen wir die Pakete \\ \bfcode{org.mindroid.api.ev3.EV3StatusLightColor}\\ und\\ \bfcode{org.mindroid.api.ev3.EV3StatusLightInterval} importieren.
+	\item Wie in Zeile 19 zu sehen ist, läuft das Programm in einer Endlosschleife, bis der “Stop”-Knopf in der App betätigt wird.
+	\item Wir müssen uns jeweils den vorherigen Zustand in der Variablen \bfcode{previousState} (Zeile 17) merken, da wir ansonsten alle 100ms den Zustand der LED zurücksetzen würden, was das Blinken verhindert. Mithilfe von \bfcode{previousState} ändern wir den LED-Modus nur dann, wenn wir müssen.
+	
+	\end{itemize}

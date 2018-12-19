@@ -121,6 +121,31 @@ public abstract class BasicAPI {
     }
 
     /**
+     * Displays the given text onto the EV3 display at the given column.
+     * Column starting Pixel = Column
+     * @param text the text to display
+     * @param column the column in which the text should be displayed, takes values from 1 to 8
+     */
+    public final void drawString(final String text, final int column){
+        if(column > 0 && column < 9) {
+            int col = column - 1;
+            getBrickController().drawString(text, Textsize.MEDIUM, 0, col * 16);
+        }else{
+            getBrickController().drawString("IMPOSSIBLE", Textsize.MEDIUM, 0, 32);
+            getBrickController().drawString("COLUMN", Textsize.MEDIUM, 0, 48);
+            getBrickController().drawString("NUMBER", Textsize.MEDIUM, 0, 64);
+        }
+    }
+
+    /**
+     * Displays the given text onto the EV3 display at the 4th column (of 8).
+     * @param text
+     */
+    public final void drawString(final String text){
+        getBrickController().drawString(text, Textsize.MEDIUM, 0, 48);
+    }
+
+    /**
      * Removes everything from the EV3 display.
      */
     public final void clearDisplay() {

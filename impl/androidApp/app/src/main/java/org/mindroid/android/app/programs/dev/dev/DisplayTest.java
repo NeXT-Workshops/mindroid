@@ -17,17 +17,19 @@ public class DisplayTest extends ImperativeWorkshopAPI {
 		public void run() {
 			clearDisplay();
 			drawString("Middle Column");
-			delay(1000);
+			delay(2000);
+
+			clearDisplay();
 			drawString("1st Column", 1);
 			drawString("2nd Column", 2);
 			drawString("3rd Column", 3);
+			for (int i=4; i<9; i++) drawString(i+"th Column", i);
+			delay(2000);
 
-			for (int i=4; i<9; i++) {
-				drawString("Zeile " + i, i);
-			}
-			delay(1000);
+			clearDisplay();
 			drawString("Blabla", 99);
 
+			delay(2000);
 
 	}
 }

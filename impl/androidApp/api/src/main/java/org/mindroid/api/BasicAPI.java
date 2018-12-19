@@ -122,7 +122,7 @@ public abstract class BasicAPI {
 
     /**
      * Displays the given text onto the EV3 display at the given column.
-     * Column starting Pixel = Column
+     * Column starting Pixel = (Column-1) * 16
      * @param text the text to display
      * @param column the column in which the text should be displayed, takes values from 1 to 8
      */

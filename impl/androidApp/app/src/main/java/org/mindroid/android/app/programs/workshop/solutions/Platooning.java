@@ -69,7 +69,7 @@ public class Platooning extends ImperativeWorkshopAPI {
         while(!isInterrupted()) {
             clearDisplay();
             float distance = getDistance();
-            drawString("Dist: " + distance, Textsize.MEDIUM, 10,50);
+            drawString("Dist: " + distance);
             if (prevState != State.FAST && distance > 30f) {
                 forward(300);
                 prevState = State.FAST;

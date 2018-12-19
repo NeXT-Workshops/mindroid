@@ -15,7 +15,7 @@ public class HelloDate extends ImperativeWorkshopAPI {
     public void run() {
            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyy");
            clearDisplay();
-           drawString("Datum: " + formatter.format(new Date()), Textsize.MEDIUM, 10, 50);
+           drawString("Datum: " + formatter.format(new Date()));
            }
   }
   

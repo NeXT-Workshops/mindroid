@@ -37,7 +37,7 @@ public class HelloWorldPing extends ImperativeWorkshopAPI {
             if(isButtonClicked(Button.ENTER)) {
                 sendMessage(colleague, helloMsgOut);
                 String printMsg = "Nachricht an " + colleague + " gesendet!";
-                drawString(printMsg, Textsize.SMALL, 1, 60);
+                drawString(printMsg);
                 sendLogMessage(printMsg);
             }
 
@@ -45,7 +45,7 @@ public class HelloWorldPing extends ImperativeWorkshopAPI {
                 String msg = getNextMessage().getContent();
                 if (msg.equals(helloMsgIn)){
                     String printMsg = "Nachricht von " + colleague + " erhalten";
-                    drawString(printMsg, Textsize.SMALL, 1, 60);
+                    drawString(printMsg);
                     sendLogMessage(printMsg);
                 }
             }

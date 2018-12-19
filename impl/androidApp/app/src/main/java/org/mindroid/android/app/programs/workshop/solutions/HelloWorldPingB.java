@@ -16,7 +16,7 @@ public class HelloWorldPingB extends ImperativeWorkshopAPI {
             if (hasMessage()){
                 String msg = getNextMessage().getContent();
                 if (msg.equals("Hallo Bob!")){
-                    drawString("Nachricht von Alice erhalten", Textsize.SMALL, 1, 60);
+                    drawString("Nachricht von Alice erhalten");
                     sendLogMessage("Nachricht von Alice erhalten!");
                 }
             }

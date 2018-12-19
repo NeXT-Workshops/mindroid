@@ -121,6 +121,25 @@ public abstract class BasicAPI {
     }
 
     /**
+     * Displays the given text onto the EV3 display at the given column.
+     * Column starting Pixel = (Column-1) * 16
+     * @param text the text to display
+     * @param column the column in which the text should be displayed, filtered by modulo 8 to produce values 0 to 7
+     */
+    public final void drawString(final String text, final int column){
+        int col = (column - 1) % 8;                   
+        drawString(text, Textsize.MEDIUM, 0, col * 16);
+    }
+
+    /**
+     * Displays the given text onto the EV3 display at the 4th column (of 8). (see drawString(final String text, final int column)
+     * @param text
+     */
+    public final void drawString(final String text){
+       drawString(text, 4);
+    }
+
+    /**
      * Removes everything from the EV3 display.
      */
     public final void clearDisplay() {

@@ -4,11 +4,17 @@ import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.brick.Button;
 import org.mindroid.impl.brick.Textsize;
+import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.statemachine.properties.Colors;
+
+import java.util.logging.Logger;
 
 public class ColorCommunication extends ImperativeWorkshopAPI {
 
-
+    private static final Logger LOGGER = Logger.getLogger(ColorCommunication.class.getName());
+    static{
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+    }
     private final String WALL_MSG = "Wall found!";
     private final String LEADER_MSG = "I am the leader!";
 
@@ -48,7 +54,7 @@ public class ColorCommunication extends ImperativeWorkshopAPI {
             }
         } else {
             // FOLLOWER
-            String oldColor="";
+            String oldColor = "";
             while (!isInterrupted()) {
                 delay(10);
                 if (hasMessage()) {
@@ -60,12 +66,16 @@ public class ColorCommunication extends ImperativeWorkshopAPI {
                         switch (colorString) {
                             case "Green":
                                 setLED(LED_GREEN_ON);
+                                break;
                             case "Yellow":
                                 setLED(LED_YELLOW_ON);
+                                break;
                             case "Red":
                                 setLED(LED_RED_ON);
+                                break;
                             default:
                                 setLED(LED_OFF);
+                                break;
                         }
                         oldColor = colorString;
                     }
@@ -74,15 +84,22 @@ public class ColorCommunication extends ImperativeWorkshopAPI {
         }
     }
 
-    private String describeColor(Colors colorValue) {
-        switch (colorValue) {
-            case GREEN:
-                return "Green";
-            case YELLOW:
-                return "Yellow";
-            case RED:
-                return "Red";
+    private static String describeColor(final Colors colorValue) {
+        if(colorValue!=null) {
+            switch (colorValue) {
+                case GREEN:
+                    return "Green";
+                case YELLOW:
+                    return "Yellow";
+                case RED:
+                    return "Red";
+            }
+            return "Other";
+        }else{
+            LOGGER.info("Nullpointer");
+            return "Nullpointer";
+
         }
-        return "Other";
+
     }
 }

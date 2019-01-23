@@ -185,11 +185,13 @@
 		void & clearDisplay() \\ 
 		&\\
 		& Löscht den Aktuellen Inhalt des Displays \\ \hline
-		void & drawString(String text, Textsize textsize, int xPosition, int yPosition) \\ 
+		void & drawString(String text)\\			
+		void & drawString(String text, int row)\\
 		&\\
-		& Schreibt den im $text$-Parameter gegebenen Text auf das Display\\
-		& an die durch $xPosition$ und $yPosition$ definerte Stelle (siehe Abb. \ref{fig:display})\\
-		& mit Textgröße $textsize$ \\ \hline
+		& Schreibt den im $text$-Parameter gegebenen Text auf das Display.\\
+		& Der Parameter $row$ bestimmt die zu beschreibende Zeile. \\
+		& Wird der Parameter $row$ weggelassen, wir in die Mittlere Zeile geschrieben. \\
+
 		\end{tabular}
 		\end{table}
 		

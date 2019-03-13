@@ -121,18 +121,18 @@ public abstract class BasicAPI {
     }
 
     /**
-     * Displays the given text onto the EV3 display at the given column.
-     * Column starting Pixel = (Column-1) * 16
+     * Displays the given text onto the EV3 display at the given row.
+     * Row starting Pixel = (Row-1) * 16
      * @param text the text to display
-     * @param column the column in which the text should be displayed, filtered by modulo 8 to produce values 0 to 7
+     * @param row the row in which the text should be displayed, filtered by modulo 8 to produce values 0 to 7
      */
-    public final void drawString(final String text, final int column){
-        int col = (column - 1) % 8;                   
-        drawString(text, Textsize.MEDIUM, 0, col * 16);
+    public final void drawString(final String text, final int row){
+        int calcRow = (row - 1) % 8;
+        drawString(text, Textsize.MEDIUM, 0, calcRow * 16);
     }
 
     /**
-     * Displays the given text onto the EV3 display at the 4th column (of 8). (see drawString(final String text, final int column)
+     * Displays the given text onto the EV3 display at the 4th row (of 8). (see drawString(final String text, final int row)
      * @param text
      */
     public final void drawString(final String text){

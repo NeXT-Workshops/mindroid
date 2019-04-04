@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.List;
 
+import static org.mindroid.server.app.util.ADBService.getADBStateByIP;
+
 public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
     private static final ConnectedDevicesFrame console = new ConnectedDevicesFrame();
@@ -242,7 +244,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
             contentPane.add(field_deviceIp);
             field_deviceIp.setBounds(posX[1],posY,120,30);
 
-            String isConnected = getConnectionState(ip,devices);
+            String isConnected = getConnectionState(ip);
 
             JTextField field_adbState = getTextField(isConnected);
             contentPane.add(field_adbState);
@@ -268,14 +270,14 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         contentPane.repaint();
     }
 
-    private String getConnectionState(String ip, String[] devices){
-
-        for (int i = 0; i < devices.length; i++) {
-            if(devices[i].contains(ip)){
-                return "connected";
-            }
+    private String getConnectionState(String ip){
+        try {
+            return getADBStateByIP(ip);
+            // TODO: catch faulty connections and try to correct them
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return "not connected";
+        return "Problem";
     }
 
     private void clearContentPane(){

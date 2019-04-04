@@ -8,7 +8,9 @@ import se.vidstige.jadb.JadbConnection;
 import se.vidstige.jadb.JadbDevice;
 import se.vidstige.jadb.JadbException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.util.List;
 
@@ -78,6 +80,38 @@ public class ADBService {
             e.printStackTrace();
         } catch (JadbException e) {
             e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Retrieves ADB-Connection State by running "adb devices" and scanning the output
+     * @param ip as a String
+     * @return String to show in dialog
+     * @throws IOException
+     */
+    public static String getADBStateByIP(String ip) throws IOException {
+        Process proc = Runtime.getRuntime().exec("adb devices");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+        String line;
+        String[] parts = null;
+        while ((line = reader.readLine()) != null){
+            if (line.contains(ip)){
+                parts = line.split("\\p{Blank}+");
+                for (String part : parts) {
+                    System.out.print(part+"||");
+                }
+                System.out.println();
+            }
+        }
+        if (parts != null){
+            String state = parts[parts.length -1];
+            if(state == "device")
+                return "connected";
+            else
+                return state;
+        }else{
+            return "IP not found";
         }
 
     }

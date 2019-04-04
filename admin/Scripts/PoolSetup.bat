@@ -14,4 +14,4 @@ git pull
 
 echo copyAssemble.bat to JE dir
 
-cp C:\Users\Public\Mindroid\mindroid\admin\scripts\assemble.bat C:\Users\Public\Mindroid\JavaEditorPortable\assemble.bat
+cp C:\Users\Public\Mindroid\mindroid\admin\Scripts\assemble.bat C:\Users\Public\Mindroid\JavaEditorPortable\assemble.bat

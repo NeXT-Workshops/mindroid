@@ -47,13 +47,13 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      */
     public ImperativeWorkshopAPI(String implementationID, int sessionRobotCount) {
         super(implementationID, sessionRobotCount);
-        //This DiffPilot supports angle correction while truning
+        //This DiffPilot supports angle correction while turning
         this.diffPilot = new DifferentialPilot(this, getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),getSensorProvider(),getGyroSensorPort(),5.6f,12.5f);
     }
 
     public ImperativeWorkshopAPI(String implementationID) {
         super(implementationID); // without session
-        //This DiffPilot supports angle correction while truning
+        //This DiffPilot supports angle correction while turning
         this.diffPilot = new DifferentialPilot(this, getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),getSensorProvider(),getGyroSensorPort(),5.6f,12.5f);
     }
 

@@ -2,6 +2,7 @@ package org.mindroid.server.app.util;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mindroid.server.app.MindroidServerConsoleFrame;
 import se.vidstige.jadb.ConnectionToRemoteDeviceException;
 import se.vidstige.jadb.JadbConnection;
@@ -12,13 +13,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ADBService {
     private final static int ADB_TCP_PORT = 5555;
     static JadbConnection jadb = new JadbConnection();
     static List<JadbDevice> devices;
     static MindroidServerConsoleFrame console = MindroidServerConsoleFrame.getMindroidServerConsole();
+    private static Logger logger = LogManager.getLogger(ADBService.class);
+    private static HashMap<String,String> adbStates = new HashMap<>();
 
     public static List<JadbDevice> getDevices(){
         refreshAdbDevices();
@@ -85,34 +90,48 @@ public class ADBService {
     }
 
     /**
-     * Retrieves ADB-Connection State by running "adb devices" and scanning the output
-     * @param ip as a String
-     * @return String to show in dialog
+     *
      * @throws IOException
      */
-    public static String getADBStateByIP(String ip) throws IOException {
+    public static void refreshADBStates() throws IOException {
+        logger.info("Refreshing ADB states");
         Process proc = Runtime.getRuntime().exec("adb devices");
         BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
         String line;
         String[] parts = null;
         while ((line = reader.readLine()) != null){
-            if (line.contains(ip)){
+            boolean isFirstline = line.toLowerCase().contains("list of devices");
+            boolean isEmtpy = line.equals("");
+            if (!isEmtpy && !isFirstline) {
                 parts = line.split("\\p{Blank}+");
+
                 for (String part : parts) {
-                    System.out.print(part+"||");
+                    System.out.print(part + "||");
                 }
                 System.out.println();
+
+                // instead of "device" say "connected"
+                String state = parts[parts.length - 1];
+                state = state.equals("device") ? "connected" : state;
+
+                // trim port from IP a.b.c.d:1234 -> a.b.c.d
+                String ip = parts[0].split(":")[0];
+
+                logger.info("IP: [" + ip + "] State: [" + state + "]");
+                adbStates.put(ip, state);
             }
         }
-        if (parts != null){
-            String state = parts[parts.length -1];
-            if(state == "device")
-                return "connected";
-            else
-                return state;
-        }else{
-            return "IP not found";
-        }
-
+        logger.info("ADB-States refreshed");
+        logger.info("IPs:    " + adbStates.keySet());
+        logger.info("States: " + adbStates.values());
+    }
+    /**
+     * Retrieves ADB-Connection State by running "adb devices" and scanning the output
+     * @param ip as a String
+     * @return String to show in dialog
+     */
+    public static String getADBStateByIP(String ip){
+        logger.info("Fetching adb state of " + ip);
+        return adbStates.get(ip);
     }
 }

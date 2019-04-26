@@ -22,6 +22,7 @@ import java.net.InetSocketAddress;
 import java.util.List;
 
 import static org.mindroid.server.app.util.ADBService.getADBStateByIP;
+import static org.mindroid.server.app.util.ADBService.refreshADBStates;
 
 public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
 
@@ -232,6 +233,11 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         int posY = 0;
 
         RobotId[] robots = um.getRobotIdsArray();
+        try {
+            refreshADBStates();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i < robots.length; i++) {
             posY = 40+i*30;
             String ip = um.getAddress(robots[i]).getHostString();
@@ -271,13 +277,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     }
 
     private String getConnectionState(String ip){
-        try {
-            return getADBStateByIP(ip);
-            // TODO: catch faulty connections and try to correct them
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "Problem";
+        return getADBStateByIP(ip);
     }
 
     private void clearContentPane(){

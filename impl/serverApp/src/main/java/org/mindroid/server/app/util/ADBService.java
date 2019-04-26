@@ -105,11 +105,6 @@ public class ADBService {
             if (!isEmtpy && !isFirstline) {
                 parts = line.split("\\p{Blank}+");
 
-                for (String part : parts) {
-                    System.out.print(part + "||");
-                }
-                System.out.println();
-
                 // instead of "device" say "connected"
                 String state = parts[parts.length - 1];
                 state = state.equals("device") ? "connected" : state;
@@ -122,8 +117,8 @@ public class ADBService {
             }
         }
         logger.info("ADB-States refreshed");
-        logger.info("IPs:    " + adbStates.keySet());
-        logger.info("States: " + adbStates.values());
+        //logger.info("IPs:    " + adbStates.keySet());
+        //logger.info("States: " + adbStates.values());
     }
     /**
      * Retrieves ADB-Connection State by running "adb devices" and scanning the output
@@ -131,7 +126,7 @@ public class ADBService {
      * @return String to show in dialog
      */
     public static String getADBStateByIP(String ip){
-        logger.info("Fetching adb state of " + ip);
+        //logger.info("Fetching adb state of " + ip);
         return adbStates.get(ip);
     }
 }

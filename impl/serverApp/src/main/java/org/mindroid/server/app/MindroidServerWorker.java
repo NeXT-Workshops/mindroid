@@ -208,6 +208,8 @@ public class MindroidServerWorker implements Runnable {
             // When device connects, connect adb to device
             LOGGER.info("Device connected, establish adb_tcp");
             ADBService.connectADB((InetSocketAddress) socketAddress);
+            ConnectedDevicesFrame.getInstance().updateDevices();
+
         } else {
             throw new IOException("Registration of "+deserializedMsg.getSource().getValue()+" failed.");
         }

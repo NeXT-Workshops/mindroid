@@ -226,6 +226,16 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
     }
 
     public void updateDevices() {
+        try {
+            refreshADBStates();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        updateDevicesFrame();
+    }
+
+
+    public void updateDevicesFrame() {
         String[] devices = getDevices();
         clearContentPane();
 
@@ -233,11 +243,7 @@ public class ConnectedDevicesFrame extends JFrame implements ILogActionHandler{
         int posY = 0;
 
         RobotId[] robots = um.getRobotIdsArray();
-        try {
-            refreshADBStates();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         for (int i = 0; i < robots.length; i++) {
             posY = 40+i*30;
             String ip = um.getAddress(robots[i]).getHostString();

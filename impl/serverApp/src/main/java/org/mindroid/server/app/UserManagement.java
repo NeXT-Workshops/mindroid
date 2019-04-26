@@ -57,8 +57,6 @@ public class UserManagement {
         ipMapping.put(robotId, new InetSocketAddress(((InetSocketAddress)msWorker.getSocket().getRemoteSocketAddress()).getAddress(), port));;
         socketMapping.put(robotId, msWorker.getSocket());
         workerMapping.put(robotId, msWorker);
-
-        ConnectedDevicesFrame.getInstance().updateDevices();
     }
 
 

@@ -26,9 +26,9 @@ public class MindroidServerConsoleFrame extends JFrame {
     }
 
     private MindroidServerConsoleFrame(){
-        super("Mindroid Server Console");
+        super("Console");
         this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-        this.setMinimumSize(new Dimension(1000,500));
+        this.setMinimumSize(new Dimension(1200,600));
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
         final Image titleImage = MindroidServerSettings.getTitleImage();

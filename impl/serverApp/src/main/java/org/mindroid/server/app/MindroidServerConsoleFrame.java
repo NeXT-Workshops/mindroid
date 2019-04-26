@@ -28,7 +28,7 @@ public class MindroidServerConsoleFrame extends JFrame {
     private MindroidServerConsoleFrame(){
         super("Mindroid Server Console");
         this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-        this.setMinimumSize(new Dimension(900,500));
+        this.setMinimumSize(new Dimension(1000,500));
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
         final Image titleImage = MindroidServerSettings.getTitleImage();
@@ -39,6 +39,7 @@ public class MindroidServerConsoleFrame extends JFrame {
         textArea = new JTextArea();
         textArea.setEditable(false);
         textArea.setLineWrap(true);
+        textArea.setFont(new Font("Consolas", Font.PLAIN, 12));
         this.getContentPane().add(new JScrollPane(textArea), BorderLayout.CENTER);
 
         JPanel southPanel = new JPanel(new BorderLayout());

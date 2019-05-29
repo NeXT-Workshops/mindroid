@@ -3,10 +3,10 @@ package org.mindroid.android.app.programs.dev.demo;
 import org.mindroid.api.ImperativeWorkshopAPI;
 import org.mindroid.impl.brick.Button;
 
-public class RemoteMaster extends ImperativeWorkshopAPI {
+public class RemoteMaster_2 extends ImperativeWorkshopAPI {
 
-    public RemoteMaster(){
-        super("Remote Master", 5);
+    public RemoteMaster_2(){
+        super("Remote Master_2", 5);
     }
 
     private enum Directions{
@@ -36,7 +36,7 @@ public class RemoteMaster extends ImperativeWorkshopAPI {
         }
     }
 
-    Modes mode = Modes.NORMAL;
+    Modes mode = Modes.DOUBLE;
 
 
     @Override

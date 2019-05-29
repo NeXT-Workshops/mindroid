@@ -7,7 +7,7 @@ import org.mindroid.common.messages.server.MindroidMessage;
 public class RemoteSlave extends ImperativeWorkshopAPI {
 
     public RemoteSlave() {
-        super("Remote Slave", 2);
+        super("Remote Slave", 5);
     }
 
     @Override

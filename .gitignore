@@ -1,7 +1,6 @@
 **/*.class
 /**/*.iml
 **/.idea/**
-**/build/**
 **/.gradle/**
 **/local.properties
 *.~ava
@@ -16,8 +15,6 @@
 *.blg
 *.dvi
 
-!impl/ev3app/build/*
-!impl/ev3app/build/libs/*
 
 doc/*/*.log
 admin/Scripts/twrp-3.2.1-1-hammerhead.img

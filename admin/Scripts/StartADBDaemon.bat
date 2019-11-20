@@ -1,1 +1,0 @@
-@cd %adb% && adb start-server

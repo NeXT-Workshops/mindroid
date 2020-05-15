@@ -6,7 +6,7 @@ import org.mindroid.impl.statemachine.properties.Colors;
 public class LawnMower extends ImperativeWorkshopAPI {
 
     private static Colors tapeColor = Colors.GREEN;
-    private static float backDist = 10.0f;
+    private static int turnAngle = 10;
 
     public LawnMower() {
         super("Lawn Mower [sol]");
@@ -17,15 +17,12 @@ public class LawnMower extends ImperativeWorkshopAPI {
         while(!isInterrupted()){
             setMotorSpeed(200);
             forward();
-            if(getLeftColor()== tapeColor && getRightColor() == tapeColor){
-                driveDistanceBackward(backDist);
-                turnRight(135);
-            }else if(getLeftColor()== tapeColor){
-                driveDistanceBackward(backDist);
-                turnRight(90);
+            if(getLeftColor()== tapeColor){
+
+                turnLeft(turnAngle);
             }else if(getRightColor()== tapeColor){
-                driveDistanceBackward(backDist);
-                turnLeft(90);
+
+                turnRight(turnAngle);
             }
             delay(50);
         }

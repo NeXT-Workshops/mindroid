@@ -136,7 +136,7 @@ public class StatemachineExecutor implements ISatisfiedConstraintHandler, IExecu
 
 
                 if(Robot.getInstance().getMessenger().isConnected() && runningStatemachines.get(ID).isMessageingAllowed()){
-                    Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Changed State to --> "+currentStates.get(ID).getName());
+                    //Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Changed State to --> "+currentStates.get(ID).getName());
                 }
 
                 //Activate state
@@ -219,8 +219,8 @@ public class StatemachineExecutor implements ISatisfiedConstraintHandler, IExecu
                 @Override
                 public void run() {
                     if (Robot.getInstance().getMessenger().isConnected()) {
-                        Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Start Statemachine: " + sm.getID());
-                        Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Current State: " + sm.getStartState().getName());
+                        //Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Start Statemachine: " + sm.getID());
+                        //Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, "Current State: " + sm.getStartState().getName());
                     }
                     currentStates.put(sm.getID(), sm.getStartState());
                     RobotContextStateManager.getInstance().cleanContextState();
@@ -283,7 +283,7 @@ public class StatemachineExecutor implements ISatisfiedConstraintHandler, IExecu
         sm.reset();
 
         if(Robot.getInstance().getMessenger().isConnected()){
-            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+sm.getID());
+            //Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,"Stop Statemachine: "+sm.getID());
         }
         unsubscribeFromEvaluators(sm.getID());
         runningStatemachines.remove(sm.getID());

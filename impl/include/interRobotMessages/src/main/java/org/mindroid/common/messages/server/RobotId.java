@@ -6,6 +6,11 @@ import java.util.Objects;
  * @author Roland Kluge - Initial implementation
  */
 public class RobotId {
+
+    public static final RobotId SESSION_HANDLER = new RobotId("SessionHandler");
+    public static final RobotId SERVER_LOG = new RobotId("Server");
+    public static final RobotId BROADCAST = new RobotId("Broadcast");
+
     private final String value;
 
     public RobotId(final String value) {

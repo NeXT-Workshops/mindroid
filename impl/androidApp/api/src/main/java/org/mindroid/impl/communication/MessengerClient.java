@@ -1,15 +1,16 @@
 package org.mindroid.impl.communication;
 
+import org.mindroid.api.AbstractImperativeImplExecutor;
 import org.mindroid.api.communication.IMessageListener;
 import org.mindroid.api.communication.IMessageServer;
 import org.mindroid.api.communication.IMessenger;
-import org.mindroid.common.messages.server.Destination;
-import org.mindroid.common.messages.server.LogLevel;
 import org.mindroid.common.messages.server.MessageMarshaller;
 import org.mindroid.common.messages.server.MessageType;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.common.messages.server.RobotId;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
+import org.mindroid.impl.imperative.ImperativeImplExecutor;
+import org.mindroid.impl.logging.APILoggerManager;
 import org.mindroid.impl.util.Messaging;
 
 import java.io.IOException;
@@ -19,6 +20,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Felicia Ruppel on 04.04.17.
@@ -34,8 +39,14 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
 
     private static final int CONNECT_TIMEOUT = 2000;
 
-    public static final String SERVER_LOG = Destination.SERVER_LOG.getValue();
-    public static final String BROADCAST = Destination.BROADCAST.getValue();
+    public static final String SERVER_LOG = RobotId.SERVER_LOG.getValue();
+    public static final String BROADCAST = RobotId.BROADCAST.getValue();
+
+    private static final Logger LOGGER = Logger.getLogger(MessengerClient.class.getName());
+
+    static{
+        APILoggerManager.getInstance().registerLogger(LOGGER);
+    }
 
     private String robotID;
     private InetAddress serverip;
@@ -47,6 +58,7 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
 
     private final MessageMarshaller serverMessageMarshaller = new MessageMarshaller();
     private final ArrayList<MindroidMessage> messages = new ArrayList<MindroidMessage>();
+    private AbstractImperativeImplExecutor.SessionStateObserver observer;
 
     public MessengerClient(String robotID){
         this.robotID = robotID;
@@ -167,23 +179,23 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
     public void sendMessage(String destination, String content) {
         MessageType type;
         if (destination.equals(IMessenger.SERVER_LOG)) {
-            type = MessageType.INFO;
+            type = MessageType.LOG;
         } else {
             type = MessageType.MESSAGE;
         }
-        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), new Destination(destination), type, content);
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), new RobotId(destination), type, content);
         sendMessage(msgObj);
     }
 
     @Override
     public void registerToServer(int port) {
-        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, MessageType.REGISTRATION, ""+port);
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), RobotId.SERVER_LOG, MessageType.REGISTRATION, ""+port);
         sendMessage(msgObj);
     }
 
     @Override
-    public synchronized void sendLogMessage(String content, LogLevel logLevel) {
-        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), Destination.SERVER_LOG, logLevel.getMessageType(), content);
+    public synchronized void sendLogMessage(String content) {
+        MindroidMessage msgObj = new MindroidMessage(new RobotId(robotID), RobotId.SERVER_LOG, MessageType.LOG, content);
         sendMessage(msgObj);
     }
 
@@ -202,7 +214,12 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
      */
     @Override
     public void handleMessage(MindroidMessage msg) {
+        if(msg.getMessageType().equals(MessageType.SESSION) && msg.getSessionRobotCount() == MindroidMessage.STOP_SESSION){
+            observer.stopExecution();
+        }
+        LOGGER.log(Level.INFO, "rcvd msg: " + msg.toString());
         getMessages().add(msg);
+
     }
 
     @Override
@@ -249,5 +266,14 @@ public class MessengerClient implements IMessenger, IMessageListener,IMessageSer
      */
     public void clearMessageCache() {
         messages.clear();
+    }
+
+    public void sendSessionMessage(int sessionRobotCount) {
+        MindroidMessage sessionMessage = new MindroidMessage(new RobotId(robotID), RobotId.SERVER_LOG, MessageType.SESSION, "", sessionRobotCount);
+        sendMessage(sessionMessage);
+    }
+
+    public void addObserver(AbstractImperativeImplExecutor.SessionStateObserver obs) {
+        this.observer = obs;
     }
 }

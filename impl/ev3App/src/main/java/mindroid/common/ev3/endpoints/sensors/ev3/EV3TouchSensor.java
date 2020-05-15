@@ -27,7 +27,7 @@ public class EV3TouchSensor extends AbstractSensor {
 	@Override
 	public String toString() {
 		return "EV3TouchSensor [sensor=" + sensor + ", sensortype=" + sensortype + ", sensormode=" + sensormode
-				+ ", sensorPort=" + sensorPort + ", sampleRate=" + sampleRate + ", isSensorCreated=" + isSensorCreated
+				+ ", sensorPort=" + sensorPort + ", samplePeriodLength=" + samplePeriodLength + ", isSensorCreated=" + isSensorCreated
 				+ "]";
 	}
 }

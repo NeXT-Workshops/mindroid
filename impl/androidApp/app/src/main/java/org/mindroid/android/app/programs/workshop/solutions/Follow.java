@@ -1,8 +1,6 @@
 package org.mindroid.android.app.programs.workshop.solutions;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
-import org.mindroid.api.ev3.EV3StatusLightColor;
-import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.brick.Button;
 
@@ -11,7 +9,7 @@ import java.util.Random;
 public class Follow extends ImperativeWorkshopAPI {
 
     public Follow() {
-        super("Follower [sol]");
+        super("Follower Dynamic Leader [sol]",2);
     }
     enum PlatoonState {
         FAST,
@@ -20,22 +18,15 @@ public class Follow extends ImperativeWorkshopAPI {
     }
     private PlatoonState prevState;
 
-    enum RoleState {
-        LEADER,
-        FOLLOWER
-    }
-    private RoleState role;
+    final int LEADER = 0;
+    final int FOLLOWER = 1;
+    int role = -1;
 
-    enum Direction {
-        LEFT,
-        RIGHT
-    }
 
-    private Random rnd = new Random();
     private String colleague;
 
-    private String player_1 = "Robert";
-    private String player_2 = "Berta";
+    private String player_1 = "Alice";
+    private String player_2 = "Bob";
 
 
     //Messages
@@ -66,7 +57,7 @@ public class Follow extends ImperativeWorkshopAPI {
             if (isButtonClicked(Button.ENTER)) {
                 sendLogMessage("I am the leader!");
                 sendMessage(colleague, leaderMsg);
-                role = RoleState.LEADER;
+                role = LEADER;
                 initDone = true;
             }
             if (hasMessage()) {
@@ -75,70 +66,52 @@ public class Follow extends ImperativeWorkshopAPI {
                 if (msg.getContent().equals(leaderMsg)) {
                     //Colleague is the leader
                     sendLogMessage("I am NOT the leader!");
-                    role = RoleState.FOLLOWER;
+                    role = FOLLOWER;
                 }
                 initDone = true;
             }
+            delay(10);
         }
 
         // drive with changing roles
         while(!isInterrupted()){
-            switch(role){
-                case LEADER:
-                    driveAsLeader(); break;
-                case FOLLOWER:
-                    driveAsFollower(); break;
+            if (role == LEADER){
+                driveAsLeader();
+            }
+            if (role == FOLLOWER){
+                driveAsFollower();
             }
         }
     }
 
     private void driveAsLeader(){
         sendLogMessage("Leading the way!");
-        // drive at least 3000ms + random(0..3000ms)
-        int driveTime = (int) (300 + Math.floor(rnd.nextFloat() * 300));
-        int drivenTime = 0;
-        sendLogMessage("Driving for " + driveTime * 10 + "ms");
         setMotorSpeed(200);
         forward();
-        // drive until interrupted or time is up
-        while (!isInterrupted() && drivenTime < driveTime) {
-            delay(10);
-            drivenTime++;
-        }
+        delay(5000);
         stop();
 
         sendMessage(colleague, turnMsg);
         waitForTurn();
-        turn(Direction.RIGHT);
-        role = RoleState.FOLLOWER;
+        turnRight(180, 100);
+        sendMessage(colleague, myTurnedMsg);
+        role = FOLLOWER;
     }
 
     private void driveAsFollower(){
         sendLogMessage("Following!");
         while(!isInterrupted()) {
-            float distance = getDistance();
-            if (prevState != PlatoonState.FAST && distance > 0.35f) {
-                forward(300);
-                prevState = PlatoonState.FAST;
-                setLED(LED_GREEN_ON);
-            } else if (prevState != PlatoonState.SLOW && distance < 0.25f) {
-                forward(100);
-                prevState = PlatoonState.SLOW;
-                setLED(LED_RED_ON);
-            } else if (prevState != PlatoonState.MED && distance > 0.25f && distance < 0.35f) {
-                forward(200);
-                prevState = PlatoonState.MED;
-                setLED(LED_YELLOW_ON);
-            }
+            keepDistance();
 
             // check for Turn Message
             if(hasMessage()){
                 MindroidMessage msg = getNextMessage();
                 sendLogMessage("I received: " + msg.getContent());
                 if( msg.getContent().equals(turnMsg)){
-                    turn(Direction.LEFT);
+                    turnLeft(180, 100);
+                    sendMessage(colleague, myTurnedMsg);
                     waitForTurn();
-                    role = RoleState.LEADER;
+                    role = LEADER;
                     return;
                 }
             }
@@ -147,25 +120,28 @@ public class Follow extends ImperativeWorkshopAPI {
         stop();
     }
 
-    private void waitForTurn(){
-        while (!hasMessage()) delay(50);
-        if(hasMessage()){
-            MindroidMessage msg = getNextMessage();
-            if (msg.getContent().equals(otherTurnedMsg))
-                sendLogMessage("I received: " + msg.getContent());
+    private void keepDistance(){
+        float distance = getDistance();
+        if (distance > 35f) {
+            forward(300);
+        } else if (distance < 25f) {
+            forward(100);
+        } else if (distance > 25f && distance < 35f) {
+            forward(200);
         }
     }
 
-    private void turn(Direction dir){
-        sendLogMessage("turning...");
-        switch(dir) {
-            case LEFT:
-                turnLeft(180, 100);
-                break;
-            case RIGHT:
-                turnRight(180, 100);
-                break;
+    private void waitForTurn(){
+        boolean finished = false;
+        while (!isInterrupted() && !finished){
+            delay(50);
+            if(hasMessage()) {
+                MindroidMessage msg = getNextMessage();
+                if (msg.getContent().equals(otherTurnedMsg)) {
+                    sendLogMessage("I received: " + msg.getContent());
+                    finished = true;
+                }
+            }
         }
-        sendMessage(colleague, myTurnedMsg);
     }
 }

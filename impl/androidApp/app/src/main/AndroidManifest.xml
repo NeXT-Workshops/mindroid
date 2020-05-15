@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
 
     <application
@@ -19,19 +20,19 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".acitivites.MainActivity"
-                android:label="@string/title_activity_main">
+                android:name=".activities.MainActivity"
+                android:label="@string/title_activity_main"
+                android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
-                android:name=".acitivites.SplashActivity"
+                android:name=".activities.SplashActivity"
                 android:label="@string/title_activity_splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".acitivites.SetupActivity">
+        <activity android:name=".activities.SetupActivity">
         </activity>
     </application>
 

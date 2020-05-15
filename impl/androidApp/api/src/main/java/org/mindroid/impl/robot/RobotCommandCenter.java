@@ -1,11 +1,9 @@
 package org.mindroid.impl.robot;
 
 
-import org.mindroid.api.BasicAPI;
-import org.mindroid.api.ExecutorProvider;
-import org.mindroid.api.IExecutor;
-import org.mindroid.api.IImplStateListener;
+import org.mindroid.api.*;
 import org.mindroid.api.robot.control.IRobotCommandCenter;
+import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.exceptions.BrickIsNotReadyException;
 import org.mindroid.impl.logging.APILoggerManager;
@@ -31,7 +29,6 @@ public class RobotCommandCenter implements IRobotCommandCenter {
     //Field for the ImperativeExecutor
     private IExecutor executor;
 
-
     /**
      * The Robot Object this RommandCenter is observing
      */
@@ -55,6 +52,8 @@ public class RobotCommandCenter implements IRobotCommandCenter {
         this.execProv = new ExecutorProvider();
         this.db = new ImplementationDB();
     }
+
+
 
     /**
      * Adds an Implementation to the Database of this RobotCommandCenter
@@ -86,6 +85,12 @@ public class RobotCommandCenter implements IRobotCommandCenter {
             executor.stop();
             robot.getRobotConfigurator().getBrick().resetBrickState();
         }
+    }
+
+    @Override
+    public void addSessionStateObserver(AbstractImperativeImplExecutor.SessionStateObserver obs) {
+        execProv.addSessionStateObserver(obs);
+        robot.getMessenger().addObserver(obs);
     }
 
     @Override

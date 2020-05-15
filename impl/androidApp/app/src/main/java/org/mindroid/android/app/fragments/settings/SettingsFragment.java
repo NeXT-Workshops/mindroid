@@ -22,20 +22,12 @@ import org.mindroid.android.app.util.ShellService;
 import java.util.ServiceLoader;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SettingsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SettingsFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class SettingsFragment extends Fragment {
     private OnSettingsChanged settingsChangedListener;
     private ConnectionPropertiesChangedListener connectionPropertiesChangedListener = SettingsProvider.getInstance();
 
     private Activity parentActivity;
-
-    private final String[] languages = {"English","Deutsch"};
 
     // has changed
     private boolean hasChanged = false;
@@ -153,8 +145,6 @@ public class SettingsFragment extends Fragment {
 
         txt_input_ServerTCPPort.setText(R.string.DEFAULT_MSG_SERVER_PORT);
 
-
-
         btn_saveSettings.setText(getResources().getString(R.string.btn_text_save_settings));
 
         btn_saveSettings.setOnClickListener(new View.OnClickListener(){
@@ -163,8 +153,6 @@ public class SettingsFragment extends Fragment {
                 saveSettings();
             }
         });
-
-
 
         //Load saved SettingsProvider
         loadSettings();

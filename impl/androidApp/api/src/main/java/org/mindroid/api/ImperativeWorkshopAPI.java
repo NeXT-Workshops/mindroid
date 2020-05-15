@@ -1,6 +1,7 @@
 package org.mindroid.api;
 
 import org.mindroid.common.messages.hardware.Sensormode;
+import org.mindroid.common.messages.server.MindroidMessage;
 import org.mindroid.impl.ev3.EV3PortID;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.impl.logging.APILoggerManager;
@@ -35,7 +36,6 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
      */
     private final int MIN_DRIVE_DELAY = 50;
 
-
     private static final Logger LOGGER = Logger.getLogger(ImperativeWorkshopAPI.class.getName());
 
     static {
@@ -45,9 +45,15 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     /**
      * @param implementationID  The ID of your Implementation. Necessary to run your implementation later on.
      */
+    public ImperativeWorkshopAPI(String implementationID, int sessionRobotCount) {
+        super(implementationID, sessionRobotCount);
+        //This DiffPilot supports angle correction while turning
+        this.diffPilot = new DifferentialPilot(this, getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),getSensorProvider(),getGyroSensorPort(),5.6f,12.5f);
+    }
+
     public ImperativeWorkshopAPI(String implementationID) {
-        super(implementationID);
-        //This DiffPilot supports angle correction while truning
+        super(implementationID); // without session
+        //This DiffPilot supports angle correction while turning
         this.diffPilot = new DifferentialPilot(this, getMotorProvider(), getLeftMotorPort(),getRightMotorPort(),getSensorProvider(),getGyroSensorPort(),5.6f,12.5f);
     }
 
@@ -127,6 +133,16 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
 
     // ------ Motor Controlling Methods ------
 
+
+    /**
+     * Rotate counter-clockwise until stop() is called
+     */
+    public final void turnLeft(){
+        if(!isInterrupted){
+            diffPilot.turnLeft();
+        }
+    }
+
     /**
      * The robot rotates counterclockwise by the given angle.
      * This method blocks until the rotation is completed.
@@ -151,6 +167,15 @@ public abstract class ImperativeWorkshopAPI extends ImperativeAPI{
     public final void turnLeft(int degrees,int speed) {
         if(!isInterrupted()) {
             diffPilot.turnLeft(degrees,speed);
+        }
+    }
+
+    /**
+     * Rotate clockwise until stop() is called
+     */
+    public final void turnRight(){
+        if(!isInterrupted){
+            diffPilot.turnRight();
         }
     }
 

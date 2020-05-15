@@ -4,15 +4,16 @@ import org.mindroid.api.ImperativeWorkshopAPI;
 
 public class SingleWallPingPong extends ImperativeWorkshopAPI {
 
-    public SingleWallPingPong() {
-        super("Single Wall-PingPong");
-    }
 
-    // ------------------------------------
-    // ÄNDERUNGEN ERST HIERNACH DURCHFÜHREN
-    // ------------------------------------
+    public SingleWallPingPong() {
+        super("Single Wall Ping-Pong");
+    }
 
     @Override
     public void run() {
+        /*
+        Änderungen erst hiernach einfügen
+         */
+
     }
 }

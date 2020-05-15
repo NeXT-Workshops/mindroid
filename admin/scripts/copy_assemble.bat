@@ -1,0 +1,1 @@
+copy assemble.bat "C:\Program Files (x86)\JavaEditor"

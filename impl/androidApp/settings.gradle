@@ -10,3 +10,5 @@ project(':interRobotMessages').projectDir = new File('../include/interRobotMessa
 // The following project contains central configuration parameters
 include ':common'
 project(':common').projectDir = new File('../include/common')
+include 'implementationFinder'
+

@@ -12,6 +12,9 @@ jar {
     manifest {
         attributes 'Main-Class': 'org.mindroid.server.app.MindroidServerApplicationMain'
     }
+
+
+
 }
 
 repositories {
@@ -21,6 +24,7 @@ repositories {
 dependencies {
     compile project(':interRobotMessages')
     compile files('src/main/res/icons')
+    compile files('src/main/res/languagefiles')
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.8.2'
 }
 

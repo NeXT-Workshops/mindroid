@@ -2,10 +2,10 @@ package org.mindroid.android.app.programs.workshop.solutions;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
 
-public class CoordWallPingPongB extends ImperativeWorkshopAPI {
+public class CoordWallPingPongB extends ImperativeWorkshopAPI{
 
     public CoordWallPingPongB() {
-        super("Coord Wall Ping-Pong Bob [sol]");
+        super("Coord Wall Ping-Pong Bob [sol]", 2);
     }
 
     String colleague = "Alice";
@@ -31,8 +31,9 @@ public class CoordWallPingPongB extends ImperativeWorkshopAPI {
     private void waitForMessage(String message){
         while (!isInterrupted()) {
             if (hasMessage()) {
-                if (getNextMessage().getContent().equals(message));
-                return;
+                if (getNextMessage().getContent().equals(message)){
+                    return;
+                }
             }
             delay(10);
         }

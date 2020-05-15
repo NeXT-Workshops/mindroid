@@ -2,7 +2,6 @@ package org.mindroid.android.app.fragments.home;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import org.mindroid.android.app.R;
-import org.mindroid.android.app.acitivites.MainActivity;
 
 /**
  * A Fragment showing the progress of a task.
@@ -110,7 +108,7 @@ public class ProgressFragment extends Fragment {
                 }
             }
         };
-
+        //TODO maybe refactor to -> view.post(updateUI); -> to remove activity parameter from method
         activity.runOnUiThread(updateUI);
     }
 

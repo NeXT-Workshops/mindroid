@@ -28,7 +28,7 @@ public class EV3UltrasonicSensor extends AbstractSensor {
 	@Override
 	public String toString() {
 		return "EV3UltrasonicSensor [sensor=" + sensor + ", sensortype=" + sensortype + ", sensormode=" + sensormode
-				+ ", sensorPort=" + sensorPort + ", sampleRate=" + sampleRate + ", isSensorCreated=" + isSensorCreated
+				+ ", sensorPort=" + sensorPort + ", samplePeriodLength=" + samplePeriodLength + ", isSensorCreated=" + isSensorCreated
 				+ "]";
 	}
 
@@ -58,7 +58,7 @@ public class EV3UltrasonicSensor extends AbstractSensor {
                         e.printStackTrace();
                     }
                     try {
-                        Thread.sleep(sampleRate);
+                        Thread.sleep(samplePeriodLength);
                     } catch (InterruptedException e) {
                         //System.err.println("SensorEndpoint - Thread could not sleep.");
                     }

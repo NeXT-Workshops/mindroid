@@ -60,13 +60,9 @@ echo.
 
 set /p input = start recovery and hit enter
 echo Copy Lineage zip-file
-<<<<<<< HEAD:admin/scripts/FlashLineage.bat
-adb push lineage-14.1-20181004-nightly-hammerhead-signed.zip /sdcard/
-=======
 adb push lineage-14.1-20180301-nightly-hammerhead-signed.zip /sdcard/
 echo Copy Addonsu zip-file
 adb push addonsu-14.1-arm-signed.zip /sdcard/
->>>>>>> origin/master:admin/Scripts/FlashLineage.bat
 echo.
 
 
@@ -83,6 +79,15 @@ echo select "Do not install"
 pause
 
 exit
+
+
+
+
+
+
+
+
+
 
 :androidHomeNotSetError
 @echo ^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-

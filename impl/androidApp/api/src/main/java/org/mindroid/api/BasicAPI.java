@@ -12,6 +12,8 @@ import org.mindroid.impl.brick.Textsize;
 import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 import org.mindroid.impl.robot.*;
 
+import java.util.Random;
+
 /**
  * This API provides the basic methods executable on any robot which do not depend on the implementation style (Statemachine/Imperative).
  */
@@ -116,6 +118,25 @@ public abstract class BasicAPI {
      */
     public final void drawString(final String text, final Textsize textsize, final int xPosition, final int yPosition) {
         getBrickController().drawString(text,textsize, xPosition, yPosition);
+    }
+
+    /**
+     * Displays the given text onto the EV3 display at the given row.
+     * Row starting Pixel = (Row-1) * 16
+     * @param text the text to display
+     * @param row the row in which the text should be displayed, filtered by modulo 8 to produce values 0 to 7
+     */
+    public final void drawString(final String text, final int row){
+        int calcRow = (row - 1) % 8;
+        drawString(text, Textsize.MEDIUM, 0, calcRow * 16);
+    }
+
+    /**
+     * Displays the given text onto the EV3 display at the 4th row (of 8). (see drawString(final String text, final int row)
+     * @param text
+     */
+    public final void drawString(final String text){
+       drawString(text, 4);
     }
 
     /**
@@ -345,7 +366,7 @@ public abstract class BasicAPI {
      * Returns true if the down button is released
      * @return boolean
      */
-    public final boolean isDownuttonReleased(){
+    public final boolean isDownButtonReleased(){
         return isButtonReleased(Button.DOWN);
     }
 
@@ -384,22 +405,24 @@ public abstract class BasicAPI {
      */
     public final void sendMessage(String destination, String message){
         if(Robot.getRobotController().getMessenger() != null){
-            Robot.getRobotController().getMessenger().sendMessage(destination,message);
+            Robot.getRobotController().getMessenger().sendMessage(destination, message);
         }else{
             System.out.println("[StatemachineAPI:sendMessage] Tried to send a message, but the Messenger was null");
         }
     }
+
+
 
     /**
      *
      * Broadcast a message to all robots connectd to the same msg server.
      * @param message 'message to send'
      */
-    public final void broadcastMessage(String message){
+    public final void sendBroadcastMessage(String message){
         if(Robot.getRobotController().getMessenger() != null){
-            Robot.getRobotController().getMessenger().sendMessage(IMessenger.BROADCAST,message);
+            Robot.getRobotController().getMessenger().sendMessage(IMessenger.BROADCAST, message);
         }else{
-            System.out.println("[StatemachineAPI:broadcastMessage] Tried to broadcast a message, but the Messenger was null");
+            System.out.println("[StatemachineAPI:sendBroadcastMessage] Tried to broadcast a message, but the Messenger was null");
         }
     }
 
@@ -409,7 +432,7 @@ public abstract class BasicAPI {
      */
     public final void sendLogMessage(String logmessage){
         if(Robot.getRobotController().getMessenger() != null){
-            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG,logmessage);
+            Robot.getRobotController().getMessenger().sendMessage(IMessenger.SERVER_LOG, logmessage);
         }else{
             ErrorHandlerManager.getInstance().handleError(new Exception("[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null"),BasicAPI.class,"[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null");
             System.out.println("[StatemachineAPI:sendLogMessage] Tried to send a logmessage, but the Messenger was null");

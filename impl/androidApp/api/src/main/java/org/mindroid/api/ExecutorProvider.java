@@ -69,4 +69,8 @@ public class ExecutorProvider extends AbstractImplVisitor{
         //Set executor
         currentExecutor = smExecutor;
     }
+
+    public void addSessionStateObserver(AbstractImperativeImplExecutor.SessionStateObserver obs){
+        impExecutor.addSessionStateObserver(obs);
+    }
 }

@@ -17,10 +17,10 @@ public class ColorTest extends ImperativeWorkshopAPI {
             Colors rightColorValue = getRightColor();
 
             clearDisplay(); 
-            drawString("Colors", Textsize.MEDIUM, 1, 1);
-            drawString("L: " + describeColor(leftColorValue), Textsize.MEDIUM, 1, 17);
-            drawString("R: " + describeColor(rightColorValue), Textsize.MEDIUM, 1, 33);
-            drawString("Distance: " + getDistance(), Textsize.MEDIUM, 1, 51);
+            drawString("Colors", 3);
+            drawString("L: " + describeColor(leftColorValue), 4);
+            drawString("R: " + describeColor(rightColorValue), 5);
+            drawString("Distance: " + getDistance(), 6);
             delay(500);
         }
     }

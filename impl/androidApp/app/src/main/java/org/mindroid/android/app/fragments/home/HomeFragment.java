@@ -1,5 +1,6 @@
 package org.mindroid.android.app.fragments.home;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -7,16 +8,17 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.Handler;
 import android.util.SparseBooleanArray;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
-
 import org.mindroid.android.app.R;
-import org.mindroid.android.app.acitivites.IErrorHandler;
-import org.mindroid.android.app.acitivites.MainActivity;
+import org.mindroid.android.app.activities.IErrorHandler;
+import org.mindroid.android.app.activities.MainActivity;
 import org.mindroid.android.app.asynctasks.ProgressTask;
+import org.mindroid.android.app.dialog.DemoDialogFragment;
 import org.mindroid.android.app.dialog.ProgressDialog;
 import org.mindroid.android.app.fragments.log.GlobalLogger;
 import org.mindroid.android.app.fragments.settings.SettingsFragment;
@@ -25,7 +27,6 @@ import org.mindroid.android.app.robodancer.SettingsProvider;
 import org.mindroid.android.app.serviceloader.ImplementationService;
 import org.mindroid.android.app.util.ShellService;
 import org.mindroid.android.app.util.USBService;
-
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -44,8 +45,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
 
     //Task
-    private final String MSG_TASK_PARAM_0_CONNECT = "connect";
-    private final String MSG_TASK_PARAM_0_DISCONNECT = "disconnectFromBrick";
+    private final String MSG_TASK_CONNECT = "connect";
+    private final String MSG_TASK_DISCONNECT = "disconnectFromBrick";
 
     //--- Buttons etc --//
 
@@ -88,11 +89,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
     private final int ACTIVATE_TETHERING_TIMEOUT = 4000;
 
-    private SparseBooleanArray menuItemAlwaysEnabled = new SparseBooleanArray();
-
     private final static Logger LOGGER = Logger.getLogger(HomeFragment.class.getName());
 
-    private Process shellProcess;
     private boolean stopThreads;
 
     public HomeFragment() { //Called by newInstance(..)
@@ -128,23 +126,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             robot.registerErrorHandler(((IErrorHandler) parentActivity).getErrorHandler());
         }
 
-        getMenuEnabledSettings();
     }
-
-    /**
-     *
-     */
-    private void getMenuEnabledSettings() {
-        //TODO refactor to a another class to configure menu
-        //SettingsProvider menu enable
-        menuItemAlwaysEnabled.put(0,true);
-        menuItemAlwaysEnabled.put(1,true);
-        menuItemAlwaysEnabled.put(2,false);
-        menuItemAlwaysEnabled.put(3,false);
-        menuItemAlwaysEnabled.put(4,true);
-        menuItemAlwaysEnabled.put(5,false);
-    }
-
 
     @Override
     public void onAttach(Context context) {
@@ -265,6 +247,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
      */
     public interface OnFragmentInteractionListener {
         void showErrorDialog(String title,String message);
+
+        void enableMenuItems();
+
+        void disableMenuItems();
     }
 
     /**
@@ -289,8 +275,6 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 btn_startRobot.setEnabled(robot.isConnectedToBrick() && robot.isConfigurated() && !robot.isRunning && (positiveUSBState || SettingsProvider.getInstance().isSimulationEnabled()) && spinner_implementations.getSelectedItem() != null && !spinner_implementations.getSelectedItem().toString().isEmpty());
 
                 btn_stopRobot.setEnabled(robot.isRunning);
-
-                setEnableMenuItems(!robot.isConnectedToBrick());
 
                 spinner_implementations.setEnabled(!robot.isRunning);
 
@@ -338,8 +322,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
                 //Stop robot
                 if(robot.isRunning){
-                    StartStopRobotTask task_stopRobot = new StartStopRobotTask("Robot",msgStartRobot);
-                    task_stopRobot.execute(STOP_ROBOT);
+                    StopRobotTask task_stopRobot = new StopRobotTask("Robot",msgStopRobot);
+                    task_stopRobot.execute();
 
                     DisconnectFromBrickTask task_disconnect = new DisconnectFromBrickTask("Robot",msgDisconnectFromRobot);
                     task_disconnect.execute();
@@ -441,10 +425,10 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             public void onClick(View v) {
                 if(robot.isMessengerConnected()){
                     DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask("Messenger","Messenger Client tries to connect");
-                    msgClientTask.execute(MSG_TASK_PARAM_0_DISCONNECT);
+                    msgClientTask.execute(MSG_TASK_DISCONNECT);
                 }else{
                     DisConnectMessengerTask msgClientTask = new DisConnectMessengerTask("Messenger","Messenger Client tries to connect");
-                    msgClientTask.execute(MSG_TASK_PARAM_0_CONNECT);
+                    msgClientTask.execute(MSG_TASK_CONNECT);
                 }
 
             }
@@ -456,6 +440,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 //TODO add internationalization to title
                 ConnectInitBrickTask task = new ConnectInitBrickTask("Connecting",SettingsProvider.getInstance().getRobotConfigBundle(),getFragmentManager());
                 task.execute();
+
             }
         });
 
@@ -463,8 +448,8 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
             @Override
             public void onClick(View v) {
                 if(robot.isRunning){
-                    StartStopRobotTask task = new StartStopRobotTask("Start/Stop robot",msgStopRobot);
-                    task.execute(STOP_ROBOT);
+                    StopRobotTask task = new StopRobotTask("Stop robot",msgStopRobot);
+                    task.execute();
                 }
 
                 DisconnectFromBrickTask task = new DisconnectFromBrickTask("Disconnecting robot",msgDisconnectFromRobot);
@@ -475,16 +460,16 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
         btn_startRobot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartStopRobotTask task = new StartStopRobotTask("Starting robot",msgStartRobot);
-                task.execute(START_ROBOT);
+                StartRobotTask task = new StartRobotTask("Starting robot",msgStartRobot);
+                task.execute();
             }
         });
 
         btn_stopRobot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartStopRobotTask task = new StartStopRobotTask("Stopping robot",msgStopRobot);
-                task.execute(STOP_ROBOT);
+                StopRobotTask task = new StopRobotTask("Stopping robot",msgStopRobot);
+                task.execute();
             }
         });
 
@@ -539,12 +524,11 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
     }
 
     public void setEnableMenuItems(boolean enable){
-        ListView mDrawerListView;
-        if((mDrawerListView = parentActivity.getMenuItemListView()) != null) {
-            for(int i = 0; i < mDrawerListView.getChildCount(); i++){
-                if(!menuItemAlwaysEnabled.get(i)) {
-                    mDrawerListView.getChildAt(i).setEnabled(enable);
-                }
+        if(getContext() instanceof OnFragmentInteractionListener){
+            if(enable){
+                ((OnFragmentInteractionListener) getContext()).enableMenuItems();
+            }else{
+                ((OnFragmentInteractionListener) getContext()).disableMenuItems();
             }
         }
     }
@@ -586,46 +570,79 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 e.printStackTrace();
                 parentActivity.showErrorDialog("Exception",e.getMessage());
             }
+            setEnableMenuItems(!result); //!isConnectedToBrick -> menu enabled when not connected
             return result;
         }
     }
 
-    private class StartStopRobotTask extends ProgressTask{
+    private class StartRobotTask extends SessionProgressTask{
 
-        public StartStopRobotTask(String title,String progressMsg) {
-            super(getFragmentManager(),title,progressMsg);
+        public StartRobotTask(String title, String progressMsg) {
+            super(title,new Bundle(),getFragmentManager());
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
-            if(params.length>0) {
-                if (params[0].equals(START_ROBOT)) { //True => Start robot, else it should stop the Robot
-                    try {
-                        robot.startExecuteImplementation(SettingsProvider.getInstance().selectedImplementationID);
+            return startRobot();
+        }
 
-                        return true;
-                    }catch(Exception e){
-                        parentActivity.showErrorDialog("Exception",e.getMessage());
-                        e.printStackTrace();
-                    }
-                } else if(params[0].equals(STOP_ROBOT)) {
-                    try {
-                        robot.stopRunningImplmentation();
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            robot.isRunning = result;
+        }
 
-                        //SAVING LOG AFTER EXECUTION
-                        //Currently removed saving log when stopping the program, as a concurrentException can occur, which is causing a dialog popping up
-                        //GlobalLogger.getInstance().saveLog();
-                        return false;
-                    }catch(Exception e){
-                        parentActivity.showErrorDialog("Exception",e.getMessage());
-                        e.printStackTrace();
-                    }
+        private boolean startRobot(){
+
+            while(!SessionStateObserver.getInstance().isDialogDisplayed()){
+                //Wait until dialog is displayed, then start robot otherwise accessing non existing view is not cool
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            }else{
+            }
+
+            //If Demo implementation - show FullscreenDemoFragment //TODO
+            if(SettingsProvider.getInstance().getSelectedProgramSet().equals(ImplementationService.DEMO)){
+                //TODO test
+                DemoDialogFragment ddf = DemoDialogFragment.newInstance();
+                ddf.show(getFragmentManager(),"DemoDialog");
+            }
+
+
+            robot.startExecuteImplementation(SettingsProvider.getInstance().selectedImplementationID);
+            do {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } while (!SessionStateObserver.getInstance().isSessionComplete() && !isDialogCancelled);
+            //Finish execution when the Session is Full and gets started, or the cancel button of the dialog is pressed (isInterrutped)
+            //-> with ending this method the dialog will be disposed onPostExecute(..)
+            if(isDialogCancelled){
+                //Stop execution of implementation
+                robot.stopRunningImplementation();
                 return false;
             }
+
+            return true;
+        }
+    }
+
+    private class StopRobotTask extends ProgressTask{
+
+        public StopRobotTask(String title, String progressMsg) {
+            super(getFragmentManager(), title, progressMsg);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            robot.stopRunningImplementation();
             return false;
         }
+
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
@@ -646,22 +663,24 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
         @Override
         protected Boolean doInBackground(String... params) {
-            if(params.length > 0){
-                if(params[0].equals(MSG_TASK_PARAM_0_CONNECT)){
+            if(params.length == 0){
+                return false;
+            }
+
+            switch(params[0]){
+                case MSG_TASK_CONNECT:
                     if(!robot.isMessengerConnected()) {
                         LOGGER.log(Level.INFO,"Connecting to Message Server");
                         robot.connectMessenger(SettingsProvider.getInstance().getMsgServerIP(),SettingsProvider.getInstance().getMsgServerPort());
-                    }
-                }else if(params[0].equals(MSG_TASK_PARAM_0_DISCONNECT)){
+                    } break;
+                case MSG_TASK_DISCONNECT:
                     if(robot.isMessengerConnected()) {
                         LOGGER.log(Level.INFO,"Disconnecting to Message Server");
                         robot.disconnectMessenger();
-                    }
-                }
+                    } break;
             }
             return robot.isMessengerConnected();
         }
-
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
@@ -692,7 +711,9 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
 
             if(robot.isConnectedToBrick()) {
                 boolean isConfigurationInitialized = initConfiguration();
-                return createRobot && isMessengerConnected && connectedToBrick && isConfigurationInitialized;
+                boolean result = createRobot && isMessengerConnected && connectedToBrick && isConfigurationInitialized;
+                setEnableMenuItems(!result); //!result = !everythingEstablished = false when everything is fine -> disable menu items
+                return result;
             }else{
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P1, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_SEN_P2, false);
@@ -702,6 +723,7 @@ public class HomeFragment extends Fragment implements SettingsFragment.OnSetting
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_B, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_C, false);
                 setProgressState(ConnectionProgressDialogFragment.KEY_PARAM_MOT_D, false);
+                setEnableMenuItems(true); //Enable menuItems, no change as robot is not connected to brick to initialize
                 return false;
             }
         }

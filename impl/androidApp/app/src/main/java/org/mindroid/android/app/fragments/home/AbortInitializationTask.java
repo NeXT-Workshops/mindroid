@@ -2,7 +2,7 @@ package org.mindroid.android.app.fragments.home;
 
 import android.app.FragmentManager;
 import android.os.AsyncTask;
-import org.mindroid.android.app.acitivites.MainActivity;
+import org.mindroid.android.app.activities.MainActivity;
 import org.mindroid.android.app.dialog.ProgressDialog;
 
 public class AbortInitializationTask extends AsyncTask {

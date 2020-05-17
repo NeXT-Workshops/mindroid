@@ -8,6 +8,7 @@ import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.robotics.filter.MedianFilter;
 import org.mindroid.common.messages.hardware.Sensors;
 import lejos.hardware.port.Port;
 import org.mindroid.common.messages.hardware.Sensormode;
@@ -23,7 +24,7 @@ public abstract class AbstractSensor {
     Sensormode sensormode = null;
     Port sensorPort;
 
-    final long sampleRate;
+    final long samplePeriodLength;
     boolean isSensorCreated = false;
 
     ArrayList<SensorListener> listener = new ArrayList<SensorListener>(1);
@@ -34,13 +35,13 @@ public abstract class AbstractSensor {
      * @param sensortype
      * @param sensorPort
      * @param mode
-     * @param sampleRate
+     * @param samplePeriodLength
      */
-    public AbstractSensor(Sensors sensortype, Port sensorPort, Sensormode mode, long sampleRate){
+    public AbstractSensor(Sensors sensortype, Port sensorPort, Sensormode mode, long samplePeriodLength){
         this.sensortype = sensortype;
         this.sensorPort = sensorPort;
         this.sensormode = mode;
-        this.sampleRate = sampleRate;
+        this.samplePeriodLength = samplePeriodLength;
     }
 
     /**
@@ -98,6 +99,7 @@ public abstract class AbstractSensor {
         Runnable run = new Runnable() {
             @Override
             public void run() {
+                MedianFilter filter = new MedianFilter(sensor, 5);
                 float[] sample = new float[sensor.sampleSize()];
                 while (sensor != null /*&& filter != null*/) {
                     try {
@@ -106,8 +108,8 @@ public abstract class AbstractSensor {
                             sample = new float[sensor.sampleSize()];
                         }
 
-                        sensor.fetchSample(sample, 0);
-                        //filter.fetchSample(sample,0);
+                        //sensor.fetchSample(sample, 0);
+                        filter.fetchSample(sample,0);
 
                         for (SensorListener tmp_listener : listener) {
                             if(tmp_listener != null) {
@@ -118,7 +120,7 @@ public abstract class AbstractSensor {
                         e.printStackTrace();
                     }
                     try {
-                        Thread.sleep(sampleRate);
+                        Thread.sleep(samplePeriodLength);
                     } catch (InterruptedException e) {
                         //System.err.println("SensorEndpoint - Thread could not sleep.");
                     }

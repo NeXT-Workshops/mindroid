@@ -1,0 +1,27 @@
+Admin Setup Mindroid
+
+Umgebungsvariable setzen
+set ANDROID_HOME=C:\Users\Public\Mindroid\Android\Sdk
+set GRADLE_USER_HOME=C:\Users\Public\Mindroid\Gradle\
+set PATH=%PATH%;C:\Users\Public\Mindroid\Android\platform-tools
+
+Benutzerumgebungsvariablen!
+
+Ports 33044 und 5555 freigeben
+
+Assemble.bat kopieren
+Gradle Ordner löschen/umbenennen
+mindroid löschen, neu pullen, git checkout
+
+Arbeitsspeicher ändern in impl\androidApp\gradle.properties
+	alt: org.gradle.jvmargs=-Xmx1536M
+	neu: org.gradle.jvmargs=-Xmx512M
+	
+
+	
+	
+	
+	
+	Programme Videos random drehen 90 180 
+	bowling
+	

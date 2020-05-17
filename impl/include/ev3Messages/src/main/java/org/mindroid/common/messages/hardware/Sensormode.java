@@ -16,9 +16,9 @@ public enum Sensormode {
     SEEK("Seek"),	//Untested Identifier(Stringvalue)
 
     //Modes of EV3GyroSensor
-    ANGLE("Angle"),					//Untested Identifier(Stringvalue)
+    ANGLE("Angle"),
     RATE("Rate"),					//Untested Identifier
-    RATEANDANGLE("RateAndAngle"), 	//Untested Identifier
+    RATEANDANGLE("Angle and Rate"),
 
     //Mode of EV3TouchSensor
     TOUCH("Touch");			//Untested Identifier(Stringvalue)

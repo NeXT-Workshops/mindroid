@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import org.mindroid.android.app.R;
-import org.mindroid.android.app.acitivites.MainActivity;
+import org.mindroid.android.app.activities.MainActivity;
 import org.mindroid.android.app.fragments.home.ConnectionProgressDialogFragment;
 import org.mindroid.android.app.fragments.myrobot.HardwareMapping;
 import org.mindroid.android.app.serviceloader.ImplementationService;
@@ -85,7 +85,7 @@ public class SettingsProvider implements ConnectionPropertiesChangedListener, Ro
     private static final List<String> DEFAULT_NAMES = Arrays.asList(
             "Mia", "Emma", "Sofia", "Hannah", "Emilia",
             "Anne", "Marie", "Mila", "Lina", "Lea",
-            "Amelie", "Luisa", "Johanna", "Emily", "Clara",//
+            "Amelie", "Luisa", "Johanna", "Emily", "Clara",
             "Ben", "Paul", "Jonas", "Elias", "Leon",
             "Finn", "Noah", "Louis", "Lukas", "Felix",
             "Max", "Henry", "Oskar", "Emil", "Liam"

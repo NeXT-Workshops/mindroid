@@ -172,6 +172,18 @@ public class DifferentialPilot implements IDifferentialPilot {
         motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations,false);
     }
 
+    @Override
+    public void turnLeft(){
+        SynchronizedMotorOperation forward = SyncedMotorOpFactory.createForwardOperation();
+        SynchronizedMotorOperation backward = SyncedMotorOpFactory.createBackwardOperation();
+
+        SynchronizedMotorOperation[] operations = getNoOperationSet();
+
+        if(!setMotorOperations(backward, forward, operations)){
+            return;
+        }
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations, false);
+    }
 
     @Override
     public void turnLeft(int degrees) {
@@ -211,6 +223,18 @@ public class DifferentialPilot implements IDifferentialPilot {
         setMotorSpeeds(oldLeftMotorSpeed,oldRightMotorSpeed);
     }
 
+    @Override
+    public void turnRight(){
+        SynchronizedMotorOperation forward = SyncedMotorOpFactory.createForwardOperation();
+        SynchronizedMotorOperation backward = SyncedMotorOpFactory.createBackwardOperation();
+
+        SynchronizedMotorOperation[] operations = getNoOperationSet();
+
+        if(!setMotorOperations(forward, backward, operations)){
+            return;
+        }
+        motorProvider.getSynchronizedMotors().executeSynchronizedOperation(operations, false);
+    }
 
     @Override
     public void turnRight(int degrees) {

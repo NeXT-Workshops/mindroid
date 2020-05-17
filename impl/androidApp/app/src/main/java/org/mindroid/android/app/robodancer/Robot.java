@@ -1,5 +1,6 @@
 package org.mindroid.android.app.robodancer;
 
+import org.mindroid.android.app.fragments.home.SessionStateObserver;
 import org.mindroid.android.app.fragments.log.GlobalLogger;
 import org.mindroid.android.app.fragments.sensormonitoring.SensorListener;
 import org.mindroid.android.app.serviceloader.ImplementationService;
@@ -29,6 +30,9 @@ public class Robot implements IImplStateListener {
 
     public boolean isRunning = false;
 
+    //Used in sensorMonitoring to show info message. true if any program has been executed.
+    public boolean programExecuted = false;
+
     private IRobotFactory roFactory;
     //-------- Robot
     private RobotPortConfig robotPortConfig;
@@ -52,6 +56,8 @@ public class Robot implements IImplStateListener {
         updateRobotPortConfig();
 
         initSensorListener();
+
+        roFactory.getRobotCommandCenter().addSessionStateObserver(SessionStateObserver.getInstance());
     }
 
     /**
@@ -187,12 +193,14 @@ public class Robot implements IImplStateListener {
         LOGGER.log(Level.INFO, "Start to execute: " + id);
         runningImplementationID = id;
         roFactory.getRobotCommandCenter().startImplementation(id,this);
+        //True if any program got executed - used in sensorMonitoring
+        programExecuted = true;
     }
 
     /**
      * Stop the running Implementation.
      */
-    public void stopRunningImplmentation(){
+    public void stopRunningImplementation(){
         LOGGER.log(Level.INFO, "Stopped execution: " + runningImplementationID);
         runningImplementationID = "";
         roFactory.getRobotCommandCenter().stopImplementation();

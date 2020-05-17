@@ -10,8 +10,9 @@ import org.mindroid.impl.brick.Textsize;
 public class PlatooningFollower extends ImperativeWorkshopAPI {
 
     public PlatooningFollower(){
-        super("Platooning Follower [sol]l");
-    };
+        super("Platooning Follower [sol]", 2);
+    }
+
     enum State {
         FAST,
         MED,
@@ -24,7 +25,7 @@ public class PlatooningFollower extends ImperativeWorkshopAPI {
       while(!isInterrupted()) {
             clearDisplay();
             float distance = getDistance();
-            drawString("Dist: " + distance, Textsize.MEDIUM, 10,50);
+            drawString("Dist: " + distance);
             if (prevState != State.FAST && distance > 30f) {
                 forward(300);
                 prevState = State.FAST;

@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import android.widget.LinearLayout;
 import org.mindroid.android.app.R;
-import org.mindroid.android.app.acitivites.MainActivity;
+import org.mindroid.android.app.activities.MainActivity;
 import org.mindroid.android.app.fragments.home.HomeFragment;
 import org.mindroid.impl.ev3.EV3PortIDs;
 import org.mindroid.android.app.robodancer.Robot;
@@ -108,7 +108,7 @@ public class SensorMonitoringFragment extends Fragment implements SensorObservat
         addSensorObservationToUI(sensor_port3_monitor);
         addSensorObservationToUI(sensor_port4_monitor);
 
-        if(!robot.isRunning){
+        if(!robot.programExecuted){ 
             if(getActivity() instanceof MainActivity){
                 ((MainActivity) getActivity()).showInfoDialog("Info",infoMessage);
             }

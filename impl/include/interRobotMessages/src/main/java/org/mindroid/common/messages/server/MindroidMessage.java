@@ -3,24 +3,41 @@ package org.mindroid.common.messages.server;
 import java.util.Objects;
 
 public class MindroidMessage {
+
     private final RobotId source;
+    private final RobotId destination;
     private final MessageType messageType;
     private final String content;
-    private final Destination destination;
+    private final int sessionRobotCount;
+
+    public static final int BAD_SESSION_SIZE = -666;
+    public static final int START_SESSION = -3;
+    public static final int QUIT_SESSION = -2;
+    public static final int UNCOUPLED_SESSION = -1;
+    public static final int STOP_SESSION = 0;
 
 
-    public MindroidMessage(final RobotId source, final Destination destination, final MessageType messageType, final String content) {
+    public MindroidMessage(RobotId source, RobotId destination, MessageType messageType, String content, int sessionRobotCount) {
         this.source = source;
         this.messageType = messageType;
         this.content = content;
         this.destination = destination;
+        this.sessionRobotCount = sessionRobotCount;
+    }
+
+    public MindroidMessage(RobotId source, RobotId destination, MessageType messageType, String content) {
+        this.source = source;
+        this.messageType = messageType;
+        this.content = content;
+        this.destination = destination;
+        this.sessionRobotCount =-1;
     }
 
     public RobotId getSource() {
         return source;
     }
 
-    public Destination getDestination() {
+    public RobotId getDestination() {
         return destination;
     }
 
@@ -32,21 +49,22 @@ public class MindroidMessage {
         return content;
     }
 
-    public boolean isLogMessage() {
-        return destination.getValue().equals(Destination.SERVER_LOG.getValue())&&!messageType.equals(MessageType.REGISTRATION);
+    public int getSessionRobotCount() { return sessionRobotCount; }
+
+    // accepts any form of "Broadcast" in Destination as Broadcast message (case-insensitive)
+    public boolean isBroadcastMessage() {
+        return destination.getValue().toLowerCase().equals(RobotId.BROADCAST.getValue().toLowerCase());
     }
 
-    public boolean isBroadcastMessage() {
-        return destination.getValue().equals(Destination.BROADCAST.getValue());
-    }
 
     @Override
     public String toString() {
-        return "MindroidMessage{" +
-                "source=" + source +
-                ", destination=" + destination +
-                ", messageType=" + messageType +
+        return "MindroidMsg{" +
+                "src=" + source +
+                ", mType=" + messageType +
                 ", content='" + content + '\'' +
+                ", dest=" + destination +
+                ", session=" + sessionRobotCount +
                 '}';
     }
 
@@ -55,14 +73,15 @@ public class MindroidMessage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MindroidMessage that = (MindroidMessage) o;
-        return Objects.equals(getSource(), that.getSource()) &&
-                Objects.equals(getDestination(), that.getDestination()) &&
-                getMessageType() == that.getMessageType() &&
-                Objects.equals(getContent(), that.getContent());
+        return sessionRobotCount == that.sessionRobotCount &&
+                Objects.equals(source, that.source) &&
+                messageType == that.messageType &&
+                Objects.equals(content, that.content) &&
+                Objects.equals(destination, that.destination);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getSource(), getDestination(), getMessageType(), getContent());
+        return Objects.hash(source, messageType, content, destination, sessionRobotCount);
     }
 }

@@ -6,15 +6,16 @@ import org.mindroid.impl.brick.Button;
 
 public class CoordWallPingPong extends ImperativeWorkshopAPI {
 
-    private final String player_1 = "Robert";
-    private final String player_2 = "Berta";
+    private final String PLAYER_1 = "Alice";
+    private final String PLAYER_2 = "Bob";
 
     //Messages
-    private final String leaderMsg = "I AM THE LEADER";
-    private final String startPingPongMsg = "YOUR TURN";
+    private final String LEADER_MSG = "I AM THE LEADER";
+    private final String START_MSG = "START!";
+    private final String CONTINUE_MSG = "WEITER!";
 
     public CoordWallPingPong() {
-        super("Coord Wall Ping-Pong Dynamic Leader [sol]");
+        super("Coord Wall Ping-Pong Dynamic Leader [sol]", 2);
     }
 
     @Override
@@ -22,10 +23,10 @@ public class CoordWallPingPong extends ImperativeWorkshopAPI {
         String myID = getRobotID();
         String colleague;
 
-        if(myID.equals(player_1)){
-            colleague = player_2;
+        if(myID.equals(PLAYER_1)){
+            colleague = PLAYER_2;
         }else{
-            colleague = player_1;
+            colleague = PLAYER_1;
         }
 
         sendLogMessage("I am " + myID);
@@ -37,53 +38,56 @@ public class CoordWallPingPong extends ImperativeWorkshopAPI {
             if(isButtonClicked(Button.ENTER)){
                 sendLogMessage("I am the leader!");
                 //I am the Leader
-                sendMessage(colleague,leaderMsg);
+                sendMessage(colleague, LEADER_MSG);
                 leaderElectionFinished = true;
 
-                //Start doing wall ping pong
-                runWallPingPong(colleague);
+                //Start doing wall ping pong, start driving
+                while(!isInterrupted()) {
+                    driveToWallAndTurn();
+                    sendMessage(colleague, START_MSG);
+                    waitForMessage(CONTINUE_MSG);
+                }
             }
 
             if(hasMessage()){
                 MindroidMessage msg = getNextMessage();
                 sendLogMessage("I received a message: "+msg.getSource().getValue()+": \""+msg.getContent()+"\"");
-                if(msg.getContent().equals(leaderMsg)){
+                if(msg.getContent().equals(LEADER_MSG)){
                     //Colleague is the leader
                     leaderElectionFinished = true;
                     sendLogMessage("I am NOT the leader!");
-                }
-            }
-            delay(50);
-        }
 
-        while(!isInterrupted()){
-
-            if(hasMessage()){
-                MindroidMessage msg = getNextMessage();
-                sendLogMessage("I received a message: "+msg.getSource().getValue()+": \""+msg.getContent()+"\"");
-                if(msg.getContent().equals(startPingPongMsg)){
-                    runWallPingPong(colleague);
+                    // do wall-pingpong, start with waiting
+                    while(!isInterrupted()){
+                        waitForMessage(START_MSG);
+                        driveToWallAndTurn();
+                        sendMessage(colleague, CONTINUE_MSG);
+                    }
                 }
             }
             delay(50);
         }
     }
 
-    /**
-     * Do a wall ping pong
-     * @param colleague - my colleagues id
-     */
-    private void runWallPingPong(String colleague){
-        forward(500);
-        while(!isInterrupted() && getDistance() > 0.15f){
-            delay(50);
+
+    private void driveToWallAndTurn(){
+        forward(300);
+        while (!isInterrupted() && getDistance() > 10f) {
+            delay(10);
         }
-        enableFloatMode();
-        driveDistanceBackward(10f,350);
-        turnRight(180,350);
-        sendMessage(colleague,startPingPongMsg);
-        driveDistanceForward(40f);
-        enableFloatMode();
-        turnLeft(180,350);
+        driveDistanceBackward(10);
+        turnLeft(180);
+    }
+
+    private void waitForMessage(String message){
+        sendLogMessage("Warte auf: \"" + message + "\"");
+        while (!isInterrupted()) {
+            if (hasMessage()) {
+                if (getNextMessage().getContent().equals(message)){
+                    return;
+                }
+            }
+            delay(10);
+        }
     }
 }

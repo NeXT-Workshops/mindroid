@@ -1,7 +1,7 @@
 package org.mindroid.android.app.errorhandling;
 
 import org.mindroid.android.app.R;
-import org.mindroid.android.app.acitivites.MainActivity;
+import org.mindroid.android.app.activities.MainActivity;
 import org.mindroid.android.app.fragments.log.GlobalLogger;
 import org.mindroid.api.errorhandling.AbstractErrorHandler;
 import org.mindroid.api.statemachine.NoStartStateException;
@@ -9,8 +9,6 @@ import org.mindroid.api.statemachine.exception.DuplicateTransitionException;
 import org.mindroid.api.statemachine.exception.NoCurrentStateSetException;
 import org.mindroid.api.statemachine.exception.NoSuchStateException;
 import org.mindroid.api.statemachine.exception.StateAlreadyExistsException;
-import org.mindroid.common.messages.server.LogLevel;
-import org.mindroid.impl.communication.MessengerClient;
 import org.mindroid.impl.communication.ServerWorker;
 import org.mindroid.impl.robot.RobotCommandCenter;
 import org.mindroid.impl.statemachine.Statemachine;

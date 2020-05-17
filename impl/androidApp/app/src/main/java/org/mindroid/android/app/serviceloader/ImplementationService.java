@@ -1,24 +1,28 @@
 package org.mindroid.android.app.serviceloader;
 
-import org.mindroid.android.app.robodancer.SettingsProvider;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.mindroid.api.BasicAPI;
 import org.mindroid.api.ImplementationIDCrawlerVisitor;
+import org.mindroid.impl.errorhandling.ErrorHandlerManager;
 
-import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
 
 public class ImplementationService {
 
+    public static final String DEMO = "demo";
+
     //Collected implementations
-    //private List<BasicAPI> implementations = new ArrayList<>();
+
     private HashMap<String, List<BasicAPI>> implementationSets = new HashMap<>();
 
     /** Collects the IDs of the APIs **/
-    //private ImplementationIDCrawlerVisitor idCollector = new ImplementationIDCrawlerVisitor();
     private HashMap<String, ImplementationIDCrawlerVisitor> idCollectorSet = new HashMap<>();
 
     private static ImplementationService ourInstance = new ImplementationService();
@@ -27,102 +31,70 @@ public class ImplementationService {
         return ourInstance;
     }
 
+    //realID,String[]
+    private HashMap<String, String[]> setMap = new HashMap<>();;// = makeMap();
+
+    //MAPS internal Set IDs to displayed Set IDs
+    //displayedID, realID
+    private HashMap<String, String> displayedIDMap = new HashMap<>();;// = makeMap();
+
     private ImplementationService(){
-        setMap = makeMap();
-        findImplementations();
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = (JSONObject) parser.parse(new FileReader("/sdcard/Mindroid/programs.json"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (jsonObject == null){
+            ErrorHandlerManager.getInstance().handleError(new NullPointerException(), ImplementationService.class, "Please push programs.json again. Use Script \"find and push\"");
+        }else {
+            String[] IDs = (String[]) jsonObject.keySet().toArray(new String[jsonObject.keySet().size()]);
+            ArrayList<String> programSets = new ArrayList<String>();
+
+            String prefixWorkshop = "WORKSHOP_";
+            String prefixDev = "DEV_";
+
+
+            for (String id : IDs) {
+                if (id.contains(prefixWorkshop)) {
+                    String displayedID = id.replace(prefixWorkshop, "");
+                    displayedIDMap.put(displayedID, id);
+                    setMap.put(id, parseStringArray(id, jsonObject));
+                } else if (id.contains(prefixDev)) {
+                    String displayedID = id.replace(prefixDev, "");
+                    displayedIDMap.put(displayedID, id);
+                    setMap.put(id, parseStringArray(id, jsonObject));
+                } else {
+                    //NOTHING
+                }
+            }
+
+            findImplementations();
+        }
+    }
+    public static String[] parseStringArray(String key, JSONObject jsonObject){
+        JSONArray classesJson = (JSONArray) jsonObject.get(key);
+
+        String[] classNames = new String[classesJson.size()];
+        for (int i = 0; i < classNames.length; i++) {
+            classNames[i] = (String) classesJson.get(i);
+        }
+
+        return classNames;
     }
 
-
-    private String[] classesDev = {
-            "org.mindroid.android.app.programs.dev.AccelerationTestManual",
-            "org.mindroid.android.app.programs.dev.AccelerationTestAuto",
-            "org.mindroid.android.app.programs.dev.HelloWorldPingA",
-            "org.mindroid.android.app.programs.dev.HelloWorldPingB",
-            "org.mindroid.android.app.programs.dev.RectangleDriver",
-            "org.mindroid.android.app.programs.dev.LawnMowerLars",
-            "org.mindroid.android.app.programs.dev.MotorTest",
-            "org.mindroid.android.app.programs.dev.SensorTestWallPingPong",
-            "org.mindroid.android.app.programs.dev.TestBroadcasting",
-            "org.mindroid.android.app.programs.dev.RectangleDriver3",
-            "org.mindroid.android.app.programs.dev.RectangleDriver2",
-            "org.mindroid.android.app.programs.dev.SingleWallPingPong",
-            "org.mindroid.android.app.programs.dev.CoordWallPingPong",
-            "org.mindroid.android.app.programs.dev.SpeedTestForBackward",
-            "org.mindroid.android.app.programs.dev.SpeedTestTurns",
-            "org.mindroid.android.app.programs.dev.ButtonTest",
-            "org.mindroid.android.app.programs.dev.SingleWallPingPong",
-            "org.mindroid.android.app.programs.dev.TestMessageAccess",
-            "org.mindroid.android.app.programs.dev.MessageTest",
-            "org.mindroid.android.app.programs.dev.SimpleForward"
-    };
-
-    private String[] classesStatemachine = {
-            "org.mindroid.android.app.programs.dev.statemachines.SensorMonitoring",
-            "org.mindroid.android.app.programs.dev.statemachines.MindroidStatemachines"
-    };
-
-    private String[] classesStubs = {
-            "org.mindroid.android.app.programs.workshop.stubs.HelloWorld",
-            "org.mindroid.android.app.programs.workshop.stubs.HelloDate",
-
-            "org.mindroid.android.app.programs.workshop.stubs.DriveSquare",
-            "org.mindroid.android.app.programs.workshop.stubs.ParkingSensor",
-            "org.mindroid.android.app.programs.workshop.stubs.ColorTest",
-
-            "org.mindroid.android.app.programs.workshop.stubs.HelloWorldPingR",
-            "org.mindroid.android.app.programs.workshop.stubs.HelloWorldPingB",
-
-            "org.mindroid.android.app.programs.workshop.stubs.SingleWallPingPong",
-            "org.mindroid.android.app.programs.workshop.stubs.CoordWallPingPong",
-
-            "org.mindroid.android.app.programs.workshop.stubs.LawnMower",
-            "org.mindroid.android.app.programs.workshop.stubs.Platooning",
-            "org.mindroid.android.app.programs.workshop.stubs.Follow"
-    };
-
-    private String[] classesSolutions = {
-            "org.mindroid.android.app.programs.workshop.solutions.HelloWorld",
-            "org.mindroid.android.app.programs.workshop.solutions.HelloDate",
-
-            "org.mindroid.android.app.programs.workshop.solutions.DriveSquare",
-            "org.mindroid.android.app.programs.workshop.solutions.ParkingSensor",
-            "org.mindroid.android.app.programs.workshop.solutions.ColorTest",
-
-            "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPingA",
-            "org.mindroid.android.app.programs.workshop.solutions.HelloWorldPingB",
-
-            "org.mindroid.android.app.programs.workshop.solutions.SingleWallPingPong",
-            "org.mindroid.android.app.programs.workshop.solutions.CoordWallPingPong",
-            "org.mindroid.android.app.programs.workshop.solutions.CoordWallPingPongA",
-            "org.mindroid.android.app.programs.workshop.solutions.CoordWallPingPongB",
-
-            "org.mindroid.android.app.programs.workshop.solutions.LawnMower",
-            "org.mindroid.android.app.programs.workshop.solutions.Platooning",
-            "org.mindroid.android.app.programs.workshop.solutions.PlatooningFollower",
-            "org.mindroid.android.app.programs.workshop.solutions.PlatooningLeader",
-            "org.mindroid.android.app.programs.workshop.solutions.Follow"
-    };
-
-    private HashMap<String, String[]> setMap;// = makeMap();
-
-    private String[] program_sets = {"Solutions", "Stubs", "Statemachine", "Dev"};
-
-    private HashMap<String, String[]> makeMap(){
-        HashMap<String, String[]> map = new HashMap<>();
-        map.put(program_sets[0], classesSolutions);
-        map.put(program_sets[1], classesStubs);
-        map.put(program_sets[2], classesStatemachine);
-        map.put(program_sets[3], classesDev);
-        return map;
-    }
 
     public String getDefaultSet() {
-        return program_sets[1];
+        return "stubs";
     }
 
 
     private void findImplementations(){
-        for(String set : program_sets){
+        for(String set : setMap.keySet()){
             List<BasicAPI> implementations = new ArrayList<>();
             ImplementationIDCrawlerVisitor idCollector = new ImplementationIDCrawlerVisitor();
             String[] foundClasses = setMap.get(set); //SettingsProvider.getInstance().getSelectedProgramSet());
@@ -131,9 +103,6 @@ public class ImplementationService {
                 if (implementation != null) {
                     implementations.add(implementation);
                     idCollector.collectID(implementation);
-
-                    //addImplementation(set, implementation);
-                    //collectID(implementation);
                 }
             }
             implementationSets.put(set, implementations);
@@ -191,7 +160,7 @@ public class ImplementationService {
      * @return ArrayList of IDs
      */
     public List<BasicAPI> getImplementations(String setKey) {
-        return implementationSets.get(setKey);
+        return implementationSets.get(displayedIDMap.get(setKey));
     }
 
     /**
@@ -199,12 +168,15 @@ public class ImplementationService {
      * @return String[] of collected IDs
      */
     public String[] getImplementationIDs(String setKey){
-        List<String> idList = idCollectorSet.get(setKey).getCollectedIDs();
+        System.out.println("################ getImplementationIDsSetKey: " +setKey );
+        System.out.println("################ getImplementationIDsSetKey MAPPING: " +displayedIDMap.get(setKey) );
+        System.out.println(idCollectorSet.toString());
+        List<String> idList = idCollectorSet.get(displayedIDMap.get(setKey)).getCollectedIDs();
         return idList.toArray(new String[idList.size()]);
     }
 
     public String[] getImplementationSets(){
-        return program_sets;
+        return displayedIDMap.keySet().toArray(new String[displayedIDMap.keySet().size()]);
     }
 
 }

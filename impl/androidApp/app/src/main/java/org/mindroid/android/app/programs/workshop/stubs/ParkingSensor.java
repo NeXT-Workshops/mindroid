@@ -1,8 +1,6 @@
 package org.mindroid.android.app.programs.workshop.stubs;
 
 import org.mindroid.api.ImperativeWorkshopAPI;
-import org.mindroid.api.ev3.EV3StatusLightColor;
-import org.mindroid.api.ev3.EV3StatusLightInterval;
 import org.mindroid.impl.brick.Textsize;
 
 public class ParkingSensor extends ImperativeWorkshopAPI {
@@ -11,12 +9,10 @@ public class ParkingSensor extends ImperativeWorkshopAPI {
         super("Parking Sensor");
     }
 
-    // ------------------------------------
-    // ÄNDERUNGEN ERST HIERNACH DURCHFÜHREN
-    // ------------------------------------
-
-    @Override
+  @Override
     public void run() {
-
+        /*
+        Änderungen erst hiernach einfügen
+         */
     }
 }

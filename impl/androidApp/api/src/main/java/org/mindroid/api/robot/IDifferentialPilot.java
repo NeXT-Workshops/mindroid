@@ -70,6 +70,11 @@ public interface IDifferentialPilot {
      */
     void flt();
 
+    /**
+     * Turn Left
+     * Nonblocking Operation
+     */
+    void turnLeft();
 
     /**
      * Turn left by given degrees.
@@ -85,6 +90,12 @@ public interface IDifferentialPilot {
      * @param speed speed 0 - 1000
      */
     void turnLeft(int degrees, int speed);
+
+    /**
+     * Turn Right
+     * Nonblocking Operation
+     */
+    void turnRight();
 
     /**
      * Turn right

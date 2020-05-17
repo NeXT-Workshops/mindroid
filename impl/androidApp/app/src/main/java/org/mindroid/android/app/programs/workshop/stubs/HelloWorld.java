@@ -9,13 +9,10 @@ public class HelloWorld extends ImperativeWorkshopAPI {
         super("Hello World");
     }
 
-    // ------------------------------------
-    // ÄNDERUNGEN ERST HIERNACH DURCHFÜHREN
-    // ------------------------------------
-
     @Override
     public void run() {
-        clearDisplay();
-        drawString("Hello World", Textsize.MEDIUM, 10 , 50);
+           clearDisplay(); 
+           drawString("Hello World");
     }
 }
+  
